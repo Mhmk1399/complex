@@ -26,7 +26,7 @@ export const Form = ({ selectedComponent, setUserInputData }: FormProps) => {
   return (
     <>
       {/* Desktop Sidebar */}
-      <div className="hidden lg:block fixed right-0 top-0 h-screen w-80 bg-white shadow-lg">
+      <div className="hidden lg:block fixed right-0 top-0 h-screen w-80 bg-white shadow-lg overflow-y-auto">
         <div className="p-6">
           <h2 className="text-2xl font-bold text-gray-800">
             Component Settings
