@@ -1,10 +1,11 @@
+"use client"
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { RichText } from './forms/richTextForm'
 
 interface FormProps {
-    selectedComponent: string;
-    setUserInputData: (input: string) => void;
+  selectedComponent: string;
+  setUserInputData: (input: string) => void;
 }
 
 export const Form = ({ selectedComponent, setUserInputData }: FormProps) => {
@@ -58,5 +59,5 @@ export const Form = ({ selectedComponent, setUserInputData }: FormProps) => {
         </div>
       </motion.div>
     </>
-  )
-}
+  );
+};
