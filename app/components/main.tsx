@@ -14,7 +14,7 @@ export const Main = () => {
   const [data, setData] = useState<DataType[]>([]);
   const [loading, setLoading] = useState(true);
   const [layout, setLayout] = useState({});
-  const [selectedComponent, setSelectedComponent] = useState<string>('');
+  const [selectedComponent, setSelectedComponent] = useState<string>('richText');
   const [userInputData, setUserInputData] = useState<{}>({});
   useEffect(() => {
     const fetchData = async () => {
