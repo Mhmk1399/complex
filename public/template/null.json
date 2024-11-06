@@ -145,7 +145,7 @@
           {
             "type": "rich-text",
             "blocks": {
-              "textHeading": "",
+              "textHeading": "rich text",
               "description": "",
               "btnText": "",
               "btnLink": "",

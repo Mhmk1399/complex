@@ -1,15 +1,22 @@
-import React from "react";
-import styled from "styled-components";
+"use client";
 import nullData from "../../../public/template/null.json";
+import styled from "styled-components";
+interface Block {
+  textHeading?: string;
+}
 
 const RichText = styled.section`
-  color: ${nullData.sections.children[0].sections[2].setting?.paddingTop};
+  padding-top: ${nullData.sections.children[0].sections[2].setting?.paddingTop};
+  padding-bottom: ${nullData.sections.children[0].sections[2].setting
+    ?.paddingBottom};
 `;
 
 const Section = () => {
   return (
-    <RichText>
-      <h1></h1>
+    <RichText style={{ display: "flex" }}>
+      <h1>
+        {(nullData.sections.children[0].sections[2].blocks as any)?.textHeading}
+      </h1>
     </RichText>
   );
 };
