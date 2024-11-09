@@ -1,10 +1,13 @@
 import React from "react";
-import Section from "../components/sections/section";
+import RichText from "../components/sections/richText";
+import Header from "../components/sections/header";
 
 const page = () => {
   return (
     <div>
-      <Section />
+      <Header />
+
+      <RichText />
     </div>
   );
 };

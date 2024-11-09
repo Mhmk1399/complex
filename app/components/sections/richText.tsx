@@ -34,7 +34,7 @@ interface SectionData {
   setting: SettingType;
 }
 
-const sectionData = nullData.sections.children[0].sections[2] as SectionData;
+const sectionData = nullData.sections.children.sections[2] as SectionData;
 
 // Styled components
 const Section = styled.section`
@@ -48,8 +48,8 @@ const Section = styled.section`
   margin-right: 10px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
   align-items: ${sectionData.blocks.setting.allTextPosition};
+  gap: 15px;
   background-color: ${sectionData.blocks.setting.background};
 `;
 
@@ -57,12 +57,14 @@ const H1 = styled.h1`
   color: ${sectionData.blocks.setting.textHeadingColor};
   font-size: ${sectionData.blocks.setting.textHeadingFontSize};
   font-weight: ${sectionData.blocks.setting.textHeadingFontWeight};
+  text-wrap: wrap;
 `;
 
 const P = styled.p`
   color: ${sectionData.blocks.setting.descriptionColor};
   font-size: ${sectionData.blocks.setting.descriptionFontSize};
   font-weight: ${sectionData.blocks.setting.descriptionFontWeight};
+  text-wrap: wrap;
 `;
 
 const Btn = styled.button`
