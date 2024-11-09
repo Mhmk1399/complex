@@ -39,7 +39,7 @@
         ]
       }
     },
-    "children": [
+    "children": 
       {
         "type": "home",
         "sections": [
@@ -439,8 +439,7 @@
           "multicolumn",
           "multiRow"
         ]
-      }
-    ],
+      },
     "sectionFooter": {
       "settings": {
         "text": "© 2023 My Website. All rights reserved."

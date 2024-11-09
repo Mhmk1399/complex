@@ -6,8 +6,8 @@ interface Block {
 }
 
 const RichText = styled.section`
-  padding-top: ${nullData.sections.children[0].sections[2].setting?.paddingTop};
-  padding-bottom: ${nullData.sections.children[0].sections[2].setting
+  padding-top: ${nullData.sections.children.sections[2].setting?.paddingTop};
+  padding-bottom: ${nullData.sections.children.sections[2].setting
     ?.paddingBottom};
 `;
 
@@ -15,7 +15,7 @@ const Section = () => {
   return (
     <RichText style={{ display: "flex" }}>
       <h1>
-        {(nullData.sections.children[0].sections[2].blocks as any)?.textHeading}
+        {(nullData.sections.children.sections[2].blocks as any)?.textHeading}
       </h1>
     </RichText>
   );

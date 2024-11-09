@@ -2,6 +2,9 @@
 import React, { useEffect, useState } from 'react'
 import { Preview } from './preview';
 import { Form } from './form';
+import { Compiler } from './compiler';
+import data from '../../public/template/null.json'
+
 
 interface DataType {
   // Define your JSON structure here
@@ -11,17 +14,15 @@ interface DataType {
 }
 
 export const Main = () => {
-  const [data, setData] = useState<DataType[]>([]);
   const [loading, setLoading] = useState(true);
   const [layout, setLayout] = useState({});
-  const [selectedComponent, setSelectedComponent] = useState<string>('richText');
+  const [selectedComponent, setSelectedComponent] = useState<string>('header');
   const [userInputData, setUserInputData] = useState<{}>({});
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch('/api/your-endpoint'); // Replace with your API endpoint
         const jsonData = await response.json();
-        setData(jsonData);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -31,6 +32,7 @@ export const Main = () => {
     fetchData();
   }, []);
   
+  const compiledData = Compiler(data, selectedComponent);
 
 
   return (
@@ -45,7 +47,11 @@ export const Main = () => {
         </div>
       ) : (
         <div>
-          <Preview setSelectedComponent={setSelectedComponent} layout={layout} />
+<Preview 
+  layout={layout}
+  setSelectedComponent={setSelectedComponent}
+  
+/>
           <Form selectedComponent={selectedComponent} setUserInputData={setUserInputData} />
         </div>
       )}
