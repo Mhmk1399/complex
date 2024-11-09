@@ -145,22 +145,21 @@
           {
             "type": "rich-text",
             "blocks": {
-              "textHeading": "rich text",
-              "description": "",
-              "btnText": "",
-              "btnLink": "",
+              "textHeading": "heading of rich textssssssssssssssssssssssssssssss",
+              "description": "description of rich textssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
+              "btnText": "button",
+              "btnLink": "/",
               "setting": {
-                "textHeadingColor": "#333",
+                "textHeadingColor": "#000",
                 "textHeadingFontSize": "20px",
                 "textHeadingFontWeight": "bold",
-                "descriptionColor": "#333",
+                "descriptionColor": "#000",
                 "descriptionFontSize": "16px",
                 "descriptionFontWeight": "normal",
+                "background": "#e4e4e4",
                 "btnTextColor": "#fff",
                 "btnBackgroundColor": "#333",
-                "allTextPosition": "center",
-                "textAlignmentBoxDesktop": "center",
-                "textAlignmentBoxMobile": "center"
+                "allTextPosition": "center"
               }
             },
 
