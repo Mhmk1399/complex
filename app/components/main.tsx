@@ -2,9 +2,8 @@
 import React, { useEffect, useState } from 'react'
 import { Preview } from './preview';
 import { Form } from './form';
-import { Compiler } from './compiler';
 import data from '../../public/template/null.json'
-
+import { log } from 'console';
 
 interface DataType {
   // Define your JSON structure here
@@ -15,9 +14,12 @@ interface DataType {
 
 export const Main = () => {
   const [loading, setLoading] = useState(true);
-  const [layout, setLayout] = useState({});
-  const [selectedComponent, setSelectedComponent] = useState<string>('header');
-  const [userInputData, setUserInputData] = useState<{}>({});
+  const [layout, setLayout] = useState<any>(data);
+  const [selectedComponent, setSelectedComponent] = useState<string>('sectionHeader');
+useEffect(() => {
+  console.log(layout);
+
+},[layout])
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -32,8 +34,6 @@ export const Main = () => {
     fetchData();
   }, []);
   
-  const compiledData = Compiler(data, selectedComponent);
-
 
   return (
     <div>
@@ -47,12 +47,11 @@ export const Main = () => {
         </div>
       ) : (
         <div>
-<Preview 
-  layout={layout}
-  setSelectedComponent={setSelectedComponent}
-  
-/>
-          <Form selectedComponent={selectedComponent} setUserInputData={setUserInputData} />
+          <Preview 
+            layout={layout}
+            setSelectedComponent={setSelectedComponent}
+          />
+          <Form selectedComponent={selectedComponent} setLayout={setLayout} />
         </div>
       )}
     </div>

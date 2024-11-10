@@ -11,8 +11,8 @@ export const Preview: React.FC<PreviewProps> = ({
   setSelectedComponent,
 }) => {
   return (
-    <div className="w-full md:w-full lg:w-[75%] h-[95vh] border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide lg:mt-5 lg:ml-5">
-      <Header setSelectedComponent={setSelectedComponent} />
+    <div className="w-full md:w-full lg:w-[75%]  h-[95vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide lg:mt-5 lg:ml-5">
+      <Header setSelectedComponent={setSelectedComponent} layout={layout} />
     </div>
   );
 };

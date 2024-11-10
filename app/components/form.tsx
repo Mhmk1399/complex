@@ -1,23 +1,30 @@
 "use client"
-import React, { useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { RichText } from './forms/richTextForm'
-import { Header } from './forms/header';
-
+import { HeaderForm } from './forms/headerForm';
+import { JasonChanger } from './compiler';
+import data from '../../public/template/null.json'
 interface FormProps {
   selectedComponent: string;
-  setUserInputData: (input: string) => void;
+  setLayout: (data: any) => void;
 }
 
-export const Form = ({ selectedComponent, setUserInputData }: FormProps) => {
+export const Form = ({ selectedComponent, setLayout }: FormProps) => {
   const [isOpen, setIsOpen] = useState(false)
+  const [userInputData, setUserInputData] = useState<any>({});
+  useEffect(() => {
+    const newjason=JasonChanger(data, selectedComponent, userInputData)
+    setLayout(newjason)
+    
+  }, [userInputData])
 
-  const renderFormContent = () => {
+  const renderFormContent = (setUserInputData: (data: {}) => void, userInputData: any ) => {
     switch (selectedComponent) {
       case 'richText':
         return <RichText />
-      case 'header':
-        return <Header />
+      case 'sectionHeader':
+        return <HeaderForm setUserInputData={setUserInputData} userInputData={userInputData}  />
       case 'buttonConfig':
         return 
       default:
@@ -33,7 +40,7 @@ export const Form = ({ selectedComponent, setUserInputData }: FormProps) => {
           <h2 className="text-2xl font-bold text-gray-800">
             Component Settings
           </h2>
-          {renderFormContent()}
+          {renderFormContent(setUserInputData, userInputData)}
         </div>
       </div>
 
@@ -56,7 +63,7 @@ export const Form = ({ selectedComponent, setUserInputData }: FormProps) => {
           <h2 className="text-2xl font-bold text-gray-800 mb-4">
             Component Settings
           </h2>
-          {renderFormContent()}
+          {renderFormContent(setUserInputData, userInputData )}
         </div>
       </motion.div>
     </>
