@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import nullData from "../../../public/template/null.json";
 import styled from "styled-components";
 
 interface HeaderProps {
