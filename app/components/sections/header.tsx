@@ -1,8 +1,11 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import nullData from "../../../public/template/null.json";
 import styled from "styled-components";
 
+interface HeaderProps {
+  setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
+}
 interface HeaderLink {
   name: string;
   url: string;
@@ -118,12 +121,12 @@ const MenuButton = styled.button`
   }
 `;
 
-const Header: React.FC = () => {
+const Header: React.FC<HeaderProps> = ({ setSelectedComponent }) => {
   const { imageLogo, imageAlt, links } = sectionData.blocks;
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <SectionHeader dir="rtl">
+    <SectionHeader dir="rtl" onSelect={() => setSelectedComponent("header")}>
       <LogoContainer>
         <Logo src={imageLogo || "/assets/images/logo.webp"} alt={imageAlt} />
         <MenuButton onClick={() => setIsOpen(!isOpen)}>☰</MenuButton>
