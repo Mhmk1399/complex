@@ -6,7 +6,15 @@ const page = () => {
   return (
     <div>
       <Header />
-
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
       <RichText />
     </div>
   );

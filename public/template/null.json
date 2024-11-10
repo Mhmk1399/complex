@@ -12,7 +12,7 @@
     "sectionHeader": {
       "type": "header",
       "blocks": {
-        "tilte": "uuuu",
+        "tilte": "title",
         "imageLogo": "",
         "imageAlt": "",
         "links": [
@@ -24,17 +24,14 @@
           { "name": "Login", "url": "/login" }
         ],
         "setting": {
-          "titleColor": "#333",
-          "titleFontSize": "24px",
-          "titleFontWeight": "bold",
-          "imageWidth": "100px",
-          "imageHeight": "100px",
-          "imageRadius": "",
-          "itemColor": "#fff",
+          "imageWidth": "50px",
+          "imageHeight": "50px",
+          "imageRadius": "30px",
+          "itemColor": "#000",
           "itemFontSize": "16px",
           "itemFontWeight": "bold",
           "itemHoverColor": "#3498db",
-          "backgroundColorNavbar": "#fff"
+          "backgroundColorNavbar": "#e4e4e4"
         }
       },
       "setting": {
