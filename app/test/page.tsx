@@ -22,10 +22,7 @@ const Page = () => {
       <br />
       <RichText />
       <br />
-      <br />
-      <br />
-      <br />
-      <br />
+     
       <Banner />
     </div>
   );
