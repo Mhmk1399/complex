@@ -58,8 +58,8 @@ const Header: React.FC<HeaderProps> = ({ setSelectedComponent, layout }) => {
     justify-content: space-between;
     padding-top: ${sectionData?.setting?.paddingTop}px;
     padding-bottom: ${sectionData?.setting?.paddingBottom}px;
-    margin-top: ${sectionData?.setting?.marginTop};
-    margin-bottom: ${sectionData?.setting?.marginBottom};
+    margin-top: ${sectionData?.setting?.marginTop };
+    margin-bottom: ${sectionData?.setting?.marginBottom };
     background-color: ${sectionData?.blocks?.setting?.backgroundColorNavbar};
     position: fixed;
 
