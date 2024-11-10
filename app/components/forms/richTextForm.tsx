@@ -81,12 +81,7 @@ export const RichText = () => {
       }
     }));
   };
-  useEffect(() => {
-    
-  console.log(formData);
-  
-    
-  }, [formData])
+
   
 
   return (
