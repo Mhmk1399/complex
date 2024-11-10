@@ -126,7 +126,7 @@ const Header: React.FC<HeaderProps> = ({ setSelectedComponent }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <SectionHeader dir="rtl" onSelect={() => setSelectedComponent("header")}>
+    <SectionHeader dir="rtl" onClick={() => setSelectedComponent("header")}>
       <LogoContainer>
         <Logo src={imageLogo || "/assets/images/logo.webp"} alt={imageAlt} />
         <MenuButton onClick={() => setIsOpen(!isOpen)}>☰</MenuButton>
