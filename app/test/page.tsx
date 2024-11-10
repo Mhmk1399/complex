@@ -1,23 +1,34 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import RichText from "../components/sections/richText";
 import Header from "../components/sections/header";
+import Banner from "../components/sections/banner";
 
-const page = () => {
+const Page = () => {
+  const [selectedComponent, setSelectedComponent] = useState<string>("");
+
   return (
     <div>
-      <Header />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
+      <Header setSelectedComponent={setSelectedComponent} />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
       <RichText />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <Banner />
     </div>
   );
 };
 
-export default page;
+export default Page;
