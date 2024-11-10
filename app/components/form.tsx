@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { RichText } from './forms/richTextForm'
+import { Header } from './forms/header';
 
 interface FormProps {
   selectedComponent: string;
@@ -15,8 +16,8 @@ export const Form = ({ selectedComponent, setUserInputData }: FormProps) => {
     switch (selectedComponent) {
       case 'richText':
         return <RichText />
-      case 'imageUpload':
-        return 
+      case 'header':
+        return <Header />
       case 'buttonConfig':
         return 
       default:
