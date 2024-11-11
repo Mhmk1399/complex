@@ -1,8 +1,6 @@
 "use client";
 import Link from "next/link";
-import nullData from "../../../public/template/null.json";
 import styled from "styled-components";
-import { useEffect } from "react";
 
 interface BlocksType {
   setting: {

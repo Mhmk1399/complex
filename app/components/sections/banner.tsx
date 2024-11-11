@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import nullData from "../../../public/template/null.json";
 import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
