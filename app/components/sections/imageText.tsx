@@ -27,7 +27,6 @@ interface BlocksType {
     opacityImage?: string;
     imageWidth?: string;
     imageHeight?: string;
-    imageRadious?: string;
   };
   imageSrc?: string;
   imageAlt?: string;
@@ -59,74 +58,80 @@ const ImageText: React.FC<ImageTextProps> = ({
   ) as SectionData;
 
   const Section = styled.section`
-    position: relative;
-    padding-top: ${sectionData.setting?.paddingTop};
-    padding-bottom: ${sectionData?.setting?.paddingBottom};
-    margin-top: ${sectionData?.setting?.marginTop || "20px"};
-    margin-bottom: ${sectionData?.setting?.marginBottom || "20px"};
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-top: ${sectionData.setting?.paddingTop};
+    padding-bottom: ${sectionData.setting?.paddingBottom};
+    margin-top: ${sectionData?.setting?.marginTop || "20px"};
+    margin-bottom: ${sectionData?.setting?.marginBottom || "20px"};
+    border-radius: ${sectionData?.blocks?.setting?.boxRadiuos || "10px"};
     overflow: hidden;
-    @media (max-width: 768px) {
-      margin: 0 10px;
+    flex-direction: column;
+    @media (min-width: 1024px) {
+      flex-direction: row;
+      margin: 10px;
     }
   `;
 
   const Image = styled.img`
-    width: ${sectionData?.blocks?.setting?.imageWidth};
-    margin: 0 10px;
+    width: ${sectionData?.blocks?.setting?.imageWidth || "50%"};
     height: ${sectionData?.blocks?.setting?.imageHeight || "auto"};
     opacity: ${sectionData?.blocks?.setting?.opacityImage || "1"};
-    border-radius: ${sectionData?.blocks?.setting?.imageRadious || "10px"};
     object-fit: cover;
-    filter: brightness(0.9);
-    @media (max-width: 425px) {
-      height: 500px;
+    @media (max-width: 768px) {
+      width: 100%;
+      height: auto;
+      padding: 0px 10px;
+    }
+    @media (min-width: 1025px) {
+      width: 50%;
     }
   `;
 
   const TextContainer = styled.div`
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.9);
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     text-align: center;
-    padding: 70px 150px;
-    backdrop-filter: blur(30px);
+    padding: 20px;
+    width: 100%;
     background-color: ${sectionData?.blocks?.setting?.backgroundColorBox};
-    opacity: ${sectionData?.blocks?.setting?.backgroundBoxOpacity || "0.2"};
-    border-radius: ${sectionData?.blocks?.setting?.boxRadiuos || "10px"};
-    transition: transform 0.4s ease, opacity 0.4s ease;
-
+    margin: 10px 0px;
     @media (max-width: 768px) {
-      height: fit-content;
-      padding: 50px 100px;
+      align-items: center;
+      text-align: center;
+      margin: 10px;
     }
   `;
 
   const Heading = styled.h2`
-    color: ${sectionData?.blocks?.setting?.headingColor || "#fff"};
+    color: ${sectionData?.blocks?.setting?.headingColor || "#333"};
     font-size: ${sectionData?.blocks?.setting?.headingFontSize || "24px"};
     font-weight: ${sectionData?.blocks?.setting?.headingFontWeight || "bold"};
-    margin: 10px 0;
-    flex-wrap: nowrap;
+    margin-bottom: 10px;
     @media (max-width: 768px) {
       font-size: 22px;
+    }
+    @media (min-width: 1025px) {
+      text-align: right;
+      padding: 0px 100px;
     }
   `;
 
   const Description = styled.p`
-    color: ${sectionData?.blocks?.setting?.descriptionColor || "#ddd"};
+    color: ${sectionData?.blocks?.setting?.descriptionColor || "#666"};
     font-size: ${sectionData?.blocks?.setting?.descriptionFontSize || "16px"};
     font-weight: ${sectionData?.blocks?.setting?.descriptionFontWeight ||
     "normal"};
-    margin-top: 10px;
+
     @media (max-width: 768px) {
       font-size: 16px;
+    }
+    @media (min-width: 1025px) {
+      margin: 10px;
+      text-align: right;
+      padding: 0px 100px;
     }
   `;
 
@@ -134,33 +139,39 @@ const ImageText: React.FC<ImageTextProps> = ({
     color: ${sectionData?.blocks?.setting?.btnTextColor || "#fff"};
     background-color: ${sectionData?.blocks?.setting?.btnBackgroundColor ||
     "#007bff"};
-    padding: 10px 30px;
+    padding: 10px 20px;
     text-decoration: none;
-    border-radius: 10px;
+    border-radius: 5px;
     margin-top: 15px;
     transition: background-color 0.2s ease-in-out;
+
     &:hover {
-      opacity: 0.9;
-      background-color: transparent;
+      background-color: #0056b3;
     }
+
     @media (max-width: 768px) {
       padding: 8px 50px;
-      font-size: 18px;
+    }
+    @media (min-width: 1025px) {
+      margin: 10px;
+      text-align: right;
+      margin: 10px 110px;
     }
   `;
 
   return (
-    <Section onClick={() => setSelectedComponent("image-text")}>
+    <Section onClick={() => setSelectedComponent("image-text")} dir="rtl">
       <Image
         src={sectionData?.blocks?.imageSrc || "/assets/images/banner2.webp"}
         alt={sectionData?.blocks?.imageAlt || "Image"}
+        loading="lazy"
       />
       <TextContainer>
         <Heading>{sectionData?.blocks?.heading || "Default Heading"}</Heading>
         <Description>
-          {sectionData?.blocks?.description || "Default Description"}
+          {sectionData?.blocks?.description ||
+            "Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review."}
         </Description>
-
         <Button href={sectionData?.blocks?.btnLink}>
           {sectionData?.blocks?.btnText || "Learn More"}
         </Button>
