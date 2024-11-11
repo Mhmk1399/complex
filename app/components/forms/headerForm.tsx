@@ -46,6 +46,21 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
     setUserInputData(initialData);
   }, []);
 
+  const [isDataReady, setIsDataReady] = React.useState(false);
+
+  useEffect(() => {
+    const initialData = {
+      ...defaultValues,
+      ...Compiler(data, 'sectionHeader')
+    };
+    setUserInputData(initialData);
+    setIsDataReady(true);
+  }, []);
+
+  if (!isDataReady) {
+    return <div>Loading...</div>; // Or your preferred loading indicator
+  }
+
   // First, add this helper function at the top with the other interfaces
   const ColorInput = ({ label, name, value, onChange }: {
     label: string;
