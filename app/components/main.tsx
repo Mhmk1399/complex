@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { Preview } from './preview';
 import { Form } from './form';
 import data from '../../public/template/null.json'
-import { log } from 'console';
 
 interface DataType {
   // Define your JSON structure here
@@ -16,10 +15,7 @@ export const Main = () => {
   const [loading, setLoading] = useState(true);
   const [layout, setLayout] = useState<any>(data);
   const [selectedComponent, setSelectedComponent] = useState<string>('sectionHeader');
-useEffect(() => {
-  console.log(layout);
 
-},[layout])
   useEffect(() => {
     const fetchData = async () => {
       try {

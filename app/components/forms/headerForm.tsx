@@ -13,27 +13,38 @@ interface Link {
 }
 
 export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userInputData }) => {
-  const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    // Ensure the value is a valid hex color
-    const hexColor = value.match(/^#/) ? value : `#${value}`;
 
-    setUserInputData((prev: any) => ({
-      ...prev,
-      blocks: {
-        ...prev.blocks,
-        setting: {
-          ...prev.blocks.setting,
-          [name]: hexColor
-        }
-      }
-    }));
+  // Add default values to prevent undefined values
+  const defaultValues = {
+    blocks: {
+      imageLogo: '',
+      imageAlt: '',
+      setting: {
+        titleColor: '#000000',
+        backgroundColorNavbar: '#ffffff',
+        itemColor: '#000000',
+        itemHoverColor: '#000000',
+        itemFontSize: '16',
+        imageWidth: '100',
+        imageHeight: '100'
+      },
+      links: []
+    },
+    setting: {
+      paddingTop: '0',
+      paddingBottom: '0',
+      marginBottom: '0'
+    }
   };
 
+  // Modify the useEffect to include default values
   useEffect(() => {
-    const initialData = Compiler(data, 'sectionHeader');
+    const initialData = {
+      ...defaultValues,
+      ...Compiler(data, 'sectionHeader')
+    };
     setUserInputData(initialData);
-  }, [])
+  }, []);
 
   // First, add this helper function at the top with the other interfaces
   const ColorInput = ({ label, name, value, onChange }: {
@@ -49,7 +60,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
           type="color"
           id={name}
           name={name}
-          value={value}
+          value={value || '#000000'}
           onChange={onChange}
           className="border  p-0.5 rounded-full"
         />
@@ -240,6 +251,15 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
             id="paddingTop"
             name="paddingTop"
             value={userInputData?.setting?.paddingTop}
+            onChange={handleSettingChange}
+            className="p-2 border rounded"
+          />
+          <label className="block mb-1" htmlFor="paddingTop">marginBottom </label>
+          <input
+            type="range"
+            id="marginBottom"
+            name="marginBottom"
+            value={userInputData?.setting?.marginBottom}
             onChange={handleSettingChange}
             className="p-2 border rounded"
           />

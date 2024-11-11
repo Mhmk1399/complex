@@ -1,6 +1,7 @@
 import React from "react";
 import Header from "./sections/header";
-import ImageText from "./sections/imageText";
+import RichText from "./sections/richText";
+import Banner from "./sections/banner";
 
 interface PreviewProps {
   layout: {};
@@ -13,15 +14,9 @@ export const Preview: React.FC<PreviewProps> = ({
 }) => {
   return (
     <div className="w-full md:w-full lg:w-[75%]  h-[95vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide lg:mt-5 lg:ml-5">
-      <Header
-        setSelectedComponent={setSelectedComponent}
-        layout={layout}
-      />
-      <br />
-      <br />
-      {/* <Banner /> */}
-      <ImageText setSelectedComponent={setSelectedComponent} layout={layout} />
-      <br /><br />
+      <Header setSelectedComponent={setSelectedComponent} layout={layout} />
+      <RichText setSelectedComponent={setSelectedComponent} layout={layout} />
+      <Banner setSelectedComponent={setSelectedComponent} layout={layout} />
     </div>
   );
 };
