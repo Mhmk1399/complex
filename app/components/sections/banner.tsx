@@ -2,25 +2,24 @@
 import React from "react";
 import styled from "styled-components";
 import Image from "next/image";
+import Link from "next/link";
 
 interface BlocksType {
   setting: {
     descriptionColor?: string;
     descriptionFontSize?: string;
     descriptionFontWeight?: string;
-    imageWidth?: string;
-    imageHeight?: string;
-    imageRadius?: string;
+    descriptionFontSizeMobile?: string;
+    imageRadious?: string;
     imageBehavior?: string;
     opacityImage?: string;
+    opacityTextBox?: string;
     textColor?: string;
     textFontSize?: string;
     textFontWeight?: string;
-    positionBoxTextDesktop?: string;
+    textFontSizeMobile?: string;
     backgroundColorBox?: string;
     backgroundBoxRadious?: string;
-    textAlignmentBoxDesktop?: string;
-    textAlignmentBoxMobile?: string;
   };
   imageSrc?: string;
   imageAlt?: string;

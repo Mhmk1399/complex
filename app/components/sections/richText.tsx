@@ -64,6 +64,9 @@ const H1 = styled.h1<{ $data: SectionData }>`
   font-size: ${props => props.$data?.blocks?.setting?.textHeadingFontSize};
   font-weight: ${props => props.$data?.blocks?.setting?.textHeadingFontWeight};
   text-wrap: wrap;
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
 `;
 
 const P = styled.p<{ $data: SectionData }>`
@@ -71,6 +74,9 @@ const P = styled.p<{ $data: SectionData }>`
   font-size: ${props => props.$data?.blocks?.setting?.descriptionFontSize};
   font-weight: ${props => props.$data?.blocks?.setting?.descriptionFontWeight};
   text-wrap: wrap;
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
 `;
 
 const Btn = styled.button<{ $data: SectionData }>`

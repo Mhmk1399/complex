@@ -49,33 +49,31 @@
           "blocks": {
             "imageSrc": "",
             "imageAlt": "",
-            "text": "",
-            "description": "",
+            "text": "heading of banner default",
+            "description": "description of banner ",
             "imageLink": "",
             "setting": {
               "descriptionColor": "#333",
-              "descriptionFontSize": "16px",
+              "descriptionFontSize": "15px",
               "descriptionFontWeight": "normal",
-              "textColor": "#fff",
-              "textFontSize": "24px",
+              "descriptionFontSizeMobile": "14px",
+              "textColor": "#000",
+              "textFontSize": "30px",
               "textFontWeight": "bold",
-              "positionBoxTextDesktop": "center",
+              "textFontSizeMobile": "20px",
               "backgroundColorBox": "#fff",
               "backgroundBoxRadious": "10px",
-              "textAlignmentBoxDesktop": "center",
-              "textAlignmentBoxMobile": "center",
-              "opacityImage": 0.5,
-              "imageWidth": "100px",
-              "imageHeight": "100px",
-              "imageRadious": "10px",
+              "opacityImage": 1,
+              "opacityTextBox": 1,
+              "imageRadious": "14px",
               "imageBehavior": "cover"
             }
           },
-          "settings": {
-            "paddingTop": "20px",
+          "setting": {
+            "paddingTop": "10px",
             "paddingBottom": "20px",
-            "marginTop": "0px",
-            "marginBottom": "0px"
+            "marginTop": "20px",
+            "marginBottom": "80px"
           }
         },
         {
@@ -152,10 +150,10 @@
             "btnLink": "/",
             "setting": {
               "textHeadingColor": "#000",
-              "textHeadingFontSize": "20px",
+              "textHeadingFontSize": "40px",
               "textHeadingFontWeight": "bold",
               "descriptionColor": "#000",
-              "descriptionFontSize": "16px",
+              "descriptionFontSize": "25px",
               "descriptionFontWeight": "normal",
               "background": "#e4e4e4",
               "btnTextColor": "#fff",
@@ -174,35 +172,35 @@
         {
           "type": "image-text",
           "blocks": {
-            "imageSrc": "src",
+            "imageSrc": "",
             "imageAlt": "",
             "heading": "",
             "description": "",
             "btnLink": "",
-            "btnText": "Shop Now",
+            "btnText": "",
             "setting": {
-              "headingColor": "#333",
-              "headingFontSize": "20px",
+              "headingColor": "#fff",
+              "headingFontSize": "30px",
               "headingFontWeight": "bold",
-              "descriptionColor": "#333",
-              "descriptionFontSize": "16px",
+              "descriptionColor": "#fff",
+              "descriptionFontSize": "20px",
               "descriptionFontWeight": "normal",
               "btnTextColor": "#fff",
-              "btnBackgroundColor": "#333",
-              "textAlignmentBoxDesktop": "center",
-              "textAlignmentBoxMobile": "center",
-              "opacityImage": 0.5,
-              "imageWidth": "100px",
-              "imageHeight": "100px",
+              "btnBackgroundColor": "#000",
+              "backgroundColorBox": "#333",
+              "backgroundBoxOpacity": 0.9,
+              "boxRadiuos": "20px",
+              "opacityImage": 1,
+              "imageWidth": "1450px",
+              "imageHeight": "700px",
               "imageRadious": "10px"
             }
           },
-          "settings": {
+          "setting": {
             "paddingTop": "20px",
             "paddingBottom": "20px",
-            "marginTop": "0px",
-            "marginBottom": "0px",
-            "DesktopImagePlacementRow": "row"
+            "marginTop": "10px",
+            "marginBottom": "0px"
           }
         },
         {
