@@ -58,6 +58,9 @@ const H1 = styled.h1`
   font-size: ${sectionData.blocks.setting.textHeadingFontSize};
   font-weight: ${sectionData.blocks.setting.textHeadingFontWeight};
   text-wrap: wrap;
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
 `;
 
 const P = styled.p`
@@ -65,6 +68,9 @@ const P = styled.p`
   font-size: ${sectionData.blocks.setting.descriptionFontSize};
   font-weight: ${sectionData.blocks.setting.descriptionFontWeight};
   text-wrap: wrap;
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
 `;
 
 const Btn = styled.button`
