@@ -1,6 +1,5 @@
 import React from "react";
 import Header from "./sections/header";
-import Banner from "./sections/banner";
 import ImageText from "./sections/imageText";
 
 interface PreviewProps {
@@ -22,6 +21,7 @@ export const Preview: React.FC<PreviewProps> = ({
       <br />
       {/* <Banner /> */}
       <ImageText setSelectedComponent={setSelectedComponent} layout={layout} />
+      <br /><br />
     </div>
   );
 };

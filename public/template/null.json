@@ -179,21 +179,20 @@
             "btnLink": "",
             "btnText": "",
             "setting": {
-              "headingColor": "#fff",
+              "headingColor": "#333",
               "headingFontSize": "30px",
               "headingFontWeight": "bold",
-              "descriptionColor": "#fff",
+              "descriptionColor": "#333",
               "descriptionFontSize": "20px",
               "descriptionFontWeight": "normal",
               "btnTextColor": "#fff",
               "btnBackgroundColor": "#000",
-              "backgroundColorBox": "#333",
+              "backgroundColorBox": "",
               "backgroundBoxOpacity": 0.9,
               "boxRadiuos": "20px",
               "opacityImage": 1,
-              "imageWidth": "1450px",
-              "imageHeight": "700px",
-              "imageRadious": "10px"
+              "imageWidth": "850px",
+              "imageHeight": "700px"
             }
           },
           "setting": {
