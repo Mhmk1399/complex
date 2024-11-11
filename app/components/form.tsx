@@ -5,6 +5,7 @@ import { RichText } from './forms/richTextForm'
 import { HeaderForm } from './forms/headerForm';
 import { JasonChanger } from './compiler';
 import data from '../../public/template/null.json'
+import { BannerForm } from './forms/bannerForm';
 interface FormProps {
   selectedComponent: string;
   setLayout: (data: any) => void;
@@ -25,8 +26,8 @@ export const Form = ({ selectedComponent, setLayout }: FormProps) => {
         return <RichText  setUserInputData={setUserInputData} userInputData={userInputData} />
       case 'sectionHeader':
         return <HeaderForm setUserInputData={setUserInputData} userInputData={userInputData}  />
-      case 'buttonConfig':
-        return 
+      case 'banner':
+      return <BannerForm setUserInputData={setUserInputData} userInputData={userInputData}  />
       default:
         return <div>Select a component to configure</div>
     }

@@ -54,13 +54,13 @@
             "imageLink": "",
             "setting": {
               "descriptionColor": "#333",
-              "descriptionFontSize": "15px",
+              "descriptionFontSize": "15",
               "descriptionFontWeight": "normal",
-              "descriptionFontSizeMobile": "14px",
+              "descriptionFontSizeMobile": "14",
               "textColor": "#000",
-              "textFontSize": "30px",
+              "textFontSize": "30",
               "textFontWeight": "bold",
-              "textFontSizeMobile": "20px",
+              "textFontSizeMobile": "20",
               "backgroundColorBox": "#fff",
               "backgroundBoxRadious": "10px",
               "opacityImage": 1,
@@ -70,10 +70,10 @@
             }
           },
           "setting": {
-            "paddingTop": "10px",
-            "paddingBottom": "20px",
-            "marginTop": "20px",
-            "marginBottom": "80px"
+            "paddingTop": "10",
+            "paddingBottom": "20",
+            "marginTop": "20",
+            "marginBottom": "80"
           }
         },
         {

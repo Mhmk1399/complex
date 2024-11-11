@@ -58,7 +58,7 @@ const SectionHeader = styled.section<{ $data: SectionData }>`
   margin-bottom: ${props => props?.$data?.setting?.marginBottom}px;
   background-color: ${props => props?.$data?.blocks?.setting?.backgroundColorNavbar};
   position: fixed;
-
+z-index: 100;
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
@@ -103,7 +103,7 @@ const NavItems = styled.div<{ $isOpen: boolean }>`
 const NavItem = styled.a<{ $data: SectionData }>`
   color: ${props => props?.$data?.blocks?.setting?.itemColor};
   font-size: ${props => props?.$data?.blocks?.setting?.itemFontSize}px;
-  font-weight: ${props => props?.$data?.blocks?.setting?.itemFontWeight};
+  font-weight: ${props => props?.$data?.blocks?.setting?.itemFontWeight}px;
   padding: 0.5rem 1rem;
   text-decoration: none;
   &:hover {
