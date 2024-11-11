@@ -50,17 +50,18 @@ interface sectionData {
 
 const Header: React.FC<HeaderProps> = ({ setSelectedComponent, layout }) => {
   const sectionData = layout.sections?.sectionHeader;
- 
+
   const SectionHeader = styled.section`
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding-top: ${sectionData?.setting?.paddingTop}px;
     padding-bottom: ${sectionData?.setting?.paddingBottom}px;
-    margin-top: ${sectionData?.setting?.marginTop };
-    margin-bottom: ${sectionData?.setting?.marginBottom };
+    margin-top: ${sectionData?.setting?.marginTop};
+    margin-bottom: ${sectionData?.setting?.marginBottom};
     background-color: ${sectionData?.blocks?.setting?.backgroundColorNavbar};
     position: fixed;
+    z-index: 50;
 
     @media (max-width: 768px) {
       flex-direction: column;
@@ -132,9 +133,16 @@ const Header: React.FC<HeaderProps> = ({ setSelectedComponent, layout }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <SectionHeader className="w-full lg:w-[75%]" dir="rtl" onClick={() => setSelectedComponent("sectionHeader")}>
+    <SectionHeader
+      className="w-full lg:w-[75%]"
+      dir="rtl"
+      onClick={() => setSelectedComponent("sectionHeader")}
+    >
       <LogoContainer>
-        <Logo src={imageLogo || "/assets/images/logo.webp"} alt={imageAlt || "logo"} />
+        <Logo
+          src={imageLogo || "/assets/images/logo.webp"}
+          alt={imageAlt || "logo"}
+        />
         <MenuButton onClick={() => setIsOpen(!isOpen)}>☰</MenuButton>
       </LogoContainer>
       <NavItems $isOpen={isOpen}>

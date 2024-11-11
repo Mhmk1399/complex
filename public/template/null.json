@@ -172,35 +172,35 @@
         {
           "type": "image-text",
           "blocks": {
-            "imageSrc": "src",
+            "imageSrc": "",
             "imageAlt": "",
             "heading": "",
             "description": "",
             "btnLink": "",
-            "btnText": "Shop Now",
+            "btnText": "",
             "setting": {
-              "headingColor": "#333",
-              "headingFontSize": "20px",
+              "headingColor": "#fff",
+              "headingFontSize": "30px",
               "headingFontWeight": "bold",
-              "descriptionColor": "#333",
-              "descriptionFontSize": "16px",
+              "descriptionColor": "#fff",
+              "descriptionFontSize": "20px",
               "descriptionFontWeight": "normal",
               "btnTextColor": "#fff",
-              "btnBackgroundColor": "#333",
-              "textAlignmentBoxDesktop": "center",
-              "textAlignmentBoxMobile": "center",
-              "opacityImage": 0.5,
-              "imageWidth": "100px",
-              "imageHeight": "100px",
+              "btnBackgroundColor": "#000",
+              "backgroundColorBox": "#333",
+              "backgroundBoxOpacity": 0.9,
+              "boxRadiuos": "20px",
+              "opacityImage": 1,
+              "imageWidth": "1450px",
+              "imageHeight": "700px",
               "imageRadious": "10px"
             }
           },
-          "settings": {
+          "setting": {
             "paddingTop": "20px",
             "paddingBottom": "20px",
-            "marginTop": "0px",
-            "marginBottom": "0px",
-            "DesktopImagePlacementRow": "row"
+            "marginTop": "10px",
+            "marginBottom": "0px"
           }
         },
         {

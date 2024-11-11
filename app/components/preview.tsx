@@ -1,6 +1,7 @@
 import React from "react";
 import Header from "./sections/header";
 import Banner from "./sections/banner";
+import ImageText from "./sections/imageText";
 
 interface PreviewProps {
   layout: {};
@@ -13,10 +14,14 @@ export const Preview: React.FC<PreviewProps> = ({
 }) => {
   return (
     <div className="w-full md:w-full lg:w-[75%]  h-[95vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide lg:mt-5 lg:ml-5">
-      <Header setSelectedComponent={setSelectedComponent} layout={layout} />
+      <Header
+        setSelectedComponent={setSelectedComponent}
+        layout={layout}
+      />
       <br />
       <br />
-      <Banner />
+      {/* <Banner /> */}
+      <ImageText setSelectedComponent={setSelectedComponent} layout={layout} />
     </div>
   );
 };
