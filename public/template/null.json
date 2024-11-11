@@ -34,8 +34,8 @@
         }
       },
       "setting": {
-        "paddingTop": "20px",
-        "paddingBottom": "20px",
+        "paddingTop": "20",
+        "paddingBottom": "20",
         "marginTop": "0px",
         "marginBottom": "0px",
         "navbarPosition": "fixed"
@@ -165,10 +165,10 @@
           },
 
           "setting": {
-            "paddingTop": "20px",
-            "paddingBottom": "20px",
-            "marginTop": "10px",
-            "marginBottom": "10px"
+            "paddingTop": "20",
+            "paddingBottom": "20",
+            "marginTop": "100",
+            "marginBottom": "10"
           }
         },
         {
