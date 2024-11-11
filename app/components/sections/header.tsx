@@ -50,7 +50,6 @@ interface sectionData {
 
 const Header: React.FC<HeaderProps> = ({ setSelectedComponent, layout }) => {
   const sectionData = layout.sections?.sectionHeader;
- console.log(layout);
  
   const SectionHeader = styled.section`
     display: flex;
@@ -135,7 +134,7 @@ const Header: React.FC<HeaderProps> = ({ setSelectedComponent, layout }) => {
   return (
     <SectionHeader className="w-full lg:w-[75%]" dir="rtl" onClick={() => setSelectedComponent("sectionHeader")}>
       <LogoContainer>
-        <Logo src={imageLogo || "/assets/images/logo.webp"} alt={imageAlt} />
+        <Logo src={imageLogo || "/assets/images/logo.webp"} alt={imageAlt || "logo"} />
         <MenuButton onClick={() => setIsOpen(!isOpen)}>☰</MenuButton>
       </LogoContainer>
       <NavItems $isOpen={isOpen}>
