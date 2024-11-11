@@ -121,7 +121,7 @@ const ImageText: React.FC<ImageTextProps> = ({
 
   const Description = styled.p`
     color: ${sectionData?.blocks?.setting?.descriptionColor || "#666"};
-    font-size: ${sectionData?.blocks?.setting?.descriptionFontSize || "16px"};
+    font-size: ${sectionData?.blocks?.setting?.descriptionFontSize || "15px"};
     font-weight: ${sectionData?.blocks?.setting?.descriptionFontWeight ||
     "normal"};
 
