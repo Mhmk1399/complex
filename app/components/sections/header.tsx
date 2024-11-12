@@ -129,16 +129,16 @@ const Header: React.FC<HeaderProps> = ({ setSelectedComponent, layout }) => {
   const defaultSectionData: SectionData = {
     blocks: {
       setting: {
-        titleColor: "",
-        titleFontSize: "16px",  // Add default values
+        titleColor: "#000000",  // Changed from "#000"
+        titleFontSize: "16px",
         titleFontWeight: "normal",
         imageWidth: "auto",
         imageHeight: "auto", 
         imageRadius: "0px",
-        itemColor: "#000000",
+        itemColor: "#000000",   // Changed from "#000"
         itemFontSize: "14px",
         itemFontWeight: "normal",
-        itemHoverColor: "#666666",
+        itemHoverColor: "#666666", // Changed from "#666"
         backgroundColorNavbar: "transparent"
       },
       imageLogo: "/assets/images/logo.webp",

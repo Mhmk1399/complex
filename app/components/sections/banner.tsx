@@ -45,31 +45,28 @@ interface props{
 }
 
 
-const Banner: React.FC<props> = ({setSelectedComponent, layout}) => {
-  const sectionData = layout.sections.children.sections[0] as SectionData;
-
-// Styled components
-const SectionBanner = styled.section`
-  position: relative;
+const SectionBanner = styled.section<{ $data: SectionData }>`
+  position: relative;  // Add this line to fix the Image fill issue
   height: 600px;
   margin: 0px 10px;
-  margin-top: ${sectionData.setting.marginTop}px;
-  margin-bottom: ${sectionData.setting.marginBottom}px;
-  padding-top: ${sectionData.setting.paddingTop}px;
-  padding-bottom: ${sectionData.setting.paddingBottom}px;
+  margin-top: ${props => props.$data.setting.marginTop}px;
+  margin-bottom: ${props => props.$data.setting.marginBottom}px;
+  padding-top: ${props => props.$data.setting.paddingTop}px;
+  padding-bottom: ${props => props.$data.setting.paddingBottom}px;
   overflow: hidden;
   @media (max-width: 768px) {
     height: 300px;
   }
 `;
 
-const BannerImage = styled(Image)`
-  opacity: ${sectionData.blocks.setting.opacityImage || "1"}px;
-  border-radius: ${sectionData.blocks.setting.imageRadious || "10px"};
-  object-fit: ${sectionData.blocks.setting.imageBehavior || "cover"};
+
+const BannerImage = styled(Image)<{ $data: SectionData }>`
+  opacity: ${props => props.$data.blocks.setting.opacityImage || "1"}px;
+  border-radius: ${props => props.$data.blocks.setting.imageRadious || "10px"};
+  object-fit: ${props => props.$data.blocks.setting.imageBehavior || "cover"};
 `;
 
-const BannerTextBox = styled.div`
+const BannerTextBox = styled.div<{ $data: SectionData }>`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -78,58 +75,62 @@ const BannerTextBox = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  opacity: ${sectionData.blocks.setting.opacityTextBox || "1"};
-  background-color: ${sectionData.blocks.setting.backgroundColorBox ||
-  "rgba(0, 0, 0, 0.5)"};
+  opacity: ${props => props.$data.blocks.setting.opacityTextBox || "1"};
+  background-color: ${props => props.$data.blocks.setting.backgroundColorBox || "rgba(0, 0, 0, 0.5)"};
   padding: 70px;
-  border-radius: ${sectionData.blocks.setting.backgroundBoxRadious || "10px"};
+  border-radius: ${props => props.$data.blocks.setting.backgroundBoxRadious || "10px"};
   @media (max-width: 768px) {
     padding: 20px;
   }
 `;
 
-const HeadingText = styled.h2`
-  color: ${sectionData.blocks.setting.textColor || "#fff"};
-  font-size: ${sectionData.blocks.setting.textFontSize || "16px"}px;
-  font-weight: ${sectionData.blocks.setting.textFontWeight || "bold"};
+const HeadingText = styled.h2<{ $data: SectionData }>`
+  color: ${props => props.$data.blocks.setting.textColor || "#fffff"};
+  font-size: ${props => props.$data.blocks.setting.textFontSize || "16px"}px;
+  font-weight: ${props => props.$data.blocks.setting.textFontWeight || "bold"};
   text-align: center;
   @media (max-width: 768px) {
-    font-size: ${sectionData.blocks.setting.textFontSizeMobile || "16px"}px;
+    font-size: ${props => props.$data.blocks.setting.textFontSizeMobile || "16px"}px;
   }
 `;
 
-const DescriptionText = styled.p`
-  color: ${sectionData.blocks.setting.descriptionColor || "#fff"};
-  font-size: ${sectionData.blocks.setting.descriptionFontSize || "16px"}px;
-  font-weight: ${sectionData.blocks.setting.descriptionFontWeight || "normal"};
+const DescriptionText = styled.p<{ $data: SectionData }>`
+  color: ${props => props.$data.blocks.setting.descriptionColor || "#ffffff"};
+  font-size: ${props => props.$data.blocks.setting.descriptionFontSize || "16px"}px;
+  font-weight: ${props => props.$data.blocks.setting.descriptionFontWeight || "normal"};
   margin-top: 17px;
   text-align: center;
   @media (max-width: 768px) {
-    font-size: ${sectionData.blocks.setting.descriptionFontSizeMobile ||
-    "15px"};
+    font-size: ${props => props.$data.blocks.setting.descriptionFontSizeMobile || "15px"};
   }
 `;
 
+const Banner: React.FC<props> = ({setSelectedComponent, layout}) => {
+  const sectionData = layout.sections.children.sections[0] as SectionData;
   const { description, imageAlt, imageSrc, text } = sectionData.blocks;
 
   return (
-    <SectionBanner onClick={() => setSelectedComponent("banner")}>
-      <Link href={sectionData.blocks.imageLink || "/"}>
+    <SectionBanner $data={sectionData} onClick={() => setSelectedComponent("banner")}>
+      <Link href={sectionData.blocks.imageLink || "/"} style={{ position: 'relative', display: 'block', width: '100%', height: '100%' }}>
         <BannerImage
+          $data={sectionData}
           alt={imageAlt || "banner"}
           src={imageSrc || "/assets/images/banner2.webp"}
-          layout="fill"
+          fill
           priority
         />
       </Link>
-      <BannerTextBox>
-        <HeadingText>{ sectionData.blocks.text || "Heading of Banner"}</HeadingText>
-        <DescriptionText>
+      <BannerTextBox $data={sectionData}>
+        <HeadingText $data={sectionData}>
+          {sectionData.blocks.text || "Heading of Banner"}
+        </HeadingText>
+        <DescriptionText $data={sectionData}>
           {sectionData.blocks.description || "Description of Banner"}
         </DescriptionText>
       </BannerTextBox>
     </SectionBanner>
   );
 };
+
 
 export default Banner;
