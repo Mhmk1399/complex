@@ -6,6 +6,9 @@ import { HeaderForm } from './forms/headerForm';
 import { JasonChanger } from './compiler';
 import { BannerForm } from './forms/bannerForm';
 import { ImageTextForm } from './forms/imageTextForm';
+import { VideoForm } from './forms/videoForm';
+import { ContactForm } from './forms/contact';
+import { NewsLetterForm } from './forms/newsLetterForm';
 interface FormProps {
   selectedComponent: string;
   setLayout: (data: any) => void;
@@ -31,6 +34,12 @@ export const Form = ({ selectedComponent, setLayout ,layout }: FormProps) => {
       return <BannerForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
       case 'image-text':
         return <ImageTextForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
+      case 'video':
+        return <VideoForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
+      case 'contact-form':
+        return <ContactForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
+      case 'newsletter':
+        return <NewsLetterForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
       default:
         return <div>Select a component to configure</div>
     }

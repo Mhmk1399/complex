@@ -46,32 +46,32 @@ const Section = styled.section<{ $data: SectionData }>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: ${(props) => props.$data.setting?.paddingTop || "20px"};
-  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20px"};
-  margin-top: ${(props) => props.$data.setting?.marginTop || "20px"};
-  margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20px"};
+  padding-top: ${(props) => props.$data.setting?.paddingTop || "20px"}px;
+  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20px"}px;
+  margin-top: ${(props) => props.$data.setting?.marginTop || "20px"}px;
+  margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20px"}px;
   background-color: ${(props) =>
     props.$data.blocks.setting?.formBackground || "#f9f9f9"};
   border-radius: 10px;
-  margin: 10px 20px;
+  
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 `;
 
 const Heading = styled.h2<{ $data: SectionData }>`
-  color: ${(props) => props.$data.blocks.setting?.headingColor || "#333"};
+  color: ${(props) => props.$data.blocks.setting?.headingColor || "#333333"};
   font-size: ${(props) =>
-    props.$data.blocks.setting?.headingFontSize || "24px"};
+    props.$data.blocks.setting?.headingFontSize || "24px"}px;
   font-weight: ${(props) =>
-    props.$data.blocks.setting?.headingFontWeight || "bold"};
+    props.$data?.blocks?.setting?.headingFontWeight || "bold"};
   margin-bottom: 10px;
   padding: 0px 20px;
   text-align: center;
 `;
 
 const Description = styled.p<{ $data: SectionData }>`
-  color: ${(props) => props.$data.blocks.setting?.descriptionColor || "#666"};
+  color: ${(props) => props.$data.blocks.setting?.descriptionColor || "#666666"};
   font-size: ${(props) =>
-    props.$data.blocks.setting?.descriptionFontSize || "16px"};
+    props.$data.blocks.setting?.descriptionFontSize || "16px"}px;
   font-weight: ${(props) =>
     props.$data.blocks.setting?.descriptionFontWeight || "normal"};
   text-align: center;
@@ -134,6 +134,7 @@ const NewsLetter: React.FC<NewsLetterProps> = ({
   const sectionData = layout.sections?.children?.sections.find(
     (section) => (section as { type?: string }).type === "newsletter"
   ) as SectionData;
+console.log(sectionData);
 
   return (
     <Section

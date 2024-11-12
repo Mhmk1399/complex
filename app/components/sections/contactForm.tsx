@@ -45,7 +45,8 @@ const Section = styled.section<{ $data: SectionData }>`
   padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20px"};
   margin-top: ${(props) => props.$data.setting?.marginTop || "20px"};
   margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20px"};
-  margin: 0 20px;
+  margin-left: 20px;
+  margin-right: 20px;
   background-color: ${(props) =>
     props.$data.blocks.setting?.formBackground || "#f9f9f9"};
   border-radius: 20px;
@@ -55,7 +56,7 @@ const Section = styled.section<{ $data: SectionData }>`
 const Heading = styled.h2<{ $data: SectionData }>`
   color: ${(props) => props.$data.blocks.setting?.headingColor || "#333"};
   font-size: ${(props) =>
-    props.$data.blocks.setting?.headingFontSize || "24px"};
+    props.$data.blocks.setting?.headingFontSize || "24px"}px;
   font-weight: ${(props) =>
     props.$data.blocks.setting?.headingFontWeight || "bold"};
   margin-bottom: 20px;

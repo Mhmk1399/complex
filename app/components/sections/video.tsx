@@ -61,16 +61,16 @@ const Section = styled.section<{ $data: SectionData }>`
 
 const Heading = styled.h1<{ $data: SectionData }>`
   color: ${(props) => props.$data?.blocks?.setting?.headingColor};
-  font-size: ${(props) => props.$data?.blocks?.setting?.headingFontSize};
+  font-size: ${(props) => props.$data?.blocks?.setting?.headingFontSize}px;
   font-weight: ${(props) => props.$data?.blocks?.setting?.headingFontWeight};
   text-align: center;
 `;
 
 const VideoElement = styled.video<{ $data: SectionData }>`
-  width: ${(props) => props.$data?.blocks?.setting?.videoWidth || "100%"};
-  height: ${(props) => props.$data?.blocks?.setting?.videoHeight || "auto"};
+  width: ${(props) => props.$data?.blocks?.setting?.videoWidth|| "100%"}0px;
+  height: ${(props) => props.$data?.blocks?.setting?.videoHeight|| "auto"};
   border-radius: ${(props) =>
-    props.$data?.blocks?.setting?.videoRadious || "10px"};
+    props.$data?.blocks?.setting?.videoRadious || "10px"}px;
   height: auto;
   @media (max-width: 768px) {
     border-radius: 20px;

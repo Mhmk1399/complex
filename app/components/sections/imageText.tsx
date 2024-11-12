@@ -150,7 +150,6 @@ const ImageText: React.FC<ImageTextProps> = ({
     blocks: {},
     setting: {} // Add default empty setting object
   };
-console.log(layout);
 
   return (
     <Section $data={sectionData} onClick={() => setSelectedComponent("image-text")} dir="rtl">
