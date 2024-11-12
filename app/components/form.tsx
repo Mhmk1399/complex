@@ -9,13 +9,14 @@ import { BannerForm } from './forms/bannerForm';
 interface FormProps {
   selectedComponent: string;
   setLayout: (data: any) => void;
+  layout: any;
 }
 
-export const Form = ({ selectedComponent, setLayout }: FormProps) => {
+export const Form = ({ selectedComponent, setLayout ,layout }: FormProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [userInputData, setUserInputData] = useState<any>({});
   useEffect(() => {
-    const newjason=JasonChanger(data, selectedComponent, userInputData)
+    const newjason=JasonChanger(layout, selectedComponent, userInputData)
     setLayout(newjason)
     
   }, [userInputData])
@@ -23,11 +24,11 @@ export const Form = ({ selectedComponent, setLayout }: FormProps) => {
   const renderFormContent = (setUserInputData: (data: {}) => void, userInputData: any ) => {
     switch (selectedComponent) {
       case 'rich-text':
-        return <RichText  setUserInputData={setUserInputData} userInputData={userInputData} />
+        return <RichText  setUserInputData={setUserInputData} userInputData={userInputData} layout={layout}/>
       case 'sectionHeader':
-        return <HeaderForm setUserInputData={setUserInputData} userInputData={userInputData}  />
+        return <HeaderForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
       case 'banner':
-      return <BannerForm setUserInputData={setUserInputData} userInputData={userInputData}  />
+      return <BannerForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
       default:
         return <div>Select a component to configure</div>
     }
