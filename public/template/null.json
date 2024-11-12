@@ -206,7 +206,7 @@
         {
           "type": "video",
           "blocks": {
-            "heading": "ededewd",
+            "heading": "video heading",
             "videoUrl": "/assets/video/video.mp4",
             "videoAlt": "",
             "setting": {
@@ -278,11 +278,11 @@
         },
         {
           "type": "collapse",
-          "heading": "",
+          "heading": "collapse",
           "blocks": [
             {
-              "text": "",
-              "content": "",
+              "text1": "text",
+              "content1": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem nobis quo velit ut dolor consequuntur cupiditate? Aperiam ab praesentium minus aliquam nemo. Esse, illum. Eligendi eum consectetur ",
               "setting": {
                 "headingColor": "#333",
                 "headingFontSize": "20px",
@@ -293,8 +293,8 @@
               }
             },
             {
-              "text": "",
-              "content": "",
+              "text2": "text",
+              "content2": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem nobis quo velit ut dolor consequuntur cupiditate? Aperiam ab praesentium minus aliquam nemo. Esse, illum. Eligendi eum consectetur ",
               "setting": {
                 "headingColor": "#333",
                 "headingFontSize": "20px",
@@ -305,8 +305,8 @@
               }
             },
             {
-              "text": "",
-              "content": "",
+              "text3": "text",
+              "content3": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem nobis quo velit ut dolor consequuntur cupiditate? Aperiam ab praesentium minus aliquam nemo. Esse, illum. Eligendi eum consectetur ",
               "setting": {
                 "headingColor": "#333",
                 "headingFontSize": "20px",
@@ -317,10 +317,10 @@
               }
             },
             {
-              "text": "",
-              "content": "",
+              "text4": "text",
+              "content4": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem nobis quo velit ut dolor consequuntur cupiditate? Aperiam ab praesentium minus aliquam nemo. Esse, illum. Eligendi eum consectetur ",
               "setting": {
-                "headingColor": "#333",
+                "headingColor": "#ffffff",
                 "headingFontSize": "20px",
                 "headingFontWeight": "bold",
                 "contentColor": "#333",
@@ -332,11 +332,12 @@
           "setting": {
             "paddingTop": "20px",
             "paddingBottom": "20px",
-            "marginTop": "0px",
-            "marginBottom": "0px",
-            "headingAlignment": "center",
+            "marginTop": "100px",
+            "marginBottom": "100px",
+            "headingColor": "#ffffff",
             "headingFontSize": "20px",
-            "headingFontWeight": "bold"
+            "headingFontWeight": "bold",
+            "background": "#179bcb"
           }
         },
         {
