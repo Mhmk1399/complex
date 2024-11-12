@@ -253,20 +253,25 @@
           "blocks": {
             "heading": "",
             "description": "",
+            "btnText": "",
+
             "setting": {
-              "headingColor": "#333",
-              "headingFontSize": "20px",
+              "headingColor": "#ffffff",
+              "headingFontSize": "27px",
               "headingFontWeight": "bold",
-              "descriptionColor": "#333",
-              "descriptionFontSize": "16px",
-              "descriptionFontWeight": "normal"
+              "descriptionColor": "#e4e4e4",
+              "descriptionFontSize": "18px",
+              "descriptionFontWeight": "normal",
+              "btnBackgroundColor": "#ea7777",
+              "btnTextColor": "#ffffff",
+              "formBackground": "#005002"
             }
           },
           "setting": {
             "paddingTop": "20px",
             "paddingBottom": "20px",
-            "marginTop": "0px",
-            "marginBottom": "0px"
+            "marginTop": "20px",
+            "marginBottom": "20px"
           }
         },
         {
