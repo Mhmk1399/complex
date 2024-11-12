@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { Compiler } from '../compiler';
-import data from '../../../public/template/null.json';
 
 interface RichTextFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<any>>;
   userInputData: any;
+  layout: any;
 }
 
 const ColorInput = ({ label, name, value, onChange }: {
@@ -28,11 +28,11 @@ const ColorInput = ({ label, name, value, onChange }: {
   </>
 );
 
- export const RichText: React.FC<RichTextFormProps> = ({ setUserInputData, userInputData }) => {
+ export const RichText: React.FC<RichTextFormProps> = ({ setUserInputData, userInputData , layout}) => {
 
 
   useEffect(() => {
-    const initialData = Compiler(data, 'rich-text') ;
+    const initialData = Compiler(layout, 'rich-text') ;
     setUserInputData(initialData[0]);
     console.log(initialData[0]);
     

@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import { Compiler } from '../compiler';
-import data from '../../../public/template/null.json'
 interface HeaderFormProps {
-
+  layout: any;
   setUserInputData: React.Dispatch<React.SetStateAction<any>>;
   userInputData: any;
 }
@@ -12,7 +11,7 @@ interface Link {
   url: string;
 }
 
-export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userInputData }) => {
+export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userInputData ,layout }) => {
 
   // Add default values to prevent undefined values
   const defaultValues = {
@@ -38,20 +37,14 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
   };
 
   // Modify the useEffect to include default values
-  useEffect(() => {
-    const initialData = {
-      ...defaultValues,
-      ...Compiler(data, 'sectionHeader')
-    };
-    setUserInputData(initialData);
-  }, []);
+  
 
   const [isDataReady, setIsDataReady] = React.useState(false);
 
   useEffect(() => {
     const initialData = {
       ...defaultValues,
-      ...Compiler(data, 'sectionHeader')
+      ...Compiler(layout, 'sectionHeader')
     };
     setUserInputData(initialData);
     setIsDataReady(true);

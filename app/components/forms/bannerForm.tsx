@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { Compiler } from '../compiler';
-import data from '../../../public/template/null.json';
 
 interface BannerFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<any>>;
   userInputData: any;
+  layout: any;
 }
 
 const ColorInput = ({ label, name, value, onChange }: {
@@ -28,9 +28,9 @@ const ColorInput = ({ label, name, value, onChange }: {
   </>
 );
 
-export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userInputData }) => {
+export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userInputData , layout}) => {
   useEffect(() => {
-    const initialData = Compiler(data, 'banner')[0];
+    const initialData = Compiler(layout, 'banner')[0];
     setUserInputData(initialData);
   }, []);
 
