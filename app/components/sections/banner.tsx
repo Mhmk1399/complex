@@ -39,9 +39,9 @@ interface SectionData {
   blocks: BlocksType;
   setting: SettingType;
 }
-interface props{
+interface props {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
-  layout: any
+  layout: any;
 }
 
 

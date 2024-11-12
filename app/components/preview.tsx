@@ -3,6 +3,8 @@ import Header from "./sections/header";
 import RichText from "./sections/richText";
 import Banner from "./sections/banner";
 import ImageText from "./sections/imageText";
+import Video from "./sections/video";
+import ContactForm from "./sections/contactForm";
 
 interface PreviewProps {
   layout: {};
@@ -19,6 +21,11 @@ export const Preview: React.FC<PreviewProps> = ({
       <RichText setSelectedComponent={setSelectedComponent} layout={layout} />
       <Banner setSelectedComponent={setSelectedComponent} layout={layout} />
       <ImageText setSelectedComponent={setSelectedComponent} layout={layout} />
+      <Video setSelectedComponent={setSelectedComponent} layout={layout} />
+      <ContactForm
+        setSelectedComponent={setSelectedComponent}
+        layout={layout}
+      />
     </div>
   );
 };
