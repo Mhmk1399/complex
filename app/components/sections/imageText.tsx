@@ -27,6 +27,7 @@ interface BlocksType {
     opacityImage?: string;
     imageWidth?: string;
     imageHeight?: string;
+    background?: string;
   };
   imageSrc?: string;
   imageAlt?: string;
@@ -51,11 +52,13 @@ const Section = styled.section<{ $data: SectionData }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: ${props => props.$data.setting?.paddingTop};
-  padding-bottom: ${props => props.$data.setting?.paddingBottom};
-  margin-top: ${props => props.$data.setting?.marginTop || "20px"};
-  margin-bottom: ${props => props.$data.setting?.marginBottom || "20px"};
-  border-radius: ${props => props.$data.blocks?.setting?.boxRadiuos || "10px"};
+  border-radius: 15px;
+  padding-top: ${props => props.$data.setting?.paddingTop || 0}px;
+  padding-bottom: ${props => props.$data.setting?.paddingBottom || 0}px;
+  margin-top: ${props => props.$data.setting?.marginTop || 0}px;
+  margin-bottom: ${props => props.$data.setting?.marginBottom || 0}px;
+  border-radius: ${props => props.$data.blocks?.setting?.boxRadiuos || "10px"}px;
+  background-color: ${props => props.$data.blocks?.setting?.background || "transparent"};
   overflow: hidden;
   flex-direction: column;
   @media (min-width: 1024px) {
@@ -70,12 +73,13 @@ const Image = styled.img<{ $data: SectionData }>`
   opacity: ${props => props.$data.blocks?.setting?.opacityImage || "1"};
   object-fit: cover;
   @media (max-width: 768px) {
-    width: 100%;
     height: auto;
-    padding: 0px 10px;
+    
   }
   @media (min-width: 1025px) {
     width: 50%;
+        ;
+
   }
 `;
 
@@ -97,7 +101,7 @@ const TextContainer = styled.div<{ $data: SectionData }>`
 
 const Heading = styled.h2<{ $data: SectionData }>`
   color: ${props => props.$data.blocks?.setting?.headingColor || "#333"};
-  font-size: ${props => props.$data.blocks?.setting?.headingFontSize || "24px"};
+  font-size: ${props => props.$data.blocks?.setting?.headingFontSize || "24px"}px;
   font-weight: ${props => props.$data.blocks?.setting?.headingFontWeight || "bold"};
   margin-bottom: 10px;
   @media (max-width: 768px) {
@@ -108,8 +112,8 @@ const Heading = styled.h2<{ $data: SectionData }>`
   }
 `;
 const Description = styled.p<{ $data: SectionData }>`
-  color: ${props => props.$data.blocks?.setting?.descriptionColor || "#666"};
-  font-size: ${props => props.$data.blocks?.setting?.descriptionFontSize || "16px"};
+  color: ${props => props.$data.blocks?.setting?.descriptionColor || "#666666"};
+  font-size: ${props => props.$data.blocks?.setting?.descriptionFontSize || "16px"}px;
   font-weight: ${props => props.$data.blocks?.setting?.descriptionFontWeight || "normal"};
   margin-bottom: 20px;
   @media (max-width: 768px) {
@@ -138,10 +142,13 @@ const ImageText: React.FC<ImageTextProps> = ({
   setSelectedComponent,
   layout,
 }) => {
-  const sectionData = layout.sections?.children?.sections.find(
+  const sectionData = layout?.sections?.children?.sections.find(
     (section) => (section as { type?: string }).type === "image-text"
-  ) as SectionData;
-
+  ) as SectionData || {
+    blocks: {},
+    setting: {} // Add default empty setting object
+  };
+console.log(layout);
 
   return (
     <Section $data={sectionData} onClick={() => setSelectedComponent("image-text")} dir="rtl">
@@ -149,18 +156,17 @@ const ImageText: React.FC<ImageTextProps> = ({
         $data={sectionData}
         src={sectionData?.blocks?.imageSrc || "/assets/images/banner2.webp"}
         alt={sectionData?.blocks?.imageAlt || "Image"}
-        loading="lazy"
       />
       <TextContainer $data={sectionData}>
         <Heading $data={sectionData}>{sectionData?.blocks?.heading || "Default Heading"}</Heading>
         <Description $data={sectionData}>
-  {sectionData?.blocks?.description ||
-    "Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review."}
-</Description>
-<Button $data={sectionData} href={sectionData?.blocks?.btnLink}>
-  {sectionData?.blocks?.btnText || "Learn More"}
-</Button>
+          {sectionData?.blocks?.description || "Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review."}
+        </Description>
+        <Button $data={sectionData} href={sectionData?.blocks?.btnLink}>
+          {sectionData?.blocks?.btnText || "Learn More"}
+        </Button>
       </TextContainer>
     </Section>
   );
-};export default ImageText;
+}
+export default ImageText;

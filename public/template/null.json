@@ -192,13 +192,14 @@
               "boxRadiuos": "20px",
               "opacityImage": 1,
               "imageWidth": "850px",
-              "imageHeight": "700px"
+              "imageHeight": "700px",
+              "background": "#e4e4e4"
             }
           },
           "setting": {
-            "paddingTop": "20px",
-            "paddingBottom": "20px",
-            "marginTop": "10px",
+            "paddingTop": "0px",
+            "paddingBottom": "0px",
+            "marginTop": "10000px",
             "marginBottom": "0px"
           }
         },

@@ -4,8 +4,8 @@ import { motion } from 'framer-motion'
 import { RichText } from './forms/richTextForm'
 import { HeaderForm } from './forms/headerForm';
 import { JasonChanger } from './compiler';
-import data from '../../public/template/null.json'
 import { BannerForm } from './forms/bannerForm';
+import { ImageTextForm } from './forms/imageTextForm';
 interface FormProps {
   selectedComponent: string;
   setLayout: (data: any) => void;
@@ -29,6 +29,8 @@ export const Form = ({ selectedComponent, setLayout ,layout }: FormProps) => {
         return <HeaderForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
       case 'banner':
       return <BannerForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
+      case 'image-text':
+        return <ImageTextForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
       default:
         return <div>Select a component to configure</div>
     }
