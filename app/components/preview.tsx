@@ -7,6 +7,7 @@ import Video from "./sections/video";
 import ContactForm from "./sections/contactForm";
 import NewsLetter from "./sections/newsLetter";
 import CollapseFaq from "./sections/collapseFaq";
+import MultiColumn from "./sections/multiColumn";
 
 interface PreviewProps {
   layout: {};
@@ -30,6 +31,10 @@ export const Preview: React.FC<PreviewProps> = ({
       />
       <NewsLetter setSelectedComponent={setSelectedComponent} layout={layout} />
       <CollapseFaq
+        setSelectedComponent={setSelectedComponent}
+        layout={layout}
+      />
+      <MultiColumn
         setSelectedComponent={setSelectedComponent}
         layout={layout}
       />

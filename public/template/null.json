@@ -348,28 +348,28 @@
           "btnLink": "",
           "blocks": [
             {
-              "title": "",
-              "description": "",
-              "imageSrc": "",
-              "imageAlt": "",
-              "btnLable": "",
-              "btnLink": ""
+              "title1": "",
+              "description1": "",
+              "imageSrc1": "",
+              "imageAlt1": "",
+              "btnLable1": "",
+              "btnLink1": ""
             },
             {
-              "title": "",
-              "description": "",
-              "imageSrc": "",
-              "imageAlt": "",
-              "btnLable": "",
-              "btnLink": ""
+              "title2": "",
+              "description2": "",
+              "imageSrc2": "",
+              "imageAlt2": "",
+              "btnLable2": "",
+              "btnLink2": ""
             },
             {
-              "title": "",
-              "description": "",
-              "imageSrc": "",
-              "imageAlt": "",
-              "btnLable": "",
-              "btnLink": ""
+              "title3": "",
+              "description3": "",
+              "imageSrc3": "",
+              "imageAlt3": "",
+              "btnLable3": "",
+              "btnLink3": ""
             }
           ],
           "setting": {
@@ -378,9 +378,6 @@
             "marginTop": "0px",
             "marginBottom": "0px",
             "backgroundColorBox": "#fff",
-            "gridDisplayDesktop": "3",
-            "gridDisplayMobile": "1",
-            "headingAlignment": "center",
             "headingFontSize": "20px",
             "headingFontWeight": "bold",
             "headingColor": "#333",
