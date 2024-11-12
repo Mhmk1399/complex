@@ -114,11 +114,12 @@ const Button = styled.button<{ $data: SectionData }>`
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  transition: all 0.4s ease-in-out;
 
   &:hover {
     background-color: ${(props) =>
       props.$data.blocks.setting?.btnBackgroundColor ? "#0056b3" : "#9c119c"};
+    transform: scale(0.97);
   }
   @media (max-width: 768px) {
     width: 90%;
