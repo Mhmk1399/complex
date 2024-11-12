@@ -62,7 +62,7 @@ const Heading = styled.h2<{ $data: SectionData }>`
   font-size: ${(props) =>
     props.$data.blocks.setting?.headingFontSize || "24px"}px;
   font-weight: ${(props) =>
-    props.$data?.blocks?.setting?.headingFontWeight || "bold"};
+    props.$data?.blocks?.setting?.headingFontWeight};
   margin-bottom: 10px;
   padding: 0px 20px;
   text-align: center;
