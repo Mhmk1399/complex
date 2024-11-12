@@ -17,17 +17,17 @@ export const Main = () => {
   const [selectedComponent, setSelectedComponent] = useState<string>('sectionHeader');
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/api/your-endpoint'); // Replace with your API endpoint
-        const jsonData = await response.json();
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    // const fetchData = async () => {
+    //   try {
+    //     const response = await fetch('/api/your-endpoint'); // Replace with your API endpoint
+    //     const jsonData = await response.json();
+    //     setLoading(false);
+    //   } catch (error) {
+        
+    //   }
+    // };
+setLoading(false);
+    // fetchData();
   }, []);
   
 
