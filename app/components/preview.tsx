@@ -5,6 +5,7 @@ import Banner from "./sections/banner";
 import ImageText from "./sections/imageText";
 import Video from "./sections/video";
 import ContactForm from "./sections/contactForm";
+import NewsLetter from "./sections/newsLetter";
 
 interface PreviewProps {
   layout: {};
@@ -26,6 +27,7 @@ export const Preview: React.FC<PreviewProps> = ({
         setSelectedComponent={setSelectedComponent}
         layout={layout}
       />
+      <NewsLetter setSelectedComponent={setSelectedComponent} layout={layout} />
     </div>
   );
 };
