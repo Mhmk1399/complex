@@ -278,66 +278,67 @@
         },
         {
           "type": "collapse",
-          "heading": "collapse",
           "blocks": [
             {
+              "heading": "collapse",
               "text1": "text",
               "content1": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem nobis quo velit ut dolor consequuntur cupiditate? Aperiam ab praesentium minus aliquam nemo. Esse, illum. Eligendi eum consectetur ",
               "setting": {
-                "headingColor": "#333",
-                "headingFontSize": "20px",
-                "headingFontWeight": "bold",
-                "contentColor": "#333",
-                "contentFontSize": "16px",
-                "contentFontWeight": "normal"
+                "textColor1": "#ffffff",
+                "textFontSize1": "20px",
+                "textFontWeight1": "bold",
+                "contentColor1": "#ffffff",
+                "contentFontSize1": "16px",
+                "contentFontWeight1": "normal"
               }
             },
             {
               "text2": "text",
               "content2": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem nobis quo velit ut dolor consequuntur cupiditate? Aperiam ab praesentium minus aliquam nemo. Esse, illum. Eligendi eum consectetur ",
               "setting": {
-                "headingColor": "#333",
-                "headingFontSize": "20px",
-                "headingFontWeight": "bold",
-                "contentColor": "#333",
-                "contentFontSize": "16px",
-                "contentFontWeight": "normal"
+                "textColor2": "#000000",
+                "textFontSize2": "20px",
+                "textFontWeight2": "bold",
+                "contentColor2": "#ffffff",
+                "contentFontSize2": "16px",
+                "contentFontWeight2": "normal"
               }
             },
             {
               "text3": "text",
               "content3": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem nobis quo velit ut dolor consequuntur cupiditate? Aperiam ab praesentium minus aliquam nemo. Esse, illum. Eligendi eum consectetur ",
               "setting": {
-                "headingColor": "#333",
-                "headingFontSize": "20px",
-                "headingFontWeight": "bold",
-                "contentColor": "#333",
-                "contentFontSize": "16px",
-                "contentFontWeight": "normal"
+                "textColor3": "#ffffff",
+                "textFontSize3": "20px",
+                "textFontWeight3": "bold",
+                "contentColor3": "#ffffff",
+                "contentFontSize3": "16px",
+                "contentFontWeight3": "normal"
               }
             },
             {
               "text4": "text",
               "content4": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem nobis quo velit ut dolor consequuntur cupiditate? Aperiam ab praesentium minus aliquam nemo. Esse, illum. Eligendi eum consectetur ",
               "setting": {
-                "headingColor": "#ffffff",
-                "headingFontSize": "20px",
-                "headingFontWeight": "bold",
-                "contentColor": "#333",
-                "contentFontSize": "16px",
-                "contentFontWeight": "normal"
+                "textColor4": "#000000",
+                "textFontSize4": "20px",
+                "textFontWeight4": "bold",
+                "contentColor4": "#ffffff",
+                "contentFontSize4": "16px",
+                "contentFontWeight4": "normal"
               }
             }
           ],
           "setting": {
             "paddingTop": "20px",
             "paddingBottom": "20px",
-            "marginTop": "100px",
-            "marginBottom": "100px",
+            "marginTop": "10px",
+            "marginBottom": "10px",
             "headingColor": "#ffffff",
-            "headingFontSize": "20px",
+            "headingFontSize": "30px",
             "headingFontWeight": "bold",
-            "background": "#179bcb"
+            "background": "#672f93",
+            "borderRadious": "20px"
           }
         },
         {
