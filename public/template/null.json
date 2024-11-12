@@ -233,19 +233,19 @@
           "blocks": {
             "heading": "",
             "setting": {
-              "headingColor": "#333",
-              "headingFontSize": "20px",
+              "headingColor": "#fff",
+              "headingFontSize": "25px",
               "headingFontWeight": "bold",
-              "btnBackgroundColor": "#333",
+              "btnBackgroundColor": "#9c119c",
               "btnTextColor": "#fff",
-              "btnBackground": "#333"
+              "formBackground": "#11769c"
             }
           },
           "setting": {
             "paddingTop": "20px",
             "paddingBottom": "20px",
-            "marginTop": "0px",
-            "marginBottom": "0px"
+            "marginTop": "20px",
+            "marginBottom": "20px"
           }
         },
         {
