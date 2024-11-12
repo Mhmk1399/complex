@@ -19,7 +19,6 @@ interface BlocksType {
     contentColor?: string;
     contentFontSize?: string;
     contentFontWeight?: string;
-    background?: string;
   };
   heading?: string;
   text1?: string;
@@ -37,6 +36,10 @@ interface SettingType {
   paddingBottom?: string;
   marginTop?: string;
   marginBottom?: string;
+  background?: string;
+  headingColor?: string;
+  headingFontSize?: string;
+  headingFontWeight?: string;
 }
 
 interface SectionData {
@@ -50,19 +53,19 @@ const Section = styled.section<{ $data: SectionData }>`
   padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20px"};
   margin-top: ${(props) => props.$data.setting?.marginTop || "20px"};
   margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20px"};
-  background-color: ${(props) =>
-    props.$data.setting?.background || "#ffffff"};
+  margin-right: 10px;
+  margin-left: 10px;
+  border-radius: 20px;
+  background-color: ${(props) => props.$data.setting?.background || "#ffffff"};
   display: flex;
   flex-direction: column;
-  width: 90%;
-  margin: 0 auto;
   align-items: center;
   justify-content: center;
   gap: 10px;
 `;
 
 const Heading = styled.h2<{ $data: SectionData }>`
-  color: ${(props) => props.$data.blocks.setting?.textColor || "#333"};
+  color: ${(props) => props.$data.blocks.heading || "#333"};
   font-size: ${(props) => props.$data.blocks.setting?.textFontSize || "24px"};
   font-weight: ${(props) =>
     props.$data.blocks.setting?.textFontWeight || "bold"};
