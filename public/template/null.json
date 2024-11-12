@@ -207,7 +207,7 @@
           "type": "video",
           "blocks": {
             "heading": "ededewd",
-            "videoUrl": "",
+            "videoUrl": "/assets/video/video.mp4",
             "videoAlt": "",
             "setting": {
               "headingColor": "#000",
@@ -215,11 +215,12 @@
               "headingFontWeight": "bold",
               "videoWidth": "1000px",
               "videoHeight": "700px",
-              "videoRadious": "40px",
+              "videoRadious": "20px",
               "videoLoop": true,
               "videoMute": false,
-              "videoAutoplay": false,
-              "videoPoster": "src"
+              "videoAutoplay": true,
+              "videoPoster": "/assets/images/banner2.webp",
+              "backgroundVideoSection": "#e4e4e4"
             }
           },
           "setting": {
