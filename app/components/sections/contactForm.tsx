@@ -75,7 +75,7 @@ const Input = styled.input`
   border: 1px solid #ccc;
   border-radius: 10px;
   font-size: 16px;
-  width: 50%;
+  width: 70%;
 
   &:focus {
     outline: none;
@@ -93,7 +93,7 @@ const TextArea = styled.textarea`
   border: 1px solid #ccc;
   border-radius: 10px;
   font-size: 16px;
-  width: 50%;
+  width: 70%;
   resize: vertical;
   min-height: 100px;
   &:focus {
