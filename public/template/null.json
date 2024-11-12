@@ -205,27 +205,27 @@
         {
           "type": "video",
           "blocks": {
-            "heading": "",
-            "videoUrl": "",
-            "alt": "",
+            "heading": "ededewd",
+            "videoUrl": "https://www.youtube.com/live/-EO7FUkxV9s?si=5aFjRS46v3ctp-z5",
+            "videoAlt": "",
             "setting": {
-              "headingColor": "#333",
-              "headingFontSize": "20px",
+              "headingColor": "#000",
+              "headingFontSize": "30px",
               "headingFontWeight": "bold",
-              "videoWidth": "100px",
-              "videoHeight": "100px",
-              "videoRadious": "10px",
-              "videoLoop": "false",
-              "videoMute": "false",
-              "videoAutoplay": "false",
+              "videoWidth": "1000px",
+              "videoHeight": "700px",
+              "videoRadious": "40px",
+              "videoLoop": true,
+              "videoMute": false,
+              "videoAutoplay": false,
               "videoPoster": "src"
             }
           },
           "setting": {
-            "paddingTop": "20px",
-            "paddingBottom": "20px",
-            "marginTop": "0px",
-            "marginBottom": "0px"
+            "paddingTop": "20",
+            "paddingBottom": "20",
+            "marginTop": "10",
+            "marginBottom": "10"
           }
         },
         {
