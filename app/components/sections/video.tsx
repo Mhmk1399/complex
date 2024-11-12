@@ -57,7 +57,6 @@ const Section = styled.section<{ $data: SectionData }>`
   justify-content: center;
   border-radius: 20px;
   gap: 15px;
-
 `;
 
 const Heading = styled.h1<{ $data: SectionData }>`
