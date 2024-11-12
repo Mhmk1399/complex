@@ -63,7 +63,9 @@ const Section = styled.section<{ $data: SectionData }>`
   flex-direction: column;
   @media (min-width: 1024px) {
     flex-direction: row;
-    margin: 10px;
+    margin-left:10px;
+        margin-right:10px;
+
   }
 `;
 
