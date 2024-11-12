@@ -6,6 +6,7 @@ import ImageText from "./sections/imageText";
 import Video from "./sections/video";
 import ContactForm from "./sections/contactForm";
 import NewsLetter from "./sections/newsLetter";
+import CollapseFaq from "./sections/collapseFaq";
 
 interface PreviewProps {
   layout: {};
@@ -28,6 +29,10 @@ export const Preview: React.FC<PreviewProps> = ({
         layout={layout}
       />
       <NewsLetter setSelectedComponent={setSelectedComponent} layout={layout} />
+      <CollapseFaq
+        setSelectedComponent={setSelectedComponent}
+        layout={layout}
+      />
     </div>
   );
 };
