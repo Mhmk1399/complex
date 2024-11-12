@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Compiler } from '../compiler';
 
-interface RichTextFormProps {
+interface NewsLetterFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<any>>;
   userInputData: any;
   layout: any;
@@ -20,7 +20,7 @@ const ColorInput = ({ label, name, value, onChange }: {
         type="color"
         id={name}
         name={name}
-        value={value}
+        value={value || '#000000'}
         onChange={onChange}
         className="border p-0.5 rounded-full"
       />
@@ -28,15 +28,11 @@ const ColorInput = ({ label, name, value, onChange }: {
   </>
 );
 
- export const RichText: React.FC<RichTextFormProps> = ({ setUserInputData, userInputData , layout}) => {
-
-
+export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({ setUserInputData, userInputData, layout }) => {
   useEffect(() => {
-    const initialData = Compiler(layout, 'rich-text') ;
-    setUserInputData(initialData[0]);
-    
+    const initialData = Compiler(layout, 'newsletter')[0];
+    setUserInputData(initialData);
   }, []);
-
 
   const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -63,7 +59,7 @@ const ColorInput = ({ label, name, value, onChange }: {
     }));
   };
 
-  const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserInputData((prev: any) => ({
       ...prev,
@@ -76,7 +72,7 @@ const ColorInput = ({ label, name, value, onChange }: {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <h2 className="text-xl font-bold mb-4">Rich Text Settings</h2>
+      <h2 className="text-xl font-bold mb-4">Newsletter Settings</h2>
 
       {/* Content Section */}
       <div className="mb-6">
@@ -86,13 +82,13 @@ const ColorInput = ({ label, name, value, onChange }: {
             <label className="block mb-1">Heading</label>
             <input
               type="text"
-              name="textHeading"
-              value={userInputData?.blocks?.textHeading ?? ''}
+              name="heading"
+              value={userInputData?.blocks?.heading ?? ''}
               onChange={handleBlockChange}
               className="w-full p-2 border rounded"
             />
           </div>
-          
+
           <div>
             <label className="block mb-1">Description</label>
             <textarea
@@ -114,17 +110,6 @@ const ColorInput = ({ label, name, value, onChange }: {
               className="w-full p-2 border rounded"
             />
           </div>
-
-          <div>
-            <label className="block mb-1">Button Link</label>
-            <input
-              type="text"
-              name="btnLink"
-              value={userInputData?.blocks?.btnLink ?? ''}
-              onChange={handleBlockChange}
-              className="w-full p-2 border rounded"
-            />
-          </div>
         </div>
       </div>
 
@@ -134,36 +119,84 @@ const ColorInput = ({ label, name, value, onChange }: {
         <div className="grid md:grid-cols-2 gap-4">
           <ColorInput
             label="Heading Color"
-            name="textHeadingColor"
-            value={userInputData?.blocks?.setting?.textHeadingColor ?? '#000000'}
-            onChange={handleBlockSettingChange}
-          />
-          <ColorInput
-            label="background Color"
-            name="background"
-            value={userInputData?.blocks?.setting?.background ?? '#000000'}
+            name="headingColor"
+            value={userInputData?.blocks?.setting?.headingColor ?? '#ffffff'}
             onChange={handleBlockSettingChange}
           />
           <ColorInput
             label="Description Color"
             name="descriptionColor"
-            value={userInputData?.blocks?.setting?.descriptionColor ?? '#000000'}
+            value={userInputData?.blocks?.setting?.descriptionColor ?? '#e4e4e4'}
             onChange={handleBlockSettingChange}
           />
-
+          <ColorInput
+            label="Button Background Color"
+            name="btnBackgroundColor"
+            value={userInputData?.blocks?.setting?.btnBackgroundColor ?? '#ea7777'}
+            onChange={handleBlockSettingChange}
+          />
           <ColorInput
             label="Button Text Color"
             name="btnTextColor"
             value={userInputData?.blocks?.setting?.btnTextColor ?? '#ffffff'}
             onChange={handleBlockSettingChange}
           />
-
           <ColorInput
-            label="Button Background Color"
-            name="btnBackgroundColor"
-            value={userInputData?.blocks?.setting?.btnBackgroundColor ?? '#000000'}
+            label="Form Background"
+            name="formBackground"
+            value={userInputData?.blocks?.setting?.formBackground ?? '#005002'}
             onChange={handleBlockSettingChange}
           />
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-4 mt-4">
+          <div>
+            <label className="block mb-1">Heading Font Size</label>
+            <input
+              type="range"
+              name="headingFontSize"
+              value={userInputData?.blocks?.setting?.headingFontSize ?? '27px'}
+              onChange={handleBlockSettingChange}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <div>
+            <label className="block mb-1">Description Font Size</label>
+            <input
+              type="range"
+              name="descriptionFontSize"
+              value={userInputData?.blocks?.setting?.descriptionFontSize ?? '18px'}
+              onChange={handleBlockSettingChange}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-4 mt-4">
+          <div>
+            <label className="block mb-1">Heading Font Weight</label>
+            <select
+              name="headingFontWeight"
+              value={userInputData?.blocks?.setting?.headingFontWeight ?? 'bold'}
+              onChange={()=>handleBlockSettingChange}
+              className="w-full p-2 border rounded"
+            >
+              <option value="normal">Normal</option>
+              <option value="bold">Bold</option>
+            </select>
+          </div>
+          <div>
+            <label className="block mb-1">Description Font Weight</label>
+            <select
+              name="descriptionFontWeight"
+              value={userInputData?.blocks?.setting?.descriptionFontWeight ?? 'normal'}
+              onChange={()=>handleBlockSettingChange}
+              className="w-full p-2 border rounded"
+            >
+              <option value="normal">Normal</option>
+              <option value="bold">Bold</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -171,49 +204,20 @@ const ColorInput = ({ label, name, value, onChange }: {
       <div className="mb-6">
         <h3 className="font-semibold mb-2">Spacing</h3>
         <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block mb-1">Padding Top</label>
-            <input
-              type="range"
-              name="paddingTop"
-              value={userInputData?.setting?.paddingTop ?? '0'}
-              onChange={handleSettingChange}
-              className="w-full"
-            />
-          </div>
-
-          <div>
-            <label className="block mb-1">Padding Bottom</label>
-            <input
-              type="range"
-              name="paddingBottom"
-              value={userInputData?.setting?.paddingBottom ?? '0'}
-              onChange={handleSettingChange}
-              className="w-full"
-            />
-          </div>
-
-          <div>
-            <label className="block mb-1">Margin Top</label>
-            <input
-              type="range"
-              name="marginTop"
-              value={userInputData?.setting?.marginTop ?? '0'}
-              onChange={handleSettingChange}
-              className="w-full"
-            />
-          </div>
-
-          <div>
-            <label className="block mb-1">Margin Bottom</label>
-            <input
-              type="range"
-              name="marginBottom"
-              value={userInputData?.setting?.marginBottom ?? '0'}
-              onChange={handleSettingChange}
-              className="w-full"
-            />
-          </div>
+          {['paddingTop', 'paddingBottom', 'marginTop', 'marginBottom'].map((spacing) => (
+            <div key={spacing}>
+              <label className="block mb-1">{spacing.charAt(0).toUpperCase() + spacing.slice(1)}</label>
+              <input
+                type="range"
+                name={spacing}
+                min="0"
+                max="100"
+                value={userInputData?.setting?.[spacing] ?? '0'}
+                onChange={handleSettingChange}
+                className="w-full"
+              />
+            </div>
+          ))}
         </div>
       </div>
     </div>

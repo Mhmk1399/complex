@@ -86,7 +86,6 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({ setUserInputData, 
     }));
   };
   
-  console.log(userInputData);
   
 
   return (

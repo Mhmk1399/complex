@@ -235,11 +235,11 @@
           "blocks": {
             "heading": "",
             "setting": {
-              "headingColor": "#fff",
+              "headingColor": "#ffffff",
               "headingFontSize": "25px",
               "headingFontWeight": "bold",
               "btnBackgroundColor": "#9c119c",
-              "btnTextColor": "#fff",
+              "btnTextColor": "#ffffff",
               "formBackground": "#11769c"
             }
           },
