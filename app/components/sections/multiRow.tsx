@@ -1,3 +1,4 @@
+import { object } from "framer-motion/client";
 import React from "react";
 import styled from "styled-components";
 
@@ -9,6 +10,14 @@ interface MultiRowShowProps {
       children?: { sections: SectionData[] };
     };
   };
+}
+interface ColumnBlock {
+  heading?: string;
+  description?: string;
+  btnLable?: string;
+  imageSrc?: string;
+  imageAlt?: string;
+  btnLink?: string;
 }
 
 interface BlocksType {
@@ -22,7 +31,6 @@ interface BlocksType {
   imageAlt?: string;
   btnLink?: string;
   btnLable?: string;
-  title?: string;
 }
 
 interface SettingType {
@@ -194,31 +202,47 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
       <Section
         dir="rtl"
         $data={sectionData}
-        onClick={() => setSelectedComponent("multi-row")}
+        onClick={() => setSelectedComponent("multirow")}
       >
         <RowContainer>
-          {sectionData.blocks.map((block: BlocksType, index: number) => (
-            <Row key={index} $data={sectionData}>
-              {block.imageSrc && (
-                <Image
-                  src={block.imageSrc}
-                  alt={block.imageAlt || "image"}
-                  $data={sectionData}
-                />
-              )}
-              <WrapperContainer $data={sectionData}>
-                <Heading $data={sectionData}>
-                  {block.heading || "No title available"}
-                </Heading>
-                <Description $data={sectionData}>
-                  {block.description || "No description available"}
-                </Description>
-                <Button href={block.btnLink || "#"} $data={sectionData}>
-                  {block?.btnLable || "Learn More"}
-                </Button>
-              </WrapperContainer>
-            </Row>
-          ))}
+          {Object.entries(sectionData.blocks).map(([key, block], idx) => {
+            if (key === "setting") return null;
+            const index = Number(key);
+            if (isNaN(index)) return null;
+            const typedBlock = block as ColumnBlock;
+            return (
+              <Row key={idx} $data={sectionData}>
+                {typedBlock.imageSrc && (
+                  <Image
+                    src={
+                      (typedBlock.imageSrc as keyof ColumnBlock) ||
+                      "/assets/images/banner2.webp"
+                    }
+                    alt={(typedBlock.imageAlt as keyof ColumnBlock) || ""}
+                    $data={sectionData}
+                  />
+                )}
+                <WrapperContainer $data={sectionData}>
+                  <Heading $data={sectionData}>
+                    {typedBlock.heading ||
+                      ("No title available" as keyof ColumnBlock)}
+                  </Heading>
+                  <Description $data={sectionData}>
+                    {typedBlock.description ||
+                      ("description" as keyof ColumnBlock)}
+                  </Description>
+                  <Button
+                    href={
+                      typedBlock.btnLink || ("#" as keyof ColumnBlock) || ""
+                    }
+                    $data={sectionData}
+                  >
+                    {(typedBlock.btnLable as keyof ColumnBlock) || "Learn More"}
+                  </Button>
+                </WrapperContainer>
+              </Row>
+            );
+          })}
         </RowContainer>
       </Section>
     </>

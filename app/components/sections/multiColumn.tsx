@@ -102,6 +102,7 @@ const Heading = styled.h2<{ $data: SectionData }>`
   font-weight: ${(props) => props.$data.setting?.headingFontWeight || "bold"};
   text-align: center;
   margin-bottom: 20px;
+  margin-top: 20px;
 
   @media (max-width: 768px) {
     font-size: 28px;
@@ -218,7 +219,6 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
     blocks: [{ setting: {} }],
     setting: {},
   };
-  console.log(layout.sections?.children?.sections[8]);
 
   return (
     <Section
@@ -229,7 +229,7 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
       <Heading $data={sectionData}>
         {sectionData?.setting.heading || "heading"}
       </Heading>
-      // Replace the existing mapping code with this:
+      {/* // Replace the existing mapping code with this: */}
       <ColumnContainer>
         {Object.entries(sectionData.blocks).map(([key, block], idx) => {
           if (key === "setting") return null;
