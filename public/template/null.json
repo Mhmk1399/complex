@@ -371,13 +371,15 @@
         },
         {
           "type": "multiRow",
+          "title": "titlrgrgrgrge",
+
           "blocks": [
             {
               "heading": "",
               "description": "",
               "btnLable": "",
               "btnLink": "",
-              "imageSrc": "",
+              "imageSrc": "/assets/images/banner1.jpg",
               "imageAlt": ""
             },
             {
@@ -385,7 +387,7 @@
               "description": "",
               "btnLable": "",
               "btnLink": "",
-              "imageSrc": "",
+              "imageSrc": "/assets/images/banner3.jpg",
               "imageAlt": ""
             },
             {
@@ -393,23 +395,32 @@
               "description": "",
               "btnLable": "",
               "btnLink": "",
-              "imageSrc": "",
+              "imageSrc": "/assets/images/banner.jpg",
               "imageAlt": ""
             }
           ],
           "setting": {
+            "titleColor": "#ffa62b",
+            "titleFontWeight": "bold",
+            "titleFontSize": "25px",
             "paddingTop": "20px",
             "paddingBottom": "20px",
-            "marginTop": "0px",
-            "marginBottom": "0px",
+            "marginTop": "20px",
+            "marginBottom": "20px",
             "backgroundColorMultiRow": "#fff",
             "backgroundColorBox": "#fff",
-            "textAlignmentBoxDesktop": "center",
-            "textAlignmentBoxPosition": "left",
-            "textAlignmentBoxMobile": "center",
-            "imageRadious": "0px",
-            "imageWidth": "100px",
-            "imageHeight": "100px"
+            "imageRadious": "10px",
+            "imageWidth": "700px",
+            "imageHeight": "300px",
+            "imageRadius": "10px",
+            "headingColor": "#000000",
+            "headingFontSize": "30px",
+            "headingFontWeight": "bold",
+            "descriptionColor": "#000000",
+            "descriptionFontSize": "18px",
+            "descriptionFontWeight": "normal",
+            "btnColor": "#ffffff",
+            "btnBackgroundColor": "#16697a"
           }
         }
       ],

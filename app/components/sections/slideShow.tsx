@@ -76,10 +76,18 @@ const SlideContainer = styled.div<{ $data: BlocksType }>`
   display: flex;
   justify-content: center;
 `;
-
-const Slide = styled.div<{ $isVisible: boolean }>`
-  display: ${(props) => (props.$isVisible ? "block" : "none")};
+const SlidesWrapper = styled.div<{ $currentIndex: number }>`
+  display: flex;
   text-align: center;
+  transition: transform 0.6s ease-in-out;
+  transform: translateX(${(props) => props.$currentIndex * -100}%);
+  width: 100%;
+`;
+
+const Slide = styled.div`
+  flex: 0 0 100%;
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
 `;
 
 const SlideImage = styled.img<{ $data: SectionData }>`
@@ -175,22 +183,24 @@ const SlideShow: React.FC<SlideShowProps> = ({
       onClick={() => setSelectedComponent("slideshow")}
     >
       <SlideContainer $data={slides[0]}>
-        {slides.map((slide, index) => (
-          <Slide key={index} $isVisible={index === currentIndex}>
-            <SlideImage
-              src={slide.imageSrc}
-              alt={slide.imageAlt}
-              $data={sectionData}
-            />
-            <SlideText $data={slide}>{slide.text}</SlideText>
-            <SlideDescription $data={sectionData.setting}>
-              {slide.description || "No description available"}
-            </SlideDescription>
-            <Button href={slide.btnLink} $data={sectionData.setting}>
-              {slide.btnText}
-            </Button>
-          </Slide>
-        ))}
+        <SlidesWrapper $currentIndex={currentIndex}>
+          {slides.map((slide: BlocksType, index) => (
+            <Slide key={index}>
+              <SlideImage
+                src={slide.imageSrc}
+                alt={slide.imageAlt}
+                $data={sectionData}
+              />
+              <SlideText $data={slide}>{slide.text}</SlideText>
+              <SlideDescription $data={sectionData.setting}>
+                {slide.description || "No description available"}
+              </SlideDescription>
+              <Button href={slide.btnLink} $data={sectionData.setting}>
+                {slide.btnText}
+              </Button>
+            </Slide>
+          ))}
+        </SlidesWrapper>
         <PrevButton onClick={handlePrev}>{"<"}</PrevButton>
         <NextButton onClick={handleNext}>{">"}</NextButton>
       </SlideContainer>

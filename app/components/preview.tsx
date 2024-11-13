@@ -9,6 +9,7 @@ import NewsLetter from "./sections/newsLetter";
 import CollapseFaq from "./sections/collapseFaq";
 import MultiColumn from "./sections/multiColumn";
 import SlideShow from "./sections/slideShow";
+import MultiRow from "./sections/multiRow";
 
 interface PreviewProps {
   layout: {};
@@ -40,6 +41,7 @@ export const Preview: React.FC<PreviewProps> = ({
         layout={layout}
       />
       <SlideShow setSelectedComponent={setSelectedComponent} layout={layout} />
+      <MultiRow setSelectedComponent={setSelectedComponent} layout={layout} />
     </div>
   );
 };
