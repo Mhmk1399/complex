@@ -100,7 +100,7 @@ const SlideText = styled.h3<{ $data: BlocksType }>`
 
 const SlideDescription = styled.p<{ $data: SettingType }>`
   padding: 5px;
-  color: ${(props) => props.$data.descriptionColor || "#333"};
+  color: ${(props) => props.$data?.descriptionColor || "#333"};
   height: 150px;
   font-size: ${(props) => props.$data.descriptionFontSize || "16px"};
   font-weight: ${(props) => props.$data.descriptionFontWeight || "normal"};

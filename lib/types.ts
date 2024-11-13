@@ -10,6 +10,14 @@ export interface Link {
   }
   
   export interface CommonSettings {
+    heading: any;
+    titleColor: any;
+    descriptionColor: any;
+    backgroundColorBox: any;
+    btnColor: any;
+    btnBackgroundColor: any;
+    imageBehavior: any;
+    imageRadious: any;
     headingColor: any;
     background: any;
     headingFontWeight: any;
