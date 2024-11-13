@@ -1,3 +1,4 @@
+import { Layout,Section } from "@/lib/types";
 export const Compiler = (data: string | object, name: string) => {
   // Create deep copy of the data using structuredClone
   let processedData = typeof data === 'string' 
@@ -15,11 +16,11 @@ export const Compiler = (data: string | object, name: string) => {
   
   return structuredClone(
     processedData.sections.children.sections.filter(
-      (section: any) => section.type === name
+      (section: Section) => section.type === name
     )
   );
 }
-export const JasonChanger = (data: string | object, name: string, newData: any) => {
+export const JasonChanger = (data: string | object, name: string, newData: {}) => {
   let processedData = typeof data === 'string' 
     ? JSON.parse(data)
     : structuredClone(data);
@@ -41,7 +42,7 @@ export const JasonChanger = (data: string | object, name: string, newData: any) 
 
   // For other sections, find and update in children sections
   processedData.sections.children.sections = processedData.sections.children.sections.map(
-    (section: any) => {
+    (section: Section) => {
       if (section.type === name) {
         return newData;
       }

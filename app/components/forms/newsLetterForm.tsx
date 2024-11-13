@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { Compiler } from '../compiler';
-
+import { Layout,Section } from '@/lib/types';
 interface NewsLetterFormProps {
-  setUserInputData: React.Dispatch<React.SetStateAction<any>>;
-  userInputData: any;
-  layout: any;
+  setUserInputData: React.Dispatch<React.SetStateAction<Section>>;
+  userInputData: Section;
+  layout: Layout;
 }
 
 const ColorInput = ({ label, name, value, onChange }: {
@@ -36,7 +36,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({ setUserInputData
 
   const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -47,7 +47,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({ setUserInputData
 
   const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -61,7 +61,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({ setUserInputData
 
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
       setting: {
         ...prev.setting,
@@ -120,31 +120,31 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({ setUserInputData
           <ColorInput
             label="Heading Color"
             name="headingColor"
-            value={userInputData?.blocks?.setting?.headingColor ?? '#ffffff'}
+            value={userInputData?.blocks?.setting?.headingColor?.toLocaleString() ?? '#ffffff'}
             onChange={handleBlockSettingChange}
           />
           <ColorInput
             label="Description Color"
             name="descriptionColor"
-            value={userInputData?.blocks?.setting?.descriptionColor ?? '#e4e4e4'}
+            value={userInputData?.blocks?.setting?.descriptionColor?.toLocaleString() ?? '#e4e4e4'}
             onChange={handleBlockSettingChange}
           />
           <ColorInput
             label="Button Background Color"
             name="btnBackgroundColor"
-            value={userInputData?.blocks?.setting?.btnBackgroundColor ?? '#ea7777'}
+            value={userInputData?.blocks?.setting?.btnBackgroundColor?.toLocaleString() ?? '#ea7777'}
             onChange={handleBlockSettingChange}
           />
           <ColorInput
             label="Button Text Color"
             name="btnTextColor"
-            value={userInputData?.blocks?.setting?.btnTextColor ?? '#ffffff'}
+            value={userInputData?.blocks?.setting?.btnTextColor?.toLocaleString() ?? '#ffffff'}
             onChange={handleBlockSettingChange}
           />
           <ColorInput
             label="Form Background"
             name="formBackground"
-            value={userInputData?.blocks?.setting?.formBackground ?? '#005002'}
+            value={userInputData?.blocks?.setting?.formBackground ?.toLocaleString()?? '#005002'}
             onChange={handleBlockSettingChange}
           />
         </div>
@@ -155,7 +155,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({ setUserInputData
             <input
               type="range"
               name="headingFontSize"
-              value={userInputData?.blocks?.setting?.headingFontSize ?? '27px'}
+              value={userInputData?.blocks?.setting?.headingFontSize ?.toLocaleString()?? '27px'}
               onChange={handleBlockSettingChange}
               className="w-full p-2 border rounded"
             />
@@ -165,7 +165,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({ setUserInputData
             <input
               type="range"
               name="descriptionFontSize"
-              value={userInputData?.blocks?.setting?.descriptionFontSize ?? '18px'}
+              value={userInputData?.blocks?.setting?.descriptionFontSize ?.toLocaleString()?? '18px'}
               onChange={handleBlockSettingChange}
               className="w-full p-2 border rounded"
             />
@@ -177,7 +177,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({ setUserInputData
             <label className="block mb-1">Heading Font Weight</label>
             <select
               name="headingFontWeight"
-              value={userInputData?.blocks?.setting?.headingFontWeight ?? 'bold'}
+              value={userInputData?.blocks?.setting?.headingFontWeight?.toLocaleString() ?? 'bold'}
               onChange={()=>handleBlockSettingChange}
               className="w-full p-2 border rounded"
             >
@@ -189,7 +189,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({ setUserInputData
             <label className="block mb-1">Description Font Weight</label>
             <select
               name="descriptionFontWeight"
-              value={userInputData?.blocks?.setting?.descriptionFontWeight ?? 'normal'}
+              value={userInputData?.blocks?.setting?.descriptionFontWeight?.toLocaleString() ?? 'normal'}
               onChange={()=>handleBlockSettingChange}
               className="w-full p-2 border rounded"
             >
@@ -212,7 +212,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({ setUserInputData
                 name={spacing}
                 min="0"
                 max="100"
-                value={userInputData?.setting?.[spacing] ?? '0'}
+                value={userInputData?.setting?.[spacing as keyof typeof userInputData.setting]?.toLocaleString() ?? '0'}
                 onChange={handleSettingChange}
                 className="w-full"
               />

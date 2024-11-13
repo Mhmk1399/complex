@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { Compiler } from '../compiler';
-
+import { Layout ,Section } from '@/lib/types';
 interface ImageTextFormProps {
-  setUserInputData: React.Dispatch<React.SetStateAction<any>>;
-  userInputData: any;
-  layout: any;
+  setUserInputData: React.Dispatch<React.SetStateAction<Section>>;
+  userInputData: Section;
+  layout: Layout;
 }
 
 export const ImageTextForm: React.FC<ImageTextFormProps> = ({ setUserInputData, userInputData, layout }) => {
@@ -52,7 +52,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({ setUserInputData, 
 
   const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -63,7 +63,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({ setUserInputData, 
 
   const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -77,7 +77,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({ setUserInputData, 
 
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
       setting: {
         ...prev.setting,
@@ -175,7 +175,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({ setUserInputData, 
             <input
               type="color"
               name="background"
-              value={userInputData?.blocks?.setting?.background ?? '#333'}
+              value={userInputData?.blocks?.setting?.background?.toLocaleString() ?? '#333'}
               onChange={handleBlockSettingChange}
               className=" p-1 border rounded"
             />
@@ -187,7 +187,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({ setUserInputData, 
             <input
               type="color"
               name="headingColor"
-              value={userInputData?.blocks?.setting?.headingColor ?? '#333'}
+              value={userInputData?.blocks?.setting?.headingColor?.toLocaleString() ?? '#333'}
               onChange={handleBlockSettingChange}
               className=" p-1 border rounded"
             />
@@ -198,7 +198,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({ setUserInputData, 
             <input
               type="range"
               name="headingFontSize"
-              value={userInputData?.blocks?.setting?.headingFontSize ?? '50'}
+              value={userInputData?.blocks?.setting?.headingFontSize?.toLocaleString() ?? '50'}
               onChange={handleBlockSettingChange}
               className="w-full p-2 border rounded"
             />
@@ -209,7 +209,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({ setUserInputData, 
             <input
               type="color"
               name="descriptionColor"
-              value={userInputData?.blocks?.setting?.descriptionColor ?? '#333333'}
+              value={userInputData?.blocks?.setting?.descriptionColor?.toLocaleString() ?? '#333333'}
               onChange={handleBlockSettingChange}
               className=" p-1 border rounded"
             />
@@ -220,7 +220,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({ setUserInputData, 
             <input
               type="range"
               name="descriptionFontSize"
-              value={userInputData?.blocks?.setting?.descriptionFontSize ?? '20'}
+              value={userInputData?.blocks?.setting?.descriptionFontSize ?.toLocaleString()?? '20'}
               onChange={handleBlockSettingChange}
               className="w-full p-2 border rounded"
             />
@@ -231,7 +231,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({ setUserInputData, 
             <input
               type="color"
               name="btnTextColor"
-              value={userInputData?.blocks?.setting?.btnTextColor ?? '#ffffff'}
+              value={userInputData?.blocks?.setting?.btnTextColor?.toLocaleString() ?? '#ffffff'}
               onChange={handleBlockSettingChange}
               className=" p-1 border rounded"
             />
@@ -242,7 +242,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({ setUserInputData, 
             <input
               type="color"
               name="btnBackgroundColor"
-              value={userInputData?.blocks?.setting?.btnBackgroundColor ?? '#000000'}
+              value={userInputData?.blocks?.setting?.btnBackgroundColor?.toLocaleString() ?? '#000000'}
               onChange={handleBlockSettingChange}
               className="p-1 border rounded"
             />

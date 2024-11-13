@@ -214,7 +214,7 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
         {sectionData?.setting.heading || "heading"}
       </Heading>
       <ColumnContainer>
-        {sectionData.blocks.map((block: string | any, idx: number) => (
+        {sectionData.blocks.map((block: string | Section, idx: number) => (
           <Column key={idx} $data={sectionData}>
             <Title $data={sectionData}>{block[`title${idx + 1}`]}</Title>
             <Description $data={sectionData}>

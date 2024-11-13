@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-
 interface CollapseFaqProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: {
@@ -143,28 +142,32 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
       onClick={() => setSelectedComponent("collapse")}
     >
       <Heading $data={sectionData}>{sectionData.blocks[0].heading}</Heading>
-      {sectionData.blocks.map((block: string | any, idx: number) => (
-        <FaqItem key={idx}>
-          <Question
-            $data={sectionData}
-            $idx={idx}
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleOpen(idx);
-            }}
-          >
-            {block[`text${idx + 1}`]}
-            <span>{openIndexes.includes(idx) ? "-" : "+"}</span>
-          </Question>
-          <Answer
-            $data={sectionData}
-            $idx={idx}
-            $isOpen={openIndexes.includes(idx)}
-          >
-            {block[`content${idx + 1}`]}
-          </Answer>
-        </FaqItem>
-      ))}
+      {sectionData.blocks.map((block, idx: number) => {
+        const typedBlock = block as BlocksType;
+        return (
+          <FaqItem key={idx}>
+            <Question
+              $data={sectionData}
+              $idx={idx}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleOpen(idx);
+              }}
+            >
+              {typedBlock[`text${idx + 1}` as keyof BlocksType] as React.ReactNode}
+              <span>{openIndexes.includes(idx) ? "-" : "+"}</span>
+            </Question>
+            <Answer
+              $data={sectionData}
+              $idx={idx}
+              $isOpen={openIndexes.includes(idx)}
+            >
+              {typedBlock[`content${idx + 1}` as keyof BlocksType] as React.ReactNode}
+            </Answer>
+          </FaqItem>
+        );
+      })}
+
     </Section>
   );
 };

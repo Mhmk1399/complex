@@ -1,5 +1,5 @@
 "use client"
-import React, { use, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { RichText } from './forms/richTextForm'
 import { HeaderForm } from './forms/headerForm';
@@ -10,22 +10,23 @@ import { VideoForm } from './forms/videoForm';
 import { ContactForm } from './forms/contact';
 import { NewsLetterForm } from './forms/newsLetterForm';
 import { CollapseForm } from './forms/collapseForm';
+import { Layout, Section  } from '@/lib/types';
 interface FormProps {
   selectedComponent: string;
-  setLayout: (data: any) => void;
-  layout: any;
+  setLayout: (data: Layout) => void;
+  layout: Layout;
 }
 
 export const Form = ({ selectedComponent, setLayout ,layout }: FormProps) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [userInputData, setUserInputData] = useState<any>({});
+  const [userInputData, setUserInputData] = useState<object | Section>({});
   useEffect(() => {
     const newjason=JasonChanger(layout, selectedComponent, userInputData)
     setLayout(newjason)
     
   }, [userInputData])
 
-  const renderFormContent = (setUserInputData: (data: {}) => void, userInputData: any ) => {
+  const renderFormContent = (setUserInputData: (data: {}) => void, userInputData: Section ) => {
     switch (selectedComponent) {
       case 'rich-text':
         return <RichText  setUserInputData={setUserInputData} userInputData={userInputData} layout={layout}/>
@@ -56,7 +57,7 @@ export const Form = ({ selectedComponent, setLayout ,layout }: FormProps) => {
           <h2 className="text-2xl font-bold text-gray-800">
             Component Settings
           </h2>
-          {renderFormContent(setUserInputData, userInputData)}
+          {renderFormContent(setUserInputData, userInputData as Section)}
         </div>
       </div>
 
@@ -79,7 +80,7 @@ export const Form = ({ selectedComponent, setLayout ,layout }: FormProps) => {
           <h2 className="text-2xl font-bold text-gray-800 mb-4">
             Component Settings
           </h2>
-          {renderFormContent(setUserInputData, userInputData )}
+          {renderFormContent(setUserInputData, userInputData as Section)}
         </div>
       </motion.div>
     </>

@@ -34,7 +34,7 @@ interface SectionData {
 }
 interface RichTextProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
-  layout: any
+  layout: l
    
   
 }

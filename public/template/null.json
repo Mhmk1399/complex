@@ -306,10 +306,10 @@
             }
           ],
           "setting": {
-            "paddingTop": "20px",
-            "paddingBottom": "20px",
-            "marginTop": "10px",
-            "marginBottom": "10px",
+            "paddingTop": "20",
+            "paddingBottom": "20",
+            "marginTop": "10",
+            "marginBottom": "10",
             "headingColor": "#ffffff",
             "headingFontSize": "30px",
             "headingFontWeight": "bold",

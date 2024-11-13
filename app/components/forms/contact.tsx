@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { Compiler } from '../compiler';
-
+import { Layout ,Section } from '@/lib/types';
 interface ContactFormProps {
-  setUserInputData: React.Dispatch<React.SetStateAction<any>>;
-  userInputData: any;
-  layout: any;
+  setUserInputData: React.Dispatch<React.SetStateAction<Section>>;
+  userInputData: Section;
+  layout: Layout;
 }
 
 const ColorInput = ({ label, name, value, onChange }: {
@@ -36,7 +36,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
 
   const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -47,7 +47,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
 
   const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -61,7 +61,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
 
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
       setting: {
         ...prev.setting,
@@ -98,25 +98,25 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
           <ColorInput
             label="Heading Color"
             name="headingColor"
-            value={userInputData?.blocks?.setting?.headingColor ?? '#ffffff'}
+            value={userInputData?.blocks?.setting?.headingColor?.toLocaleString() ?? '#ffffff'}
             onChange={handleBlockSettingChange}
           />
           <ColorInput
             label="Button Background Color"
             name="btnBackgroundColor"
-            value={userInputData?.blocks?.setting?.btnBackgroundColor ?? '#9c119c'}
+            value={userInputData?.blocks?.setting?.btnBackgroundColor?.toLocaleString() ?? '#9c119c'}
             onChange={handleBlockSettingChange}
           />
           <ColorInput
             label="Button Text Color"
             name="btnTextColor"
-            value={userInputData?.blocks?.setting?.btnTextColor ?? '#ffffff'}
+            value={userInputData?.blocks?.setting?.btnTextColor?.toLocaleString() ?? '#ffffff'}
             onChange={handleBlockSettingChange}
           />
           <ColorInput
             label="Form Background Color"
             name="formBackground"
-            value={userInputData?.blocks?.setting?.formBackground ?? '#11769c'}
+            value={userInputData?.blocks?.setting?.formBackground?.toLocaleString() ?? '#11769c'}
             onChange={handleBlockSettingChange}
           />
         </div>
@@ -127,7 +127,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
             <input
               type="range"
               name="headingFontSize"
-              value={userInputData?.blocks?.setting?.headingFontSize ?? '25px'}
+              value={userInputData?.blocks?.setting?.headingFontSize?.toLocaleString() ?? '25px'}
               onChange={handleBlockSettingChange}
               className="w-full p-2 border rounded"
             />
@@ -136,7 +136,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
             <label className="block mb-1">Heading Font Weight</label>
             <select
               name="headingFontWeight"
-              value={userInputData?.blocks?.setting?.headingFontWeight ?? 'bold'}
+              value={userInputData?.blocks?.setting?.headingFontWeight?.toLocaleString() ?? 'bold'}
               onChange={()=>handleBlockSettingChange}
               className="w-full p-2 border rounded"
             >
@@ -160,11 +160,11 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
                 name={spacing}
                 min="0"
                 max="100"
-                value={parseInt(userInputData?.setting?.[spacing] ?? '0')}
+                value={parseInt(userInputData?.setting?.[spacing as keyof typeof userInputData.setting]?.toString() ?? '0')}
                 onChange={handleSettingChange}
                 className="w-full"
               />
-              <span>{userInputData?.setting?.[spacing] ?? '0px'}</span>
+              <span>{userInputData?.setting?.[spacing as keyof typeof userInputData.setting]?.toString() ?? '0px'}</span>
             </div>
           ))}
         </div>

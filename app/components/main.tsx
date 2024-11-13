@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Preview } from './preview';
 import { Form } from './form';
 import data from '../../public/template/null.json'
-
+import {Layout }from '../../lib/types'
 interface DataType {
   // Define your JSON structure here
   id: number;
@@ -12,8 +12,9 @@ interface DataType {
 }
 
 export const Main = () => {
+  const Data = data as unknown as Layout;
   const [loading, setLoading] = useState(true);
-  const [layout, setLayout] = useState<any>(data);
+  const [layout, setLayout] = useState<Layout>(Data);
   const [selectedComponent, setSelectedComponent] = useState<string>('sectionHeader');
 
   useEffect(() => {
@@ -26,7 +27,7 @@ export const Main = () => {
         
     //   }
     // };
-setLoading(false);
+    setLoading(false);
     // fetchData();
   }, []);
   
