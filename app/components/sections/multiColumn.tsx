@@ -65,10 +65,10 @@ interface SectionData {
 
 // Styled Components
 const Section = styled.section<{ $data: SectionData }>`
-  padding-top: ${(props) => props.$data.setting?.paddingTop || "20px"};
-  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20px"};
-  margin-top: ${(props) => props.$data.setting?.marginTop || "20px"};
-  margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20px"};
+  padding-top: ${(props) => props.$data.setting?.paddingTop || "20px"}px;
+  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20px"}px;
+  margin-top: ${(props) => props.$data.setting?.marginTop || "20px"}px;
+  margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20px"}px;
   background-color: ${(props) =>
     props.$data.setting?.backgroundColorBox || "#ffffff"};
   display: flex;
@@ -198,6 +198,8 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
   setSelectedComponent,
   layout,
 }) => {
+  console.log(layout.sections?.children?.sections[8].blocks[1]);
+  
   const sectionData = (layout.sections?.children
     ?.sections?.[8] as SectionData) || {
     blocks: [{ setting: {} }],
@@ -208,7 +210,7 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
     <Section
       dir="rtl"
       $data={sectionData}
-      onClick={() => setSelectedComponent("multi-column")}
+      onClick={() => setSelectedComponent("multicolumn")}
     >
       <Heading $data={sectionData}>
         {sectionData?.setting.heading || "heading"}
