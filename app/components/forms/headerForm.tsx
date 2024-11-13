@@ -1,15 +1,13 @@
 import React, { useEffect } from 'react';
 import { Compiler } from '../compiler';
+import { Layout,Section,Link } from '@/lib/types';
 interface HeaderFormProps {
-  layout: any;
-  setUserInputData: React.Dispatch<React.SetStateAction<any>>;
-  userInputData: any;
+  layout: Layout;
+  setUserInputData: React.Dispatch<React.SetStateAction<Section>>;
+  userInputData: Section;
 }
 
-interface Link {
-  name: string;
-  url: string;
-}
+
 
 export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userInputData ,layout }) => {
 
@@ -88,7 +86,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
       url: selectedUrl
     };
 
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -106,7 +104,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
     { name: 'Login', url: '/login' }
   ];
   const removeLink = (urlToRemove: string) => {
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -116,7 +114,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
   };
   const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -127,7 +125,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
 
   const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -141,7 +139,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
 
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
       setting: {
         ...prev.setting,
@@ -189,7 +187,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
             <ColorInput
               label="Title Color"
               name="titleColor"
-              value={userInputData?.blocks?.setting.titleColor}
+              value={userInputData?.blocks?.setting?.titleColor?.toLocaleString()}
               onChange={handleBlockSettingChange}
             />
 
@@ -197,21 +195,21 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
             
               label="Background Color Navbar"
               name="backgroundColorNavbar"
-              value={userInputData?.blocks?.setting?.backgroundColorNavbar }
+              value={userInputData?.blocks?.setting?.backgroundColorNavbar?.toLocaleString() }
               onChange={handleBlockSettingChange}
             />
 
             <ColorInput
               label="Item Color"
               name="itemColor"
-              value={userInputData?.blocks?.setting.itemColor}
+              value={userInputData?.blocks?.setting.itemColor?.toLocaleString()}
               onChange={handleBlockSettingChange}
             />
 
             <ColorInput
               label="Item Hover Color"
               name="itemHoverColor"
-              value={userInputData?.blocks?.setting.itemHoverColor}
+              value={userInputData?.blocks?.setting.itemHoverColor?.toLocaleString()}
               onChange={handleBlockSettingChange}
             />
           
@@ -221,7 +219,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
             type="range"
             id="itemFontSize"
             name="itemFontSize"
-            value={userInputData?.blocks?.setting?.itemFontSize}
+            value={userInputData?.blocks?.setting?.itemFontSize?.toLocaleString()}
             onChange={handleBlockSettingChange}
             className="p-2 border rounded"
           />
@@ -231,7 +229,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
             type="range"
             id="imageWidth"
             name="imageWidth"
-            value={userInputData?.blocks?.setting?.imageWidth}
+            value={userInputData?.blocks?.setting?.imageWidth?.toLocaleString()}
             onChange={handleBlockSettingChange}
             className="p-2 border rounded"
           />
@@ -241,7 +239,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
             type="range"
             id="imageHeight"
             name="imageHeight"
-            value={userInputData?.blocks?.setting.imageHeight}
+            value={userInputData?.blocks?.setting.imageHeight?.toLocaleString()}
             onChange={handleBlockSettingChange}
             className="p-2 border rounded"
           />

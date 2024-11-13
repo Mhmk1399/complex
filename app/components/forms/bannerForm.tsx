@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { Compiler } from '../compiler';
-
+import { Layout ,Section } from '@/lib/types';
 interface BannerFormProps {
-  setUserInputData: React.Dispatch<React.SetStateAction<any>>;
-  userInputData: any;
-  layout: any;
+  setUserInputData: React.Dispatch<React.SetStateAction<Section>>;
+  userInputData: Section;
+  layout: Layout;
 }
 
 const ColorInput = ({ label, name, value, onChange }: {
@@ -36,7 +36,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
 
   const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -47,7 +47,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
 
   const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -61,7 +61,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
 
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
       setting: {
         ...prev.setting,
@@ -120,19 +120,19 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
           <ColorInput
             label="Text Color"
             name="textColor"
-            value={userInputData?.blocks?.setting?.textColor ?? '#000000'}
+            value={userInputData?.blocks?.setting?.textColor?.toLocaleString() ?? '#000000'}
             onChange={handleBlockSettingChange}
           />
           <ColorInput
             label="Description Color"
             name="descriptionColor"
-            value={userInputData?.blocks?.setting?.descriptionColor ?? '#333333'}
+            value={userInputData?.blocks?.setting?.descriptionColor.toLocaleString() ?? '#333333'}
             onChange={handleBlockSettingChange}
           />
           <ColorInput
             label="Background Color"
             name="backgroundColorBox"
-            value={userInputData?.blocks?.setting?.backgroundColorBox ?? '#ffffff'}
+            value={userInputData?.blocks?.setting?.backgroundColorBox?.toLocaleString() ?? '#ffffff'}
             onChange={handleBlockSettingChange}
           />
         </div>
@@ -141,7 +141,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
           <label className="block mb-1">Image Behavior</label>
           <select
             name="imageBehavior"
-            value={userInputData?.blocks?.setting?.imageBehavior ?? 'cover'}
+            value={userInputData?.blocks?.setting?.imageBehavior?.toLocaleString() ?? 'cover'}
             onChange={handleBlockSettingChange}
             className="w-full p-2 border rounded"
           >
@@ -156,7 +156,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
       <div className="mb-6">
         <h3 className="font-semibold mb-2">Spacing</h3>
         <div className="grid grid-cols-2 gap-4">
-          {['paddingTop', 'paddingBottom', 'marginTop', 'marginBottom'].map((spacing) => (
+          {(['paddingTop', 'paddingBottom', 'marginTop', 'marginBottom'] as const).map((spacing) => (
             <div key={spacing}>
               <label className="block mb-1">{spacing.charAt(0).toUpperCase() + spacing.slice(1)}</label>
               <input
@@ -164,7 +164,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
                 name={spacing}
                 min="0"
                 max="100"
-                value={userInputData?.setting?.[spacing] ?? '0'}
+                value={userInputData?.setting?.[spacing]?.toLocaleString() ?? '0'}
                 onChange={handleSettingChange}
                 className="w-full"
               />

@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { Compiler } from '../compiler';
-
+import { Layout,Section } from '@/lib/types';
 interface VideoFormProps {
-  setUserInputData: React.Dispatch<React.SetStateAction<any>>;
-  userInputData: any;
-  layout: any;
+  setUserInputData: React.Dispatch<React.SetStateAction<Section>>;
+  userInputData: Section;
+  layout: Layout;
 }
 
 const ColorInput = ({ label, name, value, onChange }: {
@@ -37,7 +37,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({ setUserInputData, userInpu
 
   const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -50,7 +50,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({ setUserInputData, userInpu
     const { name, value, type } = e.target;
     const inputValue = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
     
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -64,7 +64,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({ setUserInputData, userInpu
 
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
       setting: {
         ...prev.setting,
@@ -123,13 +123,13 @@ export const VideoForm: React.FC<VideoFormProps> = ({ setUserInputData, userInpu
           <ColorInput
             label="Heading Color"
             name="headingColor"
-            value={userInputData?.blocks?.setting?.headingColor ?? '#000000'}
+            value={userInputData?.blocks?.setting?.headingColor ?.toLocaleString()?? '#000000'}
             onChange={handleBlockSettingChange}
           />
           <ColorInput
             label="Background Color"
             name="backgroundVideoSection"
-            value={userInputData?.blocks?.setting?.backgroundVideoSection ?? '#e4e4e4'}
+            value={userInputData?.blocks?.setting?.backgroundVideoSection?.toLocaleString() ?? '#e4e4e4'}
             onChange={handleBlockSettingChange}
           />
 
@@ -138,7 +138,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({ setUserInputData, userInpu
             <input
               type="range"
               name="headingFontSize"
-              value={userInputData?.blocks?.setting?.headingFontSize ?? '30px'}
+              value={userInputData?.blocks?.setting?.headingFontSize?.toLocaleString() ?? '30px'}
               onChange={handleBlockSettingChange}
               className="w-full p-2 border rounded"
             />
@@ -148,7 +148,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({ setUserInputData, userInpu
             <label className="block mb-1">Heading Font Weight</label>
             <select
               name="headingFontWeight"
-              value={userInputData?.blocks?.setting?.headingFontWeight ?? 'bold'}
+              value={userInputData?.blocks?.setting?.headingFontWeight?.toLocaleString()?? 'bold'}
               onChange={handleBlockSettingChange}
               className="w-full p-2 border rounded"
             >
@@ -162,7 +162,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({ setUserInputData, userInpu
             <input
               type="range"
               name="videoWidth"
-              value={userInputData?.blocks?.setting?.videoWidth ?? '1000px'}
+              value={userInputData?.blocks?.setting?.videoWidth?.toLocaleString() ?? '1000px'}
               onChange={handleBlockSettingChange}
               className="w-full p-2 border rounded"
             />
@@ -175,7 +175,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({ setUserInputData, userInpu
             <input
               type="range"
               name="videoRadious"
-              value={userInputData?.blocks?.setting?.videoRadious ?? '20px'}
+              value={userInputData?.blocks?.setting?.videoRadious?.toLocaleString() ?? '20px'}
               onChange={handleBlockSettingChange}
               className="w-full p-2 border rounded"
             />
@@ -186,7 +186,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({ setUserInputData, userInpu
             <input
               type="text"
               name="videoPoster"
-              value={userInputData?.blocks?.setting?.videoPoster ?? ''}
+              value={userInputData?.blocks?.setting?.videoPoster?.toLocaleString() ?? ''}
               onChange={handleBlockSettingChange}
               className="w-full p-2 border rounded"
             />
@@ -199,7 +199,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({ setUserInputData, userInpu
             <input
               type="checkbox"
               name="videoLoop"
-              checked={userInputData?.blocks?.setting?.videoLoop ?? true}
+              checked={userInputData?.blocks?.setting?.videoLoop as boolean ?? true}
               onChange={handleBlockSettingChange}
               className="mr-2"
             />
@@ -210,7 +210,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({ setUserInputData, userInpu
             <input
               type="checkbox"
               name="videoMute"
-              checked={userInputData?.blocks?.setting?.videoMute ?? false}
+              checked={userInputData?.blocks?.setting?.videoMute as boolean ?? false}
               onChange={handleBlockSettingChange}
               className="mr-2"
             />
@@ -221,7 +221,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({ setUserInputData, userInpu
             <input
               type="checkbox"
               name="videoAutoplay"
-              checked={userInputData?.blocks?.setting?.videoAutoplay ?? true}
+              checked={userInputData?.blocks?.setting?.videoAutoplay as boolean ?? true}
               onChange={handleBlockSettingChange}
               className="mr-2"
             />
@@ -242,7 +242,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({ setUserInputData, userInpu
                 name={spacing}
                 min="0"
                 max="100"
-                value={userInputData?.setting?.[spacing] ?? '0'}
+                value={userInputData?.setting?.[spacing as keyof typeof userInputData.setting]?.toString() ?? '0'}
                 onChange={handleSettingChange}
                 className="w-full"
               />

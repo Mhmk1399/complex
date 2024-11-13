@@ -140,7 +140,7 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
     >
       <Heading $data={sectionData}>{sectionData.blocks[0].heading}</Heading>
       <ColumnContainer>
-        {sectionData.blocks.map((block: string | any, idx: number) => (
+        {sectionData.blocks.map((block: string | Section, idx: number) => (
           <Column key={idx} $data={sectionData}>
             <Title>gftntfghtghntgfnb</Title>
             <Description>regfte4wtgfwt4w3t</Description>

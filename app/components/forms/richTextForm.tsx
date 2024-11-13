@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { Compiler } from '../compiler';
+import { Layout,Section ,BlockSetting} from '@/lib/types';
 
 interface RichTextFormProps {
-  setUserInputData: React.Dispatch<React.SetStateAction<any>>;
-  userInputData: any;
-  layout: any;
+  setUserInputData: React.Dispatch<React.SetStateAction<Layout>>;
+  userInputData: Section;
+  layout: Layout;
 }
 
 const ColorInput = ({ label, name, value, onChange }: {
@@ -28,7 +29,7 @@ const ColorInput = ({ label, name, value, onChange }: {
   </>
 );
 
- export const RichText: React.FC<RichTextFormProps> = ({ setUserInputData, userInputData , layout}) => {
+export const RichText: React.FC<RichTextFormProps> = ({ setUserInputData, userInputData , layout}) => {
 
 
   useEffect(() => {
@@ -40,10 +41,10 @@ const ColorInput = ({ label, name, value, onChange }: {
 
   const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev : Layout) => ({
       ...prev,
       blocks: {
-        ...prev.blocks,
+        ...prev?.blocks,
         [name]: value
       }
     }));
@@ -51,7 +52,7 @@ const ColorInput = ({ label, name, value, onChange }: {
 
   const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Layout) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -65,7 +66,7 @@ const ColorInput = ({ label, name, value, onChange }: {
 
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Layout) => ({
       ...prev,
       setting: {
         ...prev.setting,
@@ -135,33 +136,33 @@ const ColorInput = ({ label, name, value, onChange }: {
           <ColorInput
             label="Heading Color"
             name="textHeadingColor"
-            value={userInputData?.blocks?.setting?.textHeadingColor ?? '#000000'}
+            value={userInputData?.blocks?.setting?.textHeadingColor?.toString() ?? '#000000'}
             onChange={handleBlockSettingChange}
           />
           <ColorInput
             label="background Color"
             name="background"
-            value={userInputData?.blocks?.setting?.background ?? '#000000'}
+            value={userInputData?.blocks?.setting?.background?.toString() ?? '#000000'}
             onChange={handleBlockSettingChange}
           />
           <ColorInput
             label="Description Color"
             name="descriptionColor"
-            value={userInputData?.blocks?.setting?.descriptionColor ?? '#000000'}
+            value={userInputData?.blocks?.setting?.descriptionColor?.toString() ?? '#000000'}
             onChange={handleBlockSettingChange}
           />
 
           <ColorInput
             label="Button Text Color"
             name="btnTextColor"
-            value={userInputData?.blocks?.setting?.btnTextColor ?? '#ffffff'}
+            value={userInputData?.blocks?.setting?.btnTextColor?.toString() ?? '#ffffff'}
             onChange={handleBlockSettingChange}
           />
 
           <ColorInput
             label="Button Background Color"
             name="btnBackgroundColor"
-            value={userInputData?.blocks?.setting?.btnBackgroundColor ?? '#000000'}
+            value={userInputData?.blocks?.setting?.btnBackgroundColor?.toString() ?? '#000000'}
             onChange={handleBlockSettingChange}
           />
         </div>
@@ -176,7 +177,7 @@ const ColorInput = ({ label, name, value, onChange }: {
             <input
               type="range"
               name="paddingTop"
-              value={userInputData?.setting?.paddingTop ?? '0'}
+              value={userInputData?.setting?.paddingTop?.toString() ?? '0'}
               onChange={handleSettingChange}
               className="w-full"
             />
@@ -187,7 +188,7 @@ const ColorInput = ({ label, name, value, onChange }: {
             <input
               type="range"
               name="paddingBottom"
-              value={userInputData?.setting?.paddingBottom ?? '0'}
+              value={userInputData?.setting?.paddingBottom?.toString() ?? '0'}
               onChange={handleSettingChange}
               className="w-full"
             />
@@ -198,7 +199,7 @@ const ColorInput = ({ label, name, value, onChange }: {
             <input
               type="range"
               name="marginTop"
-              value={userInputData?.setting?.marginTop ?? '0'}
+              value={userInputData?.setting?.marginTop?.toString() ?? '0'}
               onChange={handleSettingChange}
               className="w-full"
             />
@@ -209,7 +210,7 @@ const ColorInput = ({ label, name, value, onChange }: {
             <input
               type="range"
               name="marginBottom"
-              value={userInputData?.setting?.marginBottom ?? '0'}
+              value={userInputData?.setting?.marginBottom?.toString() ?? '0'}
               onChange={handleSettingChange}
               className="w-full"
             />

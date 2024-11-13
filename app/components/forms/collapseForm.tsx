@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { Compiler } from '../compiler';
-
+import { Layout ,Section } from '@/lib/types';
 interface CollapseFormProps {
-  setUserInputData: React.Dispatch<React.SetStateAction<any>>;
-  userInputData: any;
-  layout: any;
+  setUserInputData: React.Dispatch<React.SetStateAction<Section>>;
+  userInputData: Section;
+  layout: Layout;
 }
 
 const ColorInput = ({ label, name, value, onChange }: {
@@ -33,18 +33,18 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({ setUserInputData, us
   }, []);
 
   const handleBlockChange = (index: number, field: string, value: string) => {
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
-      blocks: prev.blocks.map((block: any, i: number) => 
+      blocks: prev.blocks.map((block: Section, i: number) => 
         i === index ? { ...block, [field]: value } : block
       )
     }));
   };
 
   const handleBlockSettingChange = (index: number, field: string, value: string) => {
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
-      blocks: prev.blocks.map((block: any, i: number) => 
+      blocks: prev.blocks.map((block: Section, i: number) => 
         i === index ? { 
           ...block, 
           setting: { ...block.setting, [field]: value }
@@ -55,7 +55,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({ setUserInputData, us
 
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: any) => ({
+    setUserInputData((prev: Section) => ({
       ...prev,
       setting: {
         ...prev.setting,
@@ -83,8 +83,8 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({ setUserInputData, us
     <label className="block mb-1">Heading Font Weight</label>
     <select
       name="headingFontWeight"
-      value={userInputData?.setting?.headingFontWeight ?? 'normal'}
-      onChange={(e)=>handleSettingChange}
+      value={userInputData?.setting?.headingFontWeight?.toLocaleString() ?? 'normal'}
+      onChange={()=>handleSettingChange}
       className="w-full p-2 border rounded"
     >
       <option value="normal">Normal</option>
@@ -149,13 +149,13 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({ setUserInputData, us
           <ColorInput
             label="Background Color"
             name="background"
-            value={userInputData?.setting?.background ?? '#672f93'}
+            value={userInputData?.setting?.background?.toLocaleString() ?? '#672f93'}
             onChange={handleSettingChange}
           />
           <ColorInput
             label="Heading Color"
             name="headingColor"
-            value={userInputData?.setting?.headingColor ?? '#ffffff'}
+            value={userInputData?.setting?.headingColor?.toLocaleString() ?? '#ffffff'}
             onChange={handleSettingChange}
           />
         </div>
@@ -170,7 +170,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({ setUserInputData, us
                 name={spacing}
                 min="0"
                 max="100"
-                value={userInputData?.setting?.[spacing] ?? '0'}
+                value={userInputData?.setting?.[spacing as keyof object] ?? '0'}
                 onChange={handleSettingChange}
                 className="w-full"
               />
