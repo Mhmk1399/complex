@@ -126,7 +126,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
           <ColorInput
             label="Description Color"
             name="descriptionColor"
-            value={userInputData?.blocks?.setting?.descriptionColor.toLocaleString() ?? '#333333'}
+            value={userInputData?.blocks?.setting?.descriptionColor?.toLocaleString() ?? '#333333'}
             onChange={handleBlockSettingChange}
           />
           <ColorInput

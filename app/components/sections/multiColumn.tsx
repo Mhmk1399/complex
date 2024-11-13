@@ -33,24 +33,20 @@ interface BlocksType {
   setting: {
     [key: string]: string;
   };
-  title1?: string;
+  title?: string;
   title2?: string;
   title3?: string;
-  description1?: string;
+  description?: string;
   description2?: string;
   description3?: string;
-  btnLabel1?: string;
+  btnLabel?: string;
   btnLabel2?: string;
   btnLabel3?: string;
-  btnLink1?: string;
+  btnLink?: string;
   btnLink2?: string;
   btnLink3?: string;
-  imageAlt1?: string;
-  imageAlt2?: string;
-  imageAlt3?: string;
-  imageSrc1?: string;
-  imageSrc2?: string;
-  imageSrc3?: string;
+  imageAlt?: string;
+  imageSrc?: string;
 }
 
 interface SettingType {
@@ -106,6 +102,7 @@ const Heading = styled.h2<{ $data: SectionData }>`
   font-weight: ${(props) => props.$data.setting?.headingFontWeight || "bold"};
   text-align: center;
   margin-bottom: 20px;
+  margin-top: 20px;
 
   @media (max-width: 768px) {
     font-size: 28px;
@@ -217,7 +214,6 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
   setSelectedComponent,
   layout,
 }) => {
-
   const sectionData = (layout.sections?.children
     ?.sections?.[8] as SectionData) || {
     blocks: [{ setting: {} }],
@@ -233,36 +229,44 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
       <Heading $data={sectionData}>
         {sectionData?.setting.heading || "heading"}
       </Heading>
-      // Replace the existing mapping code with this:
+      {/* // Replace the existing mapping code with this: */}
       <ColumnContainer>
         {Object.entries(sectionData.blocks).map(([key, block], idx) => {
-          if (key === 'setting') return null;
+          if (key === "setting") return null;
           const index = Number(key);
           if (isNaN(index)) return null;
           const typedBlock = block as ColumnBlock;
           return (
             <Column key={idx} $data={sectionData}>
-              <Title $data={sectionData}>{typedBlock[`title${index + 1}` as keyof ColumnBlock]}</Title>
+              <Title $data={sectionData}>
+                {typedBlock[`title${index + 1}` as keyof ColumnBlock]}
+              </Title>
               <Description $data={sectionData}>
                 {typedBlock[`description${index + 1}` as keyof ColumnBlock]}
               </Description>
               <Image
-                src={typedBlock[`imageSrc${index + 1}` as keyof ColumnBlock] || "/assets/images/banner2.webp"}
-                alt={typedBlock[`imageAlt${index + 1}` as keyof ColumnBlock] || ''}
+                src={
+                  typedBlock[`imageSrc${index + 1}` as keyof ColumnBlock] ||
+                  "/assets/images/banner2.webp"
+                }
+                alt={
+                  typedBlock[`imageAlt${index + 1}` as keyof ColumnBlock] || ""
+                }
                 $data={sectionData}
               />
               <Button
-                href={typedBlock[`btnLink${index + 1}` as keyof ColumnBlock] || ''}
+                href={
+                  typedBlock[`btnLink${index + 1}` as keyof ColumnBlock] || ""
+                }
                 $data={sectionData}
               >
-                {typedBlock[`btnLable${index + 1}` as keyof ColumnBlock] || "Learn More"}
+                {typedBlock[`btnLable${index + 1}` as keyof ColumnBlock] ||
+                  "Learn More"}
               </Button>
-
             </Column>
           );
         })}
       </ColumnContainer>
-
     </Section>
   );
 };

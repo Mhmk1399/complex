@@ -371,56 +371,57 @@
         },
         {
           "type": "multiRow",
-          "title": "titlrgrgrgrge",
+          "title": "multiRow",
 
           "blocks": [
             {
-              "heading": "",
-              "description": "",
-              "btnLable": "",
+              "heading": "heading1",
+              "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda porro necessitatibus ad vero ratione veritatis quos vel labore expedita molestiae dignissimos voluptatem, at non,",
+              "btnLable": "button1",
               "btnLink": "",
               "imageSrc": "/assets/images/banner1.jpg",
               "imageAlt": ""
             },
             {
-              "heading": "",
-              "description": "",
-              "btnLable": "",
+              "heading": "heading2",
+              "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda porro necessitatibus ad vero ratione veritatis quos vel labore expedita molestiae dignissimos voluptatem, at non,",
+              "btnLable": "button2",
               "btnLink": "",
               "imageSrc": "/assets/images/banner3.jpg",
               "imageAlt": ""
             },
             {
-              "heading": "",
-              "description": "",
-              "btnLable": "",
+              "heading": "heading3",
+              "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda porro necessitatibus ad vero ratione veritatis quos vel labore expedita molestiae dignissimos voluptatem, at non,",
+              "btnLable": "button3",
               "btnLink": "",
               "imageSrc": "/assets/images/banner.jpg",
               "imageAlt": ""
             }
           ],
           "setting": {
-            "titleColor": "#ffa62b",
+            "titleColor": "#000000",
             "titleFontWeight": "bold",
-            "titleFontSize": "25px",
+            "titleFontSize": "35px",
             "paddingTop": "20px",
             "paddingBottom": "20px",
             "marginTop": "20px",
             "marginBottom": "20px",
-            "backgroundColorMultiRow": "#fff",
-            "backgroundColorBox": "#fff",
+            "backgroundColorMultiRow": "#8d99ae",
+            "backgroundColorBox": "#2b2d42",
             "imageRadious": "10px",
             "imageWidth": "700px",
             "imageHeight": "300px",
-            "imageRadius": "10px",
-            "headingColor": "#000000",
+            "imageRadius": "45px",
+            "headingColor": "#fcbf49",
             "headingFontSize": "30px",
             "headingFontWeight": "bold",
-            "descriptionColor": "#000000",
+            "descriptionColor": "#e4e4e4",
             "descriptionFontSize": "18px",
             "descriptionFontWeight": "normal",
             "btnColor": "#ffffff",
-            "btnBackgroundColor": "#16697a"
+            "btnBackgroundColor": "#bc4749",
+            "imageAlign":"row"
           }
         }
       ],
