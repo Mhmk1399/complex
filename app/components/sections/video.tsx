@@ -66,8 +66,8 @@ const Heading = styled.h1<{ $data: SectionData }>`
 `;
 
 const VideoElement = styled.video<{ $data: SectionData }>`
-  width: ${(props) => props.$data?.blocks?.setting?.videoWidth|| "100%"}0px;
-  height: ${(props) => props.$data?.blocks?.setting?.videoHeight|| "auto"};
+  width: ${(props) => props.$data?.blocks?.setting?.videoWidth || "100%"}0px;
+  height: ${(props) => props.$data?.blocks?.setting?.videoHeight || "auto"};
   border-radius: ${(props) =>
     props.$data?.blocks?.setting?.videoRadious || "10px"}px;
   height: auto;
