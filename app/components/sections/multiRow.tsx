@@ -13,7 +13,7 @@ interface MultiRowShowProps {
 
 interface BlocksType {
   setting: {
-    [key: string]: string;
+    // [key: string]: string;
   };
   heading?: string;
   description?: string;
@@ -23,7 +23,6 @@ interface BlocksType {
   btnLink?: string;
   btnText?: string;
   title?: string;
-
 }
 
 interface SettingType {
@@ -88,7 +87,8 @@ const RowContainer = styled.div`
 const Row = styled.div<{ $data: SectionData }>`
   padding: 20px;
   border-radius: ${(props) => props.$data.setting?.imageRadius || "8px"};
-  background-color: ${(props) => props.$data.setting?.backgroundColorBox || "#f9f9f9"};
+  background-color: ${(props) =>
+    props.$data.setting?.backgroundColorBox || "#f9f9f9"};
   text-align: center;
   width: 100%;
   max-width: 500px;
@@ -145,7 +145,11 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
         {sectionData.blocks.map((block: BlocksType, index: number) => (
           <Row key={index} $data={sectionData}>
             {block.imageSrc && (
-              <Image src={block.imageSrc || "/assets/images/banner1.jpg"} alt={block.imageAlt || "image"} $data={sectionData} />
+              <Image
+                src={block.imageSrc || "/assets/images/banner1.jpg"}
+                alt={block.imageAlt || "image"}
+                $data={sectionData}
+              />
             )}
             <Description $data={sectionData}>
               {block.description || "No description available"}
