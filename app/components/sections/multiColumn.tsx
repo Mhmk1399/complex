@@ -9,7 +9,26 @@ interface MultiColumnProps {
     };
   };
 }
-
+interface ColumnBlock {
+  title1?: string;
+  title2?: string;
+  title3?: string;
+  description1?: string;
+  description2?: string;
+  description3?: string;
+  imageSrc1?: string;
+  imageSrc2?: string;
+  imageSrc3?: string;
+  imageAlt1?: string;
+  imageAlt2?: string;
+  imageAlt3?: string;
+  btnLink1?: string;
+  btnLink2?: string;
+  btnLink3?: string;
+  btnLable1?: string;
+  btnLable2?: string;
+  btnLable3?: string;
+}
 interface BlocksType {
   setting: {
     [key: string]: string;
@@ -198,8 +217,7 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
   setSelectedComponent,
   layout,
 }) => {
-  console.log(layout.sections?.children?.sections[8].blocks[1]);
-  
+
   const sectionData = (layout.sections?.children
     ?.sections?.[8] as SectionData) || {
     blocks: [{ setting: {} }],
@@ -215,24 +233,36 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
       <Heading $data={sectionData}>
         {sectionData?.setting.heading || "heading"}
       </Heading>
+      // Replace the existing mapping code with this:
       <ColumnContainer>
-        {sectionData.blocks.map((block: BlocksType, idx: number) => (
-          <Column key={idx} $data={sectionData}>
-            <Title $data={sectionData}>{String(block[`title${idx + 1}` as keyof BlocksType] || '')}</Title>
-            <Description $data={sectionData}>
-              {String(block[`description${idx + 1}` as keyof BlocksType] || '')}
-            </Description>
-            <Image
-              src={String(block[`imageSrc${idx + 1}` as keyof BlocksType] || "/assets/images/banner2.webp")}
-              alt={String(block[`imageAlt${idx + 1}` as keyof BlocksType] || '')}
-              $data={sectionData}
-            />
-            <Button href={String(block[`btnLink${idx + 1}` as keyof BlocksType] || '')} $data={sectionData}>
-              {String(block[`btnLabel${idx + 1}` as keyof BlocksType] || "button")}
-            </Button>
-          </Column>
-        ))}
+        {Object.entries(sectionData.blocks).map(([key, block], idx) => {
+          if (key === 'setting') return null;
+          const index = Number(key);
+          if (isNaN(index)) return null;
+          const typedBlock = block as ColumnBlock;
+          return (
+            <Column key={idx} $data={sectionData}>
+              <Title $data={sectionData}>{typedBlock[`title${index + 1}` as keyof ColumnBlock]}</Title>
+              <Description $data={sectionData}>
+                {typedBlock[`description${index + 1}` as keyof ColumnBlock]}
+              </Description>
+              <Image
+                src={typedBlock[`imageSrc${index + 1}` as keyof ColumnBlock] || "/assets/images/banner2.webp"}
+                alt={typedBlock[`imageAlt${index + 1}` as keyof ColumnBlock] || ''}
+                $data={sectionData}
+              />
+              <Button
+                href={typedBlock[`btnLink${index + 1}` as keyof ColumnBlock] || ''}
+                $data={sectionData}
+              >
+                {typedBlock[`btnLable${index + 1}` as keyof ColumnBlock] || "Learn More"}
+              </Button>
+
+            </Column>
+          );
+        })}
       </ColumnContainer>
+
     </Section>
   );
 };
