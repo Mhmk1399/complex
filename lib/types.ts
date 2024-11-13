@@ -14,18 +14,18 @@ export interface Link {
     btnTextColor: string;
     imageWidth: string;
     imageHeight: string;
-    opacityImage: any;
-    heading: any;
-    titleColor: any;
-    descriptionColor: any;
-    backgroundColorBox: any;
-    btnColor: any;
-    btnBackgroundColor: any;
-    imageBehavior: any;
-    imageRadious: any;
-    headingColor: any;
-    background: any;
-    headingFontWeight: any;
+    opacityImage: string;
+    heading: string;
+    titleColor: string;
+    descriptionColor: string;
+    backgroundColorBox: string;
+    btnColor: string;
+    btnBackgroundColor: string;
+    imageBehavior: string;
+    imageRadious: string;
+    headingColor: string;
+    background: string;
+    headingFontWeight: string;
     paddingTop: string;
     paddingBottom: string;
     marginTop: string;
@@ -57,7 +57,7 @@ export interface Link {
   }
   
   export interface BlockSetting {
-    [key: string]: string | number | boolean;
+    [key: number]: string | number | boolean | CommonSettings;
   }
   
   export interface Section {
@@ -69,8 +69,11 @@ export interface Link {
     btnLink: string;
     type: string;
     blocks: {
-      [key: string]: any;
-      setting: BlockSetting;
+      heading: string;
+      videoUrl: string;
+      videoAlt: string;
+      [key: number]: string | number | boolean | CommonSettings;
+      setting: BlockSetting | CommonSettings;
     };
     setting: CommonSettings;
   }
@@ -87,14 +90,15 @@ export interface Link {
     order: string[];
   }  
  export  interface Layout {
-    setting: any;
-    blocks: any;
+    setting: string;
+    blocks: string;
     type: "layout";
     settings: {
       fontFamily: string;
       colorSchema: ColorSchema;
     };
     sections: {
+      slideshow: string;
       sectionHeader: HeaderSection;
       children: Children;
       sectionFooter: FooterSection;

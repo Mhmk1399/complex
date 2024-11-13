@@ -4,12 +4,7 @@ import { Preview } from './preview';
 import { Form } from './form';
 import data from '../../public/template/null.json'
 import {Layout }from '../../lib/types'
-interface DataType {
-  // Define your JSON structure here
-  id: number;
-  title: string;
-  // Add more fields as needed
-}
+
 
 export const Main = () => {
   const Data = data as unknown as Layout;
