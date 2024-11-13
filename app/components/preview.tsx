@@ -8,6 +8,7 @@ import ContactForm from "./sections/contactForm";
 import NewsLetter from "./sections/newsLetter";
 import CollapseFaq from "./sections/collapseFaq";
 import MultiColumn from "./sections/multiColumn";
+import SlideShow from "./sections/slideShow";
 
 interface PreviewProps {
   layout: {};
@@ -38,6 +39,7 @@ export const Preview: React.FC<PreviewProps> = ({
         setSelectedComponent={setSelectedComponent}
         layout={layout}
       />
+      <SlideShow setSelectedComponent={setSelectedComponent} layout={layout} />
     </div>
   );
 };

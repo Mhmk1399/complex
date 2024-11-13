@@ -80,65 +80,41 @@
           "type": "slideshow",
           "blocks": [
             {
-              "imageSrc": "src",
+              "imageSrc": "/assets/images/banner3.jpg",
               "imageAlt": "",
-              "text": "",
-              "description": "",
+              "text": "text1",
+              "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur totam repellat fugiat deleniti odio quaerat assumenda nulla quo quam rem tempore, praesentium autem numquam iste,",
               "btnLink": "",
-              "btnText": "Shop Now",
-              "setting": {
-                "descriptionColor": "#333",
-                "descriptionFontSize": "16px",
-                "descriptionFontWeight": "normal",
-                "textColor": "#fff",
-                "textFontSize": "24px",
-                "textFontWeight": "bold",
-                "btnTextColor": "#fff",
-                "btnBackgroundColor": "#333",
-                "positionBoxTextDesktop": "center",
-                "backgroundColorBox": "#fff",
-                "backgroundBoxRadious": "10px",
-                "textAlignmentBoxDesktop": "center",
-                "textAlignmentBoxMobile": "center",
-                "opacityImage": 0.5,
-                "imageWidth": "100px",
-                "imageHeight": "100px",
-                "imageRadious": "10px"
-              }
+              "btnText": "Shop Now"
             },
             {
-              "imageSrc": "src",
+              "imageSrc": "/assets/images/banner1.jpg",
               "imageAlt": "",
-              "text": "",
-              "description": "",
+              "text": "text2",
+              "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur  assumenda nulla quo quam rem tempore, praesentium autem numquam iste,",
               "link": "",
-              "btnText": "Shop Now",
-              "setting": {
-                "descriptionColor": "#333",
-                "descriptionFontSize": "16px",
-                "descriptionFontWeight": "normal",
-                "textColor": "#fff",
-                "textFontSize": "24px",
-                "textFontWeight": "bold",
-                "btnTextColor": "#fff",
-                "btnBackgroundColor": "#333",
-                "positionBoxTextDesktop": "center",
-                "backgroundColorBox": "#fff",
-                "backgroundBoxRadious": "10px",
-                "textAlignmentBoxDesktop": "center",
-                "textAlignmentBoxMobile": "center",
-                "opacityImage": 0.5,
-                "imageWidth": "100px",
-                "imageHeight": "100px",
-                "imageRadious": "10px"
-              }
+              "btnText": "Shop Now"
             }
           ],
-          "settings": {
+          "setting": {
             "paddingTop": "20px",
             "paddingBottom": "20px",
             "marginTop": "0px",
-            "marginBottom": "0px"
+            "marginBottom": "0px",
+            "descriptionColor": "#ffffff",
+            "descriptionFontSize": "16px",
+            "descriptionFontWeight": "normal",
+            "textColor": "#000000",
+            "textFontSize": "24px",
+            "textFontWeight": "bold",
+            "btnTextColor": "#ffffff",
+            "btnBackgroundColor": "#5b8e7d",
+            "backgroundColorBox": "#bc4b51",
+            "backgroundBoxRadious": "10px",
+            "opacityImage": 1,
+            "imageWidth": "700px",
+            "imageHeight": "500px",
+            "imageRadious": "10px"
           }
         },
         {
