@@ -64,6 +64,7 @@ const Heading = styled.h2<{ $data: SectionData }>`
   font-weight: ${(props) => props.$data.setting?.headingFontWeight || "bold"};
   text-align: center;
   margin-bottom: 20px;
+  margin-top: 10px;
 `;
 
 const FaqItem = styled.div`

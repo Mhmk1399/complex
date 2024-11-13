@@ -64,7 +64,7 @@ const Heading = styled.h2<{ $data: SectionData }>`
   font-weight: ${(props) =>
     props.$data?.blocks?.setting?.headingFontWeight};
   margin-bottom: 10px;
-  padding: 0px 20px;
+  padding: 20px 20px;
   text-align: center;
 `;
 
