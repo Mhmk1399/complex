@@ -21,7 +21,7 @@ interface BlocksType {
   imageSrc?: string;
   imageAlt?: string;
   btnLink?: string;
-  btnText?: string;
+  btnLable?: string;
   title?: string;
 }
 
@@ -46,9 +46,11 @@ interface SettingType {
   titleColor?: string;
   titleFontWeight?: string;
   titleFontSize?: string;
+  imageAlign?: string;
 }
 
 interface SectionData {
+  title: string;
   blocks: BlocksType[];
   setting: SettingType;
 }
@@ -61,37 +63,73 @@ const Section = styled.section<{ $data: SectionData }>`
   margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20px"};
   background-color: ${(props) =>
     props.$data.setting?.backgroundColorMultiRow || "#ffffff"};
-  display: flex;
+  display: block;
   flex-direction: column;
   gap: 15px;
   align-items: center;
   border-radius: 12px;
 `;
 
-const Heading = styled.h2<{ $data: SectionData }>`
+const Title = styled.h2<{ $data: SectionData }>`
   color: ${(props) => props.$data.setting?.titleColor || "#333"};
   font-size: ${(props) => props.$data.setting?.titleFontSize || "24px"};
   font-weight: ${(props) => props.$data.setting?.titleFontWeight || "bold"};
   text-align: center;
-  margin-bottom: 20px;
+  margin-top: 30px;
+`;
+const Heading = styled.h2<{ $data: SectionData }>`
+  color: ${(props) => props.$data.setting?.headingColor || "#333"};
+  font-size: ${(props) => props.$data.setting?.headingFontSize || "24px"};
+  font-weight: ${(props) => props.$data.setting?.headingFontWeight || "bold"};
+  text-align: center;
+  @media (max-width: 768px) {
+    font-size: 24px;
+    margin-top: 10px;
+  }
 `;
 
 const RowContainer = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  flex-direction: column;
+  gap: 10px;
   justify-content: center;
   align-items: center;
 `;
 
 const Row = styled.div<{ $data: SectionData }>`
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 30px;
   border-radius: ${(props) => props.$data.setting?.imageRadius || "8px"};
   background-color: ${(props) =>
     props.$data.setting?.backgroundColorBox || "#f9f9f9"};
-  text-align: center;
-  width: 100%;
-  max-width: 500px;
+  max-width: auto;
+
+  @media (min-width: 768px) {
+    flex-direction: ${(props) => props.$data.setting?.imageAlign || "row"};
+    align-items: center;
+    img {
+      width: 40%;
+      margin-bottom: 0;
+    }
+
+    .content {
+      width: 60%;
+      text-align: center;
+    }
+  }
+`;
+
+const WrapperContainer = styled.div<{ $data: SectionData }>`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Image = styled.img<{ $data: SectionData }>`
@@ -100,6 +138,14 @@ const Image = styled.img<{ $data: SectionData }>`
   border-radius: ${(props) => props.$data.setting?.imageRadius || "8px"};
   object-fit: cover;
   margin-bottom: 10px;
+  transition: all 0.5s ease-in-out;
+  box-shadow: 3px 2px 3px 2px rgba(203, 192, 192, 0.2);
+
+  &:hover {
+    opacity: 0.4;
+    transform: scale(1.01);
+    transform: rotate(1deg);
+  }
 `;
 
 const Description = styled.p<{ $data: SectionData }>`
@@ -108,18 +154,25 @@ const Description = styled.p<{ $data: SectionData }>`
   font-weight: ${(props) =>
     props.$data.setting?.descriptionFontWeight || "normal"};
   margin-bottom: 10px;
+  text-align: center;
+  padding: 0 10px;
+  @media (max-width: 768px) {
+    font-size: 15px;
+  }
 `;
 
 const Button = styled.a<{ $data: SectionData }>`
   display: inline-block;
-  padding: 10px 20px;
+  padding: 10px 20px 10px 20px;
   color: ${(props) => props.$data.setting?.btnColor || "#fff"};
   background-color: ${(props) =>
     props.$data.setting?.btnBackgroundColor || "#007BFF"};
   border-radius: 5px;
   text-decoration: none;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
   &:hover {
-    opacity: 0.8;
+    opacity: 0.6;
   }
 `;
 
@@ -128,39 +181,47 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
   layout,
 }) => {
   const sectionData = layout.sections?.children?.sections?.[9] || {
+    title: "",
     blocks: [{ setting: {} }],
     setting: {},
   };
 
   return (
-    <Section
-      dir="rtl"
-      $data={sectionData}
-      onClick={() => setSelectedComponent("multi-row")}
-    >
-      <Heading $data={sectionData}>
+    <>
+      <Title $data={sectionData}>
         {sectionData?.title || "No title available"}
-      </Heading>
-      <RowContainer>
-        {sectionData.blocks.map((block: BlocksType, index: number) => (
-          <Row key={index} $data={sectionData}>
-            {block.imageSrc && (
-              <Image
-                src={block.imageSrc || "/assets/images/banner1.jpg"}
-                alt={block.imageAlt || "image"}
-                $data={sectionData}
-              />
-            )}
-            <Description $data={sectionData}>
-              {block.description || "No description available"}
-            </Description>
-            <Button href={block.btnLink || "#"} $data={sectionData}>
-              {block.btnLabel || "Learn More"}
-            </Button>
-          </Row>
-        ))}
-      </RowContainer>
-    </Section>
+      </Title>
+      <Section
+        dir="rtl"
+        $data={sectionData}
+        onClick={() => setSelectedComponent("multi-row")}
+      >
+        <RowContainer>
+          {sectionData.blocks.map((block: BlocksType, index: number) => (
+            <Row key={index} $data={sectionData}>
+              {block.imageSrc && (
+                <Image
+                  src={block.imageSrc}
+                  alt={block.imageAlt || "image"}
+                  $data={sectionData}
+                />
+              )}
+              <WrapperContainer $data={sectionData}>
+                <Heading $data={sectionData}>
+                  {block.heading || "No title available"}
+                </Heading>
+                <Description $data={sectionData}>
+                  {block.description || "No description available"}
+                </Description>
+                <Button href={block.btnLink || "#"} $data={sectionData}>
+                  {block?.btnLable || "Learn More"}
+                </Button>
+              </WrapperContainer>
+            </Row>
+          ))}
+        </RowContainer>
+      </Section>
+    </>
   );
 };
 export default MultiRow;

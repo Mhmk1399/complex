@@ -14,24 +14,20 @@ interface BlocksType {
   setting: {
     [key: string]: string;
   };
-  title1?: string;
+  title?: string;
   title2?: string;
   title3?: string;
-  description1?: string;
+  description?: string;
   description2?: string;
   description3?: string;
-  btnLabel1?: string;
+  btnLabel?: string;
   btnLabel2?: string;
   btnLabel3?: string;
-  btnLink1?: string;
+  btnLink?: string;
   btnLink2?: string;
   btnLink3?: string;
-  imageAlt1?: string;
-  imageAlt2?: string;
-  imageAlt3?: string;
-  imageSrc1?: string;
-  imageSrc2?: string;
-  imageSrc3?: string;
+  imageAlt?: string;
+  imageSrc?: string;
 }
 
 interface SettingType {
@@ -199,12 +195,13 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
   layout,
 }) => {
   console.log(layout.sections?.children?.sections[8].blocks[1]);
-  
+
   const sectionData = (layout.sections?.children
     ?.sections?.[8] as SectionData) || {
     blocks: [{ setting: {} }],
     setting: {},
   };
+  console.log(layout.sections?.children?.sections[8]);
 
   return (
     <Section
@@ -216,19 +213,33 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
         {sectionData?.setting.heading || "heading"}
       </Heading>
       <ColumnContainer>
-        {sectionData.blocks.map((block: BlocksType, idx: number) => (
+        {sectionData.blocks.map((block: BlocksType, idx) => (
           <Column key={idx} $data={sectionData}>
-            <Title $data={sectionData}>{String(block[`title${idx + 1}` as keyof BlocksType] || '')}</Title>
+            <Title $data={sectionData}>
+              {String(block[`title${idx + 1}` as keyof BlocksType] || "")}
+            </Title>
             <Description $data={sectionData}>
-              {String(block[`description${idx + 1}` as keyof BlocksType] || '')}
+              {String(block[`description${idx + 1}` as keyof BlocksType] || "")}
             </Description>
             <Image
-              src={String(block[`imageSrc${idx + 1}` as keyof BlocksType] || "/assets/images/banner2.webp")}
-              alt={String(block[`imageAlt${idx + 1}` as keyof BlocksType] || '')}
+              src={String(
+                block[`imageSrc${idx + 1}` as keyof BlocksType] ||
+                  "/assets/images/banner2.webp"
+              )}
+              alt={String(
+                block[`imageAlt${idx + 1}` as keyof BlocksType] || ""
+              )}
               $data={sectionData}
             />
-            <Button href={String(block[`btnLink${idx + 1}` as keyof BlocksType] || '')} $data={sectionData}>
-              {String(block[`btnLabel${idx + 1}` as keyof BlocksType] || "button")}
+            <Button
+              href={String(
+                block[`btnLink${idx + 1}` as keyof BlocksType] || ""
+              )}
+              $data={sectionData}
+            >
+              {String(
+                block[`btnLabel${idx + 1}` as keyof BlocksType] || "button"
+              )}
             </Button>
           </Column>
         ))}
