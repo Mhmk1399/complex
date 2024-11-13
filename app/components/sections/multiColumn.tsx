@@ -214,19 +214,19 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
         {sectionData?.setting.heading || "heading"}
       </Heading>
       <ColumnContainer>
-        {sectionData.blocks.map((block: string | Section, idx: number) => (
+        {sectionData.blocks.map((block: BlocksType, idx: number) => (
           <Column key={idx} $data={sectionData}>
-            <Title $data={sectionData}>{block[`title${idx + 1}`]}</Title>
+            <Title $data={sectionData}>{String(block[`title${idx + 1}` as keyof BlocksType] || '')}</Title>
             <Description $data={sectionData}>
-              {block[`description${idx + 1}`]}
+              {String(block[`description${idx + 1}` as keyof BlocksType] || '')}
             </Description>
             <Image
-              src={block[`imageSrc${idx + 1}`] || "/assets/images/banner2.webp"}
-              alt={block[`imageAlt${idx + 1}`]}
+              src={String(block[`imageSrc${idx + 1}` as keyof BlocksType] || "/assets/images/banner2.webp")}
+              alt={String(block[`imageAlt${idx + 1}` as keyof BlocksType] || '')}
               $data={sectionData}
             />
-            <Button href={block[`btnLink${idx + 1}`]} $data={sectionData}>
-              {block[`btnLabel${idx + 1}`] || "button"}
+            <Button href={String(block[`btnLink${idx + 1}` as keyof BlocksType] || '')} $data={sectionData}>
+              {String(block[`btnLabel${idx + 1}` as keyof BlocksType] || "button")}
             </Button>
           </Column>
         ))}
