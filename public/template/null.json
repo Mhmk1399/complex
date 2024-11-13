@@ -172,7 +172,7 @@
         {
           "type": "image-text",
           "blocks": {
-            "imageSrc": "",
+            "imageSrc": "/assets/images/banner3.jpg",
             "imageAlt": "",
             "heading": "",
             "description": "",
@@ -343,47 +343,54 @@
         },
         {
           "type": "multicolumn",
-          "heading": "",
-          "btnText": "",
-          "btnLink": "",
           "blocks": [
             {
-              "title1": "",
-              "description1": "",
-              "imageSrc1": "",
+              "title1": "title1",
+              "description1": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Impedit magni commodi molestias nam expedita fugiat natus eos atque aliquid. Neque temporibus itaque deserunt eum quas commodi,",
+              "imageSrc1": "/assets/images/banner1.jpg",
               "imageAlt1": "",
               "btnLable1": "",
               "btnLink1": ""
             },
             {
-              "title2": "",
-              "description2": "",
-              "imageSrc2": "",
+              "title2": "title2",
+              "description2": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Impedit magni commodi molestias nam expedita fugiat natus eos atque aliquid. Neque temporibus itaque deserunt eum quas commodi,",
+              "imageSrc2": "/assets/images/banner3.jpg",
               "imageAlt2": "",
               "btnLable2": "",
               "btnLink2": ""
             },
             {
-              "title3": "",
-              "description3": "",
-              "imageSrc3": "",
+              "title3": "title3",
+              "description3": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Impedit magni commodi molestias nam expedita fugiat natus eos atque aliquid. Neque temporibus itaque deserunt eum quas commodi,",
+              "imageSrc3": "/assets/images/banner.jpg",
               "imageAlt3": "",
               "btnLable3": "",
               "btnLink3": ""
             }
           ],
           "setting": {
+            "heading": "heading column",
             "paddingTop": "20px",
             "paddingBottom": "20px",
-            "marginTop": "0px",
-            "marginBottom": "0px",
-            "backgroundColorBox": "#fff",
-            "headingFontSize": "20px",
+            "marginTop": "20px",
+            "marginBottom": "20px",
+            "backgroundColorBox": "#82c0cc",
+            "headingFontSize": "30px",
             "headingFontWeight": "bold",
-            "headingColor": "#333",
-            "imageRadious": "0px",
-            "imageWidth": "100px",
-            "imageHeight": "100px"
+            "headingColor": "#ffffff",
+            "imageRadious": "10px",
+            "imageWidth": "400px",
+            "imageHeight": "300px",
+            "imageBehavior": "cover",
+            "titleColor": "#ffa62b",
+            "titleFontSize": "25px",
+            "titleFontWeight": "bold",
+            "descriptionColor": "#e4e4e4",
+            "descriptionFontSize": "18px",
+            "descriptionFontWeight": "normal",
+            "btnColor": "#ffffff",
+            "btnBackgroundColor": "#16697a"
           }
         },
         {

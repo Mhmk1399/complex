@@ -29,10 +29,13 @@ interface BlocksType {
   imageAlt1?: string;
   imageAlt2?: string;
   imageAlt3?: string;
-  heading?: string;
+  imageSrc1?: string;
+  imageSrc2?: string;
+  imageSrc3?: string;
 }
 
 interface SettingType {
+  heading: string;
   paddingTop?: string;
   paddingBottom?: string;
   marginTop?: string;
@@ -41,9 +44,18 @@ interface SettingType {
   headingColor?: string;
   headingFontSize?: string;
   headingFontWeight?: string;
-  imageRadius?: string;
+  imageRadious?: string;
   imageWidth?: string;
   imageHeight?: string;
+  imageBehavior?: string;
+  titleColor?: string;
+  titleFontSize?: string;
+  titleFontWeight?: string;
+  descriptionColor?: string;
+  descriptionFontSize?: string;
+  descriptionFontWeight?: string;
+  btnColor?: string;
+  btnBackgroundColor?: string;
 }
 
 interface SectionData {
@@ -61,64 +73,124 @@ const Section = styled.section<{ $data: SectionData }>`
     props.$data.setting?.backgroundColorBox || "#ffffff"};
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  gap: 15px;
+  border-radius: 12px;
 `;
 
 const Heading = styled.h2<{ $data: SectionData }>`
   color: ${(props) => props.$data.setting?.headingColor || "#333"};
-  font-size: ${(props) => props.$data.setting?.headingFontSize || "24px"};
+  font-size: ${(props) => props.$data.setting?.headingFontSize || "24px"}px;
   font-weight: ${(props) => props.$data.setting?.headingFontWeight || "bold"};
   text-align: center;
   margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    font-size: 28px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 24px;
+  }
 `;
 
 const ColumnContainer = styled.div`
   display: flex;
   gap: 20px;
   justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
 `;
 
 const Column = styled.div<{ $data: SectionData }>`
-  background-color: ${(props) =>
-    props.$data.setting?.backgroundColorBox || "#f9f9f9"};
   padding: 20px;
-  border-radius: ${(props) => props.$data.setting?.imageRadius || "8px"};
+  border-radius: ${(props) => props.$data.setting?.imageRadious || "8px"}px;
   text-align: center;
-  width: 300px;
+  width: 500px;
+
+  @media (max-width: 1024px) {
+    width: 45%;
+  }
+
+  @media (max-width: 768px) {
+    width: 90%;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+    padding: 15px;
+  }
 `;
 
-const Title = styled.h3`
-  font-size: 18px;
-  font-weight: bold;
+const Title = styled.h3<{ $data: SectionData }>`
+  font-size: ${(props) => props.$data.setting?.titleFontSize || "24px"}px;
+  font-weight: ${(props) => props.$data.setting?.titleFontWeight || "bold"};
+  color: ${(props) => props.$data.setting?.titleColor || "#ffffff"};
   margin-bottom: 10px;
+
+  @media (max-width: 768px) {
+    font-size: 22px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 20px;
+  }
 `;
 
 const Image = styled.img<{ $data: SectionData }>`
-  width: ${(props) => props.$data.setting?.imageWidth || "100px"};
-  height: ${(props) => props.$data.setting?.imageHeight || "100px"};
-  border-radius: ${(props) => props.$data.setting?.imageRadius || "8px"};
-  object-fit: cover;
+  width: ${(props) => props.$data.setting?.imageWidth || "500px"}px;
+  height: ${(props) => props.$data.setting?.imageHeight || "400px"}px;
+  border-radius: ${(props) => props.$data.setting?.imageRadious || "5px"}px;
+  object-fit: ${(props) => props.$data.setting?.imageBehavior || "cover"};
   margin-bottom: 10px;
-  margin-top: 10px;
+  transition: all 0.5s ease-in-out;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: auto;
+  }
+  &:hover {
+    transform: scale(0.95);
+  }
 `;
 
-const Description = styled.p`
-  font-size: 16px;
+const Description = styled.p<{ $data: SectionData }>`
+  font-size: ${(props) => props.$data.setting?.descriptionFontSize || "16px"}px;
+  font-weight: ${(props) =>
+    props.$data.setting?.descriptionFontWeight || "normal"};
+  color: ${(props) => props.$data.setting?.descriptionColor || "#ffffff"};
   margin-bottom: 15px;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+  }
 `;
 
-const Button = styled.a<{ $data: BlocksType }>`
+const Button = styled.a<{ $data: SectionData }>`
   display: inline-block;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
+  padding: 10px 30px;
+  background-color: ${(props) =>
+    props.$data.setting?.btnBackgroundColor || "#000"};
+  color: ${(props) => props.$data.setting?.btnColor || "#fff"};
   border-radius: 5px;
   text-decoration: none;
   cursor: pointer;
+  transition: all 0.5s ease-in-out;
+
   &:hover {
-    background-color: #0056b3;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 480px) {
+    padding: 8px 20px;
+    font-size: 14px;
   }
 `;
 
@@ -138,20 +210,23 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
       $data={sectionData}
       onClick={() => setSelectedComponent("multi-column")}
     >
-      <Heading $data={sectionData}>{sectionData.blocks[0].heading}</Heading>
+      <Heading $data={sectionData}>
+        {sectionData?.setting.heading || "heading"}
+      </Heading>
       <ColumnContainer>
         {sectionData.blocks.map((block: string | Section, idx: number) => (
           <Column key={idx} $data={sectionData}>
-            <Title>gftntfghtghntgfnb</Title>
-            <Description>regfte4wtgfwt4w3t</Description>
+            <Title $data={sectionData}>{block[`title${idx + 1}`]}</Title>
+            <Description $data={sectionData}>
+              {block[`description${idx + 1}`]}
+            </Description>
             <Image
-              src={block[`imageAlt${idx + 1}`]}
+              src={block[`imageSrc${idx + 1}`] || "/assets/images/banner2.webp"}
               alt={block[`imageAlt${idx + 1}`]}
               $data={sectionData}
-              
             />
-            <Button href={block[`btnLink${idx + 1}`]} $data={block}>
-              eh5tr5trh5yrerhge4trg
+            <Button href={block[`btnLink${idx + 1}`]} $data={sectionData}>
+              {block[`btnLabel${idx + 1}`] || "button"}
             </Button>
           </Column>
         ))}
