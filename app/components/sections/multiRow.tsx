@@ -1,4 +1,3 @@
-import { object } from "framer-motion/client";
 import React from "react";
 import styled from "styled-components";
 
