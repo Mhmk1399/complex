@@ -10,6 +10,11 @@ export interface Link {
   }
   
   export interface CommonSettings {
+    textColor: string;
+    btnTextColor: string;
+    imageWidth: string;
+    imageHeight: string;
+    opacityImage: any;
     heading: any;
     titleColor: any;
     descriptionColor: any;
@@ -56,6 +61,12 @@ export interface Link {
   }
   
   export interface Section {
+    imageSrc: string;
+    imageAlt: string;
+    text: string;
+    description: string;
+    btnText: string;
+    btnLink: string;
     type: string;
     blocks: {
       [key: string]: any;

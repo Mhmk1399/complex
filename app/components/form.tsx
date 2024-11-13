@@ -12,6 +12,7 @@ import { NewsLetterForm } from './forms/newsLetterForm';
 import { CollapseForm } from './forms/collapseForm';
 import { Layout, Section  } from '@/lib/types';
 import { MultiColumnForm } from './forms/multiColomnForm';
+import { SlideForm } from './forms/slideForm';
 interface FormProps {
   selectedComponent: string;
   setLayout: (data: Layout) => void;
@@ -47,6 +48,8 @@ export const Form = ({ selectedComponent, setLayout ,layout }: FormProps) => {
         return <CollapseForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
       case 'multicolumn':
         return <MultiColumnForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
+      case 'slideshow':
+        return <SlideForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
       default:
         return <div>Select a component to configure</div>
     }

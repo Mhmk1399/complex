@@ -33,13 +33,16 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({ setUserInputDa
     setUserInputData(initialData);
   }, []);
 
-  const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, columnNum: number) => {
     const { name, value } = e.target;
     setUserInputData((prev: Section) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
-        [name]: value
+        [columnNum-1]: {
+          ...prev.blocks[columnNum-1],
+          [`${name}${columnNum}`]: value
+        }
       }
     }));
   };
@@ -74,67 +77,66 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({ setUserInputDa
 
       {/* Column Content */}
       {[1, 2, 3].map((columnNum) => (
-        <div key={columnNum} className="mb-6 p-4 border rounded">
-          <h3 className="font-semibold mb-2">Column {columnNum}</h3>
-          <div className="space-y-4">
-            <div>
-              <label className="block mb-1">Title</label>
-              <input
-                type="text"
-                name={`title${columnNum}`}
-                value={userInputData?.blocks?.[`title${columnNum}`] ?? ''}
-                onChange={handleBlockChange}
-                className="w-full p-2 border rounded"
-              />
-            </div>
+  <div key={columnNum} className="mb-6 p-4 border rounded">
+    <h3 className="font-semibold mb-2">Column {columnNum}</h3>
+    <div className="space-y-4">
+      <div>
+        <label className="block mb-1">Title</label>
+        <input
+          type="text"
+          name="title"
+          value={userInputData?.blocks?.[columnNum-1]?.[`title${columnNum}`] || ''}
+          onChange={(e) => handleBlockChange(e, columnNum)}
+          className="w-full p-2 border rounded"
+        />
+      </div>
 
-            <div>
-              <label className="block mb-1">Description</label>
-              <textarea
-                name={`description${columnNum}`}
-                value={userInputData?.blocks?.[`description${columnNum}`] ?? ''}
-                onChange={handleBlockChange}
-                className="w-full p-2 border rounded"
-                rows={3}
-              />
-            </div>
+      <div>
+        <label className="block mb-1">Description</label>
+        <textarea
+          name="description"
+          value={userInputData?.blocks?.[columnNum-1]?.[`description${columnNum}`] || ''}
+          onChange={(e) => handleBlockChange(e, columnNum)}
+          className="w-full p-2 border rounded"
+          rows={3}
+        />
+      </div>
 
-            <div>
-              <label className="block mb-1">Image Source</label>
-              <input
-                type="text"
-                name={`imageSrc${columnNum}`}
-                value={userInputData?.blocks?.[`imageSrc${columnNum}`] ?? ''}
-                onChange={handleBlockChange}
-                className="w-full p-2 border rounded"
-              />
-            </div>
+      <div>
+        <label className="block mb-1">Image Source</label>
+        <input
+          type="text"
+          name="imageSrc"
+          value={userInputData?.blocks?.[columnNum-1]?.[`imageSrc${columnNum}`] || ''}
+          onChange={(e) => handleBlockChange(e, columnNum)}
+          className="w-full p-2 border rounded"
+        />
+      </div>
 
-            <div>
-              <label className="block mb-1">Button Label</label>
-              <input
-                type="text"
-                name={`btnLable${columnNum}`}
-                value={userInputData?.blocks?.[`btnLable${columnNum}`] ?? ''}
-                onChange={handleBlockChange}
-                className="w-full p-2 border rounded"
-              />
-            </div>
+      <div>
+        <label className="block mb-1">Button Label</label>
+        <input
+          type="text"
+          name="btnLable"
+          value={userInputData?.blocks?.[columnNum-1]?.[`btnLable${columnNum}`] || ''}
+          onChange={(e) => handleBlockChange(e, columnNum)}
+          className="w-full p-2 border rounded"
+        />
+      </div>
 
-            <div>
-              <label className="block mb-1">Button Link</label>
-              <input
-                type="text"
-                name={`btnLink${columnNum}`}
-                value={userInputData?.blocks?.[`btnLink${columnNum}`] ?? ''}
-                onChange={handleBlockChange}
-                className="w-full p-2 border rounded"
-              />
-            </div>
-          </div>
-        </div>
-      ))}
-
+      <div>
+        <label className="block mb-1">Button Link</label>
+        <input
+          type="text"
+          name="btnLink"
+          value={userInputData?.blocks?.[columnNum-1]?.[`btnLink${columnNum}`] || ''}
+          onChange={(e) => handleBlockChange(e, columnNum)}
+          className="w-full p-2 border rounded"
+        />
+      </div>
+    </div>
+  </div>
+))}
       {/* Style Settings */}
       <div className="mb-6">
         <h3 className="font-semibold mb-2">Style Settings</h3>

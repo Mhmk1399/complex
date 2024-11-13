@@ -135,8 +135,6 @@ const NewsLetter: React.FC<NewsLetterProps> = ({
   const sectionData = layout.sections?.children?.sections.find(
     (section) => (section as { type?: string }).type === "newsletter"
   ) as SectionData;
-  console.log(sectionData);
-
   return (
     <Section
       $data={sectionData}
