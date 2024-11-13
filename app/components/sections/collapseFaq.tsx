@@ -44,10 +44,10 @@ interface SectionData {
 
 // Styled Components
 const Section = styled.section<{ $data: SectionData }>`
-  padding-top: ${(props) => props.$data.setting?.paddingTop || "20px"};
-  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20px"};
-  margin-top: ${(props) => props.$data.setting?.marginTop || "20px"};
-  margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20px"};
+  padding-top: ${(props) => props.$data.setting?.paddingTop || "20px"}px;
+  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20px"}px;
+  margin-top: ${(props) => props.$data.setting?.marginTop || "20px"}px;
+  margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20px"}px;
   margin-left: 10px;
   margin-right: 10px;
   background-color: ${(props) => props.$data.setting?.background || "#ffffff"};

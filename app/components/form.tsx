@@ -9,6 +9,7 @@ import { ImageTextForm } from './forms/imageTextForm';
 import { VideoForm } from './forms/videoForm';
 import { ContactForm } from './forms/contact';
 import { NewsLetterForm } from './forms/newsLetterForm';
+import { CollapseForm } from './forms/collapseForm';
 interface FormProps {
   selectedComponent: string;
   setLayout: (data: any) => void;
@@ -40,6 +41,8 @@ export const Form = ({ selectedComponent, setLayout ,layout }: FormProps) => {
         return <ContactForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
       case 'newsletter':
         return <NewsLetterForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
+      case 'collapse':
+        return <CollapseForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
       default:
         return <div>Select a component to configure</div>
     }
