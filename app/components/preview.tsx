@@ -10,6 +10,7 @@ import CollapseFaq from "./sections/collapseFaq";
 import MultiColumn from "./sections/multiColumn";
 import SlideShow from "./sections/slideShow";
 import MultiRow from "./sections/multiRow";
+import Footer from "./sections/footer";
 
 interface PreviewProps {
   layout: {};
@@ -42,6 +43,7 @@ export const Preview: React.FC<PreviewProps> = ({
       />
       <SlideShow setSelectedComponent={setSelectedComponent} layout={layout} />
       <MultiRow setSelectedComponent={setSelectedComponent} layout={layout} />
+      <Footer setSelectedComponent={setSelectedComponent} layout={layout} />
     </div>
   );
 };

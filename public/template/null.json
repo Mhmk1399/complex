@@ -421,7 +421,7 @@
             "descriptionFontWeight": "normal",
             "btnColor": "#ffffff",
             "btnBackgroundColor": "#bc4749",
-            "imageAlign":"row"
+            "imageAlign": "row"
           }
         }
       ],
@@ -439,8 +439,35 @@
       ]
     },
     "sectionFooter": {
-      "settings": {
-        "text": "© 2023 My Website. All rights reserved."
+      "type": "footer",
+      "blocks": {
+        "imageSrc": "/assets/images/banner.jpg",
+        "imageAlt": "",
+        "text": "heading of banner default",
+        "description": "description of banner ",
+        "imageLink": "",
+        "instagramLink": "",
+        "telegramLink": "",
+        "whatsappLink": "",
+        "setting": {
+
+          "descriptionColor": "#333333",
+          "descriptionFontSize": "15",
+          "descriptionFontWeight": "normal",
+          "textColor": "#000000",
+          "textFontSize": "24px",
+          "textFontWeight": "bold",
+          "imageRadious": "10px",
+          "imageWidth": "100px",
+          "imageHeight": "100px",
+          "backgroundColor": "#fff"
+        }
+      },
+      "setting": {
+        "paddingTop": "20px",
+        "paddingBottom": "20px",
+        "marginTop": "0px",
+        "marginBottom": "0px"
       }
     }
   },
