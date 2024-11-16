@@ -88,7 +88,7 @@ const SocialLinks = styled.div`
   transition: all 0.3s ease-in-out;
 
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1.08);
   }
 `;
 const FooterLinks = styled.div`
