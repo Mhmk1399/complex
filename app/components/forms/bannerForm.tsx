@@ -1,9 +1,9 @@
 import  { useEffect } from 'react';
 import { Compiler } from '../compiler';
-import { Layout ,Section } from '@/lib/types';
+import { Layout ,Section, BannerSection } from '@/lib/types';
 interface BannerFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<Section>>;
-  userInputData: Section;
+  userInputData: BannerSection ;
   layout: Layout;
 }
 
@@ -34,16 +34,19 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
     setUserInputData(initialData);
   }, []);
 
-  const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setUserInputData((prev: Section) => ({
+  const handleBlockChange = (index: number, field: string, value: string) => {
+    setUserInputData((prev: Section ) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
-        [name]: value
+        [index]: {
+          ...prev.blocks[index],
+          [field]: value
+        }
       }
     }));
   };
+  
 
   const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -83,8 +86,8 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
             <input
               type="text"
               name="imageSrc"
-              value={userInputData?.blocks?.imageSrc ?? ''}
-              onChange={handleBlockChange}
+              value={userInputData?.blocks?.imageSrc?.toLocaleString() ?? ''}
+              onChange={()=>handleBlockChange}
               className="w-full p-2 border rounded"
             />
           </div>
@@ -95,7 +98,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
               type="text"
               name="text"
               value={userInputData?.blocks?.text ?? ''}
-              onChange={handleBlockChange}
+              onChange={()=>handleBlockChange}
               className="w-full p-2 border rounded"
             />
           </div>
@@ -104,8 +107,8 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
             <label className="block mb-1">Description</label>
             <textarea
               name="description"
-              value={userInputData?.blocks?.description ?? ''}
-              onChange={handleBlockChange}
+              value={userInputData?.blocks?.description?.toString() ?? ''}
+              onChange={()=>handleBlockChange}
               className="w-full p-2 border rounded"
               rows={3}
             />
@@ -120,19 +123,19 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
           <ColorInput
             label="Text Color"
             name="textColor"
-            value={userInputData?.blocks?.setting?.textColor?.toLocaleString() ?? '#000000'}
+            value={userInputData?.blocks?.setting?.textColor?.toString() ?? '#333333'}
             onChange={handleBlockSettingChange}
           />
           <ColorInput
             label="Description Color"
             name="descriptionColor"
-            value={userInputData?.blocks?.setting?.descriptionColor?.toLocaleString() ?? '#333333'}
+            value={userInputData?.blocks?.setting?.descriptionColor?.toString() ?? '#333333'}
             onChange={handleBlockSettingChange}
           />
           <ColorInput
             label="Background Color"
             name="backgroundColorBox"
-            value={userInputData?.blocks?.setting?.backgroundColorBox?.toLocaleString() ?? '#ffffff'}
+            value={userInputData?.blocks?.setting?.backgroundColorBox?.toString() ?? '#ffffff'}
             onChange={handleBlockSettingChange}
           />
         </div>
@@ -140,11 +143,12 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
         <div className="mt-4">
           <label className="block mb-1">Image Behavior</label>
           <select
-            name="imageBehavior"
-            value={userInputData?.blocks?.setting?.imageBehavior?.toLocaleString() ?? 'cover'}
-            onChange={handleBlockSettingChange}
-            className="w-full p-2 border rounded"
-          >
+  name="headingFontWeight"
+  value={userInputData?.setting?.headingFontWeight?.toLocaleString() ?? 'normal'}
+  onChange={()=>handleSettingChange} // Remove the arrow function
+  className="w-full p-2 border rounded"
+>
+
             <option value="cover">Cover</option>
             <option value="contain">Contain</option>
             <option value="fill">Fill</option>
@@ -164,7 +168,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
                 name={spacing}
                 min="0"
                 max="100"
-                value={userInputData?.setting?.[spacing]?.toLocaleString() ?? '0'}
+                value={userInputData?.setting?.[spacing]?.toString() ?? '0'}
                 onChange={handleSettingChange}
                 className="w-full"
               />

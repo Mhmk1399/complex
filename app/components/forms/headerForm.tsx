@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { Compiler } from '../compiler';
-import { Layout,Section,Link } from '@/lib/types';
+import { Layout,Section,Link,HeaderSection } from '@/lib/types';
 interface HeaderFormProps {
   layout: Layout;
-  setUserInputData: React.Dispatch<React.SetStateAction<Section>>;
-  userInputData: Section;
+  setUserInputData: React.Dispatch<React.SetStateAction<HeaderSection>>;
+  userInputData: HeaderSection;
 }
 
 
@@ -86,7 +86,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
       url: selectedUrl
     };
 
-    setUserInputData((prev: Section) => ({
+    setUserInputData((prev: HeaderSection) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -104,17 +104,18 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
     { name: 'Login', url: '/login' }
   ];
   const removeLink = (urlToRemove: string) => {
-    setUserInputData((prev: Section) => ({
+    setUserInputData((prev: HeaderSection) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
-        links: prev.blocks.links.filter((link: Link) => link.url !== urlToRemove)
+
+        links: (prev.blocks ).links.filter((link: Link) => link.url !== urlToRemove)
       }
     }));
   };
   const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: Section) => ({
+    setUserInputData((prev: HeaderSection) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -125,7 +126,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
 
   const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: Section) => ({
+    setUserInputData((prev: HeaderSection) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -139,7 +140,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
 
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: Section) => ({
+    setUserInputData((prev: HeaderSection) => ({
       ...prev,
       setting: {
         ...prev.setting,

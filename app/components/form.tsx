@@ -10,50 +10,75 @@ import { VideoForm } from './forms/videoForm';
 import { ContactForm } from './forms/contact';
 import { NewsLetterForm } from './forms/newsLetterForm';
 import { CollapseForm } from './forms/collapseForm';
-import { Layout, Section  } from '@/lib/types';
+import { BannerSection,Section ,CollapseSection, HeaderSection, ImageTextSection, Layout, MultiColumnSection, NewsLetterSection, RichTextSection, Section  } from '@/lib/types';
 import { MultiColumnForm } from './forms/multiColomnForm';
 import { SlideForm } from './forms/slideForm';
+type FormData = HeaderSection | BannerSection | Section | CollapseSection | RichTextSection;
+
 interface FormProps {
   selectedComponent: string;
   setLayout: (data: Layout) => void;
   layout: Layout;
 }
 
-export const Form = ({ selectedComponent, setLayout ,layout }: FormProps) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [userInputData, setUserInputData] = useState<object | Section >({});
-  useEffect(() => {
-    const newjason=JasonChanger(layout, selectedComponent, userInputData)
-    setLayout(newjason)
-    
-  }, [userInputData])
+export const Form = ({ selectedComponent, setLayout, layout }: FormProps) => {
+  const [userInputData, setUserInputData] = useState<FormData>({} as FormData);
 
-  const renderFormContent = (setUserInputData: (data: {}) => void, userInputData: Section ) => {
+  const [isOpen, setIsOpen] = useState(false)
+  useEffect(() => {
+    const newLayout = JasonChanger(layout, selectedComponent, userInputData as Section )
+    setLayout(newLayout)
+  }, [userInputData, layout, selectedComponent, setLayout])
+
+  const renderFormContent = (
+    setUserInputData: React.Dispatch<React.SetStateAction<FormData>>,
+    userInputData: FormData
+  ) => {
+  
     switch (selectedComponent) {
       case 'rich-text':
-        return <RichText  setUserInputData={setUserInputData} userInputData={userInputData} layout={layout}/>
+        return <RichText setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<RichTextSection>>} 
+                         userInputData={userInputData as RichTextSection} 
+                         layout={layout} />
       case 'sectionHeader':
-        return <HeaderForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
+        return <HeaderForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<HeaderSection>>}
+                          userInputData={userInputData as HeaderSection}
+                          layout={layout} />
       case 'banner':
-      return <BannerForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
+        return <BannerForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<Section>>}
+                          userInputData={userInputData as BannerSection}
+                          layout={layout} />
       case 'image-text':
-        return <ImageTextForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
+        return <ImageTextForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<ImageTextSection>>}
+                              userInputData={userInputData as ImageTextSection}
+                              layout={layout} />
       case 'video':
-        return <VideoForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
+        return <VideoForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<Section>>}
+                          userInputData={userInputData as Section}
+                          layout={layout} />
       case 'contact-form':
-        return <ContactForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
+        return <ContactForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<ContactSection>>}
+                            userInputData={userInputData as ContactSection}
+                            layout={layout} />
       case 'newsletter':
-        return <NewsLetterForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
+        return <NewsLetterForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<NewsLetterSection>>}
+                               userInputData={userInputData as NewsLetterSection}
+                               layout={layout} />
       case 'collapse':
-        return <CollapseForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
+        return <CollapseForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<CollapseSection>>}
+                             userInputData={userInputData as CollapseSection}
+                             layout={layout} />
       case 'multicolumn':
-        return <MultiColumnForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
+        return <MultiColumnForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<MultiColumnSection>>}
+                                userInputData={userInputData as MultiColumnSection}
+                                layout={layout} />
       case 'slideshow':
-        return <SlideForm setUserInputData={setUserInputData} userInputData={userInputData} layout={layout} />
+        return <SlideForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<Section>>}
+                          userInputData={userInputData as Section}
+                          layout={layout} />
       default:
         return <div>Select a component to configure</div>
-    }
-  }
+    }  }
 
   return (
     <>
