@@ -10,9 +10,10 @@ import CollapseFaq from "./sections/collapseFaq";
 import MultiColumn from "./sections/multiColumn";
 import SlideShow from "./sections/slideShow";
 import MultiRow from "./sections/multiRow";
+import { Layout } from "@/lib/types";
 
 interface PreviewProps {
-  layout: {};
+  layout: Layout;
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
 }
 

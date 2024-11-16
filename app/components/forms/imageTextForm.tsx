@@ -1,9 +1,9 @@
 import  { useEffect } from 'react';
 import { Compiler } from '../compiler';
-import { Layout ,Section } from '@/lib/types';
+import { Layout ,Section ,ImageTextSection } from '@/lib/types';
 interface ImageTextFormProps {
-  setUserInputData: React.Dispatch<React.SetStateAction<Section>>;
-  userInputData: Section;
+  setUserInputData: React.Dispatch<React.SetStateAction<ImageTextSection>>;
+  userInputData: ImageTextSection;
   layout: Layout;
 }
 
@@ -52,7 +52,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({ setUserInputData, 
 
   const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: Section) => ({
+    setUserInputData((prev: ImageTextSection) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -63,7 +63,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({ setUserInputData, 
 
   const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: Section) => ({
+    setUserInputData((prev: ImageTextSection) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -77,7 +77,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({ setUserInputData, 
 
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: Section) => ({
+    setUserInputData((prev: ImageTextSection) => ({
       ...prev,
       setting: {
         ...prev.setting,

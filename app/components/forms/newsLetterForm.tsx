@@ -1,9 +1,9 @@
 import  { useEffect } from 'react';
 import { Compiler } from '../compiler';
-import { Layout,Section } from '@/lib/types';
+import { Layout,NewsLetterSection } from '@/lib/types';
 interface NewsLetterFormProps {
-  setUserInputData: React.Dispatch<React.SetStateAction<Section>>;
-  userInputData: Section;
+  setUserInputData: React.Dispatch<React.SetStateAction<NewsLetterSection>>;
+  userInputData: NewsLetterSection;
   layout: Layout;
 }
 
@@ -36,7 +36,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({ setUserInputData
 
   const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: Section) => ({
+    setUserInputData((prev: NewsLetterSection) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -47,7 +47,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({ setUserInputData
 
   const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: Section) => ({
+    setUserInputData((prev: NewsLetterSection) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -61,7 +61,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({ setUserInputData
 
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: Section) => ({
+    setUserInputData((prev: NewsLetterSection) => ({
       ...prev,
       setting: {
         ...prev.setting,

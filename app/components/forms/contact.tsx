@@ -1,12 +1,19 @@
-import  { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Compiler } from '../compiler';
-import { Layout ,Section } from '@/lib/types';
+import { Layout, Section, CommonSettings } from '@/lib/types';
+
+interface ContactSection extends Omit<Section, 'blocks'> {
+  blocks: ContactFormBlocks;
+}
+interface ContactFormBlocks {
+  heading?: string;
+  setting: CommonSettings;
+}
 interface ContactFormProps {
-  setUserInputData: React.Dispatch<React.SetStateAction<Section>>;
-  userInputData: Section;
+  setUserInputData: React.Dispatch<React.SetStateAction<ContactSection>>;
+  userInputData: ContactSection;
   layout: Layout;
 }
-
 const ColorInput = ({ label, name, value, onChange }: {
   label: string;
   name: string;
@@ -36,7 +43,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
 
   const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: Section) => ({
+    setUserInputData((prev: ContactSection) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -47,7 +54,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
 
   const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: Section) => ({
+    setUserInputData((prev: ContactSection) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -61,7 +68,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
 
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: Section) => ({
+    setUserInputData((prev: ContactSection) => ({
       ...prev,
       setting: {
         ...prev.setting,
@@ -83,7 +90,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
             <input
               type="text"
               name="heading"
-              value={userInputData?.blocks?.heading ?? ''}
+              value={userInputData?.blocks?.heading?.toString() ?? ''}
               onChange={handleBlockChange}
               className="w-full p-2 border rounded"
             />
@@ -137,7 +144,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
             <select
               name="headingFontWeight"
               value={userInputData?.blocks?.setting?.headingFontWeight?.toLocaleString() ?? 'bold'}
-              onChange={()=>handleBlockSettingChange}
+              onChange={(e) => handleBlockSettingChange(e as unknown as React.ChangeEvent<HTMLInputElement>)}
               className="w-full p-2 border rounded"
             >
               <option value="normal">Normal</option>

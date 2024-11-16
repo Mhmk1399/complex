@@ -1,9 +1,10 @@
-import  { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Compiler } from '../compiler';
-import { Layout ,Section } from '@/lib/types';
+import { Layout, CollapseSection, CollapseBlock, CollapseBlockSetting } from '@/lib/types';
+
 interface CollapseFormProps {
-  setUserInputData: React.Dispatch<React.SetStateAction<Section>>;
-  userInputData: Section;
+  setUserInputData: React.Dispatch<React.SetStateAction<CollapseSection>>;
+  userInputData: CollapseSection;
   layout: Layout;
 }
 
@@ -33,18 +34,18 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({ setUserInputData, us
   }, []);
 
   const handleBlockChange = (index: number, field: string, value: string) => {
-    setUserInputData((prev: Section) => ({
+    setUserInputData((prev: CollapseSection) => ({
       ...prev,
-      blocks: prev.blocks.map((block: Section, i: number) => 
+      blocks: prev.blocks.map((block: CollapseBlock, i: number) => 
         i === index ? { ...block, [field]: value } : block
       )
     }));
   };
 
   const handleBlockSettingChange = (index: number, field: string, value: string) => {
-    setUserInputData((prev: Section) => ({
+    setUserInputData((prev: CollapseSection) => ({
       ...prev,
-      blocks: prev.blocks.map((block: Section, i: number) => 
+      blocks: prev.blocks.map((block: CollapseBlock, i: number) => 
         i === index ? { 
           ...block, 
           setting: { ...block.setting, [field]: value }
@@ -55,7 +56,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({ setUserInputData, us
 
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: Section) => ({
+    setUserInputData((prev: CollapseSection) => ({
       ...prev,
       setting: {
         ...prev.setting,
@@ -79,23 +80,20 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({ setUserInputData, us
         />
         {/* Font Weight Controls */}
 
-  <div>
-    <label className="block mb-1">Heading Font Weight</label>
-    <select
-      name="headingFontWeight"
-      value={userInputData?.setting?.headingFontWeight?.toLocaleString() ?? 'normal'}
-      onChange={()=>handleSettingChange}
-      className="w-full p-2 border rounded"
-    >
-      <option value="normal">Normal</option>
-      <option value="bold">Bold</option>
-      <option value="lighter">Lighter</option>
-      <option value="bolder">Bolder</option>
-     
-    </select>
- 
-</div>
-
+        <div>
+          <label className="block mb-1">Heading Font Weight</label>
+          <select
+            name="headingFontWeight"
+            value={userInputData?.setting?.headingFontWeight?.toString() ?? 'normal'}
+            onChange={(e) => handleSettingChange(e as unknown as React.ChangeEvent<HTMLInputElement>)}
+            className="w-full p-2 border rounded"
+          >
+            <option value="normal">Normal</option>
+            <option value="bold">Bold</option>
+            <option value="lighter">Lighter</option>
+            <option value="bolder">Bolder</option>
+          </select>
+        </div>
       </div>
 
       {/* Collapse Items */}
@@ -108,7 +106,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({ setUserInputData, us
               <label className="block mb-1">Text</label>
               <input
                 type="text"
-                value={userInputData?.blocks?.[index]?.[`text${num}`] ?? ''}
+                value={String(userInputData?.blocks?.[index]?.[`text${num}` as keyof CollapseBlock ] ?? '')}
                 onChange={(e) => handleBlockChange(index, `text${num}`, e.target.value)}
                 className="w-full p-2 border rounded"
               />
@@ -117,7 +115,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({ setUserInputData, us
             <div>
               <label className="block mb-1">Content</label>
               <textarea
-                value={userInputData?.blocks?.[index]?.[`content${num}`] ?? ''}
+                value={String(userInputData?.blocks?.[index]?.[`content${num}` as keyof CollapseBlock] ?? '')}
                 onChange={(e) => handleBlockChange(index, `content${num}`, e.target.value)}
                 className="w-full p-2 border rounded"
                 rows={3}
@@ -128,34 +126,32 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({ setUserInputData, us
               <ColorInput
                 label={`Text Color ${num}`}
                 name={`textColor${num}`}
-                value={userInputData?.blocks?.[index]?.setting?.[`textColor${num}`] ?? '#000000'}
+                value={String(userInputData?.blocks?.[index]?.setting?.[`textColor${num}` as keyof CollapseBlockSetting] ?? '#000000')}
                 onChange={(e) => handleBlockSettingChange(index, `textColor${num}`, e.target.value)}
               />
               <ColorInput
                 label={`Content Color ${num}`}
                 name={`contentColor${num}`}
-                value={userInputData?.blocks?.[index]?.setting?.[`contentColor${num}`] ?? '#000000'}
+                value={String(userInputData?.blocks?.[index]?.setting?.[`contentColor${num}` as keyof CollapseBlockSetting] ?? '#000000')}
                 onChange={(e) => handleBlockSettingChange(index, `contentColor${num}`, e.target.value)}
               />
             </div>
           </div>
         </div>
-      ))}
-
-      {/* Global Settings */}
+      ))}      {/* Global Settings */}
       <div className="mb-6">
         <h3 className="font-semibold mb-2">Global Settings</h3>
         <div className="grid md:grid-cols-2 gap-4">
           <ColorInput
             label="Background Color"
             name="background"
-            value={userInputData?.setting?.background?.toLocaleString() ?? '#672f93'}
+            value={userInputData?.setting?.background?.toString() ?? '#672f93'}
             onChange={handleSettingChange}
           />
           <ColorInput
             label="Heading Color"
             name="headingColor"
-            value={userInputData?.setting?.headingColor?.toLocaleString() ?? '#ffffff'}
+            value={userInputData?.setting?.headingColor?.toString() ?? '#ffffff'}
             onChange={handleSettingChange}
           />
         </div>
@@ -170,7 +166,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({ setUserInputData, us
                 name={spacing}
                 min="0"
                 max="100"
-                value={userInputData?.setting?.[spacing as keyof object] ?? '0'}
+                value={userInputData?.setting?.[spacing as keyof typeof userInputData.setting] ?? '0'}
                 onChange={handleSettingChange}
                 className="w-full"
               />

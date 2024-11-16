@@ -1,10 +1,10 @@
 import  { useEffect } from 'react';
 import { Compiler } from '../compiler';
-import { Layout,Section } from '@/lib/types';
+import { Layout,RichTextSection } from '@/lib/types';
 
 interface RichTextFormProps {
-  setUserInputData: React.Dispatch<React.SetStateAction<Layout>>;
-  userInputData: Section;
+  setUserInputData: React.Dispatch<React.SetStateAction<RichTextSection>>;
+  userInputData: RichTextSection;
   layout: Layout;
 }
 
@@ -41,7 +41,7 @@ export const RichText: React.FC<RichTextFormProps> = ({ setUserInputData, userIn
 
   const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev : Layout) => ({
+    setUserInputData((prev : RichTextSection) => ({
       ...prev,
       blocks: {
         ...prev?.blocks,
@@ -52,7 +52,7 @@ export const RichText: React.FC<RichTextFormProps> = ({ setUserInputData, userIn
 
   const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: Layout) => ({
+    setUserInputData((prev: RichTextSection) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -66,7 +66,7 @@ export const RichText: React.FC<RichTextFormProps> = ({ setUserInputData, userIn
 
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: Layout) => ({
+    setUserInputData((prev: RichTextSection) => ({
       ...prev,
       setting: {
         ...prev.setting,
