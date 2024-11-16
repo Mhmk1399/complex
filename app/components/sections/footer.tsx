@@ -3,49 +3,14 @@ import React from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import Image from "next/image";
-import { Layout } from "@/lib/types";
+import { Layout, FooterSection } from "@/lib/types";
 
 interface FooterProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
 }
 
-interface BlocksType {
-  setting: {
-    textColor?: string;
-    textFontSize?: string;
-    textFontWeight?: string;
-    descriptionColor?: string;
-    descriptionFontSize?: string;
-    descriptionFontWeight?: string;
-    logoWidth?: string;
-    logoHeight?: string;
-    logoRadius?: string;
-    linkColor?: string;
-  };
-  text?: string;
-  description?: string;
-  instagramLink?: string;
-  telegramLink?: string;
-  whatsappLink?: string;
-  logo?: string;
-  links?: { url: string; label: string }[];
-}
-
-interface SettingType {
-  paddingTop?: string;
-  paddingBottom?: string;
-  marginTop?: string;
-  marginBottom?: string;
-  backgroundColor?: string;
-}
-
-interface SectionData {
-  blocks: BlocksType;
-  setting: SettingType;
-}
-
-const FooterContainer = styled.footer<{ $data: SectionData }>`
+const FooterContainer = styled.footer<{ $data: FooterSection }>`
   padding-top: ${(props) => props.$data.setting.paddingTop || "20px"};
   padding-bottom: ${(props) => props.$data.setting.paddingBottom || "20px"};
   margin-top: ${(props) => props.$data.setting.marginTop || "0px"};
@@ -59,7 +24,7 @@ const FooterContainer = styled.footer<{ $data: SectionData }>`
   text-align: center;
 `;
 
-const FooterText = styled.h2<{ $data: SectionData }>`
+const FooterText = styled.h2<{ $data: FooterSection }>`
   font-size: ${(props) => props.$data.blocks.setting.textFontSize || "16px"}px;
   font-weight: ${(props) =>
     props.$data.blocks.setting.textFontWeight || "normal"};
@@ -67,7 +32,7 @@ const FooterText = styled.h2<{ $data: SectionData }>`
   padding: 10px 5px;
 `;
 
-const FooterDescription = styled.p<{ $data: SectionData }>`
+const FooterDescription = styled.p<{ $data: FooterSection }>`
   font-size: ${(props) =>
     props.$data.blocks.setting.descriptionFontSize || "16px"}px;
   font-weight: ${(props) =>
@@ -96,7 +61,7 @@ const FooterLinks = styled.div`
   margin-top: 10px;
 `;
 
-const FooterLink = styled(Link)<{ $data: SectionData }>`
+const FooterLink = styled(Link)<{ $data: FooterSection }>`
   font-weight: bold;
   text-decoration: none;
   color: ${(props) => props.$data.blocks.setting.linkColor};
@@ -106,14 +71,14 @@ const FooterLink = styled(Link)<{ $data: SectionData }>`
   }
 `;
 
-const Logo = styled(Image)<{ $data: SectionData }>`
+const Logo = styled(Image)<{ $data: FooterSection }>`
   width: ${(props) => props.$data.blocks.setting.logoWidth || "100px"};
   height: ${(props) => props.$data.blocks.setting.logoHeight || "100px"};
   border-radius: ${(props) => props.$data.blocks.setting.logoRadius || "6px"};
 `;
 
 const Footer: React.FC<FooterProps> = ({ setSelectedComponent, layout }) => {
-  const sectionData = layout?.sections?.sectionFooter 
+  const sectionData = layout?.sections?.sectionFooter;
 
   const {
     text,

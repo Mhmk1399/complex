@@ -15,7 +15,7 @@ import { Layout } from "@/lib/types";
 import FooterContainer from "./sections/footer";
 
 interface PreviewProps {
-  layout: Layout  ;
+  layout: Layout;
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -26,6 +26,11 @@ export const Preview: React.FC<PreviewProps> = ({
   return (
     <div className="mt-16 w-full md:w-full lg:w-[75%]  h-[95vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide lg:mt-5 lg:ml-5">
       <Header setSelectedComponent={setSelectedComponent} layout={layout} />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
       <RichText setSelectedComponent={setSelectedComponent} layout={layout} />
       <Banner setSelectedComponent={setSelectedComponent} layout={layout} />
       <ImageText setSelectedComponent={setSelectedComponent} layout={layout} />
@@ -45,7 +50,10 @@ export const Preview: React.FC<PreviewProps> = ({
       />
       <SlideShow setSelectedComponent={setSelectedComponent} layout={layout} />
       <MultiRow setSelectedComponent={setSelectedComponent} layout={layout} />
-      <FooterContainer setSelectedComponent={setSelectedComponent} layout={layout} />
+      <FooterContainer
+        setSelectedComponent={setSelectedComponent}
+        layout={layout}
+      />
     </div>
   );
 };

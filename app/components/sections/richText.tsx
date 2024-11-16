@@ -1,55 +1,21 @@
 "use client";
+import { Layout, RichTextBlock } from "@/lib/types";
 import Link from "next/link";
 import styled from "styled-components";
 
 interface RichTextProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
-  layout: {
-    sections?: {
-      children?: { sections: SectionData[] };
-    };
-  };
-}
-
-interface BlocksType {
-  setting: {
-    allTextPosition?: string;
-    background?: string;
-    textHeadingColor?: string;
-    textHeadingFontSize?: string;
-    textHeadingFontWeight?: string;
-    descriptionColor?: string;
-    descriptionFontSize?: string;
-    descriptionFontWeight?: string;
-    btnTextColor?: string;
-    btnBackgroundColor?: string;
-  };
-  textHeading?: string;
-  description?: string;
-  btnText?: string;
-  btnLink?: string;
-}
-
-interface SettingType {
-  paddingTop?: string;
-  paddingBottom?: string;
-  marginTop?: string;
-  marginBottom?: string;
-}
-
-interface SectionData {
-  blocks: BlocksType;
-  setting: SettingType;
+  layout: Layout;
 }
 
 // Move all styled components outside the component function
-const Section = styled.section<{ $data: SectionData }>`
+const Section = styled.section<{ $data: RichTextBlock }>`
   padding-top: ${(props) => props.$data?.setting?.paddingTop || "10px"}px;
   padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "10px"}px;
   padding-left: 30px;
   padding-right: 30px;
-  margin-top: ${(props) => props.$data?.setting?.marginTop || "0px"}px;
-  margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "0px"}px;
+  margin-top: ${(props) => props.$data?.setting?.marginTop || "30px"}px;
+  margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "30px"}px;
   margin-left: 10px;
   margin-right: 10px;
   display: flex;
@@ -59,7 +25,7 @@ const Section = styled.section<{ $data: SectionData }>`
   background-color: ${(props) => props.$data?.blocks?.setting?.background};
 `;
 
-const H1 = styled.h1<{ $data: SectionData }>`
+const H1 = styled.h1<{ $data: RichTextBlock }>`
   color: ${(props) => props.$data?.blocks?.setting?.textHeadingColor};
   font-size: ${(props) => props.$data?.blocks?.setting?.textHeadingFontSize};
   font-weight: ${(props) =>
@@ -70,7 +36,7 @@ const H1 = styled.h1<{ $data: SectionData }>`
   }
 `;
 
-const P = styled.p<{ $data: SectionData }>`
+const P = styled.p<{ $data: RichTextBlock }>`
   color: ${(props) => props.$data?.blocks?.setting?.descriptionColor};
   font-size: ${(props) => props.$data?.blocks?.setting?.descriptionFontSize};
   font-weight: ${(props) =>
@@ -81,7 +47,7 @@ const P = styled.p<{ $data: SectionData }>`
   }
 `;
 
-const Btn = styled.button<{ $data: SectionData }>`
+const Btn = styled.button<{ $data: RichTextBlock }>`
   color: ${(props) => props.$data?.blocks?.setting?.btnTextColor};
   background-color: ${(props) =>
     props.$data?.blocks?.setting?.btnBackgroundColor};
@@ -100,13 +66,8 @@ const RichText: React.FC<RichTextProps> = ({
   setSelectedComponent,
   layout,
 }) => {
-  const sectionData = layout?.sections?.children?.sections[2];
-  const { textHeading, description, btnText, btnLink } =
-    sectionData?.blocks || {};
-
-  if (!sectionData) {
-    return null;
-  }
+  const sectionData = layout?.sections?.richtext;
+  const { textHeading, description, btnText, btnLink } = sectionData?.blocks;
 
   return (
     <Section
@@ -117,7 +78,9 @@ const RichText: React.FC<RichTextProps> = ({
       {description && <P $data={sectionData}>{description}</P>}
       {btnLink && (
         <Btn $data={sectionData}>
-          <Link href={btnLink}>{btnText}</Link>
+          <Link href={btnLink} passHref legacyBehavior>
+            <a>{btnText}</a>
+          </Link>
         </Btn>
       )}
     </Section>

@@ -9,6 +9,12 @@ export interface ColorSchema {
   text: string;
 }
 export interface CollapseBlockSetting extends CommonSettings {
+  allTextPosition: Interpolation<
+    Substitute<
+      DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>,
+      { $data: RichTextBlock }
+    >
+  >;
   textColor1?: string;
   textColor2?: string;
   textColor3?: string;
@@ -51,8 +57,9 @@ interface CollapseSettings {
 }
 
 export interface CommonSettings {
-  headingFontSize: any;
-  formBackground: any;
+  backgroundColor?: string;
+  headingFontSize: string;
+  formBackground: string;
   textColor?: string;
   btnTextColor?: string;
   imageWidth?: string;
@@ -191,31 +198,27 @@ export interface NewsLetterSection {
   type: "newsletter";
 }
 // Add these new interfaces for RichText component
-export interface RichTextBlockSetting extends CommonSettings {
-  textHeadingColor?: string;
-  textHeadingFontSize?: string;
-  textHeadingFontWeight?: string;
-  descriptionColor?: string;
-  descriptionFontSize?: string;
-  descriptionFontWeight?: string;
-  btnTextColor?: string;
-  btnBackgroundColor?: string;
-  background?: string;
-  allTextPosition?: string;
-}
 
 export interface RichTextBlock {
-  textHeading?: string;
-  description?: string;
-  btnText?: string;
-  btnLink?: string;
-  setting: RichTextBlockSetting;
-}
-
-export interface RichTextSection {
-  blocks: RichTextBlock;
+  blocks: {
+    textHeading: string;
+    description: string;
+    btnText: string;
+    btnLink: string;
+    setting: {
+      textHeadingColor?: string;
+      textHeadingFontSize?: string;
+      textHeadingFontWeight?: string;
+      descriptionColor?: string;
+      descriptionFontSize?: string;
+      descriptionFontWeight?: string;
+      btnTextColor?: string;
+      btnBackgroundColor?: string;
+      background?: string;
+      allTextPosition?: string;
+    };
+  };
   setting: CommonSettings;
-  type: "rich-text";
 }
 
 export interface MultiColumnSection {
@@ -270,12 +273,27 @@ export interface ImageTextSection {
 export interface FooterSection {
   blocks: {
     text: string;
-    links: string;
     description: string;
-    btnLink: string;
-    btnText: string;
-    setting: ImageTextBlockSetting;
-  }
+    instagramLink: string;
+    telegramLink: string;
+    whatsappLink: string;
+    logo: string;
+    links?: { url: string; label: string }[];
+    setting: {
+      textColor: string;
+      textFontSize: string;
+      textFontWeight: string;
+      descriptionColor: string;
+      descriptionFontSize: string;
+      descriptionFontWeight: string;
+      logoWidth: string;
+      logoHeight: string;
+      logoRadius: string;
+      linkColor: string;
+      backgroundColor: string;
+    };
+  };
+  setting: CommonSettings;
 }
 
 export interface ContactFormBlockSetting extends Partial<CommonSettings> {
@@ -300,7 +318,7 @@ export interface ContactFormSection {
     marginTop?: string;
     marginBottom?: string;
   };
-  type: 'contact-form';
+  type: "contact-form";
 }
 
 export interface ContactFormProps {
@@ -314,79 +332,79 @@ export interface ContactFormProps {
   };
 }
 
-  // Add this new interface for ImageText section
-  export interface ImageTextSection {
-    blocks: ImageTextBlock;
-    setting: CommonSettings;
-    type: 'image-text';
-  }
-   
-  
-  export interface FooterSection {
-    settings: {
-      text: string;
-    };
-  }
-  
-  export interface Children {
-    type: string;
-    sections: Section[];
-    order: string[];
-  }  
- export  interface Layout {
-    setting: {
-      backgroundColor: string;
-      fontFamily: string;
-      colorSchema: ColorSchema;
-    };
-    blocks: string;
-    type: "layout";
-    settings: {
-      fontFamily: string;
-      colorSchema: ColorSchema;
-    };
-    sections: {
-      slideshow: string;
-      sectionHeader: HeaderSection;
-      children: Children;
-      sectionFooter: FooterSection;
-      sectionImageText: string;
-      banner: string;
-      footer: string;
-    };
-    order: string[];
-  }
-  export interface SlideBlockSetting extends Partial<CommonSettings> {
-    headingColor?: string;
-    headingFontSize?: string;
-    headingFontWeight?: string;
-    descriptionColor?: string;
-    descriptionFontSize?: string;
-    descriptionFontWeight?: string;
-    btnTextColor?: string;
-    btnBackgroundColor?: string;
-  }  
-  export interface SlideBlock {
-    imageSrc: string;
-    imageAlt: string;
-    text: string;
-    description: string;
-    btnText: string;
-    btnLink: string;
-    setting?: SlideBlockSetting;
-  }
-  
-  export interface SlideSection {
-    blocks: SlideBlock[];
-    setting: CommonSettings & {
-      paddingTop: string;
-      paddingBottom: string;
-      marginTop: string;
-      marginBottom: string;
-    };
-    type: 'slideshow';
-  }
-  // Add these new interfaces for Video component
+// Add this new interface for ImageText section
+export interface ImageTextSection {
+  blocks: ImageTextBlock;
+  setting: CommonSettings;
+  type: "image-text";
+}
+
+// export interface FooterSection {
+//   settings: {
+//     text: string;
+//   };
+// }
+
+export interface Children {
+  type: string;
+  sections: Section[];
+  order: string[];
+}
+export interface Layout {
+  setting: {
+    backgroundColor: string;
+    fontFamily: string;
+    colorSchema: ColorSchema;
+  };
+  blocks: string;
+  type: "layout";
+  settings: {
+    fontFamily: string;
+    colorSchema: ColorSchema;
+  };
+  sections: {
+    slideshow: string;
+    richtext: RichTextBlock;
+    sectionHeader: HeaderSection;
+    children: Children;
+    sectionFooter: FooterSection;
+    sectionImageText: RichTextBlock;
+    banner: BannerSection;
+    footer: string;
+  };
+  order: string[];
+}
+export interface SlideBlockSetting extends Partial<CommonSettings> {
+  headingColor?: string;
+  headingFontSize?: string;
+  headingFontWeight?: string;
+  descriptionColor?: string;
+  descriptionFontSize?: string;
+  descriptionFontWeight?: string;
+  btnTextColor?: string;
+  btnBackgroundColor?: string;
+}
+export interface SlideBlock {
+  imageSrc: string;
+  imageAlt: string;
+  text: string;
+  description: string;
+  btnText: string;
+  btnLink: string;
+  setting?: SlideBlockSetting;
+}
+
+export interface SlideSection {
+  blocks: SlideBlock[];
+  setting: CommonSettings & {
+    paddingTop: string;
+    paddingBottom: string;
+    marginTop: string;
+    marginBottom: string;
+  };
+  type: "slideshow";
+}
+// Add these new interfaces for Video component
 export interface VideoBlockSetting extends Partial<CommonSettings> {
   headingColor?: string;
   backgroundVideoSection?: string;
@@ -410,7 +428,7 @@ export interface VideoBlock {
 export interface VideoSection {
   blocks: VideoBlock;
   setting: CommonSettings;
-  type: 'video';
+  type: "video";
 }
 
 export interface VideoFormProps {

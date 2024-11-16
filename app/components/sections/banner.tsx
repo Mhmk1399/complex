@@ -3,48 +3,14 @@ import React from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
+import { Layout, BannerSection } from "@/lib/types";
 
-interface BlocksType {
-  setting: {
-    descriptionColor?: string;
-    descriptionFontSize?: string;
-    descriptionFontWeight?: string;
-    descriptionFontSizeMobile?: string;
-    imageRadious?: string;
-    imageBehavior?: string;
-    opacityImage?: string;
-    opacityTextBox?: string;
-    textColor?: string;
-    textFontSize?: string;
-    textFontWeight?: string;
-    textFontSizeMobile?: string;
-    backgroundColorBox?: string;
-    backgroundBoxRadious?: string;
-  };
-  imageSrc?: string;
-  imageAlt?: string;
-  imageLink?: string;
-  text?: string;
-  description?: string;
-}
-
-interface SettingType {
-  paddingTop?: string;
-  paddingBottom?: string;
-  marginTop?: string;
-  marginBottom?: string;
-}
-
-interface SectionData {
-  blocks: BlocksType;
-  setting: SettingType;
-}
 interface props {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
-  layout: any;
+  layout: Layout;
 }
 
-const SectionBanner = styled.section<{ $data: SectionData }>`
+const SectionBanner = styled.section<{ $data: BannerSection }>`
   position: relative; // Add this line to fix the Image fill issue
   height: 600px;
   margin: 0px 10px;
@@ -58,14 +24,14 @@ const SectionBanner = styled.section<{ $data: SectionData }>`
   }
 `;
 
-const BannerImage = styled(Image)<{ $data: SectionData }>`
+const BannerImage = styled(Image)<{ $data: BannerSection }>`
   opacity: ${(props) => props.$data.blocks.setting.opacityImage || "1"}px;
   border-radius: ${(props) =>
     props.$data.blocks.setting.imageRadious || "10px"};
   object-fit: ${(props) => props.$data.blocks.setting.imageBehavior || "cover"};
 `;
 
-const BannerTextBox = styled.div<{ $data: SectionData }>`
+const BannerTextBox = styled.div<{ $data: BannerSection }>`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -85,19 +51,18 @@ const BannerTextBox = styled.div<{ $data: SectionData }>`
   }
 `;
 
-const HeadingText = styled.h2<{ $data: SectionData }>`
+const HeadingText = styled.h2<{ $data: BannerSection }>`
   color: ${(props) => props.$data.blocks.setting.textColor || "#fffff"};
   font-size: ${(props) => props.$data.blocks.setting.textFontSize || "16px"}px;
   font-weight: ${(props) =>
     props.$data.blocks.setting.textFontWeight || "bold"};
   text-align: center;
   @media (max-width: 768px) {
-    font-size: ${(props) =>
-      props.$data.blocks.setting.textFontSizeMobile || "16px"}px;
+    font-size: 14px;
   }
 `;
 
-const DescriptionText = styled.p<{ $data: SectionData }>`
+const DescriptionText = styled.p<{ $data: BannerSection }>`
   color: ${(props) => props.$data.blocks.setting.descriptionColor || "#ffffff"};
   font-size: ${(props) =>
     props.$data.blocks.setting.descriptionFontSize || "16px"}px;
@@ -106,14 +71,22 @@ const DescriptionText = styled.p<{ $data: SectionData }>`
   margin-top: 17px;
   text-align: center;
   @media (max-width: 768px) {
-    font-size: ${(props) =>
-      props.$data.blocks.setting.descriptionFontSizeMobile || "15px"};
+    font-size: 10px;
   }
 `;
 
 const Banner: React.FC<props> = ({ setSelectedComponent, layout }) => {
-  const sectionData = layout.sections.children.sections[0] as SectionData;
-  const { description, imageAlt, imageSrc, text } = sectionData.blocks;
+  const sectionData = (layout?.sections?.banner as BannerSection) || {
+    blocks: {
+      description: "",
+      imageAlt: "",
+      imageSrc: "",
+      text: "",
+      setting: {},
+    },
+    setting: {},
+  };
+  const { description, imageAlt, imageSrc, text } = sectionData?.blocks;
 
   return (
     <SectionBanner
