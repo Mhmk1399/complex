@@ -62,7 +62,7 @@ const FooterContainer = styled.footer<{ $data: SectionData }>`
   text-align: center;
 `;
 
-const FooterText = styled.p<{ $data: SectionData }>`
+const FooterText = styled.h2<{ $data: SectionData }>`
   font-size: ${(props) => props.$data.blocks.setting.textFontSize || "16px"}px;
   font-weight: ${(props) =>
     props.$data.blocks.setting.textFontWeight || "normal"};
