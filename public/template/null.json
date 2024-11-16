@@ -421,7 +421,7 @@
             "descriptionFontWeight": "normal",
             "btnColor": "#ffffff",
             "btnBackgroundColor": "#bc4749",
-            "imageAlign":"row"
+            "imageAlign": "row"
           }
         }
       ],
@@ -439,8 +439,37 @@
       ]
     },
     "sectionFooter": {
-      "settings": {
-        "text": "© 2023 My Website. All rights reserved."
+      "blocks": {
+        "setting": {
+          "textColor": "#000000",
+          "textFontSize": "18px",
+          "textFontWeight": "bold",
+          "descriptionColor": "#293241",
+          "descriptionFontSize": "14px",
+          "descriptionFontWeight": "normal",
+          "linkColor": "#0077b6",
+          "logoWidth": "80px",
+          "logoHeight": "80px",
+          "logoRadius": "10px"
+        },
+        "text": "heading of section footer",
+        "description": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quos repellendus suscipit illo minima provident temporibus molestiae, ea ipsam quo necessitatibus aut nihil! Exercitationem sapiente asperiores qui error,",
+        "instagramLink": "#",
+        "telegramLink": "#",
+        "whatsappLink": "#",
+        "logo": "/assets/images/logo.webp",
+
+        "links": [
+          { "url": "/privacy-policy", "label": "Privacy Policy" },
+          { "url": "/terms-of-service", "label": "Terms of Service" }
+        ]
+      },
+      "setting": {
+        "paddingTop": "20px",
+        "paddingBottom": "20px",
+        "marginBottom": "40px",
+        "marginTop": "0px",
+        "backgroundColor": "#e4e4e4"
       }
     }
   },
