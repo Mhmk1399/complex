@@ -3,6 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
+import { Layout } from "@/lib/types";
 
 interface BlocksType {
   setting: {
@@ -41,7 +42,7 @@ interface SectionData {
 }
 interface props {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
-  layout: any;
+  layout: Layout;
 }
 
 const SectionBanner = styled.section<{ $data: SectionData }>`
