@@ -3,6 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import Image from "next/image";
+import { Layout } from "@/lib/types";
 
 interface BlocksType {
   setting: {
@@ -41,11 +42,7 @@ interface SectionData {
 
 interface FooterProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
-  layout: {
-    sections?: {
-      sectionFooter?: SectionData;
-    };
-  };
+  layout: Layout
 }
 
 const FooterContainer = styled.footer<{ $data: SectionData }>`

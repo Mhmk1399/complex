@@ -1,17 +1,12 @@
 import { useEffect } from 'react';
 import { Compiler } from '../compiler';
-import { Layout, Section, CommonSettings } from '@/lib/types';
+import { Layout ,ContactFormProps as contactType} from '@/lib/types';
 
-interface ContactSection extends Omit<Section, 'blocks'> {
-  blocks: ContactFormBlocks;
-}
-interface ContactFormBlocks {
-  heading?: string;
-  setting: CommonSettings;
-}
+
+
 interface ContactFormProps {
-  setUserInputData: React.Dispatch<React.SetStateAction<ContactSection>>;
-  userInputData: ContactSection;
+  setUserInputData: React.Dispatch<React.SetStateAction<contactType>>;
+  userInputData: contactType;
   layout: Layout;
 }
 const ColorInput = ({ label, name, value, onChange }: {
@@ -43,7 +38,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
 
   const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: ContactSection) => ({
+    setUserInputData((prev:contactType ) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -54,12 +49,12 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
 
   const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: ContactSection) => ({
+    setUserInputData((prev: contactType) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
         setting: {
-          ...prev.blocks.setting,
+          ...prev?.blocks?.setting,
           [name]: value
         }
       }
@@ -68,10 +63,10 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
 
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: ContactSection) => ({
+    setUserInputData((prev: contactType) => ({
       ...prev,
       setting: {
-        ...prev.setting,
+        ...prev?.setting,
         [name]: value.includes('px') ? value : `${value}px`
       }
     }));

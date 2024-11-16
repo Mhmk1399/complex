@@ -1,4 +1,6 @@
-import { Layout,Section } from "@/lib/types";
+import { BannerSection, CollapseSection, HeaderSection,ContactFormProps,RichTextSection,Section } from "@/lib/types";
+type FormData = HeaderSection | BannerSection | Section | CollapseSection | RichTextSection|ContactFormProps;
+
 export const Compiler = (data: string | object, name: string) => {
   // Create deep copy of the data using structuredClone
   const processedData = typeof data === 'string' 
@@ -20,7 +22,7 @@ export const Compiler = (data: string | object, name: string) => {
     )
   );
 }
-export const JasonChanger = (data: string | object, name: string, newData: Layout) => {
+export const JasonChanger = (data: string | object, name: string, newData: FormData) => {
   let processedData = typeof data === 'string' 
     ? JSON.parse(data)
     : structuredClone(data);

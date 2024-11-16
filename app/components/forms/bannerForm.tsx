@@ -2,7 +2,7 @@ import  { useEffect } from 'react';
 import { Compiler } from '../compiler';
 import { Layout ,Section, BannerSection } from '@/lib/types';
 interface BannerFormProps {
-  setUserInputData: React.Dispatch<React.SetStateAction<Section>>;
+  setUserInputData: React.Dispatch<React.SetStateAction<BannerSection>>;
   userInputData: BannerSection ;
   layout: Layout;
 }
@@ -35,12 +35,12 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
   }, []);
 
   const handleBlockChange = (index: number, field: string, value: string) => {
-    setUserInputData((prev: Section ) => ({
+    setUserInputData((prev: BannerSection) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
         [index]: {
-          ...prev.blocks[index],
+          ...((prev.blocks as Record<number, any>)[index] || {}),
           [field]: value
         }
       }
@@ -50,7 +50,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
 
   const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: Section) => ({
+    setUserInputData((prev: BannerSection) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -64,7 +64,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
 
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: Section) => ({
+    setUserInputData((prev: BannerSection) => ({
       ...prev,
       setting: {
         ...prev.setting,

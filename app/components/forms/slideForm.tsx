@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import { Compiler } from '../compiler';
-import { Layout, Section } from '@/lib/types';
+import { Layout, SlideSection, SlideBlock } from '@/lib/types';
 
 interface SlideFormProps {
-  setUserInputData: React.Dispatch<React.SetStateAction<Section>>;
-  userInputData: Section;
+  setUserInputData: React.Dispatch<React.SetStateAction<SlideSection>>;
+  userInputData: SlideSection;
   layout: Layout;
 }
+
 
 interface Block {
   imageSrc?: string;
@@ -18,10 +19,6 @@ interface Block {
   setting?: Record<string, string>;
 }
 
-interface FormSection {
-  blocks: Block[];
-  setting: Record<string, string>;
-}
 
 export const SlideForm: React.FC<SlideFormProps> = ({ setUserInputData, userInputData, layout }) => {
   useEffect(() => {
@@ -33,22 +30,24 @@ export const SlideForm: React.FC<SlideFormProps> = ({ setUserInputData, userInpu
     setUserInputData(initialData);
   }, []);
 
-  const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number, field: keyof Block) => {
+  const handleBlockChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, 
+    index: number, 
+    field: keyof SlideBlock
+  ) => {
     const { value } = e.target;
-    setUserInputData((prev: Section | FormSection | Layout | any) => ({
+    setUserInputData((prev: SlideSection) => ({
       ...prev,
-      blocks: Array.isArray(prev.blocks)
-        ? prev.blocks.map((block: Block, i: number) =>
-            i === index ? { ...block, [field]: value } : block
-          )
-        : [],
-      setting: prev.setting
+      blocks: prev.blocks.map((block, i) =>
+        i === index ? { ...block, [field]: value } : block
+      )
     }));
   };
+  
 
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: Section) => ({
+    setUserInputData((prev: SlideSection) => ({
       ...prev,
       setting: {
         ...prev.setting,

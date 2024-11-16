@@ -52,8 +52,8 @@ interface CollapseSettings {
 
   
   export interface CommonSettings {
-    headingFontSize: any;
-    formBackground: any;
+    headingFontSize: string;
+    formBackground: string;
     textColor?: string;
     btnTextColor?: string;
     imageWidth?: string;
@@ -134,6 +134,8 @@ interface CollapseSettings {
   }
   
   export interface BlockSetting {
+    heading: string;
+    setting: object;
     [key: number]: string | number | boolean | CommonSettings;
   }
   // Add these new interfaces for MultiColumn component
@@ -259,7 +261,43 @@ export interface MultiColumnSection {
     btnText: string;
     setting: ImageTextBlockSetting;
   }
-  
+  // Add these new interfaces for ContactForm component
+export interface ContactFormBlockSetting extends Partial<CommonSettings> {
+  headingColor?: string;
+  headingFontSize?: string;
+  headingFontWeight?: string;
+  btnTextColor?: string;
+  btnBackgroundColor?: string;
+  formBackground?: string;
+}
+
+export interface ContactFormBlock {
+  setting: ContactFormBlockSetting;
+  heading?: string;
+}
+
+export interface ContactFormSection {
+  blocks: ContactFormBlock;
+  setting: {
+    paddingTop?: string;
+    paddingBottom?: string;
+    marginTop?: string;
+    marginBottom?: string;
+  };
+  type: 'contact-form';
+}
+
+export interface ContactFormProps {
+  setting: CommonSettings;
+  blocks: BlockSetting;
+  setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
+  layout: {
+    sections?: {
+      children?: { sections: ContactFormSection[] };
+    };
+  };
+}
+
   // Add this new interface for ImageText section
   export interface ImageTextSection {
     blocks: ImageTextBlock;
@@ -280,7 +318,11 @@ export interface MultiColumnSection {
     order: string[];
   }  
  export  interface Layout {
-    setting: {};
+    setting: {
+      backgroundColor: string;
+      fontFamily: string;
+      colorSchema: ColorSchema;
+    };
     blocks: string;
     type: "layout";
     settings: {
@@ -294,7 +336,69 @@ export interface MultiColumnSection {
       sectionFooter: FooterSection;
       sectionImageText: string;
       banner: string;
+      footer: string;
     };
     order: string[];
   }
+  export interface SlideBlockSetting extends Partial<CommonSettings> {
+    headingColor?: string;
+    headingFontSize?: string;
+    headingFontWeight?: string;
+    descriptionColor?: string;
+    descriptionFontSize?: string;
+    descriptionFontWeight?: string;
+    btnTextColor?: string;
+    btnBackgroundColor?: string;
+  }  
+  export interface SlideBlock {
+    imageSrc: string;
+    imageAlt: string;
+    text: string;
+    description: string;
+    btnText: string;
+    btnLink: string;
+    setting?: SlideBlockSetting;
+  }
   
+  export interface SlideSection {
+    blocks: SlideBlock[];
+    setting: CommonSettings & {
+      paddingTop: string;
+      paddingBottom: string;
+      marginTop: string;
+      marginBottom: string;
+    };
+    type: 'slideshow';
+  }
+  // Add these new interfaces for Video component
+export interface VideoBlockSetting extends Partial<CommonSettings> {
+  headingColor?: string;
+  backgroundVideoSection?: string;
+  headingFontSize?: string;
+  headingFontWeight?: string;
+  videoWidth?: string;
+  videoRadious?: string;
+  videoPoster?: string;
+  videoLoop?: boolean;
+  videoMute?: boolean;
+  videoAutoplay?: boolean;
+}
+
+export interface VideoBlock {
+  heading?: string;
+  videoUrl: string;
+  videoAlt?: string;
+  setting: VideoBlockSetting;
+}
+
+export interface VideoSection {
+  blocks: VideoBlock;
+  setting: CommonSettings;
+  type: 'video';
+}
+
+export interface VideoFormProps {
+  setUserInputData: React.Dispatch<React.SetStateAction<VideoSection>>;
+  userInputData: VideoSection;
+  layout: Layout;
+}
