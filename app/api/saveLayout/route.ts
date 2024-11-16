@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Layout } from "@/lib/types";
+import { writeFile } from "fs/promises";
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,14 +11,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Layout data is required' }, { status: 400 });
     }
 
-    // Here you would implement your database save logic
-    // Example with a hypothetical database service:
-    // await db.layouts.save(layout);
+    // Using the exact file path
+    const filePath = "C:\\Users\\msi\\Desktop\\testgenrator\\hosein\\public\\template\\null.json";
+
+    // Convert layout to JSON string with proper formatting
+    const layoutJson = JSON.stringify(layout, null, 2);
+
+    // Write the file
+    await writeFile(filePath, layoutJson, 'utf-8');
     
-    // For now, we'll just return success
     return NextResponse.json({ 
       message: 'Layout saved successfully',
-      layout 
+      layout,
+      filePath
     }, { status: 200 });
 
   } catch (error) {
