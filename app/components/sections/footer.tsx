@@ -109,7 +109,7 @@ const FooterLink = styled(Link)<{ $data: SectionData }>`
 const Logo = styled(Image)<{ $data: SectionData }>`
   width: ${(props) => props.$data.blocks.setting.logoWidth || "100px"};
   height: ${(props) => props.$data.blocks.setting.logoHeight || "100px"};
-  border-radius: ${(props) => props.$data.blocks.setting.logoRadius || "5px"};
+  border-radius: ${(props) => props.$data.blocks.setting.logoRadius || "6px"};
 `;
 
 const Footer: React.FC<FooterProps> = ({ setSelectedComponent, layout }) => {
