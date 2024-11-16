@@ -439,35 +439,37 @@
       ]
     },
     "sectionFooter": {
-      "type": "footer",
       "blocks": {
-        "imageSrc": "/assets/images/banner.jpg",
-        "imageAlt": "",
-        "text": "heading of banner default",
-        "description": "description of banner ",
-        "imageLink": "",
-        "instagramLink": "",
-        "telegramLink": "",
-        "whatsappLink": "",
         "setting": {
-
-          "descriptionColor": "#333333",
-          "descriptionFontSize": "15",
-          "descriptionFontWeight": "normal",
           "textColor": "#000000",
-          "textFontSize": "24px",
+          "textFontSize": "18px",
           "textFontWeight": "bold",
-          "imageRadious": "10px",
-          "imageWidth": "100px",
-          "imageHeight": "100px",
-          "backgroundColor": "#fff"
-        }
+          "descriptionColor": "#293241",
+          "descriptionFontSize": "14px",
+          "descriptionFontWeight": "normal",
+          "linkColor": "#0077b6",
+          "logoWidth": "80px",
+          "logoHeight": "80px",
+          "logoRadius": "10px"
+        },
+        "text": "heading of section footer",
+        "description": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quos repellendus suscipit illo minima provident temporibus molestiae, ea ipsam quo necessitatibus aut nihil! Exercitationem sapiente asperiores qui error,",
+        "instagramLink": "#",
+        "telegramLink": "#",
+        "whatsappLink": "#",
+        "logo": "/assets/images/logo.webp",
+
+        "links": [
+          { "url": "/privacy-policy", "label": "Privacy Policy" },
+          { "url": "/terms-of-service", "label": "Terms of Service" }
+        ]
       },
       "setting": {
         "paddingTop": "20px",
         "paddingBottom": "20px",
+        "marginBottom": "40px",
         "marginTop": "0px",
-        "marginBottom": "0px"
+        "backgroundColor": "#e4e4e4"
       }
     }
   },

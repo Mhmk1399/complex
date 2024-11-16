@@ -2,17 +2,27 @@
 import React from "react";
 import styled from "styled-components";
 import Link from "next/link";
+import Image from "next/image";
 
 interface BlocksType {
   setting: {
     textColor?: string;
     textFontSize?: string;
     textFontWeight?: string;
-    backgroundColor?: string;
+    descriptionColor?: string;
+    descriptionFontSize?: string;
+    descriptionFontWeight?: string;
+    logoWidth?: string;
+    logoHeight?: string;
+    logoRadius?: string;
     linkColor?: string;
-    linkHoverColor?: string;
   };
   text?: string;
+  description?: string;
+  instagramLink?: string;
+  telegramLink?: string;
+  whatsappLink?: string;
+  logo?: string;
   links?: { url: string; label: string }[];
 }
 
@@ -44,7 +54,11 @@ const FooterContainer = styled.footer<{ $data: SectionData }>`
   margin-top: ${(props) => props.$data.setting.marginTop || "0px"};
   margin-bottom: ${(props) => props.$data.setting.marginBottom || "0px"};
   background-color: ${(props) => props.$data.setting.backgroundColor || "#333"};
-  color: ${(props) => props.$data.blocks.setting.textColor || "#fff"};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   text-align: center;
 `;
 
@@ -52,23 +66,53 @@ const FooterText = styled.p<{ $data: SectionData }>`
   font-size: ${(props) => props.$data.blocks.setting.textFontSize || "16px"}px;
   font-weight: ${(props) =>
     props.$data.blocks.setting.textFontWeight || "normal"};
-  margin-bottom: 10px;
+  color: ${(props) => props.$data.blocks.setting.textColor || "16px"};
+  padding: 10px 5px;
 `;
 
+const FooterDescription = styled.p<{ $data: SectionData }>`
+  font-size: ${(props) =>
+    props.$data.blocks.setting.descriptionFontSize || "16px"}px;
+  font-weight: ${(props) =>
+    props.$data.blocks.setting.descriptionFontWeight || "normal"};
+  color: ${(props) => props.$data.blocks.setting.descriptionColor || "16px"};
+  padding: 0px 50px;
+`;
+
+const SocialLinks = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
 const FooterLinks = styled.div`
   display: flex;
   justify-content: center;
+  color: #ffffff;
   gap: 15px;
   margin-top: 10px;
 `;
 
 const FooterLink = styled(Link)<{ $data: SectionData }>`
-  color: ${(props) => props.$data.blocks.setting.linkColor || "#fff"};
   font-weight: bold;
   text-decoration: none;
+  color: ${(props) => props.$data.blocks.setting.linkColor};
+
   &:hover {
-    color: ${(props) => props.$data.blocks.setting.linkHoverColor || "#f0f0f0"};
+    opacity: 0.7;
   }
+`;
+
+const Logo = styled(Image)<{ $data: SectionData }>`
+  width: ${(props) => props.$data.blocks.setting.logoWidth || "100px"};
+  height: ${(props) => props.$data.blocks.setting.logoHeight || "100px"};
+  border-radius: ${(props) => props.$data.blocks.setting.logoRadius || "5px"};
 `;
 
 const Footer: React.FC<FooterProps> = ({ setSelectedComponent, layout }) => {
@@ -77,14 +121,73 @@ const Footer: React.FC<FooterProps> = ({ setSelectedComponent, layout }) => {
     setting: {},
   };
 
-  const { text, links } = sectionData.blocks;
+  const {
+    text,
+    links,
+    description,
+    instagramLink,
+    telegramLink,
+    whatsappLink,
+    logo,
+  } = sectionData.blocks;
 
   return (
     <FooterContainer
+      dir="rtl"
       $data={sectionData}
-      onClick={() => setSelectedComponent("footer")}
+      onClick={() => setSelectedComponent("sectionFooter")}
     >
+      <Logo
+        $data={sectionData}
+        src={logo || "/assets/images/logo.webp"}
+        width={100}
+        height={100}
+        alt="Logo"
+      />
+
       {text && <FooterText $data={sectionData}>{text}</FooterText>}
+      {description && (
+        <FooterDescription $data={sectionData}>{description}</FooterDescription>
+      )}
+      <SocialLinks>
+        <Link
+          href={instagramLink ? instagramLink : "/"}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Image
+            src="/assets/images/instagram.png"
+            alt="Instagram"
+            width={30}
+            height={30}
+          />
+        </Link>
+        <Link
+          href={telegramLink ? telegramLink : "/"}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Image
+            src="/assets/images/whatsapp.png"
+            alt="Whatsapp"
+            width={30}
+            height={30}
+          />
+        </Link>
+        <Link
+          href={whatsappLink ? whatsappLink : "/"}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Image
+            src="/assets/images/telegram.png"
+            alt="Telegram"
+            width={30}
+            height={30}
+          />
+        </Link>
+      </SocialLinks>
+
       {links && links.length > 0 && (
         <FooterLinks>
           {links.map((link, index) => (
