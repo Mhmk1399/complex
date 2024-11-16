@@ -1,14 +1,14 @@
 import { useEffect } from 'react';
 import { Compiler } from '../compiler';
-import { Layout ,ContactFormProps as contactType} from '@/lib/types';
-
+import { ContactFormData, Layout ,ContactFormProps as contactType} from '@/lib/types';
 
 
 interface ContactFormProps {
-  setUserInputData: React.Dispatch<React.SetStateAction<contactType>>;
-  userInputData: contactType;
+  setUserInputData: React.Dispatch<React.SetStateAction<ContactFormData>>;
+  userInputData: ContactFormData;
   layout: Layout;
 }
+
 const ColorInput = ({ label, name, value, onChange }: {
   label: string;
   name: string;
@@ -38,7 +38,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
 
   const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev:contactType ) => ({
+    setUserInputData((prev:ContactFormData ) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -49,7 +49,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
 
   const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: contactType) => ({
+    setUserInputData((prev: ContactFormData) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -63,7 +63,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
 
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: contactType) => ({
+    setUserInputData((prev: ContactFormData) => ({
       ...prev,
       setting: {
         ...prev?.setting,

@@ -293,7 +293,7 @@ export interface ContactFormBlock {
 }
 
 export interface ContactFormSection {
-  blocks: ContactFormBlock;
+  blocks: {};
   setting: {
     paddingTop?: string;
     paddingBottom?: string;
@@ -418,3 +418,83 @@ export interface VideoFormProps {
   userInputData: VideoSection;
   layout: Layout;
 }
+// Add these new interfaces for Contact Form
+export interface ContactFormBlockSetting extends Partial<CommonSettings> {
+  headingColor?: string;
+  headingFontSize?: string;
+  headingFontWeight?: string;
+  btnTextColor?: string;
+  btnBackgroundColor?: string;
+  formBackground?: string;
+}
+
+export interface ContactFormBlock {
+  heading?: string;
+  setting: ContactFormBlockSetting;
+}
+
+export interface ContactFormData {
+  blocks: ContactFormBlock;
+  setting: {
+    paddingTop: string;
+    paddingBottom: string;
+    marginTop: string;
+    marginBottom: string;
+  };
+  type: 'contact-form';
+}
+
+export interface ContactFormProps {
+  setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
+  layout: {
+    sections?: {  
+      children?: { 
+        sections: ContactFormSection[];
+      };
+    };
+  };
+}
+export interface MultiRowBlockSetting extends CommonSettings {
+  titleColor: string;
+  titleFontWeight: string;
+  titleFontSize: string;
+  backgroundColorMultiRow: string;
+  backgroundColorBox: string;
+  imageRadious: string;
+  imageWidth: string;
+  imageHeight: string;
+  imageRadius: string;
+  headingColor: string;
+  headingFontSize: string;
+  headingFontWeight: string;
+  descriptionColor: string;
+  descriptionFontSize: string;
+  descriptionFontWeight: string;
+  btnColor: string;
+  btnBackgroundColor: string;
+  imageAlign: string;
+}
+
+export interface MultiRowBlock {
+  heading: string;
+  description: string;
+  btnLable: string;
+  btnLink: string;
+  imageSrc: string;
+  imageAlt: string;
+}
+
+export interface MultiRowSection {
+  type: 'multiRow';
+  title: string;
+  blocks: MultiRowBlock[];
+  setting: MultiRowBlockSetting;
+}
+
+export interface MultiRowFormProps {
+  setUserInputData: React.Dispatch<React.SetStateAction<MultiRowSection>>;
+  userInputData: MultiRowSection;
+  layout: Layout;
+}
+
+
