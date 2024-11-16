@@ -10,11 +10,12 @@ import { VideoForm } from './forms/videoForm';
 import { ContactForm } from './forms/contact';
 import { NewsLetterForm } from './forms/newsLetterForm';
 import { CollapseForm } from './forms/collapseForm';
-import {ContactFormProps, SlideSection, VideoSection} from '../../lib/types'
+import {ContactFormData, ContactFormProps, MultiRowSection, SlideSection, VideoSection} from '../../lib/types'
 import { BannerSection ,CollapseSection, HeaderSection, ImageTextSection, Layout, MultiColumnSection, NewsLetterSection, RichTextSection, Section  } from '@/lib/types';
 import { MultiColumnForm } from './forms/multiColomnForm';
 import { SlideForm } from './forms/slideForm';
-type FormData = HeaderSection | BannerSection |BannerSection|VideoSection| Section |SlideSection| CollapseSection | RichTextSection |ContactFormProps |MultiColumnSection;
+import {MultiRowForm}  from './forms/multiRowForm';
+type FormData = HeaderSection |MultiRowSection| BannerSection |BannerSection|VideoSection| Section |SlideSection| CollapseSection | RichTextSection |ContactFormProps |MultiColumnSection;
 
 interface FormProps {
   selectedComponent: string;
@@ -33,6 +34,7 @@ export const Form = ({ selectedComponent, setLayout, layout }: FormProps) => {
       setLayout(newLayout)
     }
   }, [userInputData]) // Remove layout and selectedComponent from dependencies
+  console.log(selectedComponent);
   
 
   const renderFormContent = (
@@ -62,8 +64,8 @@ export const Form = ({ selectedComponent, setLayout, layout }: FormProps) => {
                           userInputData={userInputData as VideoSection}
                           layout={layout} />
       case 'contact-form':
-        return <ContactForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<ContactFormProps>>}
-                            userInputData={userInputData as ContactFormProps}
+        return <ContactForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<ContactFormData>>}
+                            userInputData={userInputData as ContactFormData}
                             layout={layout} />
       case 'newsletter':
         return <NewsLetterForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<NewsLetterSection>>}
@@ -81,6 +83,10 @@ export const Form = ({ selectedComponent, setLayout, layout }: FormProps) => {
         return <SlideForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<SlideSection>>}
                           userInputData={userInputData as SlideSection}
                           layout={layout} />
+      case 'multirow':
+        return<MultiRowForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<MultiRowSection>>}
+        userInputData={userInputData as MultiRowSection}
+        layout={layout} />               
       default:
         return <div>Select a component to configure</div>
     }  }

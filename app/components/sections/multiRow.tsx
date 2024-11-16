@@ -192,6 +192,7 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
     blocks: [{ setting: {} }],
     setting: {},
   };
+  
 
   return (
     <>
