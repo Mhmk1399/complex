@@ -10,10 +10,11 @@ import { VideoForm } from './forms/videoForm';
 import { ContactForm } from './forms/contact';
 import { NewsLetterForm } from './forms/newsLetterForm';
 import { CollapseForm } from './forms/collapseForm';
-import { BannerSection,Section ,CollapseSection, HeaderSection, ImageTextSection, Layout, MultiColumnSection, NewsLetterSection, RichTextSection, Section  } from '@/lib/types';
+import {ContactFormProps, SlideSection, VideoSection} from '../../lib/types'
+import { BannerSection ,CollapseSection, HeaderSection, ImageTextSection, Layout, MultiColumnSection, NewsLetterSection, RichTextSection, Section  } from '@/lib/types';
 import { MultiColumnForm } from './forms/multiColomnForm';
 import { SlideForm } from './forms/slideForm';
-type FormData = HeaderSection | BannerSection | Section | CollapseSection | RichTextSection;
+type FormData = HeaderSection | BannerSection |BannerSection|VideoSection| Section |SlideSection| CollapseSection | RichTextSection |ContactFormProps |MultiColumnSection;
 
 interface FormProps {
   selectedComponent: string;
@@ -26,9 +27,13 @@ export const Form = ({ selectedComponent, setLayout, layout }: FormProps) => {
 
   const [isOpen, setIsOpen] = useState(false)
   useEffect(() => {
-    const newLayout = JasonChanger(layout, selectedComponent, userInputData as Section )
-    setLayout(newLayout)
-  }, [userInputData, layout, selectedComponent, setLayout])
+    // Only run if userInputData has actual changes
+    if (Object.keys(userInputData).length > 0) {
+      const newLayout = JasonChanger(layout, selectedComponent, userInputData as Section)
+      setLayout(newLayout)
+    }
+  }, [userInputData]) // Remove layout and selectedComponent from dependencies
+  
 
   const renderFormContent = (
     setUserInputData: React.Dispatch<React.SetStateAction<FormData>>,
@@ -45,7 +50,7 @@ export const Form = ({ selectedComponent, setLayout, layout }: FormProps) => {
                           userInputData={userInputData as HeaderSection}
                           layout={layout} />
       case 'banner':
-        return <BannerForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<Section>>}
+        return <BannerForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<BannerSection>>}
                           userInputData={userInputData as BannerSection}
                           layout={layout} />
       case 'image-text':
@@ -53,12 +58,12 @@ export const Form = ({ selectedComponent, setLayout, layout }: FormProps) => {
                               userInputData={userInputData as ImageTextSection}
                               layout={layout} />
       case 'video':
-        return <VideoForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<Section>>}
-                          userInputData={userInputData as Section}
+        return <VideoForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<VideoSection>>}
+                          userInputData={userInputData as VideoSection}
                           layout={layout} />
       case 'contact-form':
-        return <ContactForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<ContactSection>>}
-                            userInputData={userInputData as ContactSection}
+        return <ContactForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<ContactFormProps>>}
+                            userInputData={userInputData as ContactFormProps}
                             layout={layout} />
       case 'newsletter':
         return <NewsLetterForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<NewsLetterSection>>}
@@ -73,8 +78,8 @@ export const Form = ({ selectedComponent, setLayout, layout }: FormProps) => {
                                 userInputData={userInputData as MultiColumnSection}
                                 layout={layout} />
       case 'slideshow':
-        return <SlideForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<Section>>}
-                          userInputData={userInputData as Section}
+        return <SlideForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<SlideSection>>}
+                          userInputData={userInputData as SlideSection}
                           layout={layout} />
       default:
         return <div>Select a component to configure</div>

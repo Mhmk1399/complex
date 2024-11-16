@@ -272,52 +272,149 @@ export interface FooterSection {
     text: string;
     links: string;
     description: string;
-    instagramLink: string;
-    telegramLink: string;
-    whatsappLink: string;
-    logo: string;
-    setting: {
-      textColor: string;
-      textFontSize: string;
-      textFontWeight: string;
-      descriptionColor: string;
-      descriptionFontSize: string;
-      descriptionFontWeight: string;
-      logoWidth: string;
-      logoHeight: string;
-      logoRadius: string;
-      linkColor: string;
-    };
-  };
+    btnLink: string;
+    btnText: string;
+    setting: ImageTextBlockSetting;
+  }
+}
+
+export interface ContactFormBlockSetting extends Partial<CommonSettings> {
+  headingColor?: string;
+  headingFontSize?: string;
+  headingFontWeight?: string;
+  btnTextColor?: string;
+  btnBackgroundColor?: string;
+  formBackground?: string;
+}
+
+export interface ContactFormBlock {
+  setting: ContactFormBlockSetting;
+  heading?: string;
+}
+
+export interface ContactFormSection {
+  blocks: ContactFormBlock;
   setting: {
-    paddingTop: string;
-    paddingBottom: string;
-    marginBottom: string;
-    marginTop: string;
-    backgroundColor: string;
+    paddingTop?: string;
+    paddingBottom?: string;
+    marginTop?: string;
+    marginBottom?: string;
+  };
+  type: 'contact-form';
+}
+
+export interface ContactFormProps {
+  setting: CommonSettings;
+  blocks: BlockSetting;
+  setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
+  layout: {
+    sections?: {
+      children?: { sections: ContactFormSection[] };
+    };
   };
 }
 
-export interface Children {
-  type: string;
-  sections: Section[];
-  order: string[];
+  // Add this new interface for ImageText section
+  export interface ImageTextSection {
+    blocks: ImageTextBlock;
+    setting: CommonSettings;
+    type: 'image-text';
+  }
+   
+  
+  export interface FooterSection {
+    settings: {
+      text: string;
+    };
+  }
+  
+  export interface Children {
+    type: string;
+    sections: Section[];
+    order: string[];
+  }  
+ export  interface Layout {
+    setting: {
+      backgroundColor: string;
+      fontFamily: string;
+      colorSchema: ColorSchema;
+    };
+    blocks: string;
+    type: "layout";
+    settings: {
+      fontFamily: string;
+      colorSchema: ColorSchema;
+    };
+    sections: {
+      slideshow: string;
+      sectionHeader: HeaderSection;
+      children: Children;
+      sectionFooter: FooterSection;
+      sectionImageText: string;
+      banner: string;
+      footer: string;
+    };
+    order: string[];
+  }
+  export interface SlideBlockSetting extends Partial<CommonSettings> {
+    headingColor?: string;
+    headingFontSize?: string;
+    headingFontWeight?: string;
+    descriptionColor?: string;
+    descriptionFontSize?: string;
+    descriptionFontWeight?: string;
+    btnTextColor?: string;
+    btnBackgroundColor?: string;
+  }  
+  export interface SlideBlock {
+    imageSrc: string;
+    imageAlt: string;
+    text: string;
+    description: string;
+    btnText: string;
+    btnLink: string;
+    setting?: SlideBlockSetting;
+  }
+  
+  export interface SlideSection {
+    blocks: SlideBlock[];
+    setting: CommonSettings & {
+      paddingTop: string;
+      paddingBottom: string;
+      marginTop: string;
+      marginBottom: string;
+    };
+    type: 'slideshow';
+  }
+  // Add these new interfaces for Video component
+export interface VideoBlockSetting extends Partial<CommonSettings> {
+  headingColor?: string;
+  backgroundVideoSection?: string;
+  headingFontSize?: string;
+  headingFontWeight?: string;
+  videoWidth?: string;
+  videoRadious?: string;
+  videoPoster?: string;
+  videoLoop?: boolean;
+  videoMute?: boolean;
+  videoAutoplay?: boolean;
 }
-export interface Layout {
-  setting: {};
-  blocks: string;
-  type: "layout";
-  settings: {
-    fontFamily: string;
-    colorSchema: ColorSchema;
-  };
-  sections: {
-    slideshow: string;
-    sectionHeader: HeaderSection;
-    children: Children;
-    sectionFooter: FooterSection;
-    sectionImageText: string;
-    banner: BannerSection;
-  };
-  order: string[];
+
+export interface VideoBlock {
+  heading?: string;
+  videoUrl: string;
+  videoAlt?: string;
+  setting: VideoBlockSetting;
+}
+
+export interface VideoSection {
+  blocks: VideoBlock;
+  setting: CommonSettings;
+  type: 'video';
+}
+
+export interface VideoFormProps {
+  setUserInputData: React.Dispatch<React.SetStateAction<VideoSection>>;
+  userInputData: VideoSection;
+  layout: Layout;
 }

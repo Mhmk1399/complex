@@ -1,15 +1,8 @@
 "use client";
 import React from "react";
 import styled from "styled-components";
+import { ContactFormProps } from "../../../lib/types";
 
-interface ContactFormProps {
-  setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
-  layout: {
-    sections?: {
-      children?: { sections: SectionData[] };
-    };
-  };
-}
 
 interface BlocksType {
   setting: {

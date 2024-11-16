@@ -12,9 +12,10 @@ import SlideShow from "./sections/slideShow";
 import MultiRow from "./sections/multiRow";
 import Footer from "./sections/footer";
 import { Layout } from "@/lib/types";
+import FooterContainer from "./sections/footer";
 
 interface PreviewProps {
-  layout: Layout;
+  layout: Layout  ;
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -44,7 +45,7 @@ export const Preview: React.FC<PreviewProps> = ({
       />
       <SlideShow setSelectedComponent={setSelectedComponent} layout={layout} />
       <MultiRow setSelectedComponent={setSelectedComponent} layout={layout} />
-      <Footer setSelectedComponent={setSelectedComponent} layout={layout} />
+      <FooterContainer setSelectedComponent={setSelectedComponent} layout={layout} />
     </div>
   );
 };
