@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import  { useEffect } from 'react';
 import { Compiler } from '../compiler';
-import { Layout,Section ,BlockSetting} from '@/lib/types';
+import { Layout,Section } from '@/lib/types';
 
 interface RichTextFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<Layout>>;

@@ -21,7 +21,7 @@ interface FormProps {
 
 export const Form = ({ selectedComponent, setLayout ,layout }: FormProps) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [userInputData, setUserInputData] = useState<object | Section>({});
+  const [userInputData, setUserInputData] = useState<object | Section >({});
   useEffect(() => {
     const newjason=JasonChanger(layout, selectedComponent, userInputData)
     setLayout(newjason)

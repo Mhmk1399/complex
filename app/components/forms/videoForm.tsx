@@ -1,10 +1,24 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Compiler } from '../compiler';
-import { Layout,Section } from '@/lib/types';
+import { Layout, Section } from '@/lib/types';
+
 interface VideoFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<Section>>;
   userInputData: Section;
   layout: Layout;
+}
+
+interface ExtendedBlockSetting {
+  headingColor?: string;
+  backgroundVideoSection?: string;
+  headingFontSize?: string;
+  headingFontWeight?: string;
+  videoWidth?: string;
+  videoRadious?: string;
+  videoPoster?: string;
+  videoLoop?: boolean;
+  videoMute?: boolean;
+  videoAutoplay?: boolean;
 }
 
 const ColorInput = ({ label, name, value, onChange }: {
@@ -14,7 +28,6 @@ const ColorInput = ({ label, name, value, onChange }: {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => (
   <>
-  
     <div className="flex flex-row gap-6 items-center"> 
       <label className="block mb-1" htmlFor={name}>{label}</label>
       <input
@@ -123,13 +136,13 @@ export const VideoForm: React.FC<VideoFormProps> = ({ setUserInputData, userInpu
           <ColorInput
             label="Heading Color"
             name="headingColor"
-            value={userInputData?.blocks?.setting?.headingColor ?.toLocaleString()?? '#000000'}
+            value={(userInputData?.blocks?.setting as ExtendedBlockSetting)?.headingColor?.toString() ?? '#000000'}
             onChange={handleBlockSettingChange}
           />
           <ColorInput
             label="Background Color"
             name="backgroundVideoSection"
-            value={userInputData?.blocks?.setting?.backgroundVideoSection?.toLocaleString() ?? '#e4e4e4'}
+            value={(userInputData?.blocks?.setting as ExtendedBlockSetting)?.backgroundVideoSection?.toString() ?? '#e4e4e4'}
             onChange={handleBlockSettingChange}
           />
 
@@ -138,7 +151,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({ setUserInputData, userInpu
             <input
               type="range"
               name="headingFontSize"
-              value={userInputData?.blocks?.setting?.headingFontSize?.toLocaleString() ?? '30px'}
+              value={(userInputData?.blocks?.setting as ExtendedBlockSetting)?.headingFontSize?.toString() ?? '30px'}
               onChange={handleBlockSettingChange}
               className="w-full p-2 border rounded"
             />
@@ -148,7 +161,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({ setUserInputData, userInpu
             <label className="block mb-1">Heading Font Weight</label>
             <select
               name="headingFontWeight"
-              value={userInputData?.blocks?.setting?.headingFontWeight?.toLocaleString()?? 'bold'}
+              value={(userInputData?.blocks?.setting as ExtendedBlockSetting)?.headingFontWeight?.toString() ?? 'bold'}
               onChange={handleBlockSettingChange}
               className="w-full p-2 border rounded"
             >
@@ -162,20 +175,18 @@ export const VideoForm: React.FC<VideoFormProps> = ({ setUserInputData, userInpu
             <input
               type="range"
               name="videoWidth"
-              value={userInputData?.blocks?.setting?.videoWidth?.toLocaleString() ?? '1000px'}
+              value={(userInputData?.blocks?.setting as ExtendedBlockSetting)?.videoWidth?.toString() ?? '1000px'}
               onChange={handleBlockSettingChange}
               className="w-full p-2 border rounded"
             />
           </div>
-
-         
 
           <div>
             <label className="block mb-1">Video Border Radius</label>
             <input
               type="range"
               name="videoRadious"
-              value={userInputData?.blocks?.setting?.videoRadious?.toLocaleString() ?? '20px'}
+              value={(userInputData?.blocks?.setting as ExtendedBlockSetting)?.videoRadious?.toString() ?? '20px'}
               onChange={handleBlockSettingChange}
               className="w-full p-2 border rounded"
             />
@@ -186,7 +197,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({ setUserInputData, userInpu
             <input
               type="text"
               name="videoPoster"
-              value={userInputData?.blocks?.setting?.videoPoster?.toLocaleString() ?? ''}
+              value={(userInputData?.blocks?.setting as ExtendedBlockSetting)?.videoPoster?.toString() ?? ''}
               onChange={handleBlockSettingChange}
               className="w-full p-2 border rounded"
             />
@@ -199,7 +210,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({ setUserInputData, userInpu
             <input
               type="checkbox"
               name="videoLoop"
-              checked={userInputData?.blocks?.setting?.videoLoop as boolean ?? true}
+              checked={(userInputData?.blocks?.setting as ExtendedBlockSetting)?.videoLoop ?? true}
               onChange={handleBlockSettingChange}
               className="mr-2"
             />
@@ -210,7 +221,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({ setUserInputData, userInpu
             <input
               type="checkbox"
               name="videoMute"
-              checked={userInputData?.blocks?.setting?.videoMute as boolean ?? false}
+              checked={(userInputData?.blocks?.setting as ExtendedBlockSetting)?.videoMute ?? false}
               onChange={handleBlockSettingChange}
               className="mr-2"
             />
@@ -221,7 +232,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({ setUserInputData, userInpu
             <input
               type="checkbox"
               name="videoAutoplay"
-              checked={userInputData?.blocks?.setting?.videoAutoplay as boolean ?? true}
+              checked={(userInputData?.blocks?.setting as ExtendedBlockSetting)?.videoAutoplay ?? true}
               onChange={handleBlockSettingChange}
               className="mr-2"
             />

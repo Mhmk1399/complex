@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import  { useEffect } from 'react';
 import { Compiler } from '../compiler';
 import { Layout ,Section } from '@/lib/types';
 interface ImageTextFormProps {

@@ -1,7 +1,7 @@
 import { Layout,Section } from "@/lib/types";
 export const Compiler = (data: string | object, name: string) => {
   // Create deep copy of the data using structuredClone
-  let processedData = typeof data === 'string' 
+  const processedData = typeof data === 'string' 
     ? JSON.parse(data)
     : structuredClone(data);
 
@@ -20,7 +20,7 @@ export const Compiler = (data: string | object, name: string) => {
     )
   );
 }
-export const JasonChanger = (data: string | object, name: string, newData: {}) => {
+export const JasonChanger = (data: string | object, name: string, newData: Layout) => {
   let processedData = typeof data === 'string' 
     ? JSON.parse(data)
     : structuredClone(data);

@@ -22,7 +22,7 @@ export const Preview: React.FC<PreviewProps> = ({
   setSelectedComponent,
 }) => {
   return (
-    <div className="w-full md:w-full lg:w-[75%]  h-[95vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide lg:mt-5 lg:ml-5">
+    <div className="mt-16 w-full md:w-full lg:w-[75%]  h-[95vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide lg:mt-5 lg:ml-5">
       <Header setSelectedComponent={setSelectedComponent} layout={layout} />
       <RichText setSelectedComponent={setSelectedComponent} layout={layout} />
       <Banner setSelectedComponent={setSelectedComponent} layout={layout} />
