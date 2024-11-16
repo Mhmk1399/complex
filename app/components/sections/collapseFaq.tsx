@@ -1,12 +1,9 @@
+import { Layout } from "@/lib/types";
 import React, { useState } from "react";
 import styled from "styled-components";
 interface CollapseFaqProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
-  layout: {
-    sections?: {
-      children?: { sections: SectionData[] };
-    };
-  };
+  layout: Layout;
 }
 
 interface BlocksType {
@@ -122,7 +119,7 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
   layout,
 }) => {
   const sectionData = (layout.sections?.children
-    ?.sections?.[7] as SectionData) || {
+    ?.sections?.[7] as unknown as SectionData) || {
     blocks: [{ setting: {} }],
     setting: {},
   };
@@ -154,7 +151,11 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
                 toggleOpen(idx);
               }}
             >
-              {typedBlock[`text${idx + 1}` as keyof BlocksType] as React.ReactNode}
+              {
+                typedBlock[
+                  `text${idx + 1}` as keyof BlocksType
+                ] as React.ReactNode
+              }
               <span>{openIndexes.includes(idx) ? "-" : "+"}</span>
             </Question>
             <Answer
@@ -162,12 +163,15 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
               $idx={idx}
               $isOpen={openIndexes.includes(idx)}
             >
-              {typedBlock[`content${idx + 1}` as keyof BlocksType] as React.ReactNode}
+              {
+                typedBlock[
+                  `content${idx + 1}` as keyof BlocksType
+                ] as React.ReactNode
+              }
             </Answer>
           </FaqItem>
         );
       })}
-
     </Section>
   );
 };

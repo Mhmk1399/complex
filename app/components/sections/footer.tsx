@@ -5,6 +5,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { Layout } from "@/lib/types";
 
+interface FooterProps {
+  setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
+  layout: Layout;
+}
+
 interface BlocksType {
   setting: {
     textColor?: string;
@@ -38,11 +43,6 @@ interface SettingType {
 interface SectionData {
   blocks: BlocksType;
   setting: SettingType;
-}
-
-interface FooterProps {
-  setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
-  layout: Layout
 }
 
 const FooterContainer = styled.footer<{ $data: SectionData }>`
@@ -113,10 +113,7 @@ const Logo = styled(Image)<{ $data: SectionData }>`
 `;
 
 const Footer: React.FC<FooterProps> = ({ setSelectedComponent, layout }) => {
-  const sectionData = layout.sections?.sectionFooter || {
-    blocks: { setting: {}, links: [] },
-    setting: {},
-  };
+  const sectionData = layout?.sections?.sectionFooter 
 
   const {
     text,
@@ -126,7 +123,7 @@ const Footer: React.FC<FooterProps> = ({ setSelectedComponent, layout }) => {
     telegramLink,
     whatsappLink,
     logo,
-  } = sectionData.blocks;
+  } = sectionData?.blocks;
 
   return (
     <FooterContainer
@@ -185,9 +182,9 @@ const Footer: React.FC<FooterProps> = ({ setSelectedComponent, layout }) => {
         </Link>
       </SocialLinks>
 
-      {links && links.length > 0 && (
+      {links && Array.isArray(links) && links.length > 0 && (
         <FooterLinks>
-          {links.map((link, index) => (
+          {(links as { url: string; label: string }[]).map((link, index) => (
             <FooterLink
               key={index}
               href={link.url}

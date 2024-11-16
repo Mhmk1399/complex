@@ -1,24 +1,24 @@
 export interface Link {
-    name: string;
-    url: string;
-  }
-  
-  export interface ColorSchema {
-    primary: string;
-    secondary: string;
-    text: string;
-  }
-  export interface CollapseBlockSetting extends CommonSettings {
-    textColor1?: string;
-    textColor2?: string;
-    textColor3?: string;
-    textColor4?: string;
-    contentColor1?: string;
-    contentColor2?: string;
-    contentColor3?: string;
-    contentColor4?: string;
-  }
-  
+  name: string;
+  url: string;
+}
+
+export interface ColorSchema {
+  primary: string;
+  secondary: string;
+  text: string;
+}
+export interface CollapseBlockSetting extends CommonSettings {
+  textColor1?: string;
+  textColor2?: string;
+  textColor3?: string;
+  textColor4?: string;
+  contentColor1?: string;
+  contentColor2?: string;
+  contentColor3?: string;
+  contentColor4?: string;
+}
+
 // New specific interfaces for Collapse component
 export interface CollapseBlock {
   heading?: string;
@@ -37,7 +37,7 @@ export interface CollapseBlock {
 export interface CollapseSection {
   blocks: CollapseBlock[];
   setting: CollapseSettings;
-  type: 'collapse';
+  type: "collapse";
 }
 
 interface CollapseSettings {
@@ -50,95 +50,93 @@ interface CollapseSettings {
   marginBottom?: string;
 }
 
-  
-  export interface CommonSettings {
-    headingFontSize: string;
-    formBackground: string;
-    textColor?: string;
-    btnTextColor?: string;
-    imageWidth?: string;
-    imageHeight?: string;
-    opacityImage?: string;
-    heading?: string;
-    titleColor?: string;
-    descriptionColor?: string;
-    backgroundColorBox?: string;
-    btnColor?: string;
-    btnBackgroundColor?: string;
-    imageBehavior?: string;
-    imageRadious?: string;
-    headingColor?: string;
-    background?: string;
-    headingFontWeight?: string;
-    paddingTop?: string;
-    paddingBottom?: string;
-    marginTop?: string;
-    marginBottom?: string;
-    textFontSize?: string;
-    textFontWeight?: string;
-    descriptionFontSize?: string;
-    descriptionFontWeight?: string;
-    btnTextFontSize?: string;
-    btnTextFontWeight?: string;
-    imageSrc? : string;
-    text1?: string;
-    text2?: string;
-    text3?: string;
-    text4?: string;
-    content1?: string;
-    content2?: string;
-    content3?: string;
-    content4?: string;
-    setting: CollapseBlockSetting;
-    }
-  
-    export interface HeaderBlockSettings extends CommonSettings {
-      imageWidth: string;
-      imageHeight: string;
-      imageRadius: string;
-      itemColor: string;
-      itemFontSize: string;
-      itemFontWeight: string;
-      itemHoverColor: string;
-      backgroundColorNavbar: string;
-      titleColor: string;
-    }
-    export interface HeaderBlock {
-      imageLogo: string;
-      imageAlt: string;
-      links: Link[];
-      setting: HeaderBlockSettings;
-    }
-    
-  
-    export interface HeaderSection {
-      type: "header";
-      blocks: HeaderBlock;
-      setting: CommonSettings & {
-        navbarPosition: string;
-        paddingTop: string;
-        paddingBottom: string;
-        marginBottom: string;
-      };
-    }
-  export interface BannerSection {
-    blocks: {
-      imageSrc: string;
-      imageAlt: string;
-      text: string;
-      description: string;
-      imageLink?: string;
-      setting: CommonSettings;
-    };
+export interface CommonSettings {
+  headingFontSize: any;
+  formBackground: any;
+  textColor?: string;
+  btnTextColor?: string;
+  imageWidth?: string;
+  imageHeight?: string;
+  opacityImage?: string;
+  heading?: string;
+  titleColor?: string;
+  descriptionColor?: string;
+  backgroundColorBox?: string;
+  btnColor?: string;
+  btnBackgroundColor?: string;
+  imageBehavior?: string;
+  imageRadious?: string;
+  headingColor?: string;
+  background?: string;
+  headingFontWeight?: string;
+  paddingTop?: string;
+  paddingBottom?: string;
+  marginTop?: string;
+  marginBottom?: string;
+  textFontSize?: string;
+  textFontWeight?: string;
+  descriptionFontSize?: string;
+  descriptionFontWeight?: string;
+  btnTextFontSize?: string;
+  btnTextFontWeight?: string;
+  opacityTextBox?: string;
+  backgroundBoxRadious?: string;
+  imageSrc?: string;
+  text1?: string;
+  text2?: string;
+  text3?: string;
+  text4?: string;
+  content1?: string;
+  content2?: string;
+  content3?: string;
+  content4?: string;
+  setting: CollapseBlockSetting;
+}
+
+export interface HeaderBlockSettings extends CommonSettings {
+  imageWidth: string;
+  imageHeight: string;
+  imageRadius: string;
+  itemColor: string;
+  itemFontSize: string;
+  itemFontWeight: string;
+  itemHoverColor: string;
+  backgroundColorNavbar: string;
+  titleColor: string;
+}
+export interface HeaderBlock {
+  imageLogo: string;
+  imageAlt: string;
+  links: Link[];
+  setting: HeaderBlockSettings;
+}
+
+export interface HeaderSection {
+  type: "header";
+  blocks: HeaderBlock;
+  setting: CommonSettings & {
+    navbarPosition: string;
+    paddingTop: string;
+    paddingBottom: string;
+    marginBottom: string;
+  };
+}
+export interface BannerSection {
+  blocks: {
+    imageSrc: string;
+    imageAlt: string;
+    text: string;
+    description: string;
+    imageLink?: string;
     setting: CommonSettings;
-  }
-  
-  export interface BlockSetting {
-    heading: string;
-    setting: object;
-    [key: number]: string | number | boolean | CommonSettings;
-  }
-  // Add these new interfaces for MultiColumn component
+  };
+  setting: CommonSettings;
+}
+
+export interface BlockSetting {
+  [key: number]: string | number | boolean | CommonSettings;
+}
+// Add these new interfaces for MultiColumn component
 export interface MultiColumnBlockSetting extends CommonSettings {
   headingColor?: string;
   titleColor?: string;
@@ -190,7 +188,7 @@ export interface NewsLetterBlock {
 export interface NewsLetterSection {
   blocks: NewsLetterBlock;
   setting: CommonSettings;
-  type: 'newsletter';
+  type: "newsletter";
 }
 // Add these new interfaces for RichText component
 export interface RichTextBlockSetting extends CommonSettings {
@@ -217,7 +215,7 @@ export interface RichTextBlock {
 export interface RichTextSection {
   blocks: RichTextBlock;
   setting: CommonSettings;
-  type: 'rich-text';
+  type: "rich-text";
 }
 
 export interface MultiColumnSection {
@@ -225,43 +223,61 @@ export interface MultiColumnSection {
     [key: number]: MultiColumnBlock;
   };
   setting: MultiColumnBlockSetting;
-  type: 'multicolumn';
+  type: "multicolumn";
 }
 
-  export interface Section {
-    setting: CommonSettings;
-    blocks: HeaderBlock | CollapseBlock| ImageTextBlock ;
-    type: string;
-  }
-  export interface ImageTextBlockSetting extends CommonSettings {
-    headingColor: string;
-    headingFontSize: string;
-    headingFontWeight: string;
-    descriptionColor: string;
-    descriptionFontSize: string;
-    descriptionFontWeight: string;
-    btnTextColor: string;
-    btnBackgroundColor: string;
-    backgroundColorBox: string;
-    backgroundBoxOpacity: string;
-    boxRadiuos: string;
-    opacityImage: string;
-    imageWidth: string;
-    imageHeight: string;
-    background: string;
-  }
-  
-  // Add this new interface for ImageText blocks
-  export interface ImageTextBlock {
-    imageSrc: string;
-    imageAlt: string;
-    heading: string;
+export interface Section {
+  setting: CommonSettings;
+  blocks: HeaderBlock | CollapseBlock | ImageTextBlock;
+  type: string;
+}
+export interface ImageTextBlockSetting extends CommonSettings {
+  headingColor: string;
+  headingFontSize: string;
+  headingFontWeight: string;
+  descriptionColor: string;
+  descriptionFontSize: string;
+  descriptionFontWeight: string;
+  btnTextColor: string;
+  btnBackgroundColor: string;
+  backgroundColorBox: string;
+  backgroundBoxOpacity: string;
+  boxRadiuos: string;
+  opacityImage: string;
+  imageWidth: string;
+  imageHeight: string;
+  background: string;
+}
+
+// Add this new interface for ImageText blocks
+export interface ImageTextBlock {
+  imageSrc: string;
+  imageAlt: string;
+  heading: string;
+  description: string;
+  btnLink: string;
+  btnText: string;
+  setting: ImageTextBlockSetting;
+}
+
+// Add this new interface for ImageText section
+export interface ImageTextSection {
+  blocks: ImageTextBlock;
+  setting: CommonSettings;
+  type: "image-text";
+}
+
+export interface FooterSection {
+  blocks: {
+    text: string;
+    links: string;
     description: string;
     btnLink: string;
     btnText: string;
     setting: ImageTextBlockSetting;
   }
-  // Add these new interfaces for ContactForm component
+}
+
 export interface ContactFormBlockSetting extends Partial<CommonSettings> {
   headingColor?: string;
   headingFontSize?: string;
