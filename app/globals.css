@@ -72,3 +72,20 @@ body {
     display: none;
   }
 }
+.drag-transition {
+  transition: transform 0.2s ease-out;
+}
+
+[data-rbd-draggable-id] {
+  user-select: none;
+  margin: 8px 0;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: grab;
+}
+
+[data-rbd-draggable-id]:active {
+  cursor: grabbing;
+}
