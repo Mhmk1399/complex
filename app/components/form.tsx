@@ -1,5 +1,9 @@
 "use client"
 import React, { useEffect, useState } from 'react'
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { motion } from 'framer-motion'
 import { RichText } from './forms/richTextForm'
 import { HeaderForm } from './forms/headerForm';
@@ -26,17 +30,83 @@ interface FormProps {
 
 export const Form = ({ selectedComponent, setLayout, layout }: FormProps) => {
   const [userInputData, setUserInputData] = useState<FormData>({} as FormData);
-
-  const [isOpen, setIsOpen] = useState(false)
-  useEffect(() => {
-    // Only run if userInputData has actual changes
-    if (Object.keys(userInputData).length > 0) {
-      const newLayout = JasonChanger(layout, selectedComponent, userInputData as Section)
-      setLayout(newLayout)
-    }
-  }, [userInputData]) // Remove layout and selectedComponent from dependencies
-  console.log(selectedComponent);
+  const [isOpen, setIsOpen] = useState(false);
+  const [orders, setOrders] = useState<string[]>([]);
+  const [showOrdersMenu, setShowOrdersMenu] = useState(false);
   
+  // Setup sensors for dnd-kit
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  useEffect(() => {
+    if (Object.keys(userInputData).length > 0) {
+      const newLayout = JasonChanger(layout, selectedComponent, userInputData as Section);
+      setLayout(newLayout);
+    }
+  }, [userInputData]);
+
+  console.log(selectedComponent);
+
+  // Create a SortableItem component
+  const SortableItem = ({id}: {id: string}) => {
+    const {
+      attributes,
+      listeners,
+      setNodeRef,
+      transform,
+      transition
+    } = useSortable({id});
+
+    const style = {
+      transform: CSS.Transform.toString(transform),
+      transition
+    };
+
+    return (
+      <div 
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
+        className="p-3 bg-white border rounded-lg flex items-center gap-2 cursor-grab mb-2"
+      >
+        <span className="text-gray-500">☰</span>
+        <span>{id}</span>
+      </div>
+    );
+  };
+
+  useEffect(() => {
+    setOrders([...layout.sections.children.order]);
+  }, [layout.sections.children.order]);
+
+  const handleDragEnd = (event: any) => {
+    
+    const {active, over} = event;
+    if (active.id !== over.id) {
+      const oldIndex = orders.indexOf(active.id);
+      const newIndex = orders.indexOf(over.id);
+      const newOrders = arrayMove(orders, oldIndex, newIndex);
+      
+      setOrders(newOrders);
+      setLayout({
+        ...layout,
+        sections: {
+          ...layout.sections,
+          children: {
+            ...layout.sections.children,
+            order: newOrders
+          }
+        }
+      });
+
+    }
+
+  };
 
   const renderFormContent = (
     setUserInputData: React.Dispatch<React.SetStateAction<FormData>>,
@@ -94,17 +164,47 @@ export const Form = ({ selectedComponent, setLayout, layout }: FormProps) => {
         layout={layout} />           
       default:
         return <div>Select a component to configure</div>
-    }  }
+    }  
+  }
+
+  const ordersButton = (
+    <button
+      onClick={() => setShowOrdersMenu(!showOrdersMenu)}
+      className={!showOrdersMenu?`w-fit  m-2 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors`:'w-fit m-2 px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors'}
+    >
+     {!showOrdersMenu?'Orders':'menu'} 
+    </button>
+  );
 
   return (
     <>
       {/* Desktop Sidebar */}
       <div className="hidden lg:block fixed right-0 top-0 h-screen w-80 bg-white shadow-lg overflow-y-auto " style={{ zIndex: 1000 }}>
+      {ordersButton}
+
         <div className="p-6">
           <h2 className="text-2xl font-bold text-gray-800">
             Component Settings
           </h2>
-          {renderFormContent(setUserInputData, userInputData as Section)}
+          {showOrdersMenu? (
+  <div className="bg-white p-4 rounded-lg shadow-md">
+    <h3 className="text-lg font-semibold mb-2">Orders Menu</h3>
+    <DndContext 
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+    >
+      <SortableContext 
+        items={orders}
+        strategy={verticalListSortingStrategy}
+      >
+        {orders.map((id: string) => <SortableItem key={id} id={id} />)}
+      </SortableContext>
+    </DndContext>
+  </div>
+) : (
+      renderFormContent(setUserInputData, userInputData as Section)
+    )}
         </div>
       </div>
 

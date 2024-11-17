@@ -10,7 +10,6 @@ import CollapseFaq from "./sections/collapseFaq";
 import MultiColumn from "./sections/multiColumn";
 import SlideShow from "./sections/slideShow";
 import MultiRow from "./sections/multiRow";
-import Footer from "./sections/footer";
 import { Layout } from "@/lib/types";
 import FooterContainer from "./sections/footer";
 
