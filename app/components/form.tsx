@@ -10,12 +10,13 @@ import { VideoForm } from './forms/videoForm';
 import { ContactForm } from './forms/contact';
 import { NewsLetterForm } from './forms/newsLetterForm';
 import { CollapseForm } from './forms/collapseForm';
-import {ContactFormData, ContactFormProps, MultiRowSection, SlideSection, VideoSection} from '../../lib/types'
+import {ContactFormData, ContactFormProps, FooterSection, MultiRowSection, SlideSection, VideoSection} from '../../lib/types'
 import { BannerSection ,CollapseSection, HeaderSection, ImageTextSection, Layout, MultiColumnSection, NewsLetterSection, RichTextSection, Section  } from '@/lib/types';
 import { MultiColumnForm } from './forms/multiColomnForm';
 import { SlideForm } from './forms/slideForm';
 import {MultiRowForm}  from './forms/multiRowForm';
-type FormData = HeaderSection |MultiRowSection| BannerSection |BannerSection|VideoSection| Section |SlideSection| CollapseSection | RichTextSection |ContactFormProps |MultiColumnSection;
+import { FooterForm } from './forms/footerForm';
+type FormData = HeaderSection |MultiRowSection| BannerSection |FooterSection|NewsLetterSection|BannerSection|VideoSection| Section |SlideSection| CollapseSection | RichTextSection |ContactFormProps |MultiColumnSection;
 
 interface FormProps {
   selectedComponent: string;
@@ -83,10 +84,14 @@ export const Form = ({ selectedComponent, setLayout, layout }: FormProps) => {
         return <SlideForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<SlideSection>>}
                           userInputData={userInputData as SlideSection}
                           layout={layout} />
-      case 'multirow':
+      case 'multiRow':
         return<MultiRowForm setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<MultiRowSection>>}
         userInputData={userInputData as MultiRowSection}
-        layout={layout} />               
+        layout={layout} />  
+        case 'sectionFooter' : 
+        return<FooterForm  setUserInputData={setUserInputData as React.Dispatch<React.SetStateAction<FooterSection>>}
+        userInputData={userInputData as FooterSection}
+        layout={layout} />           
       default:
         return <div>Select a component to configure</div>
     }  }

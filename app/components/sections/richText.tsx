@@ -66,7 +66,7 @@ const RichText: React.FC<RichTextProps> = ({
   setSelectedComponent,
   layout,
 }) => {
-  const sectionData = layout?.sections?.richtext;
+  const sectionData = layout?.sections?.children.sections[2];
   const { textHeading, description, btnText, btnLink } = sectionData?.blocks;
 
   return (

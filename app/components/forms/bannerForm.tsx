@@ -1,6 +1,6 @@
 import  { useEffect } from 'react';
 import { Compiler } from '../compiler';
-import { Layout ,Section, BannerSection } from '@/lib/types';
+import { Layout , BannerSection } from '@/lib/types';
 interface BannerFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<BannerSection>>;
   userInputData: BannerSection ;
@@ -34,18 +34,17 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
     setUserInputData(initialData);
   }, []);
 
-  const handleBlockChange = (index: number, field: string, value: string) => {
+  const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
     setUserInputData((prev: BannerSection) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
-        [index]: {
-          ...((prev.blocks as Record<number, any>)[index] || {}),
-          [field]: value
-        }
+        [name]: value
       }
     }));
-  };
+};
+
   
 
   const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -84,34 +83,35 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
           <div>
             <label className="block mb-1">Image Source</label>
             <input
-              type="text"
-              name="imageSrc"
-              value={userInputData?.blocks?.imageSrc?.toLocaleString() ?? ''}
-              onChange={()=>handleBlockChange}
-              className="w-full p-2 border rounded"
-            />
+  type="text"
+  name="imageSrc"
+  value={userInputData?.blocks?.imageSrc ?? ''}
+  onChange={handleBlockChange}
+  className="w-full p-2 border rounded"
+/>
           </div>
 
           <div>
             <label className="block mb-1">Heading Text</label>
-            <input
-              type="text"
-              name="text"
-              value={userInputData?.blocks?.text ?? ''}
-              onChange={()=>handleBlockChange}
-              className="w-full p-2 border rounded"
-            />
+           
+<input
+  type="text"
+  name="text"
+  value={userInputData?.blocks?.text ?? ''}
+  onChange={handleBlockChange}
+  className="w-full p-2 border rounded"
+/>
           </div>
 
           <div>
             <label className="block mb-1">Description</label>
             <textarea
-              name="description"
-              value={userInputData?.blocks?.description?.toString() ?? ''}
-              onChange={()=>handleBlockChange}
-              className="w-full p-2 border rounded"
-              rows={3}
-            />
+  name="description"
+  value={userInputData?.blocks?.description ?? ''}
+  onChange={handleBlockChange}
+  className="w-full p-2 border rounded"
+  rows={3}
+/>
           </div>
         </div>
       </div>

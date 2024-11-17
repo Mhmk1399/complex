@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Compiler } from '../compiler';
-import { Layout, MultiRowSection, MultiRowBlock } from '@/lib/types';
+import { Layout, MultiRowSection } from '@/lib/types';
 
 interface MultiRowFormProps {
-  setUserInputData: React.Dispatch<React.SetStateAction<MultiRowSection>>;
-  userInputData: MultiRowSection;
+  setUserInputData: React.Dispatch<React.SetStateAction<MultiRowSection >>;
+  userInputData: MultiRowSection |undefined;
   layout: Layout;
 }
 
@@ -28,27 +28,25 @@ const ColorInput = ({ label, name, value, onChange }: {
 );
 
 export const MultiRowForm: React.FC<MultiRowFormProps> = ({ setUserInputData, userInputData, layout }) => {
-    useEffect(() => {
-        const initialData = Compiler(layout, 'multirow');
-        if (initialData && initialData[0]) {
-          setUserInputData(initialData[0]);
-        }
-      }, []);      
+  const[loaded,setLoaded]=useState(false);
+  useEffect(() => {
+    const initialData = Compiler(layout, 'multiRow')[0];
+    if(initialData){
+      setLoaded(true);
+    setUserInputData(initialData);}
+    console.log(userInputData);  
+  }, []);
+
 
   const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
     const { name, value } = e.target;
     setUserInputData((prev: MultiRowSection) => ({
       ...prev,
-      blocks: {
-        ...prev.blocks,
-        [index]: {
-          ...prev.blocks[index],
-          [name]: value
-        }
-      }
+      blocks: prev.blocks.map((block, i) => 
+        i === index ? { ...block, [name]: value } : block
+      )
     }));
   };
-  
 
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -56,57 +54,105 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({ setUserInputData, us
       ...prev,
       setting: {
         ...prev.setting,
-        [name]: value
+        [name]: value.includes('px') ? value : `${value}px`
       }
     }));
   };
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setUserInputData((prev: MultiRowSection) => ({
-      ...prev,
-      title: value
-    }));
-  };
-
   return (
+ <>
+  {!loaded ? (
+      <p>Loading...</p>
+    ) : (
     <div className="p-6 max-w-4xl mx-auto">
       <h2 className="text-xl font-bold mb-4">Multi Row Settings</h2>
 
-      {/* Main Title Setting */}
+      {/* Title Settings */}
       <div className="mb-6">
         <h3 className="font-semibold mb-2">Main Title</h3>
         <input
           type="text"
+          name="title"
           value={userInputData?.title ?? ''}
-          onChange={handleTitleChange}
+          onChange={(e) => setUserInputData(prev => ({ ...prev, title: e.target.value }))}
           className="w-full p-2 border rounded"
           placeholder="Main Title"
         />
       </div>
 
       {/* Row Content */}
-      {Object.entries(userInputData?.blocks || {}).map(([key, block], index) => {
-  if (key === 'setting') return null;
-  return (
-    <div key={index} className="mb-6 p-4 border rounded">
-      <h3 className="font-semibold mb-2">Row {index + 1}</h3>
-      <div className="space-y-4">
-        <div>
-          <label className="block mb-1">Heading</label>
-          <input
-            type="text"
-            name="heading"
-            value={block.heading || ''}
-            onChange={(e) => handleBlockChange(e, index)}
-            className="w-full p-2 border rounded"
-          />
+      {userInputData?.blocks?.map((block, index) => (
+        <div key={index} className="mb-6 p-4 border rounded">
+          <h3 className="font-semibold mb-2">Row {index + 1}</h3>
+          <div className="space-y-4">
+            <div>
+              <label className="block mb-1">Heading</label>
+              <input
+                type="text"
+                name="heading"
+                value={block.heading || ''}
+                onChange={(e) => handleBlockChange(e, index)}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+
+            <div>
+              <label className="block mb-1">Description</label>
+              <textarea
+                name="description"
+                value={block.description || ''}
+                onChange={(e) => handleBlockChange(e, index)}
+                className="w-full p-2 border rounded"
+                rows={3}
+              />
+            </div>
+
+            <div>
+              <label className="block mb-1">Image Source</label>
+              <input
+                type="text"
+                name="imageSrc"
+                value={block.imageSrc || ''}
+                onChange={(e) => handleBlockChange(e, index)}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+
+            <div>
+              <label className="block mb-1">Image Alt</label>
+              <input
+                type="text"
+                name="imageAlt"
+                value={block.imageAlt || ''}
+                onChange={(e) => handleBlockChange(e, index)}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+
+            <div>
+              <label className="block mb-1">Button Label</label>
+              <input
+                type="text"
+                name="btnLable"
+                value={block.btnLable || ''}
+                onChange={(e) => handleBlockChange(e, index)}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+
+            <div>
+              <label className="block mb-1">Button Link</label>
+              <input
+                type="text"
+                name="btnLink"
+                value={block.btnLink || ''}
+                onChange={(e) => handleBlockChange(e, index)}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+          </div>
         </div>
-        {/* Rest of the form fields */}
-      </div>
-    </div>
-  );
-})}
+      ))}
 
       {/* Style Settings */}
       <div className="mb-6">
@@ -131,7 +177,13 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({ setUserInputData, us
             onChange={handleSettingChange}
           />
           <ColorInput
-            label="Background Color Box"
+            label="Background Color"
+            name="backgroundColorMultiRow"
+            value={userInputData?.setting?.backgroundColorMultiRow ?? '#8d99ae'}
+            onChange={handleSettingChange}
+          />
+          <ColorInput
+            label="Box Background Color"
             name="backgroundColorBox"
             value={userInputData?.setting?.backgroundColorBox ?? '#2b2d42'}
             onChange={handleSettingChange}
@@ -150,32 +202,86 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({ setUserInputData, us
           />
         </div>
 
-        {/* Image Settings */}
-        <div className="mt-4 grid grid-cols-2 gap-4">
+        {/* Font Settings */}
+        <div className="grid md:grid-cols-2 gap-4 mt-4">
           <div>
-            <label className="block mb-1">Image Align</label>
+            <label className="block mb-1">Title Font Size</label>
+            <input
+              type="range"
+              name="titleFontSize"
+              min="10"
+              max="50"
+              value={parseInt(userInputData?.setting?.titleFontSize ?? '35')}
+              onChange={handleSettingChange}
+              className="w-full"
+            />
+          </div>
+          <div>
+            <label className="block mb-1">Title Font Weight</label>
             <select
-              name="imageAlign"
-              value={userInputData?.setting?.imageAlign ?? 'row'}
+              name="titleFontWeight"
+              value={userInputData?.setting?.titleFontWeight ?? 'bold'}
               onChange={handleSettingChange}
               className="w-full p-2 border rounded"
             >
-              <option value="row">Row</option>
-              <option value="row-reverse">Row Reverse</option>
+              <option value="normal">Normal</option>
+              <option value="bold">Bold</option>
             </select>
           </div>
+        </div>
+
+        {/* Image Settings */}
+        <div className="grid md:grid-cols-2 gap-4 mt-4">
           <div>
-            <label className="block mb-1">Image Radius (px)</label>
+            <label className="block mb-1">Image Width</label>
+            <input
+              type="range"
+              name="imageWidth"
+              min="200"
+              max="1000"
+              value={parseInt(userInputData?.setting?.imageWidth ?? '700')}
+              onChange={handleSettingChange}
+              className="w-full"
+            />
+          </div>
+          <div>
+            <label className="block mb-1">Image Height</label>
+            <input
+              type="range"
+              name="imageHeight"
+              min="100"
+              max="500"
+              value={parseInt(userInputData?.setting?.imageHeight ?? '300')}
+              onChange={handleSettingChange}
+              className="w-full"
+            />
+          </div>
+          <div>
+            <label className="block mb-1">Image Radius</label>
             <input
               type="range"
               name="imageRadius"
               min="0"
-              max="100"
+              max="50"
               value={parseInt(userInputData?.setting?.imageRadius ?? '45')}
               onChange={handleSettingChange}
               className="w-full"
             />
           </div>
+        </div>
+
+        {/* Layout Settings */}
+        <div className="mt-4">
+          <label className="block mb-1">Image Alignment</label>
+          <select
+            name="imageAlign"
+            value={userInputData?.setting?.imageAlign ?? 'row'}
+            onChange={handleSettingChange}
+            className="w-full p-2 border rounded"
+          >
+            <option value="row">Row</option>
+            <option value="column">Column</option>
+          </select>
         </div>
       </div>
 
@@ -200,5 +306,10 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({ setUserInputData, us
         </div>
       </div>
     </div>
+    )}
+    
+    </>
+    
   );
+  
 };
