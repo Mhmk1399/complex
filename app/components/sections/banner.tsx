@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
@@ -76,16 +76,13 @@ const DescriptionText = styled.p<{ $data: BannerSection }>`
 `;
 
 const Banner: React.FC<props> = ({ setSelectedComponent, layout }) => {
-  const sectionData = (layout?.sections?.banner as BannerSection) || {
-    blocks: {
-      description: "",
-      imageAlt: "",
-      imageSrc: "",
-      text: "",
-      setting: {},
-    },
-    setting: {},
-  };
+  useEffect(() => {
+   console.log(layout.sections.children.sections[0]);
+   
+  }, [layout])
+  
+  
+  const sectionData = (layout?.sections?.children?.sections[0] as unknown as BannerSection) 
   const { description, imageAlt, imageSrc, text } = sectionData?.blocks;
 
   return (

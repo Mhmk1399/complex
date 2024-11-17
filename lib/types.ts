@@ -222,6 +222,7 @@ export interface RichTextBlockSetting extends CommonSettings {
 }
 
 export interface RichTextBlock {
+  blocks: any;
   textHeading: string;
   description: string;
   btnText: string;
@@ -526,4 +527,39 @@ export interface MultiRowFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<MultiRowSection>>;
   userInputData: MultiRowSection;
   layout: Layout;
+}
+export interface FooterFormProps {
+  setUserInputData: React.Dispatch<React.SetStateAction<FooterSection>>;
+  userInputData: FooterSection;
+  layout: Layout;
+}
+
+export interface FooterBlockSetting {
+  textColor: string;
+  textFontSize: string;
+  textFontWeight: string;
+  descriptionColor: string;
+  descriptionFontSize: string;
+  descriptionFontWeight: string;
+  linkColor: string;
+  logoWidth: string;
+  logoHeight: string;
+  logoRadius: string;
+  backgroundColor: string;
+}
+
+export interface FooterLink {
+  url: string;
+  label: string;
+}
+
+export interface FooterBlock {
+  setting: FooterBlockSetting;
+  text: string;
+  description: string;
+  instagramLink: string;
+  telegramLink: string;
+  whatsappLink: string;
+  logo: string;
+  links: FooterLink[];
 }
