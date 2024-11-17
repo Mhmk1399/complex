@@ -8,6 +8,20 @@ interface ContactFormProps {
   userInputData: ContactFormData;
   layout: Layout;
 }
+const spacingLable = [
+  {
+    label: "قاصله درونی از بالا",
+  },
+  {
+    label: "فاصله درونی از پایین",
+  },
+  {
+    label: "فاصله بیرونی از بالا",
+  },
+  {
+    label: "فاصله بیرونی از پایین",
+  },
+];
 
 const ColorInput = ({ label, name, value, onChange }: {
   label: string;
@@ -73,15 +87,15 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h2 className="text-xl font-bold mb-4">Contact Form Settings</h2>
+    <div className="p-6 max-w-4xl mx-auto" dir='rtl'>
+      <h2 className="text-xl font-bold mb-4">تنظیمات فرم ارتباط با ما</h2>
 
       {/* Content Section */}
       <div className="mb-6">
-        <h3 className="font-semibold mb-2">Content</h3>
+        <h3 className="font-semibold mb-2">محتوا</h3>
         <div className="space-y-4">
           <div>
-            <label className="block mb-1">Form Heading</label>
+            <label className="block mb-1">سربرگ فرم</label>
             <input
               type="text"
               name="heading"
@@ -95,28 +109,28 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
 
       {/* Style Settings */}
       <div className="mb-6">
-        <h3 className="font-semibold mb-2">Style Settings</h3>
+        <h3 className="font-semibold mb-2">تنظیمات استایل</h3>
         <div className="grid md:grid-cols-2 gap-4">
           <ColorInput
-            label="Heading Color"
+            label="رنگ سربرگ"
             name="headingColor"
             value={userInputData?.blocks?.setting?.headingColor?.toLocaleString() ?? '#ffffff'}
             onChange={handleBlockSettingChange}
           />
           <ColorInput
-            label="Button Background Color"
+            label="رنگ پس زمینه دکمه"
             name="btnBackgroundColor"
             value={userInputData?.blocks?.setting?.btnBackgroundColor?.toLocaleString() ?? '#9c119c'}
             onChange={handleBlockSettingChange}
           />
           <ColorInput
-            label="Button Text Color"
+            label="رنگ متن دکمه"
             name="btnTextColor"
             value={userInputData?.blocks?.setting?.btnTextColor?.toLocaleString() ?? '#ffffff'}
             onChange={handleBlockSettingChange}
           />
           <ColorInput
-            label="Form Background Color"
+            label="رنگ پس زمینه فرم"
             name="formBackground"
             value={userInputData?.blocks?.setting?.formBackground?.toLocaleString() ?? '#11769c'}
             onChange={handleBlockSettingChange}
@@ -125,7 +139,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
 
         <div className="mt-4  gap-4">
           <div>
-            <label className="block mb-1">Heading Font Size</label>
+            <label className="block mb-1">سایز سربرگ</label>
             <input
               type="range"
               name="headingFontSize"
@@ -135,16 +149,16 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
             />
           </div>
           <div>
-            <label className="block mb-1">Heading Font Weight</label>
+            <label className="block mb-1">وزن سربرگ</label>
             <select
               name="headingFontWeight"
               value={userInputData?.blocks?.setting?.headingFontWeight?.toLocaleString() ?? 'bold'}
               onChange={(e) => handleBlockSettingChange(e as unknown as React.ChangeEvent<HTMLInputElement>)}
               className="w-full p-2 border rounded"
             >
-              <option value="normal">Normal</option>
-              <option value="bold">Bold</option>
-              <option value="lighter">Lighter</option>
+              <option value="normal">نرمال</option>
+              <option value="bold">ضخیم</option>
+              <option value="lighter">نازک</option>
             </select>
           </div>
         </div>
@@ -152,11 +166,11 @@ export const ContactForm: React.FC<ContactFormProps> = ({ setUserInputData, user
 
       {/* Spacing Settings */}
       <div className="mb-6">
-        <h3 className="font-semibold mb-2">Spacing</h3>
+        <h3 className="font-semibold mb-2">تنظیمات فاصله</h3>
         <div className=" gap-4">
-          {['paddingTop', 'paddingBottom', 'marginTop', 'marginBottom'].map((spacing) => (
-            <div key={spacing}>
-              <label className="block mb-1">{spacing.charAt(0).toUpperCase() + spacing.slice(1)}</label>
+          {['paddingTop', 'paddingBottom', 'marginTop', 'marginBottom'].map((spacing , index) => (
+            <div key={index}>
+              <label className="block mb-1">{spacingLable[index].label}</label>
               <input
                 type="range"
                 name={spacing}

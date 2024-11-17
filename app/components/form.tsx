@@ -101,8 +101,8 @@ export const Form = ({ selectedComponent, setLayout, layout }: FormProps) => {
       {/* Desktop Sidebar */}
       <div className="hidden lg:block fixed right-0 top-0 h-screen w-80 bg-white shadow-lg overflow-y-auto " style={{ zIndex: 1000 }}>
         <div className="p-6">
-          <h2 className="text-2xl font-bold text-gray-800">
-            Component Settings
+          <h2 className="text-2xl font-bold text-gray-800" dir='rtl'>
+          تنظیمات سکشن
           </h2>
           {renderFormContent(setUserInputData, userInputData as Section)}
         </div>
@@ -125,7 +125,7 @@ export const Form = ({ selectedComponent, setLayout, layout }: FormProps) => {
 
         <div className="max-h-[calc(60vh-40px)] min-h-[calc(40vh-30px)] overflow-y-auto p-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">
-            Component Settings
+            تنظیمات سکشن
           </h2>
           {renderFormContent(setUserInputData, userInputData as Section)}
         </div>

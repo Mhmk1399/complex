@@ -64,10 +64,10 @@ interface SectionData {
 
 // Styled Components
 const Section = styled.section<{ $data: SectionData }>`
-  padding-top: ${(props) => props.$data.setting?.paddingTop || "20px"};
-  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20px"};
-  margin-top: ${(props) => props.$data.setting?.marginTop || "20px"};
-  margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20px"};
+  padding-top: ${(props) => props.$data.setting?.paddingTop || "20px"}px;
+  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20px"}px;
+  margin-top: ${(props) => props.$data.setting?.marginTop || "20px"}px;
+  margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20px"}px;
   background-color: ${(props) =>
     props.$data.setting?.backgroundColorMultiRow || "#ffffff"};
   display: block;
@@ -79,14 +79,14 @@ const Section = styled.section<{ $data: SectionData }>`
 
 const Title = styled.h2<{ $data: SectionData }>`
   color: ${(props) => props.$data.setting?.titleColor || "#333"};
-  font-size: ${(props) => props.$data.setting?.titleFontSize || "24px"};
+  font-size: ${(props) => props.$data.setting?.titleFontSize || "24px"}px;
   font-weight: ${(props) => props.$data.setting?.titleFontWeight || "bold"};
   text-align: center;
   margin-top: 30px;
 `;
 const Heading = styled.h2<{ $data: SectionData }>`
   color: ${(props) => props.$data.setting?.headingColor || "#333"};
-  font-size: ${(props) => props.$data.setting?.headingFontSize || "24px"};
+  font-size: ${(props) => props.$data.setting?.headingFontSize || "24px"}px;
   font-weight: ${(props) => props.$data.setting?.headingFontWeight || "bold"};
   text-align: center;
   @media (max-width: 768px) {
@@ -111,13 +111,13 @@ const Row = styled.div<{ $data: SectionData }>`
   margin-left: 10px;
   margin-right: 10px;
   padding: 30px;
-  border-radius: ${(props) => props.$data.setting?.imageRadius || "8px"};
+  border-radius: 18px;
   background-color: ${(props) =>
     props.$data.setting?.backgroundColorBox || "#f9f9f9"};
   max-width: auto;
+  flex-direction: ${(props) => props.$data.setting?.imageAlign || "row"};
 
   @media (min-width: 768px) {
-    flex-direction: ${(props) => props.$data.setting?.imageAlign || "row"};
     align-items: center;
     img {
       width: 40%;
@@ -140,9 +140,9 @@ const WrapperContainer = styled.div<{ $data: SectionData }>`
 `;
 
 const Image = styled.img<{ $data: SectionData }>`
-  width: ${(props) => props.$data.setting?.imageWidth || "100%"};
-  height: ${(props) => props.$data.setting?.imageHeight || "auto"};
-  border-radius: ${(props) => props.$data.setting?.imageRadius || "8px"};
+  width: ${(props) => props.$data.setting?.imageWidth || "100%"}px;
+  height: ${(props) => props.$data.setting?.imageHeight || "auto"}px;
+  border-radius: ${(props) => props.$data.setting?.imageRadius || "8px"}px;
   object-fit: cover;
   margin-bottom: 10px;
   transition: all 0.5s ease-in-out;
@@ -157,7 +157,7 @@ const Image = styled.img<{ $data: SectionData }>`
 
 const Description = styled.p<{ $data: SectionData }>`
   color: ${(props) => props.$data.setting?.descriptionColor || "#666"};
-  font-size: ${(props) => props.$data.setting?.descriptionFontSize || "16px"};
+  font-size: ${(props) => props.$data.setting?.descriptionFontSize || "16px"}px;
   font-weight: ${(props) =>
     props.$data.setting?.descriptionFontWeight || "normal"};
   margin-bottom: 10px;
@@ -192,7 +192,6 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
     blocks: [{ setting: {} }],
     setting: {},
   };
-  
 
   return (
     <>

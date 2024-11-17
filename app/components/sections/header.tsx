@@ -84,7 +84,7 @@ const Logo = styled.img<{ $data: SectionData }>`
 
 const NavItems = styled.div<{ $isOpen: boolean }>`
   display: flex;
-  gap: 1.5rem;
+  gap: 2rem;
   transition: all 0.3s ease-in-out;
 
   @media (max-width: 768px) {

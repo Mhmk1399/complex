@@ -1,26 +1,47 @@
-import  { useEffect } from 'react';
-import { Compiler } from '../compiler';
-import { Layout , BannerSection } from '@/lib/types';
+import { useEffect } from "react";
+import { Compiler } from "../compiler";
+import { Layout, BannerSection } from "@/lib/types";
 interface BannerFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<BannerSection>>;
-  userInputData: BannerSection ;
+  userInputData: BannerSection;
   layout: Layout;
 }
+const spacingLable = [
+  {
+    label: "قاصله درونی از بالا",
+  },
+  {
+    label: "فاصله درونی از پایین",
+  },
+  {
+    label: "فاصله بیرونی از بالا",
+  },
+  {
+    label: "فاصله بیرونی از پایین",
+  },
+];
 
-const ColorInput = ({ label, name, value, onChange }: {
+const ColorInput = ({
+  label,
+  name,
+  value,
+  onChange,
+}: {
   label: string;
   name: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => (
   <>
-    <label className="block mb-1" htmlFor={name}>{label}</label>
+    <label className="block mb-1" htmlFor={name}>
+      {label}
+    </label>
     <div className="flex flex-col gap-3 items-center">
       <input
         type="color"
         id={name}
         name={name}
-        value={value || '#000000'}
+        value={value || "#000000"}
         onChange={onChange}
         className="border p-0.5 rounded-full"
       />
@@ -28,26 +49,32 @@ const ColorInput = ({ label, name, value, onChange }: {
   </>
 );
 
-export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userInputData , layout}) => {
+export const BannerForm: React.FC<BannerFormProps> = ({
+  setUserInputData,
+  userInputData,
+  layout,
+}) => {
   useEffect(() => {
-    const initialData = Compiler(layout, 'banner')[0];
+    const initialData = Compiler(layout, "banner")[0];
     setUserInputData(initialData);
   }, []);
 
-  const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleBlockChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setUserInputData((prev: BannerSection) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
-        [name]: value
-      }
+        [name]: value,
+      },
     }));
-};
+  };
 
-  
-
-  const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleBlockSettingChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setUserInputData((prev: BannerSection) => ({
       ...prev,
@@ -55,9 +82,9 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
         ...prev.blocks,
         setting: {
           ...prev.blocks.setting,
-          [name]: value
-        }
-      }
+          [name]: value,
+        },
+      },
     }));
   };
 
@@ -67,108 +94,125 @@ export const BannerForm: React.FC<BannerFormProps> = ({ setUserInputData, userIn
       ...prev,
       setting: {
         ...prev.setting,
-        [name]: value
-      }
+        [name]: value,
+      },
     }));
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h2 className="text-xl font-bold mb-4">Banner Settings</h2>
+    <div className="p-6 max-w-4xl mx-auto" dir="rtl">
+      <h2 className="text-xl font-bold mb-4">تنظیمات بنر</h2>
 
       {/* Content Section */}
       <div className="mb-6">
-        <h3 className="font-semibold mb-2">Content</h3>
+        <h3 className="font-semibold mb-2">محتوا</h3>
         <div className="space-y-4">
           <div>
-            <label className="block mb-1">Image Source</label>
+            <label className="block mb-1">عکس</label>
             <input
-  type="text"
-  name="imageSrc"
-  value={userInputData?.blocks?.imageSrc ?? ''}
-  onChange={handleBlockChange}
-  className="w-full p-2 border rounded"
-/>
+              type="text"
+              name="imageSrc"
+              value={userInputData?.blocks?.imageSrc ?? ""}
+              onChange={handleBlockChange}
+              className="w-full p-2 border rounded"
+            />
           </div>
 
           <div>
-            <label className="block mb-1">Heading Text</label>
-           
-<input
-  type="text"
-  name="text"
-  value={userInputData?.blocks?.text ?? ''}
-  onChange={handleBlockChange}
-  className="w-full p-2 border rounded"
-/>
+            <label className="block mb-1">سربرگ </label>
+
+            <input
+              type="text"
+              name="text"
+              value={userInputData?.blocks?.text ?? ""}
+              onChange={handleBlockChange}
+              className="w-full p-2 border rounded"
+            />
           </div>
 
           <div>
-            <label className="block mb-1">Description</label>
+            <label className="block mb-1">توضیحات</label>
             <textarea
-  name="description"
-  value={userInputData?.blocks?.description ?? ''}
-  onChange={handleBlockChange}
-  className="w-full p-2 border rounded"
-  rows={3}
-/>
+              name="description"
+              value={userInputData?.blocks?.description ?? ""}
+              onChange={handleBlockChange}
+              className="w-full p-2 border rounded"
+              rows={3}
+            />
           </div>
         </div>
       </div>
 
       {/* Style Settings */}
       <div className="mb-6">
-        <h3 className="font-semibold mb-2">Style Settings</h3>
+        <h3 className="font-semibold mb-2">تنظیمات استایل</h3>
         <div className="grid md:grid-cols-2 gap-4">
           <ColorInput
-            label="Text Color"
+            label="رنگ سربرگ"
             name="textColor"
-            value={userInputData?.blocks?.setting?.textColor?.toString() ?? '#333333'}
+            value={
+              userInputData?.blocks?.setting?.textColor?.toString() ?? "#333333"
+            }
             onChange={handleBlockSettingChange}
           />
           <ColorInput
-            label="Description Color"
+            label="رنگ توضیحات"
             name="descriptionColor"
-            value={userInputData?.blocks?.setting?.descriptionColor?.toString() ?? '#333333'}
+            value={
+              userInputData?.blocks?.setting?.descriptionColor?.toString() ??
+              "#333333"
+            }
             onChange={handleBlockSettingChange}
           />
           <ColorInput
-            label="Background Color"
+            label="رنگ پس زمینه"
             name="backgroundColorBox"
-            value={userInputData?.blocks?.setting?.backgroundColorBox?.toString() ?? '#ffffff'}
+            value={
+              userInputData?.blocks?.setting?.backgroundColorBox?.toString() ??
+              "#ffffff"
+            }
             onChange={handleBlockSettingChange}
           />
         </div>
 
         <div className="mt-4">
-          <label className="block mb-1">Image Behavior</label>
+          <label className="block mb-1">رفتار عکس</label>
           <select
-  name="headingFontWeight"
-  value={userInputData?.setting?.headingFontWeight?.toLocaleString() ?? 'normal'}
-  onChange={()=>handleSettingChange} // Remove the arrow function
-  className="w-full p-2 border rounded"
->
-
-            <option value="cover">Cover</option>
-            <option value="contain">Contain</option>
-            <option value="fill">Fill</option>
+            name="headingFontWeight"
+            value={
+              userInputData?.setting?.headingFontWeight?.toLocaleString() ??
+              "normal"
+            }
+            onChange={() => handleSettingChange} // Remove the arrow function
+            className="w-full p-2 border rounded"
+          >
+            <option value="cover">پوشش</option>
+            <option value="contain">شامل</option>
+            <option value="fill">کامل</option>
           </select>
         </div>
       </div>
 
       {/* Spacing Settings */}
       <div className="mb-6">
-        <h3 className="font-semibold mb-2">Spacing</h3>
-        <div className="grid grid-cols-2 gap-4">
-          {(['paddingTop', 'paddingBottom', 'marginTop', 'marginBottom'] as const).map((spacing) => (
+        <h3 className="font-semibold mb-2">تنظیمات فاصله</h3>
+        <div className="grid grid-cols-1 gap-4">
+          {(
+            [
+              "paddingTop",
+              "paddingBottom",
+              "marginTop",
+              "marginBottom",
+            ] as const
+          ).map((spacing, index) => (
             <div key={spacing}>
-              <label className="block mb-1">{spacing.charAt(0).toUpperCase() + spacing.slice(1)}</label>
+              <label className="block mb-1">{spacingLable[index].label}</label>
               <input
                 type="range"
                 name={spacing}
                 min="0"
                 max="100"
-                value={userInputData?.setting?.[spacing]?.toString() ?? '0'}
+                value={userInputData?.setting?.[spacing]?.toString() ?? "0"}
                 onChange={handleSettingChange}
                 className="w-full"
               />
