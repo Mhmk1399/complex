@@ -109,10 +109,10 @@ const Banner: React.FC<props> = ({ setSelectedComponent, layout }) => {
       </Link>
       <BannerTextBox $data={sectionData}>
         <HeadingText $data={sectionData}>
-          {text || "Heading of Banner"}
+          {text || "سربرگ بنر"}
         </HeadingText>
         <DescriptionText $data={sectionData}>
-          {description || "Description of Banner"}
+          {description || "توضیحات بنر"}
         </DescriptionText>
       </BannerTextBox>
     </SectionBanner>

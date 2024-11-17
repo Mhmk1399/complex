@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Using the exact file path
-    const filePath = "C:\\Users\\msi\\Desktop\\testgenrator\\hosein\\public\\template\\null.json";
+    const filePath = "E:\\react\\genetated\\thththththth\\public\\template\\null.json";
 
     // Convert layout to JSON string with proper formatting
     const layoutJson = JSON.stringify(layout, null, 2);

@@ -10,8 +10,8 @@ export async function POST(req: NextRequest) {
 
     logs.push('[START] Website generation process initiated');
 
-    const sourceDir = "C:\\Users\\msi\\Desktop\\complex-main";
-    const targetBaseDir = "C:\\Users\\msi\\Desktop\\testgenrator";
+    const sourceDir = "E:\\react\\complex";
+    const targetBaseDir = "E:\\react\\genetated";
     const targetProjectDir = path.join(targetBaseDir, projectName);
 
     await fs.mkdir(targetProjectDir, { recursive: true });
