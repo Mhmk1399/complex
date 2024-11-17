@@ -1,3 +1,7 @@
+import { DetailedHTMLProps, HTMLAttributes } from "react";
+import { Interpolation } from "styled-components";
+import { Substitute } from "styled-components/dist/types";
+
 export interface Link {
   name: string;
   url: string;
@@ -174,6 +178,7 @@ export interface MultiColumnBlock {
 }
 // Add these new interfaces for Newsletter component
 export interface NewsLetterBlockSetting extends CommonSettings {
+  textHeadingColor: Interpolation<Substitute<DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>, { $data: RichTextBlockSetting; }>>;
   headingColor: string;
   headingFontSize: string;
   headingFontWeight: string;
@@ -199,26 +204,30 @@ export interface NewsLetterSection {
 }
 // Add these new interfaces for RichText component
 
+export interface RichTextBlockSetting extends CommonSettings {
+  textHeadingColor: string;
+  textHeadingFontSize: string;
+  textHeadingFontWeight: string;
+  descriptionColor: string;
+  descriptionFontSize: string;
+  descriptionFontWeight: string;
+  btnTextColor: string;
+  btnBackgroundColor: string;
+  background: string;
+}
+
 export interface RichTextBlock {
-  blocks: {
-    textHeading: string;
-    description: string;
-    btnText: string;
-    btnLink: string;
-    setting: {
-      textHeadingColor?: string;
-      textHeadingFontSize?: string;
-      textHeadingFontWeight?: string;
-      descriptionColor?: string;
-      descriptionFontSize?: string;
-      descriptionFontWeight?: string;
-      btnTextColor?: string;
-      btnBackgroundColor?: string;
-      background?: string;
-      allTextPosition?: string;
-    };
-  };
+  textHeading: string;
+  description: string;
+  btnText: string;
+  btnLink: string;
+  setting: RichTextBlockSetting;
+}
+
+export interface RichTextSection {
+  blocks: RichTextBlock;
   setting: CommonSettings;
+  type: "rich-text";
 }
 
 export interface MultiColumnSection {
@@ -364,11 +373,10 @@ export interface Layout {
   };
   sections: {
     slideshow: string;
-    richtext: RichTextBlock;
+    richtext: RichTextSection;
     sectionHeader: HeaderSection;
     children: Children;
     sectionFooter: FooterSection;
-    sectionImageText: RichTextBlock;
     banner: BannerSection;
     footer: string;
   };
@@ -459,14 +467,14 @@ export interface ContactFormData {
     marginTop: string;
     marginBottom: string;
   };
-  type: 'contact-form';
+  type: "contact-form";
 }
 
 export interface ContactFormProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: {
-    sections?: {  
-      children?: { 
+    sections?: {
+      children?: {
         sections: ContactFormSection[];
       };
     };
@@ -503,7 +511,7 @@ export interface MultiRowBlock {
 }
 
 export interface MultiRowSection {
-  type: 'multiRow';
+  type: "multiRow";
   title: string;
   blocks: MultiRowBlock[];
   setting: MultiRowBlockSetting;
@@ -514,5 +522,3 @@ export interface MultiRowFormProps {
   userInputData: MultiRowSection;
   layout: Layout;
 }
-
-
