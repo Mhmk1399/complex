@@ -1,6 +1,6 @@
 "use client";
 
-import { Layout, RichTextSection } from "@/lib/types";
+import { Layout, RichTextSection, RichTextBlock,Section as sectionType, RichTextBlockSetting } from "@/lib/types";
 import Link from "next/link";
 import styled from "styled-components";
 
@@ -11,10 +11,10 @@ interface RichTextProps {
 
 // Styled components
 const Section = styled.section<{ $data: RichTextSection }>`
-  padding-top: ${(props) => props.$data?.setting?.paddingTop || "10px"}px;
-  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "10px"}px;
-  margin-top: ${(props) => props.$data?.setting?.marginTop || "30px"}px;
-  margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "30px"}px;
+  padding-top: ${(props) => props.$data?.setting?.paddingTop || "10px"};
+  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "10px"};
+  margin-top: ${(props) => props.$data?.setting?.marginTop || "30px"};
+  margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "30px"};
   background-color: ${(props) =>
     props.$data?.blocks?.setting?.background || "#ffffff"};
   display: flex;
@@ -23,32 +23,30 @@ const Section = styled.section<{ $data: RichTextSection }>`
   gap: 15px;
 `;
 
-const H1 = styled.h1<{ $data: RichTextSection }>`
-  color: ${(props) => props.$data?.blocks?.setting?.textHeadingColor || "#000"};
-  font-size: ${(props) =>
-    props.$data?.blocks?.setting?.textHeadingFontSize || "24px"}px;
+const H1 = styled.h1<{ $data: RichTextBlock }>`
+  color: ${(props) => props.$data?.setting?.textHeadingColor || "#000"};
+  font-size: ${(props) => props.$data?.setting?.textHeadingFontSize || "24px"};
   font-weight: ${(props) =>
-    props.$data?.blocks?.setting?.textHeadingFontWeight || "bold"};
+    props.$data?.setting?.textHeadingFontWeight || "bold"};
   @media (max-width: 768px) {
     font-size: 20px;
   }
 `;
 
-const P = styled.p<{ $data: RichTextSection }>`
-  color: ${(props) => props.$data?.blocks?.setting?.descriptionColor || "#666"};
-  font-size: ${(props) =>
-    props.$data?.blocks?.setting?.descriptionFontSize || "16px"}px;
+const P = styled.p<{ $data: RichTextBlock }>`
+  color: ${(props) => props.$data?.setting?.descriptionColor || "#666"};
+  font-size: ${(props) => props.$data?.setting?.descriptionFontSize || "16px"};
   font-weight: ${(props) =>
-    props.$data?.blocks?.setting?.descriptionFontWeight || "normal"};
+    props.$data?.setting?.descriptionFontWeight || "normal"};
   @media (max-width: 768px) {
     font-size: 13px;
   }
 `;
 
-const Btn = styled.button<{ $data: RichTextSection }>`
-  color: ${(props) => props.$data?.blocks?.setting?.btnTextColor || "#fff"};
+const Btn = styled.button<{ $data: RichTextBlock }>`
+  color: ${(props) => props.$data?.setting?.btnTextColor || "#fff"};
   background-color: ${(props) =>
-    props.$data?.blocks?.setting?.btnBackgroundColor || "#007BFF"};
+    props.$data?.setting?.btnBackgroundColor || "#007BFF"};
   padding: 10px 20px;
   border-radius: 5px;
   border: none;
@@ -60,31 +58,36 @@ const Btn = styled.button<{ $data: RichTextSection }>`
   }
 `;
 
-// Component
 const RichText: React.FC<RichTextProps> = ({
   setSelectedComponent,
   layout,
 }) => {
-  const sectionData = layout?.sections?.children?.sections[2] as unknown as RichTextSection;
-  const { textHeading, description, btnText, btnLink } =
-    sectionData?.blocks;
-  console.log(sectionData);
+  const sectionData: RichTextSection   = layout?.sections?.children?.sections[2];
+
+  if (!sectionData) {
+    console.error("Section data is missing or invalid.");
+    return null;
+  }
+
+  const { blocks } = sectionData;
+  const { textHeading, description, btnText, btnLink } = blocks || {};
+
+  console.log("sectionData", sectionData);
 
   return (
     <Section
       $data={sectionData}
       onClick={() => setSelectedComponent("rich-text")}
     >
-      {textHeading && <H1 $data={sectionData}>{textHeading}</H1>}
-      {description && <P $data={sectionData}>{description}</P>}
+      {textHeading && <H1 $data={blocks}>{textHeading}</H1>}
+      {description && <P $data={blocks}>{description}</P>}
       {btnLink && (
         <Link href={btnLink} passHref legacyBehavior>
-          <Btn $data={sectionData}>
-            {btnText}
-          </Btn>
+          <Btn $data={blocks}>{btnText}</Btn>
         </Link>
       )}
     </Section>
   );
 };
+
 export default RichText;

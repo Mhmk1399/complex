@@ -222,12 +222,25 @@ export interface RichTextBlockSetting extends CommonSettings {
 }
 
 export interface RichTextBlock {
-  blocks: any;
   textHeading: string;
   description: string;
   btnText: string;
   btnLink: string;
-  setting: RichTextBlockSetting;
+  setting: {
+    textHeadingColor?: string;
+    textHeadingFontSize?: string;
+    textHeadingFontWeight?: string;
+    descriptionColor?: string;
+    descriptionFontSize?: string;
+    descriptionFontWeight?: string;
+    btnTextColor?: string;
+    btnBackgroundColor?: string;
+    paddingTop?: string;
+    paddingBottom?: string;
+    marginTop?: string;
+    marginBottom?: string;
+    background?: string;
+  };
 }
 
 export interface RichTextSection {
@@ -246,7 +259,7 @@ export interface MultiColumnSection {
 
 export interface Section {
   setting: CommonSettings;
-  blocks: HeaderBlock | CollapseBlock | ImageTextBlock;
+  blocks: HeaderBlock | CollapseBlock | ImageTextBlock | MultiColumnBlock | NewsLetterBlock | RichTextBlock;
   type: string;
 }
 export interface ImageTextBlockSetting extends CommonSettings {
