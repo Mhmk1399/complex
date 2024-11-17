@@ -178,7 +178,12 @@ export interface MultiColumnBlock {
 }
 // Add these new interfaces for Newsletter component
 export interface NewsLetterBlockSetting extends CommonSettings {
-  textHeadingColor: Interpolation<Substitute<DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>, { $data: RichTextBlockSetting; }>>;
+  textHeadingColor: Interpolation<
+    Substitute<
+      DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>,
+      { $data: RichTextBlockSetting }
+    >
+  >;
   headingColor: string;
   headingFontSize: string;
   headingFontWeight: string;

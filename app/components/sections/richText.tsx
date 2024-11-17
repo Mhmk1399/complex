@@ -1,5 +1,6 @@
 "use client";
-import { Layout, RichTextBlock } from "@/lib/types";
+
+import { Layout, RichTextSection } from "@/lib/types";
 import Link from "next/link";
 import styled from "styled-components";
 
@@ -8,66 +9,66 @@ interface RichTextProps {
   layout: Layout;
 }
 
-// Move all styled components outside the component function
-const Section = styled.section<{ $data: RichTextBlock }>`
-  padding-top: ${(props) => props.$data?.setting?.paddingTop || "10px"}px;
-  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "10px"}px;
-  padding-left: 30px;
-  padding-right: 30px;
-  margin-top: ${(props) => props.$data?.setting?.marginTop || "30px"}px;
-  margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "30px"}px;
-  margin-left: 10px;
-  margin-right: 10px;
+// Styled components
+const Section = styled.section<{ $data: RichTextSection }>`
+  padding-top: ${(props) => props.$data?.setting?.paddingTop || "10px"};
+  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "10px"};
+  margin-top: ${(props) => props.$data?.setting?.marginTop || "30px"};
+  margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "30px"};
+  background-color: ${(props) =>
+    props.$data?.blocks?.setting?.background || "#ffffff"};
   display: flex;
   flex-direction: column;
-  align-items: ${(props) => props.$data?.blocks?.setting?.allTextPosition};
+  align-items: center;
   gap: 15px;
-  background-color: ${(props) => props.$data?.blocks?.setting?.background};
 `;
 
-const H1 = styled.h1<{ $data: RichTextBlock }>`
-  color: ${(props) => props.$data?.blocks?.setting?.textHeadingColor};
-  font-size: ${(props) => props.$data?.blocks?.setting?.textHeadingFontSize};
+const H1 = styled.h1<{ $data: RichTextSection }>`
+  color: ${(props) => props.$data?.blocks?.setting?.textHeadingColor || "#000"};
+  font-size: ${(props) =>
+    props.$data?.blocks?.setting?.textHeadingFontSize || "24px"};
   font-weight: ${(props) =>
-    props.$data?.blocks?.setting?.textHeadingFontWeight};
-  text-wrap: wrap;
+    props.$data?.blocks?.setting?.textHeadingFontWeight || "bold"};
   @media (max-width: 768px) {
     font-size: 20px;
   }
 `;
 
-const P = styled.p<{ $data: RichTextBlock }>`
-  color: ${(props) => props.$data?.blocks?.setting?.descriptionColor};
-  font-size: ${(props) => props.$data?.blocks?.setting?.descriptionFontSize};
+const P = styled.p<{ $data: RichTextSection }>`
+  color: ${(props) => props.$data?.blocks?.setting?.descriptionColor || "#666"};
+  font-size: ${(props) =>
+    props.$data?.blocks?.setting?.descriptionFontSize || "16px"};
   font-weight: ${(props) =>
-    props.$data?.blocks?.setting?.descriptionFontWeight};
-  text-wrap: wrap;
+    props.$data?.blocks?.setting?.descriptionFontWeight || "normal"};
   @media (max-width: 768px) {
     font-size: 13px;
   }
 `;
 
-const Btn = styled.button<{ $data: RichTextBlock }>`
-  color: ${(props) => props.$data?.blocks?.setting?.btnTextColor};
+const Btn = styled.button<{ $data: RichTextSection }>`
+  color: ${(props) => props.$data?.blocks?.setting?.btnTextColor || "#fff"};
   background-color: ${(props) =>
-    props.$data?.blocks?.setting?.btnBackgroundColor};
+    props.$data?.blocks?.setting?.btnBackgroundColor || "#007BFF"};
   padding: 10px 20px;
   border-radius: 5px;
+  border: none;
+  cursor: pointer;
   transition: transform 0.4s ease-in-out;
   &:hover {
     transform: scale(1.1);
-    cursor: pointer;
     opacity: 0.8;
-    color: ${(props) => props.$data?.blocks?.setting?.btnTextColor};
   }
 `;
 
+// Component
 const RichText: React.FC<RichTextProps> = ({
   setSelectedComponent,
   layout,
 }) => {
-  const sectionData = layout?.sections?.children.sections[2];
-  const { textHeading, description, btnText, btnLink } = sectionData?.blocks;
+  const sectionData = layout?.sections?.children?.sections[2] as RichTextSection;
+  const { textHeading, description, btnText, btnLink } =
+    sectionData?.blocks;
+  console.log(sectionData);
 
   return (
     <Section
@@ -77,11 +78,11 @@ const RichText: React.FC<RichTextProps> = ({
       {textHeading && <H1 $data={sectionData}>{textHeading}</H1>}
       {description && <P $data={sectionData}>{description}</P>}
       {btnLink && (
-        <Btn $data={sectionData}>
-          <Link href={btnLink} passHref legacyBehavior>
-            <a>{btnText}</a>
-          </Link>
-        </Btn>
+        <Link href={btnLink} passHref legacyBehavior>
+          <Btn $data={sectionData}>
+            {btnText}
+          </Btn>
+        </Link>
       )}
     </Section>
   );

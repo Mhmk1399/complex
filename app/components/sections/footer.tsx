@@ -15,6 +15,7 @@ const FooterContainer = styled.footer<{ $data: FooterSection }>`
   padding-bottom: ${(props) => props.$data.setting.paddingBottom || "20px"};
   margin-top: ${(props) => props.$data.setting.marginTop || "0px"};
   margin-bottom: ${(props) => props.$data.setting.marginBottom || "0px"};
+  
   background-color: ${(props) => props.$data.setting.backgroundColor || "#333"};
   display: flex;
   flex-direction: column;

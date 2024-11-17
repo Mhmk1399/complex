@@ -133,8 +133,7 @@
               "descriptionFontWeight": "normal",
               "background": "#e4e4e4",
               "btnTextColor": "#ffffff",
-              "btnBackgroundColor": "#333333",
-              "allTextPosition": "center"
+              "btnBackgroundColor": "#333333"
             }
           },
 
