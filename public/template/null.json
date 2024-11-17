@@ -15,12 +15,12 @@
         "imageLogo": "",
         "imageAlt": "",
         "links": [
-          { "name": "Home", "url": "/" },
-          { "name": "About", "url": "/about" },
-          { "name": "Contact", "url": "/contact" },
-          { "name": "Blog", "url": "/blog" },
-          { "name": "Shop", "url": "/shop" },
-          { "name": "Login", "url": "/login" }
+          { "name": "خانه", "url": "/" },
+          { "name": "درباره ما", "url": "/about" },
+          { "name": "ارتباط  ما", "url": "/contact" },
+          { "name": "بلاگ", "url": "/blog" },
+          { "name": "فروشگاه", "url": "/shop" },
+          { "name": "ورود/عضویت", "url": "/login" }
         ],
         "setting": {
           "imageWidth": "50px",
@@ -49,9 +49,8 @@
           "blocks": {
             "imageSrc": "",
             "imageAlt": "",
-            "text": "heading of banner default",
-            "description": "description of banner ",
-            "imageLink": "",
+            "text": "سربرگ بنر",
+            "description": " توضیحات بنر",
             "setting": {
               "descriptionColor": "#333333",
               "descriptionFontSize": "15",
@@ -82,18 +81,18 @@
             {
               "imageSrc": "/assets/images/banner3.jpg",
               "imageAlt": "",
-              "text": "text1",
-              "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur totam repellat fugiat deleniti odio quaerat assumenda nulla quo quam rem tempore, praesentium autem numquam iste,",
+              "text": "اسلاید اول",
+              "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
               "btnLink": "",
-              "btnText": "Shop Now"
+              "btnText": "دکمه"
             },
             {
               "imageSrc": "/assets/images/banner1.jpg",
               "imageAlt": "",
-              "text": "text2",
-              "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur  assumenda nulla quo quam rem tempore, praesentium autem numquam iste,",
+              "text": "اسلاید دوم",
+              "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
               "link": "",
-              "btnText": "Shop Now"
+              "btnText": "دکمه"
             }
           ],
           "setting": {
@@ -120,9 +119,9 @@
         {
           "type": "rich-text",
           "blocks": {
-            "textHeading": "heading of rich text",
-            "description": "description of rich texts",
-            "btnText": "button",
+            "textHeading": "سربرگ محصول",
+            "description": "توضیحات درباره محصول",
+            "btnText": "دکمه",
             "btnLink": "/",
             "setting": {
               "textHeadingColor": "#000000",
@@ -149,10 +148,10 @@
           "blocks": {
             "imageSrc": "/assets/images/banner3.jpg",
             "imageAlt": "",
-            "heading": "",
-            "description": "",
-            "btnLink": "",
-            "btnText": "",
+            "heading": "سربرگ محصول",
+            "description": "توضیحات درباره محصول",
+            "btnLink": "/",
+            "btnText": "دکمه",
             "setting": {
               "headingColor": "#333",
               "headingFontSize": "50px",
@@ -181,7 +180,7 @@
         {
           "type": "video",
           "blocks": {
-            "heading": "video heading",
+            "heading": "سربرگ ویدیو",
             "videoUrl": "/assets/video/video.mp4",
             "videoAlt": "",
             "setting": {
@@ -208,7 +207,7 @@
         {
           "type": "contact-form",
           "blocks": {
-            "heading": "",
+            "heading": "فرم ارتباط با ما",
             "setting": {
               "headingColor": "#ffffff",
               "headingFontSize": "25px",
@@ -228,9 +227,9 @@
         {
           "type": "newsletter",
           "blocks": {
-            "heading": "",
-            "description": "",
-            "btnText": "",
+            "heading": "عضویت در خبرنامه",
+            "description": "ت.ضیحات درباره خبرنامه",
+            "btnText": "ثبت نام",
 
             "setting": {
               "headingColor": "#ffffff",
@@ -255,9 +254,9 @@
           "type": "collapse",
           "blocks": [
             {
-              "heading": "collapse",
-              "text1": "text",
-              "content1": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem nobis quo velit ut dolor consequuntur cupiditate? Aperiam ab praesentium minus aliquam nemo. Esse, illum. Eligendi eum consectetur ",
+              "heading": "سوالات متداول",
+              "text1": "سوال متداول 1",
+              "content1": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد ",
               "setting": {
                 "textColor1": "#ffffff",
                 "textFontSize1": "20px",
@@ -268,8 +267,8 @@
               }
             },
             {
-              "text2": "text",
-              "content2": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem nobis quo velit ut dolor consequuntur cupiditate? Aperiam ab praesentium minus aliquam nemo. Esse, illum. Eligendi eum consectetur ",
+              "text2": "سوال متداول 2",
+              "content2": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد ",
               "setting": {
                 "textColor2": "#000000",
                 "textFontSize2": "20px",
@@ -280,8 +279,8 @@
               }
             },
             {
-              "text3": "text",
-              "content3": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem nobis quo velit ut dolor consequuntur cupiditate? Aperiam ab praesentium minus aliquam nemo. Esse, illum. Eligendi eum consectetur ",
+              "text3": "سوال متداول سوم",
+              "content3": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
               "setting": {
                 "textColor3": "#ffffff",
                 "textFontSize3": "20px",
@@ -292,8 +291,8 @@
               }
             },
             {
-              "text4": "text",
-              "content4": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem nobis quo velit ut dolor consequuntur cupiditate? Aperiam ab praesentium minus aliquam nemo. Esse, illum. Eligendi eum consectetur ",
+              "text4": "سوال متداول چهارم",
+              "content4": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
               "setting": {
                 "textColor4": "#000000",
                 "textFontSize4": "20px",
@@ -320,24 +319,24 @@
           "type": "multicolumn",
           "blocks": [
             {
-              "title1": "title1",
-              "description1": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Impedit magni commodi molestias nam expedita fugiat natus eos atque aliquid. Neque temporibus itaque deserunt eum quas commodi,",
+              "title1": "ستون یکم",
+              "description1": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
               "imageSrc1": "/assets/images/banner1.jpg",
               "imageAlt1": "",
               "btnLable1": "",
               "btnLink1": ""
             },
             {
-              "title2": "title2",
-              "description2": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Impedit magni commodi molestias nam expedita fugiat natus eos atque aliquid. Neque temporibus itaque deserunt eum quas commodi,",
+              "title2": "ستون دو",
+              "description2": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
               "imageSrc2": "/assets/images/banner3.jpg",
               "imageAlt2": "",
               "btnLable2": "",
               "btnLink2": ""
             },
             {
-              "title3": "title3",
-              "description3": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Impedit magni commodi molestias nam expedita fugiat natus eos atque aliquid. Neque temporibus itaque deserunt eum quas commodi,",
+              "title3": "ستون سوم",
+              "description3": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
               "imageSrc3": "/assets/images/banner.jpg",
               "imageAlt3": "",
               "btnLable3": "",
@@ -345,7 +344,7 @@
             }
           ],
           "setting": {
-            "heading": "heading column",
+            "heading": "سربرگ ستون ها",
             "paddingTop": "20px",
             "paddingBottom": "20px",
             "marginTop": "20px",
@@ -370,29 +369,29 @@
         },
         {
           "type": "multiRow",
-          "title": "multiRow",
+          "title": "سربرگ ردیف ها",
 
           "blocks": [
             {
-              "heading": "heading1",
-              "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda porro necessitatibus ad vero ratione veritatis quos vel labore expedita molestiae dignissimos voluptatem, at non,",
-              "btnLable": "button1",
+              "heading": "ردیف اول",
+              "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
+              "btnLable": "دکمه اول",
               "btnLink": "",
               "imageSrc": "/assets/images/banner1.jpg",
               "imageAlt": ""
             },
             {
-              "heading": "heading2",
-              "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda porro necessitatibus ad vero ratione veritatis quos vel labore expedita molestiae dignissimos voluptatem, at non,",
-              "btnLable": "button2",
+              "heading": "ردیف دوم",
+              "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
+              "btnLable": "دکمه دوم",
               "btnLink": "",
               "imageSrc": "/assets/images/banner3.jpg",
               "imageAlt": ""
             },
             {
-              "heading": "heading3",
-              "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda porro necessitatibus ad vero ratione veritatis quos vel labore expedita molestiae dignissimos voluptatem, at non,",
-              "btnLable": "button3",
+              "heading": "ردیف سوم",
+              "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
+              "btnLable": "دکمه سوم",
               "btnLink": "",
               "imageSrc": "/assets/images/banner.jpg",
               "imageAlt": ""
@@ -451,8 +450,8 @@
           "logoHeight": "80px",
           "logoRadius": "10px"
         },
-        "text": "heading of section footer",
-        "description": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quos repellendus suscipit illo minima provident temporibus molestiae, ea ipsam quo necessitatibus aut nihil! Exercitationem sapiente asperiores qui error,",
+        "text": "سربرگ قسمت پایین سایت",
+        "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
         "instagramLink": "#",
         "telegramLink": "#",
         "whatsappLink": "#",
