@@ -63,7 +63,6 @@ const Heading = styled.h2<{ $data: SectionData }>`
     props.$data.blocks.setting?.headingFontSize || "24px"}px;
   font-weight: ${(props) =>
     props.$data?.blocks?.setting?.headingFontWeight};
-  margin-bottom: 10px;
   padding: 20px 20px;
   text-align: center;
 `;
@@ -77,7 +76,7 @@ const Description = styled.p<{ $data: SectionData }>`
     props.$data.blocks.setting?.descriptionFontWeight || "normal"};
   text-align: center;
   margin-bottom: 20px;
-  padding: 0px 30px;
+  padding: 0px 10px;
 `;
 
 const Form = styled.form`
@@ -94,7 +93,7 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-  padding: 12px;
+  padding: 8px;
   margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 5px;

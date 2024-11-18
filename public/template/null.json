@@ -16,8 +16,8 @@
         "imageAlt": "",
         "links": [
           { "name": "خانه", "url": "/" },
-          { "name": "درباره ما", "url": "/about" },
-          { "name": "ارتباط  ما", "url": "/contact" },
+          { "name": "درباره ", "url": "/about" },
+          { "name": "ارتباط  ", "url": "/contact" },
           { "name": "بلاگ", "url": "/blog" },
           { "name": "فروشگاه", "url": "/shop" },
           { "name": "ورود/عضویت", "url": "/login" }
@@ -27,7 +27,7 @@
           "imageHeight": "50px",
           "imageRadius": "30px",
           "itemColor": "#000",
-          "itemFontSize": "16px",
+          "itemFontSize": "20",
           "itemFontWeight": "bold",
           "itemHoverColor": "#3498db",
           "backgroundColorNavbar": "#e4e4e4"
@@ -125,10 +125,10 @@
             "btnLink": "/",
             "setting": {
               "textHeadingColor": "#000000",
-              "textHeadingFontSize": "40px",
+              "textHeadingFontSize": "40",
               "textHeadingFontWeight": "bold",
               "descriptionColor": "#000000",
-              "descriptionFontSize": "25px",
+              "descriptionFontSize": "20",
               "descriptionFontWeight": "normal",
               "background": "#e4e4e4",
               "btnTextColor": "#ffffff",
@@ -154,10 +154,10 @@
             "btnText": "دکمه",
             "setting": {
               "headingColor": "#333",
-              "headingFontSize": "50px",
+              "headingFontSize": "60",
               "headingFontWeight": "bold",
               "descriptionColor": "#333333",
-              "descriptionFontSize": "20px",
+              "descriptionFontSize": "29",
               "descriptionFontWeight": "normal",
               "btnTextColor": "#ffffff",
               "btnBackgroundColor": "#000000",
@@ -210,7 +210,7 @@
             "heading": "فرم ارتباط با ما",
             "setting": {
               "headingColor": "#ffffff",
-              "headingFontSize": "25px",
+              "headingFontSize": "35",
               "headingFontWeight": "bold",
               "btnBackgroundColor": "#9c119c",
               "btnTextColor": "#ffffff",
@@ -228,15 +228,15 @@
           "type": "newsletter",
           "blocks": {
             "heading": "عضویت در خبرنامه",
-            "description": "ت.ضیحات درباره خبرنامه",
+            "description": "توضیحات درباره خبرنامه",
             "btnText": "ثبت نام",
 
             "setting": {
               "headingColor": "#ffffff",
-              "headingFontSize": "27px",
+              "headingFontSize": "27",
               "headingFontWeight": "bold",
               "descriptionColor": "#e4e4e4",
-              "descriptionFontSize": "18px",
+              "descriptionFontSize": "18",
               "descriptionFontWeight": "normal",
               "btnBackgroundColor": "#ea7777",
               "btnTextColor": "#ffffff",
@@ -244,10 +244,10 @@
             }
           },
           "setting": {
-            "paddingTop": "20px",
-            "paddingBottom": "20px",
-            "marginTop": "20px",
-            "marginBottom": "20px"
+            "paddingTop": "20",
+            "paddingBottom": "20",
+            "marginTop": "20",
+            "marginBottom": "20"
           }
         },
         {
@@ -345,23 +345,23 @@
           ],
           "setting": {
             "heading": "سربرگ ستون ها",
-            "paddingTop": "20px",
-            "paddingBottom": "20px",
-            "marginTop": "20px",
-            "marginBottom": "20px",
+            "paddingTop": "20",
+            "paddingBottom": "20",
+            "marginTop": "20",
+            "marginBottom": "20",
             "backgroundColorBox": "#82c0cc",
-            "headingFontSize": "30px",
+            "headingFontSize": "40",
             "headingFontWeight": "bold",
             "headingColor": "#ffffff",
-            "imageRadious": "10px",
+            "imageRadious": "10",
             "imageWidth": "400px",
             "imageHeight": "300px",
             "imageBehavior": "cover",
             "titleColor": "#ffa62b",
-            "titleFontSize": "25px",
+            "titleFontSize": "25",
             "titleFontWeight": "bold",
             "descriptionColor": "#e4e4e4",
-            "descriptionFontSize": "18px",
+            "descriptionFontSize": "18",
             "descriptionFontWeight": "normal",
             "btnColor": "#ffffff",
             "btnBackgroundColor": "#16697a"
@@ -400,22 +400,21 @@
           "setting": {
             "titleColor": "#000000",
             "titleFontWeight": "bold",
-            "titleFontSize": "35px",
-            "paddingTop": "20px",
-            "paddingBottom": "20px",
-            "marginTop": "20px",
-            "marginBottom": "20px",
+            "titleFontSize": "35",
+            "paddingTop": "20",
+            "paddingBottom": "20",
+            "marginTop": "20",
+            "marginBottom": "20",
             "backgroundColorMultiRow": "#8d99ae",
             "backgroundColorBox": "#2b2d42",
-            "imageRadious": "10px",
             "imageWidth": "700px",
             "imageHeight": "300px",
-            "imageRadius": "45px",
+            "imageRadius": "45",
             "headingColor": "#fcbf49",
-            "headingFontSize": "30px",
+            "headingFontSize": "30",
             "headingFontWeight": "bold",
             "descriptionColor": "#e4e4e4",
-            "descriptionFontSize": "18px",
+            "descriptionFontSize": "15",
             "descriptionFontWeight": "normal",
             "btnColor": "#ffffff",
             "btnBackgroundColor": "#bc4749",
@@ -440,10 +439,10 @@
       "blocks": {
         "setting": {
           "textColor": "#000000",
-          "textFontSize": "18px",
+          "textFontSize": "25",
           "textFontWeight": "bold",
-          "descriptionColor": "#293241",
-          "descriptionFontSize": "14px",
+          "descriptionColor": "#000000",
+          "descriptionFontSize": "18",
           "descriptionFontWeight": "normal",
           "linkColor": "#0077b6",
           "logoWidth": "80px",
@@ -463,10 +462,10 @@
         ]
       },
       "setting": {
-        "paddingTop": "20px",
-        "paddingBottom": "20px",
-        "marginBottom": "40px",
-        "marginTop": "0px",
+        "paddingTop": "20",
+        "paddingBottom": "20",
+        "marginBottom": "0",
+        "marginTop": "0",
         "backgroundColor": "#e4e4e4"
       }
     }

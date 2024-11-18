@@ -11,10 +11,10 @@ interface FooterProps {
 }
 
 const FooterContainer = styled.footer<{ $data: FooterSection }>`
-  padding-top: ${(props) => props.$data.setting.paddingTop || "20px"};
-  padding-bottom: ${(props) => props.$data.setting.paddingBottom || "20px"};
-  margin-top: ${(props) => props.$data.setting.marginTop || "0px"};
-  margin-bottom: ${(props) => props.$data.setting.marginBottom || "0px"};
+  padding-top: ${(props) => props.$data.setting.paddingTop || "20px"}px;
+  padding-bottom: ${(props) => props.$data.setting.paddingBottom || "20px"}px;
+  margin-top: ${(props) => props.$data.setting.marginTop || "0px"}px;
+  margin-bottom: ${(props) => props.$data.setting.marginBottom || "0px"}px;
   
   background-color: ${(props) => props.$data.setting.backgroundColor || "#333"};
   display: flex;

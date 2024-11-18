@@ -96,12 +96,12 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
   };
 
   const linkOptions = [
-    { name: 'Home', url: '/' },
-    { name: 'About', url: '/about' },
-    { name: 'Contact', url: '/contact' },
-    { name: 'Blog', url: '/blog' },
-    { name: 'Shop', url: '/shop' },
-    { name: 'Login', url: '/login' }
+    { name: 'خانه', url: '/' },
+    { name: 'درباره ما', url: '/about' },
+    { name: 'ارتباط با ما', url: '/contact' },
+    { name: 'بلاگ', url: '/blog' },
+    { name: 'فروشگاه', url: '/shop' },
+    { name: 'ورود/عضویت', url: '/login' }
   ];
   const removeLink = (urlToRemove: string) => {
     setUserInputData((prev: HeaderSection) => ({
@@ -150,16 +150,16 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
   };
 
   return (
-    <div className="p-2">
+    <div className="p-2" dir='rtl'>
       <hr className='my-3' />
 
-      <h2 className="text-xl font-bold mb-4">Header Settings</h2>
+      <h2 className="text-xl font-bold mb-4">تنظیمات سربرگ</h2>
 
       {/* Basic Information */}
       <div className="mb-6">
-        <h3 className="font-semibold mb-2">Basic Information</h3>
+        <h3 className="font-semibold mb-2">تنظیمات پایه</h3>
 
-        <label className="block mb-1" htmlFor="imageLogo">Logo URL</label>
+        <label className="block mb-1" htmlFor="imageLogo">لوگو</label>
         <input
           type="text"
           id="imageLogo"
@@ -169,7 +169,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
           className="w-full p-2 border rounded mb-2"
         />
 
-        <label className="block " htmlFor="imageAlt">Image Alt Text</label>
+        <label className="block " htmlFor="imageAlt">متن جایگزین تصویر</label>
         <input
           type="text"
           id="imageAlt"
@@ -182,11 +182,11 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
 <hr className='my-3' />
       {/* Style Settings */}
       <div className="mb-6">
-        <h3 className="font-semibold mb-2">Style Settings</h3>
+        <h3 className="font-semibold mb-2">تنظیمات استایل</h3>
         <div className="grid md:grid-cols-2 grid-cols-2 gap-2">
           
             <ColorInput
-              label="Title Color"
+              label="رنگ عنوان"
               name="titleColor"
               value={userInputData?.blocks?.setting?.titleColor?.toLocaleString()}
               onChange={handleBlockSettingChange}
@@ -194,28 +194,28 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
 
             <ColorInput 
             
-              label="Background Color Navbar"
+              label="رنگ پس زمینه"
               name="backgroundColorNavbar"
               value={userInputData?.blocks?.setting?.backgroundColorNavbar?.toLocaleString() }
               onChange={handleBlockSettingChange}
             />
 
             <ColorInput
-              label="Item Color"
+              label="رنک آیتم ها"
               name="itemColor"
               value={userInputData?.blocks?.setting.itemColor?.toLocaleString()}
               onChange={handleBlockSettingChange}
             />
 
             <ColorInput
-              label="Item Hover Color"
+              label="رنگ آیتم ها در صورت رفتن موس بر روی آنها"
               name="itemHoverColor"
               value={userInputData?.blocks?.setting.itemHoverColor?.toLocaleString()}
               onChange={handleBlockSettingChange}
             />
           
 
-          <label className="block mb-1" htmlFor="titleFontSize">Title Font Size</label>
+          <label className="block mb-1" htmlFor="titleFontSize">سایز عنوان</label>
           <input
             type="range"
             id="itemFontSize"
@@ -225,7 +225,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
             className="p-2 border rounded"
           />
 
-          <label className="block mb-1" htmlFor="imageWidth">Image Width</label>
+          <label className="block mb-1" htmlFor="imageWidth">عرض لوگو</label>
           <input
             type="range"
             id="imageWidth"
@@ -235,7 +235,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
             className="p-2 border rounded"
           />
 
-          <label className="block mb-1" htmlFor="imageHeight">Image Height</label>
+          <label className="block mb-1" htmlFor="imageHeight">ارتفاع لوگو</label>
           <input
             type="range"
             id="imageHeight"
@@ -250,9 +250,9 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
 
       {/* Layout Settings */}
       <div className="mb-6">
-        <h3 className="font-semibold mb-2">Layout Settings</h3>
+        <h3 className="font-semibold mb-2">تنظیمات فاصله</h3>
         <div className="grid grid-cols-2 gap-4">
-          <label className="block mb-1" htmlFor="paddingTop">Padding Top</label>
+          <label className="block mb-1" htmlFor="paddingTop">فاصله درونی از بالا</label>
           <input
             type="range"
             id="paddingTop"
@@ -261,7 +261,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
             onChange={handleSettingChange}
             className="p-2 border rounded"
           />
-          <label className="block mb-1" htmlFor="paddingTop">marginBottom </label>
+          <label className="block mb-1" htmlFor="marginBottom">فاصله بیرونی از پایین </label>
           <input
             type="range"
             id="marginBottom"
@@ -271,7 +271,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
             className="p-2 border rounded"
           />
 
-          <label className="block mb-1" htmlFor="paddingBottom">Padding Bottom</label>
+          <label className="block mb-1 " htmlFor="paddingBottom">فاصله درونی از پایین</label>
           <input
             type="range"
             id="paddingBottom"
@@ -288,15 +288,15 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
 
       {/* Navigation Links */}
       <div className="mb-6">
-        <h3 className="font-semibold mb-2">Navigation Links</h3>
-        <label className="block mb-1" htmlFor="linkSelect">Select a link</label>
+        <h3 className="font-semibold mb-2">آیتم های سربرگ</h3>
+        <label className="block mb-1" htmlFor="linkSelect">یک آیتم را انتخاب کنید</label>
         <select
           id="linkSelect"
           onChange={handleLinkSelect}
           className='w-full p-2 border rounded mb-4'
           defaultValue=""
         >
-          <option value="">Select a link</option>
+          <option value="">انتخاب کنید</option>
           {linkOptions?.map((link, index) => (
             <option key={`${link.url}-${index}`} value={link.url}>
               {link.name}
@@ -312,7 +312,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
                 onClick={() => removeLink(link.url)}
                 className="text-red-500 hover:text-red-700"
               >
-                Remove
+                حذف
               </button>
             </div>
           ))}
