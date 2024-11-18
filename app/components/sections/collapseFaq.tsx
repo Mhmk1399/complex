@@ -1,45 +1,15 @@
-import { Layout } from "@/lib/types";
+import { Layout, CollapseSection, CollapseBlock } from "@/lib/types";
 import React, { useState } from "react";
 import styled from "styled-components";
+
+// Props Interface
 interface CollapseFaqProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
 }
 
-interface BlocksType {
-  setting: {
-    [key: string]: string;
-  };
-  text1?: string;
-  text2?: string;
-  text3?: string;
-  text4?: string;
-  content1?: string;
-  content2?: string;
-  content3?: string;
-  content4?: string;
-  heading?: string;
-}
-
-interface SettingType {
-  paddingTop?: string;
-  paddingBottom?: string;
-  marginTop?: string;
-  marginBottom?: string;
-  background?: string;
-  headingColor?: string;
-  headingFontSize?: string;
-  headingFontWeight?: string;
-  borderRadious?: string;
-}
-
-interface SectionData {
-  blocks: BlocksType[];
-  setting: SettingType;
-}
-
 // Styled Components
-const Section = styled.section<{ $data: SectionData }>`
+const Section = styled.section<{ $data: CollapseSection }>`
   padding-top: ${(props) => props.$data.setting?.paddingTop || "20px"}px;
   padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20px"}px;
   margin-top: ${(props) => props.$data.setting?.marginTop || "20px"}px;
@@ -51,12 +21,12 @@ const Section = styled.section<{ $data: SectionData }>`
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  border-radius: ${(props) => props.$data.setting?.borderRadious || "0px"};
+  border-radius: 10px;
 `;
 
-const Heading = styled.h2<{ $data: SectionData }>`
+const Heading = styled.h2<{ $data: CollapseSection }>`
   color: ${(props) => props.$data.setting?.headingColor || "#333"};
-  font-size: ${(props) => props.$data.setting?.headingFontSize || "24px"};
+  font-size: ${(props) => props.$data.setting?.headingFontSize || "24px"}px;
   font-weight: ${(props) => props.$data.setting?.headingFontWeight || "bold"};
   text-align: center;
   margin-bottom: 20px;
@@ -69,17 +39,10 @@ const FaqItem = styled.div`
   padding: 10px;
 `;
 
-const Question = styled.div<{ $data: SectionData; $idx: number }>`
-  font-size: ${(props) =>
-    props.$data.blocks[props.$idx]?.setting[`textFontSize${props.$idx + 1}`] ||
-    "18px"};
-  font-weight: ${(props) =>
-    props.$data.blocks[props.$idx]?.setting[
-      `textFontWeight${props.$idx + 1}`
-    ] || "bold"};
-  color: ${(props) =>
-    props.$data.blocks[props.$idx]?.setting[`textColor${props.$idx + 1}`] ||
-    "#333"};
+const Question = styled.div<{ $block: CollapseBlock }>`
+  font-size: ${(props) => props.$block.setting.textFontSize || "18px"}px;
+  font-weight: ${(props) => props.$block.setting.textFontWeight || "bold"};
+  color: ${(props) => props.$block.setting.textColor || "#333"};
   cursor: pointer;
   padding: 10px;
   border-bottom: 1px solid #ccc;
@@ -88,22 +51,10 @@ const Question = styled.div<{ $data: SectionData; $idx: number }>`
   align-items: center;
 `;
 
-const Answer = styled.div<{
-  $data: SectionData;
-  $idx: number;
-  $isOpen: boolean;
-}>`
-  font-size: ${(props) =>
-    props.$data.blocks[props.$idx]?.setting[
-      `contentFontSize${props.$idx + 1}`
-    ] || "16px"};
-  font-weight: ${(props) =>
-    props.$data.blocks[props.$idx]?.setting[
-      `contentFontWeight${props.$idx + 1}`
-    ] || "normal"};
-  color: ${(props) =>
-    props.$data.blocks[props.$idx]?.setting[`contentColor${props.$idx + 1}`] ||
-    "#666"};
+const Answer = styled.div<{ $block: CollapseBlock; $isOpen: boolean }>`
+  font-size: ${(props) => props.$block.setting.contentFontSize || "16px"}px;
+  font-weight: ${(props) => props.$block.setting.contentFontWeight || "normal"};
+  color: ${(props) => props.$block.setting.contentColor || "#666"};
   padding: 15px 20px;
   text-align: right;
   background-color: transparent;
@@ -119,9 +70,10 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
   layout,
 }) => {
   const sectionData = (layout.sections?.children
-    ?.sections?.[7] as unknown as SectionData) || {
-    blocks: [{ setting: {} }],
+    ?.sections?.[7] as CollapseSection) || {
+    blocks: [],
     setting: {},
+    type: "collapse",
   };
 
   const [openIndexes, setOpenIndexes] = useState<number[]>([]);
@@ -138,40 +90,28 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
       $data={sectionData}
       onClick={() => setSelectedComponent("collapse-1234")}
     >
-      <Heading $data={sectionData}>{sectionData.blocks[0].heading}</Heading>
-      {sectionData.blocks.map((block, idx: number) => {
-        const typedBlock = block as BlocksType;
-        return (
-          <FaqItem key={idx}>
-            <Question
-              $data={sectionData}
-              $idx={idx}
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleOpen(idx);
-              }}
-            >
-              {
-                typedBlock[
-                  `text${idx + 1}` as keyof BlocksType
-                ] as React.ReactNode
-              }
-              <span>{openIndexes.includes(idx) ? "-" : "+"}</span>
-            </Question>
-            <Answer
-              $data={sectionData}
-              $idx={idx}
-              $isOpen={openIndexes.includes(idx)}
-            >
-              {
-                typedBlock[
-                  `content${idx + 1}` as keyof BlocksType
-                ] as React.ReactNode
-              }
-            </Answer>
-          </FaqItem>
-        );
-      })}
+      <Heading $data={sectionData}>{sectionData.blocks[0]?.heading}</Heading>
+      {sectionData.blocks.map((block: CollapseBlock, idx: number) => (
+        <FaqItem key={idx}>
+          <Question
+            $block={block}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleOpen(idx);
+            }}
+          >
+            {block[`text${idx + 1}` as keyof CollapseBlock] as React.ReactNode}
+            <span>{openIndexes.includes(idx) ? "-" : "+"}</span>
+          </Question>
+          <Answer $block={block} $isOpen={openIndexes.includes(idx)}>
+            {
+              block[
+                `content${idx + 1}` as keyof CollapseBlock
+              ] as React.ReactNode
+            }
+          </Answer>
+        </FaqItem>
+      ))}
     </Section>
   );
 };

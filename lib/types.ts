@@ -27,9 +27,11 @@ export interface CollapseBlockSetting extends CommonSettings {
   contentColor2?: string;
   contentColor3?: string;
   contentColor4?: string;
+  contentFontSize?: string;
+  contentFontWeight?: string;
+  contentColor?: string;
 }
 
-// New specific interfaces for Collapse component
 export interface CollapseBlock {
   heading?: string;
   text1?: string;
@@ -46,18 +48,8 @@ export interface CollapseBlock {
 
 export interface CollapseSection {
   blocks: CollapseBlock[];
-  setting: CollapseSettings;
+  setting: CollapseBlockSetting;
   type: "collapse";
-}
-
-interface CollapseSettings {
-  background?: string;
-  headingColor?: string;
-  headingFontWeight?: string;
-  paddingTop?: string;
-  paddingBottom?: string;
-  marginTop?: string;
-  marginBottom?: string;
 }
 
 export interface CommonSettings {
@@ -132,15 +124,31 @@ export interface HeaderSection {
     marginBottom: string;
   };
 }
+export interface BannerBlockSettings extends CommonSettings {
+  descriptionColor: string;
+  descriptionFontSize: string;
+  descriptionFontWeight: string;
+  textColor: string;
+  textFontSize: string;
+  textFontWeight: string;
+  backgroundColorBox: string;
+  backgroundBoxRadious: string;
+  opacityImage: string;
+  opacityTextBox: string;
+  imageRadious: string;
+  imageBehavior: string;
+}
+export interface BannerBlock {
+  imageSrc: string;
+  imageAlt: string;
+  text: string;
+  description: string;
+  imageLink?: string;
+  setting: CommonSettings;
+}
 export interface BannerSection {
-  blocks: {
-    imageSrc: string;
-    imageAlt: string;
-    text: string;
-    description: string;
-    imageLink?: string;
-    setting: CommonSettings;
-  };
+  type: "banner";
+  blocks: BannerBlock;
   setting: CommonSettings;
 }
 
@@ -259,7 +267,13 @@ export interface MultiColumnSection {
 
 export interface Section {
   setting: CommonSettings;
-  blocks: HeaderBlock | CollapseBlock | ImageTextBlock | MultiColumnBlock | NewsLetterBlock | RichTextBlock;
+  blocks:
+    | HeaderBlock
+    | CollapseBlock
+    | ImageTextBlock
+    | MultiColumnBlock
+    | NewsLetterBlock
+    | RichTextBlock;
   type: string;
 }
 export interface ImageTextBlockSetting extends CommonSettings {
@@ -478,7 +492,7 @@ export interface ContactFormBlock {
   setting: ContactFormBlockSetting;
 }
 
-export interface ContactFormData {
+export interface ContactFormDataSection {
   blocks: ContactFormBlock;
   setting: {
     paddingTop: string;
@@ -489,16 +503,16 @@ export interface ContactFormData {
   type: "contact-form";
 }
 
-export interface ContactFormProps {
-  setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
-  layout: {
-    sections?: {
-      children?: {
-        sections: ContactFormSection[];
-      };
-    };
-  };
-}
+// export interface ContactFormProps {
+//   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
+//   layout: {
+//     sections?: {
+//       children?: {
+//         sections: ContactFormSection[];
+//       };
+//     };
+//   };
+// }
 export interface MultiRowBlockSetting extends CommonSettings {
   titleColor: string;
   titleFontWeight: string;

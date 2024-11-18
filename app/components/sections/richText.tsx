@@ -1,6 +1,11 @@
 "use client";
 
-import { Layout, RichTextSection, RichTextBlock,Section as sectionType, RichTextBlockSetting } from "@/lib/types";
+import {
+  Layout,
+  RichTextSection,
+  RichTextBlock,
+  Section as sectionType,
+} from "@/lib/types";
 import Link from "next/link";
 import styled from "styled-components";
 
@@ -58,28 +63,58 @@ const Btn = styled.button<{ $data: RichTextBlock }>`
   }
 `;
 
+// Update the section data assignment with type checking
 const RichText: React.FC<RichTextProps> = ({
   setSelectedComponent,
   layout,
 }) => {
-  const sectionData: RichTextSection   = layout?.sections?.children?.sections[2];
+  const sectionData = layout?.sections?.children
+    ?.sections[2] as RichTextSection;
 
-  if (!sectionData) {
+  // Add type guard to verify section type
+  const isRichTextSection = (
+    section: sectionType
+  ): section is RichTextSection => {
+    return (
+      section?.type === "rich-text" &&
+      "blocks" in section &&
+      section.blocks !== undefined
+    );
+  };
+
+  if (!sectionData || !isRichTextSection(sectionData)) {
     console.error("Section data is missing or invalid.");
     return null;
   }
 
   const { blocks } = sectionData;
-  const { textHeading, description, btnText, btnLink } = blocks || {};
 
-  console.log("sectionData", sectionData);
+  // Type guard for RichTextBlock
+  const isRichTextBlock = (block: {}): block is RichTextBlock => {
+    return (
+      block &&
+      "textHeading" in block &&
+      "description" in block &&
+      "btnText" in block &&
+      "btnLink" in block
+    );
+  };
+
+  if (!isRichTextBlock(blocks)) {
+    console.error("Blocks data is missing or invalid.");
+    return null;
+  }
+
+  const { textHeading, description, btnText, btnLink } = blocks;
 
   return (
     <Section
+      dir="rtl"
       $data={sectionData}
       onClick={() => setSelectedComponent("rich-text")}
     >
       {textHeading && <H1 $data={blocks}>{textHeading}</H1>}
+
       {description && <P $data={blocks}>{description}</P>}
       {btnLink && (
         <Link href={btnLink} passHref legacyBehavior>

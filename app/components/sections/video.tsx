@@ -1,55 +1,22 @@
 "use client";
 import React from "react";
 import styled from "styled-components";
+import { Layout, VideoSection } from "@/lib/types";
 
+// Interfaces
 interface VideoProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
-  layout: {
-    sections?: {
-      children?: { sections: SectionData[] };
-    };
-  };
-}
-
-interface BlocksType {
-  setting: {
-    headingColor?: string;
-    headingFontSize?: string;
-    headingFontWeight?: string;
-    videoWidth?: string;
-    videoHeight?: string;
-    videoRadious?: string;
-    videoLoop?: boolean;
-    videoMute?: boolean;
-    videoAutoplay?: boolean;
-    videoPoster?: string;
-    backgroundVideoSection?: string;
-  };
-  heading?: string;
-  videoUrl?: string;
-  videoAlt?: string;
-}
-
-interface SettingType {
-  paddingTop?: string;
-  paddingBottom?: string;
-  marginTop?: string;
-  marginBottom?: string;
-}
-
-interface SectionData {
-  blocks: BlocksType;
-  setting: SettingType;
+  layout: Layout;
 }
 
 // Styled Components for Video Section
-const Section = styled.section<{ $data: SectionData }>`
-  padding-top: ${(props) => props.$data?.setting?.paddingTop || "10px"}px;
-  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "10px"}px;
-  margin-top: ${(props) => props.$data?.setting?.marginTop || "0px"}px;
-  margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "0px"}px;
+const Section = styled.section<{ $data: VideoSection }>`
+  padding-top: ${(props) => props.$data.setting?.paddingTop || "10px"}px;
+  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "10px"}px;
+  margin-top: ${(props) => props.$data.setting?.marginTop || "0px"}px;
+  margin-bottom: ${(props) => props.$data.setting?.marginBottom || "0px"}px;
   background-color: ${(props) =>
-    props.$data?.blocks?.setting?.backgroundVideoSection || "#e4e4e4"};
+    props.$data.blocks.setting?.backgroundVideoSection || "#e4e4e4"};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -58,18 +25,19 @@ const Section = styled.section<{ $data: SectionData }>`
   gap: 15px;
 `;
 
-const Heading = styled.h1<{ $data: SectionData }>`
-  color: ${(props) => props.$data?.blocks?.setting?.headingColor};
-  font-size: ${(props) => props.$data?.blocks?.setting?.headingFontSize}px;
-  font-weight: ${(props) => props.$data?.blocks?.setting?.headingFontWeight};
+const Heading = styled.h1<{ $data: VideoSection }>`
+  color: ${(props) => props.$data.blocks.setting?.headingColor || "#333"};
+  font-size: ${(props) =>
+    props.$data.blocks.setting?.headingFontSize || "24px"}px;
+  font-weight: ${(props) =>
+    props.$data.blocks.setting?.headingFontWeight || "bold"};
   text-align: center;
 `;
 
-const VideoElement = styled.video<{ $data: SectionData }>`
-  width: ${(props) => props.$data?.blocks?.setting?.videoWidth || "100%"}0px;
-  height: ${(props) => props.$data?.blocks?.setting?.videoHeight || "auto"};
+const VideoElement = styled.video<{ $data: VideoSection }>`
+  width: ${(props) => props.$data.blocks.setting?.videoWidth || "100%"};
   border-radius: ${(props) =>
-    props.$data?.blocks?.setting?.videoRadious || "10px"}px;
+    props.$data.blocks.setting?.videoRadious || "10px"}px;
   height: auto;
   @media (max-width: 768px) {
     border-radius: 20px;
@@ -79,28 +47,34 @@ const VideoElement = styled.video<{ $data: SectionData }>`
 
 // Video Component
 const Video: React.FC<VideoProps> = ({ setSelectedComponent, layout }) => {
-  const sectionData = layout.sections?.children?.sections?.[4] as SectionData;
-  const { heading, videoUrl, videoAlt } = sectionData?.blocks || {};
+  const sectionData = layout.sections?.children?.sections?.find(
+    (section) => section.type === "video"
+  ) as VideoSection;
+
+  const { blocks } = sectionData || { blocks: {} };
 
   return (
     <Section $data={sectionData} onClick={() => setSelectedComponent("video")}>
-      {heading && (
-        <Heading $data={sectionData}>{heading || "heading of video"}</Heading>
+      {blocks.heading && (
+        <Heading $data={sectionData}>
+          {blocks.heading || "Video Heading"}
+        </Heading>
       )}
-      {videoUrl && (
+      {blocks.videoUrl && (
         <VideoElement
           $data={sectionData}
-          src={videoUrl || "/assets/video/video.mp4"}
-          loop={sectionData.blocks.setting.videoLoop}
-          muted={sectionData.blocks.setting.videoMute}
-          autoPlay={sectionData.blocks.setting.videoAutoplay || true}
-          poster={sectionData.blocks.setting.videoPoster}
+          src={blocks.videoUrl || "/assets/video/video.mp4"}
+          loop={blocks.setting?.videoLoop}
+          muted={blocks.setting?.videoMute}
+          autoPlay={blocks.setting?.videoAutoplay}
+          poster={blocks.setting?.videoPoster}
           controls
         >
-          {videoAlt && <track kind="captions" label={videoAlt} />}
+          {blocks.videoAlt && <track kind="captions" label={blocks.videoAlt} />}
         </VideoElement>
       )}
     </Section>
   );
 };
+
 export default Video;

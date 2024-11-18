@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
@@ -43,11 +43,11 @@ const BannerTextBox = styled.div<{ $data: BannerSection }>`
   opacity: ${(props) => props.$data.blocks.setting.opacityTextBox || "1"};
   background-color: ${(props) =>
     props.$data.blocks.setting.backgroundColorBox || "rgba(0, 0, 0, 0.5)"};
-  padding: 70px;
+  padding: 30px 100px;
   border-radius: ${(props) =>
     props.$data.blocks.setting.backgroundBoxRadious || "10px"};
   @media (max-width: 768px) {
-    padding: 20px;
+    padding: 20px 40px;
   }
 `;
 
@@ -58,7 +58,7 @@ const HeadingText = styled.h2<{ $data: BannerSection }>`
     props.$data.blocks.setting.textFontWeight || "bold"};
   text-align: center;
   @media (max-width: 768px) {
-    font-size: 14px;
+    font-size: 24px;
   }
 `;
 
@@ -68,21 +68,19 @@ const DescriptionText = styled.p<{ $data: BannerSection }>`
     props.$data.blocks.setting.descriptionFontSize || "16px"}px;
   font-weight: ${(props) =>
     props.$data.blocks.setting.descriptionFontWeight || "normal"};
-  margin-top: 17px;
+  margin-top: 14px;
   text-align: center;
   @media (max-width: 768px) {
-    font-size: 10px;
+    font-size: 14px;
   }
 `;
 
 const Banner: React.FC<props> = ({ setSelectedComponent, layout }) => {
   useEffect(() => {
-   console.log(layout.sections.children.sections[0]);
-   
-  }, [layout])
-  
-  
-  const sectionData = (layout?.sections?.children?.sections[0] as unknown as BannerSection) 
+    console.log(layout.sections.children.sections[0]);
+  }, [layout]);
+
+  const sectionData = layout?.sections?.children?.sections[0] as BannerSection;
   const { description, imageAlt, imageSrc, text } = sectionData?.blocks;
 
   return (
@@ -108,9 +106,7 @@ const Banner: React.FC<props> = ({ setSelectedComponent, layout }) => {
         />
       </Link>
       <BannerTextBox $data={sectionData}>
-        <HeadingText $data={sectionData}>
-          {text || "سربرگ بنر"}
-        </HeadingText>
+        <HeadingText $data={sectionData}>{text || "سربرگ بنر"}</HeadingText>
         <DescriptionText $data={sectionData}>
           {description || "توضیحات بنر"}
         </DescriptionText>
