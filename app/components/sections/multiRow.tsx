@@ -105,7 +105,6 @@ const RowContainer = styled.div`
 
 const Row = styled.div<{ $data: SectionData }>`
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-left: 10px;
@@ -115,7 +114,7 @@ const Row = styled.div<{ $data: SectionData }>`
   background-color: ${(props) =>
     props.$data.setting?.backgroundColorBox || "#f9f9f9"};
   max-width: auto;
-  flex-direction: ${(props) => props.$data.setting?.imageAlign || "row"};
+  flex-direction: ${(props) => props.$data.setting?.imageAlign || "row-reverse"};
 
   @media (min-width: 768px) {
     align-items: center;
@@ -129,6 +128,13 @@ const Row = styled.div<{ $data: SectionData }>`
       text-align: center;
     }
   }
+    @media (max-width: 425px) {
+    flex-direction: column;
+    align-items: center;
+    img {
+      width: 100%;
+      margin-bottom: 10px;
+    }
 `;
 
 const WrapperContainer = styled.div<{ $data: SectionData }>`

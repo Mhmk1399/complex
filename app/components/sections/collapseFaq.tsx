@@ -1,4 +1,4 @@
-import { Layout, CollapseSection, CollapseBlock } from "@/lib/types";
+import { Layout, CollapseSection, CollapseBlock , CollapseBlockSetting } from "@/lib/types";
 import React, { useState } from "react";
 import styled from "styled-components";
 
@@ -39,10 +39,21 @@ const FaqItem = styled.div`
   padding: 10px;
 `;
 
-const Question = styled.div<{ $block: CollapseBlock }>`
-  font-size: ${(props) => props.$block.setting.textFontSize || "18px"}px;
-  font-weight: ${(props) => props.$block.setting.textFontWeight || "bold"};
-  color: ${(props) => props.$block.setting.textColor || "#333"};
+const Question = styled.div<{ $block: CollapseBlock; $index: number }>`
+  font-size: ${(props) =>
+    props.$block.setting[
+      `textFontSize${props.$index + 1}` as CollapseBlockSetting
+
+      
+    ] || "18px"}px;
+  font-weight: ${(props) =>
+    props.$block.setting[
+      `textFontWeight${props.$index + 1}` as keyof typeof props.$block.setting
+    ] || "bold"};
+  color: ${(props) =>
+    props.$block.setting[
+      `textColor${props.$index + 1}` as keyof typeof props.$block.setting
+    ] || "#ffffff"};
   cursor: pointer;
   padding: 10px;
   border-bottom: 1px solid #ccc;
@@ -51,10 +62,25 @@ const Question = styled.div<{ $block: CollapseBlock }>`
   align-items: center;
 `;
 
-const Answer = styled.div<{ $block: CollapseBlock; $isOpen: boolean }>`
-  font-size: ${(props) => props.$block.setting.contentFontSize || "16px"}px;
-  font-weight: ${(props) => props.$block.setting.contentFontWeight || "normal"};
-  color: ${(props) => props.$block.setting.contentColor || "#666"};
+const Answer = styled.div<{
+  $block: CollapseBlock;
+  $isOpen: boolean;
+  $index: number;
+}>`
+  font-size: ${(props) =>
+    props.$block.setting[
+      `contentFontSize${props.$index + 1}` as keyof typeof props.$block.setting
+    ] || "16px"}px;
+  font-weight: ${(props) =>
+    props.$block.setting[
+      `contentFontWeight${
+        props.$index + 1
+      }` as keyof typeof props.$block.setting
+    ] || "normal"};
+  color: ${(props) =>
+    props.$block.setting[
+      `contentColor${props.$index + 1}` as keyof typeof props.$block.setting
+    ] || "#e4e4e4e4"};
   padding: 15px 20px;
   text-align: right;
   background-color: transparent;
@@ -73,8 +99,10 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
     ?.sections?.[7] as CollapseSection) || {
     blocks: [],
     setting: {},
-    type: "collapse",
+    type: "collapse-1234",
   };
+
+  console.log(layout.sections.children.sections?.[7], "collapse");
 
   const [openIndexes, setOpenIndexes] = useState<number[]>([]);
 
@@ -95,6 +123,7 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
         <FaqItem key={idx}>
           <Question
             $block={block}
+            $index={idx}
             onClick={(e) => {
               e.stopPropagation();
               toggleOpen(idx);
@@ -103,7 +132,11 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
             {block[`text${idx + 1}` as keyof CollapseBlock] as React.ReactNode}
             <span>{openIndexes.includes(idx) ? "-" : "+"}</span>
           </Question>
-          <Answer $block={block} $isOpen={openIndexes.includes(idx)}>
+          <Answer
+            $block={block}
+            $isOpen={openIndexes.includes(idx)}
+            $index={idx}
+          >
             {
               block[
                 `content${idx + 1}` as keyof CollapseBlock
