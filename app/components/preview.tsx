@@ -16,43 +16,53 @@ import FooterContainer from "./sections/footer";
 interface PreviewProps {
   layout: Layout;
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
+  orders: string[];
+  setOrders: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const Preview: React.FC<PreviewProps> = ({
   layout,
   setSelectedComponent,
+  orders,
+  setOrders
 }) => {
+  const componentMap = {
+    header: Header,
+    "rich-text": RichText,
+    banner: Banner,
+    "image-text": ImageText,
+    video: Video,
+    'contact-form': ContactForm,
+    newsletter: NewsLetter,
+    collapseFaq: CollapseFaq,
+    multiColumn: MultiColumn,
+    slideshow: SlideShow,
+    multiRow: MultiRow,
+    footer: FooterContainer
+  };
+
   return (
-    <div className="mt-16 w-full md:w-full lg:w-[75%]  h-[95vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide lg:mt-5 lg:ml-5">
-      <Header setSelectedComponent={setSelectedComponent} layout={layout} />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <RichText setSelectedComponent={setSelectedComponent} layout={layout} />
-      <Banner setSelectedComponent={setSelectedComponent} layout={layout} />
-      <ImageText setSelectedComponent={setSelectedComponent} layout={layout} />
-      <Video setSelectedComponent={setSelectedComponent} layout={layout} />
-      <ContactForm
-        setSelectedComponent={setSelectedComponent}
-        layout={layout}
-      />
-      <NewsLetter setSelectedComponent={setSelectedComponent} layout={layout} />
-      <CollapseFaq
-        setSelectedComponent={setSelectedComponent}
-        layout={layout}
-      />
-      <MultiColumn
-        setSelectedComponent={setSelectedComponent}
-        layout={layout}
-      />
-      <SlideShow setSelectedComponent={setSelectedComponent} layout={layout} />
-      <MultiRow setSelectedComponent={setSelectedComponent} layout={layout} />
-      <FooterContainer
-        setSelectedComponent={setSelectedComponent}
-        layout={layout}
-      />
+    <div className="mt-16 w-full md:w-full lg:w-[75%] h-[95vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide lg:mt-5 lg:ml-5">
+      <Header setSelectedComponent={setSelectedComponent} 
+                layout={layout}
+              />
+      <div className="grid grid-cols-1 mt-32">
+        {orders.map((componentName, index) => {
+          const Component = componentMap[componentName as keyof typeof componentMap];
+          return Component ? (
+            <div 
+              key={componentName}
+              style={{ order: index }}
+              className="w-full"
+            >
+              <Component 
+                setSelectedComponent={setSelectedComponent} 
+                layout={layout}
+              />
+            </div>
+          ) : null;
+        })}
+      </div>
     </div>
   );
 };

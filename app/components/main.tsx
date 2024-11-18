@@ -11,7 +11,7 @@ export const Main = () => {
   const [layout, setLayout] = useState<Layout>(Data);
   const [selectedComponent, setSelectedComponent] = useState<string>('sectionHeader');
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
-
+  const [orders, setOrders] = useState<string[]>([]);
   useEffect(() => {
     setLoading(false);
   }, []);
@@ -72,8 +72,11 @@ export const Main = () => {
           <Preview 
             layout={layout}
             setSelectedComponent={setSelectedComponent}
+            orders={orders}
+            setOrders={setOrders}
           />
-          <Form selectedComponent={selectedComponent} setLayout={setLayout} layout={layout} />
+          <Form selectedComponent={selectedComponent} setLayout={setLayout} layout={layout}     orders={orders}
+            setOrders={setOrders} />
         </div>
       )}
     </div>

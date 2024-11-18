@@ -68,12 +68,13 @@ interface FormProps {
   selectedComponent: string;
   setLayout: (data: Layout) => void;
   layout: Layout;
+  orders:string[]
+  setOrders: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-export const Form = ({ selectedComponent, setLayout, layout }: FormProps) => {
+export const Form = ({ selectedComponent, setLayout, layout ,orders,setOrders}: FormProps) => {
   const [userInputData, setUserInputData] = useState<FormData>({} as FormData);
   const [isOpen, setIsOpen] = useState(false);
-  const [orders, setOrders] = useState<string[]>([]);
   const [showOrdersMenu, setShowOrdersMenu] = useState(false);
 
   // Setup sensors for dnd-kit
