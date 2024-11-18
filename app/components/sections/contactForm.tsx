@@ -1,35 +1,15 @@
 "use client";
 import React from "react";
 import styled from "styled-components";
-import { ContactFormProps } from "../../../lib/types";
+import { ContactFormDataSection, Layout } from "../../../lib/types"; // Assuming types are imported from a shared types file
 
-
-interface BlocksType {
-  setting: {
-    headingColor?: string;
-    headingFontSize?: string;
-    headingFontWeight?: string;
-    btnTextColor?: string;
-    btnBackgroundColor?: string;
-    formBackground?: string;
-  };
-  heading?: string;
-}
-
-interface SettingType {
-  paddingTop?: string;
-  paddingBottom?: string;
-  marginTop?: string;
-  marginBottom?: string;
-}
-
-interface SectionData {
-  blocks: BlocksType;
-  setting: SettingType;
+interface ContactFormProps {
+  setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
+  layout: Layout;
 }
 
 // Styled Components
-const Section = styled.section<{ $data: SectionData }>`
+const Section = styled.section<{ $data: ContactFormDataSection }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -46,7 +26,7 @@ const Section = styled.section<{ $data: SectionData }>`
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 `;
 
-const Heading = styled.h2<{ $data: SectionData }>`
+const Heading = styled.h2<{ $data: ContactFormDataSection }>`
   color: ${(props) => props.$data.blocks.setting?.headingColor || "#333"};
   font-size: ${(props) =>
     props.$data.blocks.setting?.headingFontSize || "24px"}px;
@@ -90,16 +70,18 @@ const TextArea = styled.textarea`
   width: 70%;
   resize: vertical;
   min-height: 100px;
+
   &:focus {
     outline: none;
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.3);
   }
+
   @media (max-width: 768px) {
     width: 90%;
   }
 `;
 
-const Button = styled.button<{ $data: SectionData }>`
+const Button = styled.button<{ $data: ContactFormDataSection }>`
   padding: 15px 50px;
   background-color: ${(props) =>
     props.$data.blocks.setting?.btnBackgroundColor || "#007bff"};
@@ -115,6 +97,7 @@ const Button = styled.button<{ $data: SectionData }>`
       props.$data.blocks.setting?.btnBackgroundColor ? "#0056b3" : "#9c119c"};
     transform: scale(0.97);
   }
+
   @media (max-width: 768px) {
     width: 90%;
   }
@@ -125,25 +108,25 @@ const ContactForm: React.FC<ContactFormProps> = ({
   setSelectedComponent,
   layout,
 }) => {
-  const sectionData = layout.sections?.children?.sections.find(
-    (section) => (section as { type?: string }).type === "contact-form"
-  ) as SectionData;
+  const sectionData = layout.sections?.children?.sections?.find(
+    (section) => section.type === "contact-form"
+  ) as ContactFormDataSection;
 
   return (
     <Section
-      dir="ltr"
+      dir="rtl"
       $data={sectionData}
       onClick={() => setSelectedComponent("contact-form")}
     >
       <Heading $data={sectionData}>
-        {sectionData.blocks.heading || "Contact Us"}
+        {sectionData?.blocks?.heading || "Contact Us"}
       </Heading>
       <Form>
-        <Input type="text" placeholder="Name" required />
-        <Input type="email" placeholder="Email" required />
-        <TextArea placeholder="Your message" required />
+        <Input type="text" placeholder="نام" required />
+        <Input type="email" placeholder="ایمیل" required />
+        <TextArea placeholder="متن پیام شما ..." required />
         <Button $data={sectionData} type="submit">
-          Send Message
+          ارسال
         </Button>
       </Form>
     </Section>
