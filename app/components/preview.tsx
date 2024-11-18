@@ -17,14 +17,12 @@ interface PreviewProps {
   layout: Layout;
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   orders: string[];
-  setOrders: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const Preview: React.FC<PreviewProps> = ({
   layout,
   setSelectedComponent,
-  orders,
-  setOrders
+  orders
 }) => {
   const componentMap = {
     header: Header,
@@ -34,7 +32,7 @@ export const Preview: React.FC<PreviewProps> = ({
     video: Video,
     'contact-form': ContactForm,
     newsletter: NewsLetter,
-    collapseFaq: CollapseFaq,
+    collapse: CollapseFaq,
     multiColumn: MultiColumn,
     slideshow: SlideShow,
     multiRow: MultiRow,
@@ -59,7 +57,9 @@ export const Preview: React.FC<PreviewProps> = ({
                 setSelectedComponent={setSelectedComponent} 
                 layout={layout}
               />
+             
             </div>
+
           ) : null;
         })}
       </div>

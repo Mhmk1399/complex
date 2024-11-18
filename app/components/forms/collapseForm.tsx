@@ -59,7 +59,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
   layout,
 }) => {
   useEffect(() => {
-    const initialData = Compiler(layout, "collapse")[0];
+    const initialData = Compiler(layout, "collapse-1234")[0];
     setUserInputData(initialData);
   }, []);
 

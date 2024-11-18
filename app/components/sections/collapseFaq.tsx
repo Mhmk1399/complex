@@ -136,7 +136,7 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
     <Section
       dir="rtl"
       $data={sectionData}
-      onClick={() => setSelectedComponent("collapse")}
+      onClick={() => setSelectedComponent("collapse-1234")}
     >
       <Heading $data={sectionData}>{sectionData.blocks[0].heading}</Heading>
       {sectionData.blocks.map((block, idx: number) => {

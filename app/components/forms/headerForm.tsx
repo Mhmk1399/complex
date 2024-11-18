@@ -96,12 +96,12 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({ setUserInputData, userIn
   };
 
   const linkOptions = [
-    { name: 'خانه', url: '/' },
-    { name: 'درباره ما', url: '/about' },
-    { name: 'ارتباط با ما', url: '/contact' },
-    { name: 'بلاگ', url: '/blog' },
-    { name: 'فروشگاه', url: '/shop' },
-    { name: 'ورود/عضویت', url: '/login' }
+    { name: ' خانه ', url: '/' },
+    { name: ' درباره ما ', url: '/about' },
+    { name: ' ارتباط با ما  ', url: '/contact' },
+    { name: ' بلاگ ', url: '/blog' },
+    { name: ' فروشگاه  ', url: '/shop' },
+    { name: ' ورود/عضویت  ', url: '/login' }
   ];
   const removeLink = (urlToRemove: string) => {
     setUserInputData((prev: HeaderSection) => ({

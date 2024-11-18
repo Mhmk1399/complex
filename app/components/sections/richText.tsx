@@ -11,10 +11,10 @@ interface RichTextProps {
 
 // Styled components
 const Section = styled.section<{ $data: RichTextSection }>`
-  padding-top: ${(props) => props.$data?.setting?.paddingTop || "10px"};
-  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "10px"};
-  margin-top: ${(props) => props.$data?.setting?.marginTop || "30px"};
-  margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "30px"};
+  padding-top: ${(props) => props.$data?.setting?.paddingTop || "10px"}px;
+  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "10px"}px;
+  margin-top: ${(props) => props.$data?.setting?.marginTop || "30px"}px;
+  margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "30px"}px;
   background-color: ${(props) =>
     props.$data?.blocks?.setting?.background || "#ffffff"};
   display: flex;

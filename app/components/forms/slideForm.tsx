@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
 import { Layout, SlideSection, SlideBlock } from "@/lib/types";
 
@@ -38,15 +38,16 @@ export const SlideForm: React.FC<SlideFormProps> = ({
   userInputData,
   layout,
 }) => {
+
+  const [loaded, setLoaded] = useState(false);
   useEffect(() => {
     const initialData = Compiler(layout, "slideshow")[0];
-    // Ensure blocks is an array
-    if (!Array.isArray(initialData.blocks)) {
-      initialData.blocks = [];
+    if (initialData) {
+      setLoaded(true);
+      setUserInputData(initialData);
     }
-    setUserInputData(initialData);
+    
   }, []);
-
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     index: number,
@@ -73,7 +74,8 @@ export const SlideForm: React.FC<SlideFormProps> = ({
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto" dir="rtl">
+   <>
+  {loaded && <div className="p-6 max-w-4xl mx-auto" dir="rtl">
       <h2 className="text-xl font-bold mb-4">تنظیمات اسلاید شو</h2>
 
       {/* Slides Content */}
@@ -165,5 +167,6 @@ export const SlideForm: React.FC<SlideFormProps> = ({
         </div>
       </div>
     </div>
+ } </>
   );
 };
