@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Compiler } from "../compiler";
 import { Layout, RichTextSection } from "@/lib/types";
 
+
 interface RichTextFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<RichTextSection>>;
   userInputData: RichTextSection;
