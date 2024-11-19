@@ -46,8 +46,8 @@ const LogoContainer = styled.div`
 `;
 
 const Logo = styled.img<{ $data: HeaderSection }>`
-  width: ${(props) => props.$data.blocks.setting.imageWidth || "auto"};
-  height: ${(props) => props.$data.blocks.setting.imageHeight || "auto"};
+  width: ${(props) => props.$data.blocks.setting.imageWidth || "auto"}px;
+  height: ${(props) => props.$data.blocks.setting.imageHeight || "auto"}px;
   border-radius: ${(props) => props.$data.blocks.setting.imageRadius || "0px"};
 `;
 

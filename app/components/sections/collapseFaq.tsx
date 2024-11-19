@@ -1,4 +1,9 @@
-import { Layout, CollapseSection, CollapseBlock , CollapseBlockSetting } from "@/lib/types";
+import {
+  Layout,
+  CollapseSection,
+  CollapseBlock,
+  CollapseBlockSetting,
+} from "@/lib/types";
 import React, { useState } from "react";
 import styled from "styled-components";
 
@@ -41,19 +46,17 @@ const FaqItem = styled.div`
 
 const Question = styled.div<{ $block: CollapseBlock; $index: number }>`
   font-size: ${(props) =>
-    props.$block.setting[
-      `textFontSize${props.$index + 1}` as CollapseBlockSetting
-
-      
-    ] || "18px"}px;
+    (props.$block.setting[
+      `textFontSize${props.$index + 1}` as keyof typeof props.$block.setting
+    ] as string) || "18px"};
   font-weight: ${(props) =>
-    props.$block.setting[
+    (props.$block.setting[
       `textFontWeight${props.$index + 1}` as keyof typeof props.$block.setting
-    ] || "bold"};
+    ] as string) || "bold"};
   color: ${(props) =>
-    props.$block.setting[
+    (props.$block.setting[
       `textColor${props.$index + 1}` as keyof typeof props.$block.setting
-    ] || "#ffffff"};
+    ] as string) || "#ffffff"};
   cursor: pointer;
   padding: 10px;
   border-bottom: 1px solid #ccc;
@@ -68,19 +71,19 @@ const Answer = styled.div<{
   $index: number;
 }>`
   font-size: ${(props) =>
-    props.$block.setting[
+    (props.$block.setting[
       `contentFontSize${props.$index + 1}` as keyof typeof props.$block.setting
-    ] || "16px"}px;
+    ] as string) || "16px"}px;
   font-weight: ${(props) =>
-    props.$block.setting[
+    (props.$block.setting[
       `contentFontWeight${
         props.$index + 1
       }` as keyof typeof props.$block.setting
-    ] || "normal"};
+    ] as string) || "normal"};
   color: ${(props) =>
-    props.$block.setting[
+    (props.$block.setting[
       `contentColor${props.$index + 1}` as keyof typeof props.$block.setting
-    ] || "#e4e4e4e4"};
+    ] as string) || "#e4e4e4e4"};
   padding: 15px 20px;
   text-align: right;
   background-color: transparent;
@@ -101,8 +104,6 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
     setting: {},
     type: "collapse-1234",
   };
-
-  console.log(layout.sections.children.sections?.[7], "collapse");
 
   const [openIndexes, setOpenIndexes] = useState<number[]>([]);
 

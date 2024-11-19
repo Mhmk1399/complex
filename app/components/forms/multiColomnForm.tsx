@@ -242,22 +242,6 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
 
         {/* Image Settings */}
         <div className="mt-4 gap-4">
-          <div>
-            <label className="block mb-1">رفتار تصویر</label>
-            <select
-              name="imageBehavior"
-              value={
-                userInputData?.setting?.imageBehavior?.toLocaleString() ??
-                "cover"
-              }
-              onChange={handleSettingChange}
-              className="w-full p-2 border rounded"
-            >
-              <option value="cover">پوشش</option>
-              <option value="contain">شامل</option>
-              <option value="fill">کامل</option>
-            </select>
-          </div>
           <div className="cols-span-2">
             <label className="block mb-1">انحنای زوایا (px)</label>
             <input

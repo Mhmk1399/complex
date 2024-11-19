@@ -1,85 +1,14 @@
+import { Layout, MultiColumnSection } from "@/lib/types";
 import React from "react";
 import styled from "styled-components";
 
 interface MultiColumnProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
-  layout: {
-    sections?: {
-      children?: { sections: SectionData[] };
-    };
-  };
-}
-interface ColumnBlock {
-  title1?: string;
-  title2?: string;
-  title3?: string;
-  description1?: string;
-  description2?: string;
-  description3?: string;
-  imageSrc1?: string;
-  imageSrc2?: string;
-  imageSrc3?: string;
-  imageAlt1?: string;
-  imageAlt2?: string;
-  imageAlt3?: string;
-  btnLink1?: string;
-  btnLink2?: string;
-  btnLink3?: string;
-  btnLable1?: string;
-  btnLable2?: string;
-  btnLable3?: string;
-}
-interface BlocksType {
-  setting: {
-    [key: string]: string;
-  };
-  title?: string;
-  title2?: string;
-  title3?: string;
-  description?: string;
-  description2?: string;
-  description3?: string;
-  btnLabel?: string;
-  btnLabel2?: string;
-  btnLabel3?: string;
-  btnLink?: string;
-  btnLink2?: string;
-  btnLink3?: string;
-  imageAlt?: string;
-  imageSrc?: string;
-}
-
-interface SettingType {
-  heading: string;
-  paddingTop?: string;
-  paddingBottom?: string;
-  marginTop?: string;
-  marginBottom?: string;
-  backgroundColorBox?: string;
-  headingColor?: string;
-  headingFontSize?: string;
-  headingFontWeight?: string;
-  imageRadious?: string;
-  imageWidth?: string;
-  imageHeight?: string;
-  imageBehavior?: string;
-  titleColor?: string;
-  titleFontSize?: string;
-  titleFontWeight?: string;
-  descriptionColor?: string;
-  descriptionFontSize?: string;
-  descriptionFontWeight?: string;
-  btnColor?: string;
-  btnBackgroundColor?: string;
-}
-
-interface SectionData {
-  blocks: BlocksType[];
-  setting: SettingType;
+  layout: Layout;
 }
 
 // Styled Components
-const Section = styled.section<{ $data: SectionData }>`
+const Section = styled.section<{ $data: MultiColumnSection }>`
   padding-top: ${(props) => props.$data.setting?.paddingTop || "20px"}px;
   padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20px"}px;
   margin-top: ${(props) => props.$data.setting?.marginTop || "20px"}px;
@@ -96,7 +25,7 @@ const Section = styled.section<{ $data: SectionData }>`
   border-radius: 12px;
 `;
 
-const Heading = styled.h2<{ $data: SectionData }>`
+const Heading = styled.h2<{ $data: MultiColumnSection }>`
   color: ${(props) => props.$data.setting?.headingColor || "#333"};
   font-size: ${(props) => props.$data.setting?.headingFontSize || "24px"}px;
   font-weight: ${(props) => props.$data.setting?.headingFontWeight || "bold"};
@@ -121,18 +50,24 @@ const ColumnContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-const Column = styled.div<{ $data: SectionData }>`
+const Column = styled.div<{ $data: MultiColumnSection }>`
   padding: 20px;
   border-radius: ${(props) => props.$data.setting?.imageRadious || "8px"}px;
   text-align: center;
   width: 500px;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 
   @media (max-width: 1024px) {
     width: 45%;
+    min-height: 500px;
   }
 
   @media (max-width: 768px) {
     width: 90%;
+    min-height: 450px;
   }
 
   @media (max-width: 480px) {
@@ -141,12 +76,12 @@ const Column = styled.div<{ $data: SectionData }>`
   }
 `;
 
-const Title = styled.h3<{ $data: SectionData }>`
+const Title = styled.h3<{ $data: MultiColumnSection }>`
   font-size: ${(props) => props.$data.setting?.titleFontSize || "24px"}px;
   font-weight: ${(props) => props.$data.setting?.titleFontWeight || "bold"};
   color: ${(props) => props.$data.setting?.titleColor || "#ffffff"};
   margin-bottom: 10px;
-
+  min-height: 60px;
   @media (max-width: 768px) {
     font-size: 22px;
   }
@@ -156,11 +91,11 @@ const Title = styled.h3<{ $data: SectionData }>`
   }
 `;
 
-const Image = styled.img<{ $data: SectionData }>`
-  width: ${(props) => props.$data.setting?.imageWidth || "500px"}px;
-  height: ${(props) => props.$data.setting?.imageHeight || "400px"}px;
+const Image = styled.img<{ $data: MultiColumnSection }>`
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
   border-radius: ${(props) => props.$data.setting?.imageRadious || "5px"}px;
-  object-fit: ${(props) => props.$data.setting?.imageBehavior || "cover"};
   margin-bottom: 10px;
   transition: all 0.5s ease-in-out;
 
@@ -173,12 +108,16 @@ const Image = styled.img<{ $data: SectionData }>`
   }
 `;
 
-const Description = styled.p<{ $data: SectionData }>`
+const Description = styled.p<{ $data: MultiColumnSection }>`
   font-size: ${(props) => props.$data.setting?.descriptionFontSize || "16px"}px;
   font-weight: ${(props) =>
     props.$data.setting?.descriptionFontWeight || "normal"};
   color: ${(props) => props.$data.setting?.descriptionColor || "#ffffff"};
+  width: 100%;
   margin-bottom: 15px;
+   min-height: 110px; // Add minimum height
+  max-height: 150px
+  overflow-y: auto;
 
   @media (max-width: 768px) {
     font-size: 18px;
@@ -189,7 +128,7 @@ const Description = styled.p<{ $data: SectionData }>`
   }
 `;
 
-const Button = styled.a<{ $data: SectionData }>`
+const Button = styled.a<{ $data: MultiColumnSection }>`
   display: inline-block;
   padding: 10px 30px;
   background-color: ${(props) =>
@@ -215,7 +154,7 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
   layout,
 }) => {
   const sectionData = (layout.sections?.children
-    ?.sections?.[8] as SectionData) || {
+    ?.sections?.[8] as MultiColumnSection) || {
     blocks: [{ setting: {} }],
     setting: {},
   };
@@ -235,37 +174,51 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
           if (key === "setting") return null;
           const index = Number(key);
           if (isNaN(index)) return null;
-          const typedBlock = block as ColumnBlock;
+          const typedBlock = block as MultiColumnSection;
           return (
             <Column key={idx} $data={sectionData}>
               <Title $data={sectionData}>
-                {typedBlock[`title${index + 1}` as keyof ColumnBlock]}
+                {
+                  typedBlock[
+                    `title${index + 1}` as keyof MultiColumnSection
+                  ] as React.ReactNode
+                }
               </Title>
               <Description $data={sectionData}>
-                {typedBlock[`description${index + 1}` as keyof ColumnBlock]}
+                {
+                  typedBlock[
+                    `description${index + 1}` as keyof MultiColumnSection
+                  ] as React.ReactNode
+                }
               </Description>
               <Image
                 src={
-                  typedBlock[`imageSrc${index + 1}` as keyof ColumnBlock] ||
-                  "/assets/images/banner2.webp"
+                  (typedBlock[
+                    `imageSrc${index + 1}` as keyof MultiColumnSection
+                  ] as string) || "/assets/images/banner2.webp"
                 }
                 alt={
-                  typedBlock[`imageAlt${index + 1}` as keyof ColumnBlock] || ""
+                  (typedBlock[
+                    `imageAlt${index + 1}` as keyof MultiColumnSection
+                  ] as string) || ""
                 }
                 $data={sectionData}
               />
               <Button
                 href={
-                  typedBlock[`btnLink${index + 1}` as keyof ColumnBlock] || ""
+                  (typedBlock[
+                    `btnLink${index + 1}` as keyof MultiColumnSection
+                  ] as string) || ""
                 }
                 $data={sectionData}
               >
-                {typedBlock[`btnLable${index + 1}` as keyof ColumnBlock] ||
-                  "Learn More"}
+                {(typedBlock[
+                  `btnLable${index + 1}` as keyof MultiColumnSection
+                ] as React.ReactNode) || "Learn More"}
               </Button>
             </Column>
           );
-        })}
+        })}{" "}
       </ColumnContainer>
     </Section>
   );

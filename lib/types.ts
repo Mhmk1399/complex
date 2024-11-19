@@ -13,6 +13,11 @@ export interface ColorSchema {
   text: string;
 }
 export interface CollapseBlockSetting extends CommonSettings {
+  titleFontSize: string;
+  titleFontWeight: string;
+  imageAlign: string;
+  imageRadius: string;
+  backgroundColorMultiRow: string;
   allTextPosition: Interpolation<
     Substitute<
       DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>,
@@ -159,11 +164,12 @@ export interface BlockSetting {
 export interface MultiColumnBlockSetting extends CommonSettings {
   headingColor?: string;
   titleColor?: string;
+  titleFontSize?: string;
+  titleFontWeight?: string;
   descriptionColor?: string;
   backgroundColorBox?: string;
   btnColor?: string;
   btnBackgroundColor?: string;
-  imageBehavior?: string;
   imageRadious?: string;
 }
 
@@ -184,6 +190,14 @@ export interface MultiColumnBlock {
   btnLink2?: string;
   btnLink3?: string;
 }
+export interface MultiColumnSection {
+  blocks: {
+    [key: number]: MultiColumnBlock;
+  };
+  setting: MultiColumnBlockSetting;
+  type: "multicolumn";
+}
+
 // Add these new interfaces for Newsletter component
 export interface NewsLetterBlockSetting extends CommonSettings {
   textHeadingColor: Interpolation<
@@ -255,14 +269,6 @@ export interface RichTextSection {
   blocks: RichTextBlock;
   setting: CommonSettings;
   type: "rich-text";
-}
-
-export interface MultiColumnSection {
-  blocks: {
-    [key: number]: MultiColumnBlock;
-  };
-  setting: MultiColumnBlockSetting;
-  type: "multicolumn";
 }
 
 export interface Section {
@@ -424,6 +430,9 @@ export interface SlideBlockSetting extends Partial<CommonSettings> {
   descriptionFontWeight?: string;
   btnTextColor?: string;
   btnBackgroundColor?: string;
+  backgroundBoxRadius?: string;
+  opacityImage?: string;
+  imageRadious?: string;
 }
 export interface SlideBlock {
   imageSrc: string;
@@ -516,13 +525,12 @@ export interface ContactFormDataSection {
 export interface MultiRowBlockSetting extends CommonSettings {
   titleColor: string;
   titleFontWeight: string;
-  titleFontSize: string;
+  titleFontSize?: string;
   backgroundColorMultiRow: string;
   backgroundColorBox: string;
-  imageRadious: string;
+  imageRadius: string;
   imageWidth: string;
   imageHeight: string;
-  imageRadius: string;
   headingColor: string;
   headingFontSize: string;
   headingFontWeight: string;
