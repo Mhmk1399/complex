@@ -99,7 +99,7 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
     ?.sections?.[7] as CollapseSection) || {
     blocks: [],
     setting: {},
-    type: "collapse-1234",
+    type: "collapse",
   };
 
   console.log(layout.sections.children.sections?.[7], "collapse");
@@ -116,7 +116,7 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
     <Section
       dir="rtl"
       $data={sectionData}
-      onClick={() => setSelectedComponent("collapse-1234")}
+      onClick={() => setSelectedComponent("collapse")}
     >
       <Heading $data={sectionData}>{sectionData.blocks[0]?.heading}</Heading>
       {sectionData.blocks.map((block: CollapseBlock, idx: number) => (
