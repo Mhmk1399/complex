@@ -245,11 +245,11 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                   name={spacing}
                   min="0"
                   max="100"
-                  value={
-                    String(userInputData?.setting?.[
+                  value={String(
+                    userInputData?.setting?.[
                       spacing as keyof typeof userInputData.setting
-                    ] ?? "0")
-                  }
+                    ] ?? "0"
+                  )}
                   onChange={handleSettingChange}
                   className="w-full"
                 />
