@@ -26,11 +26,11 @@
           "imageWidth": "50px",
           "imageHeight": "50px",
           "imageRadius": "30px",
-          "itemColor": "#000000",
+          "itemColor": "#ffffff",
           "itemFontSize": "20",
           "itemFontWeight": "bold",
-          "itemHoverColor": "#ffffff",
-          "backgroundColorNavbar": "#FCA311"
+          "itemHoverColor": "#FCA311",
+          "backgroundColorNavbar": "#14213D"
         }
       },
       "setting": {

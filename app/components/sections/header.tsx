@@ -14,7 +14,9 @@ interface HeaderProps {
 }
 
 // Styled components
-const SectionHeader = styled.section<{ $data: HeaderSection }>`
+const SectionHeader = styled.section<{
+  $data: HeaderSection;
+}>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -23,7 +25,8 @@ const SectionHeader = styled.section<{ $data: HeaderSection }>`
   margin-top: ${(props) => props.$data.setting.marginTop || "0px"}px;
   margin-bottom: ${(props) => props.$data.setting.marginBottom || "0px"}px;
   background-color: ${(props) =>
-    props.$data.blocks.setting.backgroundColorNavbar || "transparent"};
+    props.$data.blocks.setting.backgroundColorNavbar};
+
   position: fixed;
   z-index: 100;
 
@@ -102,7 +105,6 @@ const Header: React.FC<HeaderProps> = ({ setSelectedComponent, layout }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const sectionData = layout?.sections?.sectionHeader as HeaderSection;
-
   const isHeaderSection = (section: SectionType): section is HeaderSection => {
     return section?.type === "header" && "blocks" in section;
   };
