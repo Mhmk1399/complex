@@ -26,11 +26,11 @@
           "imageWidth": "50px",
           "imageHeight": "50px",
           "imageRadius": "30px",
-          "itemColor": "#ffffff",
+          "itemColor": "#14213D",
           "itemFontSize": "20",
           "itemFontWeight": "bold",
-          "itemHoverColor": "#FCA311",
-          "backgroundColorNavbar": "#14213D"
+          "itemHoverColor": "#ffffff",
+          "backgroundColorNavbar": "#FCA311"
         }
       },
       "setting": {
@@ -128,7 +128,7 @@
               "descriptionColor": "#E5E5E5",
               "descriptionFontSize": "20px",
               "descriptionFontWeight": "normal",
-              "background": "#000000",
+              "background": "#14213D",
               "btnTextColor": "#ffffff",
               "btnBackgroundColor": "#FCA311"
             }
