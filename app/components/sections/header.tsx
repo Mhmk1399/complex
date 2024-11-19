@@ -77,9 +77,12 @@ const NavItem = styled.a<{ $data: HeaderSection }>`
     props.$data.blocks.setting.itemFontWeight || "normal"};
   padding: 0.5rem 1rem;
   text-decoration: none;
+  transition: all 0.3s ease-in-out;
 
   &:hover {
     color: ${(props) => props.$data.blocks.setting.itemHoverColor || "#666"};
+    transform: scale(1.1);
+    
   }
 `;
 

@@ -411,7 +411,7 @@ export interface Layout {
     colorSchema: ColorSchema;
   };
   sections: {
-    slideshow: string;
+    slideshow: SlideSection;
     richtext: RichTextSection;
     sectionHeader: HeaderSection;
     children: Children;
@@ -421,10 +421,10 @@ export interface Layout {
   };
   order: string[];
 }
-export interface SlideBlockSetting extends Partial<CommonSettings> {
-  headingColor?: string;
-  headingFontSize?: string;
-  headingFontWeight?: string;
+export interface SlideBlockSetting {
+  textColor?: string;
+  textFontSize?: string;
+  textFontWeight?: string;
   descriptionColor?: string;
   descriptionFontSize?: string;
   descriptionFontWeight?: string;
@@ -445,12 +445,16 @@ export interface SlideBlock {
 }
 
 export interface SlideSection {
+  textFontWeight: string;
+  textFontSize: string;
+  textColor: string;
   blocks: SlideBlock[];
   setting: CommonSettings & {
     paddingTop: string;
     paddingBottom: string;
     marginTop: string;
     marginBottom: string;
+    
   };
   type: "slideshow";
 }

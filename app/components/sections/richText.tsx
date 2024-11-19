@@ -24,7 +24,10 @@ const Section = styled.section<{ $data: RichTextSection }>`
     props.$data?.blocks?.setting?.background || "#ffffff"};
   display: flex;
   flex-direction: column;
+  border-radius: 30px;
   align-items: center;
+  margin-left: 10px;
+  margin-right: 10px;
   gap: 15px;
 `;
 
@@ -33,6 +36,8 @@ const H1 = styled.h1<{ $data: RichTextBlock }>`
   font-size: ${(props) => props.$data?.setting?.textHeadingFontSize || "24px"};
   font-weight: ${(props) =>
     props.$data?.setting?.textHeadingFontWeight || "bold"};
+  // border-bottom: 3px solid #ffffff;
+  padding-bottom: 10px;
   @media (max-width: 768px) {
     font-size: 20px;
   }
@@ -114,6 +119,8 @@ const RichText: React.FC<RichTextProps> = ({
       onClick={() => setSelectedComponent("rich-text")}
     >
       {textHeading && <H1 $data={blocks}>{textHeading}</H1>}
+
+      <hr className="w-[70%] h-[4px] bg-white mb-4" />
 
       {description && <P $data={blocks}>{description}</P>}
       {btnLink && (
