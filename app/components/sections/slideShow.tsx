@@ -1,59 +1,19 @@
+import { SlideBlockSetting, SlideSection, Layout } from "@/lib/types";
 import React, { useState } from "react";
 import styled from "styled-components";
 
-// Types
+// Props Interface
 interface SlideShowProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
-  layout: {
-    sections?: {
-      children?: { sections: SectionData[] };
-    };
-  };
-}
-
-interface BlocksType {
-  setting: {
-    [key: string]: string;
-  };
-  imageSrc?: string;
-  imageAlt?: string;
-  text?: string;
-  description?: string;
-  btnLink?: string;
-  btnText?: string;
-}
-
-interface SettingType {
-  paddingTop?: string;
-  paddingBottom?: string;
-  marginTop?: string;
-  marginBottom?: string;
-  descriptionColor?: string;
-  descriptionFontSize?: string;
-  descriptionFontWeight?: string;
-  textColor?: string;
-  textFontSize?: string;
-  textFontWeight?: string;
-  btnTextColor?: string;
-  btnBackgroundColor?: string;
-  backgroundColorBox?: string;
-  opacityImage?: string;
-  imageWidth?: string;
-  imageHeight?: string;
-  imageRadius?: string;
-}
-
-interface SectionData {
-  blocks: BlocksType[];
-  setting: SettingType;
+  layout: Layout;
 }
 
 // Styled Components
-const Section = styled.section<{ $data: SectionData }>`
-  padding-top: ${(props) => props.$data.setting?.paddingTop || "20px"}px;
-  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20px"}px;
-  margin-top: ${(props) => props.$data.setting?.marginTop || "20px"}px;
-  margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20px"}px;
+const Section = styled.section<{ $data: SlideSection["setting"] }>`
+  padding-top: ${(props) => props.$data.paddingTop || "20px"}px;
+  padding-bottom: ${(props) => props.$data.paddingBottom || "20px"}px;
+  margin-top: ${(props) => props.$data.marginTop || "20px"}px;
+  margin-bottom: ${(props) => props.$data.marginBottom || "20px"}px;
   display: flex;
   margin-left: 10px;
   margin-right: 10px;
@@ -63,25 +23,24 @@ const Section = styled.section<{ $data: SectionData }>`
   align-items: center;
   justify-content: center;
   background-color: ${(props) =>
-    props.$data.setting?.backgroundColorBox || "transparent"};
+    props.$data.backgroundColorBox || "transparent"};
 `;
 
-const SlideContainer = styled.div<{ $data: BlocksType }>`
+const SlideContainer = styled.div<{ $data: SlideBlockSetting }>`
   max-width: 800px;
   overflow: hidden;
-  border-radius: ${(props) =>
-    props.$data.setting?.backgroundBoxRadius || "10px"};
+  border-radius: ${(props) => props.$data.backgroundBoxRadius || "10px"};
   margin: 0 20px;
   position: relative;
   display: flex;
   justify-content: center;
 `;
+
 const SlidesWrapper = styled.div<{ $currentIndex: number }>`
   display: flex;
-  text-align: center;
   transition: transform 0.6s ease-in-out;
   transform: translateX(${(props) => props.$currentIndex * -100}%);
-  width: 100%;
+  text-align: right;
 `;
 
 const Slide = styled.div`
@@ -90,31 +49,29 @@ const Slide = styled.div`
   transition: opacity 0.3s ease-in-out;
 `;
 
-const SlideImage = styled.img<{ $data: SectionData }>`
+const SlideImage = styled.img<{ $data: SlideBlockSetting }>`
   width: 100%;
   object-fit: cover;
-  opacity: ${(props) => props.$data.setting?.opacityImage || 0.5};
-  border-radius: ${(props) => props.$data.setting?.imageRadius || "10px"};
+  opacity: ${(props) => props.$data.opacityImage || 1};
+  border-radius: ${(props) => props.$data.imageRadious || "10px"};
   margin: 10px auto;
-  position: relative;
 `;
 
-const SlideText = styled.h3<{ $data: BlocksType }>`
-  color: ${(props) => props.$data.setting?.textColor || "#fff"};
-  font-size: ${(props) => props.$data.setting?.textFontSize || "24px"};
-  font-weight: ${(props) => props.$data.setting?.textFontWeight || "bold"};
+const SlideText = styled.h3<{ $data: SlideBlockSetting }>`
+  color: ${(props) => props.$data.headingColor || "#fff"};
+  font-size: ${(props) => props.$data.headingFontSize || "24px"};
+  font-weight: ${(props) => props.$data.headingFontWeight || "bold"};
   padding: 10px;
 `;
 
-const SlideDescription = styled.p<{ $data: SettingType }>`
-  padding: 5px;
-  color: ${(props) => props.$data?.descriptionColor || "#333"};
-  height: 150px;
+const SlideDescription = styled.p<{ $data: SlideBlockSetting }>`
+  color: ${(props) => props.$data.descriptionColor || "#333"};
   font-size: ${(props) => props.$data.descriptionFontSize || "16px"};
   font-weight: ${(props) => props.$data.descriptionFontWeight || "normal"};
+  padding: 5px;
 `;
 
-const Button = styled.a<{ $data: SettingType }>`
+const Button = styled.a<{ $data: SlideBlockSetting }>`
   display: inline-block;
   margin-top: 10px;
   padding: 10px 20px;
@@ -148,7 +105,7 @@ const NavButton = styled.button`
     top: 34%;
   }
   @media (min-width: 1024px) {
-    top: 34%;
+    top: 38%;
   }
 `;
 
@@ -165,10 +122,18 @@ const SlideShow: React.FC<SlideShowProps> = ({
   setSelectedComponent,
   layout,
 }) => {
-  const sectionData = layout.sections?.children?.sections?.[1] || {
-    blocks: [{ setting: {} }],
-    setting: {},
+  const sectionData: SlideSection = (layout.sections?.children
+    ?.sections?.[1] as SlideSection) || {
+    blocks: [],
+    setting: {
+      paddingTop: "20px",
+      paddingBottom: "20px",
+      marginTop: "20px",
+      marginBottom: "20px",
+    },
+    type: "slideshow",
   };
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const slides = sectionData.blocks;
 
@@ -179,23 +144,24 @@ const SlideShow: React.FC<SlideShowProps> = ({
 
   return (
     <Section
-      $data={sectionData}
+      dir="ltr"
+      $data={sectionData.setting}
       onClick={() => setSelectedComponent("slideshow")}
     >
-      <SlideContainer $data={slides[0]}>
+      <SlideContainer $data={slides[0]?.setting || {}}>
         <SlidesWrapper $currentIndex={currentIndex}>
-          {slides.map((slide: BlocksType, index) => (
+          {slides.map((slide, index) => (
             <Slide key={index}>
               <SlideImage
                 src={slide.imageSrc}
                 alt={slide.imageAlt}
-                $data={sectionData}
+                $data={slide.setting || {}}
               />
-              <SlideText $data={slide}>{slide.text}</SlideText>
-              <SlideDescription $data={sectionData.setting}>
-                {slide.description || "No description available"}
+              <SlideText $data={slide.setting || {}}>{slide.text}</SlideText>
+              <SlideDescription $data={slide.setting || {}}>
+                {slide.description}
               </SlideDescription>
-              <Button href={slide.btnLink} $data={sectionData.setting}>
+              <Button href={slide.btnLink} $data={slide.setting || {}}>
                 {slide.btnText}
               </Button>
             </Slide>
@@ -207,5 +173,4 @@ const SlideShow: React.FC<SlideShowProps> = ({
     </Section>
   );
 };
-
 export default SlideShow;

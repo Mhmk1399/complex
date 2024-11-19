@@ -107,11 +107,11 @@
             "btnTextColor": "#ffffff",
             "btnBackgroundColor": "#5b8e7d",
             "backgroundColorBox": "#bc4b51",
-            "backgroundBoxRadious": "10px",
+            "backgroundBoxRadius": "10px",
             "opacityImage": 1,
             "imageWidth": "700px",
             "imageHeight": "500px",
-            "imageRadious": "10px"
+            "imageRadious": "40px"
           }
         },
         {
@@ -354,7 +354,6 @@
             "imageRadious": "10",
             "imageWidth": "400px",
             "imageHeight": "300px",
-            "imageBehavior": "cover",
             "titleColor": "#ffa62b",
             "titleFontSize": "25",
             "titleFontWeight": "bold",

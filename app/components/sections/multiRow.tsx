@@ -1,69 +1,15 @@
+import { Layout, MultiRowSection, MultiRowBlock } from "@/lib/types";
 import React from "react";
 import styled from "styled-components";
 
 // Types
 interface MultiRowShowProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
-  layout: {
-    sections?: {
-      children?: { sections: SectionData[] };
-    };
-  };
-}
-interface ColumnBlock {
-  heading?: string;
-  description?: string;
-  btnLable?: string;
-  imageSrc?: string;
-  imageAlt?: string;
-  btnLink?: string;
-}
-
-interface BlocksType {
-  setting: {
-    // [key: string]: string;
-  };
-  heading?: string;
-  description?: string;
-  btnLabel?: string;
-  imageSrc?: string;
-  imageAlt?: string;
-  btnLink?: string;
-  btnLable?: string;
-}
-
-interface SettingType {
-  paddingTop?: string;
-  paddingBottom?: string;
-  marginTop?: string;
-  marginBottom?: string;
-  headingColor?: string;
-  headingFontSize?: string;
-  headingFontWeight?: string;
-  descriptionColor?: string;
-  descriptionFontWeight?: string;
-  descriptionFontSize?: string;
-  imageWidth?: string;
-  imageHeight?: string;
-  imageRadius?: string;
-  backgroundColorMultiRow?: string;
-  backgroundColorBox?: string;
-  btnColor?: string;
-  btnBackgroundColor?: string;
-  titleColor?: string;
-  titleFontWeight?: string;
-  titleFontSize?: string;
-  imageAlign?: string;
-}
-
-interface SectionData {
-  title: string;
-  blocks: BlocksType[];
-  setting: SettingType;
+  layout: Layout;
 }
 
 // Styled Components
-const Section = styled.section<{ $data: SectionData }>`
+const Section = styled.section<{ $data: MultiRowSection }>`
   padding-top: ${(props) => props.$data.setting?.paddingTop || "20px"}px;
   padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20px"}px;
   margin-top: ${(props) => props.$data.setting?.marginTop || "20px"}px;
@@ -77,14 +23,14 @@ const Section = styled.section<{ $data: SectionData }>`
   border-radius: 12px;
 `;
 
-const Title = styled.h2<{ $data: SectionData }>`
+const Title = styled.h2<{ $data: MultiRowSection }>`
   color: ${(props) => props.$data.setting?.titleColor || "#333"};
   font-size: ${(props) => props.$data.setting?.titleFontSize || "24px"}px;
   font-weight: ${(props) => props.$data.setting?.titleFontWeight || "bold"};
   text-align: center;
   margin-top: 30px;
 `;
-const Heading = styled.h2<{ $data: SectionData }>`
+const Heading = styled.h2<{ $data: MultiRowSection }>`
   color: ${(props) => props.$data.setting?.headingColor || "#333"};
   font-size: ${(props) => props.$data.setting?.headingFontSize || "24px"}px;
   font-weight: ${(props) => props.$data.setting?.headingFontWeight || "bold"};
@@ -103,7 +49,7 @@ const RowContainer = styled.div`
   align-items: center;
 `;
 
-const Row = styled.div<{ $data: SectionData }>`
+const Row = styled.div<{ $data: MultiRowSection }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -114,7 +60,8 @@ const Row = styled.div<{ $data: SectionData }>`
   background-color: ${(props) =>
     props.$data.setting?.backgroundColorBox || "#f9f9f9"};
   max-width: auto;
-  flex-direction: ${(props) => props.$data.setting?.imageAlign || "row-reverse"};
+  flex-direction: ${(props) =>
+    props.$data.setting?.imageAlign || "row-reverse"};
 
   @media (min-width: 768px) {
     align-items: center;
@@ -137,17 +84,20 @@ const Row = styled.div<{ $data: SectionData }>`
     }
 `;
 
-const WrapperContainer = styled.div<{ $data: SectionData }>`
+const WrapperContainer = styled.div<{ $data: MultiRowSection }>`
   display: flex;
   flex-direction: column;
   gap: 10px;
   justify-content: center;
   align-items: center;
+  min-height: 300px; // Add fixed minimum height
+  width: 100%; // Fixed width
+  padding: 20px;
 `;
 
-const Image = styled.img<{ $data: SectionData }>`
-  width: ${(props) => props.$data.setting?.imageWidth || "100%"}px;
-  height: ${(props) => props.$data.setting?.imageHeight || "auto"}px;
+const Image = styled.img<{ $data: MultiRowSection }>`
+  width: 100%;
+  height: 100%;
   border-radius: ${(props) => props.$data.setting?.imageRadius || "8px"}px;
   object-fit: cover;
   margin-bottom: 10px;
@@ -161,12 +111,15 @@ const Image = styled.img<{ $data: SectionData }>`
   }
 `;
 
-const Description = styled.p<{ $data: SectionData }>`
+const Description = styled.p<{ $data: MultiRowSection }>`
   color: ${(props) => props.$data.setting?.descriptionColor || "#666"};
   font-size: ${(props) => props.$data.setting?.descriptionFontSize || "16px"}px;
   font-weight: ${(props) =>
     props.$data.setting?.descriptionFontWeight || "normal"};
   margin-bottom: 10px;
+  overflow-y: auto; // Allow scrolling if content exceeds height
+  min-height: 80px;
+  width: 100%;
   text-align: center;
   padding: 0 10px;
   @media (max-width: 768px) {
@@ -174,7 +127,7 @@ const Description = styled.p<{ $data: SectionData }>`
   }
 `;
 
-const Button = styled.a<{ $data: SectionData }>`
+const Button = styled.a<{ $data: MultiRowSection }>`
   display: inline-block;
   padding: 10px 20px 10px 20px;
   color: ${(props) => props.$data.setting?.btnColor || "#fff"};
@@ -193,7 +146,8 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
   setSelectedComponent,
   layout,
 }) => {
-  const sectionData = layout.sections?.children?.sections?.[9] || {
+  const sectionData = (layout.sections?.children
+    ?.sections?.[9] as MultiRowSection) || {
     title: "",
     blocks: [{ setting: {} }],
     setting: {},
@@ -214,35 +168,31 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
             if (key === "setting") return null;
             const index = Number(key);
             if (isNaN(index)) return null;
-            const typedBlock = block as ColumnBlock;
+            const typedBlock = block as MultiRowBlock;
             return (
               <Row key={idx} $data={sectionData}>
                 {typedBlock.imageSrc && (
                   <Image
                     src={
-                      (typedBlock.imageSrc as keyof ColumnBlock) ||
+                      (typedBlock.imageSrc as string) ||
                       "/assets/images/banner2.webp"
                     }
-                    alt={(typedBlock.imageAlt as keyof ColumnBlock) || ""}
+                    alt={(typedBlock.imageAlt as string) || ""}
                     $data={sectionData}
                   />
                 )}
                 <WrapperContainer $data={sectionData}>
                   <Heading $data={sectionData}>
-                    {typedBlock.heading ||
-                      ("No title available" as keyof ColumnBlock)}
+                    {typedBlock.heading || "No title available"}
                   </Heading>
                   <Description $data={sectionData}>
-                    {typedBlock.description ||
-                      ("description" as keyof ColumnBlock)}
+                    {typedBlock.description || "description"}
                   </Description>
                   <Button
-                    href={
-                      typedBlock.btnLink || ("#" as keyof ColumnBlock) || ""
-                    }
+                    href={typedBlock.btnLink || "#" || ""}
                     $data={sectionData}
                   >
-                    {(typedBlock.btnLable as keyof ColumnBlock) || "Learn More"}
+                    {typedBlock.btnLable || "Learn More"}
                   </Button>
                 </WrapperContainer>
               </Row>

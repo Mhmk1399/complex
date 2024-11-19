@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import styled from "styled-components";
-import { ContactFormDataSection, Layout } from "../../../lib/types"; // Assuming types are imported from a shared types file
+import { ContactFormDataSection, Layout } from "../../../lib/types"; 
 
 interface ContactFormProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
