@@ -245,7 +245,7 @@ export const Form = ({
             layout={layout}
           />
         );
-      case "collapse-1234":
+      case "collapse":
         return (
           <CollapseForm
             setUserInputData={
