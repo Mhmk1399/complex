@@ -1,5 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { DragEndEvent } from "@dnd-kit/core";
+
 import {
   DndContext,
   closestCenter,
@@ -27,7 +29,7 @@ import { ContactForm } from "./forms/contact";
 import { NewsLetterForm } from "./forms/newsLetterForm";
 import { CollapseForm } from "./forms/collapseForm";
 import {
-  ContactFormData,
+  ContactFormDataSection,
   ContactFormProps,
   FooterSection,
   MultiRowSection,
@@ -68,11 +70,17 @@ interface FormProps {
   selectedComponent: string;
   setLayout: (data: Layout) => void;
   layout: Layout;
-  orders:string[]
+  orders: string[];
   setOrders: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-export const Form = ({ selectedComponent, setLayout, layout ,orders,setOrders}: FormProps) => {
+export const Form = ({
+  selectedComponent,
+  setLayout,
+  layout,
+  orders,
+  setOrders,
+}: FormProps) => {
   const [userInputData, setUserInputData] = useState<FormData>({} as FormData);
   const [isOpen, setIsOpen] = useState(false);
   const [showOrdersMenu, setShowOrdersMenu] = useState(false);
@@ -126,11 +134,12 @@ export const Form = ({ selectedComponent, setLayout, layout ,orders,setOrders}: 
     setOrders([...layout.sections.children.order]);
   }, [layout.sections.children.order]);
 
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    if (active.id !== over.id) {
-      const oldIndex = orders.indexOf(active.id);
-      const newIndex = orders.indexOf(over.id);
+
+    if (active.id !== over?.id) {
+      const oldIndex = orders.indexOf(active.id as string);
+      const newIndex = orders.indexOf(over?.id as string);
       const newOrders = arrayMove(orders, oldIndex, newIndex);
 
       setOrders(newOrders);
@@ -217,10 +226,10 @@ export const Form = ({ selectedComponent, setLayout, layout ,orders,setOrders}: 
           <ContactForm
             setUserInputData={
               setUserInputData as React.Dispatch<
-                React.SetStateAction<ContactFormData>
+                React.SetStateAction<ContactFormDataSection>
               >
             }
-            userInputData={userInputData as ContactFormData}
+            userInputData={userInputData as ContactFormDataSection}
             layout={layout}
           />
         );

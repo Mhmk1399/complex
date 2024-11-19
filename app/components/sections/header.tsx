@@ -5,7 +5,7 @@ import {
   Section as SectionType,
   HeaderBlock,
 } from "@/lib/types";
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 
 interface HeaderProps {
@@ -97,6 +97,8 @@ const MenuButton = styled.button<{ $data: HeaderSection }>`
 `;
 
 const Header: React.FC<HeaderProps> = ({ setSelectedComponent, layout }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const sectionData = layout?.sections?.sectionHeader as HeaderSection;
 
   const isHeaderSection = (section: SectionType): section is HeaderSection => {
@@ -125,8 +127,6 @@ const Header: React.FC<HeaderProps> = ({ setSelectedComponent, layout }) => {
   }
 
   const { imageLogo, imageAlt, links } = blocks;
-
-  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <SectionHeader

@@ -1,9 +1,4 @@
-import {
-  Layout,
-  CollapseSection,
-  CollapseBlock,
-  CollapseBlockSetting,
-} from "@/lib/types";
+import { Layout, CollapseSection, CollapseBlock } from "@/lib/types";
 import React, { useState } from "react";
 import styled from "styled-components";
 

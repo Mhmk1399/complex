@@ -359,7 +359,7 @@ export interface ContactFormBlock {
 }
 
 export interface ContactFormSection {
-  blocks: {};
+  blocks: ContactFormBlock;
   setting: {
     paddingTop?: string;
     paddingBottom?: string;

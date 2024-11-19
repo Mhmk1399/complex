@@ -23,7 +23,7 @@ export const Compiler = (data: string | object, name: string) => {
   );
 }
 export const JasonChanger = (data: string | object, name: string, newData: FormData) => {
-  let processedData = typeof data === 'string' 
+  const processedData = typeof data === 'string' 
     ? JSON.parse(data)
     : structuredClone(data);
 

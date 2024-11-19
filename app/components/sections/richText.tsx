@@ -90,7 +90,7 @@ const RichText: React.FC<RichTextProps> = ({
   const { blocks } = sectionData;
 
   // Type guard for RichTextBlock
-  const isRichTextBlock = (block: {}): block is RichTextBlock => {
+  const isRichTextBlock = (block: RichTextBlock): block is RichTextBlock => {
     return (
       block &&
       "textHeading" in block &&

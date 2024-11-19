@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Compiler } from "../compiler";
-import { Layout, Section, ImageTextSection } from "@/lib/types";
+import { Layout, ImageTextSection } from "@/lib/types";
 interface ImageTextFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<ImageTextSection>>;
   userInputData: ImageTextSection;
