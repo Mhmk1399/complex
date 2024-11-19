@@ -33,7 +33,7 @@ export const Preview: React.FC<PreviewProps> = ({
     'contact-form': ContactForm,
     newsletter: NewsLetter,
     collapse: CollapseFaq,
-    multicolumn: MultiColumn,
+    multiColumn: MultiColumn,
     slideshow: SlideShow,
     multiRow: MultiRow,
     footer: FooterContainer
