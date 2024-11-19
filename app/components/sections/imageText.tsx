@@ -73,7 +73,7 @@ const Heading = styled.h2<{ $data: ImageTextSection }>`
   margin-bottom: 10px;
 
   @media (max-width: 768px) {
-    font-size: 22px;
+    font-size: 28px;
   }
 
   @media (min-width: 1025px) {
@@ -91,7 +91,7 @@ const Description = styled.p<{ $data: ImageTextSection }>`
   margin-bottom: 20px;
 
   @media (max-width: 768px) {
-    font-size: 14px;
+    font-size: 16px;
   }
 
   @media (min-width: 1025px) {

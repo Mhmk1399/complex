@@ -62,7 +62,7 @@ const Input = styled.input`
   padding: 8px;
   margin-bottom: 15px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 15px;
   font-size: 16px;
   width: 100%;
   max-width: 400px;
@@ -107,7 +107,7 @@ const NewsLetter: React.FC<NewsLetterProps> = ({
 
   return (
     <Section
-    dir="rtl"
+      dir="rtl"
       $data={sectionData}
       onClick={() => setSelectedComponent("newsletter")}
     >

@@ -22,7 +22,7 @@ interface PreviewProps {
 export const Preview: React.FC<PreviewProps> = ({
   layout,
   setSelectedComponent,
-  orders
+  orders,
 }) => {
   const componentMap = {
     header: Header,
@@ -30,36 +30,33 @@ export const Preview: React.FC<PreviewProps> = ({
     banner: Banner,
     "image-text": ImageText,
     video: Video,
-    'contact-form': ContactForm,
+    "contact-form": ContactForm,
     newsletter: NewsLetter,
     collapse: CollapseFaq,
     multiColumn: MultiColumn,
     slideshow: SlideShow,
     multiRow: MultiRow,
-    footer: FooterContainer
+    footer: FooterContainer,
   };
 
   return (
     <div className="mt-16 w-full md:w-full lg:w-[75%] h-[95vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide lg:mt-5 lg:ml-5">
-      <Header setSelectedComponent={setSelectedComponent} 
-                layout={layout}
-              />
+      <Header setSelectedComponent={setSelectedComponent} layout={layout} />
       <div className="grid grid-cols-1 mt-32">
         {orders.map((componentName, index) => {
-          const Component = componentMap[componentName as keyof typeof componentMap];
+          const Component =
+            componentMap[componentName as keyof typeof componentMap];
           return Component ? (
-            <div 
+            <div
               key={componentName}
               style={{ order: index }}
               className="w-full"
             >
-              <Component 
-                setSelectedComponent={setSelectedComponent} 
+              <Component
+                setSelectedComponent={setSelectedComponent}
                 layout={layout}
               />
-             
             </div>
-
           ) : null;
         })}
       </div>

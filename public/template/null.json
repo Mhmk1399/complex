@@ -47,7 +47,7 @@
         {
           "type": "banner",
           "blocks": {
-            "imageSrc": "",
+            "imageSrc": "/assets/images/ban.jpg",
             "imageAlt": "",
             "text": "سربرگ بنر",
             "description": " توضیحات بنر",
@@ -230,10 +230,10 @@
             "btnText": "ثبت نام",
 
             "setting": {
-              "headingColor": "#000000",
+              "headingColor": "#FCA311",
               "headingFontSize": "27",
               "headingFontWeight": "bold",
-              "descriptionColor": "#FCA311",
+              "descriptionColor": "#000000",
               "descriptionFontSize": "18",
               "descriptionFontWeight": "normal",
               "btnBackgroundColor": "#FCA311",

@@ -82,7 +82,6 @@ const NavItem = styled.a<{ $data: HeaderSection }>`
   &:hover {
     color: ${(props) => props.$data.blocks.setting.itemHoverColor || "#666"};
     transform: scale(1.1);
-    
   }
 `;
 

@@ -63,6 +63,9 @@ const SlideText = styled.h3<{ $data?: SlideSection["setting"] }>`
   font-weight: ${(props) => props.$data?.textFontWeight || "bold"};
   text-align: center;
   padding: 10px;
+  @media (max-width: 768px) {
+    font-size: 28px;
+  }
 `;
 
 const SlideDescription = styled.p<{ $data?: SlideSection["setting"] }>`
@@ -70,8 +73,10 @@ const SlideDescription = styled.p<{ $data?: SlideSection["setting"] }>`
   font-size: ${(props) => props.$data?.descriptionFontSize || "16px"};
   font-weight: ${(props) => props.$data?.descriptionFontWeight || "normal"};
   text-align: center;
-
   padding: 5px;
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 `;
 
 const Button = styled.a<{ $data: SlideSection["setting"] }>`

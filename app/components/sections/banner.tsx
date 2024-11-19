@@ -57,7 +57,7 @@ const HeadingText = styled.h2<{ $data: BannerSection }>`
     props.$data.blocks.setting.textFontWeight || "bold"};
   text-align: center;
   @media (max-width: 768px) {
-    font-size: 24px;
+    font-size: 28px;
   }
 `;
 
@@ -70,7 +70,7 @@ const DescriptionText = styled.p<{ $data: BannerSection }>`
   margin-top: 14px;
   text-align: center;
   @media (max-width: 768px) {
-    font-size: 14px;
+    font-size: 16px;
   }
 `;
 

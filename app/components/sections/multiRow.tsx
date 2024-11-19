@@ -29,6 +29,9 @@ const Title = styled.h2<{ $data: MultiRowSection }>`
   font-weight: ${(props) => props.$data.setting?.titleFontWeight || "bold"};
   text-align: center;
   margin-top: 30px;
+  @media (max-width: 768px) {
+    font-size: 28px;
+  }
 `;
 const Heading = styled.h2<{ $data: MultiRowSection }>`
   color: ${(props) => props.$data.setting?.headingColor || "#333"};

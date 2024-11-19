@@ -32,6 +32,9 @@ const Heading = styled.h1<{ $data: VideoSection }>`
   font-weight: ${(props) =>
     props.$data.blocks.setting?.headingFontWeight || "bold"};
   text-align: center;
+  @media (max-width: 768px) {
+    font-size: 28px;
+  }
 `;
 
 const VideoElement = styled.video<{ $data: VideoSection }>`

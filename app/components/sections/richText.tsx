@@ -39,7 +39,7 @@ const H1 = styled.h1<{ $data: RichTextBlock }>`
   // border-bottom: 3px solid #ffffff;
   padding-bottom: 10px;
   @media (max-width: 768px) {
-    font-size: 20px;
+    font-size: 28px;
   }
 `;
 
@@ -49,7 +49,7 @@ const P = styled.p<{ $data: RichTextBlock }>`
   font-weight: ${(props) =>
     props.$data?.setting?.descriptionFontWeight || "normal"};
   @media (max-width: 768px) {
-    font-size: 13px;
+    font-size: 16px;
   }
 `;
 
