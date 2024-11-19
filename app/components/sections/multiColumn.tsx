@@ -214,7 +214,7 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
               >
                 {(typedBlock[
                   `btnLable${index + 1}` as keyof MultiColumnSection
-                ] as React.ReactNode) || "Learn More"}
+                ] as React.ReactNode) || "بیشتر"}
               </Button>
             </Column>
           );
