@@ -112,7 +112,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
   layout,
 }) => {
   const sectionData = layout.sections?.children?.sections?.find(
-    (section) => section.type === "contact-form"
+    (section) => section.type === "ContactForm"
   ) as ContactFormDataSection;
 
   return (
