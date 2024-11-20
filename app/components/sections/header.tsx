@@ -29,7 +29,6 @@ const SectionHeader = styled.section<{
     props.$data?.blocks?.setting?.backgroundColorNavbar || "#14213D"};
   position: fixed;
   z-index: 50;
-  border-radius: 30px;
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
