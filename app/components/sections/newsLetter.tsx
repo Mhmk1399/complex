@@ -1,5 +1,4 @@
 "use client";
-import React, { use, useEffect } from "react";
 import styled from "styled-components";
 import { Layout, NewsLetterSection } from "@/lib/types"; // Import the types
 
