@@ -1,0 +1,120 @@
+{
+    "type": "layout",
+    "settings": {
+      "fontFamily": "Arial, sans-serif",
+      "colorSchema": {
+        "primary": "#3498db",
+        "secondary": "#2ecc71",
+        "text": "#333333"
+      }
+    },
+    "sections": {
+      "shopOverview": {
+        "type": "shop",
+        "blocks": {
+          "heading": "فروشگاه ما",
+          "description": "بزرگترین مجموعه محصولات با کیفیت",
+          "imageSrc": "/assets/images/shop-banner.jpg",
+          "btnText": "مشاهده همه محصولات",
+          "btnLink": "/shop",
+          "setting": {
+            "headingColor": "#FCA311",
+            "headingFontSize": "40px",
+            "headingFontWeight": "bold",
+            "descriptionColor": "#E5E5E5",
+            "descriptionFontSize": "18px",
+            "descriptionFontWeight": "normal",
+            "backgroundColor": "#14213D",
+            "imageRadius": "20px",
+            "btnBackgroundColor": "#FCA311",
+            "btnTextColor": "#FFFFFF"
+          }
+        },
+        "setting": {
+          "paddingTop": "20",
+          "paddingBottom": "20",
+          "marginTop": "10",
+          "marginBottom": "10"
+        }
+      },
+      "productList": {
+        "type": "product-list",
+        "blocks": [
+          {
+            "productId": 1,
+            "imageSrc": "/assets/images/product1.jpg",
+            "imageAlt": "محصول ۱",
+            "productName": "محصول اول",
+            "price": "۱۰۰۰۰۰ تومان",
+            "btnText": "اضافه به سبد خرید",
+            "btnLink": "/product/1"
+          },
+          {
+            "productId": 2,
+            "imageSrc": "/assets/images/product2.jpg",
+            "imageAlt": "محصول ۲",
+            "productName": "محصول دوم",
+            "price": "۲۰۰۰۰۰ تومان",
+            "btnText": "اضافه به سبد خرید",
+            "btnLink": "/product/2"
+          },
+          {
+            "productId": 3,
+            "imageSrc": "/assets/images/product3.jpg",
+            "imageAlt": "محصول ۳",
+            "productName": "محصول سوم",
+            "price": "۳۰۰۰۰۰ تومان",
+            "btnText": "اضافه به سبد خرید",
+            "btnLink": "/product/3"
+          }
+        ],
+        "setting": {
+          "gridColumns": 3,
+          "imageRadius": "10px",
+          "productNameColor": "#000000",
+          "priceColor": "#FCA311",
+          "btnBackgroundColor": "#2ECC71",
+          "btnTextColor": "#FFFFFF",
+          "paddingTop": "20",
+          "paddingBottom": "20",
+          "marginTop": "10",
+          "marginBottom": "10",
+          "backgroundColor": "#E5E5E5"
+        }
+      },
+      "productDetails": {
+        "type": "product-details",
+        "blocks": {
+          "imageSrc": "/assets/images/product-detail.jpg",
+          "imageAlt": "محصول",
+          "productName": "نام محصول",
+          "price": "۱۰۰۰۰۰ تومان",
+          "description": "توضیحات کامل محصول",
+          "btnText": "اضافه به سبد خرید",
+          "btnLink": "/cart",
+          "setting": {
+            "imageWidth": "500px",
+            "imageHeight": "500px",
+            "imageRadius": "20px",
+            "productNameColor": "#FCA311",
+            "productNameFontSize": "30px",
+            "productNameFontWeight": "bold",
+            "priceColor": "#2ECC71",
+            "priceFontSize": "24px",
+            "descriptionColor": "#333333",
+            "descriptionFontSize": "16px",
+            "btnBackgroundColor": "#3498DB",
+            "btnTextColor": "#FFFFFF"
+          }
+        },
+        "setting": {
+          "paddingTop": "20",
+          "paddingBottom": "20",
+          "marginTop": "10",
+          "marginBottom": "10",
+          "backgroundColor": "#FFFFFF"
+        }
+      }
+    }
+  }
+  

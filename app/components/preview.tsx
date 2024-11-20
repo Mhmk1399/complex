@@ -30,7 +30,7 @@ export const Preview: React.FC<PreviewProps> = ({
     Banner: Banner,
     ImageText: ImageText,
     Video: Video,
-    // ContactForm: ContactForm,
+    ContactForm: ContactForm,
     NewsLetter: NewsLetter,
     CollapseFaq: CollapseFaq,
     Multicolumn: MultiColumn,
@@ -45,7 +45,7 @@ export const Preview: React.FC<PreviewProps> = ({
       <div className="grid grid-cols-1 mt-32">
         {orders.map((componentName, index) => {
           const Component =
-            componentMap[componentName as keyof typeof componentMap]            
+            componentMap[componentName as keyof typeof componentMap];
           return Component ? (
             <div
               key={componentName}

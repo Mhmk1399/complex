@@ -12,10 +12,10 @@
   }
 }
 
-
 body {
   background: var(--background);
-  font-family: var(--font-cairo), sans-serif;}
+  font-family: var(--font-cairo), sans-serif;
+}
 .loadingContainer {
   position: fixed;
   top: 0;

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import styled from "styled-components";
-import { ContactFormDataSection, Layout } from "../../../lib/types"; 
+import { ContactFormDataSection, Layout } from "../../../lib/types";
 
 interface ContactFormProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -14,24 +14,24 @@ const Section = styled.section<{ $data: ContactFormDataSection }>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: ${(props) => props.$data.setting?.paddingTop || "20px"};
-  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20px"};
-  margin-top: ${(props) => props.$data.setting?.marginTop || "20px"};
-  margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20px"};
+  padding-top: ${(props) => props.$data?.setting?.paddingTop || "20px"};
+  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "20px"};
+  margin-top: ${(props) => props.$data?.setting?.marginTop || "20px"};
+  margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "20px"};
   margin-left: 20px;
   margin-right: 20px;
   background-color: ${(props) =>
-    props.$data.blocks.setting?.formBackground || "#f9f9f9"};
+    props.$data.blocks?.setting?.formBackground || "#f9f9f9"};
   border-radius: 20px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 `;
 
 const Heading = styled.h2<{ $data: ContactFormDataSection }>`
-  color: ${(props) => props.$data.blocks.setting?.headingColor || "#333"};
+  color: ${(props) => props.$data.blocks?.setting?.headingColor || "#333"};
   font-size: ${(props) =>
-    props.$data.blocks.setting?.headingFontSize || "24px"}px;
+    props.$data.blocks?.setting?.headingFontSize || "24px"}px;
   font-weight: ${(props) =>
-    props.$data.blocks.setting?.headingFontWeight || "bold"};
+    props.$data.blocks?.setting?.headingFontWeight || "bold"};
   margin-bottom: 20px;
   @media (max-width: 768px) {
     font-size: 28px;
