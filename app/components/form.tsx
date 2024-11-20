@@ -339,7 +339,7 @@ export const Form = ({
           {showOrdersMenu ? (
             <div className="bg-white p-4 rounded-lg shadow-md" dir="rtl">
               <h3 className="text-lg font-semibold mb-2">
-                منو جابجایی
+                ترتیب سکشن
               </h3>
               <DndContext
                 sensors={sensors}
