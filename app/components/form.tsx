@@ -351,8 +351,10 @@ export const Form = ({
             تنظیمات سکشن
           </h2>
           {showOrdersMenu ? (
-            <div className="bg-white p-4 rounded-lg shadow-md">
-              <h3 className="text-lg font-semibold mb-2">Orders Menu</h3>
+            <div className="bg-white p-4 rounded-lg shadow-md" dir="rtl">
+              <h3 className="text-lg font-semibold mb-2">
+                ترتیب سکشن
+              </h3>
               <DndContext
                 sensors={sensors}
                 collisionDetection={closestCenter}

@@ -42,7 +42,7 @@ const BannerTextBox = styled.div<{ $data: BannerSection }>`
   opacity: ${(props) => props.$data.blocks.setting.opacityTextBox || "1"};
   background-color: ${(props) =>
     props.$data.blocks.setting.backgroundColorBox || "rgba(0, 0, 0, 0.5)"};
-  padding: 30px 100px;
+  padding: 50px 200px;
   border-radius: ${(props) =>
     props.$data.blocks.setting.backgroundBoxRadious || "10px"};
   @media (max-width: 768px) {
@@ -57,7 +57,7 @@ const HeadingText = styled.h2<{ $data: BannerSection }>`
     props.$data.blocks.setting.textFontWeight || "bold"};
   text-align: center;
   @media (max-width: 768px) {
-    font-size: 24px;
+    font-size: 28px;
   }
 `;
 
@@ -70,7 +70,7 @@ const DescriptionText = styled.p<{ $data: BannerSection }>`
   margin-top: 14px;
   text-align: center;
   @media (max-width: 768px) {
-    font-size: 14px;
+    font-size: 16px;
   }
 `;
 

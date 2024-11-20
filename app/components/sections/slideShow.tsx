@@ -1,6 +1,6 @@
-import { SlideBlockSetting, SlideSection, Layout } from "@/lib/types";
 import React, { useState } from "react";
 import styled from "styled-components";
+import { SlideSection, Layout, SlideBlock } from "@/lib/types";
 
 // Props Interface
 interface SlideShowProps {
@@ -26,10 +26,11 @@ const Section = styled.section<{ $data: SlideSection["setting"] }>`
     props.$data.backgroundColorBox || "transparent"};
 `;
 
-const SlideContainer = styled.div<{ $data: SlideBlockSetting }>`
+const SlideContainer = styled.div<{ $data: SlideBlock | undefined }>`
   max-width: 800px;
   overflow: hidden;
-  border-radius: ${(props) => props.$data.backgroundBoxRadius || "10px"};
+  border-radius: ${(props) =>
+    props.$data?.setting?.backgroundBoxRadius || "10px"};
   margin: 0 20px;
   position: relative;
   display: flex;
@@ -40,7 +41,6 @@ const SlidesWrapper = styled.div<{ $currentIndex: number }>`
   display: flex;
   transition: transform 0.6s ease-in-out;
   transform: translateX(${(props) => props.$currentIndex * -100}%);
-  text-align: right;
 `;
 
 const Slide = styled.div`
@@ -49,35 +49,46 @@ const Slide = styled.div`
   transition: opacity 0.3s ease-in-out;
 `;
 
-const SlideImage = styled.img<{ $data: SlideBlockSetting }>`
+const SlideImage = styled.img<{ $data: SlideBlock }>`
   width: 100%;
   object-fit: cover;
-  opacity: ${(props) => props.$data.opacityImage || 1};
-  border-radius: ${(props) => props.$data.imageRadious || "10px"};
+  opacity: ${(props) => props.$data.setting?.opacityImage || 1};
+  border-radius: ${(props) => props.$data.setting?.imageRadious || "10px"};
   margin: 10px auto;
 `;
 
-const SlideText = styled.h3<{ $data: SlideBlockSetting }>`
-  color: ${(props) => props.$data.headingColor || "#fff"};
-  font-size: ${(props) => props.$data.headingFontSize || "24px"};
-  font-weight: ${(props) => props.$data.headingFontWeight || "bold"};
+const SlideText = styled.h3<{ $data?: SlideSection["setting"] }>`
+  color: ${(props) => props.$data?.textColor || "#fff"};
+  font-size: ${(props) => props.$data?.textFontSize || "24px"};
+  font-weight: ${(props) => props.$data?.textFontWeight || "bold"};
+  text-align: center;
   padding: 10px;
+  @media (max-width: 768px) {
+    font-size: 28px;
+  }
 `;
 
-const SlideDescription = styled.p<{ $data: SlideBlockSetting }>`
-  color: ${(props) => props.$data.descriptionColor || "#333"};
-  font-size: ${(props) => props.$data.descriptionFontSize || "16px"};
-  font-weight: ${(props) => props.$data.descriptionFontWeight || "normal"};
+const SlideDescription = styled.p<{ $data?: SlideSection["setting"] }>`
+  color: ${(props) => props.$data?.descriptionColor || "#333"};
+  font-size: ${(props) => props.$data?.descriptionFontSize || "16px"};
+  font-weight: ${(props) => props.$data?.descriptionFontWeight || "normal"};
+  text-align: center;
   padding: 5px;
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 `;
 
-const Button = styled.a<{ $data: SlideBlockSetting }>`
+const Button = styled.a<{ $data: SlideSection["setting"] }>`
   display: inline-block;
   margin-top: 10px;
   padding: 10px 20px;
   color: ${(props) => props.$data.btnTextColor || "#fff"};
   background-color: ${(props) => props.$data.btnBackgroundColor || "#5b8e7d"};
   border-radius: 5px;
+  text-align: center;
+  width: 100%;
+
   text-decoration: none;
   &:hover {
     opacity: 0.8;
@@ -135,7 +146,7 @@ const SlideShow: React.FC<SlideShowProps> = ({
   };
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const slides = sectionData.blocks;
+  const slides = sectionData.blocks || [];
 
   const handleNext = () =>
     setCurrentIndex((prev) => (prev + 1) % slides.length);
@@ -148,20 +159,20 @@ const SlideShow: React.FC<SlideShowProps> = ({
       $data={sectionData.setting}
       onClick={() => setSelectedComponent("SlideShow")}
     >
-      <SlideContainer $data={slides[0]?.setting || {}}>
+      <SlideContainer $data={slides[0]}>
         <SlidesWrapper $currentIndex={currentIndex}>
           {slides.map((slide, index) => (
             <Slide key={index}>
               <SlideImage
                 src={slide.imageSrc}
                 alt={slide.imageAlt}
-                $data={slide.setting || {}}
+                $data={slide}
               />
-              <SlideText $data={slide.setting || {}}>{slide.text}</SlideText>
-              <SlideDescription $data={slide.setting || {}}>
+              <SlideText $data={sectionData.setting}>{slide.text}</SlideText>
+              <SlideDescription $data={sectionData.setting}>
                 {slide.description}
               </SlideDescription>
-              <Button href={slide.btnLink} $data={slide.setting || {}}>
+              <Button href={slide.btnLink} $data={sectionData.setting}>
                 {slide.btnText}
               </Button>
             </Slide>
@@ -173,4 +184,5 @@ const SlideShow: React.FC<SlideShowProps> = ({
     </Section>
   );
 };
+
 export default SlideShow;

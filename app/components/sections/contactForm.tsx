@@ -33,6 +33,9 @@ const Heading = styled.h2<{ $data: ContactFormDataSection }>`
   font-weight: ${(props) =>
     props.$data.blocks.setting?.headingFontWeight || "bold"};
   margin-bottom: 20px;
+  @media (max-width: 768px) {
+    font-size: 28px;
+  }
 `;
 
 const Form = styled.form`

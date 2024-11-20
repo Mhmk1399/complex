@@ -5,6 +5,7 @@ import {
   Section as SectionType,
   HeaderBlock,
 } from "@/lib/types";
+import Link from "next/link";
 import { useState } from "react";
 import styled from "styled-components";
 
@@ -14,7 +15,9 @@ interface HeaderProps {
 }
 
 // Styled components
-const SectionHeader = styled.section<{ $data: HeaderSection }>`
+const SectionHeader = styled.section<{
+  $data: HeaderSection;
+}>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -23,10 +26,9 @@ const SectionHeader = styled.section<{ $data: HeaderSection }>`
   margin-top: ${(props) => props.$data.setting.marginTop || "0px"}px;
   margin-bottom: ${(props) => props.$data.setting.marginBottom || "0px"}px;
   background-color: ${(props) =>
-    props.$data.blocks.setting.backgroundColorNavbar || "transparent"};
+    props.$data?.blocks?.setting?.backgroundColorNavbar || "#14213D"};
   position: fixed;
-  z-index: 100;
-
+  z-index: 50;
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
@@ -56,7 +58,6 @@ const NavItems = styled.div<{ $isOpen: boolean }>`
   gap: 2rem;
   transition: all 0.3s ease-in-out;
   align-items: center;
-
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
@@ -70,16 +71,18 @@ const NavItems = styled.div<{ $isOpen: boolean }>`
   }
 `;
 
-const NavItem = styled.a<{ $data: HeaderSection }>`
+const NavItem = styled(Link)<{ $data: HeaderSection }>`
   color: ${(props) => props.$data.blocks.setting.itemColor || "#000"};
   font-size: ${(props) => props.$data.blocks.setting.itemFontSize || "14px"};
   font-weight: ${(props) =>
     props.$data.blocks.setting.itemFontWeight || "normal"};
   padding: 0.5rem 1rem;
   text-decoration: none;
-
+  transition: all 0.4s ease-in-out;
   &:hover {
     color: ${(props) => props.$data.blocks.setting.itemHoverColor || "#666"};
+    transform: scale(1.08);
+    border-bottom: 1px solid;
   }
 `;
 
@@ -90,7 +93,6 @@ const MenuButton = styled.button<{ $data: HeaderSection }>`
   font-size: 1.5rem;
   cursor: pointer;
   color: ${(props) => props.$data.blocks.setting.itemColor || "#000"};
-
   @media (max-width: 768px) {
     display: flex;
   }
@@ -100,7 +102,6 @@ const Header: React.FC<HeaderProps> = ({ setSelectedComponent, layout }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const sectionData = layout?.sections?.sectionHeader as HeaderSection;
-
   const isHeaderSection = (section: SectionType): section is HeaderSection => {
     return section?.type === "header" && "blocks" in section;
   };

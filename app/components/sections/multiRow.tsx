@@ -29,6 +29,9 @@ const Title = styled.h2<{ $data: MultiRowSection }>`
   font-weight: ${(props) => props.$data.setting?.titleFontWeight || "bold"};
   text-align: center;
   margin-top: 30px;
+  @media (max-width: 768px) {
+    font-size: 28px;
+  }
 `;
 const Heading = styled.h2<{ $data: MultiRowSection }>`
   color: ${(props) => props.$data.setting?.headingColor || "#333"};
@@ -87,7 +90,7 @@ const Row = styled.div<{ $data: MultiRowSection }>`
 const WrapperContainer = styled.div<{ $data: MultiRowSection }>`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
   justify-content: center;
   align-items: center;
   min-height: 300px; // Add fixed minimum height
@@ -116,20 +119,20 @@ const Description = styled.p<{ $data: MultiRowSection }>`
   font-size: ${(props) => props.$data.setting?.descriptionFontSize || "16px"}px;
   font-weight: ${(props) =>
     props.$data.setting?.descriptionFontWeight || "normal"};
-  margin-bottom: 10px;
-  overflow-y: auto; // Allow scrolling if content exceeds height
-  min-height: 80px;
+  min-height: 100px;
   width: 100%;
   text-align: center;
   padding: 0 10px;
+  border-right: 3px solid gray;
   @media (max-width: 768px) {
     font-size: 15px;
+    margin-bottom: 10px;
   }
 `;
 
 const Button = styled.a<{ $data: MultiRowSection }>`
   display: inline-block;
-  padding: 10px 20px 10px 20px;
+  padding: 10px 30px 10px 30px;
   color: ${(props) => props.$data.setting?.btnColor || "#fff"};
   background-color: ${(props) =>
     props.$data.setting?.btnBackgroundColor || "#007BFF"};
