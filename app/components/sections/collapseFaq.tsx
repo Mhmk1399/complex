@@ -112,7 +112,7 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
     <Section
       dir="rtl"
       $data={sectionData}
-      onClick={() => setSelectedComponent("collapse")}
+      onClick={() => setSelectedComponent("CollapseFaq")}
     >
       <Heading $data={sectionData}>{sectionData.blocks[0]?.heading}</Heading>
       {sectionData.blocks.map((block: CollapseBlock, idx: number) => (

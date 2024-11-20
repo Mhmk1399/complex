@@ -45,7 +45,8 @@
       "type": "home",
       "sections": [
         {
-          "type": "banner",
+          "type": "Banner",
+          "id":1,
           "blocks": {
             "imageSrc": "",
             "imageAlt": "",
@@ -74,7 +75,8 @@
           }
         },
         {
-          "type": "slideshow",
+          "type": "SlideShow",
+          "id":2,
           "blocks": [
             {
               "imageSrc": "/assets/images/banner3.jpg",
@@ -115,7 +117,8 @@
           }
         },
         {
-          "type": "rich-text",
+          "type": "RichText",
+          "id":3,
           "blocks": {
             "textHeading": "سربرگ محصول",
             "description": "توضیحات درباره محصول",
@@ -142,7 +145,8 @@
           }
         },
         {
-          "type": "image-text",
+          "type": "ImageText",
+          "id":4,
           "blocks": {
             "imageSrc": "/assets/images/banner3.jpg",
             "imageAlt": "",
@@ -176,7 +180,8 @@
           }
         },
         {
-          "type": "video",
+          "type": "Video",
+          "id":5,
           "blocks": {
             "heading": "سربرگ ویدیو",
             "videoUrl": "/assets/video/video.mp4",
@@ -203,7 +208,8 @@
           }
         },
         {
-          "type": "contact-form",
+          "type": "ContactForm",
+          "id":6,
           "blocks": {
             "heading": "فرم ارتباط با ما",
             "setting": {
@@ -223,7 +229,8 @@
           }
         },
         {
-          "type": "newsletter",
+          "type": "NewsLetter",
+          "id":7,
           "blocks": {
             "heading": "عضویت در خبرنامه",
             "description": "توضیحات درباره خبرنامه",
@@ -249,7 +256,8 @@
           }
         },
         {
-          "type": "collapse",
+          "type": "CollapseFaq",
+          "id":8,
           "blocks": [
             {
               "heading": "سوالات متداول",
@@ -314,7 +322,8 @@
           }
         },
         {
-          "type": "multicolumn",
+          "type": "Multicolumn",
+          "id":9,
           "blocks": [
             {
               "title1": "ستون یکم",
@@ -365,7 +374,8 @@
           }
         },
         {
-          "type": "multiRow",
+          "type": "MultiRow",
+          "id":10,
           "title": "سربرگ ردیف ها",
 
           "blocks": [
@@ -420,16 +430,17 @@
         }
       ],
       "order": [
-        "banner",
-        "slideshow",
-        "rich-text",
-        "image-text",
-        "video",
-        "contact-form",
-        "newsletter",
-        "collapse",
-        "multicolumn",
-        "multiRow"
+        "Banner",
+        "SlideShow",
+        "RichText",
+        "ImageText",
+        "Video",
+        "ContactForm",
+        "NewsLetter",
+        "CollapseFaq",
+        "Multicolumn",
+        "MultiRow",
+        "section-footer"
       ]
     },
     "sectionFooter": {

@@ -6,6 +6,7 @@ interface SlideFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<SlideSection>>;
   userInputData: SlideSection;
   layout: Layout;
+  selectedComponent: string;
 }
 
 const spacingLable = [
@@ -37,11 +38,12 @@ export const SlideForm: React.FC<SlideFormProps> = ({
   setUserInputData,
   userInputData,
   layout,
+  selectedComponent,
 }) => {
 
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    const initialData = Compiler(layout, "slideshow")[0];
+    const initialData = Compiler(layout, selectedComponent)[0];
     if (initialData) {
       setLoaded(true);
       setUserInputData(initialData);

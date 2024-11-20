@@ -7,6 +7,7 @@ interface RichTextFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<RichTextSection>>;
   userInputData: RichTextSection;
   layout: Layout;
+  selectedComponent: string;
 }
 
 const ColorInput = ({
@@ -41,9 +42,10 @@ export const RichText: React.FC<RichTextFormProps> = ({
   setUserInputData,
   userInputData,
   layout,
+  selectedComponent
 }) => {
   useEffect(() => {
-    const initialData = Compiler(layout, "rich-text");
+    const initialData = Compiler(layout, selectedComponent);
     setUserInputData(initialData[0]);
   }, []);
 

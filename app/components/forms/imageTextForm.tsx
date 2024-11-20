@@ -5,12 +5,14 @@ interface ImageTextFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<ImageTextSection>>;
   userInputData: ImageTextSection;
   layout: Layout;
+  selectedComponent: string;
 }
 
 export const ImageTextForm: React.FC<ImageTextFormProps> = ({
   setUserInputData,
   userInputData,
   layout,
+  selectedComponent,
 }) => {
   // Default values
   const defaultValues = {
@@ -49,7 +51,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
   useEffect(() => {
     const initialData = {
       ...defaultValues,
-      ...Compiler(layout, "image-text"),
+      ...Compiler(layout, selectedComponent),
     };
     setUserInputData(initialData[0]);
   }, []);

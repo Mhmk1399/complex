@@ -8,6 +8,7 @@ interface ContactFormProps {
   >;
   userInputData: ContactFormDataSection;
   layout: Layout;
+  selectedComponent: string;
 }
 const spacingLable = [
   {
@@ -56,9 +57,10 @@ export const ContactForm: React.FC<ContactFormProps> = ({
   setUserInputData,
   userInputData,
   layout,
+  selectedComponent
 }) => {
   useEffect(() => {
-    const initialData = Compiler(layout, "contact-form")[0];
+    const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
   }, []);
 

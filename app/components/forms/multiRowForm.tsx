@@ -6,6 +6,7 @@ interface MultiRowFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<MultiRowSection>>;
   userInputData: MultiRowSection | undefined;
   layout: Layout;
+  selectedComponent: string;
 }
 
 const spacingLable = [
@@ -53,10 +54,11 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
   setUserInputData,
   userInputData,
   layout,
+  selectedComponent,
 }) => {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    const initialData = Compiler(layout, "multiRow")[0];
+    const initialData = Compiler(layout, selectedComponent)[0];
     if (initialData) {
       setLoaded(true);
       setUserInputData(initialData);

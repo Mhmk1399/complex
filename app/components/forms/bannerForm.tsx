@@ -55,7 +55,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
   layout,
 }) => {
   useEffect(() => {
-    const initialData = Compiler(layout, "banner")[0];
+    const initialData = Compiler(layout, "Banner")[0];
     setUserInputData(initialData);
   }, []);
 

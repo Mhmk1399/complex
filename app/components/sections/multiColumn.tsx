@@ -163,7 +163,7 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
     <Section
       dir="rtl"
       $data={sectionData}
-      onClick={() => setSelectedComponent("multicolumn")}
+      onClick={() => setSelectedComponent("Multicolumn")}
     >
       <Heading $data={sectionData}>
         {sectionData?.setting.heading || "heading"}

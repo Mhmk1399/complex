@@ -5,6 +5,7 @@ interface NewsLetterFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<NewsLetterSection>>;
   userInputData: NewsLetterSection;
   layout: Layout;
+  selectedComponent: string;
 }
 
 const spacingLable = [
@@ -54,9 +55,10 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
   setUserInputData,
   userInputData,
   layout,
+  selectedComponent
 }) => {
   useEffect(() => {
-    const initialData = Compiler(layout, "newsletter")[0];
+    const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
   }, []);
 

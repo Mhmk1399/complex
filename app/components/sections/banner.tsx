@@ -81,7 +81,7 @@ const Banner: React.FC<props> = ({ setSelectedComponent, layout }) => {
   return (
     <SectionBanner
       $data={sectionData}
-      onClick={() => setSelectedComponent("banner")}
+      onClick={() => setSelectedComponent("Banner")}
     >
       <Link
         href={sectionData.blocks.imageLink || "/"}

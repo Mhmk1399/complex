@@ -48,13 +48,13 @@ const VideoElement = styled.video<{ $data: VideoSection }>`
 // Video Component
 const Video: React.FC<VideoProps> = ({ setSelectedComponent, layout }) => {
   const sectionData = layout.sections?.children?.sections?.find(
-    (section) => section.type === "video"
+    (section) => section.type === "Video"
   ) as VideoSection;
 
   const { blocks } = sectionData || { blocks: {} };
 
   return (
-    <Section $data={sectionData} onClick={() => setSelectedComponent("video")}>
+    <Section $data={sectionData} onClick={() => setSelectedComponent("Video")}>
       {blocks.heading && (
         <Heading $data={sectionData}>
           {blocks.heading || "Video Heading"}

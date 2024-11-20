@@ -49,9 +49,10 @@ export const VideoForm: React.FC<VideoFormProps> = ({
   setUserInputData,
   userInputData,
   layout,
+  selectedComponent
 }) => {
   useEffect(() => {
-    const initialData = Compiler(layout, "video")[0];
+    const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
   }, []);
 

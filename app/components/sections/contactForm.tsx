@@ -116,7 +116,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
     <Section
       dir="rtl"
       $data={sectionData}
-      onClick={() => setSelectedComponent("contact-form")}
+      onClick={() => setSelectedComponent("ContactForm")}
     >
       <Heading $data={sectionData}>
         {sectionData?.blocks?.heading || "Contact Us"}

@@ -6,6 +6,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
   setUserInputData,
   userInputData,
   layout,
+  selectedComponent,
 }) => {
   useEffect(() => {
     const initialData = Compiler(layout, "sectionFooter");

@@ -11,6 +11,7 @@ interface CollapseFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<CollapseSection>>;
   userInputData: CollapseSection;
   layout: Layout;
+  selectedComponent: string;
 }
 const spacingLable = [
   {
@@ -57,9 +58,10 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
   setUserInputData,
   userInputData,
   layout,
+  selectedComponent,
 }) => {
   useEffect(() => {
-    const initialData = Compiler(layout, "collapse")[0];
+    const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
   }, []);
 

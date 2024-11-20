@@ -12,33 +12,34 @@ export const Main = () => {
   const [selectedComponent, setSelectedComponent] = useState<string>('sectionHeader');
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [orders, setOrders] = useState<string[]>([]);
+
   useEffect(() => {
     setLoading(false);
   }, []);
 
-  const handleSave = async () => {
-    setSaveStatus('saving');
-    try {
-      const response = await fetch('/api/saveLayout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ layout }),
-      });
+  // const handleSave = async () => {
+  //   setSaveStatus('saving');
+  //   try {
+  //     const response = await fetch('/api/saveLayout', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ layout }),
+  //     });
 
-      if (!response.ok) {
-        throw new Error('Failed to save layout');
-      }
+  //     if (!response.ok) {
+  //       throw new Error('Failed to save layout');
+  //     }
 
-      setSaveStatus('saved');
-      setTimeout(() => setSaveStatus('idle'), 2000);
-    } catch (error) {
-      console.error('Error saving layout:', error);
-      setSaveStatus('error');
-      setTimeout(() => setSaveStatus('idle'), 2000);
-    }
-  };
+  //     setSaveStatus('saved');
+  //     setTimeout(() => setSaveStatus('idle'), 2000);
+  //   } catch (error) {
+  //     console.error('Error saving layout:', error);
+  //     setSaveStatus('error');
+  //     setTimeout(() => setSaveStatus('idle'), 2000);
+  //   }
+  // };
 
   return (
     <div>
@@ -54,7 +55,7 @@ export const Main = () => {
         <div>
           <div className="fixed top-3 right-4 ">
             <button
-              onClick={handleSave}
+              // onClick={handleSave}
               disabled={saveStatus === 'saving'}
               className={`px-4 py-2 rounded-md text-white ${
                 saveStatus === 'saving' ? 'bg-gray-400' :

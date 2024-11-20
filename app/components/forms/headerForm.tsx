@@ -5,12 +5,14 @@ interface HeaderFormProps {
   layout: Layout;
   setUserInputData: React.Dispatch<React.SetStateAction<HeaderSection>>;
   userInputData: HeaderSection;
+  selectedComponent: string;
 }
 
 export const HeaderForm: React.FC<HeaderFormProps> = ({
   setUserInputData,
   userInputData,
   layout,
+  selectedComponent,
 }) => {
   // Add default values to prevent undefined values
   const defaultValues = {
@@ -42,7 +44,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
   useEffect(() => {
     const initialData = {
       ...defaultValues,
-      ...Compiler(layout, "sectionHeader"),
+      ...Compiler(layout, selectedComponent),
     };
     setUserInputData(initialData);
     setIsDataReady(true);

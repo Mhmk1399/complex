@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { use, useEffect } from "react";
 import styled from "styled-components";
 import { Layout, NewsLetterSection } from "@/lib/types"; // Import the types
 
@@ -98,18 +98,19 @@ const NewsLetter: React.FC<NewsLetterProps> = ({
   layout,
 }) => {
   const sectionData = layout.sections?.children?.sections?.find(
-    (section) => section.type === "newsletter"
+    (section) => section.type === "NewsLetter"
   ) as NewsLetterSection;
 
   if (!sectionData) {
     return null; // Return null if no section data is found
   }
 
+
   return (
     <Section
     dir="rtl"
       $data={sectionData}
-      onClick={() => setSelectedComponent("newsletter")}
+      onClick={() => setSelectedComponent("NewsLetter")}
     >
       <Heading $data={sectionData}>
         {sectionData.blocks.heading || "Subscribe to Our Newsletter"}

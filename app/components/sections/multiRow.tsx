@@ -161,7 +161,7 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
       <Section
         dir="rtl"
         $data={sectionData}
-        onClick={() => setSelectedComponent("multiRow")}
+        onClick={() => setSelectedComponent("MultiRow")}
       >
         <RowContainer>
           {Object.entries(sectionData.blocks).map(([key, block], idx) => {

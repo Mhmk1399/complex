@@ -4,7 +4,7 @@ import {
   Layout,
   RichTextSection,
   RichTextBlock,
-  Section as sectionType,
+
 } from "@/lib/types";
 import Link from "next/link";
 import styled from "styled-components";
@@ -72,38 +72,15 @@ const RichText: React.FC<RichTextProps> = ({
     ?.sections[2] as RichTextSection;
 
   // Add type guard to verify section type
-  const isRichTextSection = (
-    section: sectionType
-  ): section is RichTextSection => {
-    return (
-      section?.type === "rich-text" &&
-      "blocks" in section &&
-      section.blocks !== undefined
-    );
-  };
 
-  if (!sectionData || !isRichTextSection(sectionData)) {
-    console.error("Section data is missing or invalid.");
-    return null;
-  }
+
 
   const { blocks } = sectionData;
 
   // Type guard for RichTextBlock
-  const isRichTextBlock = (block: RichTextBlock): block is RichTextBlock => {
-    return (
-      block &&
-      "textHeading" in block &&
-      "description" in block &&
-      "btnText" in block &&
-      "btnLink" in block
-    );
-  };
+ 
 
-  if (!isRichTextBlock(blocks)) {
-    console.error("Blocks data is missing or invalid.");
-    return null;
-  }
+  
 
   const { textHeading, description, btnText, btnLink } = blocks;
 
@@ -111,7 +88,7 @@ const RichText: React.FC<RichTextProps> = ({
     <Section
       dir="rtl"
       $data={sectionData}
-      onClick={() => setSelectedComponent("rich-text")}
+      onClick={() => setSelectedComponent("RichText")}
     >
       {textHeading && <H1 $data={blocks}>{textHeading}</H1>}
 

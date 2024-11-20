@@ -131,7 +131,7 @@ const SlideShow: React.FC<SlideShowProps> = ({
       marginTop: "20px",
       marginBottom: "20px",
     },
-    type: "slideshow",
+    type: "slideShow",
   };
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -146,7 +146,7 @@ const SlideShow: React.FC<SlideShowProps> = ({
     <Section
       dir="ltr"
       $data={sectionData.setting}
-      onClick={() => setSelectedComponent("slideshow")}
+      onClick={() => setSelectedComponent("SlideShow")}
     >
       <SlideContainer $data={slides[0]?.setting || {}}>
         <SlidesWrapper $currentIndex={currentIndex}>

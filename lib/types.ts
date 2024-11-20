@@ -485,6 +485,7 @@ export interface VideoFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<VideoSection>>;
   userInputData: VideoSection;
   layout: Layout;
+  selectedComponent: string
 }
 // Add these new interfaces for Contact Form
 export interface ContactFormBlockSetting extends Partial<CommonSettings> {
@@ -567,6 +568,7 @@ export interface FooterFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<FooterSection>>;
   userInputData: FooterSection;
   layout: Layout;
+  selectedComponent: string;
 }
 
 export interface FooterBlockSetting {

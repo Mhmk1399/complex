@@ -84,7 +84,8 @@ export const Form = ({
   const [userInputData, setUserInputData] = useState<FormData>({} as FormData);
   const [isOpen, setIsOpen] = useState(false);
   const [showOrdersMenu, setShowOrdersMenu] = useState(false);
-
+ console.log(selectedComponent);
+ 
   // Setup sensors for dnd-kit
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -104,7 +105,6 @@ export const Form = ({
     }
   }, [userInputData]);
 
-  console.log(selectedComponent);
 
   // Create a SortableItem component
   const SortableItem = ({ id }: { id: string }) => {
@@ -158,10 +158,11 @@ export const Form = ({
 
   const renderFormContent = (
     setUserInputData: React.Dispatch<React.SetStateAction<FormData>>,
-    userInputData: FormData
+    userInputData: FormData,
+    selectedComponent: string,
   ) => {
     switch (selectedComponent) {
-      case "rich-text":
+      case "RichText":
         return (
           <RichText
             setUserInputData={
@@ -171,6 +172,7 @@ export const Form = ({
             }
             userInputData={userInputData as RichTextSection}
             layout={layout}
+            selectedComponent={selectedComponent}
           />
         );
       case "sectionHeader":
@@ -183,21 +185,24 @@ export const Form = ({
             }
             userInputData={userInputData as HeaderSection}
             layout={layout}
+            selectedComponent={selectedComponent}
           />
         );
-      case "banner":
+      case "Banner":
         return (
           <BannerForm
             setUserInputData={
               setUserInputData as React.Dispatch<
                 React.SetStateAction<BannerSection>
               >
+              
             }
             userInputData={userInputData as BannerSection}
             layout={layout}
+            
           />
         );
-      case "image-text":
+      case "ImageText":
         return (
           <ImageTextForm
             setUserInputData={
@@ -207,9 +212,10 @@ export const Form = ({
             }
             userInputData={userInputData as ImageTextSection}
             layout={layout}
+            selectedComponent={selectedComponent}
           />
         );
-      case "video":
+      case "Video":
         return (
           <VideoForm
             setUserInputData={
@@ -219,9 +225,10 @@ export const Form = ({
             }
             userInputData={userInputData as VideoSection}
             layout={layout}
+            selectedComponent={selectedComponent}
           />
         );
-      case "contact-form":
+      case "ContactForm":
         return (
           <ContactForm
             setUserInputData={
@@ -231,9 +238,10 @@ export const Form = ({
             }
             userInputData={userInputData as ContactFormDataSection}
             layout={layout}
+            selectedComponent={selectedComponent}
           />
         );
-      case "newsletter":
+      case "NewsLetter":
         return (
           <NewsLetterForm
             setUserInputData={
@@ -243,9 +251,10 @@ export const Form = ({
             }
             userInputData={userInputData as NewsLetterSection}
             layout={layout}
+            selectedComponent={selectedComponent}
           />
         );
-      case "collapse":
+      case "CollapseFaq":
         return (
           <CollapseForm
             setUserInputData={
@@ -255,9 +264,10 @@ export const Form = ({
             }
             userInputData={userInputData as CollapseSection}
             layout={layout}
+            selectedComponent={selectedComponent}
           />
         );
-      case "multicolumn":
+      case "Multicolumn":
         return (
           <MultiColumnForm
             setUserInputData={
@@ -267,9 +277,10 @@ export const Form = ({
             }
             userInputData={userInputData as MultiColumnSection}
             layout={layout}
+            selectedComponent={selectedComponent}
           />
         );
-      case "slideshow":
+      case "SlideShow":
         return (
           <SlideForm
             setUserInputData={
@@ -279,9 +290,10 @@ export const Form = ({
             }
             userInputData={userInputData as SlideSection}
             layout={layout}
+            selectedComponent={selectedComponent}
           />
         );
-      case "multiRow":
+      case "MultiRow":
         return (
           <MultiRowForm
             setUserInputData={
@@ -291,6 +303,7 @@ export const Form = ({
             }
             userInputData={userInputData as MultiRowSection}
             layout={layout}
+            selectedComponent={selectedComponent}
           />
         );
       case "sectionFooter":
@@ -303,6 +316,7 @@ export const Form = ({
             }
             userInputData={userInputData as FooterSection}
             layout={layout}
+            selectedComponent={selectedComponent}
           />
         );
       default:
@@ -355,7 +369,7 @@ export const Form = ({
               </DndContext>
             </div>
           ) : (
-            renderFormContent(setUserInputData, userInputData as Section)
+            renderFormContent(setUserInputData, userInputData as Section,selectedComponent)
           )}
         </div>
       </div>
@@ -379,7 +393,7 @@ export const Form = ({
           <h2 className="text-2xl font-bold text-gray-800 mb-4">
             تنظیمات سکشن
           </h2>
-          {renderFormContent(setUserInputData, userInputData as Section)}
+          {renderFormContent(setUserInputData, userInputData as Section,selectedComponent)}
         </div>
       </motion.div>
     </>

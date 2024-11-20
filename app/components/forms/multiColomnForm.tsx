@@ -6,6 +6,7 @@ interface MultiColumnFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<MultiColumnSection>>;
   userInputData: MultiColumnSection;
   layout: Layout;
+  selectedComponent: string;
 }
 const spacingLable = [
   {
@@ -52,9 +53,10 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
   setUserInputData,
   userInputData,
   layout,
+  selectedComponent,
 }) => {
   useEffect(() => {
-    const initialData = Compiler(layout, "multicolumn")[0];
+    const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
   }, []);
 
