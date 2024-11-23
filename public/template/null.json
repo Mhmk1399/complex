@@ -323,7 +323,7 @@
           }
         },
         {
-          "type": "MultiColumn",
+          "type": "Multicolumn",
           "id":9,
           "blocks": [
             {

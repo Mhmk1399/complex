@@ -1,6 +1,4 @@
 import { Layout, MultiColumnSection } from "@/lib/types";
-import { a } from "framer-motion/client";
-import React, { use, useEffect } from "react";
 import styled from "styled-components";
 
 interface MultiColumnProps {
