@@ -99,8 +99,8 @@
           "setting": {
             "paddingTop": "20",
             "paddingBottom": "20",
-            "marginTop": "0",
-            "marginBottom": "0",
+            "marginTop": "10",
+            "marginBottom": "10",
             "descriptionColor": "#E5E5E5",
             "descriptionFontSize": "16px",
             "descriptionFontWeight": "normal",

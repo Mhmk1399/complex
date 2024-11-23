@@ -84,7 +84,7 @@ export const Form = ({
   const [userInputData, setUserInputData] = useState<FormData>({} as FormData);
   const [isOpen, setIsOpen] = useState(false);
   const [showOrdersMenu, setShowOrdersMenu] = useState(false);
- 
+
   // Setup sensors for dnd-kit
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -92,6 +92,11 @@ export const Form = ({
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+  useEffect(() => {
+    if (selectedComponent) {
+      setIsOpen(true);
+    }
+  }, [selectedComponent]);
 
   useEffect(() => {
     if (Object.keys(userInputData).length > 0) {
@@ -103,7 +108,6 @@ export const Form = ({
       setLayout(newLayout);
     }
   }, [userInputData]);
-
 
   // Create a SortableItem component
   const SortableItem = ({ id }: { id: string }) => {
@@ -121,9 +125,9 @@ export const Form = ({
         style={style}
         {...attributes}
         {...listeners}
-        className="p-3 bg-white border rounded-lg flex items-center gap-2 cursor-grab mb-2"
+        className="p-3 bg-white border rounded-2xl flex items-center gap-2 cursor-grab mb-2"
       >
-        <span className="text-gray-500">☰</span>
+        <span className="text-red-500">☰</span>
         <span>{id}</span>
       </div>
     );
@@ -158,9 +162,9 @@ export const Form = ({
   const renderFormContent = (
     setUserInputData: React.Dispatch<React.SetStateAction<FormData>>,
     userInputData: FormData,
-    selectedComponent: string,
+    selectedComponent: string
   ) => {
-    const baseComponentName = selectedComponent.split('-')[0];
+    const baseComponentName = selectedComponent.split("-")[0];
 
     switch (baseComponentName) {
       case "RichText":
@@ -196,12 +200,10 @@ export const Form = ({
               setUserInputData as React.Dispatch<
                 React.SetStateAction<BannerSection>
               >
-              
             }
             userInputData={userInputData as BannerSection}
             layout={layout}
             selectedComponent={selectedComponent}
-            
           />
         );
       case "ImageText":
@@ -322,7 +324,7 @@ export const Form = ({
           />
         );
       default:
-        return <div>Select a component to configure</div>;
+        return <div>یک سکشن را برای تنظیمات کلیک کنید...</div>;
     }
   };
 
@@ -335,7 +337,7 @@ export const Form = ({
           : "w-fit m-2 px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
       }
     >
-      {!showOrdersMenu ? "Orders" : "menu"}
+      {!showOrdersMenu ? "جابجایی" : "منو"}
     </button>
   );
 
@@ -350,12 +352,15 @@ export const Form = ({
 
         <div className="p-6">
           <h2 className="text-2xl font-bold text-gray-800" dir="rtl">
-            تنظیمات سکشن
+            {showOrdersMenu ? "ترتیب سکشن" : "تنظیمات سکشن"}
           </h2>
           {showOrdersMenu ? (
-            <div className="bg-white p-4 rounded-lg shadow-md" dir="rtl">
-              <h3 className="text-lg font-semibold mb-2">
-                ترتیب سکشن
+            <div
+              className="bg-cyan-700 p-4 my-5 rounded-lg shadow-md"
+              dir="rtl"
+            >
+              <h3 className="text-2xl text-white font-semibold mb-4">
+                جابجایی سکشن
               </h3>
               <DndContext
                 sensors={sensors}
@@ -373,7 +378,11 @@ export const Form = ({
               </DndContext>
             </div>
           ) : (
-            renderFormContent(setUserInputData, userInputData as Section,selectedComponent)
+            renderFormContent(
+              setUserInputData,
+              userInputData as Section,
+              selectedComponent
+            )
           )}
         </div>
       </div>
@@ -384,20 +393,24 @@ export const Form = ({
         dragConstraints={{ top: 0, bottom: 0 }}
         initial={{ y: "calc(100% - 40px)" }}
         animate={{ y: isOpen ? 0 : "calc(100% - 40px)" }}
-        className="lg:hidden fixed bottom-0 left-0 right-0 bg-white bg-opacity-80 rounded-t-3xl shadow-2xl"
+        className="lg:hidden fixed bottom-0 left-0 right-0 bg-white z-20 bg-opacity-80 rounded-t-3xl shadow-2xl"
       >
         <div
           className="h-10 w-full flex justify-center items-center cursor-pointer"
           onClick={() => setIsOpen(!isOpen)}
         >
-          <div className="w-20 h-1.5 bg-gray-300 rounded-full" />
+          <div className="w-20 h-1.5 bg-black/60 rounded-full" />
         </div>
 
         <div className="max-h-[calc(60vh-40px)] min-h-[calc(40vh-30px)] overflow-y-auto p-6">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">
-            تنظیمات سکشن
+          <h2 className="text-xl font-bold text-white rounded-xl bg-blue-500 p-2.5 mb-4 text-center animate-pulse transition-all duration-300">
+            {selectedComponent} - تنظیمات سکشن
           </h2>
-          {renderFormContent(setUserInputData, userInputData as Section,selectedComponent)}
+          {renderFormContent(
+            setUserInputData,
+            userInputData as Section,
+            selectedComponent
+          )}
         </div>
       </motion.div>
     </>

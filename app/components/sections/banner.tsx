@@ -29,7 +29,7 @@ const BannerImage = styled(Image)<{ $data: BannerSection }>`
   opacity: ${(props) => props.$data.blocks.setting.opacityImage || "1"}px;
   border-radius: ${(props) =>
     props.$data.blocks.setting.imageRadious || "10px"};
-  object-fit: ${(props) => props.$data.blocks.setting.imageBehavior || "cover"};
+  object-fit: ${(props) => props.$data.blocks.setting.imageBehavior};
 `;
 
 const BannerTextBox = styled.div<{ $data: BannerSection }>`
