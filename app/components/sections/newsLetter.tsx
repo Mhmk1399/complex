@@ -5,6 +5,7 @@ import { Layout, NewsLetterSection } from "@/lib/types"; // Import the types
 interface NewsLetterProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
+  actualName: string;
 }
 
 // Styled Components
@@ -95,9 +96,10 @@ const Button = styled.button<{ $data: NewsLetterSection }>`
 const NewsLetter: React.FC<NewsLetterProps> = ({
   setSelectedComponent,
   layout,
+  actualName
 }) => {
   const sectionData = layout.sections?.children?.sections?.find(
-    (section) => section.type === "NewsLetter"
+    (section) => section.type === actualName
   ) as NewsLetterSection;
 
   if (!sectionData) {
@@ -109,8 +111,9 @@ const NewsLetter: React.FC<NewsLetterProps> = ({
     <Section
       dir="rtl"
       $data={sectionData}
-      onClick={() => setSelectedComponent("NewsLetter")}
+      onClick={() => setSelectedComponent(actualName)}
     >
+      <h1>{actualName}</h1>
       <Heading $data={sectionData}>
         {sectionData.blocks.heading || "Subscribe to Our Newsletter"}
       </Heading>

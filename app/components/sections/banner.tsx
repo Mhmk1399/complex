@@ -7,6 +7,7 @@ import { Layout, BannerSection } from "@/lib/types";
 interface props {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
+  actualName:string
 }
 
 const SectionBanner = styled.section<{ $data: BannerSection }>`
@@ -74,7 +75,7 @@ const DescriptionText = styled.p<{ $data: BannerSection }>`
   }
 `;
 
-const Banner: React.FC<props> = ({ setSelectedComponent, layout }) => {
+const Banner: React.FC<props> = ({ setSelectedComponent, layout,actualName }) => {
   const sectionData = layout?.sections?.children?.sections[0] as BannerSection;
   const { description, imageAlt, imageSrc, text } = sectionData?.blocks;
 
