@@ -2,11 +2,11 @@
 import React from "react";
 import styled from "styled-components";
 import { ImageTextSection, Layout } from "@/lib/types";
-import data from '../../../public/template/null.json'
 
 interface ImageTextProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
+  actualName: string;
 }
 
 // Styled Components
@@ -119,10 +119,11 @@ const Button = styled.a<{ $data: ImageTextSection }>`
 const ImageText: React.FC<ImageTextProps> = ({
   setSelectedComponent,
   layout,
+  actualName,
 }) => {
   // Find the first section with type "image-text"
   const sectionData = layout?.sections?.children?.sections.find(
-    (section) => section.type === "ImageText"
+    (section) => section.type === actualName
   ) as ImageTextSection;
 
   // Fallback for missing or invalid section data
@@ -137,7 +138,7 @@ const ImageText: React.FC<ImageTextProps> = ({
   return (
     <Section
       $data={sectionData}
-      onClick={() => setSelectedComponent("ImageText")}
+      onClick={() => setSelectedComponent(actualName)}
       dir="rtl"
     >
       <Image

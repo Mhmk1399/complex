@@ -315,7 +315,7 @@
             "paddingBottom": "20",
             "marginTop": "10",
             "marginBottom": "10",
-            "headingColor": "#14213D",
+            "headingColor": "#ffffff",
             "headingFontSize": "30px",
             "headingFontWeight": "bold",
             "background": "#14213D",
@@ -473,6 +473,7 @@
       ]
     },
     "sectionFooter": {
+      "type": "Footer",
       "blocks": {
         "setting": {
           "textColor": "#000000",

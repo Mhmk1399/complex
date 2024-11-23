@@ -6,6 +6,7 @@ import styled from "styled-components";
 interface CollapseFaqProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
+  actualName: string;
 }
 
 // Styled Components
@@ -92,13 +93,20 @@ const Answer = styled.div<{
 const CollapseFaq: React.FC<CollapseFaqProps> = ({
   setSelectedComponent,
   layout,
+  actualName,
 }) => {
-  const sectionData = (layout.sections?.children
-    ?.sections?.[7] as CollapseSection) || {
+  const sectionData = (layout.sections?.children?.sections.find(
+    (section) => section.type === actualName
+  ) as CollapseSection) || {
     blocks: [],
     setting: {},
     type: "collapse",
   };
+
+  if (!sectionData) {
+    console.error("collapse section data is missing or invalid.");
+    return null;
+  }
 
   const [openIndexes, setOpenIndexes] = useState<number[]>([]);
 
@@ -112,7 +120,7 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
     <Section
       dir="rtl"
       $data={sectionData}
-      onClick={() => setSelectedComponent("CollapseFaq")}
+      onClick={() => setSelectedComponent(actualName)}
     >
       <Heading $data={sectionData}>{sectionData.blocks[0]?.heading}</Heading>
       {sectionData.blocks.map((block: CollapseBlock, idx: number) => (

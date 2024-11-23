@@ -5,6 +5,7 @@ import styled from "styled-components";
 interface MultiColumnProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
+  actualName: string;
 }
 
 // Styled Components
@@ -152,18 +153,25 @@ const Button = styled.a<{ $data: MultiColumnSection }>`
 const MultiColumn: React.FC<MultiColumnProps> = ({
   setSelectedComponent,
   layout,
+  actualName,
 }) => {
-  const sectionData = (layout.sections?.children
-    ?.sections?.[8] as MultiColumnSection) || {
+  const sectionData = (layout.sections?.children?.sections.find(
+    (section) => section.type === actualName
+  ) as MultiColumnSection) || {
     blocks: [{ setting: {} }],
     setting: {},
   };
+
+  if (!sectionData) {
+    console.error("MultiColumn section data is missing or invalid.");
+    return null;
+  }
 
   return (
     <Section
       dir="rtl"
       $data={sectionData}
-      onClick={() => setSelectedComponent("Multicolumn")}
+      onClick={() => setSelectedComponent(actualName)}
     >
       <Heading $data={sectionData}>
         {sectionData?.setting.heading || "heading"}

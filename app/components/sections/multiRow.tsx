@@ -6,6 +6,7 @@ import styled from "styled-components";
 interface MultiRowShowProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
+  actualName: string;
 }
 
 // Styled Components
@@ -148,13 +149,20 @@ const Button = styled.a<{ $data: MultiRowSection }>`
 const MultiRow: React.FC<MultiRowShowProps> = ({
   setSelectedComponent,
   layout,
+  actualName,
 }) => {
-  const sectionData = (layout.sections?.children
-    ?.sections?.[9] as MultiRowSection) || {
+  const sectionData = (layout.sections?.children?.sections?.find(
+    (section) => section.type === actualName
+  ) as MultiRowSection) || {
     title: "",
     blocks: [{ setting: {} }],
     setting: {},
   };
+
+  if (!sectionData) {
+    console.error("MultiRow section data is missing or invalid.");
+    return null;
+  }
 
   return (
     <>
@@ -164,7 +172,7 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
       <Section
         dir="rtl"
         $data={sectionData}
-        onClick={() => setSelectedComponent("MultiRow")}
+        onClick={() => setSelectedComponent(actualName)}
       >
         <RowContainer>
           {Object.entries(sectionData.blocks).map(([key, block], idx) => {

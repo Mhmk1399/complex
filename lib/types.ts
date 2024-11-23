@@ -411,6 +411,7 @@ export interface Layout {
     colorSchema: ColorSchema;
   };
   sections: {
+    find(arg0: (section: any) => boolean): unknown;
     slideshow: SlideSection;
     richtext: RichTextSection;
     sectionHeader: HeaderSection;

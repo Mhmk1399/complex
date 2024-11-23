@@ -7,7 +7,7 @@ import { Layout, BannerSection } from "@/lib/types";
 interface props {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
-  actualName:string
+  actualName: string;
 }
 
 const SectionBanner = styled.section<{ $data: BannerSection }>`
@@ -75,14 +75,26 @@ const DescriptionText = styled.p<{ $data: BannerSection }>`
   }
 `;
 
-const Banner: React.FC<props> = ({ setSelectedComponent, layout,actualName }) => {
-  const sectionData = layout?.sections?.children?.sections[0] as BannerSection;
+const Banner: React.FC<props> = ({
+  setSelectedComponent,
+  layout,
+  actualName,
+}) => {
+  const sectionData = layout?.sections?.children?.sections.find(
+    (section) => section.type === actualName
+  ) as BannerSection;
+
+  if (!sectionData) {
+    console.error("Banner section data is missing or invalid.");
+    return null;
+  }
+
   const { description, imageAlt, imageSrc, text } = sectionData?.blocks;
 
   return (
     <SectionBanner
       $data={sectionData}
-      onClick={() => setSelectedComponent("Banner")}
+      onClick={() => setSelectedComponent(actualName)}
     >
       <Link
         href={sectionData.blocks.imageLink || "/"}

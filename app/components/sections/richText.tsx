@@ -1,17 +1,13 @@
 "use client";
 
-import {
-  Layout,
-  RichTextSection,
-  RichTextBlock,
-
-} from "@/lib/types";
+import { Layout, RichTextSection, RichTextBlock } from "@/lib/types";
 import Link from "next/link";
 import styled from "styled-components";
 
 interface RichTextProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
+  actualName: string;
 }
 
 // Styled components
@@ -72,20 +68,22 @@ const Btn = styled.button<{ $data: RichTextBlock }>`
 const RichText: React.FC<RichTextProps> = ({
   setSelectedComponent,
   layout,
+  actualName,
 }) => {
-  const sectionData = layout?.sections?.children
-    ?.sections[2] as RichTextSection;
+  const sectionData = layout?.sections?.children?.sections?.find(
+    (section) => section.type === actualName
+  ) as RichTextSection;
+
+  if (!sectionData) {
+    console.error("RichText section data is missing or invalid.");
+    return null;
+  }
 
   // Add type guard to verify section type
-
-
 
   const { blocks } = sectionData;
 
   // Type guard for RichTextBlock
- 
-
-  
 
   const { textHeading, description, btnText, btnLink } = blocks;
 
@@ -93,7 +91,7 @@ const RichText: React.FC<RichTextProps> = ({
     <Section
       dir="rtl"
       $data={sectionData}
-      onClick={() => setSelectedComponent("RichText")}
+      onClick={() => setSelectedComponent(actualName)}
     >
       {textHeading && <H1 $data={blocks}>{textHeading}</H1>}
 

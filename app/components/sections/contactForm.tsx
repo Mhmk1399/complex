@@ -6,6 +6,7 @@ import { ContactFormDataSection, Layout } from "../../../lib/types";
 interface ContactFormProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
+  actualName: string;
 }
 
 // Styled Components
@@ -110,16 +111,21 @@ const Button = styled.button<{ $data: ContactFormDataSection }>`
 const ContactForm: React.FC<ContactFormProps> = ({
   setSelectedComponent,
   layout,
+  actualName,
 }) => {
   const sectionData = layout.sections?.children?.sections?.find(
     (section) => section.type === "ContactForm"
   ) as ContactFormDataSection;
+  if (!sectionData) {
+    console.error("ContactForm section data is missing or invalid.");
+    return null;
+  }
 
   return (
     <Section
       dir="rtl"
       $data={sectionData}
-      onClick={() => setSelectedComponent("ContactForm")}
+      onClick={() => setSelectedComponent(actualName)}
     >
       <Heading $data={sectionData}>
         {sectionData?.blocks?.heading || "Contact Us"}

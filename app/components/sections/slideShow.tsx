@@ -6,6 +6,7 @@ import { SlideSection, Layout, SlideBlock } from "@/lib/types";
 interface SlideShowProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
+  actualName: string;
 }
 
 // Styled Components
@@ -132,9 +133,11 @@ const NextButton = styled(NavButton)`
 const SlideShow: React.FC<SlideShowProps> = ({
   setSelectedComponent,
   layout,
+  actualName,
 }) => {
-  const sectionData: SlideSection = (layout.sections?.children
-    ?.sections?.[1] as SlideSection) || {
+  const sectionData: SlideSection = (layout.sections?.children?.sections?.find(
+    (section) => section.type === actualName
+  ) as SlideSection) || {
     blocks: [],
     setting: {
       paddingTop: "20px",
@@ -144,6 +147,11 @@ const SlideShow: React.FC<SlideShowProps> = ({
     },
     type: "slideShow",
   };
+
+  if (!sectionData) {
+    console.error("SlideShow section data is missing or invalid.");
+    return null;
+  }
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const slides = sectionData.blocks || [];
@@ -157,7 +165,7 @@ const SlideShow: React.FC<SlideShowProps> = ({
     <Section
       dir="ltr"
       $data={sectionData.setting}
-      onClick={() => setSelectedComponent("SlideShow")}
+      onClick={() => setSelectedComponent(actualName)}
     >
       <SlideContainer $data={slides[0]}>
         <SlidesWrapper $currentIndex={currentIndex}>
