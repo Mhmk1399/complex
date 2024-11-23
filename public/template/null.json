@@ -323,7 +323,7 @@
           }
         },
         {
-          "type": "Multicolumn",
+          "type": "MultiColumn",
           "id":9,
           "blocks": [
             {
@@ -467,7 +467,7 @@
         "ContactForm",
         "NewsLetter",
         "CollapseFaq",
-        "Multicolumn",
+        "MultiColumn",
         "MultiRow",
         "NewsLetter-1"
       ]

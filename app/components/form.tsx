@@ -84,7 +84,6 @@ export const Form = ({
   const [userInputData, setUserInputData] = useState<FormData>({} as FormData);
   const [isOpen, setIsOpen] = useState(false);
   const [showOrdersMenu, setShowOrdersMenu] = useState(false);
- console.log(selectedComponent);
  
   // Setup sensors for dnd-kit
   const sensors = useSensors(
@@ -161,7 +160,9 @@ export const Form = ({
     userInputData: FormData,
     selectedComponent: string,
   ) => {
-    switch (selectedComponent) {
+    const baseComponentName = selectedComponent.split('-')[0];
+
+    switch (baseComponentName) {
       case "RichText":
         return (
           <RichText
@@ -199,6 +200,7 @@ export const Form = ({
             }
             userInputData={userInputData as BannerSection}
             layout={layout}
+            selectedComponent={selectedComponent}
             
           />
         );

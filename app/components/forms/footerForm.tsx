@@ -9,11 +9,14 @@ export const FooterForm: React.FC<FooterFormProps> = ({
   selectedComponent,
 }) => {
   useEffect(() => {
-    const initialData = Compiler(layout, "sectionFooter");
+    const initialData = Compiler(layout, selectedComponent);
     setUserInputData(initialData);
-    console.log(initialData);
   }, []);
-
+  useEffect(() => {
+    const initialData = Compiler(layout, selectedComponent);
+    setUserInputData(initialData);
+    
+  }, [selectedComponent]);
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {

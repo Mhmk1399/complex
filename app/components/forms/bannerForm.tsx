@@ -5,6 +5,7 @@ interface BannerFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<BannerSection>>;
   userInputData: BannerSection;
   layout: Layout;
+  selectedComponent: string;
 }
 const spacingLable = [
   {
@@ -53,11 +54,17 @@ export const BannerForm: React.FC<BannerFormProps> = ({
   setUserInputData,
   userInputData,
   layout,
+  selectedComponent,
 }) => {
   useEffect(() => {
-    const initialData = Compiler(layout, "Banner")[0];
+    const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
   }, []);
+  useEffect(() => {
+    const initialData = Compiler(layout, selectedComponent)[0];
+    setUserInputData(initialData);
+    
+  }, [selectedComponent]);
 
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

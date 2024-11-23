@@ -1,10 +1,12 @@
 import { Layout, MultiColumnSection } from "@/lib/types";
-import React from "react";
+import { a } from "framer-motion/client";
+import React, { use, useEffect } from "react";
 import styled from "styled-components";
 
 interface MultiColumnProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
+  actualName: string;
 }
 
 // Styled Components
@@ -152,6 +154,7 @@ const Button = styled.a<{ $data: MultiColumnSection }>`
 const MultiColumn: React.FC<MultiColumnProps> = ({
   setSelectedComponent,
   layout,
+  actualName
 }) => {
   const sectionData = (layout.sections?.children
     ?.sections?.[8] as MultiColumnSection) || {
@@ -163,7 +166,7 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
     <Section
       dir="rtl"
       $data={sectionData}
-      onClick={() => setSelectedComponent("Multicolumn")}
+      onClick={() => setSelectedComponent(actualName)}
     >
       <Heading $data={sectionData}>
         {sectionData?.setting.heading || "heading"}

@@ -101,6 +101,7 @@ const NewsLetter: React.FC<NewsLetterProps> = ({
   const sectionData = layout.sections?.children?.sections?.find(
     (section) => section.type === actualName
   ) as NewsLetterSection;
+// console.log(sectionData);
 
   if (!sectionData) {
     return null; // Return null if no section data is found

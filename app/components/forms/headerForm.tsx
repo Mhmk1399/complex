@@ -49,7 +49,14 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
     setUserInputData(initialData);
     setIsDataReady(true);
   }, []);
-
+  useEffect(() => {
+    const initialData = {
+      ...defaultValues,
+      ...Compiler(layout, selectedComponent),
+    };
+    setUserInputData(initialData);
+    setIsDataReady(true);
+  }, [selectedComponent]);
   if (!isDataReady) {
     return <div>Loading...</div>; // Or your preferred loading indicator
   }
