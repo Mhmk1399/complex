@@ -114,7 +114,6 @@ const NewsLetter: React.FC<NewsLetterProps> = ({
       $data={sectionData}
       onClick={() => setSelectedComponent(actualName)}
     >
-      <h1>{actualName}</h1>
       <Heading $data={sectionData}>
         {sectionData.blocks.heading || "Subscribe to Our Newsletter"}
       </Heading>

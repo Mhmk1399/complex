@@ -90,14 +90,22 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
     </>
   );
 
+  const urlToPersianNameMap: { [key: string]: string } = {
+    "/": "خانه",
+    "/about": "درباره ",
+    "/contact": "ارتباط  ",
+    "/blog": "بلاگ",
+    "/shop": "فروشگاه",
+    "/login": "ورود",
+
+    // Add more mappings as needed
+  };
+
   const handleLinkSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedUrl = e.target.value;
 
     const newLink = {
-      name:
-        selectedUrl === "/"
-          ? "Home"
-          : selectedUrl.charAt(1).toUpperCase() + selectedUrl.slice(2),
+      name: urlToPersianNameMap[selectedUrl] || "نامشخص", // Default to "نامشخص" if no mapping is found
       url: selectedUrl,
     };
 
@@ -112,8 +120,8 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
 
   const linkOptions = [
     { name: " خانه ", url: "/" },
-    { name: " درباره ما ", url: "/about" },
-    { name: " ارتباط با ما  ", url: "/contact" },
+    { name: " درباره  ", url: "/about" },
+    { name: " ارتباط    ", url: "/contact" },
     { name: " بلاگ ", url: "/blog" },
     { name: " فروشگاه  ", url: "/shop" },
     { name: " ورود/عضویت  ", url: "/login" },
