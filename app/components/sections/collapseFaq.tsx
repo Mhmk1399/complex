@@ -6,6 +6,8 @@ import styled from "styled-components";
 interface CollapseFaqProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
+  actualName: string;
+  selectedComponent: string;
 }
 
 // Styled Components
@@ -92,13 +94,21 @@ const Answer = styled.div<{
 const CollapseFaq: React.FC<CollapseFaqProps> = ({
   setSelectedComponent,
   layout,
+  actualName,
+  selectedComponent,
 }) => {
-  const sectionData = (layout.sections?.children
-    ?.sections?.[7] as CollapseSection) || {
+  const sectionData = (layout.sections?.children?.sections.find(
+    (section) => section.type === actualName
+  ) as CollapseSection) || {
     blocks: [],
     setting: {},
     type: "collapse",
   };
+
+  if (!sectionData) {
+    console.error("collapse section data is missing or invalid.");
+    return null;
+  }
 
   const [openIndexes, setOpenIndexes] = useState<number[]>([]);
 
@@ -112,8 +122,19 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
     <Section
       dir="rtl"
       $data={sectionData}
-      onClick={() => setSelectedComponent("CollapseFaq")}
+      onClick={() => setSelectedComponent(actualName)}
+      className={`transition-all duration-150 ease-in-out relative ${
+        selectedComponent === actualName
+          ? "border-4 border-blue-500 rounded-lg shadow-lg "
+          : ""
+      }`}
     >
+      {actualName === selectedComponent ? (
+        <div className="absolute w-fit -top-5 -left-1 bg-blue-500 py-1 px-4 rounded-lg text-white z-10">
+          {actualName}
+        </div>
+      ) : null}
+    
       <Heading $data={sectionData}>{sectionData.blocks[0]?.heading}</Heading>
       {sectionData.blocks.map((block: CollapseBlock, idx: number) => (
         <FaqItem key={idx}>

@@ -2,11 +2,12 @@
 import React from "react";
 import styled from "styled-components";
 import { ImageTextSection, Layout } from "@/lib/types";
-import data from '../../../public/template/null.json'
 
 interface ImageTextProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
+  actualName: string;
+  selectedComponent: string;
 }
 
 // Styled Components
@@ -22,7 +23,6 @@ const Section = styled.section<{ $data: ImageTextSection }>`
   margin-bottom: ${(props) => props.$data.setting?.marginBottom || "0"}px;
   background-color: ${(props) =>
     props.$data.blocks?.setting?.background || "transparent"};
-  overflow: hidden;
   flex-direction: column;
 
   @media (min-width: 1024px) {
@@ -119,10 +119,12 @@ const Button = styled.a<{ $data: ImageTextSection }>`
 const ImageText: React.FC<ImageTextProps> = ({
   setSelectedComponent,
   layout,
+  actualName,
+  selectedComponent,
 }) => {
   // Find the first section with type "image-text"
   const sectionData = layout?.sections?.children?.sections.find(
-    (section) => section.type === "ImageText"
+    (section) => section.type === actualName
   ) as ImageTextSection;
 
   // Fallback for missing or invalid section data
@@ -137,9 +139,18 @@ const ImageText: React.FC<ImageTextProps> = ({
   return (
     <Section
       $data={sectionData}
-      onClick={() => setSelectedComponent("ImageText")}
+      onClick={() => setSelectedComponent(actualName)}
       dir="rtl"
+      className={`transition-all duration-150 ease-in-out relative ${
+        selectedComponent === actualName ? "border-4 border-blue-500 " : ""
+      }`}
     >
+      {actualName === selectedComponent ? (
+        <div className="absolute w-fit -top-5 -left-1 bg-blue-500 py-1 px-4  rounded-lg text-white z-10">
+          {actualName}
+        </div>
+      ) : null}
+
       <Image
         $data={sectionData}
         src={imageSrc || "/assets/images/banner2.webp"}

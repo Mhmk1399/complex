@@ -7,6 +7,8 @@ import { Layout, VideoSection } from "@/lib/types";
 interface VideoProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
+  actualName: string;
+  selectedComponent: string;
 }
 
 // Styled Components for Video Section
@@ -49,15 +51,39 @@ const VideoElement = styled.video<{ $data: VideoSection }>`
 `;
 
 // Video Component
-const Video: React.FC<VideoProps> = ({ setSelectedComponent, layout }) => {
+const Video: React.FC<VideoProps> = ({
+  setSelectedComponent,
+  layout,
+  actualName,
+  selectedComponent,
+}) => {
   const sectionData = layout.sections?.children?.sections?.find(
-    (section) => section.type === "Video"
+    (section) => section.type === actualName
   ) as VideoSection;
+
+  if (!sectionData) {
+    console.error("Video section data is missing or invalid.");
+    return null;
+  }
 
   const { blocks } = sectionData || { blocks: {} };
 
   return (
-    <Section $data={sectionData} onClick={() => setSelectedComponent("Video")}>
+    <Section
+      $data={sectionData}
+      onClick={() => setSelectedComponent(actualName)}
+      className={`transition-all duration-150 ease-in-out relative ${
+        selectedComponent === actualName
+          ? "border-4 border-blue-500 rounded-lg shadow-lg "
+          : ""
+      }`}
+    >
+      {actualName === selectedComponent ? (
+        <div className="absolute w-fit -top-5 -left-1 bg-blue-500 py-1 px-4  rounded-lg text-white z-10">
+          {actualName}
+        </div>
+      ) : null}
+
       {blocks.heading && (
         <Heading $data={sectionData}>
           {blocks.heading || "Video Heading"}

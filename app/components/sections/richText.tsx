@@ -1,17 +1,14 @@
 "use client";
 
-import {
-  Layout,
-  RichTextSection,
-  RichTextBlock,
-
-} from "@/lib/types";
+import { Layout, RichTextSection, RichTextBlock } from "@/lib/types";
 import Link from "next/link";
 import styled from "styled-components";
 
 interface RichTextProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
+  actualName: string;
+  selectedComponent: string;
 }
 
 // Styled components
@@ -72,20 +69,23 @@ const Btn = styled.button<{ $data: RichTextBlock }>`
 const RichText: React.FC<RichTextProps> = ({
   setSelectedComponent,
   layout,
+  actualName,
+  selectedComponent,
 }) => {
-  const sectionData = layout?.sections?.children
-    ?.sections[2] as RichTextSection;
+  const sectionData = layout?.sections?.children?.sections?.find(
+    (section) => section.type === actualName
+  ) as RichTextSection;
+
+  if (!sectionData) {
+    console.error("RichText section data is missing or invalid.");
+    return null;
+  }
 
   // Add type guard to verify section type
-
-
 
   const { blocks } = sectionData;
 
   // Type guard for RichTextBlock
- 
-
-  
 
   const { textHeading, description, btnText, btnLink } = blocks;
 
@@ -93,8 +93,19 @@ const RichText: React.FC<RichTextProps> = ({
     <Section
       dir="rtl"
       $data={sectionData}
-      onClick={() => setSelectedComponent("RichText")}
+      onClick={() => setSelectedComponent(actualName)}
+      className={`transition-all duration-150 ease-in-out relative ${
+        selectedComponent === actualName
+          ? "border-4 border-blue-500 rounded-lg shadow-lg "
+          : ""
+      }`}
     >
+      {actualName === selectedComponent ? (
+        <div className="absolute w-fit -top-5 -left-1 bg-blue-500 py-1 px-4  rounded-lg text-white z-10">
+          {actualName}
+        </div>
+      ) : null}
+    
       {textHeading && <H1 $data={blocks}>{textHeading}</H1>}
 
       <hr className="w-[70%] h-[4px] bg-white mb-4" />

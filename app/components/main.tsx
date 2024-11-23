@@ -1,16 +1,19 @@
-'use client'
-import React, { useEffect, useState } from 'react'
-import { Preview } from './preview';
-import { Form } from './form';
-import data from '../../public/template/null.json'
-import { Layout } from '../../lib/types'
+"use client";
+import React, { useEffect, useState } from "react";
+import { Preview } from "./preview";
+import { Form } from "./form";
+import data from "../../public/template/null.json";
+import { Layout } from "../../lib/types";
 
 export const Main = () => {
   const Data = data as unknown as Layout;
   const [loading, setLoading] = useState(true);
   const [layout, setLayout] = useState<Layout>(Data);
-  const [selectedComponent, setSelectedComponent] = useState<string>('sectionHeader');
-  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [selectedComponent, setSelectedComponent] =
+    useState<string>("sectionHeader");
+  const [saveStatus, setSaveStatus] = useState<
+    "idle" | "saving" | "saved" | "error"
+  >("idle");
   const [orders, setOrders] = useState<string[]>([]);
 
   useEffect(() => {
@@ -56,29 +59,41 @@ export const Main = () => {
           <div className="fixed top-3 right-4 ">
             <button
               // onClick={handleSave}
-              disabled={saveStatus === 'saving'}
+              disabled={saveStatus === "saving"}
               className={`px-4 py-2 rounded-md text-white ${
-                saveStatus === 'saving' ? 'bg-gray-400' :
-                saveStatus === 'saved' ? 'bg-green-500' :
-                saveStatus === 'error' ? 'bg-red-500' :
-                'bg-green-500 hover:bg-green-600'
+                saveStatus === "saving"
+                  ? "bg-gray-400"
+                  : saveStatus === "saved"
+                  ? "bg-green-500"
+                  : saveStatus === "error"
+                  ? "bg-red-500"
+                  : "bg-green-500 hover:bg-green-600"
               }`}
             >
-              {saveStatus === 'saving' ? 'Saving...' :
-               saveStatus === 'saved' ? 'Saved!' :
-               saveStatus === 'error' ? 'Error!' :
-               'Save Changes'}
+              {saveStatus === "saving"
+                ? "Saving..."
+                : saveStatus === "saved"
+                ? "Saved!"
+                : saveStatus === "error"
+                ? "Error!"
+                : "Save Changes"}
             </button>
           </div>
-          <Preview 
+          <Preview
             layout={layout}
             setSelectedComponent={setSelectedComponent}
             orders={orders}
+            selectedComponent={selectedComponent}
           />
-          <Form selectedComponent={selectedComponent} setLayout={setLayout} layout={layout}     orders={orders}
-            setOrders={setOrders} />
+          <Form
+            selectedComponent={selectedComponent}
+            setLayout={setLayout}
+            layout={layout}
+            orders={orders}
+            setOrders={setOrders}
+          />
         </div>
       )}
     </div>
-  )
-}
+  );
+};
