@@ -42,7 +42,7 @@ export const Preview: React.FC<PreviewProps> = ({
 
   return (
     <div className="mt-16 w-full md:w-full lg:w-[75%] h-[95vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide lg:mt-5 lg:ml-5">
-      {/* <Header setSelectedComponent={setSelectedComponent} layout={layout} /> */}
+      <Header setSelectedComponent={setSelectedComponent} layout={layout} />
       <div className="grid grid-cols-1 mt-32">
         {orders.map((componentName, index) => {
           // Extract base component name by removing any numeric suffix
