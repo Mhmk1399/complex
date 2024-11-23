@@ -68,8 +68,8 @@
             }
           },
           "setting": {
-            "paddingTop": "10",
-            "paddingBottom": "20",
+            "paddingTop": "0",
+            "paddingBottom": "0",
             "marginTop": "20",
             "marginBottom": "80"
           }
