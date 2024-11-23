@@ -64,6 +64,11 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
   }, []);
+  useEffect(() => {
+    const initialData = Compiler(layout, selectedComponent)[0];
+    setUserInputData(initialData);
+    
+  }, [selectedComponent]);
 
   const handleBlockChange = (index: number, field: string, value: string) => {
     setUserInputData((prev: CollapseSection) => ({

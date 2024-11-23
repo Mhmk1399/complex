@@ -48,7 +48,10 @@ export const RichText: React.FC<RichTextFormProps> = ({
     const initialData = Compiler(layout, selectedComponent);
     setUserInputData(initialData[0]);
   }, []);
-
+  useEffect(() => {
+    const initialData = Compiler(layout, selectedComponent);
+    setUserInputData(initialData[0]);
+  }, [selectedComponent]);
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {

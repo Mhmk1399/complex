@@ -50,6 +50,14 @@ export const SlideForm: React.FC<SlideFormProps> = ({
     }
     
   }, []);
+  useEffect(() => {
+    const initialData = Compiler(layout, selectedComponent)[0];
+    if (initialData) {
+      setLoaded(true);
+      setUserInputData(initialData);
+    }
+    
+  }, [selectedComponent]);
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     index: number,

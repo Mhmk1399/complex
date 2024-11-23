@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Compiler } from "../compiler";
 import { Layout, ImageTextSection } from "@/lib/types";
+import { s } from "framer-motion/client";
 interface ImageTextFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<ImageTextSection>>;
   userInputData: ImageTextSection;
@@ -55,6 +56,13 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
     };
     setUserInputData(initialData[0]);
   }, []);
+  useEffect(() => {
+    const initialData = {
+      ...defaultValues,
+      ...Compiler(layout, selectedComponent),
+    };
+    setUserInputData(initialData[0]);
+  }, [selectedComponent]);
 
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
