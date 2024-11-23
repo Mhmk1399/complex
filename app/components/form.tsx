@@ -269,7 +269,7 @@ export const Form = ({
             selectedComponent={selectedComponent}
           />
         );
-      case "Multicolumn":
+      case "MultiColumn":
         return (
           <MultiColumnForm
             setUserInputData={
