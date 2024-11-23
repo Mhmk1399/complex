@@ -127,16 +127,25 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
     { name: " ورود/عضویت  ", url: "/login" },
   ];
   const removeLink = (urlToRemove: string) => {
-    setUserInputData((prev: HeaderSection) => ({
-      ...prev,
-      blocks: {
-        ...prev.blocks,
+    setUserInputData((prev: HeaderSection) => {
+      const indexToRemove = prev.blocks.links.findIndex(
+        (link: Link) => link.url === urlToRemove
+      );
 
-        links: prev.blocks.links.filter(
-          (link: Link) => link.url !== urlToRemove
-        ),
-      },
-    }));
+      if (indexToRemove !== -1) {
+        const updatedLinks = [...prev.blocks.links];
+        updatedLinks.splice(indexToRemove, 1);
+        return {
+          ...prev,
+          blocks: {
+            ...prev.blocks,
+            links: updatedLinks,
+          },
+        };
+      }
+
+      return prev;
+    });
   };
   const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
