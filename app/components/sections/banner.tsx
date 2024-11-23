@@ -99,7 +99,7 @@ const Banner: React.FC<props> = ({
       onClick={() => setSelectedComponent(actualName)}
       className={`transition-all duration-150 ease-in-out relative ${
         selectedComponent === actualName
-          ? "border-4 border-blue-500 rounded-lg shadow-lg "
+          ? "border-4 border-blue-500 rounded-2xl shadow-lg "
           : ""
       }`}
     >

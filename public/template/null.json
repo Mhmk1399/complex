@@ -316,10 +316,10 @@
             "marginTop": "10",
             "marginBottom": "10",
             "headingColor": "#ffffff",
-            "headingFontSize": "30px",
+            "headingFontSize": "30",
             "headingFontWeight": "bold",
             "background": "#14213D",
-            "borderRadious": "20px"
+            "borderRadious": "20"
           }
         },
         {
