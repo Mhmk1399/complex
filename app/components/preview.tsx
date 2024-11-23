@@ -13,16 +13,20 @@ import MultiRow from "./sections/multiRow";
 import { Layout } from "@/lib/types";
 import FooterContainer from "./sections/footer";
 
+// First update the PreviewProps interface
 interface PreviewProps {
   layout: Layout;
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   orders: string[];
+  selectedComponent: string; // Add this new prop
 }
 
+// Then use it in the component
 export const Preview: React.FC<PreviewProps> = ({
   layout,
   setSelectedComponent,
   orders,
+  selectedComponent, // Add this to the destructured props
 }) => {
   const componentMap = {
     Header,
@@ -61,6 +65,7 @@ export const Preview: React.FC<PreviewProps> = ({
                 setSelectedComponent={setSelectedComponent}
                 layout={layout}
                 actualName={componentName} // Pass the full name including suffix
+                selectedComponent={selectedComponent} // Pass the full name including suffix
               />
             </div>
           ) : null;

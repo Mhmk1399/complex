@@ -438,14 +438,14 @@
             "btnText": "ثبت نام",
 
             "setting": {
-              "headingColor": "#ffffff",
+              "headingColor": "#14213D",
               "headingFontSize": "27",
               "headingFontWeight": "bold",
-              "descriptionColor": "#000000",
+              "descriptionColor": "#ffffff",
               "descriptionFontSize": "18",
               "descriptionFontWeight": "normal",
               "btnBackgroundColor": "#FCA311",
-              "btnTextColor": "#14213D",
+              "btnTextColor": "#ffffff",
               "formBackground": "#E5E5E5"
             }
           },

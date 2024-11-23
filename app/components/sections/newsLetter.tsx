@@ -6,6 +6,7 @@ interface NewsLetterProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
   actualName: string;
+  selectedComponent: string; // Add this prop
 }
 
 // Styled Components
@@ -96,24 +97,34 @@ const Button = styled.button<{ $data: NewsLetterSection }>`
 const NewsLetter: React.FC<NewsLetterProps> = ({
   setSelectedComponent,
   layout,
-  actualName
+  actualName,
+  selectedComponent, // Add to destructuring
 }) => {
   const sectionData = layout.sections?.children?.sections?.find(
     (section) => section.type === actualName
   ) as NewsLetterSection;
-// console.log(sectionData);
+  // console.log(sectionData);
 
   if (!sectionData) {
     return null; // Return null if no section data is found
   }
-
 
   return (
     <Section
       dir="rtl"
       $data={sectionData}
       onClick={() => setSelectedComponent(actualName)}
+      className={`transition-all duration-150 ease-in-out relative ${
+        selectedComponent === actualName
+          ? "border-4 border-blue-500 rounded-lg shadow-lg "
+          : ""
+      }`}
     >
+      {actualName === selectedComponent ? (
+        <div className="absolute w-fit -top-5 -left-1 bg-blue-500 py-1 px-4  rounded-lg text-white z-10">
+          {actualName}
+        </div>
+      ) : null}
       <Heading $data={sectionData}>
         {sectionData.blocks.heading || "Subscribe to Our Newsletter"}
       </Heading>

@@ -8,6 +8,7 @@ interface RichTextProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
   actualName: string;
+  selectedComponent: string;
 }
 
 // Styled components
@@ -69,6 +70,7 @@ const RichText: React.FC<RichTextProps> = ({
   setSelectedComponent,
   layout,
   actualName,
+  selectedComponent,
 }) => {
   const sectionData = layout?.sections?.children?.sections?.find(
     (section) => section.type === actualName
@@ -92,7 +94,18 @@ const RichText: React.FC<RichTextProps> = ({
       dir="rtl"
       $data={sectionData}
       onClick={() => setSelectedComponent(actualName)}
+      className={`transition-all duration-150 ease-in-out relative ${
+        selectedComponent === actualName
+          ? "border-4 border-blue-500 rounded-lg shadow-lg "
+          : ""
+      }`}
     >
+      {actualName === selectedComponent ? (
+        <div className="absolute w-fit -top-5 -left-1 bg-blue-500 py-1 px-4  rounded-lg text-white z-10">
+          {actualName}
+        </div>
+      ) : null}
+    
       {textHeading && <H1 $data={blocks}>{textHeading}</H1>}
 
       <hr className="w-[70%] h-[4px] bg-white mb-4" />

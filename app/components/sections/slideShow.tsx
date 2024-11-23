@@ -7,6 +7,7 @@ interface SlideShowProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
   actualName: string;
+  selectedComponent: string;
 }
 
 // Styled Components
@@ -134,6 +135,7 @@ const SlideShow: React.FC<SlideShowProps> = ({
   setSelectedComponent,
   layout,
   actualName,
+  selectedComponent,
 }) => {
   const sectionData: SlideSection = (layout.sections?.children?.sections?.find(
     (section) => section.type === actualName
@@ -166,7 +168,16 @@ const SlideShow: React.FC<SlideShowProps> = ({
       dir="ltr"
       $data={sectionData.setting}
       onClick={() => setSelectedComponent(actualName)}
+      className={`transition-all duration-150 ease-in-out relative ${
+        selectedComponent === actualName ? "border-4 border-blue-500 " : ""
+      }`}
     >
+      {actualName === selectedComponent ? (
+        <div className="absolute w-fit -top-5 -left-1 bg-blue-500 py-1 px-4 rounded-lg text-white z-10">
+          {actualName}
+        </div>
+      ) : null}
+
       <SlideContainer $data={slides[0]}>
         <SlidesWrapper $currentIndex={currentIndex}>
           {slides.map((slide, index) => (
