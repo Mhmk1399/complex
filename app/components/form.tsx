@@ -107,6 +107,11 @@ export const Form = ({
   const addSection = (componentName: string) => {
     console.log(componentName);
   };
+  useEffect(() => {
+    if (selectedComponent) {
+      setIsOpen(true);
+    }
+  }, [selectedComponent]);
 
   useEffect(() => {
     if (Object.keys(userInputData).length > 0) {
