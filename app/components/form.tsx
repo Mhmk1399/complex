@@ -1,6 +1,18 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { DragEndEvent } from "@dnd-kit/core";
+import richtextImage from "@/public/assets/images/richtext.png";
+import ImageTextImage from "@/public/assets/images/imagetext.png";
+import bannerImage from "@/public/assets/images/banner.jpg";
+import CollapseFaqImage from "@/public/assets/images/collapse.png";
+import contactImage from "@/public/assets/images/contact.png";
+import newsLetterImage from "@/public/assets/images/newsletter.png";
+import multiColumnImage from "@/public/assets/images/multicolumn.png";
+import slideShowImage from "@/public/assets/images/slideShow.png";
+import multiRowImage from "@/public/assets/images/multirow.png";
+import video from "@/public/assets/images/video.png";
+
+
 
 import {
   DndContext,
@@ -51,6 +63,7 @@ import { MultiColumnForm } from "./forms/multiColomnForm";
 import { SlideForm } from "./forms/slideForm";
 import { MultiRowForm } from "./forms/multiRowForm";
 import { FooterForm } from "./forms/footerForm";
+import { url } from "inspector";
 type FormData =
   | HeaderSection
   | MultiRowSection
@@ -84,7 +97,8 @@ export const Form = ({
   const [userInputData, setUserInputData] = useState<FormData>({} as FormData);
   const [isOpen, setIsOpen] = useState(false);
   const [showOrdersMenu, setShowOrdersMenu] = useState(false);
- 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   // Setup sensors for dnd-kit
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -92,6 +106,10 @@ export const Form = ({
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+  const addSection = (componentName: string) => {
+    console.log(componentName);
+
+  };
 
   useEffect(() => {
     if (Object.keys(userInputData).length > 0) {
@@ -196,12 +214,12 @@ export const Form = ({
               setUserInputData as React.Dispatch<
                 React.SetStateAction<BannerSection>
               >
-              
+
             }
             userInputData={userInputData as BannerSection}
             layout={layout}
             selectedComponent={selectedComponent}
-            
+
           />
         );
       case "ImageText":
@@ -269,7 +287,7 @@ export const Form = ({
             selectedComponent={selectedComponent}
           />
         );
-      case "Multicolumn":
+      case "MultiColumn":
         return (
           <MultiColumnForm
             setUserInputData={
@@ -326,7 +344,7 @@ export const Form = ({
     }
   };
 
-  const ordersButton = (
+  const ordersButton = (<div className="flex justify-between items-center">
     <button
       onClick={() => setShowOrdersMenu(!showOrdersMenu)}
       className={
@@ -337,6 +355,13 @@ export const Form = ({
     >
       {!showOrdersMenu ? "Orders" : "menu"}
     </button>
+    {showOrdersMenu && <button
+      onClick={() => setIsModalOpen(true)}
+      className="m-2 px-4 py-2  bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors"
+    >
+      add section
+    </button>}
+  </div>
   );
 
   return (
@@ -346,6 +371,7 @@ export const Form = ({
         className="hidden lg:block fixed right-0 top-0 h-screen w-80 bg-white shadow-lg overflow-y-auto "
         style={{ zIndex: 1000 }}
       >
+
         {ordersButton}
 
         <div className="p-6">
@@ -357,6 +383,120 @@ export const Form = ({
               <h3 className="text-lg font-semibold mb-2">
                 ترتیب سکشن
               </h3>
+
+              {/* Add Modal Trigger Button */}
+
+
+              {/* Modal Component */}
+              {isModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-5000  overflow-y-auto" onClick={() => setIsModalOpen(false)}>
+
+                  <div className="bg-white p-6 rounded-lg w-[100%] max-h-[60vh] max-w-xl overflow-auto shadow-lg scrollbar-hide relative">
+                    <div className=" mb-4 absolute top-0 left-0">
+
+
+                      <button
+                        onClick={() => setIsModalOpen(false)}
+                        className="text-gray-500 hover:text-gray-700 text-lg font-semibold m-4"
+                      >
+                        ✕
+                      </button>
+
+
+                    </div>
+                    {/* Modal content will go here */}
+                    <div className="modal-content">
+                      <div onClick={() => addSection('RichText')}
+                        className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat"
+                        style={{
+                          backgroundImage: `url(${richtextImage.src})`,
+                          backgroundSize: 'contain'
+                        }}
+                      >
+                      </div>
+
+                      <div onClick={() => addSection('ImageText')}
+                        className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat"
+                        style={{
+                          backgroundImage: `url(${ImageTextImage.src})`,
+                          backgroundSize: 'contain'
+                        }}
+                      >
+                      </div>
+
+                      <div onClick={() => addSection('Banner')}
+                        className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat"
+                        style={{
+                          backgroundImage: `url(${bannerImage.src})`,
+                          backgroundSize: 'contain'
+                        }}
+                      >
+                      </div>
+
+                      <div onClick={() => addSection('CollapseFaq')}
+                        className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat"
+                        style={{
+                          backgroundImage: `url(${CollapseFaqImage.src})`,
+                          backgroundSize: 'contain'
+                        }}
+                      >
+                      </div>
+
+                      <div onClick={() => addSection('ContactForm')}
+                        className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat"
+                        style={{
+                          backgroundImage: `url(${contactImage.src})`,
+                          backgroundSize: 'contain'
+                        }}
+                      >
+                      </div>
+                      <div onClick={() => addSection('NewsLetter')}
+                        className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat"
+                        style={{
+                          backgroundImage: `url(${newsLetterImage.src})`,
+                          backgroundSize: 'contain'
+                        }}
+                      >
+                      </div>
+                      <div onClick={() => addSection('MultiColumn')}
+                        className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat"
+                        style={{
+                          backgroundImage: `url(${multiColumnImage.src})`,
+                          backgroundSize: 'contain'
+                        }}
+                      >
+                      </div>
+                      <div onClick={() => addSection('SlideShow')}
+                        className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat"
+                        style={{
+                          backgroundImage: `url(${slideShowImage.src})`,
+                          backgroundSize: 'contain'
+                        }}
+                      >
+                      </div>
+                      <div onClick={() => addSection('MultiRow')}
+                        className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat"
+                        style={{
+                          backgroundImage: `url(${multiRowImage.src})`,
+                          backgroundSize: 'contain'
+                        }}
+                      >
+                      </div>
+                      <div onClick={() => addSection('Video')}
+                        className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat"
+                        style={{
+                          backgroundImage: `url(${video.src})`,
+                          backgroundSize: 'contain'
+                        }}
+                      >
+                      </div>
+                      
+                    </div>
+
+                  </div>
+                </div>
+              )}
+
               <DndContext
                 sensors={sensors}
                 collisionDetection={closestCenter}
@@ -373,7 +513,7 @@ export const Form = ({
               </DndContext>
             </div>
           ) : (
-            renderFormContent(setUserInputData, userInputData as Section,selectedComponent)
+            renderFormContent(setUserInputData, userInputData as Section, selectedComponent)
           )}
         </div>
       </div>
@@ -397,7 +537,7 @@ export const Form = ({
           <h2 className="text-2xl font-bold text-gray-800 mb-4">
             تنظیمات سکشن
           </h2>
-          {renderFormContent(setUserInputData, userInputData as Section,selectedComponent)}
+          {renderFormContent(setUserInputData, userInputData as Section, selectedComponent)}
         </div>
       </motion.div>
     </>
