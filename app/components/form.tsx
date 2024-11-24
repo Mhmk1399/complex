@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import { DragEndEvent } from "@dnd-kit/core";
 import richtextImage from "@/public/assets/images/richtext.png";
 import ImageTextImage from "@/public/assets/images/imagetext.png";
@@ -11,6 +12,16 @@ import multiColumnImage from "@/public/assets/images/multicolumn.png";
 import slideShowImage from "@/public/assets/images/slideShow.png";
 import multiRowImage from "@/public/assets/images/multirow.png";
 import video from "@/public/assets/images/video.png";
+import videoSm from "@/public/assets/images/videoSm.png";
+import rowSm from "@/public/assets/images/rowSm.png";
+import slideSm from "@/public/assets/images/slideSm.png";
+import columnSm from "@/public/assets/images/columnSm.png";
+import newsletterSm from "@/public/assets/images/newsletterSm.png";
+import contactSm from "@/public/assets/images/contactSm.png";
+import collapseSm from "@/public/assets/images/collapseSm.png";
+import bannerSm from "@/public/assets/images/BannerSm.png";
+import imagetextSm from "@/public/assets/images/imagetextSm.png";
+import richtextSm from "@/public/assets/images/richtextSm.png";
 
 import {
   DndContext,
@@ -61,7 +72,6 @@ import { MultiColumnForm } from "./forms/multiColomnForm";
 import { SlideForm } from "./forms/slideForm";
 import { MultiRowForm } from "./forms/multiRowForm";
 import { FooterForm } from "./forms/footerForm";
-import { url } from "inspector";
 import { Create } from "./C-D";
 type FormData =
   | HeaderSection
@@ -108,7 +118,7 @@ export const Form = ({
   const addSection = (componentName: string) => {
     Create(componentName, layout, setLayout);
   };
-  
+
   const imageContainerStyle = {
     width: "800px", // Fixed width
     height: "250px", // Fixed height
@@ -138,14 +148,12 @@ export const Form = ({
   const SortableItem = ({ id }: { id: string }) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
       useSortable({ id });
-  
+
     const style = {
       transform: CSS.Transform.toString(transform),
       transition,
     };
-  
-  
-  
+
     return (
       <div
         ref={setNodeRef}
@@ -156,11 +164,9 @@ export const Form = ({
       >
         <span className="text-gray-400">☰</span>
         <span>{id}</span>
-       
       </div>
     );
   };
-  
 
   useEffect(() => {
     setOrders([...layout.sections.children.order]);
@@ -433,8 +439,8 @@ export const Form = ({
                     <motion.div
                       initial={{ y: 20, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.2 }}
-                      className="modal-content flex flex-col items-center justify-center gap-4"
+                      transition={{ delay: 0.4 }}
+                      className="modal-content flex flex-col items-center justify-center gap-12"
                     >
                       <div
                         onClick={() => addSection("RichText")}
@@ -452,6 +458,7 @@ export const Form = ({
                           {"متن غنی"}
                         </span>
                       </div>
+
                       <div
                         onClick={() => addSection("ImageText")}
                         className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
@@ -610,8 +617,8 @@ export const Form = ({
                   items={orders}
                   strategy={verticalListSortingStrategy}
                 >
-                  {orders.map((id: string,handleClick) => (
-                    <SortableItem key={id} id={id}/>
+                  {orders.map((id: string, handleClick) => (
+                    <SortableItem key={id} id={id} />
                   ))}
                 </SortableContext>
               </DndContext>
@@ -627,18 +634,305 @@ export const Form = ({
       </div>
 
       {/* Mobile/Tablet Bottom Sheet */}
+      <AnimatePresence mode="wait">
+        {showOrdersMenu && (
+          <motion.div
+            initial={{ opacity: 0, x: "-100%" }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: "100%" }}
+            transition={{
+              type: "spring",
+              stiffness: 80,
+              damping: 20,
+              duration: 0.5,
+            }}
+            className="fixed lg:hidden inset-0 h-screen w-80 bg-white shadow-lg overflow-y-auto z-[9999]"
+          >
+            <span
+              className=" ml-2 top-1 absolute text-2xl text-black rounded-full cursor-pointer p-2"
+              onClick={() => setShowOrdersMenu(!showOrdersMenu)}
+            >
+              x
+            </span>
+            <div className="bg-white p-4 my-5 rounded-lg shadow-md" dir="rtl">
+              <h3 className="text-2xl text-black font-semibold mb-4">
+                جابجایی سکشن
+              </h3>
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+              >
+                <SortableContext
+                  items={orders}
+                  strategy={verticalListSortingStrategy}
+                >
+                  {orders.map((id: string) => (
+                    <SortableItem key={id} id={id} />
+                  ))}
+                </SortableContext>
+              </DndContext>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <motion.div
         drag="y"
-        dragConstraints={{ top: 0, bottom: 0 }}
-        initial={{ y: "calc(100% - 40px)" }}
+        initial={{ y: isOpen ? 100 : "calc(100% - 40px)" }}
         animate={{ y: isOpen ? 0 : "calc(100% - 40px)" }}
-        className="lg:hidden fixed bottom-0 left-0 right-0 bg-white z-20 bg-opacity-80 rounded-t-3xl shadow-2xl"
+        dragConstraints={{ top: 0, bottom: 0 }}
+        className="lg:hidden fixed bottom-0 left-0 right-0 bg-white z-50 bg-opacity-80 rounded-t-3xl shadow-2xl 
+    sm:w-[95%] sm:mx-auto sm:left-[2.5%] 
+    md:w-[85%] md:mx-auto md:left-[7.5%]"
       >
         <div
           className="h-10 w-full flex justify-center items-center cursor-pointer"
           onClick={() => setIsOpen(!isOpen)}
         >
           <div className="w-20 h-1.5 bg-black/60 rounded-full" />
+        </div>
+
+        {/* Add the orders button here */}
+        <div className="flex justify-between items-center px-4">
+          <button
+            onClick={() => setShowOrdersMenu(!showOrdersMenu)}
+            className={
+              !showOrdersMenu
+                ? `w-fit m-2 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors`
+                : "w-fit m-2 px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+            }
+          >
+            {!showOrdersMenu ? "جابجایی" : "منو"}
+          </button>
+          {!showOrdersMenu && (
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="m-2 px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors"
+            >
+              {!isModalOpen ? "انتخاب سکشن" : "بازگشت به تنظیمات"}
+            </button>
+          )}
+          <AnimatePresence>
+            {isModalOpen && (
+              <motion.div
+                dir="rtl"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                style={{ minHeight: "100vh" }}
+                transition={{ duration: 0.3 }}
+                className="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto flex items-center justify-center z-[9999]"
+              >
+                <motion.div
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  transition={{
+                    type: "spring",
+                    damping: 30,
+                    stiffness: 300,
+                    duration: 0.6,
+                  }}
+                  className="bg-white/60 backdrop-blur-sm h-[60vh] rounded-2xl mx-2 w-full overflow-y-auto shadow-lg relative"
+                >
+                  <div className="mb-4 absolute top-4 right-4 z-10">
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => setIsModalOpen(false)}
+                      className="text-white hover:text-gray-700 text-2xl font-bold"
+                    >
+                      ✕
+                    </motion.button>
+                  </div>
+                  {/* Modal content will go here */}
+                  <motion.div
+                    initial={{ y: 0, opacity: 0 }}
+                    animate={{ y: 20, opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="p-6 overflow-y-visible w-[80%] mx-auto mb-54 z-50 flex flex-col items-center gap-2"
+                  >
+                    <div
+                      onClick={() => addSection("RichText")}
+                      className="flex flex-col items-center h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${richtextSm.src})`,
+                        maxWidth: "100%",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        متن غنی
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("ImageText")}
+                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${imagetextSm.src})`,
+                        backgroundSize: "cover",
+                        maxWidth: "100%",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        عکس نوشته
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("Banner")}
+                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${bannerSm.src})`,
+                        backgroundSize: "contain",
+                        maxWidth: "100%",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        بنر
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("CollapseFaq")}
+                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${collapseSm.src})`,
+                        backgroundSize: "cover",
+                        maxWidth: "100%",
+                        height: "30rem",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        سوالات متداول
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("ContactForm")}
+                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${contactSm.src})`,
+                        backgroundSize: "cover",
+                        maxWidth: "100%",
+                        height: "20rem",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"ارتباط با ما"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("NewsLetter")}
+                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${newsletterSm.src})`,
+                        backgroundSize: "cover",
+                        maxWidth: "100%",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        خبرنامه
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("MultiColumn")}
+                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${columnSm.src})`,
+                        backgroundSize: "cover",
+                        height: "30rem",
+                        maxWidth: "100%",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        ستون ها
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("SlideShow")}
+                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${slideSm.src})`,
+                        backgroundSize: "contain",
+                        maxWidth: "100%",
+                        height: "27rem",
+                        backgroundPosition: "top",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        اسلاید شو
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("MultiRow")}
+                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${rowSm.src})`,
+                        backgroundSize: "contain",
+                        maxWidth: "100%",
+                        height: "30rem",
+                        backgroundPosition: "top",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        ردیف ها
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("Video")}
+                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${videoSm.src})`,
+                        backgroundSize: "cover",
+                        maxWidth: "100%",
+                        height: "20rem",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        ویدیو
+                      </span>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         <div className="max-h-[calc(60vh-40px)] min-h-[calc(40vh-30px)] overflow-y-auto p-6">
