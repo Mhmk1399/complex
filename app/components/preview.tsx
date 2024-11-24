@@ -46,9 +46,11 @@ export const Preview: React.FC<PreviewProps> = ({
   };
 
   return (
-    <div className="mt-16 w-full md:w-full lg:w-[75%] h-[95vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide lg:mt-5 lg:ml-5">
+    <div className="w-full md:w-full lg:w-[75%] h-[90vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide lg:mt-1 lg:ml-5">
       <Header setSelectedComponent={setSelectedComponent} layout={layout} />
-      <div className="grid grid-cols-1 mt-32">
+      <div className="grid grid-cols-1 mt-32"> 
+     
+
         {orders.map((componentName, index) => {
           const baseComponentName = componentName.split("-")[0];
           const Component = componentMap[baseComponentName as keyof typeof componentMap];

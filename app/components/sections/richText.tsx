@@ -3,12 +3,14 @@
 import { Layout, RichTextSection, RichTextBlock } from "@/lib/types";
 import Link from "next/link";
 import styled from "styled-components";
+import { Delete } from "../C-D";
 
 interface RichTextProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
   actualName: string;
   selectedComponent: string;
+  setLayout: React.Dispatch<React.SetStateAction<Layout>>;
 }
 
 // Styled components
@@ -71,13 +73,13 @@ const RichText: React.FC<RichTextProps> = ({
   layout,
   actualName,
   selectedComponent,
+  setLayout,
 }) => {
   const sectionData = layout?.sections?.children?.sections?.find(
     (section) => section.type === actualName
   ) as RichTextSection;
 
   if (!sectionData) {
-    console.error("RichText section data is missing or invalid.");
     return null;
   }
 
@@ -100,10 +102,15 @@ const RichText: React.FC<RichTextProps> = ({
           : ""
       }`}
     >
-      {actualName === selectedComponent ? (
-        <div className="absolute w-fit -top-5 -left-1 bg-blue-500 py-1 px-4  rounded-lg text-white z-10">
+     {actualName === selectedComponent ? (<div className="absolute w-fit -top-5 -left-1 z-10 flex justify-center items-center">
+        <div className=" bg-blue-500 py-1 px-4 rounded-lg text-white ">
           {actualName}
         </div>
+        <button className="text-red-600 font-extrabold text-xl hover:bg-red-100 bg-slate-100 pb-1 mx-1 items-center justify-items-center content-center rounded-full px-3 "
+         onClick={()=>Delete(actualName,layout,setLayout)}
+        >x</button>
+        </div>
+        
       ) : null}
     
       {textHeading && <H1 $data={blocks}>{textHeading}</H1>}

@@ -1,12 +1,14 @@
 "use client";
 import styled from "styled-components";
 import { Layout, NewsLetterSection } from "@/lib/types"; // Import the types
+import { Delete } from "../C-D";
 
 interface NewsLetterProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
   actualName: string;
-  selectedComponent: string; // Add this prop
+  selectedComponent: string; 
+  setLayout: React.Dispatch<React.SetStateAction<Layout>>;
 }
 
 // Styled Components
@@ -98,7 +100,8 @@ const NewsLetter: React.FC<NewsLetterProps> = ({
   setSelectedComponent,
   layout,
   actualName,
-  selectedComponent, // Add to destructuring
+  selectedComponent,
+  setLayout,
 }) => {
   const sectionData = layout.sections?.children?.sections?.find(
     (section) => section.type === actualName
@@ -120,10 +123,15 @@ const NewsLetter: React.FC<NewsLetterProps> = ({
           : ""
       }`}
     >
-      {actualName === selectedComponent ? (
-        <div className="absolute w-fit -top-5 -left-1 bg-blue-500 py-1 px-4  rounded-lg text-white z-10">
+      {actualName === selectedComponent ? (<div className="absolute w-fit -top-5 -left-1 z-10 flex justify-center items-center">
+        <div className=" bg-blue-500 py-1 px-4 rounded-lg text-white ">
           {actualName}
         </div>
+        <button className="text-red-600 font-extrabold text-xl hover:bg-red-100 bg-slate-100 pb-1 mx-1 items-center justify-items-center content-center rounded-full px-3 "
+         onClick={()=>Delete(actualName,layout,setLayout)}
+        >x</button>
+        </div>
+        
       ) : null}
       <Heading $data={sectionData}>
         {sectionData.blocks.heading || "Subscribe to Our Newsletter"}

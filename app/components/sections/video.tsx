@@ -9,6 +9,7 @@ interface VideoProps {
   layout: Layout;
   actualName: string;
   selectedComponent: string;
+  setLayout: React.Dispatch<React.SetStateAction<Layout>>;
 }
 
 // Styled Components for Video Section
@@ -56,13 +57,13 @@ const Video: React.FC<VideoProps> = ({
   layout,
   actualName,
   selectedComponent,
+  setLayout,
 }) => {
   const sectionData = layout.sections?.children?.sections?.find(
     (section) => section.type === actualName
   ) as VideoSection;
 
   if (!sectionData) {
-    console.error("Video section data is missing or invalid.");
     return null;
   }
 
