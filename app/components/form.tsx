@@ -85,7 +85,6 @@ interface FormProps {
   setOrders: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-
 export const Form = ({
   selectedComponent,
   setLayout,
@@ -114,7 +113,7 @@ export const Form = ({
     margin: "0 auto",
     backgroundColor: "#f5f5f5",
     borderRadius: "8px",
-    overflow: "hidden" // Ensures content stays within bounds
+    overflow: "hidden", // Ensures content stays within bounds
   };
   useEffect(() => {
     if (selectedComponent) {
@@ -399,7 +398,7 @@ export const Form = ({
               {/* Modal Component */}
               {isModalOpen && (
                 <motion.div
-                dir="rtl"
+                  dir="rtl"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 overflow-y-auto"
@@ -439,7 +438,7 @@ export const Form = ({
                           backgroundImage: `url(${richtextImage.src})`,
                           backgroundSize: "cover",
                           backgroundPosition: "center",
-                          backgroundRepeat: "no-repeat"
+                          backgroundRepeat: "no-repeat",
                         }}
                       >
                         <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
@@ -455,7 +454,7 @@ export const Form = ({
                           backgroundImage: `url(${ImageTextImage.src})`,
                           backgroundSize: "cover",
                           backgroundPosition: "center",
-                          backgroundRepeat: "no-repeat"
+                          backgroundRepeat: "no-repeat",
                         }}
                       >
                         <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
@@ -471,7 +470,7 @@ export const Form = ({
                           backgroundImage: `url(${bannerImage.src})`,
                           backgroundSize: "cover",
                           backgroundPosition: "center",
-                          backgroundRepeat: "no-repeat"
+                          backgroundRepeat: "no-repeat",
                         }}
                       >
                         <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
@@ -487,7 +486,7 @@ export const Form = ({
                           backgroundImage: `url(${CollapseFaqImage.src})`,
                           backgroundSize: "cover",
                           backgroundPosition: "top",
-                          backgroundRepeat: "no-repeat"
+                          backgroundRepeat: "no-repeat",
                         }}
                       >
                         <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
@@ -503,7 +502,7 @@ export const Form = ({
                           backgroundImage: `url(${contactImage.src})`,
                           backgroundSize: "cover",
                           backgroundPosition: "top",
-                          backgroundRepeat: "no-repeat"
+                          backgroundRepeat: "no-repeat",
                         }}
                       >
                         <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
@@ -519,7 +518,7 @@ export const Form = ({
                           backgroundImage: `url(${newsLetterImage.src})`,
                           backgroundSize: "cover",
                           backgroundPosition: "top",
-                          backgroundRepeat: "no-repeat"
+                          backgroundRepeat: "no-repeat",
                         }}
                       >
                         <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
@@ -535,7 +534,7 @@ export const Form = ({
                           backgroundImage: `url(${multiColumnImage.src})`,
                           backgroundSize: "cover",
                           backgroundPosition: "center",
-                          backgroundRepeat: "no-repeat"
+                          backgroundRepeat: "no-repeat",
                         }}
                       >
                         <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
@@ -551,7 +550,7 @@ export const Form = ({
                           backgroundImage: `url(${slideShowImage.src})`,
                           backgroundSize: "cover",
                           backgroundPosition: "top",
-                          backgroundRepeat: "no-repeat"
+                          backgroundRepeat: "no-repeat",
                         }}
                       >
                         <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
@@ -567,7 +566,7 @@ export const Form = ({
                           backgroundImage: `url(${multiRowImage.src})`,
                           backgroundSize: "cover",
                           backgroundPosition: "top",
-                          backgroundRepeat: "no-repeat"
+                          backgroundRepeat: "no-repeat",
                         }}
                       >
                         <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
@@ -583,7 +582,7 @@ export const Form = ({
                           backgroundImage: `url(${video.src})`,
                           backgroundSize: "contain",
                           backgroundPosition: "center",
-                          backgroundRepeat: "no-repeat"
+                          backgroundRepeat: "no-repeat",
                         }}
                       >
                         <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
