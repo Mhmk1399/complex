@@ -72,11 +72,7 @@ import { MultiColumnForm } from "./forms/multiColomnForm";
 import { SlideForm } from "./forms/slideForm";
 import { MultiRowForm } from "./forms/multiRowForm";
 import { FooterForm } from "./forms/footerForm";
-<<<<<<< Updated upstream
-import { url } from "inspector";
 import { Create } from "./C-D";
-=======
->>>>>>> Stashed changes
 type FormData =
   | HeaderSection
   | MultiRowSection
@@ -122,7 +118,7 @@ export const Form = ({
   const addSection = (componentName: string) => {
     Create(componentName, layout, setLayout);
   };
-  
+
   const imageContainerStyle = {
     width: "800px", // Fixed width
     height: "250px", // Fixed height
@@ -152,14 +148,12 @@ export const Form = ({
   const SortableItem = ({ id }: { id: string }) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
       useSortable({ id });
-  
+
     const style = {
       transform: CSS.Transform.toString(transform),
       transition,
     };
-  
-  
-  
+
     return (
       <div
         ref={setNodeRef}
@@ -170,11 +164,9 @@ export const Form = ({
       >
         <span className="text-gray-400">☰</span>
         <span>{id}</span>
-       
       </div>
     );
   };
-  
 
   useEffect(() => {
     setOrders([...layout.sections.children.order]);
@@ -625,8 +617,8 @@ export const Form = ({
                   items={orders}
                   strategy={verticalListSortingStrategy}
                 >
-                  {orders.map((id: string,handleClick) => (
-                    <SortableItem key={id} id={id}/>
+                  {orders.map((id: string, handleClick) => (
+                    <SortableItem key={id} id={id} />
                   ))}
                 </SortableContext>
               </DndContext>
@@ -642,66 +634,63 @@ export const Form = ({
       </div>
 
       {/* Mobile/Tablet Bottom Sheet */}
-      {showOrdersMenu && (
-        <motion.div
-          initial={{ x: "-100%" }}
-          animate={{ x: 0 }}
-          exit={{ x: "100%", transition: { duration: 1 } }}
-          transition={{
-            type: "spring",
-            stiffness: 100,
-            damping: 20,
-            transition: { duration: 1 },
-          }}
-          className="fixed lg:hidden inset-0 h-screen w-80 bg-white shadow-lg overflow-y-auto z-50"
-        >
-          <span
-            className=" ml-2 top-1 absolute text-2xl text-black rounded-full cursor-pointer p-2"
-            onClick={() => setShowOrdersMenu(!showOrdersMenu)}
+      <AnimatePresence mode="wait">
+        {showOrdersMenu && (
+          <motion.div
+            initial={{ opacity: 0, x: "-100%" }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: "100%" }}
+            transition={{
+              type: "spring",
+              stiffness: 80,
+              damping: 20,
+              duration: 0.5,
+            }}
+            className="fixed lg:hidden inset-0 h-screen w-80 bg-white shadow-lg overflow-y-auto z-[9999]"
           >
-            x
-          </span>
-          <div className="bg-white p-4 my-5 rounded-lg shadow-md" dir="rtl">
-            <h3 className="text-2xl text-black font-semibold mb-4">
-              جابجایی سکشن
-            </h3>
-            <DndContext
-              sensors={sensors}
-              collisionDetection={closestCenter}
-              onDragEnd={handleDragEnd}
+            <span
+              className=" ml-2 top-1 absolute text-2xl text-black rounded-full cursor-pointer p-2"
+              onClick={() => setShowOrdersMenu(!showOrdersMenu)}
             >
-              <SortableContext
-                items={orders}
-                strategy={verticalListSortingStrategy}
+              x
+            </span>
+            <div className="bg-white p-4 my-5 rounded-lg shadow-md" dir="rtl">
+              <h3 className="text-2xl text-black font-semibold mb-4">
+                جابجایی سکشن
+              </h3>
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
               >
-                {orders.map((id: string) => (
-                  <SortableItem key={id} id={id} />
-                ))}
-              </SortableContext>
-            </DndContext>
-          </div>
-        </motion.div>
-      )}
+                <SortableContext
+                  items={orders}
+                  strategy={verticalListSortingStrategy}
+                >
+                  {orders.map((id: string) => (
+                    <SortableItem key={id} id={id} />
+                  ))}
+                </SortableContext>
+              </DndContext>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <motion.div
         drag="y"
-        dragConstraints={{ top: 0, bottom: 0 }}
-        initial={{ y: "calc(100% - 40px)" }}
+        initial={{ y: isOpen ? 100 : "calc(100% - 40px)" }}
         animate={{ y: isOpen ? 0 : "calc(100% - 40px)" }}
-        className="lg:hidden fixed bottom-0 left-0 right-0 bg-white z-20 bg-opacity-80 rounded-t-3xl shadow-2xl 
+        dragConstraints={{ top: 0, bottom: 0 }}
+        className="lg:hidden fixed bottom-0 left-0 right-0 bg-white z-50 bg-opacity-80 rounded-t-3xl shadow-2xl 
     sm:w-[95%] sm:mx-auto sm:left-[2.5%] 
     md:w-[85%] md:mx-auto md:left-[7.5%]"
       >
         <div
-          className="h-10 w-full flex justify-center items-center cursor-pointer
-      sm:h-12 md:h-14"
+          className="h-10 w-full flex justify-center items-center cursor-pointer"
           onClick={() => setIsOpen(!isOpen)}
         >
-          <div
-            className="w-20 h-1.5 bg-black/60 rounded-full 
-      sm:w-24 sm:h-2 
-      md:w-28 md:h-2.5"
-          />{" "}
+          <div className="w-20 h-1.5 bg-black/60 rounded-full" />
         </div>
 
         {/* Add the orders button here */}
@@ -731,8 +720,9 @@ export const Form = ({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
+                style={{ minHeight: "100vh" }}
                 transition={{ duration: 0.3 }}
-                className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 "
+                className="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto flex items-center justify-center z-[9999]"
               >
                 <motion.div
                   initial={{ y: "100%" }}
@@ -743,14 +733,14 @@ export const Form = ({
                     stiffness: 300,
                     duration: 0.6,
                   }}
-                  className="bg-white w-full h-full overflow-auto shadow-lg relative"
+                  className="bg-white/60 backdrop-blur-sm h-[60vh] rounded-2xl mx-2 w-full overflow-y-auto shadow-lg relative"
                 >
                   <div className="mb-4 absolute top-4 right-4 z-10">
                     <motion.button
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => setIsModalOpen(false)}
-                      className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+                      className="text-white hover:text-gray-700 text-2xl font-bold"
                     >
                       ✕
                     </motion.button>
@@ -760,7 +750,7 @@ export const Form = ({
                     initial={{ y: 0, opacity: 0 }}
                     animate={{ y: 20, opacity: 1 }}
                     transition={{ delay: 0.3 }}
-                    className="p-6  overflow-y-visible w-[80%] mx-auto mb-64 z-50 "
+                    className="p-6 overflow-y-visible w-[80%] mx-auto mb-54 z-50 flex flex-col items-center gap-2"
                   >
                     <div
                       onClick={() => addSection("RichText")}
