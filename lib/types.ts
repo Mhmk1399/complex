@@ -387,11 +387,7 @@ export interface ImageTextSection {
   type: "image-text";
 }
 
-// export interface FooterSection {
-//   settings: {
-//     text: string;
-//   };
-// }
+
 
 export interface Children {
   type: string;

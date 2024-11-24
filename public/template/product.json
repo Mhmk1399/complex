@@ -69,6 +69,16 @@
           "price": "۳۰۰۰۰۰ تومان",
           "btnText": "اضافه به سبد خرید",
           "btnLink": "/product/3"
+        },
+        {
+          "productId": 4,
+          "imageSrc": "/assets/images/product3.jpg",
+          "imageAlt": "محصول ۳",
+          "name": "محصول سوم",
+          "description": "این محصول به خوبی ساخته شده است.",
+          "price": "۳۰۰۰۰۰ تومان",
+          "btnText": "اضافه به سبد خرید",
+          "btnLink": "/product/3"
         }
       ],
       "setting": {

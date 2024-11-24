@@ -682,7 +682,7 @@ export const Form = ({
         initial={{ y: isOpen ? 100 : "calc(100% - 40px)" }}
         animate={{ y: isOpen ? 0 : "calc(100% - 40px)" }}
         dragConstraints={{ top: 0, bottom: 0 }}
-        className="lg:hidden fixed bottom-0 left-0 right-0 bg-white z-50 bg-opacity-80 rounded-t-3xl shadow-2xl 
+        className="lg:hidden fixed bottom-0 left-0 right-0 bg-white z-50 bg-opacity-90 rounded-t-3xl shadow-2xl 
     sm:w-[95%] sm:mx-auto sm:left-[2.5%] 
     md:w-[85%] md:mx-auto md:left-[7.5%]"
       >
@@ -720,9 +720,8 @@ export const Form = ({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                style={{ minHeight: "100vh" }}
                 transition={{ duration: 0.3 }}
-                className="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto flex items-center justify-center z-[9999]"
+                className="fixed inset-0 bg-black bg-opacity-50 min-h-screen overflow-y-auto flex items-center justify-center z-[9999]"
               >
                 <motion.div
                   initial={{ y: "100%" }}
@@ -733,7 +732,7 @@ export const Form = ({
                     stiffness: 300,
                     duration: 0.6,
                   }}
-                  className="bg-white/60 backdrop-blur-sm h-[60vh] rounded-2xl mx-2 w-full overflow-y-auto shadow-lg relative"
+                  className="bg-white/60 backdrop-blur-sm h-[100vh] rounded-2xl mx-2 w-full overflow-y-auto shadow-lg"
                 >
                   <div className="mb-4 absolute top-4 right-4 z-10">
                     <motion.button
@@ -750,7 +749,7 @@ export const Form = ({
                     initial={{ y: 0, opacity: 0 }}
                     animate={{ y: 20, opacity: 1 }}
                     transition={{ delay: 0.3 }}
-                    className="p-6 overflow-y-visible w-[80%] mx-auto mb-54 z-50 flex flex-col items-center gap-2"
+                    className="p-2 overflow-y-visible w-[80%] mx-auto mb-54 z-50 flex flex-col items-center gap-2"
                   >
                     <div
                       onClick={() => addSection("RichText")}
