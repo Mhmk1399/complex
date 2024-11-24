@@ -28,7 +28,7 @@ const SectionHeader = styled.section<{
   background-color: ${(props) =>
     props.$data?.blocks?.setting?.backgroundColorNavbar || "#14213D"};
   position: fixed;
-  z-index: 50;
+  z-index: 40;
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
@@ -132,7 +132,7 @@ const Header: React.FC<HeaderProps> = ({ setSelectedComponent, layout }) => {
   return (
     <SectionHeader
       $data={sectionData}
-      className="w-full lg:w-[75%]"
+      className="w-full lg:w-[75%] px-1"
       dir="rtl"
       onClick={() => setSelectedComponent("sectionHeader")}
     >

@@ -2,12 +2,14 @@
 import React from "react";
 import styled from "styled-components";
 import { ImageTextSection, Layout } from "@/lib/types";
+import { Delete } from "../C-D";
 
 interface ImageTextProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
   actualName: string;
   selectedComponent: string;
+  setLayout: React.Dispatch<React.SetStateAction<Layout>>;
 }
 
 // Styled Components
@@ -121,6 +123,7 @@ const ImageText: React.FC<ImageTextProps> = ({
   layout,
   actualName,
   selectedComponent,
+  setLayout,
 }) => {
   // Find the first section with type "image-text"
   const sectionData = layout?.sections?.children?.sections.find(
@@ -129,9 +132,9 @@ const ImageText: React.FC<ImageTextProps> = ({
 
   // Fallback for missing or invalid section data
   if (!sectionData) {
-    console.error("ImageText section data is missing or invalid.");
     return null;
   }
+
 
   const { imageSrc, imageAlt, heading, description, btnLink, btnText } =
     sectionData.blocks;
@@ -145,13 +148,18 @@ const ImageText: React.FC<ImageTextProps> = ({
         selectedComponent === actualName ? "border-4 border-blue-500 " : ""
       }`}
     >
-      {actualName === selectedComponent ? (
-        <div className="absolute w-fit -top-5 -left-1 bg-blue-500 py-1 px-4  rounded-lg text-white z-10">
+      {actualName === selectedComponent ? (<div className="absolute w-fit -top-5 -left-1 z-10 flex justify-center items-center">
+        <div className=" bg-blue-500 py-1 px-4 rounded-lg text-white ">
           {actualName}
         </div>
+        <button className="text-red-600 font-extrabold text-xl hover:bg-red-100 bg-slate-100 pb-1 mx-1 items-center justify-items-center content-center rounded-full px-3 "
+         onClick={()=>Delete(actualName,layout,setLayout)}
+        >x</button>
+        </div>
+        
       ) : null}
 
-      <Image
+      <Image className="rounded-xl "
         $data={sectionData}
         src={imageSrc || "/assets/images/banner2.webp"}
         alt={imageAlt || "Image"}

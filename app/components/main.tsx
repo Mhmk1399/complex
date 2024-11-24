@@ -3,7 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Preview } from "./preview";
 import { Form } from "./form";
 import data from "../../public/template/null.json";
-import { Layout } from "../../lib/types";
+import { AboutChildren, Layout } from "../../lib/types";
+import About from '@/public/template/about.json'
+import Contact from '@/public/template/contact.json'
 
 export const Main = () => {
   const Data = data as unknown as Layout;
@@ -15,10 +17,37 @@ export const Main = () => {
     "idle" | "saving" | "saved" | "error"
   >("idle");
   const [orders, setOrders] = useState<string[]>([]);
-
+  const [selectedRoute, setSelectedRoute] = useState<string>("home");
   useEffect(() => {
     setLoading(false);
-  }, []);
+    if (selectedRoute === "about") {
+      setLayout((prevLayout: Layout) => ({
+        ...prevLayout,
+        sections: {
+          ...prevLayout.sections,
+          children: About.children as AboutChildren
+        }
+      }));
+      
+    } else if (selectedRoute === "contact") {
+      setLayout((prevLayout: Layout) => ({
+        ...prevLayout,
+        sections: {
+          ...prevLayout.sections,
+          children: Contact.children as AboutChildren
+        }
+      }));
+    }
+    else {
+      setLayout(prevLayout => ({
+        ...prevLayout,
+        sections: {
+          ...prevLayout.sections,
+          children: Data.sections.children
+        }
+      }));
+    }
+  }, [selectedRoute])
 
   // const handleSave = async () => {
   //   setSaveStatus('saving');
@@ -56,28 +85,37 @@ export const Main = () => {
         </div>
       ) : (
         <div>
-          <div className="fixed top-3 right-4 ">
+          <div className=" z-50 flex justify-center lg:px-10 py-1">
             <button
               // onClick={handleSave}
               disabled={saveStatus === "saving"}
-              className={`px-4 py-2 rounded-md text-white ${
-                saveStatus === "saving"
+              className={`px-4 py-2 rounded-full mr-2 text-white ${saveStatus === "saving"
                   ? "bg-gray-400"
                   : saveStatus === "saved"
-                  ? "bg-green-500"
-                  : saveStatus === "error"
-                  ? "bg-red-500"
-                  : "bg-green-500 hover:bg-green-600"
-              }`}
+                    ? "bg-green-500"
+                    : saveStatus === "error"
+                      ? "bg-red-500"
+                      : "bg-green-500 hover:bg-green-600"
+                }`}
             >
               {saveStatus === "saving"
                 ? "Saving..."
                 : saveStatus === "saved"
-                ? "Saved!"
-                : saveStatus === "error"
-                ? "Error!"
-                : "Save Changes"}
+                  ? "Saved!"
+                  : saveStatus === "error"
+                    ? "Error!"
+                    : "Save Changes"}
             </button>
+            <select
+              value={selectedRoute}
+              onChange={(e) => setSelectedRoute(e.target.value)}
+              className="px-4 py-2 lg:mr-56 w-[200px] rounded-full border border-gray-300 text-center"
+            >
+              <option value="home">Home</option>
+              <option value="about">About</option>
+              <option value="contact">Contact</option>
+            </select>
+
           </div>
           <Preview
             layout={layout}

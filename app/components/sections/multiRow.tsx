@@ -1,6 +1,7 @@
 import { Layout, MultiRowSection, MultiRowBlock } from "@/lib/types";
 import React from "react";
 import styled from "styled-components";
+import { Delete } from "../C-D";
 
 // Types
 interface MultiRowShowProps {
@@ -8,6 +9,7 @@ interface MultiRowShowProps {
   layout: Layout;
   actualName: string;
   selectedComponent: string;
+  setLayout: React.Dispatch<React.SetStateAction<Layout>>;
 }
 
 // Styled Components
@@ -152,6 +154,7 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
   layout,
   actualName,
   selectedComponent,
+  setLayout,
 }) => {
   const sectionData = (layout.sections?.children?.sections?.find(
     (section) => section.type === actualName
@@ -162,7 +165,6 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
   };
 
   if (!sectionData) {
-    console.error("MultiRow section data is missing or invalid.");
     return null;
   }
 
@@ -181,11 +183,16 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
             : ""
         }`}
       >
-        {actualName === selectedComponent ? (
-          <div className="absolute w-fit -top-5 -left-1 bg-blue-500 py-1 px-4 rounded-lg text-white z-10">
-            {actualName}
-          </div>
-        ) : null}
+       {actualName === selectedComponent ? (<div className="absolute w-fit -top-5 -left-1 z-10 flex justify-center items-center">
+        <div className=" bg-blue-500 py-1 px-4 rounded-lg text-white ">
+          {actualName}
+        </div>
+        <button className="text-red-600 font-extrabold text-xl hover:bg-red-100 bg-slate-100 pb-1 mx-1 items-center justify-items-center content-center rounded-full px-3 "
+         onClick={()=>Delete(actualName,layout,setLayout)}
+        >x</button>
+        </div>
+        
+      ) : null}
 
         <RowContainer>
           {Object.entries(sectionData.blocks).map(([key, block], idx) => {

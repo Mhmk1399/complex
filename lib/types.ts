@@ -605,3 +605,18 @@ export interface FooterBlock {
   logo: string;
   links: FooterLink[];
 }
+export interface AboutChildren {
+  type: string;
+  sections: Section[];
+  order: string[];
+}
+
+export interface SectionsState {
+  slideshow?: SlideSection;
+  richtext?: RichTextSection;
+  sectionHeader?: HeaderSection;
+  children?: Children | AboutChildren;
+  sectionFooter?: FooterSection;
+  banner?: BannerSection;
+  footer?: string;
+}
