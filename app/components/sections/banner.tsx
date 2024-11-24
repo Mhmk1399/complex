@@ -3,12 +3,15 @@ import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
 import { Layout, BannerSection } from "@/lib/types";
+import { div } from "framer-motion/client";
+import { Delete } from "../C-D";
 
 interface props {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
   actualName: string;
   selectedComponent: string;
+  setLayout: React.Dispatch<React.SetStateAction<Layout>>;
 }
 
 const SectionBanner = styled.section<{ $data: BannerSection }>`
@@ -81,13 +84,13 @@ const Banner: React.FC<props> = ({
   layout,
   actualName,
   selectedComponent,
+  setLayout
 }) => {
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
   ) as BannerSection;
 
   if (!sectionData) {
-    console.error("Banner section data is missing or invalid.");
     return null;
   }
 
@@ -103,10 +106,15 @@ const Banner: React.FC<props> = ({
           : ""
       }`}
     >
-      {actualName === selectedComponent ? (
-        <div className="absolute w-fit -top-5 -left-1 bg-blue-500 py-1 px-4 rounded-lg text-white z-10">
+      {actualName === selectedComponent ? (<div className="absolute w-fit -top-5 -left-1 z-10 flex justify-center items-center">
+        <div className=" bg-blue-500 py-1 px-4 rounded-lg text-white ">
           {actualName}
         </div>
+        <button className="text-red-600 font-extrabold text-xl hover:bg-red-100 bg-slate-100 pb-1 mx-1 items-center justify-items-center content-center rounded-full px-3 "
+         onClick={()=>Delete(actualName,layout,setLayout)}
+        >x</button>
+        </div>
+        
       ) : null}
 
       <Link

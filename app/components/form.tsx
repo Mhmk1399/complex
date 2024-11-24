@@ -62,6 +62,7 @@ import { SlideForm } from "./forms/slideForm";
 import { MultiRowForm } from "./forms/multiRowForm";
 import { FooterForm } from "./forms/footerForm";
 import { url } from "inspector";
+import { Create } from "./C-D";
 type FormData =
   | HeaderSection
   | MultiRowSection
@@ -106,8 +107,9 @@ export const Form = ({
     })
   );
   const addSection = (componentName: string) => {
-    console.log(componentName);
+    Create(componentName, layout, setLayout);
   };
+  
   const imageContainerStyle = {
     width: "800px", // Fixed width
     height: "250px", // Fixed height
@@ -137,12 +139,14 @@ export const Form = ({
   const SortableItem = ({ id }: { id: string }) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
       useSortable({ id });
-
+  
     const style = {
       transform: CSS.Transform.toString(transform),
       transition,
     };
-
+  
+  
+  
     return (
       <div
         ref={setNodeRef}
@@ -151,11 +155,13 @@ export const Form = ({
         {...listeners}
         className="p-3 bg-white border rounded-2xl flex items-center gap-2 cursor-grab mb-2"
       >
-        <span className="text-red-500">☰</span>
+        <span className="text-gray-400">☰</span>
         <span>{id}</span>
+       
       </div>
     );
   };
+  
 
   useEffect(() => {
     setOrders([...layout.sections.children.order]);
@@ -605,8 +611,8 @@ export const Form = ({
                   items={orders}
                   strategy={verticalListSortingStrategy}
                 >
-                  {orders.map((id: string) => (
-                    <SortableItem key={id} id={id} />
+                  {orders.map((id: string,handleClick) => (
+                    <SortableItem key={id} id={id}/>
                   ))}
                 </SortableContext>
               </DndContext>

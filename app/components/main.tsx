@@ -84,6 +84,7 @@ export const Main = () => {
             setSelectedComponent={setSelectedComponent}
             orders={orders}
             selectedComponent={selectedComponent}
+            setLayout={setLayout}
           />
           <Form
             selectedComponent={selectedComponent}

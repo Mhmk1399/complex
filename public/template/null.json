@@ -46,7 +46,6 @@
       "sections": [
         {
           "type": "Banner",
-          "id": 1,
           "blocks": {
             "imageSrc": "/assets/images/ban.jpg",
             "imageAlt": "",
@@ -74,10 +73,8 @@
             "marginBottom": "80"
           }
         },
-
         {
           "type": "SlideShow",
-          "id": 2,
           "blocks": [
             {
               "imageSrc": "/assets/images/banner3.jpg",
@@ -119,7 +116,6 @@
         },
         {
           "type": "RichText",
-          "id": 3,
           "blocks": {
             "textHeading": "سربرگ محصول",
             "description": "توضیحات درباره محصول",
@@ -147,7 +143,6 @@
         },
         {
           "type": "ImageText",
-          "id": 4,
           "blocks": {
             "imageSrc": "/assets/images/banner3.jpg",
             "imageAlt": "",
@@ -182,7 +177,6 @@
         },
         {
           "type": "Video",
-          "id": 5,
           "blocks": {
             "heading": "سربرگ ویدیو",
             "videoUrl": "/assets/video/video.mp4",
@@ -210,7 +204,6 @@
         },
         {
           "type": "ContactForm",
-          "id": 6,
           "blocks": {
             "heading": "فرم ارتباط با ما",
             "setting": {
@@ -231,7 +224,6 @@
         },
         {
           "type": "NewsLetter",
-          "id": 7,
           "blocks": {
             "heading": "عضویت در خبرنامه",
             "description": "توضیحات درباره خبرنامه",
@@ -258,7 +250,6 @@
         },
         {
           "type": "CollapseFaq",
-          "id": 8,
           "blocks": [
             {
               "heading": "سوالات متداول",
@@ -324,7 +315,6 @@
         },
         {
           "type": "MultiColumn",
-          "id": 9,
           "blocks": [
             {
               "title1": "ستون یکم",
@@ -376,7 +366,6 @@
         },
         {
           "type": "MultiRow",
-          "id": 10,
           "title": "سربرگ ردیف ها",
 
           "blocks": [
@@ -431,7 +420,6 @@
         },
         {
           "type": "NewsLetter-1",
-          "id": 7,
           "blocks": {
             "heading": "عضویت در خبرنامه",
             "description": "توضیحات درباره خبرنامه",
