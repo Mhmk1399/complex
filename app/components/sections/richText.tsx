@@ -1,5 +1,4 @@
 "use client";
-
 import { Layout, RichTextSection, RichTextBlock } from "@/lib/types";
 import Link from "next/link";
 import styled from "styled-components";

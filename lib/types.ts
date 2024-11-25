@@ -387,8 +387,6 @@ export interface ImageTextSection {
   type: "image-text";
 }
 
-
-
 export interface Children {
   type: string;
   sections: Section[];
@@ -411,7 +409,7 @@ export interface Layout {
     slideshow: SlideSection;
     richtext: RichTextSection;
     sectionHeader: HeaderSection;
-    children: Children;
+    children: Children | AboutChildren | StoreChildren;
     sectionFooter: FooterSection;
     banner: BannerSection;
     footer: string;
@@ -451,7 +449,6 @@ export interface SlideSection {
     paddingBottom: string;
     marginTop: string;
     marginBottom: string;
-    
   };
   type: "slideshow";
 }
@@ -486,7 +483,7 @@ export interface VideoFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<VideoSection>>;
   userInputData: VideoSection;
   layout: Layout;
-  selectedComponent: string
+  selectedComponent: string;
 }
 // Add these new interfaces for Contact Form
 export interface ContactFormBlockSetting extends Partial<CommonSettings> {
@@ -615,4 +612,97 @@ export interface SectionsState {
   sectionFooter?: FooterSection;
   banner?: BannerSection;
   footer?: string;
+}
+
+export interface ProductBlockSetting extends CommonSettings {
+  headingColor: string;
+  headingFontSize: string;
+  headingFontWeight: string;
+  descriptionColor: string;
+  descriptionFontSize: string;
+  imageRadius: string;
+  productNameColor: string;
+  priceColor: string;
+  btnBackgroundColor: string;
+  btnTextColor: string;
+  gridColumns: number;
+}
+
+export interface ProductBlock {
+  productId: number;
+  imageSrc: string;
+  imageAlt: string;
+  name: string;
+  description: string;
+  price: string;
+  btnText: string;
+  btnLink: string;
+}
+
+export interface ProductSection {
+  type: "store";
+  blocks: ProductBlock[];
+  setting: ProductBlockSetting;
+}
+
+export interface ShopOverviewBlock {
+  type:string;
+  heading: string;
+  description: string;
+  imageSrc: string;
+  btnText: string;
+  btnLink: string;
+  setting: {
+    headingColor: string;
+    headingFontSize: string;
+    headingFontWeight: string;
+    descriptionColor: string;
+    descriptionFontSize: string;
+    descriptionFontWeight: string;
+    backgroundColor: string;
+    imageRadius: string;
+    btnBackgroundColor: string;
+    btnTextColor: string;
+  };
+}
+
+export interface ProductDetailsBlock {
+  type:string;
+  imageSrc: string;
+  imageAlt: string;
+  name: string;
+  description: string;
+  category: string;
+  price: string;
+  status: string;
+  discount: string;
+  id: string;
+  innventory: string;
+  setting: {
+    imageWidth: string;
+    imageHeight: string;
+    imageRadius: string;
+    productNameColor: string;
+    productNameFontSize: string;
+    productNameFontWeight: string;
+    priceColor: string;
+    priceFontSize: string;
+    descriptionColor: string;
+    descriptionFontSize: string;
+    btnBackgroundColor: string;
+    btnTextColor: string;
+  };
+}
+
+export interface ProductStoreLayout {
+  type: "store";
+  children: {
+    sections: (ShopOverviewBlock | ProductSection | ProductDetailsBlock)[];
+    order: string[];
+  };
+}
+export interface StoreChildren {
+  type: "store";
+  sections: (ShopOverviewBlock | ProductSection | ProductDetailsBlock)[];
+  order: string[];
 }

@@ -3,9 +3,10 @@ import React, { useEffect, useState } from "react";
 import { Preview } from "./preview";
 import { Form } from "./form";
 import data from "../../public/template/null.json";
-import { AboutChildren, Layout } from "../../lib/types";
-import About from '@/public/template/about.json'
-import Contact from '@/public/template/contact.json'
+import { AboutChildren, Layout , ProductStoreLayout, StoreChildren  } from "../../lib/types";
+import About from "@/public/template/about.json";
+import Contact from "@/public/template/contact.json";
+import Store from "@/public/template/product.json";
 
 export const Main = () => {
   const Data = data as unknown as Layout;
@@ -25,29 +26,37 @@ export const Main = () => {
         ...prevLayout,
         sections: {
           ...prevLayout.sections,
-          children: About.children as AboutChildren
-        }
+          children: About.children as AboutChildren,
+        },
       }));
-      
     } else if (selectedRoute === "contact") {
       setLayout((prevLayout: Layout) => ({
         ...prevLayout,
         sections: {
           ...prevLayout.sections,
-          children: Contact.children as AboutChildren
-        }
+          children: Contact.children as AboutChildren,
+        },
       }));
-    }
-    else {
-      setLayout(prevLayout => ({
+    }else if (selectedRoute === "store") {
+      setLayout((prevLayout: Layout) => ({
         ...prevLayout,
         sections: {
           ...prevLayout.sections,
-          children: Data.sections.children
-        }
+          children: Store.children as StoreChildren,
+        },
       }));
     }
-  }, [selectedRoute])
+    
+     else {
+      setLayout((prevLayout) => ({
+        ...prevLayout,
+        sections: {
+          ...prevLayout.sections,
+          children: Data.sections.children,
+        },
+      }));
+    }
+  }, [selectedRoute]);
 
   // const handleSave = async () => {
   //   setSaveStatus('saving');
@@ -89,22 +98,23 @@ export const Main = () => {
             <button
               // onClick={handleSave}
               disabled={saveStatus === "saving"}
-              className={`px-4 py-2 rounded-full mr-2 text-white ${saveStatus === "saving"
+              className={`px-4 py-2 rounded-full mr-2 text-white ${
+                saveStatus === "saving"
                   ? "bg-gray-400"
                   : saveStatus === "saved"
-                    ? "bg-green-500"
-                    : saveStatus === "error"
-                      ? "bg-red-500"
-                      : "bg-green-500 hover:bg-green-600"
-                }`}
+                  ? "bg-green-500"
+                  : saveStatus === "error"
+                  ? "bg-red-500"
+                  : "bg-green-500 hover:bg-green-600"
+              }`}
             >
               {saveStatus === "saving"
                 ? "Saving..."
                 : saveStatus === "saved"
-                  ? "Saved!"
-                  : saveStatus === "error"
-                    ? "Error!"
-                    : "Save Changes"}
+                ? "Saved!"
+                : saveStatus === "error"
+                ? "Error!"
+                : "Save Changes"}
             </button>
             <select
               value={selectedRoute}
@@ -115,7 +125,6 @@ export const Main = () => {
               <option value="about">About</option>
               <option value="contact">Contact</option>
             </select>
-
           </div>
           <Preview
             layout={layout}

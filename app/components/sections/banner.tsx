@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
 import { Layout, BannerSection } from "@/lib/types";
-import { div } from "framer-motion/client";
 import { Delete } from "../C-D";
 
 interface props {
