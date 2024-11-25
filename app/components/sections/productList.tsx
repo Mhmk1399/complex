@@ -1,8 +1,15 @@
 "use client";
 import styled from "styled-components";
+import { Delete } from "../C-D";
 import Image from "next/image";
 import Link from "next/link";
-import { ProductSection, Layout , ProductBlockSetting } from "@/lib/types"; // Adjust the import path to match your project structure
+import {
+  ProductSection,
+  Layout,
+  ProductBlockSetting,
+  ShopOverviewBlock,
+} from "@/lib/types"; // Adjust the import path to match your project structure
+import { data } from "framer-motion/client";
 
 interface ProductListProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -13,16 +20,19 @@ interface ProductListProps {
 }
 
 const SectionProductList = styled.section<{
-  $data: ProductSection["setting"];
+  $data: ProductSection;
 }>`
   display: grid;
-  grid-template-columns: repeat(${(props) => props.$data.gridColumns}, 1fr);
+  grid-template-columns: repeat(
+    ${(props) => props.$data.setting?.gridColumns},
+    1fr
+  );
   gap: 20px;
-  padding-top: ${(props) => props.$data?.paddingTop}px;
-  padding-bottom: ${(props) => props.$data?.paddingBottom}px;
-  margin-top: ${(props) => props.$data?.marginTop}px;
-  margin-bottom: ${(props) => props.$data?.marginBottom}px;
-  background-color: ${(props) => props.$data?.backgroundColor};
+  padding-top: ${(props) => props.$data?.setting?.paddingTop}px;
+  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom}px;
+  margin-top: ${(props) => props.$data?.setting?.marginTop}px;
+  margin-bottom: ${(props) => props.$data?.setting?.marginBottom}px;
+  background-color: ${(props) => props.$data?.setting?.backgroundColor};
 `;
 
 const ProductCard = styled.div`
@@ -35,17 +45,16 @@ const ProductCard = styled.div`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 `;
 
-const ProductImage = styled(Image)<{ $data: ProductBlockSetting }>`
-  border-radius: ${(props) => props.$data.imageRadious};
+const ProductImage = styled(Image)`
   object-fit: cover;
   width: 100%;
   height: 200px;
 `;
 
-const ProductName = styled.h3<{ $color: string }>`
+const ProductName = styled.h3`
   font-size: 1.2rem;
   font-weight: bold;
-  color: ${(props) => props.$color};
+  color: #000000;
   margin: 8px 0;
 `;
 
@@ -56,18 +65,18 @@ const ProductDescription = styled.p`
   margin: 8px 0;
 `;
 
-const ProductPrice = styled.span<{ $color: string }>`
+const ProductPrice = styled.span`
   font-size: 1rem;
   font-weight: bold;
-  color: ${(props) => props.$color};
+  color: #000000;
   margin: 8px 0;
 `;
 
-const ProductButton = styled(Link)<{ $bgColor: string; $textColor: string }>`
+const ProductButton = styled(Link)`
   display: inline-block;
   padding: 10px 20px;
-  background-color: ${(props) => props.$bgColor};
-  color: ${(props) => props.$textColor};
+  background-color: #e5e5e5;
+  color: #000000;
   border-radius: 4px;
   text-decoration: none;
   font-size: 0.9rem;
@@ -88,38 +97,50 @@ const ProductList: React.FC<ProductListProps> = ({
   ) as ProductSection;
 
   if (!sectionData) {
-    return 1;
+    return 13333;
   }
-  console.log(sectionData);
+
   console.log(sectionData.blocks);
-  const { blocks, setting } = sectionData;
+  
+
+  const { blocks } = sectionData;
 
   return (
     <SectionProductList
-      $data={setting}
+      $data={sectionData}
       onClick={() => setSelectedComponent(actualName)}
+      className={`transition-all duration-150 ease-in-out relative ${
+        selectedComponent === actualName
+          ? "border-4 border-blue-500 rounded-lg shadow-lg "
+          : ""
+      }`}
     >
+      {actualName === selectedComponent ? (
+        <div className="absolute w-fit -top-5 -left-1 z-10 flex justify-center items-center">
+          <div className=" bg-blue-500 py-1 px-4 rounded-lg text-white ">
+            {actualName}
+          </div>
+          <button
+            className="text-red-600 font-extrabold text-xl hover:bg-red-100 bg-slate-100 pb-1 mx-1 items-center justify-items-center content-center rounded-full px-3 "
+            onClick={() => Delete(actualName, layout, setLayout)}
+          >
+            x
+          </button>
+        </div>
+      ) : null}
+
       {blocks.map((product, index: number) => (
         <ProductCard key={index}>
           <ProductImage
             src={product.imageSrc}
             alt={product.imageAlt}
-            width={300}
-            height={200}
-            $radius={setting.imageRadius}
+            width={1000}
+            height={1000}
           />
-          <ProductName $color={setting.productNameColor}>
-            {product.name}
-          </ProductName>
+          <ProductName>{product.name}</ProductName>
           <ProductDescription>{product.description}</ProductDescription>
-          <ProductPrice $color={setting.priceColor}>
-            {product.price}
-          </ProductPrice>
-          <ProductButton
-            href={product.btnLink}
-            $bgColor={setting.btnBackgroundColor}
-            $textColor={setting.btnTextColor}
-          >
+          <ProductPrice>{product.price}</ProductPrice>
+          <ProductButton href={product.btnLink}>
             {product.btnText}
           </ProductButton>
         </ProductCard>

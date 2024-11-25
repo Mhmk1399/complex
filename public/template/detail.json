@@ -1,0 +1,36 @@
+{
+  "type": "productDetails",
+  "blocks": {
+    "imageSrc": "/assets/images/product-detail.jpg",
+    "imageAlt": "محصول",
+    "name": "نام محصول",
+    "description": "توضیحات محصول",
+    "category": "دسته بندی",
+    "price": "قیمت محصول",
+    "status": "وضعیت محصول",
+    "discount": "تخفیف محصول",
+    "id": "شناسه محصول",
+    "innventory": "موجودی محصول",
+    "setting": {
+      "imageWidth": "500px",
+      "imageHeight": "500px",
+      "imageRadius": "20px",
+      "productNameColor": "#FCA311",
+      "productNameFontSize": "30px",
+      "productNameFontWeight": "bold",
+      "priceColor": "#2ECC71",
+      "priceFontSize": "24px",
+      "descriptionColor": "#333333",
+      "descriptionFontSize": "16px",
+      "btnBackgroundColor": "#3498DB",
+      "btnTextColor": "#FFFFFF"
+    }
+  },
+  "setting": {
+    "paddingTop": "20",
+    "paddingBottom": "20",
+    "marginTop": "10",
+    "marginBottom": "10",
+    "backgroundColor": "#FFFFFF"
+  }
+}

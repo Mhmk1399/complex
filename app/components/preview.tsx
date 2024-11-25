@@ -12,6 +12,7 @@ import SlideShow from "./sections/slideShow";
 import MultiRow from "./sections/multiRow";
 import { Layout } from "@/lib/types";
 import FooterContainer from "./sections/footer";
+import ProductList from "./sections/productList";
 
 // First update the PreviewProps interface
 interface PreviewProps {
@@ -43,6 +44,7 @@ export const Preview: React.FC<PreviewProps> = ({
     SlideShow,
     MultiRow,
     FooterContainer,
+    ProductList
   };
 
   return (

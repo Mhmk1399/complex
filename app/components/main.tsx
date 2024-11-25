@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Preview } from "./preview";
 import { Form } from "./form";
 import data from "../../public/template/null.json";
-import { AboutChildren, Layout , ProductStoreLayout, StoreChildren  } from "../../lib/types";
+import { AboutChildren, Layout, StoreChildren } from "../../lib/types";
 import About from "@/public/template/about.json";
 import Contact from "@/public/template/contact.json";
 import Store from "@/public/template/product.json";
@@ -37,7 +37,7 @@ export const Main = () => {
           children: Contact.children as AboutChildren,
         },
       }));
-    }else if (selectedRoute === "store") {
+    } else if (selectedRoute === "store") {
       setLayout((prevLayout: Layout) => ({
         ...prevLayout,
         sections: {
@@ -45,9 +45,7 @@ export const Main = () => {
           children: Store.children as StoreChildren,
         },
       }));
-    }
-    
-     else {
+    } else {
       setLayout((prevLayout) => ({
         ...prevLayout,
         sections: {
@@ -119,11 +117,12 @@ export const Main = () => {
             <select
               value={selectedRoute}
               onChange={(e) => setSelectedRoute(e.target.value)}
-              className="px-4 py-2 lg:mr-56 w-[200px] rounded-full border border-gray-300 text-center"
+              className="px-2 py-2 lg:mr-56 w-[150px] rounded-2xl border border-gray-500 text-center"
             >
               <option value="home">Home</option>
               <option value="about">About</option>
               <option value="contact">Contact</option>
+              <option value="store">store</option>
             </select>
           </div>
           <Preview

@@ -614,6 +614,8 @@ export interface SectionsState {
   footer?: string;
 }
 
+//  these new interfaces for Product List
+
 export interface ProductBlockSetting extends CommonSettings {
   headingColor: string;
   headingFontSize: string;
@@ -628,7 +630,7 @@ export interface ProductBlockSetting extends CommonSettings {
   gridColumns: number;
 }
 
-export interface ProductBlock {
+export interface ProductListSection {
   productId: number;
   imageSrc: string;
   imageAlt: string;
@@ -641,12 +643,12 @@ export interface ProductBlock {
 
 export interface ProductSection {
   type: "store";
-  blocks: ProductBlock[];
+  blocks: ProductListSection[];
   setting: ProductBlockSetting;
 }
 
 export interface ShopOverviewBlock {
-  type:string;
+  type: string;
   heading: string;
   description: string;
   imageSrc: string;
@@ -666,43 +668,15 @@ export interface ShopOverviewBlock {
   };
 }
 
-export interface ProductDetailsBlock {
-  type:string;
-  imageSrc: string;
-  imageAlt: string;
-  name: string;
-  description: string;
-  category: string;
-  price: string;
-  status: string;
-  discount: string;
-  id: string;
-  innventory: string;
-  setting: {
-    imageWidth: string;
-    imageHeight: string;
-    imageRadius: string;
-    productNameColor: string;
-    productNameFontSize: string;
-    productNameFontWeight: string;
-    priceColor: string;
-    priceFontSize: string;
-    descriptionColor: string;
-    descriptionFontSize: string;
-    btnBackgroundColor: string;
-    btnTextColor: string;
-  };
-}
-
 export interface ProductStoreLayout {
   type: "store";
   children: {
-    sections: (ShopOverviewBlock | ProductSection | ProductDetailsBlock)[];
+    sections: (ShopOverviewBlock | ProductListSection)[];
     order: string[];
   };
 }
 export interface StoreChildren {
   type: "store";
-  sections: (ShopOverviewBlock | ProductSection | ProductDetailsBlock)[];
+  sections: (ShopOverviewBlock | ProductSection)[];
   order: string[];
 }
