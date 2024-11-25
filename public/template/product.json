@@ -31,7 +31,7 @@
         }
       },
       {
-        "type": "productList",
+        "type": "ProductList",
         "blocks": [
           {
             "productId": 1,
@@ -75,7 +75,7 @@
           }
         ],
         "setting": {
-          "gridColumns": 3,
+          "gridColumns": 2,
           "paddingTop": "20",
           "paddingBottom": "20",
           "marginTop": "10",
@@ -85,6 +85,6 @@
       }
     
     ],
-    "order": ["shopOverview", "productList"]
+    "order": ["shopOverview", "ProductList"]
   }
 }

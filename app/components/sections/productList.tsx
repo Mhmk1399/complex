@@ -9,7 +9,7 @@ import {
   ProductBlockSetting,
   ShopOverviewBlock,
 } from "@/lib/types"; // Adjust the import path to match your project structure
-import { data } from "framer-motion/client";
+import { a, b, data } from "framer-motion/client";
 
 interface ProductListProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -33,6 +33,7 @@ const SectionProductList = styled.section<{
   margin-top: ${(props) => props.$data?.setting?.marginTop}px;
   margin-bottom: ${(props) => props.$data?.setting?.marginBottom}px;
   background-color: ${(props) => props.$data?.setting?.backgroundColor};
+
 `;
 
 const ProductCard = styled.div`
@@ -41,7 +42,7 @@ const ProductCard = styled.div`
   align-items: center;
   border-radius: 8px;
   background: #fff;
-  padding: 16px;
+  padding: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 `;
 
@@ -92,16 +93,18 @@ const ProductList: React.FC<ProductListProps> = ({
   selectedComponent,
   setLayout,
 }) => {
-  const sectionData = layout.sections?.children?.sections.find(
+  const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
   ) as ProductSection;
+
+  console.log(actualName);
+  
 
   if (!sectionData) {
     return 13333;
   }
 
   console.log(sectionData.blocks);
-  
 
   const { blocks } = sectionData;
 
@@ -129,19 +132,21 @@ const ProductList: React.FC<ProductListProps> = ({
         </div>
       ) : null}
 
-      {blocks.map((product, index: number) => (
-        <ProductCard key={index}>
+      {blocks.map((product) => (
+        <ProductCard key={blocks.indexOf(product)}>
           <ProductImage
-            src={product.imageSrc}
+            src={product.imageSrc || "/assets/images/banner.jpg"}
             alt={product.imageAlt}
             width={1000}
             height={1000}
           />
-          <ProductName>{product.name}</ProductName>
-          <ProductDescription>{product.description}</ProductDescription>
-          <ProductPrice>{product.price}</ProductPrice>
+          <ProductName>{product.name || "title"}</ProductName>
+          <ProductDescription>
+            {product.description || "description"}
+          </ProductDescription>
+          <ProductPrice>{product.price || "20.000$"}</ProductPrice>
           <ProductButton href={product.btnLink}>
-            {product.btnText}
+            {product.btnText || "Buy Now"}
           </ProductButton>
         </ProductCard>
       ))}
