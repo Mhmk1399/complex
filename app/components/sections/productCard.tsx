@@ -1,13 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
-import { ProductListSection } from "@/lib/types";
+import { productCard, ProductCardData } from "@/lib/types";
 
 interface ProductCardProps {
-  product: ProductListSection;
-  styles: string[];
+  productData: ProductCardData;
+  setting: {};
 }
-
 const defaultSetting = {
   cardBorderRadius: "10px",
   cardBackground: "#fff",
@@ -26,14 +25,16 @@ const defaultSetting = {
   btnColor: "#000000",
 };
 
-const Card = styled.div<{ $settings?: typeof defaultSetting , $styles: string[] }>`
+const Card = styled.div<{
+  $setting?: productCard;
+}>`
   display: flex;
   flex-direction: column;
   align-items: center;
   border-radius: ${(props) =>
-    props.$settings?.cardBorderRadius || defaultSetting.cardBorderRadius};
+    props.$setting?.cardBorderRadius || defaultSetting.cardBorderRadius}px;
   background: ${(props) =>
-    props.$settings?.cardBackground || defaultSetting.cardBackground};
+    props.$setting?.cardBackground || defaultSetting.cardBackground};
   margin: 10px;
   padding: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -45,22 +46,28 @@ const Card = styled.div<{ $settings?: typeof defaultSetting , $styles: string[] 
   }
 `;
 
-const ProductImage = styled(Image)<{ $settings?: typeof defaultSetting }>`
+const ProductImage = styled(Image)<{
+  $settings?: productCard;
+  $productData?: ProductCardData;
+}>`
   object-fit: cover;
-  width: ${(props) => props.$settings?.imageWidth || defaultSetting.imageWidth};
+  width: ${(props) => props.$settings?.imageWidth || defaultSetting.imageWidth}0px;
   height: ${(props) =>
-    props.$settings?.imageheight || defaultSetting.imageheight};
+    props.$settings?.imageHeight || defaultSetting.imageheight}0px;
   border-radius: ${(props) =>
-    props.$settings?.imageRadius || defaultSetting.imageRadius};
+    props.$settings?.imageRadius || defaultSetting.imageRadius}px;
   transition: all 0.3s ease;
   &:hover {
     transform: scale(1.03);
   }
 `;
 
-const ProductName = styled.h3<{ $settings?: typeof defaultSetting }>`
+const ProductName = styled.h3<{
+  $settings?: productCard;
+  $productData?: ProductCardData;
+}>`
   font-size: ${(props) =>
-    props.$settings?.nameFontSize || defaultSetting.nameFontSize};
+    props.$settings?.nameFontSize || defaultSetting.nameFontSize}px;
   font-weight: ${(props) =>
     props.$settings?.nameFontWeight || defaultSetting.nameFontWeight};
   color: ${(props) => props.$settings?.nameColor || defaultSetting.nameColor};
@@ -68,9 +75,12 @@ const ProductName = styled.h3<{ $settings?: typeof defaultSetting }>`
   text-align: center;
 `;
 
-const ProductDescription = styled.p<{ $settings?: typeof defaultSetting }>`
+const ProductDescription = styled.p<{
+  $settings?: productCard;
+  $productData?: ProductCardData;
+}>`
   font-size: ${(props) =>
-    props.$settings?.descriptionFontSize || defaultSetting.descriptionFontSize};
+    props.$settings?.descriptionFontSize || defaultSetting.descriptionFontSize}px;
   color: ${(props) =>
     props.$settings?.descriptionColor || defaultSetting.descriptionColor};
   font-weight: ${(props) =>
@@ -80,11 +90,14 @@ const ProductDescription = styled.p<{ $settings?: typeof defaultSetting }>`
   margin: 8px 0;
 `;
 
-const ProductPrice = styled.span<{ $settings?: typeof defaultSetting }>`
+const ProductPrice = styled.span<{
+  $settings?: productCard;
+  $productData?: ProductCardData;
+}>`
   font-size: ${(props) =>
-    props.$settings?.priceFontSize || defaultSetting.priceFontSize};
+    props.$settings?.priceFontSize || defaultSetting.priceFontSize}px;
   font-weight: ${(props) =>
-    props.$settings?.pricecolor || defaultSetting.pricecolor};
+    props.$settings?.priceColor || defaultSetting.pricecolor};
   margin: 8px 0;
 `;
 
@@ -92,10 +105,8 @@ const BuyButton = styled(Link)<{ $settings?: typeof defaultSetting }>`
   display: inline-block;
   padding: 10px 20px;
   background-color: ${(props) =>
-    props.$settings?.btnBackgroundColor ||
-    defaultSetting.btnBackgroundColor};
-  color: ${(props) =>
-    props.$settings?.btnColor || defaultSetting.btnColor};
+    props.$settings?.btnBackgroundColor || defaultSetting.btnBackgroundColor};
+  color: ${(props) => props.$settings?.btnColor || defaultSetting.btnColor};
   border-radius: 4px;
   font-size: 0.9rem;
   font-weight: bold;
@@ -109,23 +120,29 @@ const BuyButton = styled(Link)<{ $settings?: typeof defaultSetting }>`
   }
 `;
 
-const ProductCard: React.FC<ProductCardProps> = ({ product , styles }) => {
-  console.log(styles , "style");
-  
+const ProductCard: React.FC<ProductCardProps> = ({ productData, setting }) => {
   return (
-    <Card dir="rtl" $styles={styles} >
+    <Card dir="rtl" $setting={setting}>
       <ProductImage
-        src={product.imageSrc}
-        alt={product.imageAlt}
+        $productData={productData}
+        $settings={setting}
+        src={productData.imageSrc || "/assets/images/pro2.jpg"}
+        alt={productData.imageAlt || "Product Image"}
         width={1000}
         height={1000}
       />
-      <ProductName>{product.name}</ProductName>
-      <ProductDescription>{product.description}</ProductDescription>
-      <ProductPrice>{product.price}</ProductPrice>
-      <BuyButton href={product.btnLink}>{product.btnText}</BuyButton>
+
+      <ProductName $productData={productData} $settings={setting}>
+        {productData.name}
+      </ProductName>
+      <ProductDescription $productData={productData} $settings={setting}>
+        {productData.description}
+      </ProductDescription>
+      <ProductPrice $productData={productData} $settings={setting}>
+        {productData.price}
+      </ProductPrice>
+      <BuyButton href={"/"}>خرید</BuyButton>
     </Card>
   );
 };
-
 export default ProductCard;

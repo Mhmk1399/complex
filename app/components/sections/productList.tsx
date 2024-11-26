@@ -35,60 +35,6 @@ const SectionProductList = styled.section<{
   }
 `;
 
-// const ProductContainer = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   border-radius: 10px;
-//   background: #fff;
-//   margin: 10px 15px;
-//   padding: 10px;
-//   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-//   @media (max-width: 425px) {
-//     margin: 10px 5px;
-//     height: 350px;
-//   }
-// `;
-
-// const ProductImage = styled(Image)`
-//   object-fit: cover;
-//   width: 100%;
-//   height: 200px;
-// `;
-
-// const ProductName = styled.h3`
-//   font-size: 1.2rem;
-//   font-weight: bold;
-//   color: #000000;
-//   margin: 8px 0;
-// `;
-
-// const ProductDescription = styled.p`
-//   font-size: 0.9rem;
-//   color: #666;
-//   text-align: center;
-//   margin: 8px 0;
-// `;
-
-// const ProductPrice = styled.span`
-//   font-size: 1rem;
-//   font-weight: bold;
-//   margin: 8px 0;
-// `;
-
-// const ProductButton = styled(Link)`
-//   display: inline-block;
-//   padding: 10px 20px;
-//   background-color: #e5e5e5;
-//   color: #000000;
-//   border-radius: 4px;
-//   text-decoration: none;
-//   font-size: 0.9rem;
-//   font-weight: bold;
-//   margin-top: 12px;
-//   text-align: center;
-// `;
-
 const ProductList: React.FC<ProductListProps> = ({
   setSelectedComponent,
   layout,
@@ -96,15 +42,28 @@ const ProductList: React.FC<ProductListProps> = ({
   selectedComponent,
   setLayout,
 }) => {
-  const [styles, setStyles] = useState([]);
-
+  const [setting, setSetting] = useState({});
+  const [productData, setProductData] = useState({});
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("/api/products");
+        const response = await fetch("/api/products", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
         const data = await response.json();
-        setStyles(data);
-        console.log(styles);
+
+        console.log(data, "data");
+
+        if (data?.products?.[4]) {
+          setSetting(data.products[4].setting);
+          const productInfo = data.products[4];
+          setProductData(productInfo);
+          console.log(productInfo, "productInfo");
+        }
       } catch (error) {
         console.log("Error fetching products:", error);
       }
@@ -147,27 +106,9 @@ const ProductList: React.FC<ProductListProps> = ({
       ) : null}
 
       {blocks.map((product) => (
-        <ProductCard
-          product={product}
-          key={blocks.indexOf(product)}
-          styles={styles}
-        />
-        // <ProductContainer key={blocks.indexOf(product)}>
-        //   <ProductImage
-        //     src={product.imageSrc || "/assets/images/banner.jpg"}
-        //     alt={product.imageAlt}
-        //     width={1000}
-        //     height={1000}
-        //   />
-        //   <ProductName>{product.name || "title"}</ProductName>
-        //   <ProductDescription>
-        //     {product.description || "description"}
-        //   </ProductDescription>
-        //   <ProductPrice>{product.price || "20.000$"}</ProductPrice>
-        //   <ProductButton href={product.btnLink}>
-        //     {product.btnText || "Buy Now"}
-        //   </ProductButton>
-        // </ProductContainer>
+        <div className="p-0 m-0" key={product.productId}>
+          <ProductCard setting={setting} productData={productData} />
+        </div>
       ))}
     </SectionProductList>
   );

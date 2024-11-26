@@ -659,3 +659,33 @@ export interface StoreChildren {
   sections: ProductSection[];
   order: string[];
 }
+
+export interface productCard {
+  cardBorderRadius?: string;
+  cardBackground?: string;
+  imageWidth?: string;
+  imageHeight?: string;
+  imageRadius?: string;
+  nameFontSize?: string;
+  nameFontWeight?: string;
+  nameColor?: string;
+  descriptionFontSize?: string;
+  descriptionFontWeight?: string;
+  descriptionColor?: string;
+  priceFontSize?: string;
+  priceColor?: string;
+  btnBackgroundColor?: string;
+  btnColor?: string;
+}
+export interface ProductCardData {
+  imageSrc: string[];
+  imageAlt: string[];
+  name: string;
+  description: string;
+  price: string;
+  category: string;
+  status: string;
+  discount: string;
+  id: string;
+  innventory: string;
+}
