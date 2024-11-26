@@ -647,36 +647,15 @@ export interface ProductSection {
   setting: ProductBlockSetting;
 }
 
-export interface ShopOverviewBlock {
-  type: string;
-  heading: string;
-  description: string;
-  imageSrc: string;
-  btnText: string;
-  btnLink: string;
-  setting: {
-    headingColor: string;
-    headingFontSize: string;
-    headingFontWeight: string;
-    descriptionColor: string;
-    descriptionFontSize: string;
-    descriptionFontWeight: string;
-    backgroundColor: string;
-    imageRadius: string;
-    btnBackgroundColor: string;
-    btnTextColor: string;
-  };
-}
-
 export interface ProductStoreLayout {
   type: "store";
   children: {
-    sections: (ShopOverviewBlock | ProductListSection)[];
+    sections: ProductListSection[];
     order: string[];
   };
 }
 export interface StoreChildren {
   type: "store";
-  sections: (ShopOverviewBlock | ProductSection)[];
+  sections: ProductSection[];
   order: string[];
 }

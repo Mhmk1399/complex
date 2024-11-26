@@ -3,88 +3,59 @@
   "children": {
     "sections": [
       {
-        "type": "shopOverview",
-        "blocks": {
-          "heading": "فروشگاه ما",
-          "description": "بزرگترین مجموعه محصولات با کیفیت",
-          "imageSrc": "/assets/images/shop-banner.jpg",
-          "btnText": "مشاهده همه محصولات",
-          "btnLink": "/shop",
-          "setting": {
-            "headingColor": "#FCA311",
-            "headingFontSize": "40px",
-            "headingFontWeight": "bold",
-            "descriptionColor": "#E5E5E5",
-            "descriptionFontSize": "18px",
-            "descriptionFontWeight": "normal",
-            "backgroundColor": "#14213D",
-            "imageRadius": "20px",
-            "btnBackgroundColor": "#FCA311",
-            "btnTextColor": "#FFFFFF"
-          }
-        },
-        "setting": {
-          "paddingTop": "20",
-          "paddingBottom": "20",
-          "marginTop": "10",
-          "marginBottom": "10"
-        }
-      },
-      {
         "type": "ProductList",
         "blocks": [
           {
             "productId": 1,
-            "imageSrc": "/assets/images/product1.jpg",
+            "imageSrc": "/assets/images/pro1.jpg",
             "imageAlt": "محصول ۱",
             "name": "محصول اول",
             "description": "این محصول به خوبی ساخته شده است.",
-            "price": "۱۰۰۰۰۰ تومان",
+            "price": "1۰۰۰۰۰ تومان",
             "btnText": "اضافه به سبد خرید",
             "btnLink": "/product/1"
           },
           {
             "productId": 2,
-            "imageSrc": "/assets/images/product2.jpg",
+            "imageSrc": "/assets/images/pro2.jpg",
             "imageAlt": "محصول ۲",
             "name": "محصول دوم",
             "description": "این محصول به خوبی ساخته شده است.",
-            "price": "۲۰۰۰۰۰ تومان",
+            "price": "2۰۰۰۰۰ تومان",
             "btnText": "اضافه به سبد خرید",
             "btnLink": "/product/2"
           },
           {
             "productId": 3,
-            "imageSrc": "/assets/images/product3.jpg",
+            "imageSrc": "/assets/images/pro3.jpg",
             "imageAlt": "محصول ۳",
             "name": "محصول سوم",
             "description": "این محصول به خوبی ساخته شده است.",
-            "price": "۳۰۰۰۰۰ تومان",
+            "price": "3۰۰۰۰۰ تومان",
             "btnText": "اضافه به سبد خرید",
             "btnLink": "/product/3"
           },
           {
             "productId": 4,
-            "imageSrc": "/assets/images/product3.jpg",
-            "imageAlt": "محصول ۳",
-            "name": "محصول سوم",
+            "imageSrc": "/assets/images/pro4.jpg",
+            "imageAlt": "محصول 4",
+            "name": "محصول چهارم",
             "description": "این محصول به خوبی ساخته شده است.",
-            "price": "۳۰۰۰۰۰ تومان",
+            "price": "4۰۰۰۰۰ تومان",
             "btnText": "اضافه به سبد خرید",
             "btnLink": "/product/3"
           }
         ],
         "setting": {
-          "gridColumns": 2,
+          "gridColumns": 4,
           "paddingTop": "20",
           "paddingBottom": "20",
           "marginTop": "10",
           "marginBottom": "10",
-          "backgroundColor": "#E5E5E5"
+          "backgroundColor": "#FCA311"
         }
       }
-    
     ],
-    "order": ["shopOverview", "ProductList"]
+    "order": [ "ProductList"]
   }
 }

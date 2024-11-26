@@ -29,10 +29,11 @@ const ProductScema = new mongoose.Schema(
       priceFontSize: { type: String, required: true },
       pricecolor: { type: String, required: true },
       btnBackgroundColor: { type: String, required: true },
-      btnColor: { type: String, required: true }
+      btnTextColor: { type: String, required: true }
     }
   },
   { timestamps: true }
 );
 
-export default mongoose.models.Products || mongoose.model("Products", ProductScema);
+export default mongoose.models.Products ||
+  mongoose.model("Products", ProductScema);
