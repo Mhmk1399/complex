@@ -2,8 +2,11 @@ import mongoose from "mongoose";
 
 const ProductScema = new mongoose.Schema(
   {
-    imageSrc: { type: String, required: true },
-    imageAlt: { type: String, required: true },
+    images: {
+      imageSrc: { type: String, required: true },
+      imageAlt: { type: String, required: true },
+    },
+   
     name: { type: String, required: true },
     description: { type: String, required: true },
     category: { type: String, required: true },
