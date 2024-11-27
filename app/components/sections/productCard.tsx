@@ -156,8 +156,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ productData, setting }) => {
         $settings={setting}
         src={currentImage.imageSrc || "/assets/images/pro2.jpg"}
         alt={currentImage.imageAlt || "Product Image"}
-        width={Number(setting?.imageWidth) || 1000}
-        height={Number(setting?.imageHeight) || 1000}
+        width={4000}
+        height={4000}
       />
       <ProductName $productData={productData} $settings={setting}>
         {productData.name}
@@ -168,7 +168,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ productData, setting }) => {
       <ProductPrice $productData={productData} $settings={setting}>
         {productData.price}
       </ProductPrice>
-      <BuyButton href={"/"}>خرید</BuyButton>
+      <BuyButton href={productData.id}>خرید</BuyButton>
     </Card>
   );
 };

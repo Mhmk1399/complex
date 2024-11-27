@@ -99,7 +99,7 @@ const Banner: React.FC<props> = ({
   const { description, imageAlt, imageSrc, text } = sectionData?.blocks;
 
   return (
-    <SectionBanner dir="rtl"
+    <SectionBanner
       $data={sectionData}
       onClick={() => setSelectedComponent(actualName)}
       className={`transition-all duration-150 ease-in-out relative ${
@@ -115,7 +115,8 @@ const Banner: React.FC<props> = ({
               مطمئن هستید؟
               <span className="text-blue-400 font-bold mx-1">
                 {actualName}
-              </span> آیا از حذف
+              </span>{" "}
+              آیا از حذف
             </h3>
             <div className="flex gap-4 justify-end">
               <button
@@ -139,7 +140,7 @@ const Banner: React.FC<props> = ({
       )}
 
       {actualName === selectedComponent ? (
-        <div className="absolute w-fit -top-5 -left-1 z-10 flex flex-row-reverse">
+        <div className="absolute w-fit -top-5 -left-1 z-10 flex ">
           <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
             {actualName}
           </div>

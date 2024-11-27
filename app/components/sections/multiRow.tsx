@@ -215,7 +215,7 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
       )}
 
       {actualName === selectedComponent ? (
-        <div className="absolute w-fit -top-5 -left-1 z-10 flex flex-row-reverse">
+        <div className="absolute w-fit -top-5 -left-1 z-10 flex">
           <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
             {actualName}
           </div>
