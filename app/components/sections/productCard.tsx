@@ -3,6 +3,7 @@ import Link from "next/link";
 import styled from "styled-components";
 import { productCard, ProductCardData } from "@/lib/types";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface ProductCardProps {
   productData: ProductCardData;
@@ -49,7 +50,7 @@ const Card = styled.div<{
   flex-direction: column;
   align-items: center;
   border-radius: ${(props) =>
-    props.$setting?.cardBorderRadius || defaultSetting.cardBorderRadius}px;
+    props.$setting?.cardBorderRadius || defaultSetting.cardBorderRadius};
   background: ${(props) =>
     props.$setting?.cardBackground || defaultSetting.cardBackground};
   margin: 10px;
@@ -68,12 +69,11 @@ const ProductImage = styled(Image)<{
   $productData?: ProductCardData;
 }>`
   object-fit: cover;
-  width: ${(props) =>
-    props.$settings?.imageWidth || defaultSetting.imageWidth}0px;
+  width: ${(props) => props.$settings?.imageWidth || defaultSetting.imageWidth};
   height: ${(props) =>
-    props.$settings?.imageHeight || defaultSetting.imageheight}px;
+    props.$settings?.imageHeight || defaultSetting.imageheight};
   border-radius: ${(props) =>
-    props.$settings?.imageRadius || defaultSetting.imageRadius}px;
+    props.$settings?.imageRadius || defaultSetting.imageRadius};
   transition: all 0.3s ease;
   &:hover {
     transform: scale(1.03);
@@ -85,7 +85,7 @@ const ProductName = styled.h3<{
   $productData?: ProductCardData;
 }>`
   font-size: ${(props) =>
-    props.$settings?.nameFontSize || defaultSetting.nameFontSize}px;
+    props.$settings?.nameFontSize || defaultSetting.nameFontSize};
   font-weight: ${(props) =>
     props.$settings?.nameFontWeight || defaultSetting.nameFontWeight};
   color: ${(props) => props.$settings?.nameColor || defaultSetting.nameColor};
@@ -98,8 +98,7 @@ const ProductDescription = styled.p<{
   $productData?: ProductCardData;
 }>`
   font-size: ${(props) =>
-    props.$settings?.descriptionFontSize ||
-    defaultSetting.descriptionFontSize}px;
+    props.$settings?.descriptionFontSize || defaultSetting.descriptionFontSize};
   color: ${(props) =>
     props.$settings?.descriptionColor || defaultSetting.descriptionColor};
   font-weight: ${(props) =>
@@ -114,14 +113,15 @@ const ProductPrice = styled.span<{
   $productData?: ProductCardData;
 }>`
   font-size: ${(props) =>
-    props.$settings?.priceFontSize || defaultSetting.priceFontSize}px;
+    props.$settings?.priceFontSize || defaultSetting.priceFontSize};
   font-weight: ${(props) =>
     props.$settings?.priceColor || defaultSetting.pricecolor};
   margin: 8px 0;
 `;
 
-const BuyButton = styled(Link)<{
+const BuyButton = styled.button<{
   $settings?: productCard;
+  $productData?: ProductCardData;
 }>`
   display: inline-block;
   padding: 10px 20px;
@@ -143,6 +143,13 @@ const BuyButton = styled(Link)<{
 
 const ProductCard: React.FC<ProductCardProps> = ({ productData, setting }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const router = useRouter();
+  const handleProductClick = () => {
+    if (productData.id) {
+      router.push(`/products?id=${productData.id}`);
+    }
+    // Use query parameters instead of dynamic routes
+  };
 
   const currentImage = productData.images[currentImageIndex] || {
     imageSrc: "",
@@ -168,7 +175,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ productData, setting }) => {
       <ProductPrice $productData={productData} $settings={setting}>
         {productData.price}
       </ProductPrice>
-      <BuyButton href={productData.id}>خرید</BuyButton>
+      <BuyButton
+        // href={`/products?id=${productData.id}`}
+        $productData={productData}
+        $settings={setting}
+        onClick={handleProductClick}
+      >
+        خرید
+      </BuyButton>
     </Card>
   );
 };
