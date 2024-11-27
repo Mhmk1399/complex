@@ -1,29 +1,10 @@
 import Image from "next/image";
-import Link from "next/link";
 import styled from "styled-components";
 import { productCard, ProductCardData } from "@/lib/types";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 interface ProductCardProps {
   productData: ProductCardData;
-  setting: {
-    cardBorderRadius?: string;
-    cardBackground?: string;
-    imageWidth?: string;
-    imageHeight?: string;
-    imageRadius?: string;
-    nameFontSize?: string;
-    nameFontWeight?: string;
-    nameColor?: string;
-    descriptionFontSize?: string;
-    descriptionFontWeight?: string;
-    descriptionColor?: string;
-    priceFontSize?: string;
-    priceColor?: string;
-    btnBackgroundColor?: string;
-    btnColor?: string;
-  };
 }
 const defaultSetting = {
   cardBorderRadius: "10px",
@@ -141,15 +122,8 @@ const BuyButton = styled.button<{
   }
 `;
 
-const ProductCard: React.FC<ProductCardProps> = ({ productData, setting }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ productData }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const router = useRouter();
-  const handleProductClick = () => {
-    if (productData.id) {
-      router.push(`/products?id=${productData.id}`);
-    }
-    // Use query parameters instead of dynamic routes
-  };
 
   const currentImage = productData.images[currentImageIndex] || {
     imageSrc: "",
@@ -157,29 +131,24 @@ const ProductCard: React.FC<ProductCardProps> = ({ productData, setting }) => {
   };
 
   return (
-    <Card dir="rtl" $setting={setting}>
+    <Card dir="rtl">
       <ProductImage
         $productData={productData}
-        $settings={setting}
         src={currentImage.imageSrc || "/assets/images/pro2.jpg"}
         alt={currentImage.imageAlt || "Product Image"}
         width={4000}
         height={4000}
       />
-      <ProductName $productData={productData} $settings={setting}>
-        {productData.name}
-      </ProductName>
-      <ProductDescription $productData={productData} $settings={setting}>
+      <ProductName $productData={productData}>{productData.name}</ProductName>
+      <ProductDescription $productData={productData}>
         {productData.description}
       </ProductDescription>
-      <ProductPrice $productData={productData} $settings={setting}>
+      <ProductPrice $productData={productData}>
         {productData.price}
       </ProductPrice>
       <BuyButton
         // href={`/products?id=${productData.id}`}
         $productData={productData}
-        $settings={setting}
-        onClick={handleProductClick}
       >
         خرید
       </BuyButton>

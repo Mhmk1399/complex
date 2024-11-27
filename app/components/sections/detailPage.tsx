@@ -8,7 +8,7 @@ interface DetailPageProps {
 }
 
 const DetailPage: React.FC<DetailPageProps> = ({ productId }) => {
-  const [product, setProduct] = useState<ProductCardData | null>({
+  const [product, setProduct] = useState<ProductCardData>({
     images: [],
     name: "",
     description: "",

@@ -4,11 +4,9 @@ import {
   ProductSection,
   Layout,
   ProductCardData,
-  ProductCardSetting,
 } from "@/lib/types";
 import ProductCard from "./productCard";
 import { useEffect, useState } from "react";
-import { s } from "framer-motion/client";
 
 interface ProductListProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -54,7 +52,6 @@ const ProductList: React.FC<ProductListProps> = ({
   selectedComponent,
   setLayout,
 }) => {
-  const [setting, setSetting] = useState<ProductCardSetting>({});
   const [productData, setProductData] = useState<ProductCardData[]>([]);
 
   useEffect(() => {
@@ -75,7 +72,6 @@ const ProductList: React.FC<ProductListProps> = ({
           console.log(productInfo);
 
           setProductData(productInfo);
-          setSetting(data.products?.[0]?.setting || {});
         }
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -86,7 +82,6 @@ const ProductList: React.FC<ProductListProps> = ({
    
     
   }, []);
-  console.log(setting , "settind");
 
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
@@ -113,7 +108,7 @@ const ProductList: React.FC<ProductListProps> = ({
       {productData.map((block) => {
         return (
           <div className="p-0 m-0" key={block.id}>
-            <ProductCard setting={setting} productData={block} />
+            <ProductCard  productData={block} />
           </div>
         );
       })}

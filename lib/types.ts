@@ -661,6 +661,8 @@ export interface StoreChildren {
 }
 
 export interface productCard {
+  blocks: any;
+  setting: any;
   cardBorderRadius?: string;
   cardBackground?: string;
   imageWidth?: string;

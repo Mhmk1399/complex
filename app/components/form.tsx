@@ -54,6 +54,7 @@ import {
   ContactFormProps,
   FooterSection,
   MultiRowSection,
+  ProductSection,
   SlideSection,
   VideoSection,
 } from "../../lib/types";
@@ -73,6 +74,7 @@ import { SlideForm } from "./forms/slideForm";
 import { MultiRowForm } from "./forms/multiRowForm";
 import { FooterForm } from "./forms/footerForm";
 import { Create } from "./C-D";
+import  ProductListForm  from "./forms/productForm";
 type FormData =
   | HeaderSection
   | MultiRowSection
@@ -86,7 +88,8 @@ type FormData =
   | CollapseSection
   | RichTextSection
   | ContactFormProps
-  | MultiColumnSection;
+  | MultiColumnSection
+  | ProductSection;
 
 interface FormProps {
   selectedComponent: string;
@@ -250,6 +253,19 @@ export const Form = ({
               >
             }
             userInputData={userInputData as ImageTextSection}
+            layout={layout}
+            selectedComponent={selectedComponent}
+          />
+        );
+      case "ProductList":
+        return (
+          <ProductListForm
+            setUserInputData={
+              setUserInputData as React.Dispatch<
+                React.SetStateAction<ProductSection>
+              >
+            }
+            userInputData={userInputData as ProductSection}
             layout={layout}
             selectedComponent={selectedComponent}
           />
