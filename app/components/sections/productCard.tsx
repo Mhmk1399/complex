@@ -2,10 +2,27 @@ import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
 import { productCard, ProductCardData } from "@/lib/types";
+import { useState } from "react";
 
 interface ProductCardProps {
   productData: ProductCardData;
-  setting: {};
+  setting: {
+    cardBorderRadius?: string;
+    cardBackground?: string;
+    imageWidth?: string;
+    imageHeight?: string;
+    imageRadius?: string;
+    nameFontSize?: string;
+    nameFontWeight?: string;
+    nameColor?: string;
+    descriptionFontSize?: string;
+    descriptionFontWeight?: string;
+    descriptionColor?: string;
+    priceFontSize?: string;
+    priceColor?: string;
+    btnBackgroundColor?: string;
+    btnColor?: string;
+  };
 }
 const defaultSetting = {
   cardBorderRadius: "10px",
@@ -51,9 +68,10 @@ const ProductImage = styled(Image)<{
   $productData?: ProductCardData;
 }>`
   object-fit: cover;
-  width: ${(props) => props.$settings?.imageWidth || defaultSetting.imageWidth}0px;
+  width: ${(props) =>
+    props.$settings?.imageWidth || defaultSetting.imageWidth}0px;
   height: ${(props) =>
-    props.$settings?.imageHeight || defaultSetting.imageheight}0px;
+    props.$settings?.imageHeight || defaultSetting.imageheight}px;
   border-radius: ${(props) =>
     props.$settings?.imageRadius || defaultSetting.imageRadius}px;
   transition: all 0.3s ease;
@@ -80,7 +98,8 @@ const ProductDescription = styled.p<{
   $productData?: ProductCardData;
 }>`
   font-size: ${(props) =>
-    props.$settings?.descriptionFontSize || defaultSetting.descriptionFontSize}px;
+    props.$settings?.descriptionFontSize ||
+    defaultSetting.descriptionFontSize}px;
   color: ${(props) =>
     props.$settings?.descriptionColor || defaultSetting.descriptionColor};
   font-weight: ${(props) =>
@@ -101,7 +120,9 @@ const ProductPrice = styled.span<{
   margin: 8px 0;
 `;
 
-const BuyButton = styled(Link)<{ $settings?: typeof defaultSetting }>`
+const BuyButton = styled(Link)<{
+  $settings?: productCard;
+}>`
   display: inline-block;
   padding: 10px 20px;
   background-color: ${(props) =>
@@ -121,17 +142,23 @@ const BuyButton = styled(Link)<{ $settings?: typeof defaultSetting }>`
 `;
 
 const ProductCard: React.FC<ProductCardProps> = ({ productData, setting }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const currentImage = productData.images[currentImageIndex] || {
+    imageSrc: "",
+    imageAlt: "",
+  };
+
   return (
     <Card dir="rtl" $setting={setting}>
       <ProductImage
         $productData={productData}
         $settings={setting}
-        src={productData.imageSrc || "/assets/images/pro2.jpg"}
-        alt={productData.imageAlt || "Product Image"}
-        width={1000}
-        height={1000}
+        src={currentImage.imageSrc || "/assets/images/pro2.jpg"}
+        alt={currentImage.imageAlt || "Product Image"}
+        width={Number(setting?.imageWidth) || 1000}
+        height={Number(setting?.imageHeight) || 1000}
       />
-
       <ProductName $productData={productData} $settings={setting}>
         {productData.name}
       </ProductName>

@@ -677,15 +677,51 @@ export interface productCard {
   btnBackgroundColor?: string;
   btnColor?: string;
 }
+// export interface ProductCardData {
+//   imageSrc: string[];
+//   imageAlt: string[];
+//   name: string;
+//   description: string;
+//   price: string;
+//   category: string;
+//   status: string;
+//   discount: string;
+//   id: string;
+//   innventory: string;
+// }
+
+
+export interface ProductImage {
+  imageSrc: string;
+  imageAlt: string;
+}
 export interface ProductCardData {
-  imageSrc: string[];
-  imageAlt: string[];
+  images: ProductImage[];
   name: string;
   description: string;
   price: string;
-  category: string;
-  status: string;
-  discount: string;
   id: string;
-  innventory: string;
+  category?: string;
+  discount?: string;
+  status?: string;
+  inventory?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+export interface ProductCardSetting {
+  cardBorderRadius?: string;
+  cardBackground?: string;
+  imageWidth?: string;
+  imageHeight?: string;
+  imageRadius?: string;
+  nameFontSize?: string;
+  nameFontWeight?: string;
+  nameColor?: string;
+  descriptionFontSize?: string;
+  descriptionFontWeight?: string;
+  descriptionColor?: string;
+  priceFontSize?: string;
+  priceColor?: string;
+  btnBackgroundColor?: string;
+  btnColor?: string;
 }

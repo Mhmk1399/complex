@@ -1,7 +1,11 @@
 "use client";
 import styled from "styled-components";
-import { Delete } from "../C-D";
-import { ProductSection, Layout } from "@/lib/types";
+import {
+  ProductSection,
+  Layout,
+  ProductCardData,
+  ProductCardSetting,
+} from "@/lib/types";
 import ProductCard from "./productCard";
 import { useEffect, useState } from "react";
 
@@ -12,6 +16,13 @@ interface ProductListProps {
   selectedComponent: string;
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
 }
+const defaultProduct: ProductCardData = {
+  images: [{ imageSrc: "/assets/images/pro2.jpg", imageAlt: "Default Image" }],
+  name: "محصول پیش‌فرض",
+  description: "توضیحات پیش‌فرض محصول",
+  price: "0",
+  id: "0",
+};
 
 const SectionProductList = styled.section<{
   $data: ProductSection;
@@ -42,35 +53,35 @@ const ProductList: React.FC<ProductListProps> = ({
   selectedComponent,
   setLayout,
 }) => {
-  const [setting, setSetting] = useState({});
-  const [productData, setProductData] = useState({});
+  const [setting, setSetting] = useState<ProductCardSetting>({});
+  const [productData, setProductData] = useState<ProductCardData[]>([]);
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await fetch("/api/products", {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         });
 
         const data = await response.json();
 
-        console.log(data, "data");
-
-        if (data?.products?.[4]) {
-          setSetting(data.products[4].setting);
-          const productInfo = data.products[4];
+        if (data?.products) {
+          const productInfo = data.products.map((product: any) => ({
+            ...product,
+            images: product.images || [],
+          }));
           setProductData(productInfo);
-          console.log(productInfo, "productInfo");
+          setSetting(data.products[5]?.setting || {});
         }
       } catch (error) {
-        console.log("Error fetching products:", error);
+        console.error("Error fetching products:", error);
       }
     };
 
     fetchProducts();
   }, []);
+
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
   ) as ProductSection;
@@ -91,26 +102,18 @@ const ProductList: React.FC<ProductListProps> = ({
           : ""
       }`}
     >
-      {actualName === selectedComponent ? (
-        <div className="absolute w-fit -top-5 -left-1 z-10 flex justify-center items-center">
-          <div className=" bg-blue-500 py-1 px-4 rounded-lg text-white ">
-            {actualName}
+      {blocks.map((block) => {
+        const product =
+          productData.find((p) => p.id === block.productId?.toString()) ||
+          defaultProduct;
+        return (
+          <div className="p-0 m-0" key={block.productId}>
+            <ProductCard setting={setting} productData={product} />
           </div>
-          <button
-            className="text-red-600 font-extrabold text-xl hover:bg-red-100 bg-slate-100 pb-1 mx-1 items-center justify-items-center content-center rounded-full px-3 "
-            onClick={() => Delete(actualName, layout, setLayout)}
-          >
-            x
-          </button>
-        </div>
-      ) : null}
-
-      {blocks.map((product) => (
-        <div className="p-0 m-0" key={product.productId}>
-          <ProductCard setting={setting} productData={productData} />
-        </div>
-      ))}
+        );
+      })}
     </SectionProductList>
   );
 };
+
 export default ProductList;
