@@ -104,10 +104,15 @@ export const ProductListForm: React.FC<ProductListProps> = ({
   };
 
   return (
-    <div className="space-y-6 p-4">
+    <div className="space-y-6 p-4" dir="rtl">
       <div className="bg-white p-4 rounded-lg shadow">
-        <h3 className="text-lg font-semibold mb-4">Layout Settings</h3>
-        <div className="grid grid-cols-2 gap-4">
+        <h3 className="text-lg font-semibold mb-4">
+          تنظیمات عمومی
+        </h3>
+        <div className="grid grid-cols-1 gap-4">
+          <label htmlFor="gridColumns" className="block mb-2">
+            تعداد ستون‌ها
+          </label>
           <input
             type="number"
             name="gridColumns"
@@ -116,24 +121,43 @@ export const ProductListForm: React.FC<ProductListProps> = ({
             placeholder="Grid Columns"
             className="border p-2 rounded"
           />
-          <input
+          {/* <label htmlFor="backgroundColor" className="block mb-2">
+            رنگ پس‌زمینه
+          </label> */}
+          <ColorInput
+          
+            label="رنگ پس‌زمینه"
+            name="backgroundColor"
+            value={
+              userInputData.setting.backgroundColor?.toString() ??
+              "#000000"
+            }
+            onChange={handleSettingChange}
+          />
+          {/* <input
             type="text"
             name="backgroundColor"
             value={userInputData.setting.backgroundColor}
             onChange={handleSettingChange}
             placeholder="Background Color"
             className="border p-2 rounded"
-          />
+          /> */}
+          <label htmlFor="paddingTop" className="block mb-2">
+            فاصله درونی از بالا
+          </label>
           <input
-            type="text"
+            type="range"
             name="paddingTop"
             value={userInputData.setting.paddingTop}
             onChange={handleSettingChange}
             placeholder="Padding Top"
             className="border p-2 rounded"
           />
+            <label htmlFor="paddingTop" className="block mb-2">
+            فاصله درونی از پایین
+          </label>
           <input
-            type="text"
+            type="range"
             name="paddingBottom"
             value={userInputData.setting.paddingBottom}
             onChange={handleSettingChange}
@@ -143,7 +167,7 @@ export const ProductListForm: React.FC<ProductListProps> = ({
         </div>
       </div>
 
-      <div className="bg-white p-4 rounded-lg shadow">
+      {/* <div className="bg-white p-4 rounded-lg shadow">
         <h3 className="text-lg font-semibold mb-4">Products</h3>
         {blocks.map((product, index) => (
           <div key={index} className="border-b pb-4 mb-4">
@@ -187,7 +211,7 @@ export const ProductListForm: React.FC<ProductListProps> = ({
             </div>
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };
