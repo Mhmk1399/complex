@@ -48,7 +48,7 @@
         ],
         "setting": {
           "gridColumns": 4,
-          "paddingTop": "20",
+          "paddingTop": 10,
           "paddingBottom": "20",
           "marginTop": "10",
           "marginBottom": "10",
@@ -56,6 +56,8 @@
         }
       }
     ],
-    "order": [ "ProductList"]
+    "order": [
+      "ProductList"
+    ]
   }
 }
