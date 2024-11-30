@@ -30,29 +30,29 @@ const SectionDetailPage = styled.div<{
 
   .product-name {
     color: ${(props) => props.$data?.setting?.productNameColor};
-    font-size: ${(props) => props.$data?.setting?.productNameFontSize};
+    font-size: ${(props) => props.$data?.setting?.productNameFontSize}px;
     font-weight: ${(props) => props.$data?.setting?.productNameFontWeight};
   }
 
   .product-price {
     color: ${(props) => props.$data?.setting?.priceColor};
-    font-size: ${(props) => props.$data?.setting?.priceFontSize};
+    font-size: ${(props) => props.$data?.setting?.priceFontSize}px;
   }
 
   .product-description {
     color: ${(props) => props.$data?.setting?.descriptionColor};
-    font-size: ${(props) => props.$data?.setting?.descriptionFontSize};
+    font-size: ${(props) => props.$data?.setting?.descriptionFontSize}px;
   }
 
   .add-to-cart-button {
-    background-color: ${(props) => props.$data?.setting?.btnBackgroundColor};
+    background-color: ${(props) => props.$data?.setting?.btnBackgroundColor || "#3498DB"};
     color: ${(props) => props.$data?.setting?.btnTextColor};
   }
 
   .product-image {
-    width: ${(props) => props.$data?.setting?.imageWidth};
-    height: ${(props) => props.$data?.setting?.imageHeight};
-    border-radius: ${(props) => props.$data?.setting?.imageRadius};
+    width: ${(props) => props.$data?.setting?.imageWidth}px;
+    height: ${(props) => props.$data?.setting?.imageHeight}px;
+    border-radius: ${(props) => props.$data?.setting?.imageRadius}px;
   }
 `;
 
@@ -90,7 +90,7 @@ const DetailPage: React.FC<DetailPageProps> = ({
         setProduct(data);
         setSelectedImage(data.images[0]?.imageSrc || "");
         setLoading(false);
-        console.log(typeof data.images, data.images);
+        // console.log(typeof data.images, data.images);
       } catch (error) {
         console.error("Error fetching product details:", error);
         setLoading(false);
@@ -152,7 +152,7 @@ const DetailPage: React.FC<DetailPageProps> = ({
               <span className="text-blue-400 font-bold mx-1">{actualName}</span>
               مطمئن هستید؟
             </h3>
-            <div className="flex gap-4 justify-end">
+            <div className="flex gap-4 justify-end flex-row-reverse">
               <button
                 className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
                 onClick={() => setShowDeleteModal(false)}

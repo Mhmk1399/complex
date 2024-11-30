@@ -27,7 +27,7 @@ function parseInputWithRegex(input: string) {
     paddingBottom: /فاصله\s?پایینی\s?رو\s?برامی\s?(\d+)\s?پیکسل\s?کن/,
     marginTop: /حاشیه\s?بالایی\s?رو\s?برامی\s?(\d+)\s?پیکسل\s?کن/,
     marginBottom: /حاشیه\s?پایینی\s?رو\s?برامی\s?(\d+)\s?پیکسل\s?کن/,
-    gridColumns: /تعداد\s?ستون\s?ها\s?رو\s?برامی\s?(\d+)\s?کن/,
+    gridColumns: /تعداد\s?ستون\s?ها\s?رو\s?برام\s?(\d+)\s?کن/,
     backgroundColor: /رنگ\s?پس\s?زمینه\s?رو\s?(.*)\s?کن/,
   };
 

@@ -47,8 +47,8 @@
           }
         ],
         "setting": {
-          "gridColumns": 4,
-          "paddingTop": 10,
+          "gridColumns": 1,
+          "paddingTop": "10",
           "paddingBottom": "20",
           "marginTop": "10",
           "marginBottom": "10",

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
 import { ProductSection, Layout } from "@/lib/types";
 
@@ -43,9 +43,47 @@ export const ProductListForm: React.FC<ProductListProps> = ({
   layout,
   selectedComponent,
 }) => {
-  const blocks = Array.isArray(userInputData.blocks)
-    ? userInputData.blocks
-    : [];
+  const [inputText, setInputText] = useState("");
+  const [json, setJson] = useState(null);
+
+  const handleLiveInput = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    
+    if (inputText.trim()) {
+      const response = await fetch('/api/update-json', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ inputText }),
+      });
+      
+      const updatedJson = await response.json();
+      setJson(updatedJson);
+      
+      // Update the form data with new JSON
+      setUserInputData(prevData => ({
+        ...prevData,
+        blocks: updatedJson.children.sections[0].blocks,
+        setting: updatedJson.children.sections[0].setting
+      }));
+    }
+  };
+  
+  //   const handleInput = async () => {
+  //     const response = await fetch('/api/update-json', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ inputText }),
+  //     });
+  //     const updatedJson = await response.json();
+  //     setJson(updatedJson);
+  // };
+  // const blocks = Array.isArray(userInputData.blocks)
+  //   ? userInputData.blocks
+  //   : [];
 
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent);
@@ -90,6 +128,8 @@ export const ProductListForm: React.FC<ProductListProps> = ({
     }));
   };
 
+
+
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -103,11 +143,23 @@ export const ProductListForm: React.FC<ProductListProps> = ({
     }));
   };
 
+
+
   return (
     <div className="space-y-6 p-4" dir="rtl">
       <div className="bg-white p-4 rounded-lg shadow">
         <h3 className="text-lg font-semibold mb-4">تنظیمات عمومی</h3>
         <div className="grid grid-cols-1 gap-4">
+          <textarea
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            rows={3}
+            style={{ width: "100%" }}
+            placeholder="یک جمله فارسی وارد کنید..."
+          />
+          <button onClick={handleLiveInput} style={{ marginTop: "10px" }}>
+            تبدیل
+          </button>
           <label htmlFor="gridColumns" className="block mb-2">
             تعداد ستون‌ها
           </label>
