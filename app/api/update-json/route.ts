@@ -22,18 +22,47 @@ function saveJson(filePath: string, data: any) {
 // Regex parsing
 function parseInputWithRegex(input: string) {
   const updates: { [key: string]: string | number } = {};
+  
   const regexMap = {
-    paddingTop: /فاصله\s?بالایی\s?رو\s?برامی\s?(\d+)\s?پیکسل\s?کن/,
-    paddingBottom: /فاصله\s?پایینی\s?رو\s?برامی\s?(\d+)\s?پیکسل\s?کن/,
-    marginTop: /حاشیه\s?بالایی\s?رو\s?برامی\s?(\d+)\s?پیکسل\s?کن/,
-    marginBottom: /حاشیه\s?پایینی\s?رو\s?برامی\s?(\d+)\s?پیکسل\s?کن/,
-    gridColumns: /تعداد\s?ستون\s?ها\s?رو\s?برامی\s?(\d+)\s?کن/,
-    backgroundColor: /رنگ\s?پس\s?زمینه\s?رو\s?(.*)\s?کن/,
+    // Existing patterns with variations
+    paddingTop: /(?:فاصله|پدینگ)\s?(?:از\s)?بالا(?:یی)?\s?(?:را|رو)\s?(?:به|برامی)?\s?(\d+)\s?(?:پیکسل)?\s?(?:بذار|کن|تنظیم کن)/i,
+    
+    paddingBottom: /(?:فاصله|پدینگ)\s?(?:از\s)?پایین(?:ی)?\s?(?:را|رو)\s?(?:به|برامی)?\s?(\d+)\s?(?:پیکسل)?\s?(?:بذار|کن|تنظیم کن)/i,
+    
+    marginTop: /(?:حاشیه|مارجین)\s?(?:از\s)?بالا(?:یی)?\s?(?:را|رو)\s?(?:به|برامی)?\s?(\d+)\s?(?:پیکسل)?\s?(?:بذار|کن|تنظیم کن)/i,
+    
+    marginBottom: /(?:حاشیه|مارجین)\s?(?:از\s)?پایین(?:ی)?\s?(?:را|رو)\s?(?:به|برامی)?\s?(\d+)\s?(?:پیکسل)?\s?(?:بذار|کن|تنظیم کن)/i,
+    
+    // New patterns for additional properties
+    width: /(?:عرض|پهنا)(?:ی)?\s?(?:را|رو)\s?(?:به|برامی)?\s?(\d+)\s?(?:پیکسل)?\s?(?:بذار|کن|تنظیم کن)/i,
+    
+    height: /(?:ارتفاع|طول)(?:ی)?\s?(?:را|رو)\s?(?:به|برامی)?\s?(\d+)\s?(?:پیکسل)?\s?(?:بذار|کن|تنظیم کن)/i,
+    
+    fontSize: /(?:سایز|اندازه)\s?(?:فونت|متن)(?:ی)?\s?(?:را|رو)\s?(?:به|برامی)?\s?(\d+)\s?(?:پیکسل)?\s?(?:بذار|کن|تنظیم کن)/i,
+    
+    borderRadius: /(?:گردی|شعاع)\s?(?:گوشه‌ها|لبه‌ها)(?:ی)?\s?(?:را|رو)\s?(?:به|برامی)?\s?(\d+)\s?(?:پیکسل)?\s?(?:بذار|کن|تنظیم کن)/i,
+    
+    opacity: /(?:شفافیت|تاری)(?:ی)?\s?(?:را|رو)\s?(?:به|برامی)?\s?(\d+)\s?(?:درصد)?\s?(?:بذار|کن|تنظیم کن)/i,
+    
+    // Color-related patterns
+    backgroundColor: /(?:رنگ|کالر)\s?(?:پس زمینه|بک گراند|زمینه)(?:ی)?\s?(?:را|رو)\s?(.*?)\s?(?:بذار|کن|تنظیم کن)/i,
+    
+    color: /(?:رنگ|کالر)\s?(?:متن|فونت)(?:ی)?\s?(?:را|رو)\s?(.*?)\s?(?:بذار|کن|تنظیم کن)/i,
+    
+    // Layout patterns
+    display: /(?:نمایش|دیسپلی)(?:ی)?\s?(?:را|رو)\s?(.*?)\s?(?:بذار|کن|تنظیم کن)/i,
+    
+    position: /(?:موقعیت|پوزیشن)(?:ی)?\s?(?:را|رو)\s?(.*?)\s?(?:بذار|کن|تنظیم کن)/i,
+    
+    gridColumns: /(?:تعداد|شمار)\s?(?:ستون|کالم)(?:ها)?\s?(?:را|رو)\s?(?:به|برامی)?\s?(\d+)\s?(?:بذار|کن|تنظیم کن)/i
   };
 
   for (const [key, regex] of Object.entries(regexMap)) {
     const match = input.match(regex);
-    if (match) updates[key] = isNaN(Number(match[1])) ? match[1] : parseInt(match[1], 10);
+    if (match) {
+      const value = match[1].trim();
+      updates[key] = isNaN(Number(value)) ? value : parseInt(value, 10);
+    }
   }
 
   return updates;
