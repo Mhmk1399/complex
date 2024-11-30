@@ -52,6 +52,7 @@ import { CollapseForm } from "./forms/collapseForm";
 import {
   ContactFormDataSection,
   ContactFormProps,
+  DetailPageSection,
   FooterSection,
   MultiRowSection,
   ProductSection,
@@ -363,19 +364,19 @@ export const Form = ({
             selectedComponent={selectedComponent}
           />
         );
-      // case "DetailPage":
-      //   return (
-      //     <DetailForm
-      //       setUserInputData={
-      //         setUserInputData as React.Dispatch<
-      //           React.SetStateAction<DetailPageSection>
-      //         >
-      //       }
-      //       userInputData={userInputData as DetailPageSection}
-      //       layout={layout}
-      //       selectedComponent={selectedComponent}
-      //     />
-      //   );
+      case "DetailPage":
+        return (
+          <DetailForm
+            setUserInputData={
+              setUserInputData as React.Dispatch<
+                React.SetStateAction<DetailPageSection>
+              >
+            }
+            userInputData={userInputData as DetailPageSection}
+            layout={layout}
+            selectedComponent={selectedComponent}
+          />
+        );
       case "sectionFooter":
         return (
           <FooterForm
