@@ -1,36 +1,54 @@
 {
-  "type": "productDetails",
-  "blocks": {
-    "imageSrc": "/assets/images/product-detail.jpg",
-    "imageAlt": "محصول",
-    "name": "نام محصول",
-    "description": "توضیحات محصول",
-    "category": "دسته بندی",
-    "price": "قیمت محصول",
-    "status": "وضعیت محصول",
-    "discount": "تخفیف محصول",
-    "id": "شناسه محصول",
-    "innventory": "موجودی محصول",
-    "setting": {
-      "imageWidth": "500px",
-      "imageHeight": "500px",
-      "imageRadius": "20px",
-      "productNameColor": "#FCA311",
-      "productNameFontSize": "30px",
-      "productNameFontWeight": "bold",
-      "priceColor": "#2ECC71",
-      "priceFontSize": "24px",
-      "descriptionColor": "#333333",
-      "descriptionFontSize": "16px",
-      "btnBackgroundColor": "#3498DB",
-      "btnTextColor": "#FFFFFF"
-    }
-  },
-  "setting": {
-    "paddingTop": "20",
-    "paddingBottom": "20",
-    "marginTop": "10",
-    "marginBottom": "10",
-    "backgroundColor": "#FFFFFF"
+  "children": {
+    "type": "DetailPage",
+    "sections": [
+      {
+        "blocks": [
+          {
+            "productId": 1,
+            "imageSrc": [
+              "/assets/images/pro1-main.jpg",
+              "/assets/images/pro1-alt1.jpg",
+              "/assets/images/pro1-alt2.jpg"
+            ],
+            "imageAlt": [
+              "تصویر اصلی محصول",
+              "تصویر جانبی اول",
+              "تصویر جانبی دوم"
+            ],
+            "name": "نام محصول",
+            "description": "توضیحات کامل محصول که شامل جزئیات بیشتری است",
+            "category": "دسته بندی محصول",
+            "price": "۱۰۰,۰۰۰ تومان",
+            "status": "موجود",
+            "discount": "۲۰٪",
+            "id": "PRD-001",
+            "inventory": 150,
+            "btnText": "افزودن به سبد خرید",
+            "btnLink": "/cart/add/1"
+          }
+        ],
+        "setting": {
+          "imageWidth": "500px",
+          "imageHeight": "500px",
+          "imageRadius": "20px",
+          "productNameColor": "#FCA311",
+          "productNameFontSize": "30px",
+          "productNameFontWeight": "bold",
+          "priceColor": "#2ECC71",
+          "priceFontSize": "24px",
+          "descriptionColor": "#333333",
+          "descriptionFontSize": "16px",
+          "btnBackgroundColor": "#3498DB",
+          "btnTextColor": "#FFFFFF",
+          "paddingTop": "20",
+          "paddingBottom": "20",
+          "marginTop": "10",
+          "marginBottom": "10",
+          "backgroundColor": "#FFFFFF"
+        }
+      }
+    ],
+    "order": ["DetailPage"]
   }
 }

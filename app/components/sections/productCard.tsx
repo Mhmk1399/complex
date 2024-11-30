@@ -145,6 +145,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ productData }) => {
       </ProductDescription>
       <ProductPrice $productData={productData}>
         {productData.price}
+
+        
       </ProductPrice>
       <BuyButton
         // href={`/products?id=${productData.id}`}

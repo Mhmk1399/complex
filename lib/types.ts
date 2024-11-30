@@ -409,7 +409,7 @@ export interface Layout {
     slideshow: SlideSection;
     richtext: RichTextSection;
     sectionHeader: HeaderSection;
-    children: Children | AboutChildren | StoreChildren;
+    children: Children | AboutChildren | StoreChildren | DetailPageChildren;
     sectionFooter: FooterSection;
     banner: BannerSection;
     footer: string;
@@ -608,7 +608,7 @@ export interface SectionsState {
   slideshow?: SlideSection;
   richtext?: RichTextSection;
   sectionHeader?: HeaderSection;
-  children?: Children | AboutChildren;
+  children?: Children | AboutChildren | DetailPageChildren;
   sectionFooter?: FooterSection;
   banner?: BannerSection;
   footer?: string;
@@ -692,7 +692,6 @@ export interface productCard {
 //   innventory: string;
 // }
 
-
 export interface ProductImage {
   imageSrc: string;
   imageAlt: string;
@@ -727,3 +726,70 @@ export interface ProductCardSetting {
   btnBackgroundColor?: string;
   btnColor?: string;
 }
+
+// these new interfaces for DetailPage
+
+export interface DetailPageBlock {
+  productId: number;
+  imageSrc: string[];
+  imageAlt: string[];
+  name: string;
+  description: string;
+  category: string;
+  price: string;
+  status: string;
+  discount: string;
+  id: string;
+  inventory: number;
+  btnText: string;
+  btnLink: string;
+  setting: {
+    imageWidth: string;
+    imageHeight: string;
+    imageRadius: string;
+    productNameColor: string;
+    productNameFontSize: string;
+    productNameFontWeight: string;
+    priceColor: string;
+    priceFontSize: string;
+    descriptionColor: string;
+    descriptionFontSize: string;
+    btnBackgroundColor: string;
+    btnTextColor: string;
+  };
+}
+
+export interface DetailPageSettings {
+  imageWidth: string;
+  imageHeight: string;
+  imageRadius: string;
+  productNameColor: string;
+  productNameFontSize: string;
+  productNameFontWeight: string;
+  priceColor: string;
+  priceFontSize: string;
+  descriptionColor: string;
+  descriptionFontSize: string;
+  btnBackgroundColor: string;
+  btnTextColor: string;
+  paddingTop: string;
+  paddingBottom: string;
+  marginTop: string;
+  marginBottom: string;
+  backgroundColor: string;
+}
+
+export interface DetailPageSection {
+  type: "DetailPage";
+  blocks: DetailPageBlock[];
+  setting: DetailPageSettings;
+}
+
+export interface DetailPageChildren {
+  type: "DetailPage";
+  sections: DetailPageSection[];
+  order: string[];
+}
+// export interface DetailPageMain {
+//   children: DetailPageChildren;
+// }

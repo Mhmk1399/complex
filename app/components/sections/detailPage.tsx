@@ -1,26 +1,86 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { ProductCardData, ProductImage } from "@/lib/types";
+import {
+  DetailPageChildren,
+  DetailPageSection,
+  Layout,
+  ProductCardData,
+  ProductImage,
+} from "@/lib/types";
 import Image from "next/image";
+import { Delete } from "../C-D";
+import { styled } from "styled-components";
 
 interface DetailPageProps {
   productId: string;
+  setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
+  layout: Layout;
+  actualName: string;
+  selectedComponent: string;
+  setLayout: React.Dispatch<React.SetStateAction<Layout>>;
 }
+const SectionDetailPage = styled.div<{
+  $data: DetailPageSection;
+}>`
+  padding-top: ${(props) => props.$data?.setting?.paddingTop}px;
+  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom}px;
+  margin-top: ${(props) => props.$data?.setting?.marginTop}px;
+  margin-bottom: ${(props) => props.$data?.setting?.marginBottom}px;
+  background-color: ${(props) => props.$data?.setting?.backgroundColor};
 
-const DetailPage: React.FC<DetailPageProps> = ({ productId }) => {
+  .product-name {
+    color: ${(props) => props.$data?.setting?.productNameColor};
+    font-size: ${(props) => props.$data?.setting?.productNameFontSize};
+    font-weight: ${(props) => props.$data?.setting?.productNameFontWeight};
+  }
+
+  .product-price {
+    color: ${(props) => props.$data?.setting?.priceColor};
+    font-size: ${(props) => props.$data?.setting?.priceFontSize};
+  }
+
+  .product-description {
+    color: ${(props) => props.$data?.setting?.descriptionColor};
+    font-size: ${(props) => props.$data?.setting?.descriptionFontSize};
+  }
+
+  .add-to-cart-button {
+    background-color: ${(props) => props.$data?.setting?.btnBackgroundColor};
+    color: ${(props) => props.$data?.setting?.btnTextColor};
+  }
+
+  .product-image {
+    width: ${(props) => props.$data?.setting?.imageWidth};
+    height: ${(props) => props.$data?.setting?.imageHeight};
+    border-radius: ${(props) => props.$data?.setting?.imageRadius};
+  }
+`;
+
+const DetailPage: React.FC<DetailPageProps> = ({
+  productId,
+  setSelectedComponent,
+  layout,
+  actualName,
+  selectedComponent,
+  setLayout,
+}) => {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [product, setProduct] = useState<ProductCardData>({
     images: [],
     name: "",
     description: "",
     price: "",
     id: "",
+    category: "",
+    discount: "",
+    status: "",
+    inventory: "",
   });
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
- 
+
   useEffect(() => {
     const fetchProductDetails = async () => {
-        
       try {
         const response = await fetch(`/api/products/${productId}`);
         if (!response.ok) {
@@ -57,22 +117,88 @@ const DetailPage: React.FC<DetailPageProps> = ({ productId }) => {
       </div>
     );
   }
+  // const sectionData = layout?.sections?.children?.sections.find(
+  //   (section) => section.type === actualName
+  // ) as DetailPageSection;
+
+  // if (!sectionData) {
+  //   return null;
+  // }
+  const sectionData = layout?.sections?.children?.sections?.find(
+    (section) => section.type === actualName
+  ) as DetailPageSection;
+
+  // Add this check before using sectionData
+  if (!layout?.sections?.children?.sections) {
+    return null;
+  }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <SectionDetailPage
+      $data={sectionData}
+      className={`container mx-auto px-4 py-8 transition-all duration-150 ease-in-out relative ${
+        selectedComponent === actualName
+          ? "border-4 border-blue-500 rounded-lg shadow-lg "
+          : ""
+      }`}
+      dir="rtl"
+      onClick={() => setSelectedComponent(actualName)}
+    >
+      {showDeleteModal && (
+        <div className="fixed inset-0  bg-black bg-opacity-70 z-50 flex items-center justify-center ">
+          <div className="bg-white p-8 rounded-lg">
+            <h3 className="text-lg font-bold mb-4">
+              آیا از حذف
+              <span className="text-blue-400 font-bold mx-1">{actualName}</span>
+              مطمئن هستید؟
+            </h3>
+            <div className="flex gap-4 justify-end">
+              <button
+                className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                انصراف
+              </button>
+              <button
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 "
+                onClick={() => {
+                  Delete(actualName, layout, setLayout);
+                  setShowDeleteModal(false);
+                }}
+              >
+                حذف
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {actualName === selectedComponent ? (
+        <div className="absolute w-fit -top-5 -left-1 z-10 flex flex-row-reverse">
+          <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
+            {actualName}
+          </div>
+          <button
+            className="font-extrabold text-xl hover:bg-blue-500 bg-red-500 pb-1 rounded-r-lg px-3 text-white transform transition-all ease-in-out duration-300"
+            onClick={() => setShowDeleteModal(true)}
+          >
+            x
+          </button>
+        </div>
+      ) : null}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Product Images Section */}
         <div className="space-y-4">
           <div className="relative h-[500px] w-full rounded-lg overflow-hidden">
             <Image
-              src={selectedImage}
+              src={selectedImage || "/assets/images/pro3.jpg"}
               alt={product.name}
               fill
               className="object-cover"
             />
           </div>
           <div className="flex gap-4 overflow-x-auto">
-            {product.images &&
+            {Array.isArray(product.images) &&
               product.images.map((image: ProductImage, index: number) => (
                 <div
                   key={index}
@@ -84,7 +210,7 @@ const DetailPage: React.FC<DetailPageProps> = ({ productId }) => {
                   onClick={() => setSelectedImage(image.imageSrc)}
                 >
                   <Image
-                    src={image.imageSrc}
+                    src={image.imageSrc || "/assets/images/pro3.jpg"}
                     alt={image.imageAlt}
                     fill
                     className="object-cover"
@@ -96,12 +222,12 @@ const DetailPage: React.FC<DetailPageProps> = ({ productId }) => {
 
         {/* Product Info Section */}
         <div className="space-y-6">
-          <h1 className="text-3xl font-bold">{product.name}</h1>
-          <p className="text-gray-600">{product.description}</p>
+          <h1 className="product-name">{product.name}</h1>
+          <p className="product-description">{product.description}</p>
 
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <span className="text-2xl font-bold">{product.price} تومان</span>
+              <span className="product-price">{product.price} تومان</span>
               {product.discount && (
                 <span className="bg-red-100 text-red-600 px-3 py-1 rounded-full">
                   {product.discount}% تخفیف
@@ -132,10 +258,15 @@ const DetailPage: React.FC<DetailPageProps> = ({ productId }) => {
                 </div>
               )}
             </div>
+            <div className="flex  gap-2">
+              <button className="px-6 py-3 add-to-cart-button rounded-md">
+                افزودن به سبد خرید
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </SectionDetailPage>
   );
 };
 export default DetailPage;

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Compiler } from "../compiler";
-import { ProductSection, Layout, ProductCardData } from "@/lib/types";
+import { ProductSection, Layout } from "@/lib/types";
 
 interface ProductListProps {
   setUserInputData: React.Dispatch<React.SetStateAction<ProductSection>>;
@@ -106,9 +106,7 @@ export const ProductListForm: React.FC<ProductListProps> = ({
   return (
     <div className="space-y-6 p-4" dir="rtl">
       <div className="bg-white p-4 rounded-lg shadow">
-        <h3 className="text-lg font-semibold mb-4">
-          تنظیمات عمومی
-        </h3>
+        <h3 className="text-lg font-semibold mb-4">تنظیمات عمومی</h3>
         <div className="grid grid-cols-1 gap-4">
           <label htmlFor="gridColumns" className="block mb-2">
             تعداد ستون‌ها
@@ -116,7 +114,7 @@ export const ProductListForm: React.FC<ProductListProps> = ({
           <input
             type="number"
             name="gridColumns"
-            value={userInputData.setting.gridColumns}
+            value={userInputData.setting.gridColumns || 1}
             onChange={handleSettingChange}
             placeholder="Grid Columns"
             className="border p-2 rounded"
@@ -125,12 +123,10 @@ export const ProductListForm: React.FC<ProductListProps> = ({
             رنگ پس‌زمینه
           </label> */}
           <ColorInput
-          
             label="رنگ پس‌زمینه"
             name="backgroundColor"
             value={
-              userInputData.setting.backgroundColor?.toString() ??
-              "#000000"
+              userInputData.setting.backgroundColor?.toString() ?? "#000000"
             }
             onChange={handleSettingChange}
           />
@@ -148,70 +144,24 @@ export const ProductListForm: React.FC<ProductListProps> = ({
           <input
             type="range"
             name="paddingTop"
-            value={userInputData.setting.paddingTop}
+            value={userInputData.setting.paddingTop || 10}
             onChange={handleSettingChange}
             placeholder="Padding Top"
             className="border p-2 rounded"
           />
-            <label htmlFor="paddingTop" className="block mb-2">
+          <label htmlFor="paddingTop" className="block mb-2">
             فاصله درونی از پایین
           </label>
           <input
             type="range"
             name="paddingBottom"
-            value={userInputData.setting.paddingBottom}
+            value={userInputData.setting.paddingBottom || 10}
             onChange={handleSettingChange}
             placeholder="Padding Bottom"
             className="border p-2 rounded"
           />
         </div>
       </div>
-
-      {/* <div className="bg-white p-4 rounded-lg shadow">
-        <h3 className="text-lg font-semibold mb-4">Products</h3>
-        {blocks.map((product, index) => (
-          <div key={index} className="border-b pb-4 mb-4">
-            <h4 className="font-medium mb-2">Product {index + 1}</h4>
-            <div className="grid grid-cols-2 gap-4">
-              <input
-                type="text"
-                value={product.name}
-                onChange={(e) =>
-                  handleProductChange(index, "name", e.target.value)
-                }
-                placeholder="Product Name"
-                className="border p-2 rounded"
-              />
-              <input
-                type="text"
-                value={product.price}
-                onChange={(e) =>
-                  handleProductChange(index, "price", e.target.value)
-                }
-                placeholder="Price"
-                className="border p-2 rounded"
-              />
-              <input
-                type="text"
-                value={product.imageSrc}
-                onChange={(e) =>
-                  handleProductChange(index, "imageSrc", e.target.value)
-                }
-                placeholder="Image Source"
-                className="border p-2 rounded"
-              />
-              <textarea
-                value={product.description}
-                onChange={(e) =>
-                  handleProductChange(index, "description", e.target.value)
-                }
-                placeholder="Description"
-                className="border p-2 rounded col-span-2"
-              />
-            </div>
-          </div>
-        ))}
-      </div> */}
     </div>
   );
 };

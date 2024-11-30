@@ -74,7 +74,9 @@ import { SlideForm } from "./forms/slideForm";
 import { MultiRowForm } from "./forms/multiRowForm";
 import { FooterForm } from "./forms/footerForm";
 import { Create } from "./C-D";
-import  ProductListForm  from "./forms/productForm";
+import ProductListForm from "./forms/productForm";
+import DetailPage from "./sections/detailPage";
+import { DetailForm } from "./forms/detailForm";
 type FormData =
   | HeaderSection
   | MultiRowSection
@@ -361,6 +363,19 @@ export const Form = ({
             selectedComponent={selectedComponent}
           />
         );
+      // case "DetailPage":
+      //   return (
+      //     <DetailForm
+      //       setUserInputData={
+      //         setUserInputData as React.Dispatch<
+      //           React.SetStateAction<DetailPageSection>
+      //         >
+      //       }
+      //       userInputData={userInputData as DetailPageSection}
+      //       layout={layout}
+      //       selectedComponent={selectedComponent}
+      //     />
+      //   );
       case "sectionFooter":
         return (
           <FooterForm

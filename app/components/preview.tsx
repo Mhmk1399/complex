@@ -13,6 +13,7 @@ import MultiRow from "./sections/multiRow";
 import { Layout } from "@/lib/types";
 import FooterContainer from "./sections/footer";
 import ProductList from "./sections/productList";
+import DetailPage from "./sections/detailPage";
 
 // First update the PreviewProps interface
 interface PreviewProps {
@@ -45,6 +46,7 @@ export const Preview: React.FC<PreviewProps> = ({
     MultiRow,
     FooterContainer,
     ProductList,
+    DetailPage,
   };
 
   return (
@@ -67,8 +69,7 @@ export const Preview: React.FC<PreviewProps> = ({
                 layout={layout}
                 actualName={componentName}
                 selectedComponent={selectedComponent}
-                setLayout={setLayout}
-              />
+                setLayout={setLayout} productId={"674ab2bd09449ba0285ffb0f"}              />
             </div>
           ) : null;
         })}

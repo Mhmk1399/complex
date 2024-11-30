@@ -3,10 +3,16 @@ import React, { useEffect, useState } from "react";
 import { Preview } from "./preview";
 import { Form } from "./form";
 import data from "../../public/template/null.json";
-import { AboutChildren, Layout, StoreChildren } from "../../lib/types";
+import {
+  AboutChildren,
+  DetailPageChildren,
+  Layout,
+  StoreChildren,
+} from "../../lib/types";
 import About from "@/public/template/about.json";
 import Contact from "@/public/template/contact.json";
 import Store from "@/public/template/product.json";
+import DetailPage from "@/public/template/detail.json";
 
 export const Main = () => {
   const Data = data as unknown as Layout;
@@ -35,6 +41,14 @@ export const Main = () => {
         sections: {
           ...prevLayout.sections,
           children: Contact.children as AboutChildren,
+        },
+      }));
+    } else if (selectedRoute === "DetailPage") {
+      setLayout((prevLayout: Layout) => ({
+        ...prevLayout,
+        sections: {
+          ...prevLayout.sections,
+          children: DetailPage.children as DetailPageChildren,
         },
       }));
     } else if (selectedRoute === "store") {
@@ -123,6 +137,7 @@ export const Main = () => {
               <option value="about">About</option>
               <option value="contact">Contact</option>
               <option value="store">store</option>
+              <option value="DetailPage">detalPage</option>
             </select>
           </div>
           <Preview
