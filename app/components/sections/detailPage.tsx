@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import {
-  DetailPageChildren,
   DetailPageSection,
   Layout,
   ProductCardData,
@@ -19,6 +18,7 @@ interface DetailPageProps {
   selectedComponent: string;
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
 }
+
 const SectionDetailPage = styled.div<{
   $data: DetailPageSection;
 }>`
@@ -45,7 +45,8 @@ const SectionDetailPage = styled.div<{
   }
 
   .add-to-cart-button {
-    background-color: ${(props) => props.$data?.setting?.btnBackgroundColor || "#3498DB"};
+    background-color: ${(props) =>
+      props.$data?.setting?.btnBackgroundColor || "#3498DB"};
     color: ${(props) => props.$data?.setting?.btnTextColor};
   }
 
@@ -64,6 +65,12 @@ const DetailPage: React.FC<DetailPageProps> = ({
   selectedComponent,
   setLayout,
 }) => {
+  console.log('DetailPage Props:', {
+    productId,
+    layout,
+    actualName,
+    selectedComponent
+  });
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [product, setProduct] = useState<ProductCardData>({
     images: [],
@@ -117,6 +124,7 @@ const DetailPage: React.FC<DetailPageProps> = ({
       </div>
     );
   }
+
   // const sectionData = layout?.sections?.children?.sections.find(
   //   (section) => section.type === actualName
   // ) as DetailPageSection;
@@ -128,10 +136,18 @@ const DetailPage: React.FC<DetailPageProps> = ({
     (section) => section.type === actualName
   ) as DetailPageSection;
 
+  console.log('Section Data:', sectionData);
+
   // Add this check before using sectionData
   if (!layout?.sections?.children?.sections) {
+    
     return null;
   }
+  console.log('Final Rendered State:', {
+    sectionData,
+    product,
+    selectedImage
+  });
 
   return (
     <SectionDetailPage

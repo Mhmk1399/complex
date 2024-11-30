@@ -69,21 +69,6 @@ export const ProductListForm: React.FC<ProductListProps> = ({
       }));
     }
   };
-  
-  //   const handleInput = async () => {
-  //     const response = await fetch('/api/update-json', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ inputText }),
-  //     });
-  //     const updatedJson = await response.json();
-  //     setJson(updatedJson);
-  // };
-  // const blocks = Array.isArray(userInputData.blocks)
-  //   ? userInputData.blocks
-  //   : [];
 
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent);

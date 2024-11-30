@@ -48,12 +48,13 @@
         ],
         "setting": {
           "gridColumns": 1,
-          "paddingTop": "10",
+          "paddingTop": 90,
           "paddingBottom": "20",
           "marginTop": "10",
           "marginBottom": "10",
-          "backgroundColor": "#FCA311",
-          "color": "#0000FF"
+          "backgroundColor": "blue",
+          "color": "#0000FF",
+          "fontSize": 16
         }
       }
     ],

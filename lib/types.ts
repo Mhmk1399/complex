@@ -756,6 +756,8 @@ export interface DetailPageBlock {
     descriptionFontSize: string;
     btnBackgroundColor: string;
     btnTextColor: string;
+    [key: string]: any; // Allows dynamic properties
+
   };
 }
 
@@ -777,6 +779,8 @@ export interface DetailPageSettings {
   marginTop: string;
   marginBottom: string;
   backgroundColor: string;
+  [key: string]: any; // Allows dynamic properties
+
 }
 
 export interface DetailPageSection {

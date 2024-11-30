@@ -50,7 +50,7 @@ export const Main = () => {
           ...prevLayout.sections,
           children: DetailPage.children as DetailPageChildren,
         },
-      }));
+      }));console.log(layout , "layout");
     } else if (selectedRoute === "store") {
       setLayout((prevLayout: Layout) => ({
         ...prevLayout,
@@ -59,6 +59,7 @@ export const Main = () => {
           children: Store.children as StoreChildren,
         },
       }));
+      
     } else {
       setLayout((prevLayout) => ({
         ...prevLayout,
@@ -67,7 +68,10 @@ export const Main = () => {
           children: Data.sections.children,
         },
       }));
+      
     }
+  
+    
   }, [selectedRoute]);
 
   // const handleSave = async () => {
@@ -137,7 +141,7 @@ export const Main = () => {
               <option value="about">About</option>
               <option value="contact">Contact</option>
               <option value="store">store</option>
-              <option value="DetailPage">detalPage</option>
+              <option value="DetailPage">DetailPage</option>
             </select>
           </div>
           <Preview

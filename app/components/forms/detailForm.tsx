@@ -15,98 +15,58 @@ export const DetailForm: React.FC<DetailFormProps> = ({
   layout,
   selectedComponent,
 }) => {
-  const defaultValues = {
-    blocks: {
-      imageSrc: [],
-      imageAlt: [],
-      name: "",
-      description: "",
-      category: "",
-      price: "",
-      status: "",
-      discount: "",
-      id: "",
-      innventory: "",
-      setting: {
-        imageWidth: "500px",
-        imageHeight: "500px",
-        imageRadius: "20px",
-        productNameColor: "#FCA311",
-        productNameFontSize: "30px",
-        productNameFontWeight: "bold",
-        priceColor: "#2ECC71",
-        priceFontSize: "24px",
-        descriptionColor: "#333333",
-        descriptionFontSize: "16px",
-        btnBackgroundColor: "#3498DB",
-        btnTextColor: "#FFFFFF",
-      },
-    },
-    setting: {
-      paddingTop: "20",
-      paddingBottom: "20",
-      marginTop: "10",
-      marginBottom: "10",
-      backgroundColor: "#FFFFFF",
-    },
-  };
-
-  // useEffect(() => {
-  //   const initialData = Compiler(layout, selectedComponent);
-  //   setUserInputData(initialData[0]);
-  // }, []);
-  // useEffect(() => {
-  //   const initialData = Compiler(layout, selectedComponent);
-  //   setUserInputData(initialData[0]);
-  // }, [selectedComponent]);
   useEffect(() => {
-    const initialData = {
-      ...defaultValues,
-      ...Compiler(layout, selectedComponent)[0],
-    };
-    console.log(initialData);
-
-    setUserInputData(initialData);
+    const initialData = Compiler(layout, selectedComponent)[0];
+    if (initialData) {
+      
+      setUserInputData(initialData);
+    }
+    
   }, []);
+  useEffect(() => {
+    const initialData = Compiler(layout, selectedComponent)[0];
+    if (initialData) {
+      
+      setUserInputData(initialData);
+    }
+    
+  }, [selectedComponent]);
 
-
-
-  const handleBlockChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: DetailPageSection) => ({
-      ...prev,
-      blocks: {
-        ...prev.blocks,
-        [name]: value,
-      },
-    }));
-  };
-
-  const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setUserInputData((prev: DetailPageSection) => ({
-      ...prev,
-      blocks: {
-        ...prev?.blocks,
-        setting: {
-          ...(prev?.setting || {}),
-          [name]: value,
+    console.log('Block Setting Change:', { name, value });
+    console.log('Previous State:', userInputData);
+    setUserInputData((prev: DetailPageSection) => {
+      const newState = {
+        ...prev,
+        blocks: {
+          ...prev?.blocks,
+          setting: {
+            ...(prev?.setting || {}),
+            [name]: value,
+          },
         },
-      },
-    }));
+      };
+      console.log('New State:', newState);
+      return newState;
+    });
   };
 
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInputData((prev: DetailPageSection) => ({
-      ...prev,
-      setting: {
-        ...prev.setting,
-        [name]: value,
-      },
-    }));
+    console.log('Setting Change:', { name, value });
+    console.log('Previous State:', userInputData);
+    setUserInputData((prev: DetailPageSection) => {
+      const newState = {
+        ...prev,
+        setting: {
+          ...prev.setting,
+          [name]: value,
+        },
+      };
+      console.log('New State:', newState);
+      return newState;
+    });
   };
 
   return (
@@ -122,8 +82,8 @@ export const DetailForm: React.FC<DetailFormProps> = ({
             <input
               type="text"
               name="imageWidth"
-              value={userInputData?.setting?.imageWidth || "300"}
-              onChange={handleBlockSettingChange}
+              value={userInputData?.setting?.imageWidth || "400"}
+              onChange={handleSettingChange}
               className="w-full p-2 border rounded"
             />
           </div>
