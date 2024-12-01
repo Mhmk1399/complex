@@ -55,27 +55,27 @@ export const DetailForm: React.FC<DetailFormProps> = ({
     }
   }, [selectedComponent]);
 
-  const handleBlockSettingChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    console.log("Block Setting Change:", { name, value });
-    console.log("Previous State:", userInputData);
-    setUserInputData((prev: DetailPageSection) => {
-      const newState = {
-        ...prev,
-        blocks: {
-          ...prev?.blocks,
-          setting: {
-            ...(prev?.setting || {}),
-            [name]: value,
-          },
-        },
-      };
-      console.log("New State:", newState);
-      return newState;
-    });
-  };
+  // const handleBlockSettingChange = (
+  //   e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  // ) => {
+  //   const { name, value } = e.target;
+  //   console.log("Block Setting Change:", { name, value });
+  //   console.log("Previous State:", userInputData);
+  //   setUserInputData((prev: DetailPageSection) => {
+  //     const newState = {
+  //       ...prev,
+  //       blocks: {
+  //         ...prev?.blocks,
+  //         setting: {
+  //           ...(prev?.setting || {}),
+  //           [name]: value,
+  //         },
+  //       },
+  //     };
+  //     console.log("New State:", newState);
+  //     return newState;
+  //   });
+  // };
 
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>

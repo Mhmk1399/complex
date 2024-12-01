@@ -804,6 +804,7 @@ export interface DetailPageChildren {
 // }
 
 export interface CollectionBlockSetting extends CommonSettings {
+  
   headingColor: string;
   headingFontSize: string;
   headingFontWeight: string;
@@ -815,7 +816,12 @@ export interface CollectionBlockSetting extends CommonSettings {
   cardBackground: string;
   cardBorderRadius: string;
   imageRadius: string;
-  gridColumns: number;
+  // gridColumns: number;
+  paddingTop: string;
+  paddingBottom: string;
+  marginTop: string;
+  marginBottom: string;
+  backgroundColor: string;
 }
 
 export interface CollectionProduct {
