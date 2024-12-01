@@ -461,7 +461,7 @@
               }
             ],
             "setting": {
-              "headingColor": "#14213D",
+              "headingColor": "#000000",
               "headingFontSize": "32px",
               "headingFontWeight": "bold",
               "productNameColor": "#000000",
@@ -469,10 +469,9 @@
               "descriptionColor": "#666666",
               "btnBackgroundColor": "#14213D",
               "btnTextColor": "#FFFFFF",
-              "cardBackground": "#FFFFFF",
+              "cardBackground": "#14213D",
               "cardBorderRadius": "8px",
-              "imageRadius": "8px",
-              "gridColumns": 3
+              "imageRadius": "8px"
             }
           },
           "setting": {
@@ -480,7 +479,7 @@
             "paddingBottom": "40px",
             "marginTop": "20px",
             "marginBottom": "20px",
-            "backgroundColor": "#F5F5F5"
+            "backgroundColor": "#FCA311"
           }
         }
       ],
