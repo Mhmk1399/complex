@@ -1,0 +1,8 @@
+{
+    "data": [
+        { "input": "رنگ پس زمینه رو قرمز کن", "output": { "backgroundColor": "قرمز" } },
+        { "input": "فاصله بالایی رو ۲۰ پیکسل کن", "output": { "paddingTop": 20 } },
+        { "input": "حاشیه پایینی رو ۱۵ پیکسل کن", "output": { "marginBottom": 15 } },
+        { "input": "تعداد ستون ها رو ۴ کن", "output": { "gridColumns": 4 } }
+    ]
+}
