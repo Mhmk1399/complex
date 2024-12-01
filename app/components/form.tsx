@@ -50,6 +50,7 @@ import { ContactForm } from "./forms/contact";
 import { NewsLetterForm } from "./forms/newsLetterForm";
 import { CollapseForm } from "./forms/collapseForm";
 import {
+  CollectionSection,
   ContactFormDataSection,
   ContactFormProps,
   DetailPageSection,
@@ -78,6 +79,7 @@ import { Create } from "./C-D";
 import ProductListForm from "./forms/productForm";
 import DetailPage from "./sections/detailPage";
 import { DetailForm } from "./forms/detailForm";
+import { CollectionForm } from "./forms/collectionForm";
 type FormData =
   | HeaderSection
   | MultiRowSection
@@ -360,6 +362,19 @@ export const Form = ({
               >
             }
             userInputData={userInputData as MultiRowSection}
+            layout={layout}
+            selectedComponent={selectedComponent}
+          />
+        );
+      case "Collection":
+        return (
+          <CollectionForm
+            setUserInputData={
+              setUserInputData as React.Dispatch<
+                React.SetStateAction<CollectionSection>
+              >
+            }
+            userInputData={userInputData as CollectionSection}
             layout={layout}
             selectedComponent={selectedComponent}
           />

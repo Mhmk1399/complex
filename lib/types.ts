@@ -411,6 +411,7 @@ export interface Layout {
     sectionHeader: HeaderSection;
     children: Children | AboutChildren | StoreChildren | DetailPageChildren;
     sectionFooter: FooterSection;
+    Collection: CollectionSection;
     banner: BannerSection;
     footer: string;
   };
@@ -768,6 +769,10 @@ export interface DetailPageSettings {
   productNameColor: string;
   productNameFontSize: string;
   productNameFontWeight: string;
+  statusColor: string;
+  statusFontSize: string;
+  categoryColor: string;
+  categoryFontSize: string;
   priceColor: string;
   priceFontSize: string;
   descriptionColor: string;
@@ -797,3 +802,40 @@ export interface DetailPageChildren {
 // export interface DetailPageMain {
 //   children: DetailPageChildren;
 // }
+
+export interface CollectionBlockSetting extends CommonSettings {
+  headingColor: string;
+  headingFontSize: string;
+  headingFontWeight: string;
+  productNameColor: string;
+  priceColor: string;
+  descriptionColor: string;
+  btnBackgroundColor: string;
+  btnTextColor: string;
+  cardBackground: string;
+  cardBorderRadius: string;
+  imageRadius: string;
+  gridColumns: number;
+}
+
+export interface CollectionProduct {
+  id: string;
+  imageSrc: string;
+  imageAlt: string;
+  name: string;
+  description: string;
+  price: string;
+  btnText: string;
+  btnLink: string;
+}
+
+export interface CollectionSection {
+  type: "Collection";
+  blocks: {
+    heading: string;
+    products: CollectionProduct[];
+    setting: CollectionBlockSetting;
+  };
+  setting: CollectionBlockSetting;
+}
+

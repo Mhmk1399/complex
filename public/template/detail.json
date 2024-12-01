@@ -1,8 +1,9 @@
 {
+  
   "children": {
-    "type": "DetailPage",
     "sections": [
       {
+        "type": "DetailPage",
         "blocks": [
           {
             "productId": 1,
@@ -29,15 +30,19 @@
           }
         ],
         "setting": {
-          "imageWidth": "500",
-          "imageHeight": "500",
+          "imageWidth": "30",
+          "imageHeight": "25",
           "imageRadius": "20",
           "productNameColor": "#FCA311",
           "productNameFontSize": "30",
           "productNameFontWeight": "bold",
           "priceColor": "#2ECC71",
+          "statusColor": "#ffffff",
+          "categoryColor": "#ffffff",
+          "categoryFontSize": "16",
+          "statusFontSize": "16",
           "priceFontSize": "24",
-          "descriptionColor": "#333333",
+          "descriptionColor": "#e4e4e4",
           "descriptionFontSize": "16",
           "btnBackgroundColor": "#3498DB",
           "btnTextColor": "#FFFFFF",
@@ -45,7 +50,7 @@
           "paddingBottom": "20",
           "marginTop": "10",
           "marginBottom": "10",
-          "backgroundColor": "#FFFFFF"
+          "backgroundColor": "#003566"
         }
       }
     ],

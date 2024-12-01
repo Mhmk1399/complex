@@ -28,32 +28,75 @@ const SectionDetailPage = styled.div<{
   margin-bottom: ${(props) => props.$data?.setting?.marginBottom}px;
   background-color: ${(props) => props.$data?.setting?.backgroundColor};
 
+
   .product-name {
     color: ${(props) => props.$data?.setting?.productNameColor};
     font-size: ${(props) => props.$data?.setting?.productNameFontSize}px;
     font-weight: ${(props) => props.$data?.setting?.productNameFontWeight};
   }
+  .product-category {
+    color: ${(props) => props.$data?.setting?.categoryColor};
+    font-size: ${(props) => props.$data?.setting?.categoryFontSize}px;
+  }
 
   .product-price {
     color: ${(props) => props.$data?.setting?.priceColor};
     font-size: ${(props) => props.$data?.setting?.priceFontSize}px;
+    @media (max-width: 768px) {
+      font-size: 30px;
+    }
   }
 
   .product-description {
     color: ${(props) => props.$data?.setting?.descriptionColor};
     font-size: ${(props) => props.$data?.setting?.descriptionFontSize}px;
+    @media (max-width: 768px) {
+      font-size: 20px;
+    }
+  }
+  .product-status {
+    color: ${(props) => props.$data?.setting?.statusColor};
+    font-size: ${(props) => props.$data?.setting?.statusFontSize}px;
+    @media (max-width: 768px) {
+      font-size: 20px;
+    }
   }
 
   .add-to-cart-button {
     background-color: ${(props) =>
       props.$data?.setting?.btnBackgroundColor || "#3498DB"};
     color: ${(props) => props.$data?.setting?.btnTextColor};
+    transition: transform 0.5s ease;
+    &:hover {
+      transform: translateY(-2px);
+      opacity: 0.85;
+      transition: transform 0.3s ease-in-out;
+    }
   }
 
   .product-image {
-    width: ${(props) => props.$data?.setting?.imageWidth}px;
-    height: ${(props) => props.$data?.setting?.imageHeight}px;
+    width: ${(props) => props.$data?.setting?.imageWidth}0px;
+    height: ${(props) => props.$data?.setting?.imageHeight}0px;
     border-radius: ${(props) => props.$data?.setting?.imageRadius}px;
+    object-fit: cover;
+    overflow: hidden;
+    position: relative;
+
+    @media (max-width: 768px) {
+      width: 100%;
+      height: auto;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.4s ease-in-out;
+
+      &:hover {
+        transform: scale(1.7);
+        cursor: zoom-in;
+      }
+    }
   }
 `;
 
@@ -65,12 +108,6 @@ const DetailPage: React.FC<DetailPageProps> = ({
   selectedComponent,
   setLayout,
 }) => {
-  console.log('DetailPage Props:', {
-    productId,
-    layout,
-    actualName,
-    selectedComponent
-  });
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [product, setProduct] = useState<ProductCardData>({
     images: [],
@@ -95,8 +132,10 @@ const DetailPage: React.FC<DetailPageProps> = ({
         }
         const data = await response.json();
         setProduct(data);
+
         setSelectedImage(data.images[0]?.imageSrc || "");
         setLoading(false);
+
         // console.log(typeof data.images, data.images);
       } catch (error) {
         console.error("Error fetching product details:", error);
@@ -124,35 +163,20 @@ const DetailPage: React.FC<DetailPageProps> = ({
       </div>
     );
   }
+  const sectionData = layout?.sections?.children?.sections?.find((section) => {
+    console.log("Comparing:", section.type, actualName);
+    return section.type === actualName;
+  }) as DetailPageSection;
 
-  // const sectionData = layout?.sections?.children?.sections.find(
-  //   (section) => section.type === actualName
-  // ) as DetailPageSection;
-
-  // if (!sectionData) {
-  //   return null;
-  // }
-  const sectionData = layout?.sections?.children?.sections?.find(
-    (section) => section.type === actualName
-  ) as DetailPageSection;
-
-  console.log('Section Data:', sectionData);
-
-  // Add this check before using sectionData
-  if (!layout?.sections?.children?.sections) {
-    
+  console.log("Section Data:", sectionData);
+  if (!sectionData) {
     return null;
   }
-  console.log('Final Rendered State:', {
-    sectionData,
-    product,
-    selectedImage
-  });
 
   return (
     <SectionDetailPage
       $data={sectionData}
-      className={`container mx-auto px-4 py-8 transition-all duration-150 ease-in-out relative ${
+      className={` mx-2 rounded-lg px-4 py-8 transition-all duration-150 ease-in-out relative ${
         selectedComponent === actualName
           ? "border-4 border-blue-500 rounded-lg shadow-lg "
           : ""
@@ -202,15 +226,15 @@ const DetailPage: React.FC<DetailPageProps> = ({
           </button>
         </div>
       ) : null}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-48">
         {/* Product Images Section */}
         <div className="space-y-4">
-          <div className="relative h-[500px] w-full rounded-lg overflow-hidden">
+          <div className="product-image">
             <Image
-              src={selectedImage || "/assets/images/pro3.jpg"}
+              src={selectedImage || "/assets/images/pro1.jpg"}
               alt={product.name}
-              fill
-              className="object-cover"
+              width={1000}
+              height={1000}
             />
           </div>
           <div className="flex gap-4 overflow-x-auto">
@@ -229,7 +253,7 @@ const DetailPage: React.FC<DetailPageProps> = ({
                     src={image.imageSrc || "/assets/images/pro3.jpg"}
                     alt={image.imageAlt}
                     fill
-                    className="object-cover"
+                    className="object-cover "
                   />
                 </div>
               ))}
@@ -254,7 +278,7 @@ const DetailPage: React.FC<DetailPageProps> = ({
             <div className="space-y-2">
               {product.status && (
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold">وضعیت:</span>
+                  <span className="font-semibold product-status">وضعیت:</span>
                   <span
                     className={`${
                       product.status === "available"
@@ -269,8 +293,10 @@ const DetailPage: React.FC<DetailPageProps> = ({
 
               {product.category && (
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold">دسته‌بندی:</span>
-                  <span>{product.category}</span>
+                  <span className="font-semibold product-category">
+                    دسته‌بندی:
+                  </span>
+                  <span className="product-category">{product.category}</span>
                 </div>
               )}
             </div>

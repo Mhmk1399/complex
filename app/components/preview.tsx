@@ -14,6 +14,7 @@ import { Layout } from "@/lib/types";
 import FooterContainer from "./sections/footer";
 import ProductList from "./sections/productList";
 import DetailPage from "./sections/detailPage";
+import { Collection } from "./sections/collection";
 
 // First update the PreviewProps interface
 interface PreviewProps {
@@ -47,6 +48,7 @@ export const Preview: React.FC<PreviewProps> = ({
     FooterContainer,
     ProductList,
     DetailPage,
+    Collection
   };
 
   return (
@@ -69,7 +71,7 @@ export const Preview: React.FC<PreviewProps> = ({
                 layout={layout}
                 actualName={componentName}
                 selectedComponent={selectedComponent}
-                setLayout={setLayout} productId={"674ab2bd09449ba0285ffb0f"}              />
+                setLayout={setLayout} productId={"674c044a7e265babdd061919"}              />
             </div>
           ) : null;
         })}

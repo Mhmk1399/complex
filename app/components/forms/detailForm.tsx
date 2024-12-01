@@ -8,6 +8,33 @@ interface DetailFormProps {
   layout: Layout;
   selectedComponent: string;
 }
+const ColorInput = ({
+  label,
+  name,
+  value,
+  onChange,
+}: {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) => (
+  <>
+    <label className="block mb-1" htmlFor={name}>
+      {label}
+    </label>
+    <div className="flex flex-col gap-3 items-center">
+      <input
+        type="color"
+        id={name}
+        name={name}
+        value={value || "#000000"}
+        onChange={onChange}
+        className="border p-0.5 rounded-full"
+      />
+    </div>
+  </>
+);
 
 export const DetailForm: React.FC<DetailFormProps> = ({
   setUserInputData,
@@ -18,24 +45,22 @@ export const DetailForm: React.FC<DetailFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     if (initialData) {
-      
       setUserInputData(initialData);
     }
-    
   }, []);
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     if (initialData) {
-      
       setUserInputData(initialData);
     }
-    
   }, [selectedComponent]);
 
-  const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleBlockSettingChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    console.log('Block Setting Change:', { name, value });
-    console.log('Previous State:', userInputData);
+    console.log("Block Setting Change:", { name, value });
+    console.log("Previous State:", userInputData);
     setUserInputData((prev: DetailPageSection) => {
       const newState = {
         ...prev,
@@ -47,15 +72,17 @@ export const DetailForm: React.FC<DetailFormProps> = ({
           },
         },
       };
-      console.log('New State:', newState);
+      console.log("New State:", newState);
       return newState;
     });
   };
 
-  const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSettingChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    console.log('Setting Change:', { name, value });
-    console.log('Previous State:', userInputData);
+    console.log("Setting Change:", { name, value });
+    console.log("Previous State:", userInputData);
     setUserInputData((prev: DetailPageSection) => {
       const newState = {
         ...prev,
@@ -64,7 +91,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
           [name]: value,
         },
       };
-      console.log('New State:', newState);
+      console.log("New State:", newState);
       return newState;
     });
   };
@@ -80,7 +107,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
           <div>
             <label className="block mb-1">عرض تصویر</label>
             <input
-              type="text"
+              type="range"
               name="imageWidth"
               value={userInputData?.setting?.imageWidth || "400"}
               onChange={handleSettingChange}
@@ -90,20 +117,20 @@ export const DetailForm: React.FC<DetailFormProps> = ({
           <div>
             <label className="block mb-1">ارتفاع تصویر</label>
             <input
-              type="text"
+              type="range"
               name="imageHeight"
               value={userInputData?.setting?.imageHeight || "500"}
-              onChange={handleBlockSettingChange}
+              onChange={handleSettingChange}
               className="w-full p-2 border rounded"
             />
           </div>
           <div>
             <label className="block mb-1">گردی گوشه‌های تصویر</label>
             <input
-              type="text"
+              type="range"
               name="imageRadius"
-              value={userInputData?.setting?.imageRadius || "20"}
-              onChange={handleBlockSettingChange}
+              value={userInputData?.setting?.imageRadius || "40"}
+              onChange={handleSettingChange}
               className="w-full p-2 border rounded"
             />
           </div>
@@ -115,13 +142,11 @@ export const DetailForm: React.FC<DetailFormProps> = ({
         <h3 className="font-semibold mb-3">تنظیمات نام محصول</h3>
         <div className="grid grid-cols-1 gap-4">
           <div>
-            <label className="block mb-1">رنگ نام محصول</label>
-            <input
-              type="color"
+            <ColorInput
+              label="رنگ نام محصول"
               name="productNameColor"
               value={userInputData?.setting?.productNameColor || "#FCA311"}
-              onChange={handleBlockSettingChange}
-              className="w-full p-2 border rounded"
+              onChange={handleSettingChange}
             />
           </div>
           <div>
@@ -130,7 +155,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
               type="range"
               name="productNameFontSize"
               value={userInputData?.setting?.productNameFontSize || "30"}
-              onChange={handleBlockSettingChange}
+              onChange={handleSettingChange}
               className="w-full p-2 border rounded"
             />
           </div>
@@ -139,13 +164,31 @@ export const DetailForm: React.FC<DetailFormProps> = ({
             <select
               name="productNameFontWeight"
               value={userInputData?.setting?.productNameFontWeight || "bold"}
-              onChange={handleBlockSettingChange}
+              onChange={handleSettingChange}
               className="w-full p-2 border rounded"
             >
               <option value="normal">معمولی</option>
               <option value="bold">ضخیم</option>
               <option value="600">نیمه ضخیم</option>
             </select>
+          </div>
+          <div>
+            <ColorInput
+              label="رنگ  توضیحات محصول"
+              name="descriptionColor"
+              value={userInputData?.setting?.descriptionColor || "#FCA311"}
+              onChange={handleSettingChange}
+            />
+          </div>
+          <div>
+            <label className="block mb-1">اندازه فونت توضیحات محصول</label>
+            <input
+              type="range"
+              name="descriptionFontSize"
+              value={userInputData?.setting?.descriptionFontSize || "30"}
+              onChange={handleSettingChange}
+              className="w-full p-2 border rounded"
+            />
           </div>
         </div>
       </div>
@@ -155,13 +198,11 @@ export const DetailForm: React.FC<DetailFormProps> = ({
         <h3 className="font-semibold mb-3">تنظیمات قیمت</h3>
         <div className="grid grid-cols-1 gap-4">
           <div>
-            <label className="block mb-1">رنگ قیمت</label>
-            <input
-              type="color"
+            <ColorInput
+              label="رنگ متن قیمت"
               name="priceColor"
-              value={userInputData?.setting?.priceColor || "#2ECC71"}
-              onChange={handleBlockSettingChange}
-              className="w-full p-2 border rounded"
+              value={userInputData?.setting?.priceColor || "#FCA311"}
+              onChange={handleSettingChange}
             />
           </div>
           <div>
@@ -170,7 +211,58 @@ export const DetailForm: React.FC<DetailFormProps> = ({
               type="range"
               name="priceFontSize"
               value={userInputData?.setting?.priceFontSize || "24"}
-              onChange={handleBlockSettingChange}
+              onChange={handleSettingChange}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* STATUS Settings */}
+
+      <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+        <h3 className="font-semibold mb-3">تنظیمات وضعیت</h3>
+        <div className="grid grid-cols-1 gap-4">
+          <div>
+            <ColorInput
+              label="رنگ متن وضعیت"
+              name="statusColor"
+              value={userInputData?.setting?.statusColor || "#FCA311"}
+              onChange={handleSettingChange}
+            />
+          </div>
+          <div>
+            <label className="block mb-1">اندازه فونت وضعیت</label>
+            <input
+              type="range"
+              name="statusFontSize"
+              value={userInputData?.setting?.statusFontSize || "24"}
+              onChange={handleSettingChange}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+        </div>
+      </div>
+      {/* /* {category setting} */}
+
+      <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+        <h3 className="font-semibold mb-3">تنظیمات دسته بندی</h3>
+        <div className="grid grid-cols-1 gap-4">
+          <div>
+            <ColorInput
+              label="رنگ متن دسته بندی"
+              name="categoryColor"
+              value={userInputData?.setting?.categoryColor || "#FCA311"}
+              onChange={handleSettingChange}
+            />
+          </div>
+          <div>
+            <label className="block mb-1">اندازه فونت دسته بندی</label>
+            <input
+              type="range"
+              name="categoryFontSize"
+              value={userInputData?.setting?.categoryFontSize || "24"}
+              onChange={handleSettingChange}
               className="w-full p-2 border rounded"
             />
           </div>
@@ -182,23 +274,19 @@ export const DetailForm: React.FC<DetailFormProps> = ({
         <h3 className="font-semibold mb-3">تنظیمات دکمه</h3>
         <div className="grid grid-cols-1 gap-4">
           <div>
-            <label className="block mb-1">رنگ پس‌زمینه دکمه</label>
-            <input
-              type="color"
+            <ColorInput
+              label="  رنگ پس زمینه دکمه"
               name="btnBackgroundColor"
-              value={userInputData?.setting?.btnBackgroundColor || "#3498DB"}
-              onChange={handleBlockSettingChange}
-              className="w-full p-2 border rounded"
+              value={userInputData?.setting?.btnBackgroundColor || "#FCA311"}
+              onChange={handleSettingChange}
             />
           </div>
           <div>
-            <label className="block mb-1">رنگ متن دکمه</label>
-            <input
-              type="color"
+            <ColorInput
+              label="  رنگ  متن دکمه"
               name="btnTextColor"
-              value={userInputData?.setting?.btnTextColor || "#FFFFFF"}
-              onChange={handleBlockSettingChange}
-              className="w-full p-2 border rounded"
+              value={userInputData?.setting?.btnTextColor || "#FCA311"}
+              onChange={handleSettingChange}
             />
           </div>
         </div>
@@ -208,13 +296,11 @@ export const DetailForm: React.FC<DetailFormProps> = ({
       <div className="mb-6 p-4 bg-gray-50 rounded-lg">
         <h3 className="font-semibold mb-3">تنظیمات پس‌زمینه</h3>
         <div>
-          <label className="block mb-1">رنگ پس‌زمینه</label>
-          <input
-            type="color"
+          <ColorInput
+            label="رنگ   پس زمینه"
             name="backgroundColor"
-            value={userInputData?.setting?.backgroundColor || "#FFFFFF"}
+            value={userInputData?.setting?.backgroundColor || "#FCA311"}
             onChange={handleSettingChange}
-            className="w-full p-2 border rounded"
           />
         </div>
       </div>
@@ -236,7 +322,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
                     : "حاشیه از پایین"}
                 </label>
                 <input
-                  type="number"
+                  type="range"
                   name={spacing}
                   value={userInputData?.setting?.[spacing] || "20"}
                   onChange={handleSettingChange}
