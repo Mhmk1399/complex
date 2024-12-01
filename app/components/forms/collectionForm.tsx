@@ -46,38 +46,51 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     if (initialData) {
+      setUserInputData(initialData);
+    }
+  }, []);
+
+  useEffect(() => {
+    const initialData = Compiler(layout, selectedComponent)[0];
+    if (initialData) {
       setLoaded(true);
       setUserInputData(initialData);
     }
   }, [selectedComponent]);
 
-  const handleProductChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    const { name, value } = e.target;
-    setUserInputData((prev: CollectionSection) => ({
-      ...prev,
-      blocks: {
-        ...prev.blocks,
-        products: prev.blocks.products.map((product, i) =>
-          i === index ? { ...product, [name]: value } : product
-        ),
-      },
-    }));
-  };
+  // const handleProductChange = (
+  //   e: React.ChangeEvent<HTMLInputElement>,
+  //   index: number
+  // ) => {
+  //   const { name, value } = e.target;
+  //   setUserInputData((prev: CollectionSection) => ({
+  //     ...prev,
+  //     blocks: {
+  //       ...prev.blocks,
+  //       products: prev.blocks.products.map((product, i) =>
+  //         i === index ? { ...product, [name]: value } : product
+  //       ),
+  //     },
+  //   }));
+  // };
 
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setUserInputData((prev: CollectionSection) => ({
-      ...prev,
-      setting: {
-        ...prev.setting,
-        [name]: value.includes("px") ? value : value,
-      },
-    }));
+    console.log("Setting Change:", { name, value });
+    console.log("Previous State:", userInputData);
+    setUserInputData((prev: CollectionSection) => {
+      const newState = {
+        ...prev,
+        setting: {
+          ...prev.setting,
+          [name]: value,
+        },
+      };
+      console.log("New State:", newState);
+      return newState;
+    });
   };
 
   return (
@@ -86,10 +99,10 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
         <p>Loading...</p>
       ) : (
         <div className="p-6 max-w-4xl mx-auto" dir="rtl">
-          <h2 className="text-xl font-bold mb-4">تنظیمات مجموعه محصولات</h2>
+          {/* <h2 className="text-xl font-bold mb-4">تنظیمات مجموعه محصولات</h2> */}
 
           {/* Products */}
-          {userInputData?.blocks?.products?.map((product, index) => (
+          {/* {userInputData?.blocks?.products?.map((product, index) => (
             <div key={index} className="mb-6 p-4 border rounded">
               <h3 className="font-semibold mb-2">محصول {index + 1}</h3>
               <div className="space-y-4">
@@ -149,51 +162,78 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
                 </div>
               </div>
             </div>
-          ))}
+          ))} */}
 
           {/* Style Settings */}
           <div className="mb-6">
+            <h2 className="text-xl font-bold mb-4">تنظیمات سربرگ مجموعه</h2>
+            <div className="grid md:grid-cols-1 gap-4">
+              <label> سایز سربرگ</label>
+              <input
+                type="range"
+                name="headingFontSize"
+                value={userInputData?.setting?.headingFontSize || 24}
+                onChange={handleSettingChange}
+              />
+              <label> سایز فونت سربرگ</label>
+              <select
+                name="headingFontWeight"
+                value={userInputData?.setting?.headingFontWeight || "normal"}
+                onChange={handleSettingChange}
+                className="w-full p-2 border rounded"
+              >
+                <option value="normal">نرمال</option>
+                <option value="bold">ضخیم</option>
+                <option value="400">نازک</option>
+              </select>
+              <ColorInput
+                label="رنگ سربرگ"
+                name="headingColor"
+                value={userInputData?.setting?.headingColor || "#000000"}
+                onChange={handleSettingChange}
+              />
+            </div>
             <h3 className="font-semibold mb-2">تنظیمات ظاهری</h3>
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid md:grid-cols-1 gap-4">
               <ColorInput
                 label="رنگ پس زمینه"
                 name="backgroundColor"
-                value={userInputData?.setting?.backgroundColor ?? "#ffffff"}
+                value={userInputData?.setting?.backgroundColor || "#ffffff"}
                 onChange={handleSettingChange}
               />
               <ColorInput
                 label="رنگ پس زمینه کارت"
                 name="cardBackground"
-                value={userInputData?.setting?.cardBackground ?? "#ffffff"}
+                value={userInputData?.setting?.cardBackground || "#ffffff"}
                 onChange={handleSettingChange}
               />
               <ColorInput
                 label="رنگ نام محصول"
                 name="productNameColor"
-                value={userInputData?.setting?.productNameColor ?? "#000000"}
+                value={userInputData?.setting?.productNameColor || "#000000"}
                 onChange={handleSettingChange}
               />
               <ColorInput
                 label="رنگ قیمت"
                 name="priceColor"
-                value={userInputData?.setting?.priceColor ?? "#000000"}
+                value={userInputData?.setting?.priceColor || "#000000"}
                 onChange={handleSettingChange}
               />
               <ColorInput
                 label="رنگ متن دکمه"
                 name="btnTextColor"
-                value={userInputData?.setting?.btnTextColor ?? "#ffffff"}
+                value={userInputData?.setting?.btnTextColor || "#ffffff"}
                 onChange={handleSettingChange}
               />
               <ColorInput
                 label="رنگ پس زمینه دکمه"
                 name="btnBackgroundColor"
-                value={userInputData?.setting?.btnBackgroundColor ?? "#000000"}
+                value={userInputData?.setting?.btnBackgroundColor || "#000000"}
                 onChange={handleSettingChange}
               />
             </div>
 
-            {/* Grid Settings */}
+            {/* Grid Settings
             <div className="mt-4">
               <label className="block mb-1">تعداد ستون‌ها</label>
               <input
@@ -201,11 +241,11 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
                 name="gridColumns"
                 min="1"
                 max="4"
-                value={userInputData?.setting?.gridColumns ?? 3}
+                value={userInputData?.setting?.gridColumns || 3}
                 onChange={handleSettingChange}
                 className="w-full"
               />
-            </div>
+            </div> */}
 
             {/* Border Radius Settings */}
             <div className="mt-4">
@@ -216,7 +256,7 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
                 min="0"
                 max="30"
                 value={parseInt(
-                  userInputData?.setting?.cardBorderRadius ?? "8"
+                  userInputData?.setting?.cardBorderRadius || "8"
                 )}
                 onChange={handleSettingChange}
                 className="w-full"
@@ -230,7 +270,7 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
                 name="imageRadius"
                 min="0"
                 max="30"
-                value={parseInt(userInputData?.setting?.imageRadius ?? "8")}
+                value={parseInt(userInputData?.setting?.imageRadius || "8")}
                 onChange={handleSettingChange}
                 className="w-full"
               />
@@ -242,7 +282,7 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
             <h3 className="font-semibold mb-3">تنظیمات فاصله‌گذاری</h3>
             <div className="grid grid-cols-1 gap-4">
               {["paddingTop", "paddingBottom", "marginTop", "marginBottom"].map(
-                (spacing, index) => (
+                (spacing, index: number) => (
                   <div key={index}>
                     <label className="block mb-1">
                       {spacing === "paddingTop"

@@ -52,19 +52,12 @@
           "paddingBottom": "20",
           "marginTop": "10",
           "marginBottom": "10",
-<<<<<<< Updated upstream
           "backgroundColor": "blue",
           "color": "#0000FF",
           "fontSize": 16
-=======
-          "backgroundColor": "رنگ",
-          "color": "#0000FF"
->>>>>>> Stashed changes
         }
       }
     ],
-    "order": [
-      "ProductList"
-    ]
+    "order": ["ProductList"]
   }
 }

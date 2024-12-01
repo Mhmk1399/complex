@@ -2,6 +2,7 @@ import { CollectionBlockSetting, CollectionSection, Layout } from "@/lib/types";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Delete } from "../C-D";
+import Link from "next/link";
 
 interface CollectionProps {
   productId: string;
@@ -21,18 +22,27 @@ interface ProductData {
 }
 
 const CollectionWrapper = styled.div<{ $setting: CollectionBlockSetting }>`
-  padding: ${(props) => props.$setting?.paddingTop}px
-    ${(props) => props.$setting?.paddingBottom}px;
-  margin: ${(props) => props.$setting?.marginTop}px
-    ${(props) => props.$setting?.marginBottom}px;
+  padding-top: ${(props) => props.$setting?.paddingTop}px;
+  padding-bottom: ${(props) => props.$setting?.paddingBottom}px;
+  margin-top: ${(props) => props.$setting?.marginTop}px;
+  margin-bottom: ${(props) => props.$setting?.marginBottom}px;
   background-color: ${(props) => props.$setting?.backgroundColor};
+`;
+const Heading = styled.h2<{ $setting: CollectionBlockSetting }>`
+  color: ${(props) => props.$setting?.headingColor};
+  font-size: ${(props) => props.$setting?.headingFontSize}px;
+  font-weight: ${(props) => props.$setting?.headingFontWeight};
+  text-align: center;
 `;
 
 const ProductGrid = styled.div<{ $setting: CollectionBlockSetting }>`
   display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
+  gap: 10px;
   padding: 20px;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const ProductCard = styled.div<{
@@ -40,18 +50,27 @@ const ProductCard = styled.div<{
   $isLarge?: boolean;
 }>`
   background: ${(props) => props.$setting.cardBackground};
-  border-radius: ${(props) => props.$setting.cardBorderRadius};
+  border-radius: ${(props) => props.$setting.cardBorderRadius}px;
   overflow: hidden;
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  &:hover {
+    transform: scale(0.99);
+  }
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  width: ${(props) =>
-    props.$isLarge ? "calc(50% - 12px)" : "calc(25% - 12px)"};
+  width: ${(props) => (props.$isLarge ? "100%" : "calc(49% - 100px)")};
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const ProductImage = styled.img<{ $setting: CollectionBlockSetting }>`
   width: 100%;
   height: 300px;
   object-fit: cover;
-  border-radius: ${(props) => props.$setting.imageRadius};
+  border-radius: ${(props) => props.$setting.imageRadius}px;
 `;
 
 const ProductInfo = styled.div`
@@ -68,7 +87,7 @@ const ProductPrice = styled.div<{ $setting: CollectionBlockSetting }>`
   margin: 8px 0;
 `;
 
-const BuyButton = styled.button<{ $setting: CollectionBlockSetting }>`
+const BuyButton = styled(Link)<{ $setting: CollectionBlockSetting }>`
   background: ${(props) => props.$setting.btnBackgroundColor};
   color: ${(props) => props.$setting.btnTextColor};
   border: none;
@@ -90,29 +109,37 @@ export const Collection: React.FC<CollectionProps> = ({
   setLayout,
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [products, setProducts] = useState<ProductData[]>([]);
+  // const [products, setProducts] = useState<ProductData[]>([]);
 
+  const [collections, setCollections] = useState<any[]>([]);
+  const [selectedCollection, setSelectedCollection] = useState("all");
+  const [filteredProducts, setFilteredProducts] = useState<ProductData[]>([]);
+
+  // Modify your useEffect to handle collections
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("/api/collection", {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
-
+        const response = await fetch("/api/collections");
         const data = await response.json();
 
-        if (data?.products) {
-          const formattedProducts = data.products.map((product:{}) => ({
-            id: product._id,
-            name: product.name,
-            price: product.price,
-            imageSrc: product.images?.imageSrc || "/assets/images/pro2.jpg",
-            imageAlt: product.images?.imageAlt || product.name,
-            btnText: "خرید محصول",
-          }));
+        setCollections(data.collections);
 
-          setProducts(formattedProducts);
+        // Set initial filtered products from 'all' collection
+        const allCollection = data.collections.find(
+          (c: any) => c.name === "all"
+        );
+        if (allCollection) {
+          const formattedProducts = allCollection.products.map(
+            (product: any) => ({
+              id: product._id,
+              name: product.name,
+              price: product.price,
+              imageSrc: product.images?.imageSrc || "/assets/images/pro2.jpg",
+              imageAlt: product.images?.imageAlt || product.name,
+              btnText: "خرید محصول",
+            })
+          );
+          setFilteredProducts(formattedProducts);
         }
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -121,95 +148,148 @@ export const Collection: React.FC<CollectionProps> = ({
 
     fetchProducts();
   }, []);
+  const handleCollectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const collectionName = e.target.value;
+    setSelectedCollection(collectionName);
+
+    const selectedCollectionData = collections.find(
+      (c) => c.name === collectionName
+    );
+    if (selectedCollectionData) {
+      const formattedProducts = selectedCollectionData.products.map(
+        (product: any) => ({
+          id: product._id,
+          name: product.name,
+          price: product.price,
+          imageSrc: product.images?.imageSrc || "/assets/images/pro2.jpg",
+          imageAlt: product.images?.imageAlt || product.name,
+          btnText: "خرید محصول",
+        })
+      );
+      setFilteredProducts(formattedProducts);
+    }
+  };
 
   const sectionData = layout?.sections?.children?.sections?.find(
     (section) => section.type === actualName
   ) as CollectionSection;
 
-  console.log(sectionData);
+  // console.log(sectionData);
 
   return (
-    <CollectionWrapper
-      $setting={sectionData}
-      onClick={() => {
-        setSelectedComponent(actualName);
-      }}
-      className={`transition-all duration-150 ease-in-out relative ${
-        selectedComponent === actualName
-          ? "border-4 border-blue-500 rounded-2xl shadow-lg "
-          : ""
-      }`}
-    >
-      {showDeleteModal && (
-        <div className="fixed inset-0  bg-black bg-opacity-70 z-50 flex items-center justify-center ">
-          <div className="bg-white p-8 rounded-lg">
-            <h3 className="text-lg font-bold mb-4">
-              مطمئن هستید؟
-              <span className="text-blue-400 font-bold mx-1">
-                {actualName}
-              </span>{" "}
-              آیا از حذف
-            </h3>
-            <div className="flex gap-4 justify-end">
-              <button
-                className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
-                onClick={() => setShowDeleteModal(false)}
-              >
-                انصراف
-              </button>
-              <button
-                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 "
-                onClick={() => {
-                  Delete(actualName, layout, setLayout);
-                  setShowDeleteModal(false);
-                }}
-              >
-                حذف
-              </button>
+    <>
+      <Heading $setting={sectionData.setting}>
+        {sectionData.blocks.heading}
+      </Heading>
+      <div className="flex justify-center px-6 my-4">
+        <select
+          value={selectedCollection}
+          onChange={handleCollectionChange}
+          className="p-2 border rounded-lg bg-white shadow-sm"
+          style={{
+            color: sectionData.setting.headingColor,
+            borderColor: sectionData.setting.btnBackgroundColor,
+          }}
+        >
+          {collections.map((collection) => (
+            <option key={collection._id} value={collection.name}>
+              {collection.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <CollectionWrapper
+        dir="rtl"
+        $setting={sectionData.setting}
+        onClick={() => {
+          setSelectedComponent(actualName);
+        }}
+        className={`transition-all duration-150 ease-in-out relative ${
+          selectedComponent === actualName
+            ? "border-4 border-blue-500 rounded-2xl shadow-lg "
+            : ""
+        }`}
+      >
+        {showDeleteModal && (
+          <div className="fixed inset-0  bg-black bg-opacity-70 z-50 flex items-center justify-center">
+            <div className="bg-white p-8 rounded-lg">
+              <h3 className="text-lg font-bold mb-4">
+                آیا از حذف
+                <span className="text-blue-400 font-bold mx-1">
+                  {actualName}
+                </span>
+                مطمئن هستید؟
+              </h3>
+              <div className="flex flex-row-reverse gap-4 justify-end">
+                <button
+                  className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+                  onClick={() => setShowDeleteModal(false)}
+                >
+                  انصراف
+                </button>
+                <button
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 "
+                  onClick={() => {
+                    Delete(actualName, layout, setLayout);
+                    setShowDeleteModal(false);
+                  }}
+                >
+                  حذف
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {actualName === selectedComponent ? (
-        <div className="absolute w-fit -top-5 -left-1 z-10 flex ">
-          <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
-            {actualName}
+        {actualName === selectedComponent ? (
+          <div className="absolute w-fit -top-5 -left-1 z-10 flex flex-row-reverse ">
+            <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
+              {actualName}
+            </div>
+            <button
+              className="font-extrabold text-xl hover:bg-blue-500 bg-red-500 pb-1 rounded-r-lg px-3 text-white transform transition-all ease-in-out duration-300"
+              onClick={() => setShowDeleteModal(true)}
+            >
+              x
+            </button>
           </div>
-          <button
-            className="font-extrabold text-xl hover:bg-blue-500 bg-red-500 pb-1 rounded-r-lg px-3 text-white transform transition-all ease-in-out duration-300"
-            onClick={() => setShowDeleteModal(true)}
-          >
-            x
-          </button>
-        </div>
-      ) : null}
+        ) : null}
 
-      <ProductGrid $setting={sectionData}>
-        {products.slice(0, 3).map((product, index) => (
-          <ProductCard
-            key={product.id}
-            $setting={sectionData}
-            $isLarge={index === 0}
-            style={
-              index === 0 ? { height: "100%" } : { height: "calc(50% - 12px)" }
-            }
-          >
-            <ProductImage
-              src={product.imageSrc}
-              alt={product.imageAlt}
-              $setting={sectionData}
-            />
-            <ProductInfo>
-              <ProductName $setting={sectionData}>{product.name}</ProductName>
-              <ProductPrice $setting={sectionData}>
-                {product.price}
-              </ProductPrice>
-              <BuyButton $setting={sectionData}>{product.btnText}</BuyButton>
-            </ProductInfo>
-          </ProductCard>
-        ))}
-      </ProductGrid>
-    </CollectionWrapper>
+        <ProductGrid $setting={sectionData.setting}>
+          {filteredProducts.slice(0, 3).map((product, index) => (
+            <ProductCard
+              key={product.id}
+              $setting={sectionData.setting}
+              $isLarge={index === 0}
+              style={
+                index === 0
+                  ? { height: "100%" }
+                  : { height: "calc(50% - 10px)" }
+              }
+            >
+              <ProductImage
+                src={product.imageSrc || "/assets/images/pro2.jpg"}
+                alt={product.imageAlt}
+                $setting={sectionData.setting}
+              />
+              <ProductInfo>
+                <ProductName $setting={sectionData.setting}>
+                  {product.name}
+                </ProductName>
+                <ProductPrice $setting={sectionData.setting}>
+                  {product.price}
+                </ProductPrice>
+                <BuyButton
+                  href={`/detailpages/${product.id}`}
+                  $setting={sectionData.setting}
+                >
+                  {product.btnText}
+                </BuyButton>
+              </ProductInfo>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </CollectionWrapper>
+    </>
   );
 };
