@@ -528,9 +528,9 @@
       "setting": {
         "paddingTop": "20",
         "paddingBottom": "20",
-        "marginBottom": "0",
-        "marginTop": "0",
-        "backgroundColor": "#e4e4e4"
+        "marginBottom": "10",
+        "marginTop": "10",
+        "backgroundColor": "#ffffff"
       }
     }
   },

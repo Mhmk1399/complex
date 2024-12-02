@@ -12,13 +12,13 @@ interface ProductListProps {
   selectedComponent: string;
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
 }
-const defaultProduct: ProductCardData = {
-  images: [{ imageSrc: "/assets/images/pro2.jpg", imageAlt: "Default Image" }],
-  name: "محصول پیش‌فرض",
-  description: "توضیحات پیش‌فرض محصول",
-  price: "0",
-  id: "0",
-};
+// const defaultProduct: ProductCardData = {
+//   images: [{ imageSrc: "/assets/images/pro2.jpg", imageAlt: "Default Image" }],
+//   name: "محصول پیش‌فرض",
+//   description: "توضیحات پیش‌فرض محصول",
+//   price: "0",
+//   id: "0",
+// };
 
 const SectionProductList = styled.section<{
   $data: ProductSection;

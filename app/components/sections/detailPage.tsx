@@ -22,41 +22,40 @@ interface DetailPageProps {
 const SectionDetailPage = styled.div<{
   $data: DetailPageSection;
 }>`
-  padding-top: ${(props) => props.$data?.setting?.paddingTop}px;
-  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom}px;
-  margin-top: ${(props) => props.$data?.setting?.marginTop}px;
-  margin-bottom: ${(props) => props.$data?.setting?.marginBottom}px;
-  background-color: ${(props) => props.$data?.setting?.backgroundColor};
-
+  padding-top: ${(props) => props.$data?.setting?.paddingTop || 0}px;
+  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || 0}px;
+  margin-top: ${(props) => props.$data?.setting?.marginTop || 0}px;
+  margin-bottom: ${(props) => props.$data?.setting?.marginBottom || 0}px;
+  background-color: ${(props) => props.$data?.setting?.backgroundColor ||"#ffffff"};
 
   .product-name {
-    color: ${(props) => props.$data?.setting?.productNameColor};
-    font-size: ${(props) => props.$data?.setting?.productNameFontSize}px;
-    font-weight: ${(props) => props.$data?.setting?.productNameFontWeight};
+    color: ${(props) => props.$data?.setting?.productNameColor || "#000000"};
+    font-size: ${(props) => props.$data?.setting?.productNameFontSize || 20}px;
+    font-weight: ${(props) => props.$data?.setting?.productNameFontWeight || "bold"};;
   }
   .product-category {
-    color: ${(props) => props.$data?.setting?.categoryColor};
-    font-size: ${(props) => props.$data?.setting?.categoryFontSize}px;
+    color: ${(props) => props.$data?.setting?.categoryColor || "#000000"};
+    font-size: ${(props) => props.$data?.setting?.categoryFontSize || 20}px;
   }
 
   .product-price {
-    color: ${(props) => props.$data?.setting?.priceColor};
-    font-size: ${(props) => props.$data?.setting?.priceFontSize}px;
+    color: ${(props) => props.$data?.setting?.priceColor ||  "#000000"};;
+    font-size: ${(props) => props.$data?.setting?.priceFontSize || 12}px;
     @media (max-width: 768px) {
       font-size: 30px;
     }
   }
 
   .product-description {
-    color: ${(props) => props.$data?.setting?.descriptionColor};
-    font-size: ${(props) => props.$data?.setting?.descriptionFontSize}px;
+    color: ${(props) => props.$data?.setting?.descriptionColor || "#000000"};
+    font-size: ${(props) => props.$data?.setting?.descriptionFontSize || 16}px;
     @media (max-width: 768px) {
       font-size: 20px;
     }
   }
   .product-status {
-    color: ${(props) => props.$data?.setting?.statusColor};
-    font-size: ${(props) => props.$data?.setting?.statusFontSize}px;
+    color: ${(props) => props.$data?.setting?.statusColor || "#000000"};
+    font-size: ${(props) => props.$data?.setting?.statusFontSize || 10}px;
     @media (max-width: 768px) {
       font-size: 20px;
     }
@@ -65,7 +64,7 @@ const SectionDetailPage = styled.div<{
   .add-to-cart-button {
     background-color: ${(props) =>
       props.$data?.setting?.btnBackgroundColor || "#3498DB"};
-    color: ${(props) => props.$data?.setting?.btnTextColor};
+    color: ${(props) => props.$data?.setting?.btnTextColor || "#FFFFFF"};
     transition: transform 0.5s ease;
     &:hover {
       transform: translateY(-2px);
@@ -75,9 +74,9 @@ const SectionDetailPage = styled.div<{
   }
 
   .product-image {
-    width: ${(props) => props.$data?.setting?.imageWidth}0px;
-    height: ${(props) => props.$data?.setting?.imageHeight}0px;
-    border-radius: ${(props) => props.$data?.setting?.imageRadius}px;
+    width: ${(props) => props.$data?.setting?.imageWidth || 300}0px;
+    height: ${(props) => props.$data?.setting?.imageHeight || 200}0px;
+    border-radius: ${(props) => props.$data?.setting?.imageRadius || 10}px;
     object-fit: cover;
     overflow: hidden;
     position: relative;
@@ -163,10 +162,14 @@ const DetailPage: React.FC<DetailPageProps> = ({
       </div>
     );
   }
-  const sectionData = layout?.sections?.children?.sections?.find((section) => {
-    console.log("Comparing:", section.type, actualName);
+  const sectionData = (layout?.sections?.children?.sections?.find((section) => {
     return section.type === actualName;
-  }) as DetailPageSection;
+}) as DetailPageSection) || {
+    blocks: {},
+    setting: {}, // Provide default empty settings
+    type: 'DetailPage'
+};
+
 
   console.log("Section Data:", sectionData);
   if (!sectionData) {

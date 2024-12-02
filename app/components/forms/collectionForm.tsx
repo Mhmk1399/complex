@@ -8,6 +8,13 @@ interface CollectionFormProps {
   layout: Layout;
   selectedComponent: string;
 }
+const spacingProperties = [
+  "paddingTop",
+  "paddingBottom",
+  "marginTop",
+  "marginBottom",
+] as const;
+type SpacingProperty = (typeof spacingProperties)[number];
 
 const ColorInput = ({
   label,
@@ -281,28 +288,26 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
           <div className="mb-6 p-4 bg-gray-50 rounded-lg">
             <h3 className="font-semibold mb-3">تنظیمات فاصله‌گذاری</h3>
             <div className="grid grid-cols-1 gap-4">
-              {["paddingTop", "paddingBottom", "marginTop", "marginBottom"].map(
-                (spacing, index: number) => (
-                  <div key={index}>
-                    <label className="block mb-1">
-                      {spacing === "paddingTop"
-                        ? "فاصله از بالا"
-                        : spacing === "paddingBottom"
-                        ? "فاصله از پایین"
-                        : spacing === "marginTop"
-                        ? "حاشیه از بالا"
-                        : "حاشیه از پایین"}
-                    </label>
-                    <input
-                      type="range"
-                      name={spacing}
-                      value={userInputData?.setting?.[spacing] || "20"}
-                      onChange={handleSettingChange}
-                      className="w-full p-2 border rounded"
-                    />
-                  </div>
-                )
-              )}
+              {spacingProperties.map((spacing: SpacingProperty) => (
+                <div key={spacing}>
+                  <label className="block mb-1">
+                    {spacing === "paddingTop"
+                      ? "فاصله از بالا"
+                      : spacing === "paddingBottom"
+                      ? "فاصله از پایین"
+                      : spacing === "marginTop"
+                      ? "حاشیه از بالا"
+                      : "حاشیه از پایین"}
+                  </label>
+                  <input
+                    type="range"
+                    name={spacing}
+                    value={userInputData?.setting[spacing] || "20"}
+                    onChange={handleSettingChange}
+                    className="w-full p-2 border rounded"
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </div>
