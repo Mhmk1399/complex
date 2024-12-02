@@ -50,6 +50,7 @@ const SectionBlogList = styled.section<{
 const BlogCard = styled.div`
   background: white;
   border-radius: 8px;
+  margin: 0 8px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease-in-out;
@@ -78,13 +79,13 @@ const BlogCard = styled.div`
   .meta {
     display: flex;
     justify-content: space-between;
-    color: #666;
+    color: #000000;
     font-size: 0.875rem;
     margin-bottom: 10px;
   }
 
   .description {
-    color: #444;
+    color: #000000;
     margin-bottom: 15px;
   }
 
@@ -123,19 +124,16 @@ const BlogList: React.FC<BlogListProps> = ({
 
         const data = await response.json();
 
-
-        if (data?.blogs) {
           const blogInfo = data.blogs.map((blog: BlogData) => ({
             ...blog,
-            btnText: "مطالعه بیشتر",
+            // btnText: "مطالعه بیشتر",
             btnLink: `/blog/${blog.blogId}`,
             imageSrc: "/assets/images/pro3.jpg", // Add a default image
-            imageAlt: blog.title
+            imageAlt: blog.title,
+            description: blog.description,
           }));
-          setBlogData(blogInfo);
-          console.log(blogInfo);
-
-        }
+        setBlogData(blogInfo);
+        console.log(data);
       } catch (error) {
         console.error("Error fetching blogs:", error);
       }
@@ -206,10 +204,11 @@ const BlogList: React.FC<BlogListProps> = ({
       )}
 
       {blogData.map((blog, index) => (
+        // Inside BlogCard component:
         <BlogCard key={`blog-${blog.blogId}-${index}`}>
           {blog.imageSrc ? (
             <Image
-              src={blog.imageSrc}
+              src={blog.imageSrc || "/assets/images/pro2.jpg"}
               alt={blog.imageAlt || "Blog image"}
               width={1000}
               height={800}
@@ -218,12 +217,24 @@ const BlogList: React.FC<BlogListProps> = ({
           <div className="content">
             <h2 className="title">{blog.title}</h2>
             <div className="meta">
-              <span>{blog.author}</span>
+              {/* Display all available author info */}
+              <span>{blog.author}نویسنده : </span>
               <span>{blog.date}</span>
             </div>
-            <p className="description">{blog.description}</p>
+            {/* Display any text content available */}
+            {Object.entries(blog)
+              .filter(
+                ([key, value]) =>
+                  typeof value === "string" && !["title"].includes(key)
+              )
+              .map(([key, value]) => (
+                <p key={key} className="description mb-2">
+                  <span className="font-bold">{key}: </span>
+                  {value}
+                </p>
+              ))}
             <a href={blog.btnLink} className="read-more">
-              {blog.btnText}
+              {blog.btnText || "مطالعه بیشتر"}
             </a>
           </div>
         </BlogCard>
