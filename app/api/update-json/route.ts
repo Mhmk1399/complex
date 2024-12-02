@@ -46,11 +46,10 @@ function fuzzyMatch(input: string): any {
   const result = fuse.search(input);
   console.log('Fuzzy match result:', result);
   if (result.length) {
-    return result[0].item.output;
+    return (result[0].item as { output: any }).output;
   }
   return null;
-}
-function parseInputWithRegex(input: string) {
+}function parseInputWithRegex(input: string) {
   const updates: { [key: string]: string | number } = {};
 
   const regexMap = {
