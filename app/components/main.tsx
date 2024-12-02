@@ -61,6 +61,7 @@ export const Main = () => {
           children: Store.children as StoreChildren,
         },
       }));
+      console.log(layout);
     } else if (selectedRoute === "BlogList") {
       setLayout((prevLayout: Layout) => ({
         ...prevLayout,
@@ -69,6 +70,8 @@ export const Main = () => {
           children: Blog.children as BlogChildren,
         },
       }));
+      
+      
     } else {
       setLayout((prevLayout) => ({
         ...prevLayout,
@@ -78,6 +81,8 @@ export const Main = () => {
         },
       }));
     }
+    console.log(layout);
+    
   }, [selectedRoute]);
 
   // const handleSave = async () => {

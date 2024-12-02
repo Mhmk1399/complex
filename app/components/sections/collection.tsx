@@ -173,6 +173,9 @@ export const Collection: React.FC<CollectionProps> = ({
   const sectionData = layout?.sections?.children?.sections?.find(
     (section) => section.type === actualName
   ) as CollectionSection;
+  if (!sectionData?.setting) {
+    return null; // or return a loading state/placeholder
+  }
 
   // console.log(sectionData);
 
