@@ -16,8 +16,7 @@ const FooterContainer = styled.footer<{ $data: FooterSection }>`
   margin-top: ${(props) => props.$data?.setting?.marginTop || "0"}px;
   margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "0"}px;
 
-  background-color: ${(props) =>
-    props.$data?.setting?.backgroundColor || "#333"};
+  background-color: ${(props) => props.$data?.setting?.backgroundColor};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,6 +41,7 @@ const FooterDescription = styled.p<{ $data: FooterSection }>`
   color: ${(props) =>
     props.$data?.blocks?.setting?.descriptionColor || "#ffffff"};
   padding: 0px 50px;
+  min-height: 100%;
 `;
 
 const SocialLinks = styled.div`
@@ -88,6 +88,10 @@ const Footer: React.FC<FooterProps> = ({
 }) => {
   const sectionData = layout?.sections?.sectionFooter as FooterSection;
 
+  if (!sectionData) {
+    return null;
+  }
+
   const {
     text,
     links,
@@ -107,12 +111,11 @@ const Footer: React.FC<FooterProps> = ({
         selectedComponent === "sectionFooter" ? "border-4 border-blue-500 " : ""
       }`}
     >
-       {"sectionFooter" === selectedComponent ? (
+      {"sectionFooter" === selectedComponent ? (
         <div className="absolute w-fit -top-5 -left-1 z-10 flex ">
           <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
             {"sectionFooter"}
           </div>
-          
         </div>
       ) : null}
       <Logo

@@ -118,7 +118,10 @@ export const FooterForm: React.FC<FooterFormProps> = ({
             <label className="block mb-1">توضیحات</label>
             <textarea
               name="description"
-              value={userInputData?.blocks?.description ?? "توضیحات فوتر"}
+              value={
+                userInputData?.blocks?.description ??
+                "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد"
+              }
               onChange={handleBlockChange}
               className="w-full p-2 border rounded"
               rows={3}
@@ -243,7 +246,6 @@ export const FooterForm: React.FC<FooterFormProps> = ({
             }
             onChange={handleBlockSettingChange}
           />
-       
         </div>
 
         <div className="grid md:grid-cols-2 gap-4 mt-4">
@@ -323,7 +325,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
       <div className="mb-6">
         <h3 className="font-semibold mb-2">لینک‌های فوتر</h3>
         <div className="space-y-4">
-        <ColorInput
+          <ColorInput
             label="رنگ لینک‌ها"
             name="linkColor"
             value={userInputData?.blocks?.setting?.linkColor ?? "#ffffff"}
