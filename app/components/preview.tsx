@@ -15,6 +15,7 @@ import Footer from "./sections/footer";
 import ProductList from "./sections/productList";
 import DetailPage from "./sections/detailPage";
 import { Collection } from "./sections/collection";
+import BlogList from "./sections/blogList";
 
 // First update the PreviewProps interface
 interface PreviewProps {
@@ -48,6 +49,7 @@ export const Preview: React.FC<PreviewProps> = ({
     ProductList,
     DetailPage,
     Collection,
+    BlogList
   };
 
   return (

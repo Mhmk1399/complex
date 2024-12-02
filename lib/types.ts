@@ -864,6 +864,29 @@ export interface BlogChildren {
   sections: BlogListSection[];
   order: string[];
 }
+export interface BlogSection {
+  type: string;
+  blocks: {
+    blogId: number;
+    imageSrc: string;
+    imageAlt: string;
+    title: string;
+    description: string;
+    author: string;
+    date: string;
+    btnText: string;
+    btnLink: string;
+  }[];
+  setting: {
+    gridColumns: number;
+    paddingTop: string | number;
+    paddingBottom: string | number;
+    marginTop: string | number;
+    marginBottom: string | number;
+    backgroundColor: string;
+  };
+}
+
 
 
 
