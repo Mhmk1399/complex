@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,15 +7,17 @@ import { Layout, FooterSection } from "@/lib/types";
 interface FooterProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
+  selectedComponent: string;
 }
 
 const FooterContainer = styled.footer<{ $data: FooterSection }>`
-  padding-top: ${(props) => props.$data.setting.paddingTop || "20px"}px;
-  padding-bottom: ${(props) => props.$data.setting.paddingBottom || "20px"}px;
-  margin-top: ${(props) => props.$data.setting.marginTop || "0px"}px;
-  margin-bottom: ${(props) => props.$data.setting.marginBottom || "0px"}px;
-  
-  background-color: ${(props) => props.$data.setting.backgroundColor || "#333"};
+  padding-top: ${(props) => props.$data?.setting?.paddingTop || "20"}px;
+  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "20"}px;
+  margin-top: ${(props) => props.$data?.setting?.marginTop || "0"}px;
+  margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "0"}px;
+
+  background-color: ${(props) =>
+    props.$data?.setting?.backgroundColor || "#333"};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,19 +27,20 @@ const FooterContainer = styled.footer<{ $data: FooterSection }>`
 `;
 
 const FooterText = styled.h2<{ $data: FooterSection }>`
-  font-size: ${(props) => props.$data.blocks.setting.textFontSize || "16px"}px;
+  font-size: ${(props) => props.$data?.blocks?.setting?.textFontSize || "16"}px;
   font-weight: ${(props) =>
-    props.$data.blocks.setting.textFontWeight || "normal"};
-  color: ${(props) => props.$data.blocks.setting.textColor || "16px"};
+    props.$data?.blocks?.setting?.textFontWeight || "normal"};
+  color: ${(props) => props.$data?.blocks?.setting?.textColor || "#ffffff"};
   padding: 10px 5px;
 `;
 
 const FooterDescription = styled.p<{ $data: FooterSection }>`
   font-size: ${(props) =>
-    props.$data.blocks.setting.descriptionFontSize || "16px"}px;
+    props.$data?.blocks?.setting?.descriptionFontSize || "16"}px;
   font-weight: ${(props) =>
-    props.$data.blocks.setting.descriptionFontWeight || "normal"};
-  color: ${(props) => props.$data.blocks.setting.descriptionColor || "16px"};
+    props.$data?.blocks?.setting?.descriptionFontWeight || "normal"};
+  color: ${(props) =>
+    props.$data?.blocks?.setting?.descriptionColor || "#ffffff"};
   padding: 0px 50px;
 `;
 
@@ -65,7 +67,7 @@ const FooterLinks = styled.div`
 const FooterLink = styled(Link)<{ $data: FooterSection }>`
   font-weight: bold;
   text-decoration: none;
-  color: ${(props) => props.$data.blocks.setting.linkColor};
+  color: ${(props) => props.$data?.blocks?.setting?.linkColor || "#ffffff"};
 
   &:hover {
     opacity: 0.7;
@@ -73,13 +75,18 @@ const FooterLink = styled(Link)<{ $data: FooterSection }>`
 `;
 
 const Logo = styled(Image)<{ $data: FooterSection }>`
-  width: ${(props) => props.$data.blocks.setting.logoWidth || "100px"};
-  height: ${(props) => props.$data.blocks.setting.logoHeight || "100px"};
-  border-radius: ${(props) => props.$data.blocks.setting.logoRadius || "6px"};
+  width: ${(props) => props.$data?.blocks?.setting?.logoWidth || "100"}px;
+  height: ${(props) => props.$data?.blocks?.setting?.logoHeight || "100"}px;
+  border-radius: ${(props) =>
+    props.$data?.blocks?.setting?.logoRadius || "6"}px;
 `;
 
-const Footer: React.FC<FooterProps> = ({ setSelectedComponent, layout }) => {
-  const sectionData = layout?.sections?.sectionFooter;
+const Footer: React.FC<FooterProps> = ({
+  setSelectedComponent,
+  layout,
+  selectedComponent,
+}) => {
+  const sectionData = layout?.sections?.sectionFooter as FooterSection;
 
   const {
     text,
@@ -96,7 +103,18 @@ const Footer: React.FC<FooterProps> = ({ setSelectedComponent, layout }) => {
       dir="rtl"
       $data={sectionData}
       onClick={() => setSelectedComponent("sectionFooter")}
+      className={`transition-all duration-150 ease-in-out relative ${
+        selectedComponent === "sectionFooter" ? "border-4 border-blue-500 " : ""
+      }`}
     >
+       {"sectionFooter" === selectedComponent ? (
+        <div className="absolute w-fit -top-5 -left-1 z-10 flex ">
+          <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
+            {"sectionFooter"}
+          </div>
+          
+        </div>
+      ) : null}
       <Logo
         $data={sectionData}
         src={logo || "/assets/images/logo.webp"}
@@ -105,10 +123,10 @@ const Footer: React.FC<FooterProps> = ({ setSelectedComponent, layout }) => {
         alt="Logo"
       />
 
-      {text && <FooterText $data={sectionData}>{text}</FooterText>}
-      {description && (
-        <FooterDescription $data={sectionData}>{description}</FooterDescription>
-      )}
+      <FooterText $data={sectionData}>{text}</FooterText>
+
+      <FooterDescription $data={sectionData}>{description}</FooterDescription>
+
       <SocialLinks>
         <Link
           href={instagramLink ? instagramLink : "/"}
@@ -150,15 +168,15 @@ const Footer: React.FC<FooterProps> = ({ setSelectedComponent, layout }) => {
 
       {links && Array.isArray(links) && links.length > 0 && (
         <FooterLinks>
-          {(links as { url: string; label: string }[]).map((link, index) => (
+          {links.map((link, index) => (
             <FooterLink
               key={index}
-              href={link.url}
+              href={link?.url || "#"}
               $data={sectionData}
               target="_blank"
               rel="noopener noreferrer"
             >
-              {link.label}
+              {link?.label || "Link"}
             </FooterLink>
           ))}
         </FooterLinks>

@@ -319,6 +319,7 @@ export interface ImageTextSection {
 }
 
 export interface FooterSection {
+  type: "Footer";
   blocks: {
     text: string;
     description: string;
@@ -327,21 +328,38 @@ export interface FooterSection {
     whatsappLink: string;
     logo: string;
     links?: { url: string; label: string }[];
-    setting: {
-      textColor: string;
-      textFontSize: string;
-      textFontWeight: string;
-      descriptionColor: string;
-      descriptionFontSize: string;
-      descriptionFontWeight: string;
-      logoWidth: string;
-      logoHeight: string;
-      logoRadius: string;
-      linkColor: string;
-      backgroundColor: string;
-    };
+    setting: FooterBlockSetting;
   };
   setting: CommonSettings;
+}
+export interface FooterBlockSetting {
+  textColor: string;
+  textFontSize: string;
+  textFontWeight: string;
+  descriptionColor: string;
+  descriptionFontSize: string;
+  descriptionFontWeight: string;
+  linkColor: string;
+  logoWidth: string;
+  logoHeight: string;
+  logoRadius: string;
+  backgroundColor: string;
+}
+
+export interface FooterLink {
+  url: string;
+  label: string;
+}
+
+export interface FooterBlock {
+  setting: FooterBlockSetting;
+  text: string;
+  description: string;
+  instagramLink: string;
+  telegramLink: string;
+  whatsappLink: string;
+  logo: string;
+  links: FooterLink[];
 }
 
 export interface ContactFormBlockSetting extends Partial<CommonSettings> {
@@ -409,11 +427,10 @@ export interface Layout {
     slideshow: SlideSection;
     richtext: RichTextSection;
     sectionHeader: HeaderSection;
-    children: Children | AboutChildren | StoreChildren | DetailPageChildren;
+    children: Children | AboutChildren | StoreChildren | DetailPageChildren | BlogChildren;
     sectionFooter: FooterSection;
     Collection: CollectionSection;
     banner: BannerSection;
-    footer: string;
   };
   order: string[];
 }
@@ -570,35 +587,6 @@ export interface FooterFormProps {
   selectedComponent: string;
 }
 
-export interface FooterBlockSetting {
-  textColor: string;
-  textFontSize: string;
-  textFontWeight: string;
-  descriptionColor: string;
-  descriptionFontSize: string;
-  descriptionFontWeight: string;
-  linkColor: string;
-  logoWidth: string;
-  logoHeight: string;
-  logoRadius: string;
-  backgroundColor: string;
-}
-
-export interface FooterLink {
-  url: string;
-  label: string;
-}
-
-export interface FooterBlock {
-  setting: FooterBlockSetting;
-  text: string;
-  description: string;
-  instagramLink: string;
-  telegramLink: string;
-  whatsappLink: string;
-  logo: string;
-  links: FooterLink[];
-}
 export interface AboutChildren {
   type: string;
   sections: Section[];
@@ -757,8 +745,7 @@ export interface DetailPageBlock {
     descriptionFontSize: string;
     btnBackgroundColor: string;
     btnTextColor: string;
-    [key: string]: any; // Allows dynamic properties
-
+    // [key: string]: any; // Allows dynamic properties
   };
 }
 
@@ -784,8 +771,7 @@ export interface DetailPageSettings {
   marginTop: string;
   marginBottom: string;
   backgroundColor: string;
-  [key: string]: any; // Allows dynamic properties
-
+  // [key: string]: any; // Allows dynamic properties
 }
 
 export interface DetailPageSection {
@@ -804,7 +790,6 @@ export interface DetailPageChildren {
 // }
 
 export interface CollectionBlockSetting extends CommonSettings {
-  
   headingColor: string;
   headingFontSize: string;
   headingFontWeight: string;
@@ -844,4 +829,41 @@ export interface CollectionSection {
   };
   setting: CollectionBlockSetting;
 }
+
+export interface BlogBlock {
+  blogId: number;
+  imageSrc: string;
+  imageAlt: string;
+  title: string;
+  description: string;
+  author: string;
+  date: string;
+  btnText: string;
+  btnLink: string;
+}
+
+export interface BlogListSetting {
+  gridColumns: number;
+  paddingTop: number;
+  paddingBottom: string;
+  marginTop: string;
+  marginBottom: string;
+  backgroundColor: string;
+  color: string;
+  fontSize: number;
+}
+
+export interface BlogListSection {
+  type: "BlogList";
+  blocks: BlogBlock[];
+  setting: BlogListSetting;
+}
+
+export interface BlogChildren {
+  type: "BlogList";
+  sections: BlogListSection[];
+  order: string[];
+}
+
+
 

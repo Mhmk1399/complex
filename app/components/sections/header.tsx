@@ -12,6 +12,7 @@ import styled from "styled-components";
 interface HeaderProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
+  selectedComponent: string;
 }
 
 // Styled components
@@ -50,7 +51,8 @@ const LogoContainer = styled.div`
 const Logo = styled.img<{ $data: HeaderSection }>`
   width: ${(props) => props.$data.blocks.setting.imageWidth || "auto"}px;
   height: ${(props) => props.$data.blocks.setting.imageHeight || "auto"}px;
-  // border-radius: ${(props) => props.$data.blocks.setting.imageRadius || "0px"};
+  // border-radius: ${(props) =>
+    props.$data.blocks.setting.imageRadius || "0px"};
 `;
 
 const NavItems = styled.div<{ $isOpen: boolean }>`
@@ -98,7 +100,11 @@ const MenuButton = styled.button<{ $data: HeaderSection }>`
   }
 `;
 
-const Header: React.FC<HeaderProps> = ({ setSelectedComponent, layout }) => {
+const Header: React.FC<HeaderProps> = ({
+  setSelectedComponent,
+  layout,
+  selectedComponent,
+}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const sectionData = layout?.sections?.sectionHeader as HeaderSection;
@@ -132,10 +138,20 @@ const Header: React.FC<HeaderProps> = ({ setSelectedComponent, layout }) => {
   return (
     <SectionHeader
       $data={sectionData}
-      className="w-full lg:w-[75%] px-1"
+      className={`w-full lg:w-[75%] px-1 transition-all duration-150 ease-in-out ${
+        selectedComponent === "sectionHeader" ? "border-4 border-blue-500" : ""
+      }`}
       dir="rtl"
       onClick={() => setSelectedComponent("sectionHeader")}
     >
+       {"sectionHeader" === selectedComponent ? (
+        <div className="absolute w-fit -top-5 -left-1 z-10 flex ">
+          <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
+            {"sectionHeader"}
+          </div>
+          
+        </div>
+      ) : null}
       <LogoContainer>
         <Logo
           $data={sectionData}

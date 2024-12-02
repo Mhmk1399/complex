@@ -5,6 +5,7 @@ import { Form } from "./form";
 import data from "../../public/template/null.json";
 import {
   AboutChildren,
+  BlogChildren,
   DetailPageChildren,
   Layout,
   StoreChildren,
@@ -13,6 +14,7 @@ import About from "@/public/template/about.json";
 import Contact from "@/public/template/contact.json";
 import Store from "@/public/template/product.json";
 import DetailPage from "@/public/template/detail.json";
+import Blog from "@/public/template/blog.json";
 
 export const Main = () => {
   const Data = data as unknown as Layout;
@@ -50,7 +52,7 @@ export const Main = () => {
           ...prevLayout.sections,
           children: DetailPage.children as DetailPageChildren,
         },
-      }));console.log(layout , "layout");
+      }));
     } else if (selectedRoute === "store") {
       setLayout((prevLayout: Layout) => ({
         ...prevLayout,
@@ -59,7 +61,14 @@ export const Main = () => {
           children: Store.children as StoreChildren,
         },
       }));
-      
+    } else if (selectedRoute === "BlogList") {
+      setLayout((prevLayout: Layout) => ({
+        ...prevLayout,
+        sections: {
+          ...prevLayout.sections,
+          children: Blog.children as BlogChildren,
+        },
+      }));
     } else {
       setLayout((prevLayout) => ({
         ...prevLayout,
@@ -68,10 +77,7 @@ export const Main = () => {
           children: Data.sections.children,
         },
       }));
-      
     }
-  
-    
   }, [selectedRoute]);
 
   // const handleSave = async () => {
@@ -142,6 +148,7 @@ export const Main = () => {
               <option value="contact">Contact</option>
               <option value="store">store</option>
               <option value="DetailPage">DetailPage</option>
+              <option value="BlogList">Blog</option>
             </select>
           </div>
           <Preview

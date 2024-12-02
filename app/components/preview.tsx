@@ -11,7 +11,7 @@ import MultiColumn from "./sections/multiColumn";
 import SlideShow from "./sections/slideShow";
 import MultiRow from "./sections/multiRow";
 import { Layout } from "@/lib/types";
-import FooterContainer from "./sections/footer";
+import Footer from "./sections/footer";
 import ProductList from "./sections/productList";
 import DetailPage from "./sections/detailPage";
 import { Collection } from "./sections/collection";
@@ -45,15 +45,18 @@ export const Preview: React.FC<PreviewProps> = ({
     MultiColumn,
     SlideShow,
     MultiRow,
-    FooterContainer,
     ProductList,
     DetailPage,
-    Collection
+    Collection,
   };
 
   return (
     <div className="w-full md:w-full lg:w-[75%] h-[90vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide lg:mt-1 lg:ml-5">
-      <Header setSelectedComponent={setSelectedComponent} layout={layout} />
+      <Header
+        setSelectedComponent={setSelectedComponent}
+        layout={layout}
+        selectedComponent={selectedComponent}
+      />
       <div className="grid grid-cols-1 mt-32">
         {orders.map((componentName, index) => {
           const baseComponentName = componentName.split("-")[0];
@@ -71,11 +74,18 @@ export const Preview: React.FC<PreviewProps> = ({
                 layout={layout}
                 actualName={componentName}
                 selectedComponent={selectedComponent}
-                setLayout={setLayout} productId={"674c044a7e265babdd061919"}              />
+                setLayout={setLayout}
+                productId={"674c044a7e265babdd061919"}
+              />
             </div>
           ) : null;
         })}
       </div>
+      <Footer
+        setSelectedComponent={setSelectedComponent}
+        layout={layout}
+        selectedComponent={selectedComponent}
+      />
     </div>
   );
 };
