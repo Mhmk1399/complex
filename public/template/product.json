@@ -52,12 +52,15 @@
           "paddingBottom": "20",
           "marginTop": "10",
           "marginBottom": "10",
-          "backgroundColor": "blue",
+          "backgroundColor": "این",
           "color": "#0000FF",
           "fontSize": 16
         }
       }
     ],
-    "order": ["ProductList"]
-  }
+    "order": [
+      "ProductList"
+    ]
+  },
+  "backgroundColor": "."
 }

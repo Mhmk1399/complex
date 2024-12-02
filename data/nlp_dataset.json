@@ -1,0 +1,396 @@
+[
+    {
+      "input": "رنگ پس‌زمینه منو رو نارنجی بکن",
+      "output": {
+        "sections.sectionHeader.blocks.setting.backgroundColorNavbar": "#FCA311"
+      }
+    },
+    {
+      "input": "رنگ پشت منو رو به نارنجی تغییر بده",
+      "output": {
+        "sections.sectionHeader.blocks.setting.backgroundColorNavbar": "#FCA311"
+      }
+    },
+    {
+      "input": "رنگ بکگراند منو رو نارنجی کن",
+      "output": {
+        "sections.sectionHeader.blocks.setting.backgroundColorNavbar": "#FCA311"
+      }
+    },
+    {
+      "input": "منو رو بالا نگه‌دار",
+      "output": { "sections.sectionHeader.setting.navbarPosition": "fixed" }
+    },
+    {
+      "input": "منوی بالای صفحه رو ثابت کن",
+      "output": { "sections.sectionHeader.setting.navbarPosition": "fixed" }
+    },
+    {
+      "input": "رنگ آیتم‌های منو رو آبی کن",
+      "output": { "sections.sectionHeader.blocks.setting.itemColor": "#0000FF" }
+    },
+    {
+      "input": "رنگ نوشته‌های لینک‌های منو رو آبی کن",
+      "output": { "sections.sectionHeader.blocks.setting.itemColor": "#0000FF" }
+    },
+    {
+      "input": "اندازه فونت لینک‌های منو رو ۱۸ کن",
+      "output": { "sections.sectionHeader.blocks.setting.itemFontSize": "18" }
+    },
+    {
+      "input": "فونت متن‌های منو رو پررنگ کن",
+      "output": { "sections.sectionHeader.blocks.setting.itemFontWeight": "bold" }
+    },
+    {
+      "input": "ارتفاع لوگوی منو رو ۷۰ پیکسل بزار",
+      "output": { "sections.sectionHeader.blocks.setting.imageHeight": "70px" }
+    },
+    {
+      "input": "عرض عکس لوگوی منو رو به ۶۰ پیکسل تغییر بده",
+      "output": { "sections.sectionHeader.blocks.setting.imageWidth": "60px" }
+    },
+    {
+      "input": "حاشیه گردی عکس لوگوی منو رو ۴۰ پیکسل بکن",
+      "output": { "sections.sectionHeader.blocks.setting.imageRadius": "40px" }
+    },
+    {
+      "input": "رنگ هنگام هاور شدن لینک‌ها رو سبز کن",
+      "output": {
+        "sections.sectionHeader.blocks.setting.itemHoverColor": "#00FF00"
+      }
+    },
+    {
+      "input": "لینک اول منو رو به صفحه اصلی ببر",
+      "output": { "sections.sectionHeader.blocks.links[0].url": "/" }
+    },
+    {
+      "input": "اسم لینک دوم منو رو بذار خدمات",
+      "output": { "sections.sectionHeader.blocks.links[1].name": "خدمات" }
+    },
+    {
+      "input": "لینک سوم منو رو به /تماس تغییر بده",
+      "output": { "sections.sectionHeader.blocks.links[2].url": "/تماس" }
+    },
+    {
+      "input": "رنگ متن لینک‌ها رو قرمز کن",
+      "output": { "sections.sectionHeader.blocks.setting.itemColor": "#FF0000" }
+    },
+    {
+      "input": "فاصله داخلی بالای منو رو به ۵ پیکسل تغییر بده",
+      "output": { "sections.sectionHeader.setting.paddingTop": "5" }
+    },
+    {
+      "input": "پدینگ پایین منو رو ۳۰ تنظیم کن",
+      "output": { "sections.sectionHeader.setting.paddingBottom": "30" }
+    },
+    {
+      "input": "فاصله بالا از منو رو ۱۰ پیکسل بزار",
+      "output": { "sections.sectionHeader.setting.marginTop": "10px" }
+    },
+    {
+      "input": "فاصله پایین از منو رو ۱۵ پیکسل کن",
+      "output": { "sections.sectionHeader.setting.marginBottom": "15px" }
+    },
+    {
+      "input": "رنگ آیتم منو رو به قرمز تغییر بده",
+      "output": { "sections.sectionHeader.blocks.setting.itemColor": "#FF0000" }
+    },
+    {
+      "input": "رنگ لینک‌های داخل منو رو آبی تنظیم کن",
+      "output": { "sections.sectionHeader.blocks.setting.itemColor": "#0000FF" }
+    },
+    {
+      "input": "رنگ متن‌ها در هنگام هاور منو رو سبز کن",
+      "output": {
+        "sections.sectionHeader.blocks.setting.itemHoverColor": "#00FF00"
+      }
+    },
+    {
+      "input": "ارتفاع لوگو رو ۷۰ پیکسل قرار بده",
+      "output": { "sections.sectionHeader.blocks.setting.imageHeight": "70px" }
+    },
+    {
+      "input": "عرض لوگو رو به ۶۰ پیکسل تغییر بده",
+      "output": { "sections.sectionHeader.blocks.setting.imageWidth": "60px" }
+    },
+    {
+      "input": "حاشیه گردی عکس لوگوی منو رو به ۴۰ پیکسل تغییر بده",
+      "output": { "sections.sectionHeader.blocks.setting.imageRadius": "40px" }
+    },
+    {
+      "input": "حاشیه پایین منو رو ۲۰ پیکسل کن",
+      "output": { "sections.sectionHeader.setting.marginBottom": "20px" }
+    },
+    {
+      "input": "پدینگ بالای منو رو ۱۰ پیکسل بزار",
+      "output": { "sections.sectionHeader.setting.paddingTop": "10" }
+    },
+  
+    {
+      "input": "رنگ توضیحات بنر رو خاکستری کن",
+      "output": {
+        "sections.sectionBanner.blocks.setting.descriptionColor": "#E5E5E5"
+      }
+    },
+    {
+      "input": "رنگ متن توضیحات بنر رو به خاکستری تغییر بده",
+      "output": {
+        "sections.sectionBanner.blocks.setting.descriptionColor": "#E5E5E5"
+      }
+    },
+    {
+      "input": "اندازه فونت توضیحات بنر رو ۱۵ تنظیم کن",
+      "output": {
+        "sections.sectionBanner.blocks.setting.descriptionFontSize": "15"
+      }
+    },
+    {
+      "input": "فونت توضیحات بنر رو عادی کن",
+      "output": {
+        "sections.sectionBanner.blocks.setting.descriptionFontWeight": "normal"
+      }
+    },
+    {
+      "input": "رنگ متن بنر رو نارنجی کن",
+      "output": { "sections.sectionBanner.blocks.setting.textColor": "#FCA311" }
+    },
+    {
+      "input": "اندازه فونت متن بنر رو ۳۰ پیکسل کن",
+      "output": { "sections.sectionBanner.blocks.setting.textFontSize": "30" }
+    },
+    {
+      "input": "فونت متن بنر رو پررنگ کن",
+      "output": { "sections.sectionBanner.blocks.setting.textFontWeight": "bold" }
+    },
+    {
+      "input": "رنگ پس‌زمینه باکس بنر رو سرمه‌ای کن",
+      "output": {
+        "sections.sectionBanner.blocks.setting.backgroundColorBox": "#14213D"
+      }
+    },
+    {
+      "input": "رنگ پشت باکس بنر رو به سرمه‌ای تغییر بده",
+      "output": {
+        "sections.sectionBanner.blocks.setting.backgroundColorBox": "#14213D"
+      }
+    },
+    {
+      "input": "حاشیه گردی باکس بنر رو ۱۰ پیکسل تنظیم کن",
+      "output": {
+        "sections.sectionBanner.blocks.setting.backgroundBoxRadious": "10px"
+      }
+    },
+    {
+      "input": "شفافیت عکس بنر رو ۱ تنظیم کن",
+      "output": { "sections.sectionBanner.blocks.setting.opacityImage": 1 }
+    },
+    {
+      "input": "شفافیت متن باکس بنر رو روی ۱ قرار بده",
+      "output": { "sections.sectionBanner.blocks.setting.opacityTextBox": 1 }
+    },
+    {
+      "input": "حاشیه گردی عکس بنر رو ۱۴ پیکسل کن",
+      "output": { "sections.sectionBanner.blocks.setting.imageRadious": "14px" }
+    },
+    {
+      "input": "نحوه نمایش عکس بنر رو به صورت پوششی تنظیم کن",
+      "output": { "sections.sectionBanner.blocks.setting.imageBehavior": "cover" }
+    },
+    {
+      "input": "پدینگ بالای بنر رو ۰ قرار بده",
+      "output": { "sections.sectionBanner.setting.paddingTop": "0" }
+    },
+    {
+      "input": "پدینگ پایین بنر رو ۰ پیکسل کن",
+      "output": { "sections.sectionBanner.setting.paddingBottom": "0" }
+    },
+    {
+      "input": "فاصله بالای بنر رو ۲۰ پیکسل تنظیم کن",
+      "output": { "sections.sectionBanner.setting.marginTop": "20" }
+    },
+    {
+      "input": "فاصله پایین بنر رو ۸۰ پیکسل کن",
+      "output": { "sections.sectionBanner.setting.marginBottom": "80" }
+    },
+    {
+      "input": "لینک تصویر بنر رو به /assets/images/ban.jpg تغییر بده",
+      "output": {
+        "sections.sectionBanner.blocks.imageSrc": "/assets/images/ban.jpg"
+      }
+    },
+    {
+      "input": "متن جایگزین تصویر بنر رو خالی بذار",
+      "output": { "sections.sectionBanner.blocks.imageAlt": "" }
+    },
+    {
+      "input": "عنوان متن بنر رو سربرگ بنر بزار",
+      "output": { "sections.sectionBanner.blocks.text": "سربرگ بنر" }
+    },
+    {
+      "input": "متن توضیحات بنر رو توضیحات بنر بزار",
+      "output": { "sections.sectionBanner.blocks.description": "توضیحات بنر" }
+    },
+    {
+      "input": "رنگ متن توضیحات رو به خاکستری تغییر بده",
+      "output": {
+        "sections.sectionBanner.blocks.setting.descriptionColor": "#E5E5E5"
+      }
+    },
+    {
+      "input": "اندازه فونت توضیحات رو ۱۵ پیکسل تنظیم کن",
+      "output": {
+        "sections.sectionBanner.blocks.setting.descriptionFontSize": "15"
+      }
+    },
+    {
+      "input": "شفافیت باکس متن بنر رو به ۱ تغییر بده",
+      "output": { "sections.sectionBanner.blocks.setting.opacityTextBox": 1 }
+    },
+    {
+      "input": "اندازه حاشیه گردی عکس بنر رو ۱۴ پیکسل تنظیم کن",
+      "output": { "sections.sectionBanner.blocks.setting.imageRadious": "14px" }
+    },
+    {
+      "input": "نحوه نمایش عکس در بنر رو پوشش بده",
+      "output": { "sections.sectionBanner.blocks.setting.imageBehavior": "cover" }
+    },
+  
+    {
+      "input": "لینک تصویر اسلاید اول رو به /assets/images/banner3.jpg تغییر بده",
+      "output": {
+        "sections.sectionSlideShow.blocks[0].imageSrc": "/assets/images/banner3.jpg"
+      }
+    },
+    {
+      "input": "متن جایگزین تصویر اسلاید اول رو خالی بذار",
+      "output": { "sections.sectionSlideShow.blocks[0].imageAlt": "" }
+    },
+    {
+      "input": "متن اسلاید اول رو اسلاید اول قرار بده",
+      "output": { "sections.sectionSlideShow.blocks[0].text": "اسلاید اول" }
+    },
+    {
+      "input": "توضیحات اسلاید اول رو تغییر بده به متن لورم ایپسوم",
+      "output": {
+        "sections.sectionSlideShow.blocks[0].description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد"
+      }
+    },
+    {
+      "input": "متن دکمه اسلاید اول رو به دکمه تغییر بده",
+      "output": { "sections.sectionSlideShow.blocks[0].btnText": "دکمه" }
+    },
+    {
+      "input": "لینک دکمه اسلاید اول رو خالی بذار",
+      "output": { "sections.sectionSlideShow.blocks[0].btnLink": "" }
+    },
+    {
+      "input": "لینک تصویر اسلاید دوم رو به /assets/images/banner1.jpg تغییر بده",
+      "output": {
+        "sections.sectionSlideShow.blocks[1].imageSrc": "/assets/images/banner1.jpg"
+      }
+    },
+    {
+      "input": "متن جایگزین تصویر اسلاید دوم رو خالی بذار",
+      "output": { "sections.sectionSlideShow.blocks[1].imageAlt": "" }
+    },
+    {
+      "input": "متن اسلاید دوم رو اسلاید دوم بذار",
+      "output": { "sections.sectionSlideShow.blocks[1].text": "اسلاید دوم" }
+    },
+    {
+      "input": "توضیحات اسلاید دوم رو تغییر بده به متن لورم ایپسوم",
+      "output": {
+        "sections.sectionSlideShow.blocks[1].description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد"
+      }
+    },
+    {
+      "input": "متن دکمه اسلاید دوم رو به دکمه تغییر بده",
+      "output": { "sections.sectionSlideShow.blocks[1].btnText": "دکمه" }
+    },
+    {
+      "input": "رنگ متن توضیحات اسلایدشو رو خاکستری کن",
+      "output": {
+        "sections.sectionSlideShow.setting.descriptionColor": "#E5E5E5"
+      }
+    },
+    {
+      "input": "اندازه فونت توضیحات اسلایدشو رو ۱۶ پیکسل کن",
+      "output": {
+        "sections.sectionSlideShow.setting.descriptionFontSize": "16px"
+      }
+    },
+    {
+      "input": "فونت توضیحات اسلایدشو رو عادی کن",
+      "output": {
+        "sections.sectionSlideShow.setting.descriptionFontWeight": "normal"
+      }
+    },
+    {
+      "input": "رنگ متن اسلایدشو رو سفید کن",
+      "output": { "sections.sectionSlideShow.setting.textColor": "#FFFFFF" }
+    },
+    {
+      "input": "اندازه فونت متن اسلایدشو رو ۲۴ پیکسل کن",
+      "output": { "sections.sectionSlideShow.setting.textFontSize": "24" }
+    },
+    {
+      "input": "فونت متن اسلایدشو رو پررنگ کن",
+      "output": { "sections.sectionSlideShow.setting.textFontWeight": "bold" }
+    },
+    {
+      "input": "رنگ متن دکمه‌های اسلایدشو رو مشکی کن",
+      "output": { "sections.sectionSlideShow.setting.btnTextColor": "#000000" }
+    },
+    {
+      "input": "رنگ پس‌زمینه دکمه‌های اسلایدشو رو نارنجی کن",
+      "output": {
+        "sections.sectionSlideShow.setting.btnBackgroundColor": "#FCA311"
+      }
+    },
+    {
+      "input": "رنگ پس‌زمینه باکس اسلایدشو رو سرمه‌ای کن",
+      "output": {
+        "sections.sectionSlideShow.setting.backgroundColorBox": "#14213D"
+      }
+    },
+    {
+      "input": "حاشیه گردی باکس اسلایدشو رو ۴۰ پیکسل کن",
+      "output": {
+        "sections.sectionSlideShow.setting.backgroundBoxRadius": "40px"
+      }
+    },
+    {
+      "input": "شفافیت عکس‌های اسلایدشو رو ۱ بذار",
+      "output": { "sections.sectionSlideShow.setting.opacityImage": 1 }
+    },
+    {
+      "input": "عرض تصاویر اسلایدشو رو ۷۰۰ پیکسل کن",
+      "output": { "sections.sectionSlideShow.setting.imageWidth": "700" }
+    },
+    {
+      "input": "ارتفاع تصاویر اسلایدشو رو ۵۰۰ پیکسل کن",
+      "output": { "sections.sectionSlideShow.setting.imageHeight": "500" }
+    },
+    {
+      "input": "حاشیه گردی عکس‌های اسلایدشو رو ۴۰ پیکسل کن",
+      "output": { "sections.sectionSlideShow.setting.imageRadious": "40px" }
+    },
+    {
+      "input": "پدینگ بالای اسلایدشو رو ۲۰ پیکسل بذار",
+      "output": { "sections.sectionSlideShow.setting.paddingTop": "20" }
+    },
+    {
+      "input": "پدینگ پایین اسلایدشو رو ۲۰ پیکسل تنظیم کن",
+      "output": { "sections.sectionSlideShow.setting.paddingBottom": "20" }
+    },
+    {
+      "input": "فاصله بالای اسلایدشو رو ۱۰ پیکسل بذار",
+      "output": { "sections.sectionSlideShow.setting.marginTop": "10" }
+    },
+    {
+      "input": "فاصله پایین اسلایدشو رو ۱۰ پیکسل بذار",
+      "output": { "sections.sectionSlideShow.setting.marginBottom": "10" }
+    }
+  ]
+  
+  
