@@ -10,34 +10,42 @@ interface ImageTextProps {
   actualName: string;
   selectedComponent: string;
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
+  previewWidth: "sm" | "default";
 }
 
 // Styled Components
-const Section = styled.section<{ $data: ImageTextSection }>`
+const Section = styled.section<{
+  $data: ImageTextSection;
+  $previewWidth: "sm" | "default";
+}>`
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: ${(props) =>
-    props.$data.blocks?.setting?.boxRadiuos || "10px"};
+    props.$data.blocks?.setting?.boxRadiuos || "10"}px;
   padding-top: ${(props) => props.$data.setting?.paddingTop || "0"}px;
   padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "0"}px;
   margin-top: ${(props) => props.$data.setting?.marginTop || "0"}px;
   margin-bottom: ${(props) => props.$data.setting?.marginBottom || "0"}px;
   background-color: ${(props) =>
     props.$data.blocks?.setting?.background || "transparent"};
-  flex-direction: column;
+  flex-direction: ${(props) =>
+    props.$previewWidth === "sm"
+      ? "column"
+      : "row"};
 
-  @media (min-width: 1024px) {
-    flex-direction: row;
-    margin-left: 10px;
-    margin-right: 10px;
-  }
+
 `;
 
-const Image = styled.img<{ $data: ImageTextSection }>`
-  width: ${(props) => props.$data.blocks?.setting?.imageWidth || "50%"};
-  height: ${(props) => props.$data.blocks?.setting?.imageHeight || "auto"};
-  opacity: ${(props) => props.$data.blocks?.setting?.opacityImage || "1"};
+const Image = styled.img<{
+  $data: ImageTextSection;
+  $previewWidth: "sm" | "default";
+}>`
+  width: ${(props) => props.$data?.blocks?.setting?.imageWidth || "500"}0px;
+  height: ${(props) => props.$data?.blocks?.setting?.imageHeight || "200"}0px;
+  opacity: ${(props) => props.$data?.blocks?.setting?.opacityImage || "1"};
+  border-radius: ${(props) =>
+    props.$data?.blocks?.setting?.boxRadiuos || "10"}px;
   object-fit: cover;
 
   @media (max-width: 768px) {
@@ -49,11 +57,11 @@ const Image = styled.img<{ $data: ImageTextSection }>`
   }
 `;
 
-const TextContainer = styled.div<{ $data: ImageTextSection }>`
+const TextContainer = styled.div<{ $data: ImageTextSection; $previewWidth: "sm" | "default"; }>`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  text-align: center;
+  align-items: flex-end;
+  text-align: right;
   padding: 20px;
   width: 100%;
   background-color: ${(props) =>
@@ -67,39 +75,33 @@ const TextContainer = styled.div<{ $data: ImageTextSection }>`
   }
 `;
 
-const Heading = styled.h2<{ $data: ImageTextSection }>`
+const Heading = styled.h2<{
+  $data: ImageTextSection;
+  $previewWidth: "sm" | "default";
+}>`
   color: ${(props) => props.$data.blocks?.setting?.headingColor || "#333"};
   font-size: ${(props) =>
-    props.$data.blocks?.setting?.headingFontSize || "24"}px;
+    props.$previewWidth === "sm"
+      ? "18"
+      : props.$data?.setting?.headingFontSize || "30"}px;
   font-weight: ${(props) =>
     props.$data.blocks?.setting?.headingFontWeight || "bold"};
   margin-bottom: 10px;
-
-  @media (max-width: 768px) {
-    font-size: 28px;
-  }
-
-  @media (min-width: 1025px) {
-    text-align: right;
-  }
 `;
 
-const Description = styled.p<{ $data: ImageTextSection }>`
+const Description = styled.p<{
+  $data: ImageTextSection;
+  $previewWidth: "sm" | "default";
+}>`
   color: ${(props) =>
     props.$data.blocks?.setting?.descriptionColor || "#666666"};
   font-size: ${(props) =>
-    props.$data.blocks?.setting?.descriptionFontSize || "16"}px;
+    props.$previewWidth === "sm"
+      ? "18"
+      : props.$data?.setting?.descriptionFontSize || "24"}px;
   font-weight: ${(props) =>
     props.$data.blocks?.setting?.descriptionFontWeight || "normal"};
   margin-bottom: 20px;
-
-  @media (max-width: 768px) {
-    font-size: 16px;
-  }
-
-  @media (min-width: 1025px) {
-    text-align: right;
-  }
 `;
 
 const Button = styled.a<{ $data: ImageTextSection }>`
@@ -124,6 +126,7 @@ const ImageText: React.FC<ImageTextProps> = ({
   actualName,
   selectedComponent,
   setLayout,
+  previewWidth,
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   // Find the first section with type "image-text"
@@ -136,19 +139,19 @@ const ImageText: React.FC<ImageTextProps> = ({
     return null;
   }
 
-
   const { imageSrc, imageAlt, heading, description, btnLink, btnText } =
     sectionData.blocks;
 
   return (
     <Section
+      $previewWidth={previewWidth}
       $data={sectionData}
       onClick={() => setSelectedComponent(actualName)}
       className={`transition-all duration-150 ease-in-out relative ${
         selectedComponent === actualName ? "border-4 border-blue-500 " : ""
       }`}
     >
-         {showDeleteModal && (
+      {showDeleteModal && (
         <div className="fixed inset-0  bg-black bg-opacity-70 z-50 flex items-center justify-center ">
           <div className="bg-white p-8 rounded-lg">
             <h3 className="text-lg font-bold mb-4">
@@ -193,14 +196,18 @@ const ImageText: React.FC<ImageTextProps> = ({
         </div>
       ) : null}
 
-      <Image className="rounded-xl "
+      <Image
+        className="rounded-xl "
         $data={sectionData}
+        $previewWidth={previewWidth}
         src={imageSrc || "/assets/images/banner2.webp"}
         alt={imageAlt || "Image"}
       />
-      <TextContainer $data={sectionData}>
-        <Heading $data={sectionData}>{heading || "Default Heading"}</Heading>
-        <Description $data={sectionData}>
+      <TextContainer $data={sectionData} $previewWidth={previewWidth}>
+        <Heading $data={sectionData} $previewWidth={previewWidth}>
+          {heading || "Default Heading"}
+        </Heading>
+        <Description $data={sectionData} $previewWidth={previewWidth}>
           {description ||
             "Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review."}
         </Description>

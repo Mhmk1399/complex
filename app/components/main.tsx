@@ -6,6 +6,7 @@ import data from "../../public/template/null.json";
 import {
   AboutChildren,
   BlogChildren,
+  BlogDetailChildren,
   DetailPageChildren,
   Layout,
   StoreChildren,
@@ -15,6 +16,7 @@ import Contact from "@/public/template/contact.json";
 import Store from "@/public/template/product.json";
 import DetailPage from "@/public/template/detail.json";
 import Blog from "@/public/template/blog.json";
+import BlogDetail from "@/public/template/blogDetail.json";
 
 export const Main = () => {
   const Data = data as unknown as Layout;
@@ -70,8 +72,14 @@ export const Main = () => {
           children: Blog.children as BlogChildren,
         },
       }));
-      
-      
+    } else if (selectedRoute === "BlogDetail") {
+      setLayout((prevLayout: Layout) => ({
+        ...prevLayout,
+        sections: {
+          ...prevLayout.sections,
+          children: BlogDetail.children as BlogDetailChildren,
+        },
+      }));
     } else {
       setLayout((prevLayout) => ({
         ...prevLayout,
@@ -82,7 +90,6 @@ export const Main = () => {
       }));
     }
     console.log(layout);
-    
   }, [selectedRoute]);
 
   // const handleSave = async () => {
@@ -154,6 +161,7 @@ export const Main = () => {
               <option value="store">store</option>
               <option value="DetailPage">DetailPage</option>
               <option value="BlogList">Blog</option>
+              <option value="BlogDetail">BlogDetail</option>
             </select>
           </div>
           <Preview

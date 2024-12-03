@@ -123,10 +123,10 @@
             "btnLink": "/",
             "setting": {
               "textHeadingColor": "#FCA311",
-              "textHeadingFontSize": "40px",
+              "textHeadingFontSize": "40",
               "textHeadingFontWeight": "bold",
               "descriptionColor": "#E5E5E5",
-              "descriptionFontSize": "20px",
+              "descriptionFontSize": "18",
               "descriptionFontWeight": "normal",
               "background": "#14213D",
               "btnTextColor": "#ffffff",
@@ -161,10 +161,10 @@
               "btnBackgroundColor": "#FFFFFF",
               "backgroundColorBox": "",
               "backgroundBoxOpacity": 0.9,
-              "boxRadiuos": "20px",
+              "boxRadiuos": "20",
               "opacityImage": 1,
-              "imageWidth": "850px",
-              "imageHeight": "700px",
+              "imageWidth": "85",
+              "imageHeight": "50",
               "background": "#14213D"
             }
           },

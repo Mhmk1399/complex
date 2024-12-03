@@ -246,6 +246,7 @@ const BlogList: React.FC<BlogListProps> = ({
                 <p key={key} className="description mb-2">
                   <span className="font-bold">{key}: </span>
                   {value}
+                  {blog.description}
                 </p>
               ))}
             <a href={blog.btnLink} className="read-more">

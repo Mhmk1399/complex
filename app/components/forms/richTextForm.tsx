@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { Compiler } from "../compiler";
 import { Layout, RichTextSection } from "@/lib/types";
 
-
 interface RichTextFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<RichTextSection>>;
   userInputData: RichTextSection;
@@ -42,7 +41,7 @@ export const RichText: React.FC<RichTextFormProps> = ({
   setUserInputData,
   userInputData,
   layout,
-  selectedComponent
+  selectedComponent,
 }) => {
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent);
@@ -65,7 +64,9 @@ export const RichText: React.FC<RichTextFormProps> = ({
     }));
   };
 
-  const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBlockSettingChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setUserInputData((prev: RichTextSection) => ({
       ...prev,
@@ -197,6 +198,70 @@ export const RichText: React.FC<RichTextFormProps> = ({
             }
             onChange={handleBlockSettingChange}
           />
+        </div>
+      </div>
+      <div>
+        <h4 className="font-bold mb-2">تنظیمات سایز</h4>
+        <div className="grid grid-cols-1 gap-4">
+          <div>
+            <label className="block mb-1"> سایز سربرگ </label>
+            <input
+              type="range"
+              name="textHeadingFontSize"
+              value={
+                userInputData?.blocks?.setting?.textHeadingFontSize?.toString() ??
+                "0"
+              }
+              onChange={handleBlockSettingChange}
+              className="w-full"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1"> وزن سربرگ </label>
+            <select
+              name="textHeadingFontWeight"
+              value={
+                userInputData?.blocks?.setting?.textHeadingFontWeight?.toString() ??
+                "0"
+              }
+              onChange={handleBlockSettingChange}
+              className="w-full p-2 border rounded"
+            >
+              <option value="bold">ضخیم</option>
+              <option value="normal">نرمال</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block mb-1">سایز توضیحات</label>
+            <input
+              type="range"
+              name="descriptionFontSize"
+              value={
+                userInputData?.blocks?.setting?.descriptionFontSize?.toString() ??
+                "0"
+              }
+              onChange={handleBlockSettingChange}
+              className="w-full"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1">فاصله بیرونی از پایین</label>
+            <select
+              name="descriptionFontWeight"
+              value={
+                userInputData?.blocks?.setting?.descriptionFontWeight?.toString() ??
+                "0"
+              }
+              onChange={handleBlockSettingChange}
+              className="w-full p-2 border rounded"
+            >
+              <option value="bold">ضخیم</option>
+              <option value="normal">نرمال</option>
+            </select>
+          </div>
         </div>
       </div>
 

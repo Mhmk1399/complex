@@ -12,30 +12,29 @@ interface props {
   actualName: string;
   selectedComponent: string;
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
+  previewWidth: "sm" | "default";
 }
 
-const SectionBanner = styled.section<{ $data: BannerSection }>`
-  position: relative; // Add this line to fix the Image fill issue
-  height: 600px;
+const SectionBanner = styled.section<{ $data: BannerSection; $previewWidth: "sm" | "default" }>`
+  position: relative;
+  height: ${(props) => (props.$previewWidth === "sm" ? "300px" : "600px")};
   margin: 0px 10px;
   margin-top: ${(props) => props.$data.setting.marginTop}px;
   margin-bottom: ${(props) => props.$data.setting.marginBottom}px;
   padding-top: ${(props) => props.$data.setting.paddingTop}px;
   padding-bottom: ${(props) => props.$data.setting.paddingBottom}px;
-  // overflow: hidden;
   @media (max-width: 768px) {
-    height: 300px;
+    height: ${(props) => (props.$previewWidth === "sm" ? "200px" : "300px")};
   }
 `;
 
-const BannerImage = styled(Image)<{ $data: BannerSection }>`
+const BannerImage = styled(Image)<{ $data: BannerSection; $previewWidth: "sm" | "default" }>`
   opacity: ${(props) => props.$data.blocks.setting.opacityImage || "1"}px;
-  border-radius: ${(props) =>
-    props.$data.blocks.setting.imageRadious || "10px"};
+  border-radius: ${(props) => props.$data.blocks.setting.imageRadious || "10px"};
   object-fit: ${(props) => props.$data.blocks.setting.imageBehavior};
 `;
 
-const BannerTextBox = styled.div<{ $data: BannerSection }>`
+const BannerTextBox = styled.div<{ $data: BannerSection; $previewWidth: "sm" | "default" }>`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -45,39 +44,38 @@ const BannerTextBox = styled.div<{ $data: BannerSection }>`
   justify-content: center;
   align-items: center;
   opacity: ${(props) => props.$data.blocks.setting.opacityTextBox || "1"};
-  background-color: ${(props) =>
-    props.$data.blocks.setting.backgroundColorBox || "rgba(0, 0, 0, 0.5)"};
-  padding: 50px 200px;
-  border-radius: ${(props) =>
-    props.$data.blocks.setting.backgroundBoxRadious || "10px"};
-  @media (max-width: 768px) {
-    padding: 20px 40px;
-  }
+  background-color: ${(props) => props.$data.blocks.setting.backgroundColorBox || "rgba(0, 0, 0, 0.5)"};
+  padding: ${(props) => (props.$previewWidth === "sm" ? "20px 40px" : "50px 200px")};
+  border-radius: ${(props) => props.$data.blocks.setting.backgroundBoxRadious || "10px"};
 `;
 
-const HeadingText = styled.h2<{ $data: BannerSection }>`
-  color: ${(props) => props.$data.blocks.setting.textColor || "#fffff"};
-  font-size: ${(props) => props.$data.blocks.setting.textFontSize || "16px"}px;
-  font-weight: ${(props) =>
-    props.$data.blocks.setting.textFontWeight || "bold"};
+const HeadingText = styled.h2<{ $data: BannerSection; $previewWidth: "sm" | "default" }>`
+  color: ${(props) => props.$data.blocks.setting.textColor || "#ffffff"};
+  font-size: ${(props) =>
+    props.$previewWidth === "sm"
+      ? "18px"
+      : props.$data.blocks.setting.textFontSize || "16px"}px;
+  font-weight: ${(props) => props.$data.blocks.setting.textFontWeight || "bold"};
   text-align: center;
   @media (max-width: 768px) {
-    font-size: 28px;
+    font-size: ${(props) => (props.$previewWidth === "sm" ? "16px" : "28px")};
   }
 `;
 
-const DescriptionText = styled.p<{ $data: BannerSection }>`
+const DescriptionText = styled.p<{ $data: BannerSection; $previewWidth: "sm" | "default" }>`
   color: ${(props) => props.$data.blocks.setting.descriptionColor || "#ffffff"};
   font-size: ${(props) =>
-    props.$data.blocks.setting.descriptionFontSize || "16px"}px;
-  font-weight: ${(props) =>
-    props.$data.blocks.setting.descriptionFontWeight || "normal"};
+    props.$previewWidth === "sm"
+      ? "14px"
+      : props.$data.blocks.setting.descriptionFontSize || "16px"}px;
+  font-weight: ${(props) => props.$data.blocks.setting.descriptionFontWeight || "normal"};
   margin-top: 14px;
   text-align: center;
   @media (max-width: 768px) {
-    font-size: 16px;
+    font-size: ${(props) => (props.$previewWidth === "sm" ? "12px" : "16px")};
   }
 `;
+
 
 const Banner: React.FC<props> = ({
   setSelectedComponent,
@@ -85,6 +83,7 @@ const Banner: React.FC<props> = ({
   actualName,
   selectedComponent,
   setLayout,
+  previewWidth,
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -100,6 +99,7 @@ const Banner: React.FC<props> = ({
 
   return (
     <SectionBanner
+    $previewWidth={previewWidth}
       $data={sectionData}
       onClick={() => setSelectedComponent(actualName)}
       className={`transition-all duration-150 ease-in-out relative ${
@@ -163,6 +163,7 @@ const Banner: React.FC<props> = ({
         }}
       >
         <BannerImage
+        $previewWidth={previewWidth}
           $data={sectionData}
           alt={imageAlt || "banner"}
           src={imageSrc || "/assets/images/banner2.webp"}
@@ -170,9 +171,9 @@ const Banner: React.FC<props> = ({
           priority
         />
       </Link>
-      <BannerTextBox $data={sectionData}>
-        <HeadingText $data={sectionData}>{text || "سربرگ بنر"}</HeadingText>
-        <DescriptionText $data={sectionData}>
+      <BannerTextBox $data={sectionData} $previewWidth={previewWidth}>
+        <HeadingText $data={sectionData} $previewWidth={previewWidth}>{text || "سربرگ بنر"}</HeadingText>
+        <DescriptionText $data={sectionData} $previewWidth={previewWidth}>
           {description || "توضیحات بنر"}
         </DescriptionText>
       </BannerTextBox>

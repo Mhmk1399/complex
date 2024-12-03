@@ -11,14 +11,18 @@ interface RichTextProps {
   actualName: string;
   selectedComponent: string;
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
+  previewWidth: "sm" | "default";
 }
 
 // Styled components
-const Section = styled.section<{ $data: RichTextSection }>`
-  padding-top: ${(props) => props.$data?.setting?.paddingTop || "10px"}px;
-  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "10px"}px;
-  margin-top: ${(props) => props.$data?.setting?.marginTop || "30px"}px;
-  margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "30px"}px;
+const Section = styled.section<{
+  $data: RichTextSection;
+  $previewWidth: "sm" | "default";
+}>`
+  padding-top: ${(props) => props.$data?.setting?.paddingTop || "10"}px;
+  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "10"}px;
+  margin-top: ${(props) => props.$data?.setting?.marginTop || "30"}px;
+  margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "30"}px;
   background-color: ${(props) =>
     props.$data?.blocks?.setting?.background || "#ffffff"};
   display: flex;
@@ -30,9 +34,12 @@ const Section = styled.section<{ $data: RichTextSection }>`
   gap: 15px;
 `;
 
-const H1 = styled.h1<{ $data: RichTextBlock }>`
+const H1 = styled.h1<{ $data: RichTextBlock; $previewWidth: "sm" | "default" }>`
   color: ${(props) => props.$data?.setting?.textHeadingColor || "#000"};
-  font-size: ${(props) => props.$data?.setting?.textHeadingFontSize || "24px"};
+  font-size: ${(props) =>
+    props.$previewWidth === "sm"
+      ? "18"
+      : props.$data?.setting?.textHeadingFontSize || "24"}px;
   font-weight: ${(props) =>
     props.$data?.setting?.textHeadingFontWeight || "bold"};
   // border-bottom: 3px solid #ffffff;
@@ -42,9 +49,12 @@ const H1 = styled.h1<{ $data: RichTextBlock }>`
   }
 `;
 
-const P = styled.p<{ $data: RichTextBlock }>`
+const P = styled.p<{ $data: RichTextBlock; $previewWidth: "sm" | "default" }>`
   color: ${(props) => props.$data?.setting?.descriptionColor || "#666"};
-  font-size: ${(props) => props.$data?.setting?.descriptionFontSize || "16px"};
+  font-size: ${(props) =>
+    props.$previewWidth === "sm"
+      ? "14"
+      : props.$data?.setting?.descriptionFontSize || "24"}px;
   font-weight: ${(props) =>
     props.$data?.setting?.descriptionFontWeight || "normal"};
   @media (max-width: 768px) {
@@ -52,17 +62,21 @@ const P = styled.p<{ $data: RichTextBlock }>`
   }
 `;
 
-const Btn = styled.button<{ $data: RichTextBlock }>`
+const Btn = styled.button<{
+  $data: RichTextBlock;
+  $previewWidth: "sm" | "default";
+}>`
   color: ${(props) => props.$data?.setting?.btnTextColor || "#fff"};
   background-color: ${(props) =>
     props.$data?.setting?.btnBackgroundColor || "#007BFF"};
-  padding: 10px 20px;
+  padding: ${(props) =>
+    props.$previewWidth === "sm" ? "7px 20px" : "15px 30px"};
   border-radius: 5px;
   border: none;
   cursor: pointer;
   transition: transform 0.4s ease-in-out;
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1.02);
     opacity: 0.8;
   }
 `;
@@ -74,6 +88,7 @@ const RichText: React.FC<RichTextProps> = ({
   actualName,
   selectedComponent,
   setLayout,
+  previewWidth,
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const sectionData = layout?.sections?.children?.sections?.find(
@@ -94,6 +109,7 @@ const RichText: React.FC<RichTextProps> = ({
 
   return (
     <Section
+      $previewWidth={previewWidth}
       dir="rtl"
       $data={sectionData}
       onClick={() => setSelectedComponent(actualName)}
@@ -146,14 +162,24 @@ const RichText: React.FC<RichTextProps> = ({
         </div>
       ) : null}
 
-      {textHeading && <H1 $data={blocks}>{textHeading}</H1>}
+      {textHeading && (
+        <H1 $data={blocks} $previewWidth={previewWidth}>
+          {textHeading}
+        </H1>
+      )}
 
       <hr className="w-[70%] h-[4px] bg-white mb-4" />
 
-      {description && <P $data={blocks}>{description}</P>}
+      {description && (
+        <P $previewWidth={previewWidth} $data={blocks}>
+          {description}
+        </P>
+      )}
       {btnLink && (
         <Link href={btnLink} passHref legacyBehavior>
-          <Btn $data={blocks}>{btnText}</Btn>
+          <Btn $data={blocks} $previewWidth={previewWidth}>
+            {btnText}
+          </Btn>
         </Link>
       )}
     </Section>

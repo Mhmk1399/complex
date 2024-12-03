@@ -13,27 +13,27 @@ interface HeaderProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
   selectedComponent: string;
+  previewWidth: "sm" | "default";
 }
 
 // Styled components
 const SectionHeader = styled.section<{
   $data: HeaderSection;
+  $previewWidth: "sm" | "default";
 }>`
-  display: flex;
+  display: ${(props) => (props.$previewWidth === "sm" ? "block" : "flex")};
   align-items: center;
-  justify-content: space-between;
-  padding-top: ${(props) => props.$data.setting.paddingTop || "0px"}px;
-  padding-bottom: ${(props) => props.$data.setting.paddingBottom || "0px"}px;
-  margin-top: ${(props) => props.$data.setting.marginTop || "0px"}px;
-  margin-bottom: ${(props) => props.$data.setting.marginBottom || "0px"}px;
+  justify-content: center;
+  text-align: center;
+  padding-top: ${(props) => props.$data.setting.paddingTop || "0"}px;
+  padding-bottom: ${(props) => props.$data.setting.paddingBottom || "0"}px;
+  margin-top: ${(props) => props.$data.setting.marginTop || "0"}px;
+  margin-bottom: ${(props) => props.$data.setting.marginBottom || "0"}px;
   background-color: ${(props) =>
     props.$data?.blocks?.setting?.backgroundColorNavbar || "#14213D"};
-  position: fixed;
+  position: absolute;
+  width: 100%;
   z-index: 40;
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: center;
-  }
 `;
 
 const LogoContainer = styled.div`
@@ -48,62 +48,83 @@ const LogoContainer = styled.div`
   }
 `;
 
-const Logo = styled.img<{ $data: HeaderSection }>`
-  width: ${(props) => props.$data.blocks.setting.imageWidth || "auto"}px;
-  height: ${(props) => props.$data.blocks.setting.imageHeight || "auto"}px;
-  // border-radius: ${(props) =>
-    props.$data.blocks.setting.imageRadius || "0px"};
+const Logo = styled.img<{
+  $data: HeaderSection;
+  $previewWidth: "sm" | "default";
+}>`
+  width: ${(props) =>
+    props.$previewWidth === "sm"
+      ? `${Number(props.$data.blocks.setting.imageWidth || "100") / 2}px`
+      : `${props.$data.blocks.setting.imageWidth || "auto"}px`};
+  height: ${(props) =>
+    props.$previewWidth === "sm"
+      ? `${Number(props.$data.blocks.setting.imageHeight || "50") / 2}px`
+      : `${props.$data.blocks.setting.imageHeight || "auto"}px`};
 `;
 
-const NavItems = styled.div<{ $isOpen: boolean }>`
+const NavItems = styled.div<{
+  $isOpen: boolean;
+  $previewWidth: "sm" | "default";
+}>`
   display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 2rem;
   transition: all 0.3s ease-in-out;
-  align-items: center;
-  @media (max-width: 768px) {
+
+  ${({ $previewWidth, $isOpen }) =>
+    $previewWidth === "sm" &&
+    `
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     width: 100%;
-    max-height: ${({ $isOpen }) => ($isOpen ? "500px" : "0")};
-    opacity: ${({ $isOpen }) => ($isOpen ? "1" : "0")};
+    max-height: ${$isOpen ? "500px" : "0"};
+    opacity: ${$isOpen ? "1" : "0"};
     overflow: hidden;
-    visibility: ${({ $isOpen }) => ($isOpen ? "visible" : "hidden")};
-    transform: translateY(${({ $isOpen }) => ($isOpen ? "0" : "-90px")});
-    transition: all 0.5s ease-in-out;
-  }
+    visibility: ${$isOpen ? "visible" : "hidden"};
+    transform: translateY(${$isOpen ? "0" : "-90px"});
+  `}
 `;
 
-const NavItem = styled(Link)<{ $data: HeaderSection }>`
+const NavItem = styled(Link)<{
+  $data: HeaderSection;
+  $previewWidth: "sm" | "default";
+}>`
   color: ${(props) => props.$data.blocks.setting.itemColor || "#000"};
-  font-size: ${(props) => props.$data.blocks.setting.itemFontSize || "14px"};
+  font-size: ${(props) =>
+    props.$previewWidth === "sm"
+      ? `16px`
+      : `${props.$data.blocks.setting.itemFontSize || "14px"}`};
   font-weight: ${(props) =>
     props.$data.blocks.setting.itemFontWeight || "normal"};
-  padding: 0.5rem 1rem;
-  text-decoration: none;
-  transition: all 0.4s ease-in-out;
+  padding: ${(props) =>
+    props.$previewWidth === "sm" ? "0.25rem 0.5rem" : "0.5rem 1rem"};
+  transition: all 0.2s ease-in-out;
   &:hover {
-    color: ${(props) => props.$data.blocks.setting.itemHoverColor || "#666"};
-    transform: scale(1.08);
-    border-bottom: 1px solid;
+    color: ${(props) => props.$data.blocks.setting.itemHoverColor || "#000"};
   }
 `;
 
-const MenuButton = styled.button<{ $data: HeaderSection }>`
-  display: none;
+const MenuButton = styled.button<{
+  $data: HeaderSection;
+  $previewWidth: "sm" | "default";
+}>`
+  display: ${({ $previewWidth }) =>
+    $previewWidth === "sm" ? "block" : "none"};
   background: none;
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
   color: ${(props) => props.$data.blocks.setting.itemColor || "#000"};
-  @media (max-width: 768px) {
-    display: flex;
-  }
+  z-index: 100;
 `;
 
 const Header: React.FC<HeaderProps> = ({
   setSelectedComponent,
   layout,
   selectedComponent,
+  previewWidth,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -137,34 +158,48 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <SectionHeader
+      $previewWidth={previewWidth}
       $data={sectionData}
-      className={`w-full lg:w-[75%] px-1 transition-all duration-150 ease-in-out ${
+      className={`w-full ${
+        previewWidth === "default" ? "w-[75%]" : "w-[28%]"
+      } px-1 transition-all duration-150 mt-4 ease-in-out ${
         selectedComponent === "sectionHeader" ? "border-4 border-blue-500" : ""
       }`}
       dir="rtl"
       onClick={() => setSelectedComponent("sectionHeader")}
     >
-       {"sectionHeader" === selectedComponent ? (
+      {"sectionHeader" === selectedComponent ? (
         <div className="absolute w-fit -top-5 -left-1 z-10 flex ">
           <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
             {"sectionHeader"}
           </div>
-          
         </div>
       ) : null}
       <LogoContainer>
         <Logo
+          className={`${isOpen ? "hidden" : "block"}`}
           $data={sectionData}
+          $previewWidth={previewWidth}
           src={imageLogo || "/assets/images/logo.webp"}
           alt={imageAlt}
         />
-        <MenuButton $data={sectionData} onClick={() => setIsOpen(!isOpen)}>
+        <MenuButton
+          className="absolute top-5 left-1 p-4"
+          $data={sectionData}
+          $previewWidth={previewWidth}
+          onClick={() => setIsOpen(!isOpen)}
+        >
           {isOpen ? "X" : "☰"}
         </MenuButton>
       </LogoContainer>
-      <NavItems $isOpen={isOpen}>
+      <NavItems $isOpen={isOpen} $previewWidth={previewWidth}>
         {links?.map((link, index) => (
-          <NavItem $data={sectionData} key={index} href={link.url}>
+          <NavItem
+            $previewWidth={previewWidth}
+            $data={sectionData}
+            key={index}
+            href={link.url}
+          >
             {link.name}
           </NavItem>
         ))}

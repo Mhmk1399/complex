@@ -82,6 +82,7 @@ import DetailPage from "./sections/detailPage";
 import { DetailForm } from "./forms/detailForm";
 import { CollectionForm } from "./forms/collectionForm";
 import BlogListForm from "./forms/blogForm";
+import { BlogDetailForm } from "./forms/blogDetailForm";
 type FormData =
   | HeaderSection
   | MultiRowSection
@@ -397,6 +398,19 @@ export const Form = ({
       case "DetailPage":
         return (
           <DetailForm
+            setUserInputData={
+              setUserInputData as React.Dispatch<
+                React.SetStateAction<DetailPageSection>
+              >
+            }
+            userInputData={userInputData as DetailPageSection}
+            layout={layout}
+            selectedComponent={selectedComponent}
+          />
+        );
+      case "BlogDetail":
+        return (
+          <BlogDetailForm
             setUserInputData={
               setUserInputData as React.Dispatch<
                 React.SetStateAction<DetailPageSection>

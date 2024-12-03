@@ -410,6 +410,7 @@ export interface Children {
   sections: Section[];
   order: string[];
 }
+
 export interface Layout {
   setting: {
     backgroundColor: string;
@@ -427,7 +428,13 @@ export interface Layout {
     slideshow: SlideSection;
     richtext: RichTextSection;
     sectionHeader: HeaderSection;
-    children: Children | AboutChildren | StoreChildren | DetailPageChildren | BlogChildren;
+    children:
+      | Children
+      | AboutChildren
+      | StoreChildren
+      | DetailPageChildren
+      | BlogChildren
+      | BlogDetailChildren;
     sectionFooter: FooterSection;
     Collection: CollectionSection;
     banner: BannerSection;
@@ -446,6 +453,7 @@ export interface SlideBlockSetting {
   backgroundBoxRadius?: string;
   opacityImage?: string;
   imageRadious?: string;
+  imageBehavior?: string;
 }
 export interface SlideBlock {
   imageSrc: string;
@@ -597,7 +605,13 @@ export interface SectionsState {
   slideshow?: SlideSection;
   richtext?: RichTextSection;
   sectionHeader?: HeaderSection;
-  children?: Children | AboutChildren | DetailPageChildren | BlogChildren;
+  children?:
+    | Children
+    | AboutChildren
+    | DetailPageChildren
+    | BlogChildren
+    | BlogDetailChildren
+    | StoreChildren;
   sectionFooter?: FooterSection;
   banner?: BannerSection;
   footer?: string;
@@ -892,10 +906,72 @@ export interface BlogSection {
     textColor: string;
     btnBackgroundColor: string;
     buttonColor: string;
-
   };
 }
 
+// blog detail
+export interface BlogDetailBlock {
+  blogId: number;
+  coverImage: string;
+  imageAlt: string;
+  title: string;
+  subtitle: string;
+  content: string;
+  author: {
+    name: string;
+    avatar: string;
+    bio: string;
+  };
+  category: string;
+  tags: string[];
+  publishDate: string;
+  readTime: string;
+  id: string;
+  relatedPosts: {
+    id: string;
+    title: string;
+    thumbnail: string;
+  }[];
+  socialShare: {
+    twitter: boolean;
+    facebook: boolean;
+    linkedin: boolean;
+    telegram: boolean;
+  };
+}
 
+export interface BlogDetailBlockSetting extends CommonSettings {
+  coverImageWidth: string;
+  coverImageHeight: string;
+  imageRadius: string;
+  titleColor: string;
+  titleFontSize: string;
+  titleFontWeight: string;
+  subtitleColor: string;
+  subtitleFontSize: string;
+  contentColor: string;
+  contentFontSize: string;
+  contentLineHeight: string;
+  authorNameColor: string;
+  authorNameFontSize: string;
+  categoryColor: string;
+  categoryFontSize: string;
+  tagsColor: string;
+  tagsFontSize: string;
+  dateColor: string;
+  dateFontSize: string;
+  readTimeColor: string;
+  readTimeFontSize: string;
+  sectionSpacing: string;
+}
 
-
+export interface BlogDetailSection {
+  blocks: BlogDetailBlock[];
+  setting: BlogDetailBlockSetting;
+  type: "BlogDetail";
+}
+export interface BlogDetailChildren {
+  type: "BlogDetail";
+  sections: BlogDetailSection[];
+  order: string[];
+}

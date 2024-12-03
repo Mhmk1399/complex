@@ -1,44 +1,41 @@
-import React, { useState } from "react";
+"use client";
 import styled from "styled-components";
+import React, { useState } from "react";
 import { SlideSection, Layout, SlideBlock } from "@/lib/types";
 import { Delete } from "../C-D";
 
-// Props Interface
 interface SlideShowProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
   actualName: string;
   selectedComponent: string;
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
+  previewWidth: "sm" | "default";
 }
 
-// Styled Components
-const Section = styled.section<{ $data: SlideSection["setting"] }>`
-  padding-top: ${(props) => props.$data.paddingTop || "20px"}px;
-  padding-bottom: ${(props) => props.$data.paddingBottom || "20px"}px;
-  margin-top: ${(props) => props.$data.marginTop || "20px"}px;
-  margin-bottom: ${(props) => props.$data.marginBottom || "20px"}px;
-  display: flex;
-  margin-left: 10px;
-  margin-right: 10px;
-  border-radius: 10px;
+const SectionSlideShow = styled.section<{
+  $data: SlideSection;
+  $previewWidth: "sm" | "default";
+}>`
   position: relative;
+  margin: 0px 10px;
+  margin-top: ${(props) => props.$data.setting.marginTop}px;
+  margin-bottom: ${(props) => props.$data.setting.marginBottom}px;
+  padding-top: ${(props) => props.$data.setting.paddingTop}px;
+  padding-bottom: ${(props) => props.$data.setting.paddingBottom}px;
+  background-color: ${(props) =>
+    props.$data.setting.backgroundColorBox || "transparent"};
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: ${(props) =>
-    props.$data.backgroundColorBox || "transparent"};
 `;
 
-const SlideContainer = styled.div<{ $data: SlideBlock | undefined }>`
-  max-width: 800px;
+const SlideContainer = styled.div<{ $previewWidth: "sm" | "default" }>`
+  width: 100%;
+  max-width: ${(props) => (props.$previewWidth === "sm" ? "400px" : "800px")};
   overflow: hidden;
-  border-radius: ${(props) =>
-    props.$data?.setting?.backgroundBoxRadius || "10px"};
-  margin: 0 20px;
   position: relative;
-  display: flex;
-  justify-content: center;
 `;
 
 const SlidesWrapper = styled.div<{ $currentIndex: number }>`
@@ -49,153 +46,127 @@ const SlidesWrapper = styled.div<{ $currentIndex: number }>`
 
 const Slide = styled.div`
   flex: 0 0 100%;
-  opacity: 1;
-  transition: opacity 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const SlideImage = styled.img<{ $data: SlideBlock }>`
   width: 100%;
-  object-fit: cover;
-  opacity: ${(props) => props.$data.setting?.opacityImage || 1};
-  border-radius: ${(props) => props.$data.setting?.imageRadious || "10px"};
-  margin: 10px auto;
+  border-radius: ${(props) => props.$data?.setting?.imageRadious || "10px"};
+  opacity: ${(props) => props.$data?.setting?.opacityImage || 1};
+  object-fit: ${(props) => props.$data?.setting?.imageBehavior || "cover"};
 `;
 
-const SlideText = styled.h3<{ $data?: SlideSection["setting"] }>`
-  color: ${(props) => props.$data?.textColor || "#fff"};
-  font-size: ${(props) => props.$data?.textFontSize || "24px"};
-  font-weight: ${(props) => props.$data?.textFontWeight || "bold"};
-  text-align: center;
-  padding: 10px;
-  @media (max-width: 768px) {
-    font-size: 28px;
-  }
-`;
-
-const SlideDescription = styled.p<{ $data?: SlideSection["setting"] }>`
-  color: ${(props) => props.$data?.descriptionColor || "#333"};
-  font-size: ${(props) => props.$data?.descriptionFontSize || "16px"};
-  font-weight: ${(props) => props.$data?.descriptionFontWeight || "normal"};
-  text-align: center;
-  padding: 5px;
-  @media (max-width: 768px) {
-    font-size: 16px;
-  }
-`;
-
-const Button = styled.a<{ $data: SlideSection["setting"] }>`
-  display: inline-block;
+const SlideTextBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-top: 10px;
-  padding: 10px 20px;
-  color: ${(props) => props.$data.btnTextColor || "#fff"};
-  background-color: ${(props) => props.$data.btnBackgroundColor || "#5b8e7d"};
-  border-radius: 5px;
-  text-align: center;
-  width: 100%;
+`;
 
-  text-decoration: none;
-  &:hover {
-    opacity: 0.8;
-  }
+const SlideHeading = styled.h3<{
+  $data: SlideSection["setting"];
+  $previewWidth: "sm" | "default";
+}>`
+  color: ${(props) => props.$data.textColor || "#000"};
+  font-size: ${(props) =>
+    props.$previewWidth === "sm"
+      ? "18"
+      : props.$data?.setting?.textFontSize || "22"}px;
+  font-weight: ${(props) => props.$data.textFontWeight || "bold"};
+  margin-top: 5px;
+  text-align: center;
+`;
+
+const SlideDescription = styled.p<{
+  $data: SlideSection["setting"];
+  $previewWidth: "sm" | "default";
+}>`
+  color: ${(props) => props.$data.descriptionColor || "#333"};
+  font-size: ${(props) =>
+    props.$previewWidth === "sm"
+      ? "14"
+      : props.$data?.setting?.descriptionFontSize || "22"}px;
+  font-weight: ${(props) => props.$data.descriptionFontWeight || "normal"};
+  padding: 20px;
+  text-align: center;
+  margin-top: 5px;
 `;
 
 const NavButton = styled.button`
   position: absolute;
-  background: rgba(0, 0, 0, 0.5);
-  color: #fff;
-  border-radius: 100px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
   padding: 10px;
+  border: none;
+  border-radius: 50%;
   cursor: pointer;
   z-index: 10;
-  &:hover {
-    opacity: 0.8;
-  }
-
-  @media (max-width: 425px) {
-    transform: translateY(-140%);
-
-    font-size: 10px;
-  }
-  @media (max-width: 768px) {
-    top: 34%;
-  }
-  @media (min-width: 1024px) {
-    top: 38%;
-  }
 `;
 
 const PrevButton = styled(NavButton)`
-  left: 3px;
+  left: 10px;
 `;
 
 const NextButton = styled(NavButton)`
-  right: 3px;
+  right: 10px;
 `;
 
-// SlideShow Component
 const SlideShow: React.FC<SlideShowProps> = ({
   setSelectedComponent,
   layout,
   actualName,
   selectedComponent,
   setLayout,
+  previewWidth,
 }) => {
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const sectionData: SlideSection = (layout.sections?.children?.sections?.find(
-    (section) => section.type === actualName
-  ) as SlideSection) || {
-    blocks: [],
-    setting: {
-      paddingTop: "20px",
-      paddingBottom: "20px",
-      marginTop: "20px",
-      marginBottom: "20px",
-    },
-    type: "slideShow",
-  };
-
-  if (!sectionData) {
-    return null;
-  }
-
   const [currentIndex, setCurrentIndex] = useState(0);
-  const slides = sectionData.blocks || [];
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const sectionData = layout.sections.children?.sections.find(
+    (section) => section.type === actualName
+  ) as SlideSection;
+
+  if (!sectionData) return null;
+
+  const { blocks } = sectionData;
 
   const handleNext = () =>
-    setCurrentIndex((prev) => (prev + 1) % slides.length);
+    setCurrentIndex((prev) => (prev + 1) % blocks.length);
   const handlePrev = () =>
-    setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
+    setCurrentIndex((prev) => (prev - 1 + blocks.length) % blocks.length);
 
   return (
-    <Section
-      $data={sectionData.setting}
+    <SectionSlideShow
+      $data={sectionData}
+      $previewWidth={previewWidth}
       onClick={() => setSelectedComponent(actualName)}
-      className={`transition-all duration-150 ease-in-out relative ${
-        selectedComponent === actualName ? "border-4 border-blue-500 " : ""
+      className={`relative transition-all duration-150 ${
+        selectedComponent === actualName
+          ? "border-4 border-blue-500 rounded-lg"
+          : ""
       }`}
     >
-          {showDeleteModal && (
-        <div className="fixed inset-0  bg-black bg-opacity-70 z-50 flex items-center justify-center ">
-          <div className="bg-white p-8 rounded-lg">
-            <h3 className="text-lg font-bold mb-4">
-              مطمئن هستید؟
-              <span className="text-blue-400 font-bold mx-1">
-                {actualName}
-              </span> آیا از حذف
-            </h3>
-            <div className="flex gap-4 justify-end">
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg">
+            <h3 className="text-lg font-bold">حذف {actualName}؟</h3>
+            <div className="flex justify-end gap-4 mt-4">
               <button
-                className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
                 onClick={() => setShowDeleteModal(false)}
+                className="btn-cancel"
               >
                 انصراف
               </button>
               <button
-                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 "
                 onClick={() => {
                   Delete(actualName, layout, setLayout);
                   setShowDeleteModal(false);
                 }}
+                className="btn-delete"
               >
                 حذف
               </button>
@@ -204,43 +175,33 @@ const SlideShow: React.FC<SlideShowProps> = ({
         </div>
       )}
 
-      {actualName === selectedComponent ? (
-        <div className="absolute w-fit -top-5 -left-1 z-10 flex ">
-          <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
-            {actualName}
-          </div>
-          <button
-            className="font-extrabold text-xl hover:bg-blue-500 bg-red-500 pb-1 rounded-r-lg px-3 text-white transform transition-all ease-in-out duration-300"
-            onClick={() => setShowDeleteModal(true)}
-          >
-            x
-          </button>
-        </div>
-      ) : null}
-
-      <SlideContainer $data={slides[0]}>
+      <SlideContainer $previewWidth={previewWidth}>
         <SlidesWrapper $currentIndex={currentIndex}>
-          {slides.map((slide, index) => (
+          {blocks.map((slide, index) => (
             <Slide key={index}>
               <SlideImage
                 src={slide.imageSrc}
-                alt={slide.imageAlt}
+                alt={slide.imageAlt || "Slide"}
                 $data={slide}
               />
-              <SlideText $data={sectionData.setting}>{slide.text}</SlideText>
-              <SlideDescription $data={sectionData.setting}>
-                {slide.description}
-              </SlideDescription>
-              <Button href={slide.btnLink} $data={sectionData.setting}>
-                {slide.btnText}
-              </Button>
+              <SlideTextBox>
+                <SlideHeading
+                  $data={sectionData.setting}
+                  $previewWidth={previewWidth}
+                >
+                  {slide.text}
+                </SlideHeading>
+                <SlideDescription $data={sectionData.setting} $previewWidth={previewWidth}>
+                  {slide.description}
+                </SlideDescription>
+              </SlideTextBox>
             </Slide>
           ))}
         </SlidesWrapper>
         <PrevButton onClick={handlePrev}>{"<"}</PrevButton>
         <NextButton onClick={handleNext}>{">"}</NextButton>
       </SlideContainer>
-    </Section>
+    </SectionSlideShow>
   );
 };
 

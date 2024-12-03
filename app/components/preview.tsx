@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "./sections/header";
 import RichText from "./sections/richText";
 import Banner from "./sections/banner";
@@ -16,6 +16,7 @@ import ProductList from "./sections/productList";
 import DetailPage from "./sections/detailPage";
 import { Collection } from "./sections/collection";
 import BlogList from "./sections/blogList";
+import BlogDetail from "./sections/blogDetail";
 
 // First update the PreviewProps interface
 interface PreviewProps {
@@ -34,6 +35,8 @@ export const Preview: React.FC<PreviewProps> = ({
   selectedComponent,
   setLayout,
 }) => {
+  const [previewWidth, setPreviewWidth] = useState<"sm" | "default">("default");
+
   const componentMap = {
     Header,
     RichText,
@@ -49,45 +52,84 @@ export const Preview: React.FC<PreviewProps> = ({
     ProductList,
     DetailPage,
     Collection,
-    BlogList
+    BlogList,
+    BlogDetail,
   };
 
   return (
-    <div className="w-full md:w-full lg:w-[75%] h-[90vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide lg:mt-1 lg:ml-5">
-      <Header
-        setSelectedComponent={setSelectedComponent}
-        layout={layout}
-        selectedComponent={selectedComponent}
-      />
-      <div className="grid grid-cols-1 mt-32">
-        {orders.map((componentName, index) => {
-          const baseComponentName = componentName.split("-")[0];
-          const Component =
-            componentMap[baseComponentName as keyof typeof componentMap];
-
-          return Component ? (
-            <div
-              key={componentName} // Using the full componentName which includes the UUID
-              style={{ order: index }}
-              className="w-full"
-            >
-              <Component
-                setSelectedComponent={setSelectedComponent}
-                layout={layout}
-                actualName={componentName}
-                selectedComponent={selectedComponent}
-                setLayout={setLayout}
-                productId={"674c044a7e265babdd061919"}
-              />
-            </div>
-          ) : null;
-        })}
+    <div>
+      {/* Buttons to toggle preview size */}
+      <div className="flex justify-center gap-4 p-4 bg-gray-100 border-b border-gray-200">
+        <button
+          onClick={() => setPreviewWidth("sm")}
+          className={`px-4 py-2 rounded ${
+            previewWidth === "sm" ? "bg-blue-500 text-white" : "bg-gray-200"
+          }`}
+        >
+          Small Mode
+        </button>
+        <button
+          onClick={() => setPreviewWidth("default")}
+          className={`px-4 py-2 rounded ${
+            previewWidth === "default"
+              ? "bg-blue-500 text-white"
+              : "bg-gray-200"
+          }`}
+        >
+          Default Mode
+        </button>
       </div>
-      <Footer
-        setSelectedComponent={setSelectedComponent}
-        layout={layout}
-        selectedComponent={selectedComponent}
-      />
+
+      {/* Preview Container */}
+
+      <div className={`flex relative justify-center ${previewWidth === "default" ? "flex-col" : "mr-64"}`}>
+        
+        {/* Add this wrapper */}
+        <div
+          className={`h-[90vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide lg:mt-1 lg:ml-5 ${
+            previewWidth === "sm" ? "w-[425px]" : "w-full lg:w-[75%]"
+          }`}
+        >
+          <Header
+            setSelectedComponent={setSelectedComponent}
+            layout={layout}
+            selectedComponent={selectedComponent}
+            previewWidth={previewWidth} // Pass the state to components
+          />
+          <div className="grid grid-cols-1 mt-32">
+            {orders.map((componentName, index) => {
+              const baseComponentName = componentName.split("-")[0];
+              const Component =
+                componentMap[baseComponentName as keyof typeof componentMap];
+
+              return Component ? (
+                <div
+                  key={componentName} // Using the full componentName which includes the UUID
+                  style={{ order: index }}
+                  className="w-full"
+                >
+                  <Component
+                    setSelectedComponent={setSelectedComponent}
+                    layout={layout}
+                    actualName={componentName}
+                    selectedComponent={selectedComponent}
+                    setLayout={setLayout}
+                    productId={"674c044a7e265babdd061919"}
+                    blogId={"674dc8d6cf4d515adfa1a31f"}
+                    previewWidth={previewWidth} // Pass the state to components
+                  />
+                </div>
+              ) : null;
+            })}
+          </div>
+          <Footer
+            setSelectedComponent={setSelectedComponent}
+            layout={layout}
+            selectedComponent={selectedComponent}
+            previewWidth={previewWidth} // Pass the state to components
+          />
+        </div>
+      </div>
     </div>
   );
 };

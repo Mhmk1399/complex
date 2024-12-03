@@ -77,7 +77,9 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
     }));
   };
 
-  const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBlockSettingChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setUserInputData((prev: ImageTextSection) => ({
       ...prev,
@@ -225,6 +227,21 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
               className="w-full p-2 border rounded"
             />
           </div>
+          <div>
+            <label className="block mb-1">وزن سربرگ</label>
+            <select
+              name="headingFontWeight"
+              value={
+                userInputData?.blocks?.setting?.headingFontWeight?.toString() ??
+                "0"
+              }
+              onChange={handleBlockSettingChange}
+              className="w-full p-2 border rounded"
+            >
+              <option value="bold">ضخیم</option>
+              <option value="normal">نرمال</option>
+            </select>
+          </div>
 
           <div>
             <label className="block mb-1">رنگ توضیحات</label>
@@ -252,6 +269,21 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
               onChange={handleBlockSettingChange}
               className="w-full p-2 border rounded"
             />
+          </div>
+          <div>
+            <label className="block mb-1">وزن توضیحات</label>
+            <select
+              name="descriptionFontWeight"
+              value={
+                userInputData?.blocks?.setting?.descriptionFontWeight?.toString() ??
+                "0"
+              }
+              onChange={handleBlockSettingChange}
+              className="w-full p-2 border rounded"
+            >
+              <option value="bold">ضخیم</option>
+              <option value="normal">نرمال</option>
+            </select>
           </div>
 
           <div>
@@ -284,6 +316,76 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
         </div>
       </div>
       <hr />
+      <br />
+      <div className="mb-6">
+        <h3 className="font-semibold mb-2">تنظیمات استایل</h3>
+        <div className="gap-4">
+          <div>
+            <label className="block mb-1"> انحنای زوایای کارت </label>
+            <input
+              type="range"
+              name="boxRadiuos"
+              max={100}
+              min={0}
+              value={
+                userInputData?.blocks?.setting?.boxRadiuos?.toLocaleString() ??
+                "10"
+              }
+              onChange={handleBlockSettingChange}
+              className=" p-1 border w-full rounded"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1">عرض تصویر </label>
+            <input
+              type="range"
+              name="imageWidth"
+              value={
+                userInputData?.blocks?.setting?.imageWidth?.toLocaleString() ??
+                "300"
+              }
+              onChange={handleBlockSettingChange}
+              className=" p-1 border w-full rounded"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1">ارتفاع تصویر</label>
+            <input
+              type="range"
+              name="imageHeight"
+              value={
+                userInputData?.blocks?.setting?.imageHeight?.toLocaleString() ??
+                "300"
+              }
+              onChange={handleBlockSettingChange}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1">شفافیت تصویر</label>
+            <select
+              name="opacityImage"
+              value={
+                userInputData?.blocks?.setting?.opacityImage?.toLocaleString() ??
+                "1"
+              }
+              onChange={handleBlockSettingChange}
+              className="w-full p-2 border rounded"
+            >
+              {Array.from({ length: 11 }, (_, i) => i / 10).map((value) => (
+                <option key={value} value={value}>
+                  {value}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <br />
 
       {/* Layout Settings */}
       <div className="mb-6">
