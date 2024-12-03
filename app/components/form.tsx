@@ -50,6 +50,7 @@ import { ContactForm } from "./forms/contact";
 import { NewsLetterForm } from "./forms/newsLetterForm";
 import { CollapseForm } from "./forms/collapseForm";
 import {
+  BlogChildren,
   CollectionSection,
   ContactFormDataSection,
   ContactFormProps,
@@ -80,6 +81,7 @@ import ProductListForm from "./forms/productForm";
 import DetailPage from "./sections/detailPage";
 import { DetailForm } from "./forms/detailForm";
 import { CollectionForm } from "./forms/collectionForm";
+import BlogListForm from "./forms/blogForm";
 type FormData =
   | HeaderSection
   | MultiRowSection
@@ -245,6 +247,19 @@ export const Form = ({
               >
             }
             userInputData={userInputData as BannerSection}
+            layout={layout}
+            selectedComponent={selectedComponent}
+          />
+        );
+      case "BlogList":
+        return (
+          <BlogListForm
+            setUserInputData={
+              setUserInputData as React.Dispatch<
+                React.SetStateAction<BlogChildren>
+              >
+            }
+            userInputData={userInputData as BlogChildren}
             layout={layout}
             selectedComponent={selectedComponent}
           />

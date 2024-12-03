@@ -597,7 +597,7 @@ export interface SectionsState {
   slideshow?: SlideSection;
   richtext?: RichTextSection;
   sectionHeader?: HeaderSection;
-  children?: Children | AboutChildren | DetailPageChildren;
+  children?: Children | AboutChildren | DetailPageChildren | BlogChildren;
   sectionFooter?: FooterSection;
   banner?: BannerSection;
   footer?: string;
@@ -844,13 +844,16 @@ export interface BlogBlock {
 
 export interface BlogListSetting {
   gridColumns: number;
-  paddingTop: number;
-  paddingBottom: string;
-  marginTop: string;
-  marginBottom: string;
+  paddingTop: string | number;
+  paddingBottom: string | number;
+  marginTop: string | number;
+  marginBottom: string | number;
   backgroundColor: string;
-  color: string;
-  fontSize: number;
+  cardBackgroundColor: string;
+  cardBorderRadius: string;
+  textColor: string;
+  btnBackgroundColor: string;
+  buttonColor: string;
 }
 
 export interface BlogListSection {
@@ -884,6 +887,12 @@ export interface BlogSection {
     marginTop: string | number;
     marginBottom: string | number;
     backgroundColor: string;
+    cardBackgroundColor: string;
+    cardBorderRadius: string;
+    textColor: string;
+    btnBackgroundColor: string;
+    buttonColor: string;
+
   };
 }
 

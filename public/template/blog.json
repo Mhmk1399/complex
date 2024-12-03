@@ -33,7 +33,14 @@
           "paddingBottom": "30",
           "marginTop": "15",
           "marginBottom": "15",
-          "backgroundColor": "#f8f9fa"
+          "backgroundColor": "#f8f9fa",
+          "cardBackgroundColor":"#ffffff",
+          "textColor":"#000000",
+          "cardBorderRadius":10,
+          "btnBackgroundColor":"#e4e4e4",
+          "buttonColor":"#ffffff"
+
+
       
         }
       }

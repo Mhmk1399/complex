@@ -1,9 +1,15 @@
 "use client";
 import styled from "styled-components";
 import { Delete } from "../C-D";
-import { BlogSection, Layout } from "@/lib/types";
+import {
+  BlogListSection,
+  BlogListSetting,
+  BlogSection,
+  Layout,
+} from "@/lib/types";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { data } from "@tensorflow/tfjs";
 
 interface BlogListProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -25,14 +31,14 @@ interface BlogData {
 }
 
 const SectionBlogList = styled.section<{
-  $data: BlogSection;
+  $data: BlogListSection;
 }>`
   display: grid;
   grid-template-columns: repeat(
     ${(props) => props.$data.setting?.gridColumns},
     1fr
   );
-  gap: 20px;
+  gap: 10px;
   padding-top: ${(props) => props.$data?.setting?.paddingTop}px;
   padding-bottom: ${(props) => props.$data?.setting?.paddingBottom}px;
   margin-top: ${(props) => props.$data?.setting?.marginTop}px;
@@ -43,14 +49,17 @@ const SectionBlogList = styled.section<{
     grid-template-columns: repeat(1, 1fr);
   }
   @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr);
   }
 `;
 
-const BlogCard = styled.div`
-  background: white;
-  border-radius: 8px;
+const BlogCard = styled.div<{
+  $data: BlogListSetting;
+}>`
+  background: ${(props) => props.$data?.cardBackgroundColor};
+  border-radius: ${(props) => props.$data?.cardBorderRadius}px;
   margin: 0 8px;
+  height: 70%;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease-in-out;
@@ -62,24 +71,25 @@ const BlogCard = styled.div`
 
   img {
     width: 100%;
-    height: 200px;
+    height: 300px;
     object-fit: cover;
   }
 
   .content {
-    padding: 20px;
+    padding: 10px;
   }
 
   .title {
     font-size: 1.25rem;
     font-weight: bold;
     margin-bottom: 10px;
+    color: ${(props) => props.$data?.textColor};
   }
 
   .meta {
     display: flex;
     justify-content: space-between;
-    color: #000000;
+    color: ${(props) => props.$data?.textColor};
     font-size: 0.875rem;
     margin-bottom: 10px;
   }
@@ -87,19 +97,21 @@ const BlogCard = styled.div`
   .description {
     color: #000000;
     margin-bottom: 15px;
+    color: ${(props) => props.$data?.textColor};
   }
 
   .read-more {
     display: inline-block;
     padding: 8px 16px;
     background: #0070f3;
-    color: white;
+    color: ${(props) => props.$data?.buttonColor};
     border-radius: 4px;
     text-decoration: none;
     transition: background 0.3s ease;
+    background: ${(props) => props.$data?.btnBackgroundColor};
 
     &:hover {
-      background: #0051cc;
+      opacity: 0.8;
     }
   }
 `;
@@ -124,14 +136,14 @@ const BlogList: React.FC<BlogListProps> = ({
 
         const data = await response.json();
 
-          const blogInfo = data.blogs.map((blog: BlogData) => ({
-            ...blog,
-            // btnText: "مطالعه بیشتر",
-            btnLink: `/blog/${blog.blogId}`,
-            imageSrc: "/assets/images/pro3.jpg", // Add a default image
-            imageAlt: blog.title,
-            description: blog.description,
-          }));
+        const blogInfo = data.blogs.map((blog: BlogData) => ({
+          ...blog,
+          // btnText: "مطالعه بیشتر",
+          btnLink: `/blog/${blog.blogId}`,
+          imageSrc: "/assets/images/pro3.jpg", // Add a default image
+          imageAlt: blog.title,
+          description: blog.description,
+        }));
         setBlogData(blogInfo);
         console.log(data);
       } catch (error) {
@@ -145,7 +157,7 @@ const BlogList: React.FC<BlogListProps> = ({
 
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
-  ) as BlogSection;
+  ) as BlogListSection;
 
   if (!sectionData) return null;
 
@@ -205,7 +217,10 @@ const BlogList: React.FC<BlogListProps> = ({
 
       {blogData.map((blog, index) => (
         // Inside BlogCard component:
-        <BlogCard key={`blog-${blog.blogId}-${index}`}>
+        <BlogCard
+          key={`blog-${blog.blogId}-${index}`}
+          $data={sectionData.setting}
+        >
           {blog.imageSrc ? (
             <Image
               src={blog.imageSrc || "/assets/images/pro2.jpg"}
