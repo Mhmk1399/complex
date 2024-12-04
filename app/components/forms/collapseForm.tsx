@@ -62,6 +62,9 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
 }) => {
   const [loaded, setLoaded] = useState(false);
 
+  console.log(selectedComponent);
+  
+
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     if (initialData) {
