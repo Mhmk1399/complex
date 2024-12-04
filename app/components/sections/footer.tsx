@@ -8,75 +8,106 @@ interface FooterProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
   selectedComponent: string;
+  previewWidth: "sm" | "default";
 }
 
-const FooterContainer = styled.footer<{ $data: FooterSection }>`
+const FooterContainer = styled.footer<{
+  $data: FooterSection;
+  $previewWidth: "sm" | "default";
+}>`
   padding-top: ${(props) => props.$data?.setting?.paddingTop || "20"}px;
   padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "20"}px;
   margin-top: ${(props) => props.$data?.setting?.marginTop || "0"}px;
   margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "0"}px;
-
   background-color: ${(props) => props.$data?.setting?.backgroundColor};
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: ${(props) => (props.$previewWidth === "sm" ? "8px" : "10px")};
   text-align: center;
+  width: ${(props) => (props.$previewWidth === "sm" ? "425px" : "100%")};
 `;
 
-const FooterText = styled.h2<{ $data: FooterSection }>`
-  font-size: ${(props) => props.$data?.blocks?.setting?.textFontSize || "16"}px;
+const FooterText = styled.h2<{
+  $data: FooterSection;
+  $previewWidth: "sm" | "default";
+}>`
+  font-size: ${(props) => {
+    const baseFontSize = props.$data?.blocks?.setting?.textFontSize || "16";
+    return props.$previewWidth === "sm"
+      ? `${parseInt(baseFontSize) * 0.8}px`
+      : `${baseFontSize}px`;
+  }};
   font-weight: ${(props) =>
     props.$data?.blocks?.setting?.textFontWeight || "normal"};
   color: ${(props) => props.$data?.blocks?.setting?.textColor || "#ffffff"};
-  padding: 10px 5px;
+  padding: ${(props) =>
+    props.$previewWidth === "sm" ? "8px 4px" : "10px 5px"};
 `;
 
-const FooterDescription = styled.p<{ $data: FooterSection }>`
-  font-size: ${(props) =>
-    props.$data?.blocks?.setting?.descriptionFontSize || "16"}px;
+const FooterDescription = styled.p<{
+  $data: FooterSection;
+  $previewWidth: "sm" | "default";
+}>`
+  font-size: ${(props) => {
+    const baseFontSize =
+      props.$data?.blocks?.setting?.descriptionFontSize || "16";
+    return props.$previewWidth === "sm"
+      ? `${parseInt(baseFontSize) * 0.8}px`
+      : `${baseFontSize}px`;
+  }};
   font-weight: ${(props) =>
     props.$data?.blocks?.setting?.descriptionFontWeight || "normal"};
   color: ${(props) =>
     props.$data?.blocks?.setting?.descriptionColor || "#ffffff"};
-  padding: 0px 50px;
-  min-height: 100%;
+  padding: ${(props) => (props.$previewWidth === "sm" ? "0 20px" : "0 50px")};
 `;
 
-const SocialLinks = styled.div`
+const SocialLinks = styled.div<{ $previewWidth: "sm" | "default" }>`
   display: flex;
   justify-content: center;
-  gap: 15px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  gap: ${(props) => (props.$previewWidth === "sm" ? "10px" : "15px")};
+  margin: ${(props) => (props.$previewWidth === "sm" ? "8px 0" : "10px 0")};
   transition: all 0.3s ease-in-out;
-
   &:hover {
     transform: scale(1.08);
   }
 `;
-const FooterLinks = styled.div`
+const FooterLinks = styled.div<{ $previewWidth: "sm" | "default" }>`
   display: flex;
   justify-content: center;
-  color: #ffffff;
-  gap: 15px;
-  margin-top: 10px;
+  flex-wrap: wrap;
+  gap: ${(props) => (props.$previewWidth === "sm" ? "10px" : "15px")};
+  margin-top: ${(props) => (props.$previewWidth === "sm" ? "8px" : "10px")};
+  padding: ${(props) => (props.$previewWidth === "sm" ? "0 10px" : "0")};
 `;
 
 const FooterLink = styled(Link)<{ $data: FooterSection }>`
   font-weight: bold;
   text-decoration: none;
   color: ${(props) => props.$data?.blocks?.setting?.linkColor || "#ffffff"};
-
   &:hover {
     opacity: 0.7;
   }
 `;
 
-const Logo = styled(Image)<{ $data: FooterSection }>`
-  width: ${(props) => props.$data?.blocks?.setting?.logoWidth || "100"}px;
-  height: ${(props) => props.$data?.blocks?.setting?.logoHeight || "100"}px;
+const Logo = styled(Image)<{
+  $data: FooterSection;
+  $previewWidth: "sm" | "default";
+}>`
+  width: ${(props) => {
+    const baseWidth = props.$data?.blocks?.setting?.logoWidth || "100";
+    return props.$previewWidth === "sm"
+      ? `${parseInt(baseWidth) * 0.8}px`
+      : `${baseWidth}px`;
+  }};
+  height: ${(props) => {
+    const baseHeight = props.$data?.blocks?.setting?.logoHeight || "100";
+    return props.$previewWidth === "sm"
+      ? `${parseInt(baseHeight) * 0.8}px`
+      : `${baseHeight}px`;
+  }};
   border-radius: ${(props) =>
     props.$data?.blocks?.setting?.logoRadius || "6"}px;
 `;
@@ -85,6 +116,7 @@ const Footer: React.FC<FooterProps> = ({
   setSelectedComponent,
   layout,
   selectedComponent,
+  previewWidth,
 }) => {
   const sectionData = layout?.sections?.sectionFooter as FooterSection;
 
@@ -106,6 +138,7 @@ const Footer: React.FC<FooterProps> = ({
     <FooterContainer
       dir="rtl"
       $data={sectionData}
+      $previewWidth={previewWidth}
       onClick={() => setSelectedComponent("sectionFooter")}
       className={`transition-all duration-150 ease-in-out relative ${
         selectedComponent === "sectionFooter" ? "border-4 border-blue-500 " : ""
@@ -119,6 +152,7 @@ const Footer: React.FC<FooterProps> = ({
         </div>
       ) : null}
       <Logo
+        $previewWidth={previewWidth}
         $data={sectionData}
         src={logo || "/assets/images/logo.webp"}
         width={100}
@@ -126,11 +160,15 @@ const Footer: React.FC<FooterProps> = ({
         alt="Logo"
       />
 
-      <FooterText $data={sectionData}>{text}</FooterText>
+      <FooterText $previewWidth={previewWidth} $data={sectionData}>
+        {text}
+      </FooterText>
 
-      <FooterDescription $data={sectionData}>{description}</FooterDescription>
+      <FooterDescription $previewWidth={previewWidth} $data={sectionData}>
+        {description}
+      </FooterDescription>
 
-      <SocialLinks>
+      <SocialLinks $previewWidth={previewWidth}>
         <Link
           href={instagramLink ? instagramLink : "/"}
           target="_blank"
@@ -170,7 +208,7 @@ const Footer: React.FC<FooterProps> = ({
       </SocialLinks>
 
       {links && Array.isArray(links) && links.length > 0 && (
-        <FooterLinks>
+        <FooterLinks $previewWidth={previewWidth}>
           {links.map((link, index) => (
             <FooterLink
               key={index}

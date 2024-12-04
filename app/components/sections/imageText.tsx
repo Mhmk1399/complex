@@ -30,11 +30,7 @@ const Section = styled.section<{
   background-color: ${(props) =>
     props.$data.blocks?.setting?.background || "transparent"};
   flex-direction: ${(props) =>
-    props.$previewWidth === "sm"
-      ? "column"
-      : "row"};
-
-
+    props.$previewWidth === "sm" ? "column" : "row"};
 `;
 
 const Image = styled.img<{
@@ -47,28 +43,24 @@ const Image = styled.img<{
   border-radius: ${(props) =>
     props.$data?.blocks?.setting?.boxRadiuos || "10"}px;
   object-fit: cover;
-
-  @media (max-width: 768px) {
-    height: auto;
-  }
-
-  @media (min-width: 1025px) {
-    width: 50%;
-  }
 `;
 
-const TextContainer = styled.div<{ $data: ImageTextSection; $previewWidth: "sm" | "default"; }>`
+const TextContainer = styled.div<{
+  $data: ImageTextSection;
+  $previewWidth: "sm" | "default";
+}>`
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  text-align: right;
+  align-items: ${(props) =>
+    props.$previewWidth === "sm" ? "center" : "flex-end"};
+  text-align: ${(props) => (props.$previewWidth === "sm" ? "center" : "right")};
   padding: 20px;
   width: 100%;
   background-color: ${(props) =>
     props.$data.blocks?.setting?.backgroundColorBox};
   margin: 10px 0px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 425px) {
     align-items: center;
     text-align: center;
     margin: 10px;
@@ -82,8 +74,8 @@ const Heading = styled.h2<{
   color: ${(props) => props.$data.blocks?.setting?.headingColor || "#333"};
   font-size: ${(props) =>
     props.$previewWidth === "sm"
-      ? "18"
-      : props.$data?.setting?.headingFontSize || "30"}px;
+      ? "22"
+      : props.$data.blocks?.setting?.headingFontSize || "30"}px;
   font-weight: ${(props) =>
     props.$data.blocks?.setting?.headingFontWeight || "bold"};
   margin-bottom: 10px;
@@ -98,7 +90,7 @@ const Description = styled.p<{
   font-size: ${(props) =>
     props.$previewWidth === "sm"
       ? "18"
-      : props.$data?.setting?.descriptionFontSize || "24"}px;
+      : props.$data?.blocks?.setting?.descriptionFontSize || "24"}px;
   font-weight: ${(props) =>
     props.$data.blocks?.setting?.descriptionFontWeight || "normal"};
   margin-bottom: 20px;

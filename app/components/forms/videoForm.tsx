@@ -175,7 +175,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({
               type="range"
               name="headingFontSize"
               value={
-                userInputData.blocks.setting?.headingFontSize?.toString() ??
+                userInputData.blocks?.setting?.headingFontSize?.toString() ??
                 "30px"
               }
               onChange={handleBlockSettingChange}
@@ -204,8 +204,9 @@ export const VideoForm: React.FC<VideoFormProps> = ({
             <input
               type="range"
               name="videoWidth"
+              max={10000}
               value={
-                userInputData.blocks.setting?.videoWidth?.toString() ?? "1000px"
+                userInputData.blocks?.setting?.videoWidth?.toString() ?? "1000px"
               }
               onChange={handleBlockSettingChange}
               className="w-full p-2 border rounded"

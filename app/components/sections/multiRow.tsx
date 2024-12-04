@@ -3,43 +3,96 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Delete } from "../C-D";
 
-// Types
 interface MultiRowShowProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
   actualName: string;
   selectedComponent: string;
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
+  previewWidth: "sm" | "default";
 }
 
-// Styled Components
-const Section = styled.section<{ $data: MultiRowSection }>`
+const Section = styled.section<{
+  $data: MultiRowSection;
+  $previewWidth: string;
+}>`
   padding-top: ${(props) => props.$data.setting?.paddingTop || "20px"}px;
   padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20px"}px;
   margin-top: ${(props) => props.$data.setting?.marginTop || "20px"}px;
   margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20px"}px;
   background-color: ${(props) =>
     props.$data.setting?.backgroundColorMultiRow || "#ffffff"};
-  display: block;
-  flex-direction: column;
-  gap: 15px;
-  align-items: center;
+  width: ${(props) => (props.$previewWidth === "sm" ? "375px" : "100%")};
+  margin: 0 auto;
   border-radius: 12px;
 `;
 
-const Title = styled.h2<{ $data: MultiRowSection }>`
-  color: ${(props) => props.$data.setting?.titleColor || "#333"};
-  font-size: ${(props) => props.$data.setting?.titleFontSize || "24px"}px;
-  font-weight: ${(props) => props.$data.setting?.titleFontWeight || "bold"};
-  text-align: center;
-  margin-top: 30px;
-  @media (max-width: 768px) {
-    font-size: 28px;
+const RowContainer = styled.div<{ $previewWidth: string }>`
+  display: flex;
+  flex-direction: column;
+  gap: ${(props) => (props.$previewWidth === "sm" ? "8px" : "16px")};
+  padding: ${(props) => (props.$previewWidth === "sm" ? "10px" : "20px")};
+`;
+
+const Row = styled.div<{ $data: MultiRowSection; $previewWidth: string }>`
+  display: flex;
+  flex-direction: ${(props) =>
+    props.$previewWidth === "sm"
+      ? "column"
+      : props.$data.setting?.imageAlign || "row-reverse"};
+  gap: ${(props) => (props.$previewWidth === "sm" ? "10px" : "20px")};
+  padding: ${(props) => (props.$previewWidth === "sm" ? "15px" : "30px")};
+  background-color: ${(props) =>
+    props.$data.setting?.backgroundColorBox || "#f9f9f9"};
+  border-radius: 18px;
+`;
+
+const ContentWrapper = styled.div<{
+  $data: MultiRowSection;
+  $previewWidth: string;
+}>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: ${(props) => (props.$previewWidth === "sm" ? "18px" : "16px")};
+  width: ${(props) => (props.$previewWidth === "sm" ? "100%" : "60%")};
+`;
+
+const Image = styled.img<{ $data: MultiRowSection; $previewWidth: string }>`
+  width: ${(props) =>
+    props.$previewWidth === "sm" ? "100%" : props.$data.setting?.imageWidth}px;
+  height: ${(props) =>
+    props.$previewWidth === "sm"
+      ? "200px"
+      : props.$data.setting?.imageHeight}px;
+  object-fit: cover;
+  border-radius: ${(props) => props.$data.setting?.imageRadius || "8px"}px;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.01);
+    opacity: 0.7;
+    cursor: pointer;
   }
 `;
-const Heading = styled.h2<{ $data: MultiRowSection }>`
+
+const Title = styled.h2<{ $data: MultiRowSection; $previewWidth: string }>`
+  font-size: ${(props) =>
+    props.$previewWidth === "sm"
+      ? "24"
+      : props.$data.setting?.titleFontSize || "24"}px;
+  color: ${(props) => props.$data?.setting?.titleColor || "#ffffff"};
+  text-align: center;
+  margin-bottom: ${(props) => (props.$previewWidth === "sm" ? "10px" : "20px")};
+`;
+
+const Heading = styled.h2<{ $data: MultiRowSection; $previewWidth: string }>`
   color: ${(props) => props.$data.setting?.headingColor || "#333"};
-  font-size: ${(props) => props.$data.setting?.headingFontSize || "24px"}px;
+  font-size: ${(props) =>
+    props.$previewWidth === "sm"
+      ? "22"
+      : props.$data.setting?.headingFontSize || "24"}px;
   font-weight: ${(props) => props.$data.setting?.headingFontWeight || "bold"};
   text-align: center;
   @media (max-width: 768px) {
@@ -48,104 +101,29 @@ const Heading = styled.h2<{ $data: MultiRowSection }>`
   }
 `;
 
-const RowContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Row = styled.div<{ $data: MultiRowSection }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 10px;
-  margin-right: 10px;
-  padding: 30px;
-  border-radius: 18px;
-  background-color: ${(props) =>
-    props.$data.setting?.backgroundColorBox || "#f9f9f9"};
-  max-width: auto;
-  flex-direction: ${(props) =>
-    props.$data.setting?.imageAlign || "row-reverse"};
-
-  @media (min-width: 768px) {
-    align-items: center;
-    img {
-      width: 40%;
-      margin-bottom: 0;
-    }
-
-    .content {
-      width: 60%;
-      text-align: center;
-    }
-  }
-    @media (max-width: 425px) {
-    flex-direction: column;
-    align-items: center;
-    img {
-      width: 100%;
-      margin-bottom: 10px;
-    }
-`;
-
-const WrapperContainer = styled.div<{ $data: MultiRowSection }>`
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  justify-content: center;
-  align-items: center;
-  min-height: 300px; // Add fixed minimum height
-  width: 100%; // Fixed width
-  padding: 20px;
-`;
-
-const Image = styled.img<{ $data: MultiRowSection }>`
-  width: 100%;
-  height: 100%;
-  border-radius: ${(props) => props.$data.setting?.imageRadius || "8px"}px;
-  object-fit: cover;
-  margin-bottom: 10px;
-  transition: all 0.5s ease-in-out;
-  box-shadow: 3px 2px 3px 2px rgba(203, 192, 192, 0.2);
-
-  &:hover {
-    opacity: 0.4;
-    transform: scale(1.01);
-    transform: rotate(1deg);
-  }
-`;
-
-const Description = styled.p<{ $data: MultiRowSection }>`
+const Description = styled.p<{ $data: MultiRowSection; $previewWidth: string }>`
+  font-size: ${(props) =>
+    props.$previewWidth === "sm"
+      ? "14"
+      : props.$data.setting?.descriptionFontSize || "16"}px;
   color: ${(props) => props.$data.setting?.descriptionColor || "#666"};
-  font-size: ${(props) => props.$data.setting?.descriptionFontSize || "16px"}px;
-  font-weight: ${(props) =>
-    props.$data.setting?.descriptionFontWeight || "normal"};
-  min-height: 100px;
-  width: 100%;
   text-align: center;
-  padding: 0 10px;
-  border-right: 3px solid gray;
-  @media (max-width: 768px) {
-    font-size: 15px;
-    margin-bottom: 10px;
-  }
+  padding: ${(props) => (props.$previewWidth === "sm" ? "0 15" : "0 10")}px;
 `;
 
-const Button = styled.a<{ $data: MultiRowSection }>`
-  display: inline-block;
-  padding: 10px 30px 10px 30px;
-  color: ${(props) => props.$data.setting?.btnColor || "#fff"};
+const Button = styled.a<{ $data: MultiRowSection; $previewWidth: string }>`
+  padding: ${(props) =>
+    props.$previewWidth === "sm" ? "8px 20px" : "10px 30px"};
+  font-size: ${(props) => (props.$previewWidth === "sm" ? "14px" : "16px")};
   background-color: ${(props) =>
     props.$data.setting?.btnBackgroundColor || "#007BFF"};
+  color: ${(props) => props.$data.setting?.btnColor || "#fff"};
   border-radius: 5px;
-  text-decoration: none;
   text-align: center;
-  transition: all 0.3s ease-in-out;
+  transition: opacity 0.3s ease;
+
   &:hover {
-    opacity: 0.6;
+    opacity: 0.8;
   }
 `;
 
@@ -155,35 +133,28 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
   actualName,
   selectedComponent,
   setLayout,
+  previewWidth,
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   const sectionData = (layout.sections?.children?.sections?.find(
     (section) => section.type === actualName
-  ) as MultiRowSection) || {
-    title: "",
-    blocks: [{ setting: {} }],
-    setting: {},
-  };
+  ) as MultiRowSection) || { blocks: [], setting: {} };
 
-  if (!sectionData) {
-    return null;
-  }
+  if (!sectionData) return null;
 
   return (
-    <>
-      <Title $data={sectionData}>
-        {sectionData?.title || "No title available"}
-      </Title>
-      <Section
-        $data={sectionData}
-        onClick={() => setSelectedComponent(actualName)}
-        className={`transition-all duration-150 ease-in-out relative ${
-          selectedComponent === actualName
-            ? "border-4 border-blue-500 rounded-lg shadow-lg "
-            : ""
-        }`}
-      >
-     {showDeleteModal && (
+    <Section
+      $data={sectionData}
+      $previewWidth={previewWidth}
+      onClick={() => setSelectedComponent(actualName)}
+      className={`transition-all duration-150 ease-in-out relative ${
+        selectedComponent === actualName
+          ? "border-4 border-blue-500 rounded-lg shadow-lg "
+          : ""
+      }`}
+    >
+      {showDeleteModal && (
         <div className="fixed inset-0  bg-black bg-opacity-70 z-50 flex items-center justify-center ">
           <div className="bg-white p-8 rounded-lg">
             <h3 className="text-lg font-bold mb-4">
@@ -227,45 +198,44 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
           </button>
         </div>
       ) : null}
+      <Title $data={sectionData} $previewWidth={previewWidth}>
+        {sectionData.title}
+      </Title>
 
-        <RowContainer>
-          {Object.entries(sectionData.blocks).map(([key, block], idx) => {
-            if (key === "setting") return null;
-            const index = Number(key);
-            if (isNaN(index)) return null;
-            const typedBlock = block as MultiRowBlock;
-            return (
-              <Row key={idx} $data={sectionData}>
-                {typedBlock.imageSrc && (
-                  <Image
-                    src={
-                      (typedBlock.imageSrc as string) ||
-                      "/assets/images/banner2.webp"
-                    }
-                    alt={(typedBlock.imageAlt as string) || ""}
-                    $data={sectionData}
-                  />
-                )}
-                <WrapperContainer $data={sectionData}>
-                  <Heading $data={sectionData}>
-                    {typedBlock.heading || "No title available"}
-                  </Heading>
-                  <Description $data={sectionData}>
-                    {typedBlock.description || "description"}
-                  </Description>
-                  <Button
-                    href={typedBlock.btnLink || "#" || ""}
-                    $data={sectionData}
-                  >
-                    {typedBlock.btnLable || "Learn More"}
-                  </Button>
-                </WrapperContainer>
-              </Row>
-            );
-          })}
-        </RowContainer>
-      </Section>
-    </>
+      <RowContainer $previewWidth={previewWidth}>
+        {Object.entries(sectionData.blocks).map(([key, block], idx) => {
+          if (key === "setting") return null;
+          const typedBlock = block as MultiRowBlock;
+
+          return (
+            <Row key={idx} $data={sectionData} $previewWidth={previewWidth}>
+              <Image
+                src={typedBlock.imageSrc || "/default-image.jpg"}
+                alt={typedBlock.imageAlt || ""}
+                $data={sectionData}
+                $previewWidth={previewWidth}
+              />
+              <ContentWrapper $previewWidth={previewWidth} $data={sectionData}>
+                <Heading $previewWidth={previewWidth} $data={sectionData}>
+                  {typedBlock.heading}
+                </Heading>
+                <Description $data={sectionData} $previewWidth={previewWidth}>
+                  {typedBlock.description}
+                </Description>
+                <Button
+                  href={typedBlock.btnLink || "#"}
+                  $data={sectionData}
+                  $previewWidth={previewWidth}
+                >
+                  {typedBlock.btnLable || "Learn More"}
+                </Button>
+              </ContentWrapper>
+            </Row>
+          );
+        })}
+      </RowContainer>
+    </Section>
   );
 };
+
 export default MultiRow;

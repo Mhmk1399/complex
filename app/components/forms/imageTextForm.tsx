@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Compiler } from "../compiler";
 import { Layout, ImageTextSection } from "@/lib/types";
-import { s } from "framer-motion/client";
 interface ImageTextFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<ImageTextSection>>;
   userInputData: ImageTextSection;
@@ -315,10 +314,9 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
           </div>
         </div>
       </div>
-      <hr />
-      <br />
-      <div className="mb-6">
-        <h3 className="font-semibold mb-2">تنظیمات استایل</h3>
+
+      <div className="my-6">
+        {/* <h3 className="font-semibold mb-2">تنظیمات استایل</h3> */}
         <div className="gap-4">
           <div>
             <label className="block mb-1"> انحنای زوایای کارت </label>

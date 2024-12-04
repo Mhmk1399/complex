@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Layout, BannerSection } from "@/lib/types";
 import { Delete } from "../C-D";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface props {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -23,6 +23,7 @@ const SectionBanner = styled.section<{ $data: BannerSection; $previewWidth: "sm"
   margin-bottom: ${(props) => props.$data.setting.marginBottom}px;
   padding-top: ${(props) => props.$data.setting.paddingTop}px;
   padding-bottom: ${(props) => props.$data.setting.paddingBottom}px;
+  transition: all 0.3s ease-in-out;
   @media (max-width: 768px) {
     height: ${(props) => (props.$previewWidth === "sm" ? "200px" : "300px")};
   }
@@ -86,6 +87,27 @@ const Banner: React.FC<props> = ({
   previewWidth,
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [preview, setPreview] = useState<"sm" | "default">("default");
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 425) {
+        setPreview('sm');
+      } else {
+        setPreview('default');
+      }
+    };
+  
+    // Initial check
+    handleResize();
+  
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+  
+    // Cleanup
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  
 
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName

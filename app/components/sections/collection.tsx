@@ -11,6 +11,7 @@ interface CollectionProps {
   actualName: string;
   selectedComponent: string;
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
+  previewWidth: "sm" | "default";
 }
 interface ProductData {
   id: string;
@@ -21,12 +22,17 @@ interface ProductData {
   btnText: string;
 }
 
-const CollectionWrapper = styled.div<{ $setting: CollectionBlockSetting }>`
+const CollectionWrapper = styled.div<{
+  $setting: CollectionBlockSetting;
+  $previewWidth: "sm" | "default";
+}>`
   padding-top: ${(props) => props.$setting?.paddingTop}px;
   padding-bottom: ${(props) => props.$setting?.paddingBottom}px;
   margin-top: ${(props) => props.$setting?.marginTop}px;
   margin-bottom: ${(props) => props.$setting?.marginBottom}px;
   background-color: ${(props) => props.$setting?.backgroundColor};
+  width: ${(props) => (props.$previewWidth === "sm" ? "425px" : "100%")};
+  margin: ${(props) => (props.$previewWidth === "sm" ? "0 auto" : "0")};
 `;
 const Heading = styled.h2<{ $setting: CollectionBlockSetting }>`
   color: ${(props) => props.$setting?.headingColor};
@@ -35,19 +41,25 @@ const Heading = styled.h2<{ $setting: CollectionBlockSetting }>`
   text-align: center;
 `;
 
-const ProductGrid = styled.div<{ $setting: CollectionBlockSetting }>`
-  display: flex;
+const ProductGrid = styled.div<{
+  $setting: CollectionBlockSetting;
+  $previewWidth: "sm" | "default";
+}>`
+  display: grid;
+  align-items: center;
+  jiustify-content: center;
   gap: 10px;
-  padding: 20px;
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: center;
-  }
+  padding: 10px;
+  grid-template-columns: ${(props) =>
+    props.$previewWidth === "sm"
+      ? "1fr"
+      : "repeat(auto-fit, minmax(100px, 1fr))"};
 `;
 
 const ProductCard = styled.div<{
   $setting: CollectionBlockSetting;
   $isLarge?: boolean;
+  $previewWidth: "sm" | "default";
 }>`
   background: ${(props) => props.$setting.cardBackground};
   border-radius: ${(props) => props.$setting.cardBorderRadius}px;
@@ -60,10 +72,7 @@ const ProductCard = styled.div<{
     transform: scale(0.99);
   }
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  width: ${(props) => (props.$isLarge ? "100%" : "calc(49% - 100px)")};
-  @media (max-width: 768px) {
-    width: 100%;
-  }
+  // width: ${(props) => (props.$isLarge ? "100%" : "calc(49% - 100px)")};
 `;
 
 const ProductImage = styled.img<{ $setting: CollectionBlockSetting }>`
@@ -107,6 +116,7 @@ export const Collection: React.FC<CollectionProps> = ({
   actualName,
   selectedComponent,
   setLayout,
+  previewWidth,
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   // const [products, setProducts] = useState<ProductData[]>([]);
@@ -122,8 +132,8 @@ export const Collection: React.FC<CollectionProps> = ({
         const response = await fetch("/api/collections");
         const data = await response.json();
 
-        setCollections(data.collections);
-
+        const collectionData = data.collections || [];
+        setCollections(collectionData);
         // Set initial filtered products from 'all' collection
         const allCollection = data.collections.find(
           (c: any) => c.name === "all"
@@ -202,6 +212,7 @@ export const Collection: React.FC<CollectionProps> = ({
         </select>
       </div>
       <CollectionWrapper
+        $previewWidth={previewWidth}
         dir="rtl"
         $setting={sectionData.setting}
         onClick={() => {
@@ -258,9 +269,13 @@ export const Collection: React.FC<CollectionProps> = ({
           </div>
         ) : null}
 
-        <ProductGrid $setting={sectionData.setting}>
+        <ProductGrid
+          $setting={sectionData.setting}
+          $previewWidth={previewWidth}
+        >
           {filteredProducts.slice(0, 3).map((product, index) => (
             <ProductCard
+              $previewWidth={previewWidth}
               key={product.id}
               $setting={sectionData.setting}
               $isLarge={index === 0}

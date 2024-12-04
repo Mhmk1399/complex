@@ -10,24 +10,25 @@ interface ContactFormProps {
   actualName: string;
   selectedComponent: string;
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
+  previewWidth: "sm" | "default";
 }
 
-// Styled Components
-const Section = styled.section<{ $data: ContactFormDataSection }>`
+const Section = styled.section<{ 
+  $data: ContactFormDataSection; 
+  $previewWidth: "sm" | "default" 
+}>`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding-top: ${(props) => props.$data?.setting?.paddingTop || "20px"};
   padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "20px"};
-  margin-top: ${(props) => props.$data?.setting?.marginTop || "20px"};
-  margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "20px"};
-  margin-left: 20px;
-  margin-right: 20px;
-  background-color: ${(props) =>
-    props.$data.blocks?.setting?.formBackground || "#f9f9f9"};
+  margin: ${(props) => props.$data?.setting?.marginTop || "20px"} 20px;
+  background-color: ${(props) => props.$data.blocks?.setting?.formBackground || "#f9f9f9"};
   border-radius: 20px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: ${(props) => props.$previewWidth === "sm" ? "100%" : "auto"};
+  max-width: ${(props) => props.$previewWidth === "sm" ? "375px" : "100%"};
 `;
 
 const Heading = styled.h2<{ $data: ContactFormDataSection }>`
@@ -42,20 +43,21 @@ const Heading = styled.h2<{ $data: ContactFormDataSection }>`
   }
 `;
 
-const Form = styled.form`
+const Form = styled.form<{ $previewWidth: "sm" | "default" }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  padding: 0 20px;
+  width: ${props => props.$previewWidth === "sm" ? "90%" : "100%"};
+  max-width: ${props => props.$previewWidth === "sm" ? "340px" : "800px"};
+  padding: 0 ${props => props.$previewWidth === "sm" ? "10px" : "20px"};
 `;
 
-const Input = styled.input`
-  padding: 14px;
+const Input = styled.input<{ $previewWidth: "sm" | "default" }>`
+  padding: ${props => props.$previewWidth === "sm" ? "10px" : "14px"};
   margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: ${props => props.$previewWidth === "sm" ? "14px" : "16px"};
   width: 70%;
 
   &:focus {
@@ -68,15 +70,15 @@ const Input = styled.input`
   }
 `;
 
-const TextArea = styled.textarea`
-  padding: 14px;
+const TextArea = styled.textarea<{ $previewWidth: "sm" | "default" }>`
+  padding: ${props => props.$previewWidth === "sm" ? "10px" : "14px"};
   margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: ${props => props.$previewWidth === "sm" ? "14px" : "16px"};
   width: 70%;
   resize: vertical;
-  min-height: 100px;
+  min-height: ${props => props.$previewWidth === "sm" ? "80px" : "100px"};
 
   &:focus {
     outline: none;
@@ -88,25 +90,24 @@ const TextArea = styled.textarea`
   }
 `;
 
-const Button = styled.button<{ $data: ContactFormDataSection }>`
-  padding: 15px 50px;
-  background-color: ${(props) =>
-    props.$data.blocks.setting?.btnBackgroundColor || "#007bff"};
-  color: ${(props) => props.$data.blocks.setting?.btnTextColor || "#fff"};
+const Button = styled.button<{ 
+  $data: ContactFormDataSection;
+  $previewWidth: "sm" | "default"
+}>`
+  padding: ${props => props.$previewWidth === "sm" ? "12px 30px" : "15px 50px"};
+  background-color: ${props => props.$data.blocks.setting?.btnBackgroundColor || "#007bff"};
+  color: ${props => props.$data.blocks.setting?.btnTextColor || "#fff"};
   border: none;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: ${props => props.$previewWidth === "sm" ? "14px" : "16px"};
   cursor: pointer;
   transition: all 0.4s ease-in-out;
+  width: ${props => props.$previewWidth === "sm" ? "50%" : "70%"};
+  text-align: center;
 
   &:hover {
-    background-color: ${(props) =>
-      props.$data.blocks.setting?.btnBackgroundColor ? "#0056b3" : "#9c119c"};
+    background-color: ${props => props.$data.blocks.setting?.btnBackgroundColor ? "#0056b3" : "#9c119c"};
     transform: scale(0.97);
-  }
-
-  @media (max-width: 768px) {
-    width: 90%;
   }
 `;
 
@@ -117,6 +118,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
   actualName,
   selectedComponent,
   setLayout,
+  previewWidth,
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const sectionData = layout.sections?.children?.sections?.find(
@@ -128,7 +130,9 @@ const ContactForm: React.FC<ContactFormProps> = ({
 
   return (
     <Section
+      dir="rtl"
       $data={sectionData}
+      $previewWidth={previewWidth}
       onClick={() => setSelectedComponent(actualName)}
       className={`transition-all duration-150 ease-in-out relative ${
         selectedComponent === actualName
@@ -137,16 +141,16 @@ const ContactForm: React.FC<ContactFormProps> = ({
       }`}
     >
       {showDeleteModal && (
-        <div className="fixed inset-0  bg-black bg-opacity-70 z-50 flex items-center justify-center ">
+        <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center ">
           <div className="bg-white p-8 rounded-lg">
             <h3 className="text-lg font-bold mb-4">
-              مطمئن هستید؟
+              آیا از حذف
               <span className="text-blue-400 font-bold mx-1">
                 {actualName}
               </span>{" "}
-              آیا از حذف
+              مطمئن هستید؟
             </h3>
-            <div className="flex gap-4 justify-end">
+            <div className="flex gap-4 justify-end flex-row-reverse">
               <button
                 className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
                 onClick={() => setShowDeleteModal(false)}
@@ -168,7 +172,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
       )}
 
       {actualName === selectedComponent ? (
-        <div className="absolute w-fit -top-5 -left-1 z-10 flex ">
+        <div className="absolute w-fit -top-5 -left-1 z-10 flex flex-row-reverse ">
           <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
             {actualName}
           </div>
@@ -184,11 +188,11 @@ const ContactForm: React.FC<ContactFormProps> = ({
       <Heading $data={sectionData}>
         {sectionData?.blocks?.heading || "Contact Us"}
       </Heading>
-      <Form>
-        <Input type="text" placeholder="نام" required />
-        <Input type="email" placeholder="ایمیل" required />
-        <TextArea placeholder="متن پیام شما ..." required />
-        <Button $data={sectionData} type="submit">
+      <Form $previewWidth={previewWidth}>
+        <Input $previewWidth={previewWidth} type="text" placeholder="نام" required />
+        <Input $previewWidth={previewWidth} type="email" placeholder="ایمیل" required />
+        <TextArea $previewWidth={previewWidth} placeholder="متن پیام شما ..." required />
+        <Button $data={sectionData} $previewWidth={previewWidth} type="submit">
           ارسال
         </Button>
       </Form>
