@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Layout, BannerSection } from "@/lib/types";
 import { Delete } from "../C-D";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface props {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -18,22 +18,24 @@ interface props {
 const SectionBanner = styled.section<{
   $data: BannerSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   position: relative;
-  height: ${(props) => (props.$previewWidth === "sm" ? "300px" : "600px")};
+  height: ${(props) => (props.$preview === "sm" ? "300px" : "600px")};
   margin: 0px 10px;
   margin-top: ${(props) => props.$data.setting.marginTop}px;
   margin-bottom: ${(props) => props.$data.setting.marginBottom}px;
   padding-top: ${(props) => props.$data.setting.paddingTop}px;
   padding-bottom: ${(props) => props.$data.setting.paddingBottom}px;
   @media (max-width: 768px) {
-    height: ${(props) => (props.$previewWidth === "sm" ? "200px" : "300px")};
+    height: ${(props) => (props.$preview === "sm" ? "200px" : "300px")};
   }
 `;
 
 const BannerImage = styled(Image)<{
   $data: BannerSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   opacity: ${(props) => props.$data.blocks.setting.opacityImage || "1"}px;
   border-radius: ${(props) =>
@@ -44,6 +46,7 @@ const BannerImage = styled(Image)<{
 const BannerTextBox = styled.div<{
   $data: BannerSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   position: absolute;
   top: 50%;
@@ -56,8 +59,7 @@ const BannerTextBox = styled.div<{
   opacity: ${(props) => props.$data.blocks.setting.opacityTextBox || "1"};
   background-color: ${(props) =>
     props.$data.blocks.setting.backgroundColorBox || "rgba(0, 0, 0, 0.5)"};
-  padding: ${(props) =>
-    props.$previewWidth === "sm" ? "20px 40px" : "50px 200px"};
+  padding: ${(props) => (props.$preview === "sm" ? "20px 40px" : "50px 200px")};
   border-radius: ${(props) =>
     props.$data.blocks.setting.backgroundBoxRadious || "10px"};
 `;
@@ -65,27 +67,29 @@ const BannerTextBox = styled.div<{
 const HeadingText = styled.h2<{
   $data: BannerSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   color: ${(props) => props.$data.blocks.setting.textColor || "#ffffff"};
   font-size: ${(props) =>
-    props.$previewWidth === "sm"
+    props.$preview === "sm"
       ? "18px"
       : props.$data.blocks.setting.textFontSize || "16px"}px;
   font-weight: ${(props) =>
     props.$data.blocks.setting.textFontWeight || "bold"};
   text-align: center;
   @media (max-width: 768px) {
-    font-size: ${(props) => (props.$previewWidth === "sm" ? "16px" : "28px")};
+    font-size: ${(props) => (props.$preview === "sm" ? "16px" : "28px")};
   }
 `;
 
 const DescriptionText = styled.p<{
   $data: BannerSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   color: ${(props) => props.$data.blocks.setting.descriptionColor || "#ffffff"};
   font-size: ${(props) =>
-    props.$previewWidth === "sm"
+    props.$preview === "sm"
       ? "14px"
       : props.$data.blocks.setting.descriptionFontSize || "16px"}px;
   font-weight: ${(props) =>
@@ -93,7 +97,7 @@ const DescriptionText = styled.p<{
   margin-top: 14px;
   text-align: center;
   @media (max-width: 768px) {
-    font-size: ${(props) => (props.$previewWidth === "sm" ? "12px" : "16px")};
+    font-size: ${(props) => (props.$preview === "sm" ? "12px" : "16px")};
   }
 `;
 
@@ -106,6 +110,15 @@ const Banner: React.FC<props> = ({
   previewWidth,
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [preview, setPreview] = useState(previewWidth);
+
+  useEffect(() => {
+    if (window.innerWidth <= 425) {
+      setPreview("sm");
+    } else {
+      setPreview(previewWidth);
+    }
+  }, [previewWidth]);
 
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
@@ -114,12 +127,21 @@ const Banner: React.FC<props> = ({
   if (!sectionData) {
     return null;
   }
+  if (!sectionData) {
+    return <div>No data available</div>; // or handle this case appropriately
+  }
+
+
+
 
   const { description, imageAlt, imageSrc, text } = sectionData?.blocks;
+
+  console.log(preview);
 
   return (
     <SectionBanner
       $previewWidth={previewWidth}
+      $preview={preview}
       $data={sectionData}
       onClick={() => setSelectedComponent(actualName)}
       className={`transition-all duration-150 ease-in-out relative ${
@@ -183,6 +205,7 @@ const Banner: React.FC<props> = ({
         }}
       >
         <BannerImage
+          $preview={preview}
           $previewWidth={previewWidth}
           $data={sectionData}
           alt={imageAlt || "banner"}
@@ -191,11 +214,23 @@ const Banner: React.FC<props> = ({
           priority
         />
       </Link>
-      <BannerTextBox $data={sectionData} $previewWidth={previewWidth}>
-        <HeadingText $data={sectionData} $previewWidth={previewWidth}>
+      <BannerTextBox
+        $data={sectionData}
+        $previewWidth={previewWidth}
+        $preview={preview}
+      >
+        <HeadingText
+          $data={sectionData}
+          $previewWidth={previewWidth}
+          $preview={preview}
+        >
           {text || "سربرگ بنر"}
         </HeadingText>
-        <DescriptionText $data={sectionData} $previewWidth={previewWidth}>
+        <DescriptionText
+          $data={sectionData}
+          $previewWidth={previewWidth}
+          $preview={preview}
+        >
           {description || "توضیحات بنر"}
         </DescriptionText>
       </BannerTextBox>

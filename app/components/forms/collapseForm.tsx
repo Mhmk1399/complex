@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
 import {
   Layout,
@@ -60,14 +60,25 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
   layout,
   selectedComponent,
 }) => {
+  const [loaded, setLoaded] = useState(false);
+
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
-    setUserInputData(initialData);
+    if (initialData) {
+      setLoaded(true);
+      setUserInputData(initialData);
+    }
+  console.log(initialData);
+
   }, []);
+  
+
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
-    setUserInputData(initialData);
-    
+    if (initialData) {
+      setLoaded(true);
+      setUserInputData(initialData);
+    }
   }, [selectedComponent]);
 
   const handleBlockChange = (index: number, field: string, value: string) => {
@@ -109,6 +120,10 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
   };
 
   return (
+    <>
+    {!loaded ? (
+        <p>Loading...</p>
+      ) : (
     <div className="p-6 max-w-4xl mx-auto" dir="rtl">
       <h2 className="text-xl font-bold mb-4">تنظیمات آکاردئون</h2>
       {/* Main Heading Settings */}
@@ -266,5 +281,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
         </div>
       </div>
     </div>
+      )}
+    </>
   );
 };

@@ -55,6 +55,9 @@ export const Preview: React.FC<PreviewProps> = ({
     BlogList,
     BlogDetail,
   };
+  // if (!layout || !orders) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <div>

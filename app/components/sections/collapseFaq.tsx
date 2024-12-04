@@ -4,7 +4,7 @@ import {
   CollapseBlock,
   CollapseBlockSetting,
 } from "@/lib/types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Delete } from "../C-D";
 
@@ -131,16 +131,34 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [openIndexes, setOpenIndexes] = useState<number[]>([]);
+  const [blocks, setBlocks] = useState<CollapseBlock[]>([]);
 
-  const sectionData = (layout.sections?.children?.sections.find(
+
+
+  const sectionData = (layout?.sections?.children?.sections?.find(
     (section) => section.type === actualName
   ) as CollapseSection) || {
     blocks: [],
     setting: {},
     type: "collapse",
   };
+  if (!sectionData) {
+    return null;
+  }
+  useEffect(() => {
+    if (sectionData?.blocks) {
+      const blocksArray = Object.keys(sectionData.blocks)
+        .filter(key => !isNaN(Number(key)))
+        .map(key => sectionData.blocks[key]);
+      setBlocks(blocksArray);
+    }
+  }, [sectionData]);
 
-  if (!sectionData) return null;
+  // console.log(actualName , "actualName");
+  // console.log(sectionData , "sectionData");
+  
+  
+  // Ensure blocks is an array
 
   const toggleOpen = (index: number) => {
     setOpenIndexes((prev) =>
@@ -158,6 +176,42 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
         selectedComponent === actualName ? "border-4 border-blue-500 " : ""
       }`}
     >
+      <Heading $data={sectionData} $previewWidth={previewWidth}>
+        {sectionData.blocks[0]?.heading}
+      </Heading>
+
+      {blocks.length > 0 ? (
+        blocks.map((block: CollapseBlock, idx: number) => (
+          <FaqItem key={idx} $previewWidth={previewWidth}>
+            <Question
+              $block={block}
+              $index={idx}
+              $previewWidth={previewWidth}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleOpen(idx);
+              }}
+            >
+              {block[`text${idx + 1}` as keyof CollapseBlock] as React.ReactNode}
+              <span>{openIndexes.includes(idx) ? "-" : "+"}</span>
+            </Question>
+            <Answer
+              $block={block}
+              $isOpen={openIndexes.includes(idx)}
+              $index={idx}
+              $previewWidth={previewWidth}
+            >
+              {
+                block[
+                  `content${idx + 1}` as keyof CollapseBlock
+                ] as React.ReactNode
+              }
+            </Answer>
+          </FaqItem>
+        ))
+      ) : (
+        <div>Loading...</div>
+      )}
       {showDeleteModal && (
         <div className="fixed inset-0  bg-black bg-opacity-70 z-50 flex items-center justify-center ">
           <div className="bg-white p-8 rounded-lg">
@@ -202,41 +256,7 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
           </button>
         </div>
       ) : null}
-
-      <Heading $data={sectionData} $previewWidth={previewWidth}>
-        {sectionData.blocks[0]?.heading}
-      </Heading>
-
-      {sectionData.blocks.map((block: CollapseBlock, idx: number) => (
-        <FaqItem key={idx} $previewWidth={previewWidth}>
-          <Question
-            $block={block}
-            $index={idx}
-            $previewWidth={previewWidth}
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleOpen(idx);
-            }}
-          >
-            {block[`text${idx + 1}` as keyof CollapseBlock] as React.ReactNode}
-            <span>{openIndexes.includes(idx) ? "-" : "+"}</span>
-          </Question>
-          <Answer
-            $block={block}
-            $isOpen={openIndexes.includes(idx)}
-            $index={idx}
-            $previewWidth={previewWidth}
-          >
-            {
-              block[
-                `content${idx + 1}` as keyof CollapseBlock
-              ] as React.ReactNode
-            }
-          </Answer>
-        </FaqItem>
-      ))}
     </Section>
-  );
-};
+  );};
 
 export default CollapseFaq;
