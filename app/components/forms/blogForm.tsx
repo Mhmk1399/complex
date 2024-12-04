@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
-import { BlogSection, Layout } from "@/lib/types";
-
-interface BlogListFormProps {
-  setUserInputData: React.Dispatch<React.SetStateAction<BlogSection>>;
-  userInputData: BlogSection;
-  layout: Layout;
-  selectedComponent: string;
-}
+import { BlogSection, BlogListFormProps } from "@/lib/types";
 
 const ColorInput = ({
   label,

@@ -869,44 +869,26 @@ export interface BlogListSetting {
   btnBackgroundColor: string;
   buttonColor: string;
 }
-
+export interface BlogListFormProps {
+  setUserInputData: React.Dispatch<React.SetStateAction<BlogSection>>;
+  userInputData: BlogSection;
+  layout: Layout;
+  selectedComponent: string;
+}
 export interface BlogListSection {
   type: "BlogList";
   blocks: BlogBlock[];
   setting: BlogListSetting;
 }
-
 export interface BlogChildren {
   type: "BlogList";
   sections: BlogListSection[];
   order: string[];
 }
 export interface BlogSection {
-  type: string;
-  blocks: {
-    blogId: number;
-    imageSrc: string;
-    imageAlt: string;
-    title: string;
-    description: string;
-    author: string;
-    date: string;
-    btnText: string;
-    btnLink: string;
-  }[];
-  setting: {
-    gridColumns: number;
-    paddingTop: string | number;
-    paddingBottom: string | number;
-    marginTop: string | number;
-    marginBottom: string | number;
-    backgroundColor: string;
-    cardBackgroundColor: string;
-    cardBorderRadius: string;
-    textColor: string;
-    btnBackgroundColor: string;
-    buttonColor: string;
-  };
+  type: "BlogList";  // Changed from string to literal type
+  blocks: BlogBlock[];
+  setting: BlogListSetting;
 }
 
 // blog detail

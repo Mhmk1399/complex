@@ -50,7 +50,7 @@ import { ContactForm } from "./forms/contact";
 import { NewsLetterForm } from "./forms/newsLetterForm";
 import { CollapseForm } from "./forms/collapseForm";
 import {
-  BlogChildren,
+  BlogSection,
   CollectionSection,
   ContactFormDataSection,
   ContactFormProps,
@@ -252,19 +252,18 @@ export const Form = ({
             selectedComponent={selectedComponent}
           />
         );
-      case "BlogList":
-        return (
-          <BlogListForm
-            setUserInputData={
-              setUserInputData as React.Dispatch<
-                React.SetStateAction<BlogChildren>
-              >
-            }
-            userInputData={userInputData as BlogChildren}
-            layout={layout}
-            selectedComponent={selectedComponent}
-          />
-        );
+        case "BlogList":
+          return (
+            <BlogListForm
+              setUserInputData={
+                setUserInputData as React.Dispatch<React.SetStateAction<BlogSection>>
+              }
+              userInputData={userInputData as BlogSection}
+              layout={layout}
+              selectedComponent={selectedComponent}
+            />
+          );
+        
       case "ImageText":
         return (
           <ImageTextForm
