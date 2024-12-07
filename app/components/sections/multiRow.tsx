@@ -1,5 +1,5 @@
 import { Layout, MultiRowSection, MultiRowBlock } from "@/lib/types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Delete } from "../C-D";
 
@@ -14,34 +14,42 @@ interface MultiRowShowProps {
 
 const Section = styled.section<{
   $data: MultiRowSection;
-  $previewWidth: string;
+  $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
-  padding-top: ${(props) => props.$data.setting?.paddingTop || "20px"}px;
-  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20px"}px;
-  margin-top: ${(props) => props.$data.setting?.marginTop || "20px"}px;
-  margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20px"}px;
+  padding-top: ${(props) => props.$data.setting?.paddingTop || "20"}px;
+  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20"}px;
+  margin-top: ${(props) => props.$data.setting?.marginTop || "20"}px;
+  margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20"}px;
   background-color: ${(props) =>
     props.$data.setting?.backgroundColorMultiRow || "#ffffff"};
-  width: ${(props) => (props.$previewWidth === "sm" ? "375px" : "100%")};
+  width: ${(props) => (props.$preview === "sm" ? "375px" : "100%")};
   margin: 0 auto;
   border-radius: 12px;
 `;
 
-const RowContainer = styled.div<{ $previewWidth: string }>`
+const RowContainer = styled.div<{
+  $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
+}>`
   display: flex;
   flex-direction: column;
-  gap: ${(props) => (props.$previewWidth === "sm" ? "8px" : "16px")};
-  padding: ${(props) => (props.$previewWidth === "sm" ? "10px" : "20px")};
+  gap: ${(props) => (props.$preview === "sm" ? "8px" : "16px")};
+  padding: ${(props) => (props.$preview === "sm" ? "10px" : "20px")};
 `;
 
-const Row = styled.div<{ $data: MultiRowSection; $previewWidth: string }>`
+const Row = styled.div<{
+  $data: MultiRowSection;
+  $previewWidth: string;
+  $preview: "sm" | "default";
+}>`
   display: flex;
   flex-direction: ${(props) =>
-    props.$previewWidth === "sm"
+    props.$preview === "sm"
       ? "column"
       : props.$data.setting?.imageAlign || "row-reverse"};
-  gap: ${(props) => (props.$previewWidth === "sm" ? "10px" : "20px")};
-  padding: ${(props) => (props.$previewWidth === "sm" ? "15px" : "30px")};
+  gap: ${(props) => (props.$preview === "sm" ? "10px" : "20px")};
+  padding: ${(props) => (props.$preview === "sm" ? "15px" : "30px")};
   background-color: ${(props) =>
     props.$data.setting?.backgroundColorBox || "#f9f9f9"};
   border-radius: 18px;
@@ -49,23 +57,26 @@ const Row = styled.div<{ $data: MultiRowSection; $previewWidth: string }>`
 
 const ContentWrapper = styled.div<{
   $data: MultiRowSection;
-  $previewWidth: string;
+  $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: ${(props) => (props.$previewWidth === "sm" ? "18px" : "16px")};
-  width: ${(props) => (props.$previewWidth === "sm" ? "100%" : "60%")};
+  gap: ${(props) => (props.$preview === "sm" ? "18px" : "16px")};
+  width: ${(props) => (props.$preview === "sm" ? "100%" : "60%")};
 `;
 
-const Image = styled.img<{ $data: MultiRowSection; $previewWidth: string }>`
+const Image = styled.img<{
+  $data: MultiRowSection;
+  $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
+}>`
   width: ${(props) =>
-    props.$previewWidth === "sm" ? "100%" : props.$data.setting?.imageWidth}px;
+    props.$preview === "sm" ? "100%" : props.$data.setting?.imageWidth}px;
   height: ${(props) =>
-    props.$previewWidth === "sm"
-      ? "200px"
-      : props.$data.setting?.imageHeight}px;
+    props.$preview === "sm" ? "200px" : props.$data.setting?.imageHeight}px;
   object-fit: cover;
   border-radius: ${(props) => props.$data.setting?.imageRadius || "8px"}px;
   transition: all 0.3s ease-in-out;
@@ -77,20 +88,28 @@ const Image = styled.img<{ $data: MultiRowSection; $previewWidth: string }>`
   }
 `;
 
-const Title = styled.h2<{ $data: MultiRowSection; $previewWidth: string }>`
+const Title = styled.h2<{
+  $data: MultiRowSection;
+  $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
+}>`
   font-size: ${(props) =>
-    props.$previewWidth === "sm"
+    props.$preview === "sm"
       ? "24"
       : props.$data.setting?.titleFontSize || "24"}px;
   color: ${(props) => props.$data?.setting?.titleColor || "#ffffff"};
   text-align: center;
-  margin-bottom: ${(props) => (props.$previewWidth === "sm" ? "10px" : "20px")};
+  margin-bottom: ${(props) => (props.$preview === "sm" ? "10px" : "20px")};
 `;
 
-const Heading = styled.h2<{ $data: MultiRowSection; $previewWidth: string }>`
+const Heading = styled.h2<{
+  $data: MultiRowSection;
+  $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
+}>`
   color: ${(props) => props.$data.setting?.headingColor || "#333"};
   font-size: ${(props) =>
-    props.$previewWidth === "sm"
+    props.$preview === "sm"
       ? "22"
       : props.$data.setting?.headingFontSize || "24"}px;
   font-weight: ${(props) => props.$data.setting?.headingFontWeight || "bold"};
@@ -101,20 +120,27 @@ const Heading = styled.h2<{ $data: MultiRowSection; $previewWidth: string }>`
   }
 `;
 
-const Description = styled.p<{ $data: MultiRowSection; $previewWidth: string }>`
+const Description = styled.p<{
+  $data: MultiRowSection;
+  $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
+}>`
   font-size: ${(props) =>
-    props.$previewWidth === "sm"
+    props.$preview === "sm"
       ? "14"
       : props.$data.setting?.descriptionFontSize || "16"}px;
   color: ${(props) => props.$data.setting?.descriptionColor || "#666"};
   text-align: center;
-  padding: ${(props) => (props.$previewWidth === "sm" ? "0 15" : "0 10")}px;
+  padding: ${(props) => (props.$preview === "sm" ? "0 15" : "0 10")}px;
 `;
 
-const Button = styled.a<{ $data: MultiRowSection; $previewWidth: string }>`
-  padding: ${(props) =>
-    props.$previewWidth === "sm" ? "8px 20px" : "10px 30px"};
-  font-size: ${(props) => (props.$previewWidth === "sm" ? "14px" : "16px")};
+const Button = styled.a<{
+  $data: MultiRowSection;
+  $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
+}>`
+  padding: ${(props) => (props.$preview === "sm" ? "8px 20px" : "10px 30px")};
+  font-size: ${(props) => (props.$preview === "sm" ? "14px" : "16px")};
   background-color: ${(props) =>
     props.$data.setting?.btnBackgroundColor || "#007BFF"};
   color: ${(props) => props.$data.setting?.btnColor || "#fff"};
@@ -136,6 +162,15 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
   previewWidth,
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [preview, setPreview] = useState(previewWidth);
+
+  useEffect(() => {
+    if (window.innerWidth <= 425) {
+      setPreview("sm");
+    } else {
+      setPreview(previewWidth);
+    }
+  }, [previewWidth]);
 
   const sectionData = (layout.sections?.children?.sections?.find(
     (section) => section.type === actualName
@@ -145,6 +180,7 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
 
   return (
     <Section
+      $preview={preview}
       $data={sectionData}
       $previewWidth={previewWidth}
       onClick={() => setSelectedComponent(actualName)}
@@ -198,31 +234,54 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
           </button>
         </div>
       ) : null}
-      <Title $data={sectionData} $previewWidth={previewWidth}>
+      <Title
+        $data={sectionData}
+        $previewWidth={previewWidth}
+        $preview={preview}
+      >
         {sectionData.title}
       </Title>
 
-      <RowContainer $previewWidth={previewWidth}>
+      <RowContainer $previewWidth={previewWidth} $preview={preview}>
         {Object.entries(sectionData.blocks).map(([key, block], idx) => {
           if (key === "setting") return null;
           const typedBlock = block as MultiRowBlock;
 
           return (
-            <Row key={idx} $data={sectionData} $previewWidth={previewWidth}>
+            <Row
+              key={idx}
+              $data={sectionData}
+              $previewWidth={previewWidth}
+              $preview={preview}
+            >
               <Image
+                $preview={preview}
                 src={typedBlock.imageSrc || "/default-image.jpg"}
                 alt={typedBlock.imageAlt || ""}
                 $data={sectionData}
                 $previewWidth={previewWidth}
               />
-              <ContentWrapper $previewWidth={previewWidth} $data={sectionData}>
-                <Heading $previewWidth={previewWidth} $data={sectionData}>
+              <ContentWrapper
+                $preview={preview}
+                $previewWidth={previewWidth}
+                $data={sectionData}
+              >
+                <Heading
+                  $previewWidth={previewWidth}
+                  $data={sectionData}
+                  $preview={preview}
+                >
                   {typedBlock.heading}
                 </Heading>
-                <Description $data={sectionData} $previewWidth={previewWidth}>
+                <Description
+                  $preview={preview}
+                  $data={sectionData}
+                  $previewWidth={previewWidth}
+                >
                   {typedBlock.description}
                 </Description>
                 <Button
+                  $preview={preview}
                   href={typedBlock.btnLink || "#"}
                   $data={sectionData}
                   $previewWidth={previewWidth}

@@ -25,14 +25,15 @@ interface ProductData {
 const CollectionWrapper = styled.div<{
   $setting: CollectionBlockSetting;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   padding-top: ${(props) => props.$setting?.paddingTop}px;
   padding-bottom: ${(props) => props.$setting?.paddingBottom}px;
   margin-top: ${(props) => props.$setting?.marginTop}px;
   margin-bottom: ${(props) => props.$setting?.marginBottom}px;
   background-color: ${(props) => props.$setting?.backgroundColor};
-  width: ${(props) => (props.$previewWidth === "sm" ? "425px" : "100%")};
-  margin: ${(props) => (props.$previewWidth === "sm" ? "0 auto" : "0")};
+  width: ${(props) => (props.$preview === "sm" ? "425px" : "100%")};
+  margin: ${(props) => (props.$preview === "sm" ? "0 auto" : "0")};
 `;
 const Heading = styled.h2<{ $setting: CollectionBlockSetting }>`
   color: ${(props) => props.$setting?.headingColor};
@@ -44,6 +45,7 @@ const Heading = styled.h2<{ $setting: CollectionBlockSetting }>`
 const ProductGrid = styled.div<{
   $setting: CollectionBlockSetting;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   display: grid;
   align-items: center;
@@ -51,15 +53,14 @@ const ProductGrid = styled.div<{
   gap: 10px;
   padding: 10px;
   grid-template-columns: ${(props) =>
-    props.$previewWidth === "sm"
-      ? "1fr"
-      : "repeat(auto-fit, minmax(100px, 1fr))"};
+    props.$preview === "sm" ? "1fr" : "repeat(auto-fit, minmax(100px, 1fr))"};
 `;
 
 const ProductCard = styled.div<{
   $setting: CollectionBlockSetting;
   $isLarge?: boolean;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   background: ${(props) => props.$setting.cardBackground};
   border-radius: ${(props) => props.$setting.cardBorderRadius}px;
@@ -119,6 +120,15 @@ export const Collection: React.FC<CollectionProps> = ({
   previewWidth,
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [preview, setPreview] = useState(previewWidth);
+
+  useEffect(() => {
+    if (window.innerWidth <= 425) {
+      setPreview("sm");
+    } else {
+      setPreview(previewWidth);
+    }
+  }, [previewWidth]);
   // const [products, setProducts] = useState<ProductData[]>([]);
 
   const [collections, setCollections] = useState<any[]>([]);
@@ -212,6 +222,7 @@ export const Collection: React.FC<CollectionProps> = ({
         </select>
       </div>
       <CollectionWrapper
+        $preview={preview}
         $previewWidth={previewWidth}
         dir="rtl"
         $setting={sectionData.setting}
@@ -270,11 +281,13 @@ export const Collection: React.FC<CollectionProps> = ({
         ) : null}
 
         <ProductGrid
+          $preview={preview}
           $setting={sectionData.setting}
           $previewWidth={previewWidth}
         >
           {filteredProducts.slice(0, 3).map((product, index) => (
             <ProductCard
+              $preview={preview}
               $previewWidth={previewWidth}
               key={product.id}
               $setting={sectionData.setting}

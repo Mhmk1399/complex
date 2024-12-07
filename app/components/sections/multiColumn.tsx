@@ -1,7 +1,7 @@
 import { Layout, MultiColumnSection } from "@/lib/types";
 import styled from "styled-components";
 import { Delete } from "../C-D";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface MultiColumnProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -15,55 +15,56 @@ interface MultiColumnProps {
 const Section = styled.section<{
   $data: MultiColumnSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   padding-top: ${(props) =>
-    props.$previewWidth === "sm"
-      ? "10px"
-      : props.$data.setting?.paddingTop || "20px"}px;
+    props.$preview === "sm" ? "10" : props.$data.setting?.paddingTop || "20"}px;
   padding-bottom: ${(props) =>
-    props.$previewWidth === "sm"
-      ? "10px"
-      : props.$data.setting?.paddingBottom || "20px"}px;
+    props.$preview === "sm"
+      ? "10"
+      : props.$data.setting?.paddingBottom || "20"}px;
   margin-top: ${(props) =>
-    props.$previewWidth === "sm"
-      ? "10px"
-      : props.$data.setting?.marginTop || "20px"}px;
+    props.$preview === "sm" ? "10" : props.$data.setting?.marginTop || "20"}px;
   margin-bottom: ${(props) =>
-    props.$previewWidth === "sm"
-      ? "10px"
-      : props.$data.setting?.marginBottom || "20px"}px;
+    props.$preview === "sm"
+      ? "10"
+      : props.$data.setting?.marginBottom || "20"}px;
   background-color: ${(props) =>
     props.$data.setting?.backgroundColorBox || "#ffffff"};
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: ${(props) => (props.$previewWidth === "sm" ? "10px" : "15px")};
+  gap: ${(props) => (props.$preview === "sm" ? "10" : "15")}px;
   border-radius: 12px;
-  width: ${(props) => (props.$previewWidth === "sm" ? "100%" : "auto")};
-  padding-left: ${(props) => (props.$previewWidth === "sm" ? "5px" : "10px")};
-  padding-right: ${(props) => (props.$previewWidth === "sm" ? "5px" : "10px")};
+  width: ${(props) => (props.$preview === "sm" ? "100%" : "auto")}px;
+  padding-left: ${(props) => (props.$preview === "sm" ? "5" : "10")}px;
+  padding-right: ${(props) => (props.$preview === "sm" ? "5" : "10")}px;
 `;
 
 const Heading = styled.h2<{
   $data: MultiColumnSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   color: ${(props) => props.$data.setting?.headingColor || "#333"};
   font-size: ${(props) => {
     const baseSize = props.$data.setting?.headingFontSize || 24;
-    return props.$previewWidth === "sm"
+    return props.$preview === "sm"
       ? `${(baseSize as number) * 0.8}px`
       : `${baseSize}px`;
   }};
   font-weight: ${(props) => props.$data.setting?.headingFontWeight || "bold"};
   text-align: center;
-  margin-bottom: ${(props) => (props.$previewWidth === "sm" ? "10px" : "20px")};
+  margin-bottom: ${(props) => (props.$preview === "sm" ? "10px" : "20px")};
 `;
 
-const ColumnContainer = styled.div<{ $previewWidth: "sm" | "default" }>`
+const ColumnContainer = styled.div<{
+  $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
+}>`
   display: flex;
-  gap: ${(props) => (props.$previewWidth === "sm" ? "10px" : "20px")};
+  gap: ${(props) => (props.$preview === "sm" ? "10px" : "20px")};
   justify-content: center;
   align-items: stretch;
   flex-wrap: wrap;
@@ -73,12 +74,13 @@ const ColumnContainer = styled.div<{ $previewWidth: "sm" | "default" }>`
 const Column = styled.div<{
   $data: MultiColumnSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
-  padding: ${(props) => (props.$previewWidth === "sm" ? "10px" : "20px")};
+  padding: ${(props) => (props.$preview === "sm" ? "10px" : "20px")};
   border-radius: ${(props) => props.$data.setting?.imageRadious || "8px"}px;
   text-align: center;
-  width: ${(props) => (props.$previewWidth === "sm" ? "100%" : "30%")};
-  min-height: ${(props) => (props.$previewWidth === "sm" ? "auto" : "600px")};
+  width: ${(props) => (props.$preview === "sm" ? "100%" : "30%")};
+  min-height: ${(props) => (props.$preview === "sm" ? "auto" : "600px")};
   display: flex;
   flex-direction: column;
   position: relative;
@@ -87,17 +89,18 @@ const Column = styled.div<{
 const Title = styled.h3<{
   $data: MultiColumnSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   font-size: ${(props) => {
     const baseSize = props.$data.setting?.titleFontSize || 24;
-    return props.$previewWidth === "sm"
+    return props.$preview === "sm"
       ? `${(baseSize as number) * 0.8}px`
       : `${baseSize}px`;
   }};
   font-weight: ${(props) => props.$data.setting?.titleFontWeight || "bold"};
   color: ${(props) => props.$data.setting?.titleColor || "#ffffff"};
-  margin-bottom: ${(props) => (props.$previewWidth === "sm" ? "5px" : "10px")};
-  min-height: ${(props) => (props.$previewWidth === "sm" ? "40px" : "60px")};
+  margin-bottom: ${(props) => (props.$preview === "sm" ? "5px" : "10px")};
+  min-height: ${(props) => (props.$preview === "sm" ? "40px" : "60px")};
 `;
 
 const Image = styled.img<{ $data: MultiColumnSection }>`
@@ -120,21 +123,20 @@ const Image = styled.img<{ $data: MultiColumnSection }>`
 const Description = styled.p<{
   $data: MultiColumnSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   font-size: ${(props) => {
     const baseSize = props.$data.setting?.descriptionFontSize || 16;
-    return props.$previewWidth === "sm"
+    return props.$preview === "sm"
       ? `${(baseSize as number) * 0.9}px`
       : `${baseSize}px`;
   }};
   font-weight: ${(props) =>
     props.$data.setting?.descriptionFontWeight || "normal"};
   color: ${(props) => props.$data.setting?.descriptionColor || "#ffffff"};
-  margin-bottom: ${(props) => (props.$previewWidth === "sm" ? "10px" : "15px")};
-  // min-height: ${(props) =>
-    props.$previewWidth === "sm" ? "80px" : "110px"};
-  // max-height: ${(props) =>
-    props.$previewWidth === "sm" ? "120px" : "150px"};
+  margin-bottom: ${(props) => (props.$preview === "sm" ? "10px" : "15px")};
+  // min-height: ${(props) => (props.$preview === "sm" ? "80px" : "110px")};
+  // max-height: ${(props) => (props.$preview === "sm" ? "120px" : "150px")};
   overflow-y: visible;
 `;
 
@@ -168,6 +170,15 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
   previewWidth,
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [preview, setPreview] = useState(previewWidth);
+
+  useEffect(() => {
+    if (window.innerWidth <= 425) {
+      setPreview("sm");
+    } else {
+      setPreview(previewWidth);
+    }
+  }, [previewWidth]);
   const sectionData = (layout.sections?.children?.sections.find(
     (section) => section.type === actualName
   ) as MultiColumnSection) || {
@@ -181,6 +192,7 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
 
   return (
     <Section
+      $preview={preview}
       $previewWidth={previewWidth}
       $data={sectionData}
       onClick={() => setSelectedComponent(actualName)}
@@ -235,26 +247,43 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
         </div>
       ) : null}
 
-      <Heading $data={sectionData} $previewWidth={previewWidth}>
+      <Heading
+        $data={sectionData}
+        $previewWidth={previewWidth}
+        $preview={preview}
+      >
         {sectionData?.setting.heading || "heading"}
       </Heading>
       {/* // Replace the existing mapping code with this: */}
-      <ColumnContainer $previewWidth={previewWidth}>
+      <ColumnContainer $previewWidth={previewWidth} $preview={preview}>
         {Object.entries(sectionData.blocks).map(([key, block], idx) => {
           if (key === "setting") return null;
           const index = Number(key);
           if (isNaN(index)) return null;
           const typedBlock = block as MultiColumnSection;
           return (
-            <Column key={idx} $data={sectionData} $previewWidth={previewWidth}>
-              <Title $data={sectionData} $previewWidth={previewWidth}>
+            <Column
+              key={idx}
+              $data={sectionData}
+              $previewWidth={previewWidth}
+              $preview={preview}
+            >
+              <Title
+                $data={sectionData}
+                $previewWidth={previewWidth}
+                $preview={preview}
+              >
                 {
                   typedBlock[
                     `title${index + 1}` as keyof MultiColumnSection
                   ] as React.ReactNode
                 }
               </Title>
-              <Description $previewWidth={previewWidth} $data={sectionData}>
+              <Description
+                $previewWidth={previewWidth}
+                $data={sectionData}
+                $preview={preview}
+              >
                 {
                   typedBlock[
                     `description${index + 1}` as keyof MultiColumnSection

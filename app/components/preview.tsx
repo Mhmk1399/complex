@@ -17,13 +17,14 @@ import DetailPage from "./sections/detailPage";
 import { Collection } from "./sections/collection";
 import BlogList from "./sections/blogList";
 import BlogDetail from "./sections/blogDetail";
+import Image from "next/image";
 
 // First update the PreviewProps interface
 interface PreviewProps {
   layout: Layout;
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   orders: string[];
-  selectedComponent: string; // Add this new prop
+  selectedComponent: string;
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
 }
 
@@ -55,38 +56,52 @@ export const Preview: React.FC<PreviewProps> = ({
     BlogList,
     BlogDetail,
   };
-  // if (!layout || !orders) {
-  //   return <div>Loading...</div>;
-  // }
 
   return (
     <div>
       {/* Buttons to toggle preview size */}
-      <div className="flex justify-center gap-4 p-4 bg-gray-100 border-b border-gray-200">
+      <div className="flex items-center flex-row-reverse justify-center mr-56 gap-4 p-2 border-b-2 border-gray-200">
+        <span className="hidden lg:block text-gray-500 font-bold">: تنظیمات پیش نمایش </span>
+
         <button
+        title="حالت گوشی"
           onClick={() => setPreviewWidth("sm")}
-          className={`px-4 py-2 rounded ${
-            previewWidth === "sm" ? "bg-blue-500 text-white" : "bg-gray-200"
+          className={`px-4 py-2 rounded hidden lg:block ${
+            previewWidth === "sm" ? "bg-blue-400 text-white" : "bg-gray-200"
           }`}
         >
-          Small Mode
+          <Image
+            src="/assets/images/smartphone.png"
+            alt="Small Mode"
+            width={20}
+            height={20}
+          />
         </button>
         <button
+        title="حالت سیستم"
           onClick={() => setPreviewWidth("default")}
-          className={`px-4 py-2 rounded ${
+          className={`px-4 py-2 rounded hidden lg:block ${
             previewWidth === "default"
-              ? "bg-blue-500 text-white"
+              ? "bg-blue-400 text-white"
               : "bg-gray-200"
           }`}
         >
-          Default Mode
+          <Image
+            src="/assets/images/computer.png"
+            alt="Small Mode"
+            width={20}
+            height={20}
+          />
         </button>
       </div>
 
       {/* Preview Container */}
 
-      <div className={`flex relative justify-center ${previewWidth === "default" ? "flex-col" : "mr-64"}`}>
-        
+      <div
+        className={`flex relative justify-center ${
+          previewWidth === "default" ? "flex-col" : "mr-64"
+        }`}
+      >
         {/* Add this wrapper */}
         <div
           className={`h-[90vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide lg:mt-1 lg:ml-5 ${

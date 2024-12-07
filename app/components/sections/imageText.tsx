@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { ImageTextSection, Layout } from "@/lib/types";
 import { Delete } from "../C-D";
@@ -17,6 +17,7 @@ interface ImageTextProps {
 const Section = styled.section<{
   $data: ImageTextSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   display: flex;
   align-items: center;
@@ -29,13 +30,13 @@ const Section = styled.section<{
   margin-bottom: ${(props) => props.$data.setting?.marginBottom || "0"}px;
   background-color: ${(props) =>
     props.$data.blocks?.setting?.background || "transparent"};
-  flex-direction: ${(props) =>
-    props.$previewWidth === "sm" ? "column" : "row"};
+  flex-direction: ${(props) => (props.$preview === "sm" ? "column" : "row")};
 `;
 
 const Image = styled.img<{
   $data: ImageTextSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   width: ${(props) => props.$data?.blocks?.setting?.imageWidth || "500"}0px;
   height: ${(props) => props.$data?.blocks?.setting?.imageHeight || "200"}0px;
@@ -47,13 +48,13 @@ const Image = styled.img<{
 
 const TextContainer = styled.div<{
   $data: ImageTextSection;
+  $preview: "sm" | "default";
   $previewWidth: "sm" | "default";
 }>`
   display: flex;
   flex-direction: column;
-  align-items: ${(props) =>
-    props.$previewWidth === "sm" ? "center" : "flex-end"};
-  text-align: ${(props) => (props.$previewWidth === "sm" ? "center" : "right")};
+  align-items: ${(props) => (props.$preview === "sm" ? "center" : "flex-end")};
+  text-align: ${(props) => (props.$preview === "sm" ? "center" : "right")};
   padding: 20px;
   width: 100%;
   background-color: ${(props) =>
@@ -70,10 +71,11 @@ const TextContainer = styled.div<{
 const Heading = styled.h2<{
   $data: ImageTextSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   color: ${(props) => props.$data.blocks?.setting?.headingColor || "#333"};
   font-size: ${(props) =>
-    props.$previewWidth === "sm"
+    props.$preview === "sm"
       ? "22"
       : props.$data.blocks?.setting?.headingFontSize || "30"}px;
   font-weight: ${(props) =>
@@ -84,11 +86,12 @@ const Heading = styled.h2<{
 const Description = styled.p<{
   $data: ImageTextSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   color: ${(props) =>
     props.$data.blocks?.setting?.descriptionColor || "#666666"};
   font-size: ${(props) =>
-    props.$previewWidth === "sm"
+    props.$preview === "sm"
       ? "18"
       : props.$data?.blocks?.setting?.descriptionFontSize || "24"}px;
   font-weight: ${(props) =>
@@ -121,6 +124,15 @@ const ImageText: React.FC<ImageTextProps> = ({
   previewWidth,
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [preview, setPreview] = useState(previewWidth);
+
+  useEffect(() => {
+    if (window.innerWidth <= 425) {
+      setPreview("sm");
+    } else {
+      setPreview(previewWidth);
+    }
+  }, [previewWidth]);
   // Find the first section with type "image-text"
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
@@ -136,6 +148,7 @@ const ImageText: React.FC<ImageTextProps> = ({
 
   return (
     <Section
+      $preview={preview}
       $previewWidth={previewWidth}
       $data={sectionData}
       onClick={() => setSelectedComponent(actualName)}
@@ -189,17 +202,30 @@ const ImageText: React.FC<ImageTextProps> = ({
       ) : null}
 
       <Image
+        $preview={preview}
         className="rounded-xl "
         $data={sectionData}
         $previewWidth={previewWidth}
         src={imageSrc || "/assets/images/banner2.webp"}
         alt={imageAlt || "Image"}
       />
-      <TextContainer $data={sectionData} $previewWidth={previewWidth}>
-        <Heading $data={sectionData} $previewWidth={previewWidth}>
+      <TextContainer
+        $preview={preview}
+        $data={sectionData}
+        $previewWidth={previewWidth}
+      >
+        <Heading
+          $preview={preview}
+          $data={sectionData}
+          $previewWidth={previewWidth}
+        >
           {heading || "Default Heading"}
         </Heading>
-        <Description $data={sectionData} $previewWidth={previewWidth}>
+        <Description
+          $preview={preview}
+          $data={sectionData}
+          $previewWidth={previewWidth}
+        >
           {description ||
             "Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review."}
         </Description>

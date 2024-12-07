@@ -1,6 +1,6 @@
 "use client";
 import styled from "styled-components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SlideSection, Layout, SlideBlock } from "@/lib/types";
 import { Delete } from "../C-D";
 
@@ -16,6 +16,7 @@ interface SlideShowProps {
 const SectionSlideShow = styled.section<{
   $data: SlideSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   position: relative;
   margin: 0px 10px;
@@ -31,9 +32,12 @@ const SectionSlideShow = styled.section<{
   justify-content: center;
 `;
 
-const SlideContainer = styled.div<{ $previewWidth: "sm" | "default" }>`
+const SlideContainer = styled.div<{
+  $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
+}>`
   width: 100%;
-  max-width: ${(props) => (props.$previewWidth === "sm" ? "400px" : "800px")};
+  max-width: ${(props) => (props.$preview === "sm" ? "400px" : "800px")};
   overflow: hidden;
   position: relative;
 `;
@@ -68,10 +72,11 @@ const SlideTextBox = styled.div`
 const SlideHeading = styled.h3<{
   $data: SlideSection["setting"];
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   color: ${(props) => props.$data.textColor || "#000"};
   font-size: ${(props) =>
-    props.$previewWidth === "sm"
+    props.$preview === "sm"
       ? "18"
       : props.$data?.setting?.textFontSize || "22"}px;
   font-weight: ${(props) => props.$data.textFontWeight || "bold"};
@@ -82,10 +87,11 @@ const SlideHeading = styled.h3<{
 const SlideDescription = styled.p<{
   $data: SlideSection["setting"];
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   color: ${(props) => props.$data.descriptionColor || "#333"};
   font-size: ${(props) =>
-    props.$previewWidth === "sm"
+    props.$preview === "sm"
       ? "14"
       : props.$data?.setting?.descriptionFontSize || "22"}px;
   font-weight: ${(props) => props.$data.descriptionFontWeight || "normal"};
@@ -97,22 +103,30 @@ const SlideDescription = styled.p<{
 const NavButton = styled.button`
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-250%);
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   padding: 10px;
   border: none;
-  border-radius: 50%;
+  border-radius: 20%;
   cursor: pointer;
   z-index: 10;
+  @media (max-width: 425px) {
+    transform: translateY(-390%);
+    padding: 7px;
+  }
+  @media (max-width: 768px) {
+    transform: translateY(-290%);
+    padding: 7px;
+  }
 `;
 
 const PrevButton = styled(NavButton)`
-  left: 10px;
+  left: 5px;
 `;
 
 const NextButton = styled(NavButton)`
-  right: 10px;
+  right: 5px;
 `;
 
 const SlideShow: React.FC<SlideShowProps> = ({
@@ -125,6 +139,15 @@ const SlideShow: React.FC<SlideShowProps> = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [preview, setPreview] = useState(previewWidth);
+
+  useEffect(() => {
+    if (window.innerWidth <= 425) {
+      setPreview("sm");
+    } else {
+      setPreview(previewWidth);
+    }
+  }, [previewWidth]);
 
   const sectionData = layout.sections.children?.sections.find(
     (section) => section.type === actualName
@@ -141,6 +164,7 @@ const SlideShow: React.FC<SlideShowProps> = ({
 
   return (
     <SectionSlideShow
+      $preview={preview}
       $data={sectionData}
       $previewWidth={previewWidth}
       onClick={() => setSelectedComponent(actualName)}
@@ -195,7 +219,7 @@ const SlideShow: React.FC<SlideShowProps> = ({
         </div>
       ) : null}
 
-      <SlideContainer $previewWidth={previewWidth}>
+      <SlideContainer $previewWidth={previewWidth} $preview={preview}>
         <SlidesWrapper $currentIndex={currentIndex}>
           {blocks.map((slide, index) => (
             <Slide key={index}>
@@ -206,12 +230,17 @@ const SlideShow: React.FC<SlideShowProps> = ({
               />
               <SlideTextBox>
                 <SlideHeading
+                  $preview={preview}
                   $data={sectionData.setting}
                   $previewWidth={previewWidth}
                 >
                   {slide.text}
                 </SlideHeading>
-                <SlideDescription $data={sectionData.setting} $previewWidth={previewWidth}>
+                <SlideDescription
+                  $preview={preview}
+                  $data={sectionData.setting}
+                  $previewWidth={previewWidth}
+                >
                   {slide.description}
                 </SlideDescription>
               </SlideTextBox>

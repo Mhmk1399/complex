@@ -6,7 +6,7 @@ import {
   HeaderBlock,
 } from "@/lib/types";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 interface HeaderProps {
@@ -20,8 +20,9 @@ interface HeaderProps {
 const SectionHeader = styled.section<{
   $data: HeaderSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
-  display: ${(props) => (props.$previewWidth === "sm" ? "block" : "flex")};
+  display: ${(props) => (props.$preview === "sm" ? "block" : "flex")};
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -51,13 +52,14 @@ const LogoContainer = styled.div`
 const Logo = styled.img<{
   $data: HeaderSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   width: ${(props) =>
-    props.$previewWidth === "sm"
+    props.$preview === "sm"
       ? `${Number(props.$data.blocks.setting.imageWidth || "100") / 2}px`
       : `${props.$data.blocks.setting.imageWidth || "auto"}px`};
   height: ${(props) =>
-    props.$previewWidth === "sm"
+    props.$preview === "sm"
       ? `${Number(props.$data.blocks.setting.imageHeight || "50") / 2}px`
       : `${props.$data.blocks.setting.imageHeight || "auto"}px`};
 `;
@@ -65,6 +67,7 @@ const Logo = styled.img<{
 const NavItems = styled.div<{
   $isOpen: boolean;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   display: flex;
   align-items: center;
@@ -72,8 +75,8 @@ const NavItems = styled.div<{
   gap: 2rem;
   transition: all 0.3s ease-in-out;
 
-  ${({ $previewWidth, $isOpen }) =>
-    $previewWidth === "sm" &&
+  ${({ $preview, $isOpen }) =>
+    $preview === "sm" &&
     `
     flex-direction: column;
     align-items: center;
@@ -90,16 +93,17 @@ const NavItems = styled.div<{
 const NavItem = styled(Link)<{
   $data: HeaderSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   color: ${(props) => props.$data.blocks.setting.itemColor || "#000"};
   font-size: ${(props) =>
-    props.$previewWidth === "sm"
+    props.$preview === "sm"
       ? `16px`
       : `${props.$data.blocks.setting.itemFontSize || "14px"}`};
   font-weight: ${(props) =>
     props.$data.blocks.setting.itemFontWeight || "normal"};
   padding: ${(props) =>
-    props.$previewWidth === "sm" ? "0.25rem 0.5rem" : "0.5rem 1rem"};
+    props.$preview === "sm" ? "0.25rem 0.5rem" : "0.5rem 1rem"};
   transition: all 0.2s ease-in-out;
   &:hover {
     color: ${(props) => props.$data.blocks.setting.itemHoverColor || "#000"};
@@ -109,9 +113,9 @@ const NavItem = styled(Link)<{
 const MenuButton = styled.button<{
   $data: HeaderSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
-  display: ${({ $previewWidth }) =>
-    $previewWidth === "sm" ? "block" : "none"};
+  display: ${({ $preview }) => ($preview === "sm" ? "block" : "none")};
   background: none;
   border: none;
   font-size: 1.5rem;
@@ -127,6 +131,15 @@ const Header: React.FC<HeaderProps> = ({
   previewWidth,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [preview, setPreview] = useState(previewWidth);
+
+  useEffect(() => {
+    if (window.innerWidth <= 425) {
+      setPreview("sm");
+    } else {
+      setPreview(previewWidth);
+    }
+  }, [previewWidth]);
 
   const sectionData = layout?.sections?.sectionHeader as HeaderSection;
   const isHeaderSection = (section: SectionType): section is HeaderSection => {
@@ -158,6 +171,7 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <SectionHeader
+      $preview={preview}
       $previewWidth={previewWidth}
       $data={sectionData}
       className={`w-full ${
@@ -177,6 +191,7 @@ const Header: React.FC<HeaderProps> = ({
       ) : null}
       <LogoContainer>
         <Logo
+          $preview={preview}
           className={`${isOpen ? "hidden" : "block"}`}
           $data={sectionData}
           $previewWidth={previewWidth}
@@ -184,6 +199,7 @@ const Header: React.FC<HeaderProps> = ({
           alt={imageAlt}
         />
         <MenuButton
+          $preview={preview}
           className="absolute top-5 left-1 p-4"
           $data={sectionData}
           $previewWidth={previewWidth}
@@ -192,9 +208,14 @@ const Header: React.FC<HeaderProps> = ({
           {isOpen ? "X" : "☰"}
         </MenuButton>
       </LogoContainer>
-      <NavItems $isOpen={isOpen} $previewWidth={previewWidth}>
+      <NavItems
+        $isOpen={isOpen}
+        $previewWidth={previewWidth}
+        $preview={preview}
+      >
         {links?.map((link, index) => (
           <NavItem
+            $preview={preview}
             $previewWidth={previewWidth}
             $data={sectionData}
             key={index}

@@ -38,10 +38,15 @@ const Heading = styled.h1<{ $data: VideoSection; $previewWidth: string }>`
   font-weight: ${(props) =>
     props.$data.blocks?.setting?.headingFontWeight || "bold"};
   text-align: center;
-  padding: 0 ${(props) => (props.$previewWidth === "sm" ? "10px" : "0")};
+  padding: 0 ${(props) => (props.$previewWidth === "sm" ? "10" : "0")}px;
+  @media (max-width: 768px) {
+    font-size:20px;
 `;
 
-const VideoElement = styled.video<{ $data: VideoSection; $previewWidth: string }>`
+const VideoElement = styled.video<{
+  $data: VideoSection;
+  $previewWidth: string;
+}>`
   width: ${(props) =>
     props.$previewWidth === "sm"
       ? "355px"
@@ -61,7 +66,7 @@ const Video: React.FC<VideoProps> = ({
   previewWidth,
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  
+
   const sectionData = layout.sections?.children?.sections?.find(
     (section) => section.type === actualName
   ) as VideoSection;
@@ -129,7 +134,7 @@ const Video: React.FC<VideoProps> = ({
           {blocks.heading}
         </Heading>
       )}
-      
+
       {blocks.videoUrl && (
         <VideoElement
           $data={sectionData}
