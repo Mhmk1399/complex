@@ -25,8 +25,10 @@ const Section = styled.section<{ $data: NewsLetterSection; $previewWidth: "sm" |
   background-color: ${(props) => props.$data.blocks.setting.formBackground || "#f9f9f9"};
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  width: ${(props) => (props.$previewWidth === "sm" ? "425px" : "100%")};
+  // width: ${(props) => (props.$previewWidth === "sm" ? "425px" : "100%")};
   transition: all 0.3s ease;
+  margin-left: 10px;
+  margin-right: 10px;
 `;
 
 const Heading = styled.h2<{ $data: NewsLetterSection; $previewWidth: "sm" | "default" }>`

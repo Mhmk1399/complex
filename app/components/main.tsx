@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Preview } from "./preview";
 import { Form } from "./form";
 import data from "../../public/template/null.json";
+import smData from "../../public/template/nullSm.json";
 import {
   AboutChildren,
   BlogChildren,
@@ -22,6 +23,8 @@ export const Main = () => {
   const Data = data as unknown as Layout;
   const [loading, setLoading] = useState(true);
   const [layout, setLayout] = useState<Layout>(Data);
+  const [smLayout, setSmLayout] = useState<Layout>(smData as unknown as Layout);
+  const [activeMode, setActiveMode] = useState<"sm" | "lg">("sm");
   const [selectedComponent, setSelectedComponent] =
     useState<string>("sectionHeader");
   const [saveStatus, setSaveStatus] = useState<
@@ -31,6 +34,8 @@ export const Main = () => {
   const [selectedRoute, setSelectedRoute] = useState<string>("home");
   useEffect(() => {
     setLoading(false);
+    const currentLayoutData = activeMode === "sm" ? smData : Data;
+
     if (selectedRoute === "about") {
       setLayout((prevLayout: Layout) => ({
         ...prevLayout,
@@ -85,12 +90,12 @@ export const Main = () => {
         ...prevLayout,
         sections: {
           ...prevLayout.sections,
-          children: Data.sections.children,
+          children: currentLayoutData.sections.children,
         },
       }));
     }
     console.log(layout);
-  }, [selectedRoute]);
+  }, [selectedRoute, activeMode]);
 
   // const handleSave = async () => {
   //   setSaveStatus('saving');
@@ -115,7 +120,14 @@ export const Main = () => {
   //     setTimeout(() => setSaveStatus('idle'), 2000);
   //   }
   // };
-
+  const handleModeChange = (mode: "lg" | "sm") => {
+    setActiveMode(mode);
+    if (mode === "sm" && window.innerWidth < 768) {
+      setLayout(smLayout);
+    } else {
+      setLayout(Data);
+    }
+  };
   return (
     <div>
       {loading ? (
@@ -150,6 +162,30 @@ export const Main = () => {
                 ? "Error!"
                 : "Save Changes"}
             </button>
+            <div className="inline mr-3">
+              <div className="inline mr-3">
+                <button
+                  className="px-2 py-1 rounded-md"
+                  onClick={() => handleModeChange("sm")}
+                  style={{
+                    backgroundColor: activeMode === "sm" ? "blue" : "gray",
+                    color: "white",
+                  }}
+                >
+                  SM
+                </button>
+                <button
+                  className="mx-2 px-2 py-1 rounded-md"
+                  onClick={() => handleModeChange("lg")}
+                  style={{
+                    backgroundColor: activeMode === "lg" ? "blue" : "gray",
+                    color: "white",
+                  }}
+                >
+                  LG
+                </button>
+              </div>
+            </div>
             <select
               value={selectedRoute}
               onChange={(e) => setSelectedRoute(e.target.value)}

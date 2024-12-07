@@ -30,6 +30,7 @@ const SectionBanner = styled.section<{
   @media (max-width: 768px) {
     height: ${(props) => (props.$preview === "sm" ? "200px" : "300px")};
   }
+
 `;
 
 const BannerImage = styled(Image)<{
@@ -130,9 +131,6 @@ const Banner: React.FC<props> = ({
   if (!sectionData) {
     return <div>No data available</div>; // or handle this case appropriately
   }
-
-
-
 
   const { description, imageAlt, imageSrc, text } = sectionData?.blocks;
 

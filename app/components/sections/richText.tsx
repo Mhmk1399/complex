@@ -3,7 +3,7 @@ import { Layout, RichTextSection, RichTextBlock } from "@/lib/types";
 import Link from "next/link";
 import styled from "styled-components";
 import { Delete } from "../C-D";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface RichTextProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -18,6 +18,7 @@ interface RichTextProps {
 const Section = styled.section<{
   $data: RichTextSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   padding-top: ${(props) => props.$data?.setting?.paddingTop || "10"}px;
   padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "10"}px;
@@ -34,10 +35,14 @@ const Section = styled.section<{
   gap: 15px;
 `;
 
-const H1 = styled.h1<{ $data: RichTextBlock; $previewWidth: "sm" | "default" }>`
+const H1 = styled.h1<{
+  $data: RichTextBlock;
+  $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
+}>`
   color: ${(props) => props.$data?.setting?.textHeadingColor || "#000"};
   font-size: ${(props) =>
-    props.$previewWidth === "sm"
+    props.$preview === "sm"
       ? "18"
       : props.$data?.setting?.textHeadingFontSize || "24"}px;
   font-weight: ${(props) =>
@@ -49,10 +54,14 @@ const H1 = styled.h1<{ $data: RichTextBlock; $previewWidth: "sm" | "default" }>`
   }
 `;
 
-const P = styled.p<{ $data: RichTextBlock; $previewWidth: "sm" | "default" }>`
+const P = styled.p<{
+  $data: RichTextBlock;
+  $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
+}>`
   color: ${(props) => props.$data?.setting?.descriptionColor || "#666"};
   font-size: ${(props) =>
-    props.$previewWidth === "sm"
+    props.$preview === "sm"
       ? "14"
       : props.$data?.setting?.descriptionFontSize || "24"}px;
   font-weight: ${(props) =>
@@ -65,12 +74,12 @@ const P = styled.p<{ $data: RichTextBlock; $previewWidth: "sm" | "default" }>`
 const Btn = styled.button<{
   $data: RichTextBlock;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   color: ${(props) => props.$data?.setting?.btnTextColor || "#fff"};
   background-color: ${(props) =>
     props.$data?.setting?.btnBackgroundColor || "#007BFF"};
-  padding: ${(props) =>
-    props.$previewWidth === "sm" ? "7px 20px" : "15px 30px"};
+  padding: ${(props) => (props.$preview === "sm" ? "7px 20px" : "15px 30px")};
   border-radius: 5px;
   border: none;
   cursor: pointer;
@@ -91,6 +100,15 @@ const RichText: React.FC<RichTextProps> = ({
   previewWidth,
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [preview, setPreview] = useState(previewWidth);
+
+  useEffect(() => {
+    if (window.innerWidth <= 425) {
+      setPreview("sm");
+    } else {
+      setPreview(previewWidth);
+    }
+  }, [previewWidth]);
   const sectionData = layout?.sections?.children?.sections?.find(
     (section) => section.type === actualName
   ) as RichTextSection;
@@ -109,6 +127,7 @@ const RichText: React.FC<RichTextProps> = ({
 
   return (
     <Section
+      $preview={preview}
       $previewWidth={previewWidth}
       dir="rtl"
       $data={sectionData}
@@ -163,7 +182,7 @@ const RichText: React.FC<RichTextProps> = ({
       ) : null}
 
       {textHeading && (
-        <H1 $data={blocks} $previewWidth={previewWidth}>
+        <H1 $data={blocks} $previewWidth={previewWidth} $preview={preview}>
           {textHeading}
         </H1>
       )}
@@ -171,13 +190,13 @@ const RichText: React.FC<RichTextProps> = ({
       <hr className="w-[70%] h-[4px] bg-white mb-4" />
 
       {description && (
-        <P $previewWidth={previewWidth} $data={blocks}>
+        <P $previewWidth={previewWidth} $data={blocks} $preview={preview}>
           {description}
         </P>
       )}
       {btnLink && (
         <Link href={btnLink} passHref legacyBehavior>
-          <Btn $data={blocks} $previewWidth={previewWidth}>
+          <Btn $data={blocks} $previewWidth={previewWidth} $preview={preview}>
             {btnText}
           </Btn>
         </Link>

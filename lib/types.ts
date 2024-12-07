@@ -99,6 +99,10 @@ export interface CommonSettings {
   content3?: string;
   content4?: string;
   setting: CollapseBlockSetting;
+  paddingTopLg?: string;
+  paddingBottomLg?: string;
+  marginTopLg?: string;
+  marginBottomLg?: string;
 }
 
 export interface HeaderBlockSettings extends CommonSettings {
@@ -142,6 +146,18 @@ export interface BannerBlockSettings extends CommonSettings {
   opacityTextBox: string;
   imageRadious: string;
   imageBehavior: string;
+  descriptionColorLg: string;
+  descriptionFontSizeLg: string;
+  descriptionFontWeightLg: string;
+  textColorLg: string;
+  textFontSizeLg: string;
+  textFontWeightLg: string;
+  backgroundColorBoxLg: string;
+  backgroundBoxRadiousLg: string;
+  opacityImageLg: string;
+  opacityTextBoxLg: string;
+  imageRadiousLg: string;
+  imageBehaviorLg: string;
 }
 export interface BannerBlock {
   imageSrc: string;

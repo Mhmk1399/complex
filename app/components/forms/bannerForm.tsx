@@ -1,11 +1,23 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
 import { Layout, BannerSection } from "@/lib/types";
+import React from "react";
+import MarginPaddingEditor from "../sections/editor";
 interface BannerFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<BannerSection>>;
   userInputData: BannerSection;
   layout: Layout;
   selectedComponent: string;
+}
+interface BoxValues {
+  top: number;
+  bottom: number;
+}
+
+interface MarginPaddingEditorProps {
+  margin: BoxValues;
+  padding: BoxValues;
+  onChange: (type: "margin" | "padding", updatedValues: BoxValues) => void;
 }
 const spacingLable = [
   {
@@ -56,15 +68,40 @@ export const BannerForm: React.FC<BannerFormProps> = ({
   layout,
   selectedComponent,
 }) => {
+  const [margin, setMargin] = React.useState<BoxValues>({
+    top: 0,
+    bottom: 0,
+  });
+  const [padding, setPadding] = React.useState<BoxValues>({
+    top: 0,
+    bottom: 0,
+  });
+  const [activeMode, setActiveMode] = useState<"sm" | "lg">("sm");
+
+  const handleModeChange = (mode: "sm" | "lg") => {
+    setActiveMode(mode);
+  };
+  const handleUpdate = (
+    type: "margin" | "padding",
+    updatedValues: BoxValues
+  ) => {
+    if (type === "margin") setMargin(updatedValues);
+    else setPadding(updatedValues);
+  };
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
-  }, []);
-  useEffect(() => {
-    const initialData = Compiler(layout, selectedComponent)[0];
-    setUserInputData(initialData);
+
     
-  }, [selectedComponent]);
+  }, []);
+  console.log("log1", userInputData);
+
+  // useEffect(() => {
+  //   const initialData = Compiler(layout, selectedComponent)[0];
+  //   setUserInputData(initialData);
+  // }, [selectedComponent]);
+
+  console.log("log2", userInputData);
 
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -108,7 +145,29 @@ export const BannerForm: React.FC<BannerFormProps> = ({
 
   return (
     <div className="p-6 max-w-4xl mx-auto" dir="rtl">
-      <h2 className="text-xl font-bold mb-4">تنظیمات بنر</h2>
+      <h2 className="text-xl font-bold mb-4 inline">تنظیمات بنر</h2>
+      <div className="inline mr-3">
+        <button
+          className=" px-2 py-1 rounded-md"
+          onClick={() => handleModeChange("sm")}
+          style={{
+            backgroundColor: activeMode === "sm" ? "blue" : "gray",
+            color: "white",
+          }}
+        >
+          SM
+        </button>
+        <button
+          className="mx-2 px-2 py-1 rounded-md"
+          onClick={() => handleModeChange("lg")}
+          style={{
+            backgroundColor: activeMode === "lg" ? "blue" : "gray",
+            color: "white",
+          }}
+        >
+          LG
+        </button>
+      </div>
 
       {/* Content Section */}
       <div className="mb-6">
@@ -226,6 +285,15 @@ export const BannerForm: React.FC<BannerFormProps> = ({
             </div>
           ))}
         </div>
+      </div>
+      <div
+        style={{ padding: "1rem", display: "flex", justifyContent: "center" }}
+      >
+        <MarginPaddingEditor
+          margin={margin}
+          padding={padding}
+          onChange={handleUpdate}
+        />
       </div>
     </div>
   );

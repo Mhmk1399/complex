@@ -38,8 +38,8 @@ const Section = styled.section<{
   gap: ${(props) => (props.$preview === "sm" ? "10" : "15")}px;
   border-radius: 12px;
   width: ${(props) => (props.$preview === "sm" ? "100%" : "auto")}px;
-  padding-left: ${(props) => (props.$preview === "sm" ? "5" : "10")}px;
-  padding-right: ${(props) => (props.$preview === "sm" ? "5" : "10")}px;
+  margin-left: ${(props) => (props.$preview === "sm" ? "5" : "10")}px;
+  margin-right: ${(props) => (props.$preview === "sm" ? "5" : "10")}px;
 `;
 
 const Heading = styled.h2<{

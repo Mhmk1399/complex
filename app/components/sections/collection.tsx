@@ -32,8 +32,10 @@ const CollectionWrapper = styled.div<{
   margin-top: ${(props) => props.$setting?.marginTop}px;
   margin-bottom: ${(props) => props.$setting?.marginBottom}px;
   background-color: ${(props) => props.$setting?.backgroundColor};
-  width: ${(props) => (props.$preview === "sm" ? "425px" : "100%")};
-  margin: ${(props) => (props.$preview === "sm" ? "0 auto" : "0")};
+  // width: ${(props) => (props.$preview === "sm" ? "425px" : "100%")};
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 12px;
 `;
 const Heading = styled.h2<{ $setting: CollectionBlockSetting }>`
   color: ${(props) => props.$setting?.headingColor};
@@ -48,12 +50,13 @@ const ProductGrid = styled.div<{
   $preview: "sm" | "default";
 }>`
   display: grid;
-  align-items: center;
-  jiustify-content: center;
+  grid-template-columns: repeat(
+    ${(props) => (props.$preview === "sm" ? "1" : "3")},
+    1fr
+  );
   gap: 10px;
   padding: 10px;
-  grid-template-columns: ${(props) =>
-    props.$preview === "sm" ? "1fr" : "repeat(auto-fit, minmax(100px, 1fr))"};
+
 `;
 
 const ProductCard = styled.div<{

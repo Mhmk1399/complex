@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Link from "next/link";
 import Image from "next/image";
 import { Layout, FooterSection } from "@/lib/types";
+import { useState, useEffect } from "react";
 
 interface FooterProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -14,6 +15,7 @@ interface FooterProps {
 const FooterContainer = styled.footer<{
   $data: FooterSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   padding-top: ${(props) => props.$data?.setting?.paddingTop || "20"}px;
   padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "20"}px;
@@ -24,36 +26,37 @@ const FooterContainer = styled.footer<{
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: ${(props) => (props.$previewWidth === "sm" ? "8px" : "10px")};
+  gap: ${(props) => (props.$preview === "sm" ? "8px" : "10px")};
   text-align: center;
-  width: ${(props) => (props.$previewWidth === "sm" ? "425px" : "100%")};
+  // width: ${(props) => (props.$preview === "sm" ? "425px" : "100%")};
 `;
 
 const FooterText = styled.h2<{
   $data: FooterSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   font-size: ${(props) => {
     const baseFontSize = props.$data?.blocks?.setting?.textFontSize || "16";
-    return props.$previewWidth === "sm"
+    return props.$preview === "sm"
       ? `${parseInt(baseFontSize) * 0.8}px`
       : `${baseFontSize}px`;
   }};
   font-weight: ${(props) =>
     props.$data?.blocks?.setting?.textFontWeight || "normal"};
   color: ${(props) => props.$data?.blocks?.setting?.textColor || "#ffffff"};
-  padding: ${(props) =>
-    props.$previewWidth === "sm" ? "8px 4px" : "10px 5px"};
+  padding: ${(props) => (props.$preview === "sm" ? "8px 4px" : "10px 5px")};
 `;
 
 const FooterDescription = styled.p<{
   $data: FooterSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   font-size: ${(props) => {
     const baseFontSize =
       props.$data?.blocks?.setting?.descriptionFontSize || "16";
-    return props.$previewWidth === "sm"
+    return props.$preview === "sm"
       ? `${parseInt(baseFontSize) * 0.8}px`
       : `${baseFontSize}px`;
   }};
@@ -61,26 +64,32 @@ const FooterDescription = styled.p<{
     props.$data?.blocks?.setting?.descriptionFontWeight || "normal"};
   color: ${(props) =>
     props.$data?.blocks?.setting?.descriptionColor || "#ffffff"};
-  padding: ${(props) => (props.$previewWidth === "sm" ? "0 20px" : "0 50px")};
+  padding: ${(props) => (props.$preview === "sm" ? "0 20px" : "0 50px")};
 `;
 
-const SocialLinks = styled.div<{ $previewWidth: "sm" | "default" }>`
+const SocialLinks = styled.div<{
+  $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
+}>`
   display: flex;
   justify-content: center;
-  gap: ${(props) => (props.$previewWidth === "sm" ? "10px" : "15px")};
-  margin: ${(props) => (props.$previewWidth === "sm" ? "8px 0" : "10px 0")};
+  gap: ${(props) => (props.$preview === "sm" ? "10px" : "15px")};
+  margin: ${(props) => (props.$preview === "sm" ? "8px 0" : "10px 0")};
   transition: all 0.3s ease-in-out;
   &:hover {
     transform: scale(1.08);
   }
 `;
-const FooterLinks = styled.div<{ $previewWidth: "sm" | "default" }>`
+const FooterLinks = styled.div<{
+  $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
+}>`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: ${(props) => (props.$previewWidth === "sm" ? "10px" : "15px")};
-  margin-top: ${(props) => (props.$previewWidth === "sm" ? "8px" : "10px")};
-  padding: ${(props) => (props.$previewWidth === "sm" ? "0 10px" : "0")};
+  gap: ${(props) => (props.$preview === "sm" ? "10px" : "15px")};
+  margin-top: ${(props) => (props.$preview === "sm" ? "8px" : "10px")};
+  padding: ${(props) => (props.$preview === "sm" ? "0 10px" : "0")};
 `;
 
 const FooterLink = styled(Link)<{ $data: FooterSection }>`
@@ -95,16 +104,17 @@ const FooterLink = styled(Link)<{ $data: FooterSection }>`
 const Logo = styled(Image)<{
   $data: FooterSection;
   $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   width: ${(props) => {
     const baseWidth = props.$data?.blocks?.setting?.logoWidth || "100";
-    return props.$previewWidth === "sm"
+    return props.$preview === "sm"
       ? `${parseInt(baseWidth) * 0.8}px`
       : `${baseWidth}px`;
   }};
   height: ${(props) => {
     const baseHeight = props.$data?.blocks?.setting?.logoHeight || "100";
-    return props.$previewWidth === "sm"
+    return props.$preview === "sm"
       ? `${parseInt(baseHeight) * 0.8}px`
       : `${baseHeight}px`;
   }};
@@ -118,6 +128,15 @@ const Footer: React.FC<FooterProps> = ({
   selectedComponent,
   previewWidth,
 }) => {
+  const [preview, setPreview] = useState(previewWidth);
+
+  useEffect(() => {
+    if (window.innerWidth <= 425) {
+      setPreview("sm");
+    } else {
+      setPreview(previewWidth);
+    }
+  }, [previewWidth]);
   const sectionData = layout?.sections?.sectionFooter as FooterSection;
 
   if (!sectionData) {
@@ -136,6 +155,7 @@ const Footer: React.FC<FooterProps> = ({
 
   return (
     <FooterContainer
+      $preview={preview}
       dir="rtl"
       $data={sectionData}
       $previewWidth={previewWidth}
@@ -152,6 +172,7 @@ const Footer: React.FC<FooterProps> = ({
         </div>
       ) : null}
       <Logo
+        $preview={preview}
         $previewWidth={previewWidth}
         $data={sectionData}
         src={logo || "/assets/images/logo.webp"}
@@ -160,15 +181,23 @@ const Footer: React.FC<FooterProps> = ({
         alt="Logo"
       />
 
-      <FooterText $previewWidth={previewWidth} $data={sectionData}>
+      <FooterText
+        $preview={preview}
+        $previewWidth={previewWidth}
+        $data={sectionData}
+      >
         {text}
       </FooterText>
 
-      <FooterDescription $previewWidth={previewWidth} $data={sectionData}>
+      <FooterDescription
+        $preview={preview}
+        $previewWidth={previewWidth}
+        $data={sectionData}
+      >
         {description}
       </FooterDescription>
 
-      <SocialLinks $previewWidth={previewWidth}>
+      <SocialLinks $preview={preview} $previewWidth={previewWidth}>
         <Link
           href={instagramLink ? instagramLink : "/"}
           target="_blank"
@@ -208,7 +237,7 @@ const Footer: React.FC<FooterProps> = ({
       </SocialLinks>
 
       {links && Array.isArray(links) && links.length > 0 && (
-        <FooterLinks $previewWidth={previewWidth}>
+        <FooterLinks $previewWidth={previewWidth} $preview={preview}>
           {links.map((link, index) => (
             <FooterLink
               key={index}
@@ -227,3 +256,5 @@ const Footer: React.FC<FooterProps> = ({
 };
 
 export default Footer;
+
+

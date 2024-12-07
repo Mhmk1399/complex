@@ -60,8 +60,6 @@ import {
   ProductSection,
   SlideSection,
   VideoSection,
-} from "../../lib/types";
-import {
   BannerSection,
   CollapseSection,
   HeaderSection,
@@ -78,7 +76,6 @@ import { MultiRowForm } from "./forms/multiRowForm";
 import { FooterForm } from "./forms/footerForm";
 import { Create } from "./C-D";
 import ProductListForm from "./forms/productForm";
-import DetailPage from "./sections/detailPage";
 import { DetailForm } from "./forms/detailForm";
 import { CollectionForm } from "./forms/collectionForm";
 import BlogListForm from "./forms/blogForm";
@@ -252,18 +249,20 @@ export const Form = ({
             selectedComponent={selectedComponent}
           />
         );
-        case "BlogList":
-          return (
-            <BlogListForm
-              setUserInputData={
-                setUserInputData as React.Dispatch<React.SetStateAction<BlogSection>>
-              }
-              userInputData={userInputData as BlogSection}
-              layout={layout}
-              selectedComponent={selectedComponent}
-            />
-          );
-        
+      case "BlogList":
+        return (
+          <BlogListForm
+            setUserInputData={
+              setUserInputData as React.Dispatch<
+                React.SetStateAction<BlogSection>
+              >
+            }
+            userInputData={userInputData as BlogSection}
+            layout={layout}
+            selectedComponent={selectedComponent}
+          />
+        );
+
       case "ImageText":
         return (
           <ImageTextForm
