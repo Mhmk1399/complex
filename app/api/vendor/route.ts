@@ -4,7 +4,9 @@ import Vendor from '@/models/vendor';
 import User from '@/models/users';
 
 
+
 export async function POST(request: Request) {
+  
     const { name, owner } = await request.json();
   
     try {

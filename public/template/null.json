@@ -71,8 +71,7 @@
             "paddingBottom": "0",
             "marginTop": "20",
             "marginBottom": "80",
-            "paddinRight": "0",
-            "paddinLeft": "0"
+            "position": "relative"
           }
         },
         {

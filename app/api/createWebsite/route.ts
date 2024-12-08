@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from 'fs/promises';
 import path from 'path';
 
+
+
 export async function POST(req: NextRequest) {
   const logs: string[] = [];
 
@@ -10,28 +12,20 @@ export async function POST(req: NextRequest) {
 
     logs.push('[START] Website generation process initiated');
 
-    const sourceDir = "E:\\react\\complex";
-    const targetBaseDir = "E:\\react\\genetated";
-    const targetProjectDir = path.join(targetBaseDir, projectName);
+    const SOURCE_DIR = process.env.SOURCE_DIR || "C:\Users\msi\Documents\GitHub\complex";
+    const TARGET_BASE_DIR = process.env.TARGET_BASE_DIR || "C:\Users\msi\Documents";
+    const targetProjectDir = path.join(TARGET_BASE_DIR, projectName);
+    const EMPTY_DIR = process.env.EMPTY_DIR || "C:\Users\msi\Desktop\newuser";
+
+
 
     await fs.mkdir(targetProjectDir, { recursive: true });
     logs.push(`[SUCCESS] Created new project directory: ${projectName}`);
 
     logs.push('[PROCESS] Copying repository files...');
-    await fs.cp(sourceDir, targetProjectDir, {
+    await fs.cp(EMPTY_DIR, targetProjectDir, {
       recursive: true,
-      filter: (src) => {
-        const skipPaths = [
-          'node_modules',
-          '.git',
-          '.next',
-          'form',
-          '.env',
-          '.env.local'
-        ];
-        return !skipPaths.some(skip => src.includes(skip)) &&
-          !path.basename(src).startsWith('.');
-      }
+     
     });
     logs.push('[SUCCESS] Repository files copied');
 
