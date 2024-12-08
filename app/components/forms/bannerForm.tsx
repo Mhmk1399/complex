@@ -22,7 +22,6 @@ interface MarginPaddingEditorProps {
   onChange: (type: "margin" | "padding", updatedValues: BoxValues) => void;
 }
 
-
 const ColorInput = ({
   label,
   name,
@@ -70,6 +69,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
     right: 0,
   });
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
 
@@ -178,7 +178,10 @@ export const BannerForm: React.FC<BannerFormProps> = ({
     : "animate-slideUp opacity-0 h-0 overflow-hidden";
 
   return (
-    <div className="p-3 max-w-4xl mx-auto bg-gray-200 rounded-xl mt-4" dir="rtl">
+    <div
+      className="p-3 max-w-4xl mx-auto bg-gray-200 rounded-xl mt-4"
+      dir="rtl"
+    >
       <h2 className="text-xl font-bold my-4 inline">تنظیمات بنر</h2>
       {/* Content Section */}
 
@@ -323,12 +326,6 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                   }
                   onChange={handleBlockSettingChange}
                 />
-                <div>
-                  {
-                    userInputData?.blocks?.setting?.textColor?.toString() ??
-                    "#333333"
-                  }
-                </div>
               </div>
               <div className="p-3 bg-gray-50 rounded-lg">
                 <label>سایز سربرگ</label>
@@ -342,10 +339,9 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                   onChange={handleBlockSettingChange}
                 />
                 <div>
-                  {
-                    userInputData?.blocks?.setting?.textFontSize?.toString() ??
-                    "18px"
-                  }px
+                  {userInputData?.blocks?.setting?.textFontSize?.toString() ??
+                    "18px"}
+                  px
                 </div>
               </div>
               <div className="p-3 bg-gray-50 rounded-lg">
@@ -373,12 +369,6 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                   }
                   onChange={handleBlockSettingChange}
                 />
-                <div>
-                  {
-                    userInputData?.blocks?.setting?.descriptionColor?.toString() ??
-                    "#333333"
-                  }
-                </div>
               </div>
               <div className="p-3 bg-gray-50 rounded-lg">
                 <label>سایز توضیحات</label>
@@ -392,10 +382,9 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                   onChange={handleBlockSettingChange}
                 />
                 <div>
-                  {
-                    userInputData?.blocks?.setting?.descriptionFontSize?.toString() ??
-                    "18"
-                  }px
+                  {userInputData?.blocks?.setting?.descriptionFontSize?.toString() ??
+                    "18"}
+                  px
                 </div>
               </div>
               <div className="p-3 bg-gray-50 rounded-lg">

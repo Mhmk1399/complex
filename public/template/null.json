@@ -70,8 +70,7 @@
             "paddingTop": "0",
             "paddingBottom": "0",
             "marginTop": "20",
-            "marginBottom": "80",
-            "position": "relative"
+            "marginBottom": "80"
           }
         },
         {
@@ -203,10 +202,12 @@
             }
           },
           "setting": {
-            "paddingTop": "20",
-            "paddingBottom": "20",
-            "marginTop": "10",
-            "marginBottom": "10"
+            "paddingTop": "30",
+            "paddingBottom": "30",
+            "marginTop": "20",
+            "marginBottom": "20",
+            "paddinRight": "0",
+            "paddinLeft": "0"
           }
         },
         {
@@ -223,10 +224,12 @@
             }
           },
           "setting": {
-            "paddingTop": "20px",
-            "paddingBottom": "20px",
-            "marginTop": "20px",
-            "marginBottom": "20px"
+            "paddingTop": "30",
+            "paddingBottom": "30",
+            "marginTop": "20",
+            "marginBottom": "20",
+            "paddinRight": "0",
+            "paddinLeft": "0"
           }
         },
         {
@@ -249,10 +252,12 @@
             }
           },
           "setting": {
-            "paddingTop": "20",
-            "paddingBottom": "20",
+            "paddingTop": "30",
+            "paddingBottom": "30",
             "marginTop": "20",
-            "marginBottom": "20"
+            "marginBottom": "20",
+            "paddinRight": "0",
+            "paddinLeft": "0"
           }
         },
         {
@@ -309,10 +314,12 @@
             }
           ],
           "setting": {
-            "paddingTop": "20",
-            "paddingBottom": "20",
-            "marginTop": "10",
-            "marginBottom": "10",
+            "paddingTop": "30",
+            "paddingBottom": "30",
+            "marginTop": "20",
+            "marginBottom": "20",
+            "paddinRight": "0",
+            "paddinLeft": "0",
             "headingColor": "#ffffff",
             "headingFontSize": "30",
             "headingFontWeight": "bold",
@@ -350,10 +357,12 @@
           ],
           "setting": {
             "heading": "سربرگ ستون ها",
-            "paddingTop": "20",
-            "paddingBottom": "20",
+            "paddingTop": "30",
+            "paddingBottom": "30",
             "marginTop": "20",
             "marginBottom": "20",
+            "paddinRight": "0",
+            "paddinLeft": "0",
             "backgroundColorBox": "#E5E5E5",
             "headingFontSize": "40",
             "headingFontWeight": "bold",
@@ -405,10 +414,12 @@
             "titleColor": "#000000",
             "titleFontWeight": "bold",
             "titleFontSize": "35",
-            "paddingTop": "20",
-            "paddingBottom": "20",
+            "paddingTop": "30",
+            "paddingBottom": "30",
             "marginTop": "20",
             "marginBottom": "20",
+            "paddinRight": "0",
+            "paddinLeft": "0",
             "backgroundColorMultiRow": "#FCA311",
             "backgroundColorBox": "#14213D",
             "imageWidth": "500",

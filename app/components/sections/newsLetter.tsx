@@ -20,6 +20,8 @@ const Section = styled.section<{ $data: NewsLetterSection; $previewWidth: "sm" |
   justify-content: center;
   padding-top: ${(props) => props.$data.setting.paddingTop || "20"}px;
   padding-bottom: ${(props) => props.$data.setting.paddingBottom || "20"}px;
+  padding-left: ${(props) => props.$data.setting.paddingLeft || "20"}px;
+  padding-right: ${(props) => props.$data.setting.paddingRight || "20"}px;
   margin-top: ${(props) => props.$data.setting.marginTop || "20"}px;
   margin-bottom: ${(props) => props.$data.setting.marginBottom || "20"}px;
   background-color: ${(props) => props.$data.blocks.setting.formBackground || "#f9f9f9"};
@@ -36,7 +38,7 @@ const Heading = styled.h2<{ $data: NewsLetterSection; $previewWidth: "sm" | "def
   font-size: ${(props) => props.$previewWidth === "sm" 
     ? `${parseInt(props.$data.blocks.setting.headingFontSize) * 0.8}px`
     : `${props.$data.blocks.setting.headingFontSize}px`};
-  font-weight: ${(props) => props.$data.blocks.setting.headingFontWeight};
+  font-weight: ${(props) => props.$data?.blocks?.setting?.headingFontWeight || "bold"};
   text-align: center;
   padding: ${(props) => props.$previewWidth === "sm" ? "10px" : "20px"};
 `;

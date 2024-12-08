@@ -21,9 +21,10 @@ const Section = styled.section<{
   $data: CollapseSection;
   $previewWidth: string;
 }>`
-  padding-top: ${(props) => (props.$data.setting?.paddingTop || 20) + "px"};
-  padding-bottom: ${(props) =>
-    (props.$data.setting?.paddingBottom || 20) + "px"};
+  padding-top: ${(props) => props.$data.setting?.paddingTop || 20}px;
+  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || 20}px;
+  padding-left: ${(props) => props.$data.setting?.paddingLeft || 20}px;
+  padding-right: ${(props) => props.$data.setting?.paddingRight || 20}px;
   margin-top: ${(props) => props.$data.setting?.marginTop || 20}px;
   margin-bottom: ${(props) => props.$data.setting?.marginBottom || 20}px;
   margin-left: 10px;
@@ -133,8 +134,6 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
   const [openIndexes, setOpenIndexes] = useState<number[]>([]);
   const [blocks, setBlocks] = useState<CollapseBlock[]>([]);
 
-
-
   const sectionData = (layout?.sections?.children?.sections?.find(
     (section) => section.type === actualName
   ) as CollapseSection) || {
@@ -148,16 +147,15 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
   useEffect(() => {
     if (sectionData?.blocks) {
       const blocksArray = Object.keys(sectionData.blocks)
-        .filter(key => !isNaN(Number(key)))
-        .map(key => sectionData.blocks[key]);
+        .filter((key) => !isNaN(Number(key)))
+        .map((key) => sectionData.blocks[Number(key)]);
       setBlocks(blocksArray);
     }
   }, [sectionData]);
 
   // console.log(actualName , "actualName");
   // console.log(sectionData , "sectionData");
-  
-  
+
   // Ensure blocks is an array
 
   const toggleOpen = (index: number) => {
@@ -192,7 +190,11 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
                 toggleOpen(idx);
               }}
             >
-              {block[`text${idx + 1}` as keyof CollapseBlock] as React.ReactNode}
+              {
+                block[
+                  `text${idx + 1}` as keyof CollapseBlock
+                ] as React.ReactNode
+              }
               <span>{openIndexes.includes(idx) ? "-" : "+"}</span>
             </Question>
             <Answer
@@ -257,6 +259,7 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
         </div>
       ) : null}
     </Section>
-  );};
+  );
+};
 
 export default CollapseFaq;

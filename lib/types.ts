@@ -544,6 +544,10 @@ export interface ContactFormDataSection {
     paddingBottom: string;
     marginTop: string;
     marginBottom: string;
+    marginLeft?: string;
+    marginRight?: string;
+    paddingLeft?: string;
+    paddingRight?: string;
   };
   type: "contact-form";
 }

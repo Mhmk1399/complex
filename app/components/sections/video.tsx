@@ -16,6 +16,8 @@ interface VideoProps {
 const Section = styled.section<{ $data: VideoSection; $previewWidth: string }>`
   padding-top: ${(props) => props.$data.setting?.paddingTop || "10"}px;
   padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "10"}px;
+  padding-left: ${(props) => props.$data.setting?.paddingLeft || "10"}px;
+  padding-right: ${(props) => props.$data.setting?.paddingRight || "10"}px;
   margin-top: ${(props) => props.$data?.setting?.marginTop || "0"}px;
   margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "0"}px;
   background-color: ${(props) =>
@@ -50,7 +52,7 @@ const VideoElement = styled.video<{
   width: ${(props) =>
     props.$previewWidth === "sm"
       ? "355px"
-      : props.$data.blocks.setting?.videoWidth || "100%"}0px;
+      : props.$data.blocks.setting?.videoWidth || "100%"}px;
   border-radius: ${(props) =>
     props.$data.blocks.setting?.videoRadious || "10px"}px;
   height: auto;

@@ -254,7 +254,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
 
         {/* Dropdown Content */}
         {isContentOpen && (
-          <div className="p-4 border-t border-gray-100 space-y-4">
+          <div className="p-4 border-t border-gray-100 space-y-4 animate-slideDown">
             <div className="p-3 bg-gray-50 rounded-lg">
               <label className="block mb-2 text-sm font-bold text-gray-700">
                 تصویر
@@ -377,7 +377,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
         </button>
 
         {isStyleSettingsOpen && (
-          <div className="p-4 border-t border-gray-100 space-y-6">
+          <div className="p-4 border-t border-gray-100 space-y-6 animate-slideDown">
             {/* Heading Settings */}
             <div className="space-y-4">
               <h4 className="font-bold text-gray-700">تنظیمات سربرگ</h4>
@@ -516,6 +516,9 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
               </div>
             </div>
             {/* Background Settings */}
+            <h4 className="font-bold text-gray-700">
+              تنظیمات رنگ پس زمینه
+            </h4>
             <div className="space-y-4">
               <div className="p-3 bg-gray-50 rounded-lg">
                 <ColorInput
@@ -529,6 +532,10 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
                 />
               </div>
             </div>
+            <h4 className="font-bold text-gray-700">
+              تنظیمات کارت و تصویر
+            </h4>
+
             <div>
               {" "}
               <label className="block mb-1"> انحنای زوایای کارت </label>{" "}
@@ -543,8 +550,11 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
                 }
                 onChange={handleBlockSettingChange}
                 className=" p-1 border w-full rounded"
-              />{" "}
-            </div>{" "}
+              />
+              <span className="text-sm">
+                {userInputData?.blocks?.setting?.boxRadiuos}px
+              </span>
+            </div>
             <div>
               {" "}
               <label className="block mb-1">عرض تصویر </label>{" "}
