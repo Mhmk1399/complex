@@ -1,124 +1,116 @@
 import { promises as fs } from 'fs'
 import path from 'path'
-
-interface BannerSection {
-  type: string;
-  blocks: {
-    imageSrc: string;
-    imageAlt: string;
-    text: string;
-    description: string;
-    setting: {
-      descriptionColor: string;
-      descriptionFontSize: string;
-      descriptionFontWeight: string;
-      textColor: string;
-      textFontSize: string;
-      textFontWeight: string;
-      backgroundColorBox: string;
-      backgroundBoxRadious: string;
-      opacityImage: number;
-      opacityTextBox: number;
-      imageRadious: string;
-      imageBehavior: string;
-    }
-  };
-  setting: {
-    paddingTop: string;
-    paddingBottom: string;
-    marginTop: string;
-    marginBottom: string;
-  }
-}
-
+import {
+  BlogSection,
+  CollectionSection,
+  ContactFormDataSection,
+  FooterSection,
+  MultiRowSection,
+  ProductSection,
+  SlideSection,
+  VideoSection,
+  BannerSection,
+  HeaderSection,
+  ImageTextSection,
+  MultiColumnSection,
+  NewsLetterSection,
+  RichTextSection,
+} from "@/lib/types";import LastPreview from '../components/sections/LastPreview'
 
 export default async function Page() {
-const getJsonData = async () => {
-  try {
-    const jsonPath = path.join(process.cwd(), 'public', 'template', 'null.json')
-    console.log('Attempting to read from:', jsonPath)
-    
-    const jsonData = await fs.readFile(jsonPath, 'utf-8')
-    return JSON.parse(jsonData)
-  } catch (error) {
-    console.error('Error reading JSON file:', error)
-    throw error
-  }
-}
-const extractSections = (data: any) => {
-  const sections = {
-    banners: [] as BannerSection[],
-    // Add other section arrays as needed
-  };
-
-  data.sections.children.sections.forEach((section: any) => {
-    if (section.type === "Banner") {
-      sections.banners.push(section);
+  const getJsonData = async () => {
+    try {
+      const jsonPath = path.join(process.cwd(), 'public', 'template', 'null.json')
+      console.log('Attempting to read from:', jsonPath)
+      
+      const jsonData = await fs.readFile(jsonPath, 'utf-8')
+      return JSON.parse(jsonData)
+    } catch (error) {
+      console.error('Error reading JSON file:', error)
+      throw error
     }
-    // Add other section type checks
-  });
+  }
+  const extractSections = (data: any) => {
+    const sections = {
+      banners: [] as BannerSection[],
+      slideshows: [] as SlideSection[],
+      RichText:[] as RichTextSection[],
+      ImageText:[] as ImageTextSection[],
+      Video:[] as VideoSection[],
+      ContactForm:[] as ContactFormDataSection[],
+      NewsLetter:[] as NewsLetterSection[],
+      MultiColumn:[] as MultiColumnSection[],
+      MultiRow:[] as MultiRowSection[],
+      Footer:[] as FooterSection[],
+      Header:[] as HeaderSection[],
+      Collection:[] as CollectionSection[],
+      Product:[] as ProductSection[],
+      Blog:[] as BlogSection[],
 
-  return sections;
-};
+
+    
+      // Add other section arrays as needed
+    };
+
+    data.sections.children.sections.forEach((section: any) => {
+      if (section.type === "Banner") {
+        sections.banners.push(section);
+      }
+      if (section.type === "SlideShow") {
+        sections.slideshows.push(section);
+      }
+      if (section.type === "RichText") {
+        sections.RichText.push(section);
+      }
+      if (section.type === "ImageText") {
+        sections.ImageText.push(section);
+      }
+      if (section.type === "Video") {
+        sections.Video.push(section);
+      }
+      if (section.type === "ContactForm") {
+        sections.ContactForm.push(section);
+      }
+      if (section.type === "NewsLetter") {
+        sections.NewsLetter.push(section);
+      }
+      
+      if (section.type === "MultiColumn") {
+        sections.MultiColumn.push(section);
+      }
+      if (section.type === "MultiRow") {
+        sections.MultiRow.push(section);
+      }
+      if (section.type === "Footer") {
+        sections.Footer.push(section);
+      }
+      if (section.type === "Header") {
+        sections.Header.push(section);
+      }
+      if (section.type === "Collection") {
+        sections.Collection.push(section);
+        console.log(section);}
+
+        if (section.type === "Product") {
+        sections.Product.push(section);
+      }
+      if (section.type === "Blog") {
+        sections.Blog.push(section);
+      }
+     
+      
+
+      // Add other section type checks
+    });
+
+    return sections;
+  };
 
   try {
     const jsonData = await getJsonData();
     const sections = extractSections(jsonData);
     
-    return (
-      <div>
-        {/* Render Banner Sections */}
-        {sections.banners.map((banner, index) => (
-          <div 
-            key={index}
-            style={{
-              paddingTop: `${banner.setting.paddingTop}px`,
-              paddingBottom: `${banner.setting.paddingBottom}px`,
-              marginTop: `${banner.setting.marginTop}px`,
-              marginBottom: `${banner.setting.marginBottom}px`,
-              position: 'relative',
-            }}
-          >
-            <div style={{
-              backgroundColor: banner.blocks.setting.backgroundColorBox,
-              borderRadius: banner.blocks.setting.backgroundBoxRadious, 
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-              <img 
-                src={banner.blocks.imageSrc}
-                alt={banner.blocks.imageAlt}
-                style={{
-                  opacity: banner.blocks.setting.opacityImage,
-                  borderRadius: banner.blocks.setting.imageRadious,
-                  objectFit: banner.blocks.setting.imageBehavior as any
-                }}
-              />
-              <h2 style={{
-                color: banner.blocks.setting.textColor,
-                fontSize: `${banner.blocks.setting.textFontSize}px`,
-                fontWeight: banner.blocks.setting.textFontWeight
-              }}>
-                {banner.blocks.text}
-              </h2>
-              <p style={{
-                color: banner.blocks.setting.descriptionColor,
-                fontSize: `${banner.blocks.setting.descriptionFontSize}px`,
-                fontWeight: banner.blocks.setting.descriptionFontWeight
-              }}>
-                {banner.blocks.description}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
+    return <LastPreview sections={sections} />;
   } catch (error) {
     console.error('Error:', error);
     return <div>Error loading content</div>;

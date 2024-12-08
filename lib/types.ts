@@ -491,6 +491,7 @@ export interface SlideSection {
     paddingBottom: string;
     marginTop: string;
     marginBottom: string;
+    backgroundBoxRadius: string;
   };
   type: "slideshow";
 }
