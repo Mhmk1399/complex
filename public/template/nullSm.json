@@ -47,22 +47,22 @@
         {
           "type": "Banner",
           "blocks": {
-            "imageSrc": "/assets/images/ban.jpg",
+            "imageSrc": "/assets/images/pro1.jpg",
             "imageAlt": "",
-            "text": "سربرگ توضیحااااااات",
+            "text": "سربرگ بنر sm",
             "description": " توضیحات بنر",
             "setting": {
-              "descriptionColor": "#E5E5E5",
+              "descriptionColor": "#000000",
               "descriptionFontSize": "15",
               "descriptionFontWeight": "normal",
               "textColor": "#FCA311",
               "textFontSize": "30",
               "textFontWeight": "bold",
-              "backgroundColorBox": "#fff",
+              "backgroundColorBox": "#e4e4e4",
               "backgroundBoxRadious": "10px",
               "opacityImage": 1,
               "opacityTextBox": 1,
-              "imageRadious": "14px",
+              "imageRadious": "14",
               "imageBehavior": "cover"
             }
           },
@@ -70,7 +70,9 @@
             "paddingTop": "0",
             "paddingBottom": "0",
             "marginTop": "20",
-            "marginBottom": "80"
+            "marginBottom": "80",
+            "paddinRight": "0",
+            "paddinLeft": "0"
           }
         },
         {
@@ -123,10 +125,10 @@
             "btnLink": "/",
             "setting": {
               "textHeadingColor": "#FCA311",
-              "textHeadingFontSize": "40",
+              "textHeadingFontSize": "20",
               "textHeadingFontWeight": "bold",
               "descriptionColor": "#E5E5E5",
-              "descriptionFontSize": "18",
+              "descriptionFontSize": "15",
               "descriptionFontWeight": "normal",
               "background": "#14213D",
               "btnTextColor": "#ffffff",

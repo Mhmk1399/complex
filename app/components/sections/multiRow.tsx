@@ -19,12 +19,13 @@ const Section = styled.section<{
 }>`
   padding-top: ${(props) => props.$data.setting?.paddingTop || "20"}px;
   padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20"}px;
+  paddding-left: ${(props) => props.$data.setting?.paddingLeft || "0"}px;
+  padding-right: ${(props) => props.$data.setting?.paddingRight || "0"}px;
   margin-top: ${(props) => props.$data.setting?.marginTop || "20"}px;
   margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20"}px;
   background-color: ${(props) =>
     props.$data.setting?.backgroundColorMultiRow || "#ffffff"};
   width: ${(props) => (props.$preview === "sm" ? "375px" : "100%")};
-  margin: 0 auto;
   border-radius: 12px;
 `;
 

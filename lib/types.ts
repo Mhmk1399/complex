@@ -99,10 +99,11 @@ export interface CommonSettings {
   content3?: string;
   content4?: string;
   setting: CollapseBlockSetting;
-  paddingTopLg?: string;
-  paddingBottomLg?: string;
-  marginTopLg?: string;
-  marginBottomLg?: string;
+  paddingRight?: string;
+  paddingLeft?: string;
+  marginRight?: string;
+  marginLeft?: string;
+
 }
 
 export interface HeaderBlockSettings extends CommonSettings {
@@ -146,18 +147,7 @@ export interface BannerBlockSettings extends CommonSettings {
   opacityTextBox: string;
   imageRadious: string;
   imageBehavior: string;
-  descriptionColorLg: string;
-  descriptionFontSizeLg: string;
-  descriptionFontWeightLg: string;
-  textColorLg: string;
-  textFontSizeLg: string;
-  textFontWeightLg: string;
-  backgroundColorBoxLg: string;
-  backgroundBoxRadiousLg: string;
-  opacityImageLg: string;
-  opacityTextBoxLg: string;
-  imageRadiousLg: string;
-  imageBehaviorLg: string;
+  
 }
 export interface BannerBlock {
   imageSrc: string;
@@ -485,6 +475,11 @@ export interface SlideSection {
   textFontWeight: string;
   textFontSize: string;
   textColor: string;
+  opacityImage: string;
+  imageRadious: string;
+  imageBehavior: string;
+  btnBackgroundColor: string;
+  btnTextColor: string;
   blocks: SlideBlock[];
   setting: CommonSettings & {
     paddingTop: string;
@@ -550,6 +545,10 @@ export interface ContactFormDataSection {
     paddingBottom: string;
     marginTop: string;
     marginBottom: string;
+    marginLeft?: string;
+    marginRight?: string;
+    paddingLeft?: string;
+    paddingRight?: string;
   };
   type: "contact-form";
 }

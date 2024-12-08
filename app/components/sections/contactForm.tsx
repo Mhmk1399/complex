@@ -13,22 +13,26 @@ interface ContactFormProps {
   previewWidth: "sm" | "default";
 }
 
-const Section = styled.section<{ 
-  $data: ContactFormDataSection; 
-  $previewWidth: "sm" | "default" 
+const Section = styled.section<{
+  $data: ContactFormDataSection;
+  $previewWidth: "sm" | "default";
 }>`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: ${(props) => props.$data?.setting?.paddingTop || "20px"};
-  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "20px"};
-  margin: ${(props) => props.$data?.setting?.marginTop || "20px"} 20px;
-  background-color: ${(props) => props.$data.blocks?.setting?.formBackground || "#f9f9f9"};
+  padding-top: ${(props) => props.$data?.setting?.paddingTop || "20"}px;
+  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "20"}px;
+  padding-left: ${(props) => props.$data?.setting?.paddingLeft || "20"}px;
+  padding-right: ${(props) => props.$data?.setting?.paddingRight || "20"}px;
+  margin-top: ${(props) => props.$data?.setting?.marginTop || "20"}px;
+  margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "20"}px;
+  background-color: ${(props) =>
+    props.$data.blocks?.setting?.formBackground || "#f9f9f9"};
   border-radius: 20px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  width: ${(props) => props.$previewWidth === "sm" ? "100%" : "auto"};
-  max-width: ${(props) => props.$previewWidth === "sm" ? "375px" : "100%"};
+  width: ${(props) => (props.$previewWidth === "sm" ? "100%" : "auto")};
+  max-width: ${(props) => (props.$previewWidth === "sm" ? "375px" : "100%")};
 `;
 
 const Heading = styled.h2<{ $data: ContactFormDataSection }>`
@@ -47,17 +51,17 @@ const Form = styled.form<{ $previewWidth: "sm" | "default" }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: ${props => props.$previewWidth === "sm" ? "90%" : "100%"};
-  max-width: ${props => props.$previewWidth === "sm" ? "340px" : "800px"};
-  padding: 0 ${props => props.$previewWidth === "sm" ? "10px" : "20px"};
+  width: ${(props) => (props.$previewWidth === "sm" ? "90%" : "100%")};
+  max-width: ${(props) => (props.$previewWidth === "sm" ? "340px" : "800px")};
+  padding: 0 ${(props) => (props.$previewWidth === "sm" ? "10px" : "20px")};
 `;
 
 const Input = styled.input<{ $previewWidth: "sm" | "default" }>`
-  padding: ${props => props.$previewWidth === "sm" ? "10px" : "14px"};
+  padding: ${(props) => (props.$previewWidth === "sm" ? "10px" : "14px")};
   margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 10px;
-  font-size: ${props => props.$previewWidth === "sm" ? "14px" : "16px"};
+  font-size: ${(props) => (props.$previewWidth === "sm" ? "14px" : "16px")};
   width: 70%;
 
   &:focus {
@@ -71,14 +75,14 @@ const Input = styled.input<{ $previewWidth: "sm" | "default" }>`
 `;
 
 const TextArea = styled.textarea<{ $previewWidth: "sm" | "default" }>`
-  padding: ${props => props.$previewWidth === "sm" ? "10px" : "14px"};
+  padding: ${(props) => (props.$previewWidth === "sm" ? "10px" : "14px")};
   margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 10px;
-  font-size: ${props => props.$previewWidth === "sm" ? "14px" : "16px"};
+  font-size: ${(props) => (props.$previewWidth === "sm" ? "14px" : "16px")};
   width: 70%;
   resize: vertical;
-  min-height: ${props => props.$previewWidth === "sm" ? "80px" : "100px"};
+  min-height: ${(props) => (props.$previewWidth === "sm" ? "80px" : "100px")};
 
   &:focus {
     outline: none;
@@ -90,23 +94,26 @@ const TextArea = styled.textarea<{ $previewWidth: "sm" | "default" }>`
   }
 `;
 
-const Button = styled.button<{ 
+const Button = styled.button<{
   $data: ContactFormDataSection;
-  $previewWidth: "sm" | "default"
+  $previewWidth: "sm" | "default";
 }>`
-  padding: ${props => props.$previewWidth === "sm" ? "12px 30px" : "15px 50px"};
-  background-color: ${props => props.$data.blocks.setting?.btnBackgroundColor || "#007bff"};
-  color: ${props => props.$data.blocks.setting?.btnTextColor || "#fff"};
+  padding: ${(props) =>
+    props.$previewWidth === "sm" ? "12px 30px" : "15px 50px"};
+  background-color: ${(props) =>
+    props.$data.blocks.setting?.btnBackgroundColor || "#007bff"};
+  color: ${(props) => props.$data.blocks.setting?.btnTextColor || "#fff"};
   border: none;
   border-radius: 5px;
-  font-size: ${props => props.$previewWidth === "sm" ? "14px" : "16px"};
+  font-size: ${(props) => (props.$previewWidth === "sm" ? "14px" : "16px")};
   cursor: pointer;
   transition: all 0.4s ease-in-out;
-  width: ${props => props.$previewWidth === "sm" ? "50%" : "70%"};
+  width: ${(props) => (props.$previewWidth === "sm" ? "50%" : "70%")};
   text-align: center;
 
   &:hover {
-    background-color: ${props => props.$data.blocks.setting?.btnBackgroundColor ? "#0056b3" : "#9c119c"};
+    background-color: ${(props) =>
+      props.$data.blocks.setting?.btnBackgroundColor ? "#0056b3" : "#9c119c"};
     transform: scale(0.97);
   }
 `;
@@ -189,9 +196,23 @@ const ContactForm: React.FC<ContactFormProps> = ({
         {sectionData?.blocks?.heading || "Contact Us"}
       </Heading>
       <Form $previewWidth={previewWidth}>
-        <Input $previewWidth={previewWidth} type="text" placeholder="نام" required />
-        <Input $previewWidth={previewWidth} type="email" placeholder="ایمیل" required />
-        <TextArea $previewWidth={previewWidth} placeholder="متن پیام شما ..." required />
+        <Input
+          $previewWidth={previewWidth}
+          type="text"
+          placeholder="نام"
+          required
+        />
+        <Input
+          $previewWidth={previewWidth}
+          type="email"
+          placeholder="ایمیل"
+          required
+        />
+        <TextArea
+          $previewWidth={previewWidth}
+          placeholder="متن پیام شما ..."
+          required
+        />
         <Button $data={sectionData} $previewWidth={previewWidth} type="submit">
           ارسال
         </Button>

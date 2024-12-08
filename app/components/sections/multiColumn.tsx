@@ -23,6 +23,14 @@ const Section = styled.section<{
     props.$preview === "sm"
       ? "10"
       : props.$data.setting?.paddingBottom || "20"}px;
+  padding-right: ${(props) =>
+    props.$preview === "sm"
+      ? "10"
+      : props.$data.setting?.paddingRight || "20"}px;
+  padding-left: ${(props) =>
+    props.$preview === "sm"
+      ? "10"
+      : props.$data.setting?.paddingLeft || "20"}px;
   margin-top: ${(props) =>
     props.$preview === "sm" ? "10" : props.$data.setting?.marginTop || "20"}px;
   margin-bottom: ${(props) =>
@@ -94,9 +102,9 @@ const Title = styled.h3<{
   font-size: ${(props) => {
     const baseSize = props.$data.setting?.titleFontSize || 24;
     return props.$preview === "sm"
-      ? `${(baseSize as number) * 0.8}px`
-      : `${baseSize}px`;
-  }};
+      ? `${(baseSize as number) * 0.8}`
+      : `${baseSize}`;
+  }}px;
   font-weight: ${(props) => props.$data.setting?.titleFontWeight || "bold"};
   color: ${(props) => props.$data.setting?.titleColor || "#ffffff"};
   margin-bottom: ${(props) => (props.$preview === "sm" ? "5px" : "10px")};
@@ -128,9 +136,9 @@ const Description = styled.p<{
   font-size: ${(props) => {
     const baseSize = props.$data.setting?.descriptionFontSize || 16;
     return props.$preview === "sm"
-      ? `${(baseSize as number) * 0.9}px`
-      : `${baseSize}px`;
-  }};
+      ? `${(baseSize as number) * 0.9}`
+      : `${baseSize}`;
+  }}px;
   font-weight: ${(props) =>
     props.$data.setting?.descriptionFontWeight || "normal"};
   color: ${(props) => props.$data.setting?.descriptionColor || "#ffffff"};

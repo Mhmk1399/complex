@@ -105,6 +105,8 @@ export default async function Page() {
 
     return sections;
   };
+    return sections;
+  };
 
   try {
     const jsonData = await getJsonData();
@@ -112,7 +114,8 @@ export default async function Page() {
     
     return <LastPreview sections={sections} />;
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     return <div>Error loading content</div>;
   }
 }
+

@@ -1,41 +1,62 @@
 import React from "react";
 import styled from "styled-components";
 
+interface BoxValues {
+  top: number;
+  bottom: number;
+  right: number;
+  left: number;
+}
+interface MarginPaddingEditorProps {
+  margin: BoxValues;
+  padding: BoxValues;
+  onChange: (type: "margin" | "padding", updatedValues: BoxValues) => void;
+}
+
 // Styled-components for layout and styles
 const EditorWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #333;
-  color: #fff;
-  width: 300px;
-  height: 200px;
-  border: 1px solid #444;
+  background: #2c3e50;
+  color: #ecf0f1;
+  width: 320px;
+  height: 250px;
+  border: 1px solid #34495e;
   border-radius: 10px;
   position: relative;
+  padding: 30px;
+  box-shadow: 0 4px 8px rgba(56, 85, 156, 0.8);
 `;
 
 const Label = styled.span`
-  font-size: 12px;
-  color: #aaa;
+  font-size: 14px;
+  color: #bdc3c7;
   position: absolute;
 `;
 
 const InputBox = styled.input`
   width: 50px;
-  height: 25px;
-  background: transparent;
-  border: none;
+  height: 30px;
+  background: #34495e;
+  border: 1px solid #95a5a6;
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: bold;
-  color: #00bcd4;
+  color: #ecf0f1;
   outline: none;
+  border-radius: 10px;
+  margin: 5px 0;
 
   ::-webkit-inner-spin-button,
   ::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
+  }
+
+  :focus {
+    border-color: #1abc9c;
   }
 `;
 
@@ -44,33 +65,23 @@ const PaddingMarginBox = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #222;
-  border: 1px solid #444;
-  width: 100px;
-  height: 100px;
-  border-radius: 8px;
+  background: #34495e;
+  border: 1px solid #95a5a6;
+  width: 140px;
+  height: 140px;
+  border-radius: 10px;
   position: relative;
+  margin: 20px 0;
+  padding: 10px;
 `;
 
 const InputLabel = styled.div`
   position: absolute;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: bold;
-  color: #fff;
+  color: #ecf0f1;
   text-align: center;
 `;
-
-// Type definitions for props and state
-interface BoxValues {
-  top: number;
-  bottom: number;
-}
-
-interface MarginPaddingEditorProps {
-  margin: BoxValues;
-  padding: BoxValues;
-  onChange: (type: "margin" | "padding", updatedValues: BoxValues) => void;
-}
 
 const MarginPaddingEditor: React.FC<MarginPaddingEditorProps> = ({
   margin,
@@ -79,11 +90,14 @@ const MarginPaddingEditor: React.FC<MarginPaddingEditorProps> = ({
 }) => {
   const handleChange = (
     type: "margin" | "padding",
-    side: "top" | "bottom",
+    side: "top" | "bottom" | "left" | "right",
     value: string
   ) => {
     const numericValue = parseFloat(value) || 0; // Ensure numeric input
-    onChange(type, { ...[margin, padding][type === "margin" ? 0 : 1], [side]: numericValue });
+    onChange(type, {
+      ...[margin, padding][type === "margin" ? 0 : 1],
+      [side]: numericValue,
+    });
   };
 
   return (
@@ -95,35 +109,74 @@ const MarginPaddingEditor: React.FC<MarginPaddingEditorProps> = ({
           type="number"
           value={margin.top || 0}
           onChange={(e) => handleChange("margin", "top", e.target.value)}
-          style={{ position: "absolute", top: "-30px" , left: "17%" }}
+          style={{ position: "absolute", top: "-30px", left: "31%" }}
         />
 
         {/* Padding Inputs */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <div style={{ position: "relative", width: "100%", height: "100%" }}>
+          {/* Top Padding */}
           <InputBox
             type="number"
             value={padding.top || 0}
             onChange={(e) => handleChange("padding", "top", e.target.value)}
-            style={{ marginBottom: "10px" , marginLeft: "-31%" }}
+            style={{
+              position: "absolute",
+              top: "10px",
+              left: "50%",
+              transform: "translateX(-50%)",
+            }}
           />
+
+          {/* Bottom Padding */}
           <InputBox
             type="number"
             value={padding.bottom || 0}
             onChange={(e) => handleChange("padding", "bottom", e.target.value)}
-            style={{ marginTop: "10px" , marginLeft: "-31%" }}
+            style={{
+              position: "absolute",
+              bottom: "8px",
+              left: "50%",
+              transform: "translateX(-50%)",
+            }}
+          />
+
+          {/* Left Padding */}
+          <InputBox
+            type="number"
+            value={padding.left || 0}
+            onChange={(e) => handleChange("padding", "left", e.target.value)}
+            style={{
+              position: "absolute",
+              left: "-30px",
+              top: "50%",
+              transform: "translateY(-50%)",
+            }}
+          />
+
+          {/* Right Padding */}
+          <InputBox
+            type="number"
+            value={padding.right || 0}
+            onChange={(e) => handleChange("padding", "right", e.target.value)}
+            style={{
+              position: "absolute",
+              right: "-30px",
+              top: "50%",
+              transform: "translateY(-50%)",
+            }}
           />
         </div>
-
         {/* Margin Bottom Input */}
         <InputBox
           type="number"
           value={margin.bottom || 0}
           onChange={(e) => handleChange("margin", "bottom", e.target.value)}
-          style={{ position: "absolute", bottom: "-30px" , left: "17%" }}
+          style={{ position: "absolute", bottom: "-30px", left: "31%" }}
         />
       </PaddingMarginBox>
-      <Label style={{ bottom: "90px" }}>PADDING</Label>
+      <Label style={{ bottom: "110px"  , color:"yellow"}}>PADDING</Label>
     </EditorWrapper>
   );
 };
+
 export default MarginPaddingEditor;

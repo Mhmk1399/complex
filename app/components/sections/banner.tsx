@@ -27,6 +27,8 @@ const SectionBanner = styled.section<{
   margin-bottom: ${(props) => props.$data.setting.marginBottom}px;
   padding-top: ${(props) => props.$data.setting.paddingTop}px;
   padding-bottom: ${(props) => props.$data.setting.paddingBottom}px;
+  padding-left: ${(props) => props.$data.setting.paddingLeft}px;
+  padding-right: ${(props) => props.$data.setting.paddingRight}px;
   @media (max-width: 768px) {
     height: ${(props) => (props.$preview === "sm" ? "200px" : "300px")};
   }
@@ -38,10 +40,11 @@ const BannerImage = styled(Image)<{
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
-  opacity: ${(props) => props.$data.blocks.setting.opacityImage || "1"}px;
+  opacity: ${(props) => props.$data.blocks.setting.opacityImage || "1"};
   border-radius: ${(props) =>
     props.$data.blocks.setting.imageRadious || "10px"};
-  object-fit: ${(props) => props.$data.blocks.setting.imageBehavior};
+  object-fit: ${(props) => props.$data.blocks.setting.imageBehavior || "cover"};
+  
 `;
 
 const BannerTextBox = styled.div<{
