@@ -105,8 +105,7 @@ export default async function Page() {
 
     return sections;
   };
-    return sections;
-  };
+ 
 
   try {
     const jsonData = await getJsonData();
