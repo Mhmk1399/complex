@@ -3,6 +3,7 @@ import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import { SlideSection, Layout, SlideBlock } from "@/lib/types";
 import { Delete } from "../C-D";
+import Link from "next/link";
 
 interface SlideShowProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -24,6 +25,8 @@ const SectionSlideShow = styled.section<{
   margin-bottom: ${(props) => props.$data.setting.marginBottom}px;
   padding-top: ${(props) => props.$data.setting.paddingTop}px;
   padding-bottom: ${(props) => props.$data.setting.paddingBottom}px;
+  padding-left: ${(props) => props.$data.setting.paddingLeft}px;
+  padding-right: ${(props) => props.$data.setting.paddingRight}px;
   background-color: ${(props) =>
     props.$data.setting.backgroundColorBox || "transparent"};
   display: flex;
@@ -55,11 +58,11 @@ const Slide = styled.div`
   align-items: center;
 `;
 
-const SlideImage = styled.img<{ $data: SlideBlock }>`
+const SlideImage = styled.img<{ $data: SlideSection["setting"] }>`
   width: 100%;
-  border-radius: ${(props) => props.$data?.setting?.imageRadious || "10px"};
-  opacity: ${(props) => props.$data?.setting?.opacityImage || 1};
-  object-fit: ${(props) => props.$data?.setting?.imageBehavior || "cover"};
+  border-radius: ${(props) => props.$data?.imageRadious || "10"}px;
+  opacity: ${(props) => props.$data?.opacityImage || 1};
+  object-fit: ${(props) => props.$data?.imageBehavior || "cover"};
 `;
 
 const SlideTextBox = styled.div`
@@ -78,7 +81,7 @@ const SlideHeading = styled.h3<{
   font-size: ${(props) =>
     props.$preview === "sm"
       ? "18"
-      : props.$data?.setting?.textFontSize || "22"}px;
+      : props.$data?.textFontSize || "22"}px;
   font-weight: ${(props) => props.$data.textFontWeight || "bold"};
   margin-top: 5px;
   text-align: center;
@@ -93,7 +96,7 @@ const SlideDescription = styled.p<{
   font-size: ${(props) =>
     props.$preview === "sm"
       ? "14"
-      : props.$data?.setting?.descriptionFontSize || "22"}px;
+      : props.$data?.descriptionFontSize || "22"}px;
   font-weight: ${(props) => props.$data.descriptionFontWeight || "normal"};
   padding: 20px;
   text-align: center;
@@ -127,6 +130,16 @@ const PrevButton = styled(NavButton)`
 
 const NextButton = styled(NavButton)`
   right: 5px;
+`;
+
+const Button = styled.button<{
+  $data: SlideSection["setting"];
+}>`
+  text-align: center;
+  background-color: ${(props) =>
+    props.$data?.setting?.btnBackgroundColor || "#007bff"};
+  color: ${(props) => props.$data?.setting?.btnTextColor || "#fff"};
+  padding: 10px 20px;
 `;
 
 const SlideShow: React.FC<SlideShowProps> = ({
@@ -226,7 +239,7 @@ const SlideShow: React.FC<SlideShowProps> = ({
               <SlideImage
                 src={slide.imageSrc}
                 alt={slide.imageAlt || "Slide"}
-                $data={slide}
+                $data={sectionData.setting}
               />
               <SlideTextBox>
                 <SlideHeading
@@ -243,10 +256,14 @@ const SlideShow: React.FC<SlideShowProps> = ({
                 >
                   {slide.description}
                 </SlideDescription>
+                <Button $data={sectionData.setting}>
+                  <Link href={slide.btnLink ? slide.btnLink : "#"} target="_blank">
+                    {slide.btnText ? slide.btnText : "بیشتر بخوانید"}
+                  </Link>
+                </Button>
               </SlideTextBox>
             </Slide>
-          ))}
-        </SlidesWrapper>
+          ))}        </SlidesWrapper>
         <PrevButton onClick={handlePrev}>{"<"}</PrevButton>
         <NextButton onClick={handleNext}>{">"}</NextButton>
       </SlideContainer>

@@ -22,6 +22,8 @@ const Section = styled.section<{
 }>`
   padding-top: ${(props) => props.$data?.setting?.paddingTop || "10"}px;
   padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "10"}px;
+  padding-left: ${(props) => props.$data?.setting?.paddingLeft || "10"}px;
+  padding-right: ${(props) => props.$data?.setting?.paddingRight || "10"}px;
   margin-top: ${(props) => props.$data?.setting?.marginTop || "30"}px;
   margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "30"}px;
   background-color: ${(props) =>
