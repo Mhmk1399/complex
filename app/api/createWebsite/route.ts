@@ -2,108 +2,68 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from 'fs/promises';
 import path from 'path';
 
-
-
 export async function POST(req: NextRequest) {
   const logs: string[] = [];
 
   try {
     const { projectName } = await req.json();
-
     logs.push('[START] Website generation process initiated');
 
-    const SOURCE_DIR = process.env.SOURCE_DIR || "C:\Users\msi\Documents\GitHub\complex";
-    const TARGET_BASE_DIR = process.env.TARGET_BASE_DIR || "C:\Users\msi\Documents";
+    // Define source directories
+    const EMPTY_DIR = path.normalize(process.env.EMPTY_DIR || "C:\\Users\\msi\\Desktop\\newuser");
+    const SOURCE_JSON = process.env.SOURCE_DIR || "C:\\Users\\msi\\Documents\\GitHub\\complex\\public\\template\\null.json";
+    const TARGET_BASE_DIR = "C:\\Users\\msi\\Desktop"
+
+   
+    logs.push(`Target Base Directory: ${TARGET_BASE_DIR}`);
+    logs.push(`Empty Directory: ${EMPTY_DIR}`);
+
+    try {
+      await fs.access(EMPTY_DIR);
+    } catch {
+      logs.push('[ERROR] Empty directory template not found');
+      return NextResponse.json({
+        success: false,
+        error: `Template directory not found: ${EMPTY_DIR}`,
+        logs
+      }, { status: 404 });
+    }
+    
+    // Create target project directory
     const targetProjectDir = path.join(TARGET_BASE_DIR, projectName);
-    const EMPTY_DIR = process.env.EMPTY_DIR || "C:\Users\msi\Desktop\newuser";
-
-
-
     await fs.mkdir(targetProjectDir, { recursive: true });
-    logs.push(`[SUCCESS] Created new project directory: ${projectName}`);
+    logs.push(`[SUCCESS] Created project directory: ${targetProjectDir}`);
 
-    logs.push('[PROCESS] Copying repository files...');
+    // Copy all files from EMPTY_DIR to target directory
+    logs.push('[PROCESS] Copying template files...');
     await fs.cp(EMPTY_DIR, targetProjectDir, {
       recursive: true,
-     
+
+      filter: (src) => {
+        // Skip node_modules and other unnecessary files
+        const skipPaths = [
+          'node_modules',
+          '.git',
+          '.next',
+          '.env',
+          '.env.local'
+        ];
+        return !skipPaths.some(skip => src.includes(skip));
+      }
     });
-    logs.push('[SUCCESS] Repository files copied');
+    logs.push('[SUCCESS] Template files copied');
 
-    // Write new page.tsx
-    logs.push('[PROCESS] Creating custom page.tsx');
-    const newPageContent = `'use client'
-import data from '../public/template/null.json'
-import { Layout } from '../lib/types'
-import { Preview } from "./components/preview";
-import { useState } from 'react';
+    // Ensure template directory exists
+    const targetTemplateDir = path.join(targetProjectDir, 'public', 'template');
+    await fs.mkdir(targetTemplateDir, { recursive: true });
+    logs.push('[SUCCESS] Created template directory');
 
-const Data = data as unknown as Layout;
-
-const Home = () => {
-  const [layout, setLayout] = useState<Layout>(Data);
-  const [selectedComponent, setSelectedComponent] = useState<string>('sectionHeader');
-
-  return (
-    <div>
-       <Preview
-            layout={layout}
-            setSelectedComponent={setSelectedComponent}
-          />
-    </div>
-  );
-}
-
-export default Home`;
-
-    await fs.writeFile(path.join(targetProjectDir, '/app/page.tsx'), newPageContent);
-    logs.push('[SUCCESS] Custom page.tsx created');
-
-    // Write new preview.tsx
-    logs.push('[PROCESS] Creating custom preview component');
-    const newPreviewContent = `import React from "react";
-import Header from "./sections/header";
-import RichText from "./sections/richText";
-import Banner from "./sections/banner";
-import ImageText from "./sections/imageText";
-import Video from "./sections/video";
-import ContactForm from "./sections/contactForm";
-import NewsLetter from "./sections/newsLetter";
-import CollapseFaq from "./sections/collapseFaq";
-import MultiColumn from "./sections/multiColumn";
-import SlideShow from "./sections/slideShow";
-import MultiRow from "./sections/multiRow";
-
-interface PreviewProps {
-  layout: {};
-  setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
-}
-
-export const Preview: React.FC<PreviewProps> = ({
-  layout,
-  setSelectedComponent,
-}) => {
-  return (
-    <div className="w-full md:w-full lg:w-[100%] h-[95vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide   ">
-      <Header setSelectedComponent={setSelectedComponent} layout={layout} />
-      <RichText setSelectedComponent={setSelectedComponent} layout={layout} />
-      <Banner setSelectedComponent={setSelectedComponent} layout={layout} />
-      <ImageText setSelectedComponent={setSelectedComponent} layout={layout} />
-      <Video setSelectedComponent={setSelectedComponent} layout={layout} />
-      <ContactForm setSelectedComponent={setSelectedComponent} layout={layout} />
-      <NewsLetter setSelectedComponent={setSelectedComponent} layout={layout} />
-      <CollapseFaq setSelectedComponent={setSelectedComponent} layout={layout} />
-      <MultiColumn setSelectedComponent={setSelectedComponent} layout={layout} />
-      <SlideShow setSelectedComponent={setSelectedComponent} layout={layout} />
-      <MultiRow setSelectedComponent={setSelectedComponent} layout={layout} />
-    </div>
-  );
-};`;
-
-    await fs.writeFile(path.join(targetProjectDir, '/app/components/preview.tsx'), newPreviewContent);
-    logs.push('[SUCCESS] Custom preview component created');
-
-    logs.push('[COMPLETE] Website generation completed');
-    logs.push(`[INFO] Project location: ${targetProjectDir}`);
+    // Copy null.json to target template directory
+    await fs.cp(
+      SOURCE_JSON, 
+      path.join(targetTemplateDir, 'null.json')
+    );
+    logs.push('[SUCCESS] Added null.json template');
 
     return NextResponse.json({
       success: true,
