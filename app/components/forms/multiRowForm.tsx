@@ -70,6 +70,8 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [isContentOpen, setIsContentOpen] = useState(false);
+  const [openRows, setOpenRows] = useState<Record<number, boolean>>({});
+  const [isHeadingOpen, setIsHeadingOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
 
   const handleUpdate = (
@@ -162,95 +164,213 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
       {!loaded ? (
         <p>Loading...</p>
       ) : (
-        <div className="p-6 max-w-4xl mx-auto" dir="rtl">
-          <h2 className="text-xl font-bold mb-4">ردیف ها</h2>
+        <div
+          className="p-6 max-w-4xl mx-auto bg-gray-200 rounded-xl my-4"
+          dir="rtl"
+        >
+          <h2 className="text-xl font-bold my-4">ردیف ها</h2>
 
           {/* Title Settings */}
-          <div className="mb-6">
-            <h3 className="font-semibold mb-2">سربرگ</h3>
-            <input
-              type="text"
-              name="title"
-              value={userInputData?.title ?? ""}
-              onChange={(e) =>
-                setUserInputData((prev) => ({ ...prev, title: e.target.value }))
-              }
-              className="w-full p-2 border rounded"
-              placeholder="Main Title"
-            />
+          <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
+            <button
+              onClick={() => setIsHeadingOpen(!isHeadingOpen)}
+              className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
+            >
+              <div className="flex items-center gap-2">
+                <svg
+                  className="w-5 h-5 text-blue-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
+                <h3 className="font-semibold text-gray-700">سربرگ</h3>
+              </div>
+              <svg
+                className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                  isHeadingOpen ? "rotate-180" : ""
+                }`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+
+            {isHeadingOpen && (
+              <div className="p-4 border-t border-gray-100 animate-slideDown">
+                <div className="p-3 bg-gray-50 rounded-lg">
+                  <input
+                    type="text"
+                    name="title"
+                    value={userInputData?.title ?? ""}
+                    onChange={(e) =>
+                      setUserInputData((prev) => ({
+                        ...prev,
+                        title: e.target.value,
+                      }))
+                    }
+                    className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    placeholder="Main Title"
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Row Content */}
           {userInputData?.blocks?.map((block, index) => (
-            <div key={index} className="mb-6 p-4 border rounded">
-              <h3 className="font-semibold mb-2">ردیف {index + 1}</h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block mb-1">عنوان</label>
-                  <input
-                    type="text"
-                    name="heading"
-                    value={block.heading || ""}
-                    onChange={(e) => handleBlockChange(e, index)}
-                    className="w-full p-2 border rounded"
-                  />
+            <div
+              key={index}
+              className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100"
+            >
+              {/* Row Header Button */}
+              <button
+                onClick={() =>
+                  setOpenRows((prev) => ({
+                    ...prev,
+                    [index]: !prev[index],
+                  }))
+                }
+                className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
+              >
+                <div className="flex items-center gap-2">
+                  <svg
+                    className="w-5 h-5 text-blue-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  </svg>
+                  <h3 className="font-semibold text-gray-700">
+                    ردیف {index + 1}
+                  </h3>
                 </div>
+                <svg
+                  className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                    openRows[index] ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
 
-                <div>
-                  <label className="block mb-1">توضیحات</label>
-                  <textarea
-                    name="description"
-                    value={block.description || ""}
-                    onChange={(e) => handleBlockChange(e, index)}
-                    className="w-full p-2 border rounded"
-                    rows={3}
-                  />
-                </div>
+              {/* Row Content */}
+              {openRows[index] && (
+                <div className="p-4 border-t border-gray-100 animate-slideDown">
+                  <div className="space-y-4">
+                    {/* Title Input */}
+                    <div className="p-3 bg-gray-50 rounded-lg">
+                      <label className="block mb-2 text-sm font-bold text-gray-700">
+                        عنوان
+                      </label>
+                      <input
+                        type="text"
+                        name="heading"
+                        value={block.heading || ""}
+                        onChange={(e) => handleBlockChange(e, index)}
+                        className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      />
+                    </div>
 
-                <div>
-                  <label className="block mb-1">تصویر</label>
-                  <input
-                    type="text"
-                    name="imageSrc"
-                    value={block.imageSrc || ""}
-                    onChange={(e) => handleBlockChange(e, index)}
-                    className="w-full p-2 border rounded"
-                  />
-                </div>
+                    {/* Description Textarea */}
+                    <div className="p-3 bg-gray-50 rounded-lg">
+                      <label className="block mb-2 text-sm font-bold text-gray-700">
+                        توضیحات
+                      </label>
+                      <textarea
+                        name="description"
+                        value={block.description || ""}
+                        onChange={(e) => handleBlockChange(e, index)}
+                        className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        rows={3}
+                      />
+                    </div>
 
-                <div>
-                  <label className="block mb-1">متن جایگزین تصویر</label>
-                  <input
-                    type="text"
-                    name="imageAlt"
-                    value={block.imageAlt || ""}
-                    onChange={(e) => handleBlockChange(e, index)}
-                    className="w-full p-2 border rounded"
-                  />
-                </div>
+                    {/* Image Input */}
+                    <div className="p-3 bg-gray-50 rounded-lg">
+                      <label className="block mb-2 text-sm font-bold text-gray-700">
+                        تصویر
+                      </label>
+                      <input
+                        type="text"
+                        name="imageSrc"
+                        value={block.imageSrc || ""}
+                        onChange={(e) => handleBlockChange(e, index)}
+                        className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      />
+                    </div>
 
-                <div>
-                  <label className="block mb-1">متن دکمه</label>
-                  <input
-                    type="text"
-                    name="btnLable"
-                    value={block.btnLable || ""}
-                    onChange={(e) => handleBlockChange(e, index)}
-                    className="w-full p-2 border rounded"
-                  />
-                </div>
+                    {/* Image Alt Input */}
+                    <div className="p-3 bg-gray-50 rounded-lg">
+                      <label className="block mb-2 text-sm font-bold text-gray-700">
+                        متن جایگزین تصویر
+                      </label>
+                      <input
+                        type="text"
+                        name="imageAlt"
+                        value={block.imageAlt || ""}
+                        onChange={(e) => handleBlockChange(e, index)}
+                        className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      />
+                    </div>
 
-                <div>
-                  <label className="block mb-1">لینک دکمه</label>
-                  <input
-                    type="text"
-                    name="btnLink"
-                    value={block.btnLink || ""}
-                    onChange={(e) => handleBlockChange(e, index)}
-                    className="w-full p-2 border rounded"
-                  />
+                    {/* Button Label Input */}
+                    <div className="p-3 bg-gray-50 rounded-lg">
+                      <label className="block mb-2 text-sm font-bold text-gray-700">
+                        متن دکمه
+                      </label>
+                      <input
+                        type="text"
+                        name="btnLable"
+                        value={block.btnLable || ""}
+                        onChange={(e) => handleBlockChange(e, index)}
+                        className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      />
+                    </div>
+
+                    {/* Button Link Input */}
+                    <div className="p-3 bg-gray-50 rounded-lg">
+                      <label className="block mb-2 text-sm font-bold text-gray-700">
+                        لینک دکمه
+                      </label>
+                      <input
+                        type="text"
+                        name="btnLink"
+                        value={block.btnLink || ""}
+                        onChange={(e) => handleBlockChange(e, index)}
+                        className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           ))}
 
@@ -264,6 +384,38 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                 value={userInputData?.setting?.titleColor ?? "#000000"}
                 onChange={handleSettingChange}
               />
+              <div>
+                <h4 className="font-semibold mb-2">
+                  تنظیمات سربرگ
+                </h4>
+                <label className="block mb-1">سایز سربرگ</label>
+                <input
+                  type="range"
+                  name="titleFontSize"
+                  min="10"
+                  max="50"
+                  value={parseInt(
+                    userInputData?.setting?.titleFontSize ?? "35"
+                  )}
+                  onChange={handleSettingChange}
+                  className="w-full"
+                />
+                <div className="text-gray-500 text-sm">
+                  {userInputData?.setting?.titleFontSize}px
+                </div>
+              </div>
+              <div>
+                <label className="block mb-1">وزن سربرگ</label>
+                <select
+                  name="titleFontWeight"
+                  value={userInputData?.setting?.titleFontWeight ?? "bold"}
+                  onChange={handleSettingChange}
+                  className="w-full p-2 border rounded"
+                >
+                  <option value="normal">نرمال</option>
+                  <option value="bold">ضخیم</option>
+                </select>
+              </div>
               <ColorInput
                 label="رنگ عنوان"
                 name="headingColor"
@@ -305,34 +457,7 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
             </div>
 
             {/* Font Settings */}
-            <div className="grid md:grid-cols-1 gap-4 mt-4">
-              <div>
-                <label className="block mb-1">سایز سربرگ</label>
-                <input
-                  type="range"
-                  name="titleFontSize"
-                  min="10"
-                  max="50"
-                  value={parseInt(
-                    userInputData?.setting?.titleFontSize ?? "35"
-                  )}
-                  onChange={handleSettingChange}
-                  className="w-full"
-                />
-              </div>
-              <div>
-                <label className="block mb-1">وزن سربرگ</label>
-                <select
-                  name="titleFontWeight"
-                  value={userInputData?.setting?.titleFontWeight ?? "bold"}
-                  onChange={handleSettingChange}
-                  className="w-full p-2 border rounded"
-                >
-                  <option value="normal">نرمال</option>
-                  <option value="bold">ضخیم</option>
-                </select>
-              </div>
-            </div>
+            <div className="grid md:grid-cols-1 gap-4 mt-4"></div>
 
             {/* Image Settings */}
             <div className="grid md:grid-cols-1 gap-4 mt-4">
