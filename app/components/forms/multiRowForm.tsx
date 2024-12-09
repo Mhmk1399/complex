@@ -154,7 +154,7 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
       ...prev,
       setting: {
         ...prev.setting,
-        [name]: value.includes("px") ? value : `${value}`,
+        [name]: value,
       },
     }));
   };
@@ -376,142 +376,263 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
 
           {/* Style Settings */}
           <div className="mb-6">
-            <h3 className="font-semibold mb-2">تنظیمات استایل</h3>
-            <div className="grid md:grid-cols-1 gap-4">
-              <ColorInput
-                label="رنگ سربرگ"
-                name="titleColor"
-                value={userInputData?.setting?.titleColor ?? "#000000"}
-                onChange={handleSettingChange}
-              />
-              <div>
-                <h4 className="font-semibold mb-2">
-                  تنظیمات سربرگ
-                </h4>
-                <label className="block mb-1">سایز سربرگ</label>
-                <input
-                  type="range"
-                  name="titleFontSize"
-                  min="10"
-                  max="50"
-                  value={parseInt(
-                    userInputData?.setting?.titleFontSize ?? "35"
-                  )}
-                  onChange={handleSettingChange}
-                  className="w-full"
-                />
-                <div className="text-gray-500 text-sm">
-                  {userInputData?.setting?.titleFontSize}px
-                </div>
-              </div>
-              <div>
-                <label className="block mb-1">وزن سربرگ</label>
-                <select
-                  name="titleFontWeight"
-                  value={userInputData?.setting?.titleFontWeight ?? "bold"}
-                  onChange={handleSettingChange}
-                  className="w-full p-2 border rounded"
+            <button
+              onClick={() => setIsStyleSettingsOpen(!isStyleSettingsOpen)}
+              className="w-full flex justify-between bg-white  items-center p-4 my-6 hover:bg-gray-50 rounded-xl transition-all duration-200"
+            >
+              <div className="flex items-center gap-2">
+                <svg
+                  className="w-5 h-5 text-blue-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  <option value="normal">نرمال</option>
-                  <option value="bold">ضخیم</option>
-                </select>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+                  />
+                </svg>
+                <h3 className="font-semibold text-gray-700">تنظیمات استایل</h3>
               </div>
-              <ColorInput
-                label="رنگ عنوان"
-                name="headingColor"
-                value={userInputData?.setting?.headingColor ?? "#fcbf49"}
-                onChange={handleSettingChange}
-              />
-              <ColorInput
-                label="رنگ توضیحات"
-                name="descriptionColor"
-                value={userInputData?.setting?.descriptionColor ?? "#e4e4e4"}
-                onChange={handleSettingChange}
-              />
-              <ColorInput
-                label="رنگ پس زمینه"
-                name="backgroundColorMultiRow"
-                value={
-                  userInputData?.setting?.backgroundColorMultiRow ?? "#8d99ae"
-                }
-                onChange={handleSettingChange}
-              />
-              <ColorInput
-                label="رنگ پس زمینه ردیف ها"
-                name="backgroundColorBox"
-                value={userInputData?.setting?.backgroundColorBox ?? "#2b2d42"}
-                onChange={handleSettingChange}
-              />
-              <ColorInput
-                label="رنگ متن دکمه"
-                name="btnColor"
-                value={userInputData?.setting?.btnColor ?? "#ffffff"}
-                onChange={handleSettingChange}
-              />
-              <ColorInput
-                label="رنگ پس زمینه دکمه"
-                name="btnBackgroundColor"
-                value={userInputData?.setting?.btnBackgroundColor ?? "#bc4749"}
-                onChange={handleSettingChange}
-              />
-            </div>
-
-            {/* Font Settings */}
-            <div className="grid md:grid-cols-1 gap-4 mt-4"></div>
-
-            {/* Image Settings */}
-            <div className="grid md:grid-cols-1 gap-4 mt-4">
-              <div>
-                <label className="block mb-1">عرض تصویر</label>
-                <input
-                  type="range"
-                  name="imageWidth"
-                  min="200"
-                  max="1000"
-                  value={parseInt(userInputData?.setting?.imageWidth ?? "700")}
-                  onChange={handleSettingChange}
-                  className="w-full"
-                />
-              </div>
-              <div>
-                <label className="block mb-1">ارتفاع تصویر</label>
-                <input
-                  type="range"
-                  name="imageHeight"
-                  min="100"
-                  max="500"
-                  value={parseInt(userInputData?.setting?.imageHeight ?? "300")}
-                  onChange={handleSettingChange}
-                  className="w-full"
-                />
-              </div>
-              <div>
-                <label className="block mb-1">انحنا زوایای تصویر</label>
-                <input
-                  type="range"
-                  name="imageRadius"
-                  min="0"
-                  max="50"
-                  value={parseInt(userInputData?.setting?.imageRadius ?? "45")}
-                  onChange={handleSettingChange}
-                  className="w-full"
-                />
-              </div>
-            </div>
-
-            {/* Layout Settings */}
-            <div className="mt-4">
-              <label className="block mb-1">جایگاه تصویر</label>
-              <select
-                name="imageAlign"
-                value={userInputData?.setting?.imageAlign ?? "row"}
-                onChange={handleSettingChange}
-                className="w-full p-2 border rounded"
+              <svg
+                className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                  isStyleSettingsOpen ? "rotate-180" : ""
+                }`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                <option value="row">ردیف</option>
-                <option value="row-reverse">ردیف معکوس</option>
-              </select>
-            </div>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+            {isStyleSettingsOpen && (
+              <>
+                <div className="grid md:grid-cols-1 gap-4 animate-slideDown">
+                  <h4 className="font-semibold my-2">تنظیمات سربرگ</h4>
+                  <ColorInput
+                    label="رنگ سربرگ"
+                    name="titleColor"
+                    value={userInputData?.setting?.titleColor ?? "#000000"}
+                    onChange={handleSettingChange}
+                  />
+                  <div>
+                    <label className="block mb-1">سایز سربرگ</label>
+                    <input
+                      type="range"
+                      name="titleFontSize"
+                      min="10"
+                      max="50"
+                      value={parseInt(
+                        userInputData?.setting?.titleFontSize ?? "35"
+                      )}
+                      onChange={handleSettingChange}
+                      className="w-full"
+                    />
+                    <div className="text-gray-500 text-sm">
+                      {userInputData?.setting?.titleFontSize}px
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block mb-1">وزن سربرگ</label>
+                    <select
+                      name="titleFontWeight"
+                      value={userInputData?.setting?.titleFontWeight ?? "bold"}
+                      onChange={handleSettingChange}
+                      className="w-full p-2 border rounded"
+                    >
+                      <option value="normal">نرمال</option>
+                      <option value="bold">ضخیم</option>
+                    </select>
+                  </div>
+                  <h4 className="font-semibold my-2">تنظیمات عنوان</h4>
+                  <ColorInput
+                    label="رنگ عنوان"
+                    name="headingColor"
+                    value={userInputData?.setting?.headingColor ?? "#fcbf49"}
+                    onChange={handleSettingChange}
+                  />
+                  <div>
+                    <label className="block mb-1">سایز عنوان</label>
+                    <input
+                      type="range"
+                      name="headingFontSize"
+                      min="10"
+                      max="50"
+                      value={parseInt(
+                        userInputData?.setting?.headingFontSize ?? "35"
+                      )}
+                      onChange={handleSettingChange}
+                      className="w-full"
+                    />
+                    <div className="text-gray-500 text-sm">
+                      {userInputData?.setting?.headingFontSize}px
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block mb-1">وزن عنوان</label>
+                    <select
+                      name="headingFontWeight"
+                      value={
+                        userInputData?.setting?.headingFontWeight ?? "bold"
+                      }
+                      onChange={handleSettingChange}
+                      className="w-full p-2 border rounded"
+                    >
+                      <option value="normal">نرمال</option>
+                      <option value="bold">ضخیم</option>
+                    </select>
+                  </div>
+                  <h4 className="font-semibold my-2">تنظیمات توضیحات</h4>
+                  <ColorInput
+                    label="رنگ توضیحات"
+                    name="descriptionColor"
+                    value={
+                      userInputData?.setting?.descriptionColor ?? "#e4e4e4"
+                    }
+                    onChange={handleSettingChange}
+                  />
+                  <div>
+                    <label className="block mb-1">سایز توضیحات</label>
+                    <input
+                      type="range"
+                      name="descriptionFontSize"
+                      min="10"
+                      max="50"
+                      value={parseInt(
+                        userInputData?.setting?.descriptionFontSize ?? "35"
+                      )}
+                      onChange={handleSettingChange}
+                      className="w-full"
+                    />
+                    <div className="text-gray-500 text-sm">
+                      {userInputData?.setting?.descriptionFontSize}px
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block mb-1">وزن توضیحات</label>
+                    <select
+                      name="descriptionFontWeight"
+                      value={
+                        userInputData?.setting?.descriptionFontWeight ?? "bold"
+                      }
+                      onChange={handleSettingChange}
+                      className="w-full p-2 border rounded"
+                    >
+                      <option value="normal">نرمال</option>
+                      <option value="bold">ضخیم</option>
+                    </select>
+                  </div>
+                  <h4 className="font-semibold my-2">تنظیمات پس زمینه</h4>
+                  <ColorInput
+                    label="رنگ پس زمینه"
+                    name="backgroundColorMultiRow"
+                    value={
+                      userInputData?.setting?.backgroundColorMultiRow ??
+                      "#8d99ae"
+                    }
+                    onChange={handleSettingChange}
+                  />
+                  <ColorInput
+                    label="رنگ پس زمینه ردیف ها"
+                    name="backgroundColorBox"
+                    value={
+                      userInputData?.setting?.backgroundColorBox ?? "#2b2d42"
+                    }
+                    onChange={handleSettingChange}
+                  />
+                  <h4 className="font-semibold my-2">تنظیمات دکمه </h4>
+                  <ColorInput
+                    label="رنگ متن دکمه"
+                    name="btnColor"
+                    value={userInputData?.setting?.btnColor ?? "#ffffff"}
+                    onChange={handleSettingChange}
+                  />
+                  <ColorInput
+                    label="رنگ پس زمینه دکمه"
+                    name="btnBackgroundColor"
+                    value={
+                      userInputData?.setting?.btnBackgroundColor ?? "#bc4749"
+                    }
+                    onChange={handleSettingChange}
+                  />
+                  <div className="grid md:grid-cols-1 gap-4 mt-4">
+                    <h4 className="font-semibold mb-2">تنظیمات تصویر</h4>
+                    <div>
+                      <label className="block mb-1">عرض تصویر</label>
+                      <input
+                        type="range"
+                        name="imageWidth"
+                        min="200"
+                        max="1000"
+                        value={parseInt(
+                          userInputData?.setting?.imageWidth ?? "700"
+                        )}
+                        onChange={handleSettingChange}
+                        className="w-full"
+                      />
+                      <div className="text-gray-500 text-sm">
+                        {userInputData?.setting?.imageWidth}px
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block mb-1">ارتفاع تصویر</label>
+                      <input
+                        type="range"
+                        name="imageHeight"
+                        min="100"
+                        max="500"
+                        value={parseInt(
+                          userInputData?.setting?.imageHeight ?? "300"
+                        )}
+                        onChange={handleSettingChange}
+                        className="w-full"
+                      />
+                      <div className="text-gray-500 text-sm">
+                        {userInputData?.setting?.imageHeight}px
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block mb-1">انحنا زوایای تصویر</label>
+                      <input
+                        type="range"
+                        name="imageRadius"
+                        min="0"
+                        max="50"
+                        value={parseInt(
+                          userInputData?.setting?.imageRadius ?? "45"
+                        )}
+                        onChange={handleSettingChange}
+                        className="w-full"
+                      />
+                      <div className="text-gray-500 text-sm">
+                        {userInputData?.setting?.imageRadius}px
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Layout Settings */}
+                  <div className="mt-4">
+                    <label className="block mb-1">جایگاه تصویر</label>
+                    <select
+                      name="imageAlign"
+                      value={userInputData?.setting?.imageAlign ?? "row"}
+                      onChange={handleSettingChange}
+                      className="w-full p-2 border rounded"
+                    >
+                      <option value="row">ردیف</option>
+                      <option value="row-reverse">ردیف معکوس</option>
+                    </select>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Spacing Settings */}
