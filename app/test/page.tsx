@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs'
 import path from 'path'
+import Banner from "../components/test"
 import {
   BlogSection,
   CollectionSection,
@@ -111,7 +112,7 @@ export default async function Page() {
     const jsonData = await getJsonData();
     const sections = extractSections(jsonData);
     
-    return <LastPreview sections={sections} />;
+    return <Banner sections={sections} />;
   } catch (error) {
     console.error("Error:", error);
     return <div>Error loading content</div>;

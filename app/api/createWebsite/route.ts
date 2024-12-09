@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
       filter: (src) => {
         // Skip node_modules and other unnecessary files
         const skipPaths = [
-          'node_modules',
+          'node_modules', 
           '.git',
           '.next',
           '.env',
