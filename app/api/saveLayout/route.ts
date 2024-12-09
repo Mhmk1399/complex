@@ -1,18 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Layout } from "@/lib/types";
 import { writeFile } from "fs/promises";
+import Head from "next/head";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { layout } = body as { layout: Layout };
 
+
     if (!layout) {
       return NextResponse.json({ message: 'Layout data is required' }, { status: 400 });
     }
 
     // Using the exact file path
-    const filePath = "E:\\react\\genetated\\thththththth\\public\\template\\null.json";
+    const filePath = process.env.LAYOUT_FILE_PATH || 'C:\\Users\\msi\\Documents\\GitHub\\userwebsite\\src\\app\\layout.tsx';
 
     // Convert layout to JSON string with proper formatting
     const layoutJson = JSON.stringify(layout, null, 2);

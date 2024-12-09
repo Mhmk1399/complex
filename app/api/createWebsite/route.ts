@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     logs.push('[START] Website generation process initiated');
 
     // Define source directories
-    const EMPTY_DIR = path.normalize(process.env.EMPTY_DIR || "C:\\Users\\msi\\Desktop\\newuser");
+    const EMPTY_DIR = path.normalize(process.env.EMPTY_DIR || "C:\\Users\\msi\\Documents\\GitHub\\userwebsite");
   
     const TARGET_BASE_DIR = "C:\\Users\\msi\\Desktop"
 
