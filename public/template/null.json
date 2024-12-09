@@ -10,17 +10,34 @@
   },
   "sections": {
     "sectionHeader": {
-      "type": "header",
       "blocks": {
         "imageLogo": "",
         "imageAlt": "",
         "links": [
-          { "name": "خانه", "url": "/" },
-          { "name": "درباره ", "url": "/about" },
-          { "name": "ارتباط  ", "url": "/contact" },
-          { "name": "بلاگ", "url": "/blog" },
-          { "name": "فروشگاه", "url": "/shop" },
-          { "name": "ورود/عضویت", "url": "/login" }
+          {
+            "name": "خانه",
+            "url": "/"
+          },
+          {
+            "name": "درباره ",
+            "url": "/about"
+          },
+          {
+            "name": "ارتباط  ",
+            "url": "/contact"
+          },
+          {
+            "name": "بلاگ",
+            "url": "/blog"
+          },
+          {
+            "name": "فروشگاه",
+            "url": "/shop"
+          },
+          {
+            "name": "ورود/عضویت",
+            "url": "/login"
+          }
         ],
         "setting": {
           "imageWidth": "50px",
@@ -30,7 +47,7 @@
           "itemFontSize": "20",
           "itemFontWeight": "bold",
           "itemHoverColor": "#ffffff",
-          "backgroundColorNavbar": "#FCA311"
+          "backgroundColorNavbar": "#c49f64"
         }
       },
       "setting": {
@@ -41,7 +58,8 @@
         "paddinRight": "0",
         "paddinLeft": "0",
         "navbarPosition": "fixed"
-      }
+      },
+      "type": "header"
     },
     "children": {
       "type": "home",
@@ -51,7 +69,7 @@
           "blocks": {
             "imageSrc": "/assets/images/ban.jpg",
             "imageAlt": "",
-            "text": "سربرگ بنر",
+            "text": "sssss",
             "description": " توضیحات بنر",
             "setting": {
               "descriptionColor": "#E5E5E5",
@@ -139,7 +157,6 @@
               "btnBackgroundColor": "#FCA311"
             }
           },
-
           "setting": {
             "paddingTop": "30",
             "paddingBottom": "30",
@@ -242,7 +259,6 @@
             "heading": "عضویت در خبرنامه",
             "description": "توضیحات درباره خبرنامه",
             "btnText": "ثبت نام",
-
             "setting": {
               "headingColor": "#FCA311",
               "headingFontSize": "27",
@@ -387,7 +403,6 @@
         {
           "type": "MultiRow",
           "title": "سربرگ ردیف ها",
-
           "blocks": [
             {
               "heading": "ردیف اول",
@@ -446,7 +461,6 @@
             "heading": "عضویت در خبرنامه",
             "description": "توضیحات درباره خبرنامه",
             "btnText": "ثبت نام",
-
             "setting": {
               "headingColor": "#14213D",
               "headingFontSize": "27",
@@ -545,10 +559,15 @@
         "telegramLink": "#",
         "whatsappLink": "#",
         "logo": "/assets/images/logo.webp",
-
         "links": [
-          { "url": "/privacy-policy", "label": "Privacy Policy" },
-          { "url": "/terms-of-service", "label": "Terms of Service" }
+          {
+            "url": "/privacy-policy",
+            "label": "Privacy Policy"
+          },
+          {
+            "url": "/terms-of-service",
+            "label": "Terms of Service"
+          }
         ]
       },
       "setting": {
@@ -562,5 +581,9 @@
       }
     }
   },
-  "order": ["section-header", "children", "section-footer"]
+  "order": [
+    "section-header",
+    "children",
+    "section-footer"
+  ]
 }
