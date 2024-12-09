@@ -29,6 +29,8 @@ const CollectionWrapper = styled.div<{
 }>`
   padding-top: ${(props) => props.$setting?.paddingTop}px;
   padding-bottom: ${(props) => props.$setting?.paddingBottom}px;
+  padding-right: ${(props) => props.$setting?.paddingRight}px;
+  padding-left: ${(props) => props.$setting?.paddingLeft}px;
   margin-top: ${(props) => props.$setting?.marginTop}px;
   margin-bottom: ${(props) => props.$setting?.marginBottom}px;
   background-color: ${(props) => props.$setting?.backgroundColor};
@@ -56,7 +58,6 @@ const ProductGrid = styled.div<{
   );
   gap: 10px;
   padding: 10px;
-
 `;
 
 const ProductCard = styled.div<{
