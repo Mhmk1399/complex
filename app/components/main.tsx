@@ -97,29 +97,29 @@ export const Main = () => {
     console.log(layout);
   }, [selectedRoute, activeMode]);
 
-  // const handleSave = async () => {
-  //   setSaveStatus('saving');
-  //   try {
-  //     const response = await fetch('/api/saveLayout', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ layout }),
-  //     });
+  const handleSave = async () => {
+    setSaveStatus('saving');
+    try {
+      const response = await fetch('/api/saveLayout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ layout }),
+      });
 
-  //     if (!response.ok) {
-  //       throw new Error('Failed to save layout');
-  //     }
+      if (!response.ok) {
+        throw new Error('Failed to save layout');
+      }
 
-  //     setSaveStatus('saved');
-  //     setTimeout(() => setSaveStatus('idle'), 2000);
-  //   } catch (error) {
-  //     console.error('Error saving layout:', error);
-  //     setSaveStatus('error');
-  //     setTimeout(() => setSaveStatus('idle'), 2000);
-  //   }
-  // };
+      setSaveStatus('saved');
+      setTimeout(() => setSaveStatus('idle'), 2000);
+    } catch (error) {
+      console.error('Error saving layout:', error);
+      setSaveStatus('error');
+      setTimeout(() => setSaveStatus('idle'), 2000);
+    }
+  };
   const handleModeChange = (mode: "lg" | "sm") => {
     setActiveMode(mode);
     if (mode === "sm" && window.innerWidth < 768) {
@@ -142,7 +142,7 @@ export const Main = () => {
         <div>
           <div className=" z-50 flex justify-center lg:px-10 py-1">
             <button
-              // onClick={handleSave}
+              onClick={handleSave}
               disabled={saveStatus === "saving"}
               className={`px-4 py-2 rounded-full mr-2 text-white ${
                 saveStatus === "saving"
