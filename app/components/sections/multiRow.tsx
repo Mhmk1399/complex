@@ -6,7 +6,7 @@ import { Delete } from "../C-D";
 interface MultiRowShowProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
-  
+
   actualName: string;
   selectedComponent: string;
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
@@ -131,6 +131,8 @@ const Description = styled.p<{
     props.$preview === "sm"
       ? "14"
       : props.$data.setting?.descriptionFontSize || "16"}px;
+  font-weight: ${(props) =>
+    props.$data?.setting?.descriptionFontWeight || "normal"};
   color: ${(props) => props.$data.setting?.descriptionColor || "#666"};
   text-align: center;
   padding: ${(props) => (props.$preview === "sm" ? "0 15" : "0 10")}px;
