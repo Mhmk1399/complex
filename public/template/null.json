@@ -69,7 +69,7 @@
           "blocks": {
             "imageSrc": "/assets/images/ban.jpg",
             "imageAlt": "",
-            "text": "sssss",
+            "text": "asdasdasdawww",
             "description": " توضیحات بنر",
             "setting": {
               "descriptionColor": "#E5E5E5",
@@ -87,13 +87,15 @@
             }
           },
           "setting": {
-            "paddingTop": "0",
-            "paddingBottom": "0",
-            "marginTop": "60",
-            "marginBottom": "60",
             "paddinRight": "0",
             "paddinLeft": "0",
-            "imageBehavior": "contain"
+            "paddingTop": "53",
+            "paddingBottom": "102",
+            "marginTop": "20",
+            "marginBottom": "91",
+            "imageBehavior": "cover",
+            "paddingLeft": "24",
+            "paddingRight": "25"
           }
         },
         {
@@ -129,7 +131,7 @@
             "textColor": "#FFFFFF",
             "textFontSize": "24",
             "textFontWeight": "bold",
-            "btnTextColor": "#ffffff",
+            "btnTextColor": "#ee2020",
             "btnBackgroundColor": "#FCA311",
             "backgroundColorBox": "#14213D",
             "backgroundBoxRadius": "40",
@@ -142,7 +144,7 @@
         {
           "type": "RichText",
           "blocks": {
-            "textHeading": "سربرگ محصول",
+            "textHeading": "سربرگ مadsasdasdasdasssحصول",
             "description": "توضیحات درباره محصول",
             "btnText": "دکمه",
             "btnLink": "/",
