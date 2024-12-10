@@ -330,7 +330,7 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
                   <ColorInput
                     label="رنگ پس‌زمینه"
                     name="backgroundColor"
-                    value={userInputData?.fsetting?.backgroundColor || "#ffffff"}
+                    value={userInputData?.setting?.backgroundColor || "#ffffff"}
                     onChange={handleSettingChange}
                   />
                 </div>
