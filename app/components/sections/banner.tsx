@@ -65,7 +65,7 @@ const BannerTextBox = styled.div<{
     props.$data.blocks.setting.backgroundColorBox || "rgba(0, 0, 0, 0.5)"};
   padding: ${(props) => (props.$preview === "sm" ? "20px 40px" : "50px 200px")};
   border-radius: ${(props) =>
-    props.$data.blocks.setting.backgroundBoxRadious || "10px"};
+    props.$data.blocks.setting.backgroundBoxRadious || "10"}px;
 `;
 
 const HeadingText = styled.h2<{

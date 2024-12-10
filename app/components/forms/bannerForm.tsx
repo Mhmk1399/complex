@@ -226,7 +226,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
 
         {/* Dropdown Content */}
         {isContentOpen && (
-          <div className="p-4 border-t border-gray-100 space-y-4">
+          <div className="p-4 border-t border-gray-100 space-y-4 animate-slideDown">
             {/* Image Input */}
             <div className="p-3 bg-gray-50 rounded-lg">
               <label className="block mb-2 text-sm font-bold text-gray-700">
@@ -317,6 +317,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
             <div className="grid md:grid-cols-1 gap-4">
               {/* Color inputs with updated styling */}
               <div className="p-3 bg-gray-50 rounded-lg">
+                <h4 className="font-semibold my-4">تنظیمات سربرگ</h4>
                 <ColorInput
                   label="رنگ سربرگ"
                   name="textColor"
@@ -331,6 +332,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                 <label>سایز سربرگ</label>
                 <input
                   type="range"
+                  className="w-full"
                   name="textFontSize"
                   value={
                     userInputData?.blocks?.setting?.textFontSize?.toString() ??
@@ -360,6 +362,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                 </select>
               </div>
               <div className="p-3 bg-gray-50 rounded-lg">
+                <h4 className="font-semibold my-4">تنظیمات توضیحات</h4>
                 <ColorInput
                   label="رنگ توضیحات"
                   name="descriptionColor"
@@ -374,6 +377,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                 <label>سایز توضیحات</label>
                 <input
                   type="range"
+                  className="w-full"
                   name="descriptionFontSize"
                   value={
                     userInputData?.blocks?.setting?.descriptionFontSize?.toString() ??
@@ -406,6 +410,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
 
               {/* Opacity select with new styling */}
               <div className="p-3 bg-gray-50 rounded-lg">
+                <h4 className="font-semibold my-4">تنظیمات تصویر</h4>
                 <label className="block mb-2 text-sm font-medium text-gray-700">
                   شفافیت تصویر
                 </label>
@@ -424,28 +429,78 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                     </option>
                   ))}
                 </select>
+                <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                  <label className="block mb-2 text-sm font-medium text-gray-700">
+                    رفتار عکس
+                  </label>
+                  <select
+                    name="imageBehavior"
+                    value={
+                      userInputData?.setting?.imageBehavior?.toLocaleString() ??
+                      "cover"
+                    }
+                    onChange={handleSettingChange}
+                    className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  >
+                    <option value="cover">پوشش</option>
+                    <option value="contain">شامل</option>
+                    <option value="fill">کامل</option>
+                  </select>
+                </div>
+              </div>
+              <div className="p-3 bg-gray-50 rounded-lg">
+                <h4 className="font-semibold my-4">تنظیمات کادر</h4>
+                <label className="block mb-2 text-sm font-medium text-gray-700">
+                  شفافیت کادر
+                </label>
+                <select
+                  name="opacityTextBox"
+                  value={
+                    userInputData?.blocks?.setting?.opacityTextBox?.toLocaleString() ??
+                    "1"
+                  }
+                  onChange={handleBlockSettingChange}
+                  className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                >
+                  {Array.from({ length: 11 }, (_, i) => i / 10).map((value) => (
+                    <option key={value} value={value}>
+                      {value}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="p-3 bg-gray-50 rounded-lg">
+                <ColorInput
+                  label="رنگ پس زمینه کادر"
+                  name="backgroundColorBox"
+                  value={
+                    userInputData?.blocks?.setting?.backgroundColorBox?.toString() ??
+                    "#333333"
+                  }
+                  onChange={handleBlockSettingChange}
+                />
+              </div>
+              <div className="p-3 bg-gray-50 rounded-lg">
+                <label> انحنای زاویه کادر</label>
+                <input
+                  className="w-full"
+                  type="range"
+                  name="backgroundBoxRadious"
+                  value={
+                    userInputData?.blocks?.setting?.backgroundBoxRadious?.toString() ??
+                    "18"
+                  }
+                  onChange={handleBlockSettingChange}
+                />
+                <div className="text-gray-500 text-sm">
+                  {userInputData?.blocks?.setting?.backgroundBoxRadious?.toString() ??
+                    "18"}
+                  px
+                </div>
               </div>
             </div>
 
             {/* Image behavior select */}
-            <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-              <label className="block mb-2 text-sm font-medium text-gray-700">
-                رفتار عکس
-              </label>
-              <select
-                name="imageBehavior"
-                value={
-                  userInputData?.setting?.imageBehavior?.toLocaleString() ??
-                  "cover"
-                }
-                onChange={handleSettingChange}
-                className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-              >
-                <option value="cover">پوشش</option>
-                <option value="contain">شامل</option>
-                <option value="fill">کامل</option>
-              </select>
-            </div>
           </div>
         </div>
       </div>
