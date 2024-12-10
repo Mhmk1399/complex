@@ -18,6 +18,7 @@ import Store from "@/public/template/product.json";
 import DetailPage from "@/public/template/detail.json";
 import Blog from "@/public/template/blog.json";
 import BlogDetail from "@/public/template/blogDetail.json";
+import { mod } from "@tensorflow/tfjs";
 
 export const Main = () => {
   const Data = data as unknown as Layout;
@@ -98,35 +99,40 @@ export const Main = () => {
   }, [selectedRoute, activeMode]);
 
   const handleSave = async () => {
-    setSaveStatus('saving');
+    setSaveStatus("saving");
     try {
-      const response = await fetch('/api/saveLayout', {
-        method: 'POST',
+      console.log("Saving mode:", activeMode);
+
+      const response = await fetch("/api/saveLayout", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ layout }),
+
+        body: JSON.stringify({
+          mode: activeMode,
+          layout: activeMode === "sm" ? smLayout : layout,
+        }),
       });
 
+      const result = await response.json(); // Get response data
+      console.log("Save response:", result); // Debug log
       if (!response.ok) {
-        throw new Error('Failed to save layout');
+        throw new Error("Failed to save layout");
       }
 
-      setSaveStatus('saved');
-      setTimeout(() => setSaveStatus('idle'), 2000);
+      setSaveStatus("saved");
+      setTimeout(() => setSaveStatus("idle"), 2000);
     } catch (error) {
-      console.error('Error saving layout:', error);
-      setSaveStatus('error');
-      setTimeout(() => setSaveStatus('idle'), 2000);
+      console.error("Error saving layout:", error);
+      setSaveStatus("error");
+      setTimeout(() => setSaveStatus("idle"), 2000);
     }
   };
   const handleModeChange = (mode: "lg" | "sm") => {
     setActiveMode(mode);
-    if (mode === "sm" && window.innerWidth < 768) {
-      setLayout(smLayout);
-    } else {
-      setLayout(Data);
-    }
+    const newLayout = mode === "sm" ? smLayout : Data;
+    setLayout(newLayout);
   };
   return (
     <div>

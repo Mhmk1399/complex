@@ -47,7 +47,11 @@
           "itemFontSize": "20",
           "itemFontWeight": "bold",
           "itemHoverColor": "#ffffff",
+<<<<<<< Updated upstream
           "backgroundColorNavbar": "#FCA311"
+=======
+          "backgroundColorNavbar": "#f5be56"
+>>>>>>> Stashed changes
         }
       },
       "setting": {
@@ -69,9 +73,10 @@
           "blocks": {
             "imageSrc": "/assets/images/ban.jpg",
             "imageAlt": "",
-            "text": "sssss",
+            "text": "asdasdasdawww",
             "description": " توضیحات بنر",
             "setting": {
+<<<<<<< Updated upstream
               "descriptionColor": "#E5E5E5",
               "descriptionFontSize": "22",
               "descriptionFontWeight": "bold",
@@ -82,16 +87,35 @@
               "backgroundBoxRadious": "54",
               "opacityImage": "1",
               "opacityTextBox": "0.7",
+=======
+              "descriptionColor": "#f21c1c",
+              "descriptionFontSize": "22",
+              "descriptionFontWeight": "normal",
+              "textColor": "#ff0088",
+              "textFontSize": "64",
+              "textFontWeight": "normal",
+              "backgroundColorBox": "#14213D",
+              "backgroundBoxRadious": "10px",
+              "opacityImage": "0.7",
+              "opacityTextBox": 1,
+>>>>>>> Stashed changes
               "imageRadious": "14px",
               "imageBehavior": "cover"
             }
           },
           "setting": {
-            "paddingTop": "0",
-            "paddingBottom": "0",
+            "paddingTop": "53",
+            "paddingBottom": "102",
             "marginTop": "20",
+<<<<<<< Updated upstream
             "marginBottom": "80",
             "imageBehavior": "contain"
+=======
+            "marginBottom": "91",
+            "imageBehavior": "cover",
+            "paddingLeft": "24",
+            "paddingRight": "25"
+>>>>>>> Stashed changes
           }
         },
         {
@@ -127,7 +151,7 @@
             "textColor": "#FFFFFF",
             "textFontSize": "24",
             "textFontWeight": "bold",
-            "btnTextColor": "#ffffff",
+            "btnTextColor": "#ee2020",
             "btnBackgroundColor": "#FCA311",
             "backgroundColorBox": "#14213D",
             "backgroundBoxRadius": "40",
@@ -140,7 +164,7 @@
         {
           "type": "RichText",
           "blocks": {
-            "textHeading": "سربرگ محصول",
+            "textHeading": "سربرگ مadsasdasdasdasssحصول",
             "description": "توضیحات درباره محصول",
             "btnText": "دکمه",
             "btnLink": "/",
