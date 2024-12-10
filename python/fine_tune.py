@@ -1,42 +1,81 @@
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, Seq2SeqTrainer, Seq2SeqTrainingArguments
-from datasets import load_dataset
+from transformers import AutoTokenizer, AutoModelForMaskedLM
+from transformers import DataCollatorForLanguageModeling
+from transformers import Trainer, TrainingArguments
+import datasets
+import json
 
-# Load dataset
-dataset = load_dataset("json", data_files="persian_dataset.json")
+# Load tokenizer and model
+model_name = "HooshvareLab/bert-base-parsbert-uncased"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForMaskedLM.from_pretrained(model_name)
 
-# Tokenizer and Model (Use T5 or ParsBERT-based T5 model)
-tokenizer = AutoTokenizer.from_pretrained("HooshvareLab/t5-fa-small")
-model = AutoModelForSeq2SeqLM.from_pretrained("HooshvareLab/t5-fa-small")
+# Prepare dataset
+def prepare_dataset(data_path):
+    with open(data_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
 
-def preprocess_function(examples):
-    inputs = [ex["input"] for ex in examples["data"]]
-    targets = [str(ex["output"]) for ex in examples["data"]]
-    model_inputs = tokenizer(inputs, max_length=128, truncation=True)
-    labels = tokenizer(targets, max_length=128, truncation=True).input_ids
-    model_inputs["labels"] = labels
-    return model_inputs
+    texts = [f"{item['input']} [SEP] {json.dumps(item['output'])}" for item in data]
+    return datasets.Dataset.from_dict({'text': texts})
 
-tokenized_data = dataset.map(preprocess_function, batched=True)
+dataset = prepare_dataset("data/training_data.json")
 
-# Training Arguments
-training_args = Seq2SeqTrainingArguments(
-    output_dir="./results",
-    evaluation_strategy="epoch",
-    learning_rate=2e-5,
-    per_device_train_batch_size=4,
-    num_train_epochs=3,
-    save_total_limit=2,
+# Tokenize and structure the dataset
+def tokenize_function(examples):
+    tokenized = tokenizer(
+        examples["text"],
+        truncation=True,
+        padding="max_length",
+        max_length=128
+    )
+    tokenized["labels"] = tokenized["input_ids"]  # MLM task: labels = input_ids
+    return tokenized
+
+tokenized_dataset = dataset.map(tokenize_function, batched=True)
+
+# Split into train and validation sets
+train_test_split = tokenized_dataset.train_test_split(test_size=0.1)
+train_dataset = train_test_split["train"]
+eval_dataset = train_test_split["test"]
+
+# Data collator with masking
+data_collator = DataCollatorForLanguageModeling(
+    tokenizer=tokenizer,
+    mlm=True,
+    mlm_probability=0.15
 )
 
-# Trainer
-trainer = Seq2SeqTrainer(
+# Training arguments
+training_args = TrainingArguments(
+    output_dir="./parsbert-style-tuned",
+    num_train_epochs=3,
+    per_device_train_batch_size=8,
+    save_steps=500,
+    save_total_limit=2,
+    evaluation_strategy="steps",
+    eval_steps=500,
+    remove_unused_columns=False,
+    logging_dir="./logs",
+    logging_steps=100,
+    learning_rate=5e-5,
+    warmup_steps=500
+)
+
+# Initialize trainer
+trainer = Trainer(
     model=model,
     args=training_args,
-    train_dataset=tokenized_data["train"],
-    tokenizer=tokenizer,
+    train_dataset=train_dataset,
+    eval_dataset=eval_dataset,
+    data_collator=data_collator
 )
 
-# Fine-tune model
+# Train the model
 trainer.train()
-model.save_pretrained("./fine_tuned_model")
-tokenizer.save_pretrained("./fine_tuned_model")
+
+# Evaluate the model
+eval_results = trainer.evaluate()
+print("Evaluation results:", eval_results)
+
+# Save fine-tuned model
+model.save_pretrained("./parsbert-style-tuned")
+tokenizer.save_pretrained("./parsbert-style-tuned")
