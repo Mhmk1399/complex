@@ -31,6 +31,8 @@ const SectionProductList = styled.section<{
   gap: 8px;
   padding-top: ${(props) => props.$data?.setting?.paddingTop}px;
   padding-bottom: ${(props) => props.$data?.setting?.paddingBottom}px;
+  padding-left: ${(props) => props.$data?.setting?.paddingLeft}px;
+  padding-right: ${(props) => props.$data?.setting?.paddingRight}px;
   margin-top: ${(props) => props.$data?.setting?.marginTop}px;
   margin-bottom: ${(props) => props.$data?.setting?.marginBottom}px;
   background-color: ${(props) => props.$data?.setting?.backgroundColor};

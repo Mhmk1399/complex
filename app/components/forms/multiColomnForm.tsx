@@ -83,6 +83,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
         setting: {
           ...prev.setting,
           marginTop: updatedValues.top.toString(),
+
           marginBottom: updatedValues.bottom.toString(),
         },
       }));
@@ -404,7 +405,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
         {isStyleSettingsOpen && (
           <>
             <div className="grid md:grid-cols-1 rounded-xl bg-gray-50 gap-4 p-2 animate-slideDown">
-              <h4 className="font-semibold mb-2">تنظیمات سربرگ</h4>
+              <h4 className="font-semibold mb-2 text-sky-700">تنظیمات سربرگ</h4>
               <ColorInput
                 label="رنگ سربرگ"
                 name="headingColor"

@@ -24,6 +24,8 @@ const SectionDetailPage = styled.div<{
 }>`
   padding-top: ${(props) => props.$data?.setting?.paddingTop || 0}px;
   padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || 0}px;
+  padding-left: ${(props) => props.$data?.setting?.paddingLeft || 20}px;
+  padding-right: ${(props) => props.$data?.setting?.paddingRight || 20}px;
   margin-top: ${(props) => props.$data?.setting?.marginTop || 0}px;
   margin-bottom: ${(props) => props.$data?.setting?.marginBottom || 0}px;
   background-color: ${(props) => props.$data?.setting?.backgroundColor ||"#ffffff"};
@@ -74,8 +76,8 @@ const SectionDetailPage = styled.div<{
   }
 
   .product-image {
-    width: ${(props) => props.$data?.setting?.imageWidth || 300}0px;
-    height: ${(props) => props.$data?.setting?.imageHeight || 200}0px;
+    width: ${(props) => props.$data?.setting?.imageWidth || 300}px;
+    height: ${(props) => props.$data?.setting?.imageHeight || 200}px;
     border-radius: ${(props) => props.$data?.setting?.imageRadius || 10}px;
     object-fit: cover;
     overflow: hidden;

@@ -1,5 +1,4 @@
 {
-  
   "children": {
     "sections": [
       {
@@ -30,8 +29,8 @@
           }
         ],
         "setting": {
-          "imageWidth": "30",
-          "imageHeight": "25",
+          "imageWidth": "700",
+          "imageHeight": "450",
           "imageRadius": "20",
           "productNameColor": "#FCA311",
           "productNameFontSize": "30",
@@ -48,8 +47,10 @@
           "btnTextColor": "#FFFFFF",
           "paddingTop": "20",
           "paddingBottom": "20",
-          "marginTop": "10",
-          "marginBottom": "10",
+          "marginTop": "60",
+          "marginBottom": "60",
+          "paddinRight": "10",
+          "paddinLeft": "10",
           "backgroundColor": "#003566"
         }
       }

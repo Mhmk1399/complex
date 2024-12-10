@@ -798,8 +798,12 @@ export interface DetailPageSettings {
   btnTextColor: string;
   paddingTop: string;
   paddingBottom: string;
+  paddingLeft: string;
+  paddingRight: string;
   marginTop: string;
   marginBottom: string;
+  marginLeft: string;
+  marginRight: string;
   backgroundColor: string;
   // [key: string]: any; // Allows dynamic properties
 }
@@ -876,8 +880,12 @@ export interface BlogListSetting {
   gridColumns: number;
   paddingTop: string | number;
   paddingBottom: string | number;
+  paddingLeft: string | number;
+  paddingRight: string | number;
   marginTop: string | number;
   marginBottom: string | number;
+  marginLeft: string | number;
+  marginRight: string | number;
   backgroundColor: string;
   cardBackgroundColor: string;
   cardBorderRadius: string;

@@ -31,17 +31,16 @@
           "gridColumns": 2,
           "paddingTop": 70,
           "paddingBottom": "30",
+          "paddinLeft": "0",
+          "paddingRight": "10",
           "marginTop": "15",
           "marginBottom": "15",
           "backgroundColor": "#f8f9fa",
-          "cardBackgroundColor":"#ffffff",
-          "textColor":"#000000",
-          "cardBorderRadius":10,
-          "btnBackgroundColor":"#e4e4e4",
-          "buttonColor":"#ffffff"
-
-
-      
+          "cardBackgroundColor": "#ffffff",
+          "textColor": "#000000",
+          "cardBorderRadius": 10,
+          "btnBackgroundColor": "#e4e4e4",
+          "buttonColor": "#ffffff"
         }
       }
     ],

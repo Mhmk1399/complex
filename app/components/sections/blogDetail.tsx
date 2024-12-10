@@ -27,6 +27,8 @@ const SectionBlogDetail = styled.div<{
 }>`
   padding-top: ${(props) => props.$data?.setting?.paddingTop || 0}px;
   padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || 0}px;
+  padding-left: ${(props) => props.$data?.setting?.paddingLeft || 0}px;
+  padding-right: ${(props) => props.$data?.setting?.paddingRight || 0}px;
   margin-top: ${(props) => props.$data?.setting?.marginTop || 0}px;
   margin-bottom: ${(props) => props.$data?.setting?.marginBottom || 0}px;
   background-color: ${(props) =>

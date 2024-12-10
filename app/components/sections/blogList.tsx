@@ -9,7 +9,6 @@ import {
 } from "@/lib/types";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { data } from "@tensorflow/tfjs";
 
 interface BlogListProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -41,6 +40,8 @@ const SectionBlogList = styled.section<{
   gap: 10px;
   padding-top: ${(props) => props.$data?.setting?.paddingTop}px;
   padding-bottom: ${(props) => props.$data?.setting?.paddingBottom}px;
+  paddding-left: ${(props) => props.$data?.setting?.paddingLeft}px;
+  padding-right: ${(props) => props.$data?.setting?.paddingRight}px;
   margin-top: ${(props) => props.$data?.setting?.marginTop}px;
   margin-bottom: ${(props) => props.$data?.setting?.marginBottom}px;
   background-color: ${(props) => props.$data?.setting?.backgroundColor};
