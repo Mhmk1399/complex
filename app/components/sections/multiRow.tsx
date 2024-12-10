@@ -26,7 +26,7 @@ const Section = styled.section<{
   margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20"}px;
   background-color: ${(props) =>
     props.$data.setting?.backgroundColorMultiRow || "#ffffff"};
-  width: ${(props) => (props.$preview === "sm" ? "375px" : "100%")};
+  width: ${(props) => (props.$preview === "sm" ? "auto" : "100%")};
   border-radius: 12px;
 `;
 

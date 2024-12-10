@@ -316,7 +316,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
           <div className="p-4 border-t border-gray-200">
             <div className="grid md:grid-cols-1 gap-4">
               {/* Color inputs with updated styling */}
-              <div className="p-3 bg-gray-50 rounded-lg">
+              <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
                 <h4 className="font-semibold my-4">تنظیمات سربرگ</h4>
                 <ColorInput
                   label="رنگ سربرگ"
@@ -327,8 +327,6 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                   }
                   onChange={handleBlockSettingChange}
                 />
-              </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
                 <label>سایز سربرگ</label>
                 <input
                   type="range"
@@ -340,13 +338,10 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                   }
                   onChange={handleBlockSettingChange}
                 />
-                <div>
-                  {userInputData?.blocks?.setting?.textFontSize?.toString() ??
-                    "18px"}
+                <div className="text-gray-500 text-sm">
+                  {userInputData?.blocks?.setting?.textFontSize}
                   px
                 </div>
-              </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
                 <label className="block mb-1">وزن سربرگ</label>
                 <select
                   name="textFontWeight"
@@ -361,7 +356,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                   <option value="normal">نرمال</option>
                 </select>
               </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
+              <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
                 <h4 className="font-semibold my-4">تنظیمات توضیحات</h4>
                 <ColorInput
                   label="رنگ توضیحات"
@@ -372,8 +367,6 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                   }
                   onChange={handleBlockSettingChange}
                 />
-              </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
                 <label>سایز توضیحات</label>
                 <input
                   type="range"
@@ -385,13 +378,10 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                   }
                   onChange={handleBlockSettingChange}
                 />
-                <div>
-                  {userInputData?.blocks?.setting?.descriptionFontSize?.toString() ??
-                    "18"}
+                <div className="text-gray-500 text-sm">
+                  {userInputData?.blocks?.setting?.descriptionFontSize}
                   px
                 </div>
-              </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
                 <label className="block mb-1">وزن توضیحات</label>
                 <select
                   name="descriptionFontWeight"
@@ -409,7 +399,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
               {/* Repeat for other color inputs */}
 
               {/* Opacity select with new styling */}
-              <div className="p-3 bg-gray-50 rounded-lg">
+              <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
                 <h4 className="font-semibold my-4">تنظیمات تصویر</h4>
                 <label className="block mb-2 text-sm font-medium text-gray-700">
                   شفافیت تصویر
@@ -448,9 +438,9 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                   </select>
                 </div>
               </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
+              <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
                 <h4 className="font-semibold my-4">تنظیمات کادر</h4>
-                <label className="block mb-2 text-sm font-medium text-gray-700">
+                <label className="block mb-2 text-base font-medium text-gray-800">
                   شفافیت کادر
                 </label>
                 <select
@@ -468,8 +458,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                     </option>
                   ))}
                 </select>
-              </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
+              
                 <ColorInput
                   label="رنگ پس زمینه کادر"
                   name="backgroundColorBox"
@@ -479,8 +468,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                   }
                   onChange={handleBlockSettingChange}
                 />
-              </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
+              
                 <label> انحنای زاویه کادر</label>
                 <input
                   className="w-full"
