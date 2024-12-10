@@ -39,6 +39,7 @@ const ColorInput = ({
     <label className="block mb-1" htmlFor={name}>
       {label}
     </label>
+    
     <div className="flex flex-col gap-3 items-center">
       <input
         type="color"

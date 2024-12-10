@@ -87,8 +87,6 @@
             }
           },
           "setting": {
-            "paddinRight": "0",
-            "paddinLeft": "0",
             "paddingTop": "53",
             "paddingBottom": "102",
             "marginTop": "20",
