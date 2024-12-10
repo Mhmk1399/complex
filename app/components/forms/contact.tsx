@@ -163,8 +163,8 @@ export const ContactForm: React.FC<ContactFormProps> = ({
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto bg-gray-200 rounded-xl" dir="rtl">
-      <h2 className="text-xl font-bold mb-4">تنظیمات فرم ارتباط با ما</h2>
+    <div className="p-6 max-w-4xl mx-auto bg-gray-200 rounded-xl my-4" dir="rtl">
+      <h2 className="text-xl font-bold my-4">تنظیمات فرم ارتباط با ما</h2>
 
       {/* Content Section */}
       {/* Content Section */}
@@ -271,10 +271,11 @@ export const ContactForm: React.FC<ContactFormProps> = ({
           <div className="p-4 border-t border-gray-100 space-y-6 animate-slideDown">
             {/* Heading Settings */}
             <div className="space-y-4">
-              <h4 className="text-base font-semibold text-gray-600">
+             
+            <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+            <h4 className="text-base font-semibold text-sky-600">
                 تنظیمات سربرگ
               </h4>
-              <div className="p-3 bg-gray-50 rounded-lg space-y-4">
                 <div>
                   <ColorInput
                     label="رنگ سربرگ"
@@ -335,10 +336,11 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 
             {/* Button Settings */}
             <div className="space-y-4">
-              <h4 className="text-base font-semibold text-gray-600">
+             
+            <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+            <h4 className="text-base font-semibold text-sky-600">
                 تنظیمات دکمه
               </h4>
-              <div className="p-3 bg-gray-50 rounded-lg space-y-4">
                 <div>
                   <ColorInput
                     label="رنگ پس زمینه دکمه"
@@ -373,10 +375,11 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 
             {/* Background Settings */}
             <div className="space-y-4">
-              <h4 className="text-base font-semibold text-gray-600">
+             
+            <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+            <h4 className="text-base font-semibold text-sky-600">
                 تنظیمات رنگ پس زمینه
               </h4>
-              <div className="p-3 bg-gray-50 rounded-lg">
                 <ColorInput
                   label="رنگ پس زمینه فرم"
                   name="formBackground"

@@ -380,8 +380,8 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
           <div className="p-4 border-t border-gray-100 space-y-6 animate-slideDown">
             {/* Heading Settings */}
             <div className="space-y-4">
-              <h4 className="font-bold text-gray-700">تنظیمات سربرگ</h4>
-              <div className="p-3 bg-gray-50 rounded-lg space-y-4">
+              <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+                <h4 className="font-bold text-sky-700">تنظیمات سربرگ</h4>
                 <div>
                   <ColorInput
                     label="رنگ سربرگ"
@@ -434,8 +434,8 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
             </div>
             {/* Description Settings */}
             <div className="space-y-4">
-              <h4 className="font-bold text-gray-700">تنظیمات توضیحات</h4>
-              <div className="p-3 bg-gray-50 rounded-lg space-y-4">
+              <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+                <h4 className="font-bold text-sky-700">تنظیمات توضیحات</h4>
                 <div>
                   <ColorInput
                     label="رنگ توضیحات"
@@ -488,8 +488,8 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
             </div>
             {/* Button Settings */}
             <div className="space-y-4">
-              <h4 className="font-bold text-gray-700">تنظیمات دکمه</h4>
-              <div className="p-3 bg-gray-50 rounded-lg space-y-4">
+              <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+                <h4 className="font-bold text-sky-700">تنظیمات دکمه</h4>
                 <div>
                   <ColorInput
                     label="رنگ دکمه"
@@ -516,28 +516,21 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
               </div>
             </div>
             {/* Background Settings */}
-            <h4 className="font-bold text-gray-700">
-              تنظیمات رنگ پس زمینه
-            </h4>
-            <div className="space-y-4">
-              <div className="p-3 bg-gray-50 rounded-lg">
-                <ColorInput
-                  label="رنگ پس زمینه"
-                  name="background"
-                  value={
-                    userInputData?.blocks?.setting?.background?.toString() ??
-                    "#333333"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-              </div>
+            <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+              <h4 className="font-bold text-sky-700">تنظیمات رنگ پس زمینه</h4>
+              <ColorInput
+                label="رنگ پس زمینه"
+                name="background"
+                value={
+                  userInputData?.blocks?.setting?.background?.toString() ??
+                  "#333333"
+                }
+                onChange={handleBlockSettingChange}
+              />
             </div>
-            <h4 className="font-bold text-gray-700">
-              تنظیمات کارت و تصویر
-            </h4>
 
-            <div>
-              {" "}
+            <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+              <h4 className="font-bold text-sky-700">تنظیمات کارت و تصویر</h4>
               <label className="block mb-1"> انحنای زوایای کارت </label>{" "}
               <input
                 type="range"
@@ -553,10 +546,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
               />
               <span className="text-sm">
                 {userInputData?.blocks?.setting?.boxRadiuos}px
-              </span>
-            </div>
-            <div>
-              {" "}
+              </span>{" "}
               <label className="block mb-1">عرض تصویر </label>{" "}
               <input
                 type="range"
@@ -572,9 +562,6 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
                 {" "}
                 {userInputData?.blocks?.setting?.imageWidth}px{" "}
               </span>{" "}
-            </div>{" "}
-            <div>
-              {" "}
               <label className="block mb-1">ارتفاع تصویر</label>{" "}
               <input
                 type="range"
@@ -590,9 +577,6 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
                 {" "}
                 {userInputData?.blocks?.setting?.imageHeight}px{" "}
               </span>{" "}
-            </div>{" "}
-            <div>
-              {" "}
               <label className="block mb-1">شفافیت تصویر</label>{" "}
               <select
                 name="opacityImage"

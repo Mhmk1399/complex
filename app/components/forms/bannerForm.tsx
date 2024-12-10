@@ -69,9 +69,9 @@ export const BannerForm: React.FC<BannerFormProps> = ({
     right: 0,
   });
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState<string | null>(null);
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
+  const [dropdownAnimation, setDropdownAnimation] = useState<string>("");
 
   const handleUpdate = (
     type: "margin" | "padding",
@@ -121,14 +121,11 @@ export const BannerForm: React.FC<BannerFormProps> = ({
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
   }, []);
-  console.log("log1", userInputData);
 
   // useEffect(() => {
   //   const initialData = Compiler(layout, selectedComponent)[0];
   //   setUserInputData(initialData);
   // }, [selectedComponent]);
-
-  console.log("log2", userInputData);
 
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -173,16 +170,13 @@ export const BannerForm: React.FC<BannerFormProps> = ({
   };
 
   // Add this CSS animation class
-  const dropdownAnimation = isStyleSettingsOpen
-    ? "animate-slideDown opacity-100"
-    : "animate-slideUp opacity-0 h-0 overflow-hidden";
 
   return (
     <div
-      className="p-3 max-w-4xl mx-auto bg-gray-200 rounded-xl mt-4"
+      className="p-3 max-w-4xl mx-auto bg-gray-200 rounded-xl my-4"
       dir="rtl"
     >
-      <h2 className="text-xl font-bold my-4 inline">تنظیمات بنر</h2>
+      <h2 className="text-xl font-bold my-4 ">تنظیمات بنر</h2>
       {/* Content Section */}
 
       <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100 mt-4">
@@ -226,7 +220,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
 
         {/* Dropdown Content */}
         {isContentOpen && (
-          <div className="p-4 border-t border-gray-100 space-y-4 animate-slideDown">
+          <div className="p-4 border-t  border-gray-100 space-y-4 animate-slideDown">
             {/* Image Input */}
             <div className="p-3 bg-gray-50 rounded-lg">
               <label className="block mb-2 text-sm font-bold text-gray-700">
@@ -312,185 +306,201 @@ export const BannerForm: React.FC<BannerFormProps> = ({
         </button>
 
         {/* Dropdown Content */}
-        <div className={`${dropdownAnimation} transition-all duration-300`}>
-          <div className="p-4 border-t border-gray-200">
-            <div className="grid md:grid-cols-1 gap-4">
-              {/* Color inputs with updated styling */}
-              <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
-                <h4 className="font-semibold my-4">تنظیمات سربرگ</h4>
-                <ColorInput
-                  label="رنگ سربرگ"
-                  name="textColor"
-                  value={
-                    userInputData?.blocks?.setting?.textColor?.toString() ??
-                    "#333333"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-                <label>سایز سربرگ</label>
-                <input
-                  type="range"
-                  className="w-full"
-                  name="textFontSize"
-                  value={
-                    userInputData?.blocks?.setting?.textFontSize?.toString() ??
-                    "18"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-                <div className="text-gray-500 text-sm">
-                  {userInputData?.blocks?.setting?.textFontSize}
-                  px
-                </div>
-                <label className="block mb-1">وزن سربرگ</label>
-                <select
-                  name="textFontWeight"
-                  value={
-                    userInputData?.blocks?.setting?.textFontWeight?.toString() ??
-                    "0"
-                  }
-                  onChange={handleBlockSettingChange}
-                  className="w-full p-2 border rounded"
-                >
-                  <option value="bold">ضخیم</option>
-                  <option value="normal">نرمال</option>
-                </select>
-              </div>
-              <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
-                <h4 className="font-semibold my-4">تنظیمات توضیحات</h4>
-                <ColorInput
-                  label="رنگ توضیحات"
-                  name="descriptionColor"
-                  value={
-                    userInputData?.blocks?.setting?.descriptionColor?.toString() ??
-                    "#333333"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-                <label>سایز توضیحات</label>
-                <input
-                  type="range"
-                  className="w-full"
-                  name="descriptionFontSize"
-                  value={
-                    userInputData?.blocks?.setting?.descriptionFontSize?.toString() ??
-                    "18"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-                <div className="text-gray-500 text-sm">
-                  {userInputData?.blocks?.setting?.descriptionFontSize}
-                  px
-                </div>
-                <label className="block mb-1">وزن توضیحات</label>
-                <select
-                  name="descriptionFontWeight"
-                  value={
-                    userInputData?.blocks?.setting?.descriptionFontWeight?.toString() ??
-                    "0"
-                  }
-                  onChange={handleBlockSettingChange}
-                  className="w-full p-2 border rounded"
-                >
-                  <option value="bold">ضخیم</option>
-                  <option value="normal">نرمال</option>
-                </select>
-              </div>
-              {/* Repeat for other color inputs */}
+        {isStyleSettingsOpen && (
+          <>
+            <div className="transition-all animate-slideDown  duration-300">
+              <div className="p-4 border-t border-gray-200">
+                <div className="grid md:grid-cols-1 gap-4">
+                  {/* Color inputs with updated styling */}
+                  <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+                    <h4 className="font-semibold text-sky-700 my-4">
+                      تنظیمات سربرگ
+                    </h4>
+                    <ColorInput
+                      label="رنگ سربرگ"
+                      name="textColor"
+                      value={
+                        userInputData?.blocks?.setting?.textColor?.toString() ??
+                        "#333333"
+                      }
+                      onChange={handleBlockSettingChange}
+                    />
+                    <label>سایز سربرگ</label>
+                    <input
+                      type="range"
+                      className="w-full"
+                      name="textFontSize"
+                      value={
+                        userInputData?.blocks?.setting?.textFontSize?.toString() ??
+                        "18"
+                      }
+                      onChange={handleBlockSettingChange}
+                    />
+                    <div className="text-gray-500 text-sm">
+                      {userInputData?.blocks?.setting?.textFontSize}
+                      px
+                    </div>
+                    <label className="block mb-1">وزن سربرگ</label>
+                    <select
+                      name="textFontWeight"
+                      value={
+                        userInputData?.blocks?.setting?.textFontWeight?.toString() ??
+                        "0"
+                      }
+                      onChange={handleBlockSettingChange}
+                      className="w-full p-2 border rounded"
+                    >
+                      <option value="bold">ضخیم</option>
+                      <option value="normal">نرمال</option>
+                    </select>
+                  </div>
+                  <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+                    <h4 className="font-semibold text-sky-700 my-4">
+                      تنظیمات توضیحات
+                    </h4>
+                    <ColorInput
+                      label="رنگ توضیحات"
+                      name="descriptionColor"
+                      value={
+                        userInputData?.blocks?.setting?.descriptionColor?.toString() ??
+                        "#333333"
+                      }
+                      onChange={handleBlockSettingChange}
+                    />
+                    <label>سایز توضیحات</label>
+                    <input
+                      type="range"
+                      className="w-full"
+                      name="descriptionFontSize"
+                      value={
+                        userInputData?.blocks?.setting?.descriptionFontSize?.toString() ??
+                        "18"
+                      }
+                      onChange={handleBlockSettingChange}
+                    />
+                    <div className="text-gray-500 text-sm">
+                      {userInputData?.blocks?.setting?.descriptionFontSize}
+                      px
+                    </div>
+                    <label className="block mb-1">وزن توضیحات</label>
+                    <select
+                      name="descriptionFontWeight"
+                      value={
+                        userInputData?.blocks?.setting?.descriptionFontWeight?.toString() ??
+                        "0"
+                      }
+                      onChange={handleBlockSettingChange}
+                      className="w-full p-2 border rounded"
+                    >
+                      <option value="bold">ضخیم</option>
+                      <option value="normal">نرمال</option>
+                    </select>
+                  </div>
+                  {/* Repeat for other color inputs */}
 
-              {/* Opacity select with new styling */}
-              <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
-                <h4 className="font-semibold my-4">تنظیمات تصویر</h4>
-                <label className="block mb-2 text-sm font-medium text-gray-700">
-                  شفافیت تصویر
-                </label>
-                <select
-                  name="opacityImage"
-                  value={
-                    userInputData?.blocks?.setting?.opacityImage?.toLocaleString() ??
-                    "1"
-                  }
-                  onChange={handleBlockSettingChange}
-                  className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                >
-                  {Array.from({ length: 11 }, (_, i) => i / 10).map((value) => (
-                    <option key={value} value={value}>
-                      {value}
-                    </option>
-                  ))}
-                </select>
-                <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-                  <label className="block mb-2 text-sm font-medium text-gray-700">
-                    رفتار عکس
-                  </label>
-                  <select
-                    name="imageBehavior"
-                    value={
-                      userInputData?.setting?.imageBehavior?.toLocaleString() ??
-                      "cover"
-                    }
-                    onChange={handleSettingChange}
-                    className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                  >
-                    <option value="cover">پوشش</option>
-                    <option value="contain">شامل</option>
-                    <option value="fill">کامل</option>
-                  </select>
+                  {/* Opacity select with new styling */}
+                  <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+                    <h4 className="font-semibold text-sky-700 my-4">
+                      تنظیمات تصویر
+                    </h4>
+                    <label className="block mb-2 text-sm font-medium text-gray-700">
+                      شفافیت تصویر
+                    </label>
+                    <select
+                      name="opacityImage"
+                      value={
+                        userInputData?.blocks?.setting?.opacityImage?.toLocaleString() ??
+                        "1"
+                      }
+                      onChange={handleBlockSettingChange}
+                      className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    >
+                      {Array.from({ length: 11 }, (_, i) => i / 10).map(
+                        (value) => (
+                          <option key={value} value={value}>
+                            {value}
+                          </option>
+                        )
+                      )}
+                    </select>
+                    <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                      <label className="block mb-2 text-sm font-medium text-gray-700">
+                        رفتار عکس
+                      </label>
+                      <select
+                        name="imageBehavior"
+                        value={
+                          userInputData?.setting?.imageBehavior?.toLocaleString() ??
+                          "cover"
+                        }
+                        onChange={handleSettingChange}
+                        className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      >
+                        <option value="cover">پوشش</option>
+                        <option value="contain">شامل</option>
+                        <option value="fill">کامل</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+                    <h4 className="font-semibold text-sky-700 my-4">
+                      تنظیمات کادر
+                    </h4>
+                    <label className="block mb-2 text-base font-medium text-gray-800">
+                      شفافیت کادر
+                    </label>
+                    <select
+                      name="opacityTextBox"
+                      value={
+                        userInputData?.blocks?.setting?.opacityTextBox?.toLocaleString() ??
+                        "1"
+                      }
+                      onChange={handleBlockSettingChange}
+                      className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    >
+                      {Array.from({ length: 11 }, (_, i) => i / 10).map(
+                        (value) => (
+                          <option key={value} value={value}>
+                            {value}
+                          </option>
+                        )
+                      )}
+                    </select>
+
+                    <ColorInput
+                      label="رنگ پس زمینه کادر"
+                      name="backgroundColorBox"
+                      value={
+                        userInputData?.blocks?.setting?.backgroundColorBox?.toString() ??
+                        "#333333"
+                      }
+                      onChange={handleBlockSettingChange}
+                    />
+
+                    <label> انحنای زاویه کادر</label>
+                    <input
+                      className="w-full"
+                      type="range"
+                      name="backgroundBoxRadious"
+                      value={
+                        userInputData?.blocks?.setting?.backgroundBoxRadious?.toString() ??
+                        "18"
+                      }
+                      onChange={handleBlockSettingChange}
+                    />
+                    <div className="text-gray-500 text-sm">
+                      {userInputData?.blocks?.setting?.backgroundBoxRadious?.toString() ??
+                        "18"}
+                      px
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
-                <h4 className="font-semibold my-4">تنظیمات کادر</h4>
-                <label className="block mb-2 text-base font-medium text-gray-800">
-                  شفافیت کادر
-                </label>
-                <select
-                  name="opacityTextBox"
-                  value={
-                    userInputData?.blocks?.setting?.opacityTextBox?.toLocaleString() ??
-                    "1"
-                  }
-                  onChange={handleBlockSettingChange}
-                  className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                >
-                  {Array.from({ length: 11 }, (_, i) => i / 10).map((value) => (
-                    <option key={value} value={value}>
-                      {value}
-                    </option>
-                  ))}
-                </select>
-              
-                <ColorInput
-                  label="رنگ پس زمینه کادر"
-                  name="backgroundColorBox"
-                  value={
-                    userInputData?.blocks?.setting?.backgroundColorBox?.toString() ??
-                    "#333333"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-              
-                <label> انحنای زاویه کادر</label>
-                <input
-                  className="w-full"
-                  type="range"
-                  name="backgroundBoxRadious"
-                  value={
-                    userInputData?.blocks?.setting?.backgroundBoxRadious?.toString() ??
-                    "18"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-                <div className="text-gray-500 text-sm">
-                  {userInputData?.blocks?.setting?.backgroundBoxRadious?.toString() ??
-                    "18"}
-                  px
-                </div>
+
+                {/* Image behavior select */}
               </div>
             </div>
-
-            {/* Image behavior select */}
-          </div>
-        </div>
+          </>
+        )}
       </div>
 
       {/* Spacing Settings Dropdown */}

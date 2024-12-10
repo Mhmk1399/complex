@@ -297,11 +297,11 @@ export const VideoForm: React.FC<VideoFormProps> = ({
         {isStyleSettingsOpen && (
           <div className="p-4 border-t border-gray-100 space-y-6 animate-slideDown">
             {/* Heading Settings */}
-            <div className="space-y-4">
-              <h4 className="text-base font-bold text-gray-700">
+            <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+              <h4 className="text-base font-bold text-sky-700">
                 تنظیمات سربرگ
               </h4>
-              <div className="p-3 bg-gray-50 rounded-lg">
+              <div className="p-3 rounded-lg">
                 <ColorInput
                   label="رنگ سربرگ"
                   name="headingColor"
@@ -316,7 +316,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({
                 </span>
               </div>
 
-              <div className="p-3 bg-gray-50 rounded-lg">
+              <div className="p-3  rounded-lg">
                 <label className="block mb-2 text-sm font-bold text-gray-700">
                   سایز سربرگ
                 </label>
@@ -356,8 +356,8 @@ export const VideoForm: React.FC<VideoFormProps> = ({
 
             {/* Video Settings */}
             <div className="space-y-4">
-              <div className="p-3 bg-gray-50 rounded-lg">
-                <h4 className="text-base font-bold text-gray-700 mb-4">
+              <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+                <h4 className="text-base font-bold text-sky-700 mb-4">
                   تنظیمات ویدیو
                 </h4>
                 <label className="block mb-2 text-sm font-bold text-gray-700">
@@ -377,8 +377,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({
                 <span className="text-sm text-gray-500">
                   {userInputData.blocks?.setting?.videoWidth}px
                 </span>
-              </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
+
                 <label className="block mb-2 text-sm font-bold text-gray-700">
                   انحنای زوایا
                 </label>
@@ -395,8 +394,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({
                 <span className="text-sm text-gray-500">
                   {userInputData.blocks.setting?.videoRadious}px
                 </span>
-              </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
+
                 <label className="block mb-2 text-sm font-bold text-gray-700">
                   پوستر ویدیو
                 </label>
@@ -409,10 +407,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({
                   onChange={handleBlockSettingChange}
                   className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
                 />
-              </div>
 
-              {/* Video Controls */}
-              <div className="p-3 bg-gray-50 rounded-lg">
                 <h4 className="font-bold text-gray-700 mb-3">
                   تنظیمات کنترل ویدیو
                 </h4>
@@ -453,11 +448,11 @@ export const VideoForm: React.FC<VideoFormProps> = ({
                   </div>
                 </div>
               </div>
-              <h4 className="font-bold text-gray-700 mb-3">
-                تنظیمات پس زمینه 
-              </h4>
 
-              <div className="p-3 bg-gray-50 rounded-lg">
+              <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+                <h4 className="font-bold text-sky-700 mb-3">
+                  تنظیمات پس زمینه
+                </h4>
                 <ColorInput
                   label="رنگ پس زمینه"
                   name="backgroundVideoSection"
@@ -467,9 +462,9 @@ export const VideoForm: React.FC<VideoFormProps> = ({
                   }
                   onChange={handleBlockSettingChange}
                 />
-                <span className="text-sm text-gray-600" dir="ltr">
+                <div className="text-sm text-gray-600">
                   {userInputData.blocks.setting?.backgroundVideoSection}
-                </span>
+                </div>
               </div>
             </div>
           </div>

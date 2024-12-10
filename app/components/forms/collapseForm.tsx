@@ -182,8 +182,8 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
       {!loaded ? (
         <p>Loading...</p>
       ) : (
-        <div className="p-6 max-w-4xl mx-auto rounded-xl bg-gray-200" dir="rtl">
-          <h2 className="text-xl font-bold mb-4">تنظیمات آکاردئون</h2>
+        <div className="p-6 max-w-4xl mx-auto my-4 rounded-xl bg-gray-200" dir="rtl">
+          <h2 className="text-xl font-bold my-4">تنظیمات آکاردئون</h2>
           {/* Main Heading Settings */}
           <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
             {/* Header Button */}

@@ -56,12 +56,12 @@ const Logo = styled.img<{
 }>`
   width: ${(props) =>
     props.$preview === "sm"
-      ? `${Number(props.$data.blocks.setting.imageWidth || "100") / 2}px`
-      : `${props.$data.blocks.setting.imageWidth || "auto"}px`};
+      ? `${Number(props.$data.blocks.setting.imageWidth || "100") / 2}`
+      : `${props.$data.blocks.setting.imageWidth || "auto"}`}px;
   height: ${(props) =>
     props.$preview === "sm"
-      ? `${Number(props.$data.blocks.setting.imageHeight || "50") / 2}px`
-      : `${props.$data.blocks.setting.imageHeight || "auto"}px`};
+      ? `${Number(props.$data.blocks.setting.imageHeight || "50") / 2}`
+      : `${props.$data.blocks.setting.imageHeight || "auto"}`}px;
 `;
 
 const NavItems = styled.div<{
@@ -98,8 +98,8 @@ const NavItem = styled(Link)<{
   color: ${(props) => props.$data.blocks.setting.itemColor || "#000"};
   font-size: ${(props) =>
     props.$preview === "sm"
-      ? `16px`
-      : `${props.$data.blocks.setting.itemFontSize || "14px"}`};
+      ? `16`
+      : `${props.$data.blocks.setting.itemFontSize || "14"}`}px;
   font-weight: ${(props) =>
     props.$data.blocks.setting.itemFontWeight || "normal"};
   padding: ${(props) =>

@@ -317,9 +317,10 @@ export const RichText: React.FC<RichTextFormProps> = ({
         {isStyleSettingsOpen && (
           <div className="p-4 border-t border-gray-100 animate-slideDown">
             <div className="grid md:grid-cols-1 gap-4">
-              <h4 className="font-bold text-gray-700">تنظیمات سربرگ</h4>
-              {/* Header Settings */}
-              <div className="p-3 bg-gray-50 rounded-lg">
+              <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+                <h4 className="font-bold text-sky-700">تنظیمات سربرگ</h4>
+                {/* Header Settings */}
+
                 <label className="block mb-2 text-sm font-bold text-gray-700">
                   سایز سربرگ
                 </label>
@@ -336,8 +337,7 @@ export const RichText: React.FC<RichTextFormProps> = ({
                 <span className="text-sm">
                   {userInputData?.blocks?.setting?.textHeadingFontSize}px
                 </span>
-              </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
+
                 <label className="block mb-2 text-sm font-bold text-gray-700">
                   وزن سربرگ
                 </label>
@@ -353,8 +353,7 @@ export const RichText: React.FC<RichTextFormProps> = ({
                   <option value="bold">ضخیم</option>
                   <option value="normal">نرمال</option>
                 </select>
-              </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
+
                 <ColorInput
                   label="رنگ سربرگ"
                   name="textHeadingColor"
@@ -366,8 +365,9 @@ export const RichText: React.FC<RichTextFormProps> = ({
                 />
               </div>
               {/* Description Settings */}{" "}
-              <h4 className="font-bold text-gray-700">تنظیمات سربرگ</h4>
-              <div className="p-3 bg-gray-50 rounded-lg">
+              <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+                <h4 className="font-bold text-sky-700">تنظیمات توضیحات</h4>
+
                 <label className="block mb-2 text-sm font-bold text-gray-700">
                   سایز توضیحات
                 </label>
@@ -384,8 +384,7 @@ export const RichText: React.FC<RichTextFormProps> = ({
                 <span className="text-sm">
                   {userInputData?.blocks?.setting?.descriptionFontSize}px
                 </span>
-              </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
+
                 <label className="block mb-2 text-sm font-bold text-gray-700">
                   وزن توضیحات
                 </label>
@@ -401,8 +400,6 @@ export const RichText: React.FC<RichTextFormProps> = ({
                   <option value="bold">ضخیم</option>
                   <option value="normal">نرمال</option>
                 </select>
-              </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
                 <ColorInput
                   label="رنگ توضیحات"
                   name="descriptionColor"
@@ -413,9 +410,9 @@ export const RichText: React.FC<RichTextFormProps> = ({
                   onChange={handleBlockSettingChange}
                 />
               </div>
-              <h4 className="font-bold text-gray-700">تنظیمات رنگ ها</h4>
               {/* Background and Button Colors */}
-              <div className="p-3 bg-gray-50 rounded-lg">
+              <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+                <h4 className="font-bold text-sky-700">تنظیمات رنگ ها</h4>
                 <ColorInput
                   label="رنگ پس زمینه"
                   name="background"
@@ -425,8 +422,7 @@ export const RichText: React.FC<RichTextFormProps> = ({
                   }
                   onChange={handleBlockSettingChange}
                 />
-              </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
+
                 <ColorInput
                   label="رنگ متن دکمه"
                   name="btnTextColor"
@@ -436,8 +432,7 @@ export const RichText: React.FC<RichTextFormProps> = ({
                   }
                   onChange={handleBlockSettingChange}
                 />
-              </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
+
                 <ColorInput
                   label="رنگ پس زمینه دکمه"
                   name="btnBackgroundColor"

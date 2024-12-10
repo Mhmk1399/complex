@@ -353,8 +353,8 @@ export const SlideForm: React.FC<SlideFormProps> = ({
             <div className="p-4 border-t border-gray-100 animate-slideDown">
               <div className="grid grid-cols-1 gap-6">
                 {/* Text Settings */}
-                <div className="space-y-4">
-                  <h4 className="font-bold text-gray-700 mb-3">
+                <div className="space-y-4 bg-gray-100 rounded-lg p-4">
+                  <h4 className="font-bold text-sky-700 mb-3">
                     تنظیمات سربرگ
                   </h4>
                   <div className="space-y-3">
@@ -367,7 +367,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                         name="textFontSize"
                         value={userInputData?.setting?.textFontSize || 15}
                         onChange={handleSettingChange}
-                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                        className="w-full h-2  rounded-lg appearance-none cursor-pointer"
                       />
                       <div className="text-xs text-gray-500 mt-1">
                         {userInputData?.setting?.textFontSize || 15}px
@@ -389,7 +389,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                       </select>
                     </div>
 
-                    <div className="p-3 bg-gray-50 rounded-lg">
+                    <div className="p-3 rounded-lg">
                       <ColorInput
                         label="رنگ سربرگ"
                         name="textColor"
@@ -408,8 +408,8 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                 </div>
 
                 {/* Description Settings */}
-                <div className="space-y-4 ">
-                  <h4 className="font-bold text-gray-700 mb-3">
+                <div className="space-y-4 bg-gray-100 rounded-lg p-4">
+                  <h4 className="font-bold text-sky-700 mb-3">
                     تنظیمات توضیحات
                   </h4>
                   <div className="space-y-3">
@@ -450,7 +450,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                       </select>
                     </div>
 
-                    <div className="p-3 bg-gray-50 rounded-lg">
+                    <div className="p-3  rounded-lg">
                       <ColorInput
                         label="رنگ سربرگ"
                         name="descriptionColor"
@@ -467,8 +467,8 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                     </div>
                   </div>
                 </div>
-                <div className="space-y-4 ">
-                  <h4 className="font-bold text-gray-700 mb-3">
+                <div className="space-y-4 bg-gray-100 rounded-lg p-4">
+                  <h4 className="font-bold text-sky-700 mb-3">
                     تنظیمات تصویر
                   </h4>
                   <div className="space-y-3">
@@ -488,7 +488,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                       </div>
                     </div>
 
-                    <div className="p-3 bg-gray-50 rounded-lg">
+                    <div className="p-3  rounded-lg">
                       <label className="block mb-2 text-sm font-medium text-gray-700">
                         شفافیت تصویر
                       </label>
@@ -533,10 +533,10 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                     </div>
                   </div>
                 </div>
-                <div className="space-y-4 ">
-                  <h4 className="font-bold text-gray-700 mb-3">تنظیمات دکمه</h4>
+                <div className="space-y-4 bg-gray-100 rounded-lg p-4">
+                  <h4 className="font-bold text-sky-700 mb-3">تنظیمات دکمه</h4>
                   <div className="space-y-3">
-                    <div className="p-3 bg-gray-50 rounded-lg">
+                    <div className="p-3 rounded-lg">
                       <ColorInput
                         label="رنگ متن دکمه"
                         name="btnTextColor"
@@ -552,7 +552,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                       </div>
                     </div>
 
-                    <div className="p-3 bg-gray-50 rounded-lg">
+                    <div className="p-3  rounded-lg">
                       <ColorInput
                         label="رنگ پس زمینه دکمه"
                         name="btnBackgroundColor"

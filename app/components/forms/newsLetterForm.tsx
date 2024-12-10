@@ -164,8 +164,8 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto bg-gray-200 rounded-xl" dir="rtl">
-      <h2 className="text-xl font-bold mb-4">تنظیمات خبرنامه</h2>
+    <div className="p-6 max-w-4xl mx-auto my-4 bg-gray-200 rounded-xl" dir="rtl">
+      <h2 className="text-xl font-bold my-4">تنظیمات خبرنامه</h2>
 
       {/* Content Section */}
       <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
@@ -296,8 +296,8 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
           <div className="p-4 border-t border-gray-100 space-y-6 animate-slideDown">
             {/* Heading Settings */}
             <div className="space-y-4">
-              <h4 className="font-semibold text-gray-700">تنظیمات سربرگ</h4>
-              <div className="p-3 bg-gray-50 rounded-lg space-y-4">
+              <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+                <h4 className="font-semibold text-sky-700">تنظیمات سربرگ</h4>
                 <div>
                   <ColorInput
                     label="رنگ سربرگ"
@@ -354,8 +354,8 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
 
             {/* Description Settings */}
             <div className="space-y-4">
-              <h4 className="font-semibold text-gray-700">تنظیمات توضیحات</h4>
-              <div className="p-3 bg-gray-50 rounded-lg space-y-4">
+              <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+                <h4 className="font-semibold text-sky-700">تنظیمات توضیحات</h4>
                 <div>
                   <ColorInput
                     label="رنگ توضیحات"
@@ -412,8 +412,8 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
 
             {/* Button Settings */}
             <div className="space-y-4">
-              <h4 className="font-semibold text-gray-700">تنظیمات دکمه</h4>
-              <div className="p-3 bg-gray-50 rounded-lg space-y-4">
+              <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+                <h4 className="font-semibold text-sky-700">تنظیمات دکمه</h4>
                 <div>
                   <ColorInput
                     label="رنگ پس زمینه دکمه"
@@ -448,10 +448,10 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
 
             {/* Background Settings */}
             <div className="space-y-4">
-              <h4 className="font-semibold text-gray-700">
-                تنظیمات رنگ پس زمینه
-              </h4>
-              <div className="p-3 bg-gray-50 rounded-lg">
+              <div className="p-3 bg-gray-100 rounded-lg flex flex-col gap-3">
+                <h4 className="font-semibold text-sky-700">
+                  تنظیمات رنگ پس زمینه
+                </h4>
                 <ColorInput
                   label="رنگ پس زمینه"
                   name="formBackground"
