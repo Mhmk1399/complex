@@ -8,7 +8,6 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Preview } from "../preview";
 
 interface HeaderProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -38,7 +37,9 @@ const SectionHeader = styled.section<{
   z-index: 40;
 `;
 
-const LogoContainer = styled.div`
+const LogoContainer = styled.div<{
+  $data: HeaderSection;
+}>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -63,6 +64,17 @@ const Logo = styled.img<{
     props.$preview === "sm"
       ? `${Number(props.$data.blocks.setting.imageHeight || "50") / 2}`
       : `${props.$data.blocks.setting.imageHeight || "auto"}`}px;
+  // margin-right: ${(props) =>
+    props.$data.blocks.setting.marginRight || "0"}px;
+  // margin-left: ${(props) => props.$data.blocks.setting.marginLeft || "0"}px;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  transform: translateX(
+    ${(props) =>
+      `calc(${props.$data.blocks.setting.marginRight || 0}px - ${
+        props.$data.blocks.setting.marginLeft || 0
+      }px)`}
+  );
 `;
 
 const NavItems = styled.div<{
@@ -123,7 +135,7 @@ const MenuButton = styled.button<{
   cursor: pointer;
   color: ${(props) => props.$data.blocks.setting.itemColor || "#000"};
   position: absolute;
-  top:  ${(props) => (props.$preview === "sm" ? "top-1" : "top-5")};
+  top: ${(props) => (props.$preview === "sm" ? "top-1" : "top-5")};
   z-index: 100;
 `;
 
@@ -192,7 +204,7 @@ const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
       ) : null}
-      <LogoContainer>
+      <LogoContainer $data={sectionData}>
         <Logo
           $preview={preview}
           className={`${isOpen ? "hidden" : "block"}`}
@@ -202,7 +214,6 @@ const Header: React.FC<HeaderProps> = ({
           alt={imageAlt}
         />
 
-        
         <MenuButton
           $preview={preview}
           className="absolute top-5 left-1 p-4"

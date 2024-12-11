@@ -116,6 +116,8 @@ export interface HeaderBlockSettings extends CommonSettings {
   itemHoverColor: string;
   backgroundColorNavbar: string;
   titleColor: string;
+  marginRight?: string;
+  marginLeft?: string;
 }
 export interface HeaderBlock {
   imageLogo: string;

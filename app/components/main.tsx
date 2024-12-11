@@ -20,6 +20,7 @@ import DetailPage from "@/public/template/detail.json";
 import Blog from "@/public/template/blog.json";
 import BlogDetail from "@/public/template/blogDetail.json";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export const Main = () => {
   const Data = data as unknown as Layout;
@@ -163,10 +164,17 @@ export const Main = () => {
               e.currentTarget.style.setProperty("--x", `${x}%`);
               e.currentTarget.style.setProperty("--y", `${y}%`);
             }}
-            className="sticky top-0 z-50 backdrop-blur-2xl bg-gradient-to-br from-[#0052D4] to-[#6FB1FC] shadow-md cursor-pointer"
+            className="sticky top-0 z-50  backdrop-blur-2xl bg-gradient-to-br from-[#0052D4] to-[#6FB1FC] shadow-md cursor-pointer"
           >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex flex-col sm:flex-row items-center justify-between py-4 space-y-4 sm:space-y-0">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+              <div className="flex flex-col sm:flex-row items-center justify-around py-4 space-y-4 sm:space-y-0">
+                <motion.button
+                  className={`w-full sm:w-auto bg-pink-400 text-white lg:-ml-12 px-3 py-2.5 rounded-full font-medium transition-all duration-300 transform`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Link href="/">نمایش سایت</Link>
+                </motion.button>
                 {/* Save Button with Animation */}
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -269,7 +277,7 @@ export const Main = () => {
                 </motion.select>
                 <label
                   htmlFor="page-settings"
-                  className="lg:-ml-80 hidden lg:block lg:border-t-black text-sm text-gray-50 font-semibold"
+                  className="lg:-ml-36 hidden lg:block lg:border-t-black text-sm text-gray-50 font-semibold"
                 >
                   : تنظیمات صفحه
                 </label>
