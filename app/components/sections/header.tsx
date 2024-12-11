@@ -8,6 +8,7 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { Preview } from "../preview";
 
 interface HeaderProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -121,6 +122,8 @@ const MenuButton = styled.button<{
   font-size: 1.5rem;
   cursor: pointer;
   color: ${(props) => props.$data.blocks.setting.itemColor || "#000"};
+  position: absolute;
+  top:  ${(props) => (props.$preview === "sm" ? "top-1" : "top-5")};
   z-index: 100;
 `;
 
@@ -198,6 +201,8 @@ const Header: React.FC<HeaderProps> = ({
           src={imageLogo || "/assets/images/logo.webp"}
           alt={imageAlt}
         />
+
+        
         <MenuButton
           $preview={preview}
           className="absolute top-5 left-1 p-4"

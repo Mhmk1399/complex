@@ -4,6 +4,7 @@ import { Preview } from "./preview";
 import { Form } from "./form";
 import data from "../../public/template/null.json";
 import smData from "../../public/template/nullSm.json";
+import Image from "next/image";
 import {
   AboutChildren,
   BlogChildren,
@@ -18,14 +19,15 @@ import Store from "@/public/template/product.json";
 import DetailPage from "@/public/template/detail.json";
 import Blog from "@/public/template/blog.json";
 import BlogDetail from "@/public/template/blogDetail.json";
-import { mod } from "@tensorflow/tfjs";
+import { motion } from "framer-motion";
 
 export const Main = () => {
   const Data = data as unknown as Layout;
   const [loading, setLoading] = useState(true);
   const [layout, setLayout] = useState<Layout>(Data);
   const [smLayout, setSmLayout] = useState<Layout>(smData as unknown as Layout);
-  const [activeMode, setActiveMode] = useState<"sm" | "lg">("sm");
+  const [activeMode, setActiveMode] = useState<"sm" | "lg">("lg");
+  const [previewWidth, setPreviewWidth] = useState<"sm" | "default">("default");
   const [selectedComponent, setSelectedComponent] =
     useState<string>("sectionHeader");
   const [saveStatus, setSaveStatus] = useState<
@@ -145,73 +147,143 @@ export const Main = () => {
           </div>
         </div>
       ) : (
-        <div>
-          <div className=" z-50 flex justify-center lg:px-10 py-1">
-            <button
-              onClick={handleSave}
-              disabled={saveStatus === "saving"}
-              className={`px-4 py-2 rounded-full mr-2 text-white ${
-                saveStatus === "saving"
-                  ? "bg-gray-400"
-                  : saveStatus === "saved"
-                  ? "bg-green-500"
-                  : saveStatus === "error"
-                  ? "bg-red-500"
-                  : "bg-green-500 hover:bg-green-600"
-              }`}
-            >
-              {saveStatus === "saving"
-                ? "Saving..."
-                : saveStatus === "saved"
-                ? "Saved!"
-                : saveStatus === "error"
-                ? "Error!"
-                : "Save Changes"}
-            </button>
-            <div className="inline mr-3">
-              <div className="inline mr-3">
-                <button
-                  className="px-2 py-1 rounded-md"
-                  onClick={() => handleModeChange("sm")}
-                  style={{
-                    backgroundColor: activeMode === "sm" ? "blue" : "gray",
-                    color: "white",
-                  }}
+        <div className="min-h-screen ">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            whileHover={{
+              background:
+                "radial-gradient(circle at var(--x) var(--y), #4facfe 0%, #0052D4 50%)",
+              transition: { duration: 0.3 },
+            }}
+            onMouseMove={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              const x = ((e.clientX - rect.left) / rect.width) * 100;
+              const y = ((e.clientY - rect.top) / rect.height) * 100;
+              e.currentTarget.style.setProperty("--x", `${x}%`);
+              e.currentTarget.style.setProperty("--y", `${y}%`);
+            }}
+            className="sticky top-0 z-50 backdrop-blur-2xl bg-gradient-to-br from-[#0052D4] to-[#6FB1FC] shadow-md cursor-pointer"
+          >
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex flex-col sm:flex-row items-center justify-between py-4 space-y-4 sm:space-y-0">
+                {/* Save Button with Animation */}
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleSave}
+                  disabled={saveStatus === "saving"}
+                  className={`w-full sm:w-auto lg:-ml-12 px-3 py-2.5 rounded-full font-medium transition-all duration-300 transform
+                  ${
+                    saveStatus === "saving"
+                      ? "bg-blue-900"
+                      : saveStatus === "saved"
+                      ? "bg-green-500"
+                      : saveStatus === "error"
+                      ? "bg-red-500"
+                      : "bg-gradient-to-r from-blue-200 to-blue-600 hover:from-blue-600 hover:to-blue-200"
+                  }
+                  text-white shadow-md hover:shadow-lg`}
                 >
-                  SM
-                </button>
-                <button
-                  className="mx-2 px-2 py-1 rounded-md"
-                  onClick={() => handleModeChange("lg")}
-                  style={{
-                    backgroundColor: activeMode === "lg" ? "blue" : "gray",
-                    color: "white",
-                  }}
+                  {saveStatus === "saving"
+                    ? "...در حال ذخیره"
+                    : saveStatus === "saved"
+                    ? " ! ذخیره شد "
+                    : saveStatus === "error"
+                    ? "ارور"
+                    : "ذخیره تنظیمات"}
+                </motion.button>
+
+                {/* View Mode Toggles */}
+                <div className="flex items-center flex-row-reverse space-x-3">
+                  <span className="text-sm text-gray-50 ml-2 hidden lg:block font-semibold">
+                    : تنظیمات پیش نمایش
+                  </span>
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => handleModeChange("sm")}
+                    className={`p-2 rounded-lg hidden lg:block transition-all duration-300 shadow-md hover:shadow-gray-500
+                    ${
+                      previewWidth === "sm"
+                        ? "bg-yellow-500 shadow-lg"
+                        : "bg-gray-200 hover:bg-gray-300"
+                    }`}
+                  >
+                    <Image
+                      onClick={() => setPreviewWidth("sm")}
+                      src="/assets/images/smartphone.png"
+                      alt="Mobile View"
+                      width={24}
+                      height={24}
+                      className="transform transition-transform"
+                    />
+                  </motion.button>
+
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => handleModeChange("lg")}
+                    className={`p-2 rounded-lg hidden lg:block transition-all duration-300 shadow-md hover:shadow-gray-500
+                    ${
+                      previewWidth === "default"
+                        ? "bg-yellow-500 shadow-lg"
+                        : "bg-gray-200 hover:bg-gray-300"
+                    }`}
+                  >
+                    <Image
+                      src="/assets/images/computer.png"
+                      onClick={() => setPreviewWidth("default")}
+                      alt="Desktop View"
+                      width={24}
+                      height={24}
+                      className="transform transition-transform"
+                    />
+                  </motion.button>
+                </div>
+
+                {/* Route Selector */}
+                <label
+                  htmlFor="page-settings"
+                  className="lg:-ml-80 text-sm block lg:hidden text-gray-50 font-semibold"
                 >
-                  LG
-                </button>
+                  : تنظیمات صفحه
+                </label>
+                <motion.select
+                  whileHover={{ scale: 1.02 }}
+                  dir="rtl"
+                  id="page-settings"
+                  value={selectedRoute}
+                  onChange={(e) => setSelectedRoute(e.target.value)}
+                  className="w-full  sm:w-40 px-2 py-1 bg-gray-200 rounded-xl border-2 border-gray-200 
+                   shadow-sm focus:border-gray-200 focus:ring-2 focus:ring-gray-200 
+                  transition-all duration-300"
+                >
+                  <option value="home">خانه</option>
+                  <option value="about">درباره </option>
+                  <option value="contact">ارتباط</option>
+                  <option value="store">فروشگاه</option>
+                  <option value="DetailPage">جزِئیات محصول</option>
+                  <option value="BlogList">وبلاگ</option>
+                  <option value="BlogDetail">جزئیات وبلاگ </option>
+                </motion.select>
+                <label
+                  htmlFor="page-settings"
+                  className="lg:-ml-80 hidden lg:block lg:border-t-black text-sm text-gray-50 font-semibold"
+                >
+                  : تنظیمات صفحه
+                </label>
               </div>
             </div>
-            <select
-              value={selectedRoute}
-              onChange={(e) => setSelectedRoute(e.target.value)}
-              className="px-2 py-2 lg:mr-56 w-[150px] rounded-2xl border border-gray-500 text-center"
-            >
-              <option value="home">Home</option>
-              <option value="about">About</option>
-              <option value="contact">Contact</option>
-              <option value="store">store</option>
-              <option value="DetailPage">DetailPage</option>
-              <option value="BlogList">Blog</option>
-              <option value="BlogDetail">BlogDetail</option>
-            </select>
-          </div>
+          </motion.div>
           <Preview
             layout={layout}
             setSelectedComponent={setSelectedComponent}
             orders={orders}
             selectedComponent={selectedComponent}
             setLayout={setLayout}
+            previewWidth={previewWidth}
+            setPreviewWidth={setPreviewWidth}
           />
           <Form
             selectedComponent={selectedComponent}

@@ -40,8 +40,8 @@
           }
         ],
         "setting": {
-          "imageWidth": "80",
-          "imageHeight": "80",
+          "imageWidth": "60",
+          "imageHeight": "60",
           "imageRadius": "30",
           "itemColor": "#14213D",
           "itemFontSize": "15",
@@ -52,7 +52,7 @@
       },
       "setting": {
         "paddingTop": "10",
-        "paddingBottom": "10",
+        "paddingBottom": "30",
         "marginTop": "20",
         "marginBottom": "20",
         "paddinRight": "0",
@@ -69,14 +69,14 @@
           "blocks": {
             "imageSrc": "/assets/images/ban.jpg",
             "imageAlt": "",
-            "text": "asdasdasdawww",
+            "text": "lggggg",
             "description": " توضیحات بنر",
             "setting": {
               "descriptionColor": "#E5E5E5",
               "descriptionFontSize": "22",
               "descriptionFontWeight": "bold",
               "textColor": "#FCA311",
-              "textFontSize": "30",
+              "textFontSize": "71",
               "textFontWeight": "bold",
               "backgroundColorBox": "#14213d",
               "backgroundBoxRadious": "54",
@@ -87,13 +87,13 @@
             }
           },
           "setting": {
-            "paddingTop": "53",
-            "paddingBottom": "102",
+            "paddingTop": "30",
+            "paddingBottom": "30",
             "marginTop": "20",
-            "marginBottom": "91",
+            "marginBottom": "20",
             "imageBehavior": "cover",
-            "paddingLeft": "24",
-            "paddingRight": "25"
+            "paddingLeft": "10",
+            "paddingRight": "10"
           }
         },
         {
@@ -578,5 +578,9 @@
       }
     }
   },
-  "order": ["section-header", "children", "section-footer"]
+  "order": [
+    "section-header",
+    "children",
+    "section-footer"
+  ]
 }

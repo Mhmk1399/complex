@@ -32,7 +32,7 @@ const Section = styled.section<{
   border-radius: 20px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   width: ${(props) => (props.$previewWidth === "sm" ? "100%" : "auto")};
-  max-width: ${(props) => (props.$previewWidth === "sm" ? "375px" : "100%")};
+  max-width: ${(props) => (props.$previewWidth === "sm" ? "425px" : "100%")};
 `;
 
 const Heading = styled.h2<{ $data: ContactFormDataSection }>`
