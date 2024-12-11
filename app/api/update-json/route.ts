@@ -10,6 +10,7 @@ const hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
 function loadJson(filePath: string) {
   try {
     return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    console.log('JSON file loaded successfully.');
   } catch (error) {
     console.error('Failed to load JSON file:', error);
     throw new Error('JSON file load failed.');
@@ -22,21 +23,21 @@ function saveJson(filePath: string, data: any) {
 }
 
 // Deep Update for JSON Structure
-function deepUpdate(obj: any, updates: any) {
-  for (const key in updates) {
-    const keys = key.split('.'); // Support nested keys
-    let current = obj;
+// function deepUpdate(obj: any, updates: any) {
+//   for (const key in updates) {
+//     const keys = key.split('.'); // Support nested keys
+//     let current = obj;
 
-    keys.forEach((k, index) => {
-      if (index === keys.length - 1) {
-        current[k] = updates[key];
-      } else {
-        if (!current[k]) current[k] = {};
-        current = current[k];
-      }
-    });
-  }
-}
+//     keys.forEach((k, index) => {
+//       if (index === keys.length - 1) {
+//         current[k] = updates[key];
+//       } else {
+//         if (!current[k]) current[k] = {};
+//         current = current[k];
+//       }
+//     });
+//   }
+// }
 
 // Fuzzy Matching for Enhanced Understanding
 const dataset = loadJson(path.join(process.cwd(), 'data', 'nlp_dataset.json')); // Assuming your dataset file
@@ -49,7 +50,8 @@ function fuzzyMatch(input: string): any {
     return (result[0].item as { output: any }).output;
   }
   return null;
-}function parseInputWithRegex(input: string) {
+} 
+function parseInputWithRegex(input: string) {
   const updates: { [key: string]: string | number } = {};
 
   const regexMap = {
@@ -142,7 +144,7 @@ export async function POST(request: Request) {
     console.log('Applying updates:', updates);
 
     // Update JSON Data
-    deepUpdate(jsonData, updates);
+    // deepUpdate(jsonData, updates);
 
     // Save Updated JSON
     saveJson(filePath, jsonData);
