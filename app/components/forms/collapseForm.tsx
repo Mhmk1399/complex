@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
 import {
   Layout,
@@ -176,12 +176,27 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
       ),
     }));
   };
+  const [isUpdating, setIsUpdating] = useState(false);
 
-  const handleBlockSettingChange = (
-    index: number,
-    field: string,
-    value: string
-  ) => {
+  const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
+    
+    const { name, value } = e.target;
+    setUserInputData((prev: CollapseSection) => ({
+      ...prev,
+      setting: {
+        ...prev.setting,
+        [name]: value,
+      },
+    }));
+  
+    setTimeout(() => setIsUpdating(false), 100);
+  };
+  const handleBlockSettingChange = (index: number, field: string, value: string) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
+  
     setUserInputData((prev: CollapseSection) => ({
       ...prev,
       blocks: prev.blocks.map((block: CollapseBlock, i: number) =>
@@ -193,18 +208,10 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
           : block
       ),
     }));
+  
+    setTimeout(() => setIsUpdating(false), 100);
   };
-
-  const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setUserInputData((prev: CollapseSection) => ({
-      ...prev,
-      setting: {
-        ...prev.setting,
-        [name]: value,
-      },
-    }));
-  };
+  
 
   return (
     <>

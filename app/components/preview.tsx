@@ -17,7 +17,6 @@ import DetailPage from "./sections/detailPage";
 import { Collection } from "./sections/collection";
 import BlogList from "./sections/blogList";
 import BlogDetail from "./sections/blogDetail";
-import Image from "next/image";
 
 // First update the PreviewProps interface
 interface PreviewProps {

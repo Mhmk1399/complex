@@ -189,18 +189,28 @@ export const ProductListForm: React.FC<ProductListProps> = ({
     }));
   };
 
-  const handleSettingChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setUserInputData((prev: ProductSection) => ({
-      ...prev,
-      setting: {
-        ...prev.setting,
-        [name]: value,
-      },
-    }));
-  };
+// Add this state to control updates
+const [isUpdating, setIsUpdating] = useState(false);
+
+// Modify your change handlers to include debouncing
+const handleSettingChange = (
+  e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+) => {
+  if (isUpdating) return;
+  setIsUpdating(true);
+  
+  const { name, value } = e.target;
+  setUserInputData((prev: ProductSection) => ({
+    ...prev,
+    setting: {
+      ...prev.setting,
+      [name]: value,
+    },
+  }));
+
+  // Reset the updating flag after a short delay
+  setTimeout(() => setIsUpdating(false), 100);
+};
 
   return (
     <div className=" p-2 bg-gray-200 my-4 rounded-lg" dir="rtl">

@@ -17,11 +17,6 @@ interface BoxValues {
   right: number;
 }
 
-interface MarginPaddingEditorProps {
-  margin: BoxValues;
-  padding: BoxValues;
-  onChange: (type: "margin" | "padding", updatedValues: BoxValues) => void;
-}
 
 const ColorInput = ({
   label,
@@ -175,24 +170,25 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
   //   }));
   // };
 
+  const [isUpdating, setIsUpdating] = useState(false);
+  
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
     const { name, value } = e.target;
-    console.log("Setting Change:", { name, value });
-    console.log("Previous State:", userInputData);
-    setUserInputData((prev: CollectionSection) => {
-      const newState = {
-        ...prev,
-        setting: {
-          ...prev.setting,
-          [name]: value,
-        },
-      };
-      console.log("New State:", newState);
-      return newState;
-    });
+    setUserInputData((prev: CollectionSection) => ({
+      ...prev,
+      setting: {
+        ...prev.setting,
+        [name]: value,
+      },
+    }));
+    setTimeout(() => setIsUpdating(false), 100);
+
   };
+  
 
   return (
     <>

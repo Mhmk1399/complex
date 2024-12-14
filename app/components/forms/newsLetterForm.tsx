@@ -165,9 +165,13 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
     }));
   };
 
+  const [isUpdating, setIsUpdating] = useState(false);
+
   const handleBlockSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
     const { name, value } = e.target;
     setUserInputData((prev: NewsLetterSection) => ({
       ...prev,
@@ -179,17 +183,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
         },
       },
     }));
-  };
-
-  const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setUserInputData((prev: NewsLetterSection) => ({
-      ...prev,
-      setting: {
-        ...prev.setting,
-        [name]: value,
-      },
-    }));
+    setTimeout(() => setIsUpdating(false), 100);
   };
 
   return (

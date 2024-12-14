@@ -19,11 +19,7 @@ interface BoxValues {
   right: number;
 }
 
-interface MarginPaddingEditorProps {
-  margin: BoxValues;
-  padding: BoxValues;
-  onChange: (type: "margin" | "padding", updatedValues: BoxValues) => void;
-}
+
 
 const ColorInput = ({
   label,
@@ -166,7 +162,11 @@ export const ContactForm: React.FC<ContactFormProps> = ({
     }));
   };
 
+  const [isUpdating, setIsUpdating] = useState(false);
+
   const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
     const { name, value } = e.target;
     setUserInputData((prev: ContactFormDataSection) => ({
       ...prev,
@@ -178,18 +178,10 @@ export const ContactForm: React.FC<ContactFormProps> = ({
         },
       },
     }));
+    setTimeout(() => setIsUpdating(false), 100);
   };
+  
 
-  const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setUserInputData((prev: ContactFormDataSection) => ({
-      ...prev,
-      setting: {
-        ...prev?.setting,
-        [name]: value.includes("px") ? value : `${value}px`,
-      },
-    }));
-  };
 
   return (
     <div

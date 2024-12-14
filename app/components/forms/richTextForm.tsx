@@ -75,6 +75,7 @@ export const RichText: React.FC<RichTextFormProps> = ({
   const [inputText, setInputText] = useState("");
   const [json, setJson] = useState(null);
   const [dropdownAnimation, setDropdownAnimation] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleLiveInput = async (
     event: React.MouseEvent<HTMLButtonElement>
@@ -169,6 +170,8 @@ export const RichText: React.FC<RichTextFormProps> = ({
   const handleBlockSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
     const { name, value } = e.target;
     setUserInputData((prev: RichTextSection) => ({
       ...prev,
@@ -180,11 +183,15 @@ export const RichText: React.FC<RichTextFormProps> = ({
         },
       },
     }));
+    setTimeout(() => setIsUpdating(false), 100);
   };
-
+  
+  // Similarly update handleSettingChange
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
     const { name, value } = e.target;
     setUserInputData((prev: RichTextSection) => ({
       ...prev,
@@ -193,8 +200,8 @@ export const RichText: React.FC<RichTextFormProps> = ({
         [name]: value,
       },
     }));
+    setTimeout(() => setIsUpdating(false), 100);
   };
-
   return (
     <div
       className="p-2 max-w-4xl mx-auto bg-gray-200 rounded-xl my-4"

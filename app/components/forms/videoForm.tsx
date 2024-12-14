@@ -161,35 +161,30 @@ export const VideoForm: React.FC<VideoFormProps> = ({
     }));
   };
 
-  const handleBlockSettingChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value, type } = e.target;
-    const inputValue =
-      type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
+  const [isUpdating, setIsUpdating] = useState(false);
 
-    setUserInputData((prev: VideoSection) => ({
-      ...prev,
-      blocks: {
-        ...prev.blocks,
-        setting: {
-          ...prev.blocks.setting,
-          [name]: inputValue,
-        },
-      },
-    }));
-  };
+const handleBlockSettingChange = (
+  e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+) => {
+  if (isUpdating) return;
+  setIsUpdating(true);
+  const { name, value, type } = e.target;
+  const inputValue = type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
 
-  const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setUserInputData((prev: VideoSection) => ({
-      ...prev,
+  setUserInputData((prev: VideoSection) => ({
+    ...prev,
+    blocks: {
+      ...prev.blocks,
       setting: {
-        ...prev.setting,
-        [name]: value,
+        ...prev.blocks.setting,
+        [name]: inputValue,
       },
-    }));
-  };
+    },
+  }));
+  setTimeout(() => setIsUpdating(false), 100);
+};
+
+
 
   return (
     <div

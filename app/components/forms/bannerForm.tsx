@@ -167,10 +167,13 @@ export const BannerForm: React.FC<BannerFormProps> = ({
       },
     }));
   };
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleBlockSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
     const { name, value } = e.target;
     setUserInputData((prev: BannerSection) => ({
       ...prev,
@@ -182,8 +185,11 @@ export const BannerForm: React.FC<BannerFormProps> = ({
         },
       },
     }));
+    setTimeout(() => setIsUpdating(false), 100);
+
   };
 
+  
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {

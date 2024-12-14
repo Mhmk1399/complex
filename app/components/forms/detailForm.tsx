@@ -157,45 +157,26 @@ export const DetailForm: React.FC<DetailFormProps> = ({
     }
   }, [selectedComponent]);
 
-  // const handleBlockSettingChange = (
-  //   e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  // ) => {
-  //   const { name, value } = e.target;
-  //   console.log("Block Setting Change:", { name, value });
-  //   console.log("Previous State:", userInputData);
-  //   setUserInputData((prev: DetailPageSection) => {
-  //     const newState = {
-  //       ...prev,
-  //       blocks: {
-  //         ...prev?.blocks,
-  //         setting: {
-  //           ...(prev?.setting || {}),
-  //           [name]: value,
-  //         },
-  //       },
-  //     };
-  //     console.log("New State:", newState);
-  //     return newState;
-  //   });
-  // };
+  
+
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
+    
     const { name, value } = e.target;
-    console.log("Setting Change:", { name, value });
-    console.log("Previous State:", userInputData);
-    setUserInputData((prev: DetailPageSection) => {
-      const newState = {
-        ...prev,
-        setting: {
-          ...prev.setting,
-          [name]: value,
-        },
-      };
-      console.log("New State:", newState);
-      return newState;
-    });
+    setUserInputData((prev: DetailPageSection) => ({
+      ...prev,
+      setting: {
+        ...prev.setting,
+        [name]: value,
+      },
+    }));
+    
+    setTimeout(() => setIsUpdating(false), 100);
   };
 
   return (
