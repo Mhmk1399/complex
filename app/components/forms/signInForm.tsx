@@ -232,7 +232,9 @@ export const SignInForm = () => {
                 }
                 className="w-full p-4  ring-1 ring-purple-400 focus:ring-2 focus:ring-purple-400 outline-none duration-300  placeholder:opacity-100 rounded-lg shadow-md focus:shadow-lg focus:shadow-purple-400 backdrop-blur-md bg-white/80"
               />
-              {errors && <p className="text-red-400 font-bold mt-2">{errors}</p>}
+              {errors && (
+                <p className="text-red-400 font-bold mt-2">{errors}</p>
+              )}
             </>
           ) : (
             <h2 className="text-2xl text-center font-bold text-purple-700 mb-6 drop-shadow-md">
@@ -326,8 +328,8 @@ export const SignInForm = () => {
                 idx + 1 <= step ? "bg-purple-600" : "bg-gray-200"
               }`}
               style={{ width: `${100 / questions.length}%` }}
-            //   initial={{ scale: 0.8 }}
-            //   animate={{ scale: idx + 1 === step ? 1.2 : 1 }}
+              //   initial={{ scale: 0.8 }}
+              //   animate={{ scale: idx + 1 === step ? 1.2 : 1 }}
             />
           ))}
         </div>
