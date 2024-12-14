@@ -166,7 +166,7 @@ export const Collection: React.FC<CollectionProps> = ({
           setFilteredProducts(formattedProducts);
         }
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.log("Error fetching products:", error);
       }
     };
 

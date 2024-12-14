@@ -152,7 +152,7 @@ export const Form = ({
     }
   }, [userInputData]);
 
-  // Create a SortableItem component
+
   const SortableItem = ({ id }: { id: string }) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
       useSortable({ id });

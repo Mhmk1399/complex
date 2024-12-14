@@ -73,6 +73,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
   const [inputText, setInputText] = useState("");
   const [json, setJson] = useState(null);
   const [dropdownAnimation, setDropdownAnimation] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
 
   const handleLiveInput = async (
@@ -209,6 +210,8 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
   const handleBlockSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
     const { name, value } = e.target;
     setUserInputData((prev: ImageTextSection) => ({
       ...prev,
@@ -220,18 +223,11 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
         },
       },
     }));
+    setTimeout(() => setIsUpdating(false), 100);
   };
+  
 
-  const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setUserInputData((prev: ImageTextSection) => ({
-      ...prev,
-      setting: {
-        ...prev.setting,
-        [name]: value,
-      },
-    }));
-  };
+
 
   return (
     <div

@@ -3,6 +3,8 @@ import { Compiler } from "../compiler";
 import { Layout, SlideSection, SlideBlock } from "@/lib/types";
 import React from "react";
 import MarginPaddingEditor from "../sections/editor";
+import { useCallback } from 'react'
+  import debounce from 'lodash/debounce'
 
 interface SlideFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<SlideSection>>;
@@ -42,23 +44,37 @@ const ColorInput = ({
   name: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <>
-    <label className="block mb-1" htmlFor={name}>
-      {label}
-    </label>
-    <div className="flex flex-col gap-3 items-center">
-      <input
-        type="color"
-        id={name}
-        name={name}
-        value={value}
-        onChange={onChange}
-        className="border p-0.5 rounded-full"
-      />
-    </div>
-  </>
-);
+}) => {
+  const [localValue, setLocalValue] = useState(value);
+  
+  const debouncedOnChange = useCallback(
+    debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+      onChange(e);
+    }, 100),
+    []
+  );
+
+  return (
+    <>
+      <label className="block mb-1" htmlFor={name}>
+        {label}
+      </label>
+      <div className="flex flex-col gap-3 items-center">
+        <input
+          type="color"
+          id={name}
+          name={name}
+          value={localValue}
+          onChange={(e) => {
+            setLocalValue(e.target.value);
+            debouncedOnChange(e);
+          }}
+          className="border p-0.5 rounded-full"
+        />
+      </div>
+    </>
+  );
+};
 
 export const SlideForm: React.FC<SlideFormProps> = ({
   setUserInputData,
@@ -112,6 +128,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
       setUserInputData(initialData);
     }
   }, [selectedComponent]);
+  
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     index: number,
@@ -125,10 +142,13 @@ export const SlideForm: React.FC<SlideFormProps> = ({
       ),
     }));
   };
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    if (isUpdating) return;
+
     const { name, value } = e.target;
     setUserInputData((prev: SlideSection) => ({
       ...prev,
@@ -137,6 +157,8 @@ export const SlideForm: React.FC<SlideFormProps> = ({
         [name]: value,
       },
     }));
+    setTimeout(() => setIsUpdating(false), 100);
+
   };
   const [margin, setMargin] = React.useState<BoxValues>({
     top: 0,

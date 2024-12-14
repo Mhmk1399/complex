@@ -171,9 +171,14 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
     }));
   };
 
+  const [isUpdating, setIsUpdating] = useState(false);
+
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
+    
     const { name, value } = e.target;
     setUserInputData((prev: MultiColumnSection) => ({
       ...prev,
@@ -182,6 +187,8 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
         [name]: value,
       },
     }));
+  
+    setTimeout(() => setIsUpdating(false), 100);
   };
 
   return (
