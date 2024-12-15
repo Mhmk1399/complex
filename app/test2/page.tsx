@@ -1,14 +1,12 @@
-import React from 'react'
-import {SignInForm} from '../components/forms/signInForm'
-import UserDashboard from '../components/sections/userdashboard'
+import React from "react";
+import { SignInForm } from "../components/forms/signInForm";
 
 const page = () => {
   return (
     <div>
-        {/* <SignInForm /> */}
-        <UserDashboard    />
+      <SignInForm />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;
