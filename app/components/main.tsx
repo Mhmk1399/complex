@@ -29,6 +29,7 @@ export const Main = () => {
   const [smLayout, setSmLayout] = useState<Layout>(smData as unknown as Layout);
   const [activeMode, setActiveMode] = useState<"sm" | "lg">("lg");
   const [previewWidth, setPreviewWidth] = useState<"sm" | "default">("default");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedComponent, setSelectedComponent] =
     useState<string>("sectionHeader");
   const [saveStatus, setSaveStatus] = useState<
@@ -36,6 +37,17 @@ export const Main = () => {
   >("idle");
   const [orders, setOrders] = useState<string[]>([]);
   const [selectedRoute, setSelectedRoute] = useState<string>("home");
+  const [activeRoutes, setActiveRoutes] = useState([{ value: 'home', name: '' },
+  { value: 'about', name: 'درباره' },
+  { value: 'contact', name: 'ارتباط' },
+  { value: 'store', name: 'فروشگاه' },
+  { value: 'DetailPage', name: 'جزئیات' },
+  { value: 'BlogList', name: 'وبلاگ' },
+  { value: 'BlogDetail', name: 'وبلاگ' }]);
+  const handleAddRoute = (newRoute: { value: string, name: string }) => {
+    setActiveRoutes(prevRoutes => [...prevRoutes, newRoute]);
+  };
+
   useEffect(() => {
     setLoading(false);
     const currentLayoutData = activeMode === "sm" ? smData : Data;
@@ -61,7 +73,7 @@ export const Main = () => {
         ...prevLayout,
         sections: {
           ...prevLayout.sections,
-          children: DetailPage.children as DetailPageChildren,
+          children: DetailPage.children as unknown as DetailPageChildren,
         },
       }));
     } else if (selectedRoute === "store") {
@@ -69,7 +81,7 @@ export const Main = () => {
         ...prevLayout,
         sections: {
           ...prevLayout.sections,
-          children: Store.children as StoreChildren,
+          children: Store.children as unknown as StoreChildren,
         },
       }));
       console.log(layout);
@@ -78,7 +90,7 @@ export const Main = () => {
         ...prevLayout,
         sections: {
           ...prevLayout.sections,
-          children: Blog.children as BlogChildren,
+          children: Blog.children as unknown as BlogChildren,
         },
       }));
     } else if (selectedRoute === "BlogDetail") {
@@ -86,7 +98,7 @@ export const Main = () => {
         ...prevLayout,
         sections: {
           ...prevLayout.sections,
-          children: BlogDetail.children as BlogDetailChildren,
+          children: BlogDetail.children as unknown as BlogDetailChildren,
         },
       }));
     } else {
@@ -99,6 +111,32 @@ export const Main = () => {
       }));
     }
     console.log(layout);
+  }, [selectedRoute, activeMode]);
+
+  const [newRouteName, setNewRouteName] = useState('');
+  const [newRouteValue, setNewRouteValue] = useState('');
+  useEffect(() => {
+    setLoading(false);
+    const currentLayoutData = activeMode === "sm" ? smData : Data;
+
+    const routeConfigs = {
+      about: About.children as AboutChildren,
+      contact: Contact.children as AboutChildren,
+      DetailPage: DetailPage.children as unknown as DetailPageChildren,
+      store: Store.children as unknown as StoreChildren,
+      BlogList: Blog.children as unknown as BlogChildren,
+      BlogDetail: BlogDetail.children as unknown as BlogDetailChildren,
+      // Add default case for custom routes
+      default: currentLayoutData.sections.children
+    };
+
+    setLayout((prevLayout: Layout) => ({
+      ...prevLayout,
+      sections: {
+        ...prevLayout.sections,
+        children: routeConfigs[selectedRoute] || routeConfigs.default,
+      },
+    }));
   }, [selectedRoute, activeMode]);
 
   const handleSave = async () => {
@@ -140,8 +178,8 @@ export const Main = () => {
   return (
     <div>
       {loading ? (
-        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-white bg-opacity-90 z-50">
-          <div className="flex space-x-2">
+        <div className="fixed top-0 left-0 w-[75%] h-full flex fle justify-center items-center bg-white bg-opacity-90 z-50">
+          <div className="flex space-x-1">
             <div className="w-4 h-4 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
             <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
             <div className="w-4 h-4 bg-blue-600 rounded-full animate-bounce"></div>
@@ -167,7 +205,7 @@ export const Main = () => {
             className="sticky top-0 z-50  backdrop-blur-2xl bg-gradient-to-br from-[#0052D4] to-[#6FB1FC] shadow-md cursor-pointer"
           >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
-              <div className="flex flex-col sm:flex-row items-center justify-around py-4 space-y-4 sm:space-y-0">
+              <div className="flex flex-col sm:flex-row items-center justify-center py-4 gap-x-5 space-y-4 sm:space-y-0">
                 <motion.button
                   className={`w-full sm:w-auto bg-pink-400 text-white lg:-ml-12 px-3 py-2.5 rounded-full font-medium transition-all duration-300 transform`}
                   whileHover={{ scale: 1.05 }}
@@ -181,25 +219,24 @@ export const Main = () => {
                   whileTap={{ scale: 0.95 }}
                   onClick={handleSave}
                   disabled={saveStatus === "saving"}
-                  className={`w-full sm:w-auto lg:-ml-12 px-3 py-2.5 rounded-full font-medium transition-all duration-300 transform
-                  ${
-                    saveStatus === "saving"
+                  className={`w-fitlg:-ml-12 px-3 py-2.5 rounded-full font-medium transition-all duration-300 transform
+                  ${saveStatus === "saving"
                       ? "bg-blue-900"
                       : saveStatus === "saved"
-                      ? "bg-green-500"
-                      : saveStatus === "error"
-                      ? "bg-red-500"
-                      : "bg-gradient-to-r from-blue-200 to-blue-600 hover:from-blue-600 hover:to-blue-200"
-                  }
+                        ? "bg-green-500"
+                        : saveStatus === "error"
+                          ? "bg-red-500"
+                          : "bg-gradient-to-r from-blue-200 to-blue-600 hover:from-blue-600 hover:to-blue-200"
+                    }
                   text-white shadow-md hover:shadow-lg`}
                 >
                   {saveStatus === "saving"
                     ? "...در حال ذخیره"
                     : saveStatus === "saved"
-                    ? " ! ذخیره شد "
-                    : saveStatus === "error"
-                    ? "ارور"
-                    : "ذخیره تنظیمات"}
+                      ? " ! ذخیره شد "
+                      : saveStatus === "error"
+                        ? "ارور"
+                        : "ذخیره تنظیمات"}
                 </motion.button>
 
                 {/* View Mode Toggles */}
@@ -212,11 +249,10 @@ export const Main = () => {
                     whileTap={{ scale: 0.9 }}
                     onClick={() => handleModeChange("sm")}
                     className={`p-2 rounded-lg hidden lg:block transition-all duration-300 shadow-md hover:shadow-gray-500
-                    ${
-                      previewWidth === "sm"
+                    ${previewWidth === "sm"
                         ? "bg-yellow-500 shadow-lg"
                         : "bg-gray-200 hover:bg-gray-300"
-                    }`}
+                      }`}
                   >
                     <Image
                       onClick={() => setPreviewWidth("sm")}
@@ -233,11 +269,10 @@ export const Main = () => {
                     whileTap={{ scale: 0.9 }}
                     onClick={() => handleModeChange("lg")}
                     className={`p-2 rounded-lg hidden lg:block transition-all duration-300 shadow-md hover:shadow-gray-500
-                    ${
-                      previewWidth === "default"
+                    ${previewWidth === "default"
                         ? "bg-yellow-500 shadow-lg"
                         : "bg-gray-200 hover:bg-gray-300"
-                    }`}
+                      }`}
                   >
                     <Image
                       src="/assets/images/computer.png"
@@ -249,38 +284,34 @@ export const Main = () => {
                     />
                   </motion.button>
                 </div>
-
-                {/* Route Selector */}
-                <label
-                  htmlFor="page-settings"
-                  className="lg:-ml-80 text-sm block lg:hidden text-gray-50 font-semibold"
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setIsModalOpen(true)}
+                  className="px-3 py-2 bg-blue-500 text-white rounded-xl shadow-md hover:bg-blue-600"
                 >
-                  : تنظیمات صفحه
-                </label>
+                  افزودن مسیر
+                </motion.button>
+
+
+
                 <motion.select
                   whileHover={{ scale: 1.02 }}
                   dir="rtl"
                   id="page-settings"
                   value={selectedRoute}
                   onChange={(e) => setSelectedRoute(e.target.value)}
-                  className="w-full  sm:w-40 px-2 py-1 bg-gray-200 rounded-xl border-2 border-gray-200 
-                   shadow-sm focus:border-gray-200 focus:ring-2 focus:ring-gray-200 
-                  transition-all duration-300"
+                  className="w-[100px]  px-2 py-1 bg-gray-200 rounded-xl border-2 border-gray-200 
+             shadow-sm focus:border-gray-200 focus:ring-2 focus:ring-gray-200 
+             transition-all duration-300"
                 >
-                  <option value="home">خانه</option>
-                  <option value="about">درباره </option>
-                  <option value="contact">ارتباط</option>
-                  <option value="store">فروشگاه</option>
-                  <option value="DetailPage">جزِئیات محصول</option>
-                  <option value="BlogList">وبلاگ</option>
-                  <option value="BlogDetail">جزئیات وبلاگ </option>
+                  {activeRoutes.map((route) => (
+                    <option key={route.value} value={route.value}>
+                      {route.name || route.value}
+                    </option>
+                  ))}
                 </motion.select>
-                <label
-                  htmlFor="page-settings"
-                  className="lg:-ml-36 hidden lg:block lg:border-t-black text-sm text-gray-50 font-semibold"
-                >
-                  : تنظیمات صفحه
-                </label>
+
               </div>
             </div>
           </motion.div>
@@ -300,6 +331,54 @@ export const Main = () => {
             orders={orders}
             setOrders={setOrders}
           />
+        </div>
+      )}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white p-6 rounded-xl shadow-lg w-96"
+          >
+            <h3 className="text-lg font-bold mb-4 text-right">افزودن مسیر جدید</h3>
+            <div className="space-y-4">
+              <input
+                type="text"
+                placeholder="نام مسیر"
+                value={newRouteName}
+                onChange={(e) => setNewRouteName(e.target.value)}
+                className="w-full p-2 border rounded-lg"
+                dir="rtl"
+              />
+              <input
+                type="text"
+                placeholder="آدرس مسیر"
+                value={newRouteValue}
+                onChange={(e) => setNewRouteValue(e.target.value)}
+                className="w-full p-2 border rounded-lg"
+                dir="rtl"
+              />
+              <div className="flex justify-end space-x-2 space-x-reverse">
+                <button
+                  onClick={() => {
+                    handleAddRoute({ value: newRouteValue, name: newRouteName });
+                    setNewRouteName('');
+                    setNewRouteValue('');
+                    setIsModalOpen(false);
+                  }}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                >
+                  ذخیره
+                </button>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+                >
+                  انصراف
+                </button>
+              </div>
+            </div>
+          </motion.div>
         </div>
       )}
     </div>
