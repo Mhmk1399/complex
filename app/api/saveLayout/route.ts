@@ -3,15 +3,19 @@ import { Layout } from "@/lib/types";
 import { writeFile } from "fs/promises";
 import path from "path";
 
-
 export async function POST(req: NextRequest) {
   try {
+    const userData = JSON.parse(req.headers.get('user-data') || '{}')
+    const { templatesDirectory } = userData
+    
+    if (!templatesDirectory) {
+      return NextResponse.json({ 
+        message: 'User templates directory not found' 
+      }, { status: 420 });
+    }
+
     const body = await req.json();
-
     const { layout, mode } = body as { layout: Layout; mode: string };
-
-    console.log("Received layout:", layout);
-    console.log("Received mode:", mode);
 
     if (!layout || !mode) {
       return NextResponse.json({ 
@@ -19,43 +23,32 @@ export async function POST(req: NextRequest) {
       }, { status: 400 });
     }
 
-     if (!['sm', 'lg'].includes(mode)) {
+    if (!['sm', 'lg'].includes(mode)) {
       return NextResponse.json({ 
         message: 'Invalid mode specified' 
       }, { status: 400 });
     }
 
-    // Choose path based on device type
+    // Use the templatesDirectory from token
     const jsonPath = path.join(
-      process.cwd(),
-      "public",
-      "template",
-     mode === "sm" ? "nullSm.json" : "null.json"
+      templatesDirectory,
+      mode === "sm" ? "nullSm.json" : "null.json"
     );
-    console.log('Writing to path:', jsonPath); // Debug log
+    
+    console.log('Writing to path:', jsonPath);
 
-
-    if (!layout) {
-      return NextResponse.json({ message: 'Layout data is required' }, { status: 400 });
-    }
-
-    // Using the exact file path
-
-    // Convert layout to JSON string with proper formatting
     const layoutJson = JSON.stringify(layout, null, 2);
     
-
-    // Write the file
     try {
-    await writeFile(jsonPath, layoutJson, 'utf-8');
-    console.log('File write completed'); 
-  } catch (writeError) {
-    console.error('File write error:', writeError);
-    return NextResponse.json({ 
-      message: 'Error writing file',
-      error: writeError 
-    }, { status: 500 });
-  }
+      await writeFile(jsonPath, layoutJson, 'utf-8');
+      console.log('File write completed'); 
+    } catch (writeError) {
+      console.error('File write error:', writeError);
+      return NextResponse.json({ 
+        message: 'Error writing file',
+        error: writeError 
+      }, { status: 500 });
+    }
 
     return NextResponse.json({
       message: 'Layout saved successfully',
