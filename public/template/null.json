@@ -144,7 +144,7 @@
         {
           "type": "RichText",
           "blocks": {
-            "textHeading": "سربرگ مadsasdasdasdasssحصول",
+            "textHeading": "سربرگ محصول",
             "description": "توضیحات درباره محصول",
             "btnText": "دکمه",
             "btnLink": "/",
