@@ -201,7 +201,6 @@ export const Collection: React.FC<CollectionProps> = ({
     return null; // or return a loading state/placeholder
   }
 
-  // console.log(sectionData);
 
   return (
     <>

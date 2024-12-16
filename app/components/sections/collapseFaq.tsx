@@ -153,8 +153,7 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
     }
   }, [sectionData]);
 
-  // console.log(actualName , "actualName");
-  // console.log(sectionData , "sectionData");
+
 
   // Ensure blocks is an array
 

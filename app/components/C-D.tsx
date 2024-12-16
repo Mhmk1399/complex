@@ -43,7 +43,6 @@ export const Create = (
     };
 
     // Log to verify updated layout
-    console.log("Updated Layout:", updatedLayout);
 
     setLayout(updatedLayout as Layout);
   }
@@ -67,7 +66,6 @@ export const Delete = (
       },
     },
   };
-  console.log(layout.sections.children.sections);
 
   setLayout(updatedLayout as Layout);
 };

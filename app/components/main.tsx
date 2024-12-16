@@ -47,11 +47,29 @@ export const Main = () => {
   const handleAddRoute = (newRoute: { value: string, name: string }) => {
     setActiveRoutes(prevRoutes => [...prevRoutes, newRoute]);
   };
+// Replace the direct import with API call
+useEffect(() => {
+  const fetchLayout = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/layout-jason');
+      const Data = await response.json();
+      console.log("Layout data:", Data);
+      
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching layout:', error);
+      setLoading(false);
+    }
+  };
+
+  fetchLayout();
+}, []);
 
   useEffect(() => {
     setLoading(false);
     const currentLayoutData = activeMode === "sm" ? smData : Data;
-
+    
     if (selectedRoute === "about") {
       setLayout((prevLayout: Layout) => ({
         ...prevLayout,
@@ -84,7 +102,6 @@ export const Main = () => {
           children: Store.children as unknown as StoreChildren,
         },
       }));
-      console.log(layout);
     } else if (selectedRoute === "BlogList") {
       setLayout((prevLayout: Layout) => ({
         ...prevLayout,
@@ -110,7 +127,6 @@ export const Main = () => {
         },
       }));
     }
-    console.log(layout);
   }, [selectedRoute, activeMode]);
 
   const [newRouteName, setNewRouteName] = useState('');
@@ -142,7 +158,6 @@ export const Main = () => {
   const handleSave = async () => {
     setSaveStatus("saving");
     try {
-      console.log("Saving mode:", activeMode);
 
       const response = await fetch("/api/saveLayout", {
         method: "POST",

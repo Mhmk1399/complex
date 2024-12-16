@@ -137,7 +137,6 @@ const Banner: React.FC<props> = ({
 
   const { description, imageAlt, imageSrc, text } = sectionData?.blocks;
 
-  console.log(preview);
 
   return (
     <SectionBanner

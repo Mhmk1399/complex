@@ -162,9 +162,15 @@ const SlideShow: React.FC<SlideShowProps> = ({
     }
   }, [previewWidth]);
 
-  const sectionData = layout.sections.children?.sections.find(
+  const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
   ) as SlideSection;
+  
+  // Also add an early return if layout is not properly initialized
+  if (!layout || !layout.sections) {
+    return null;
+  }
+  
 
   if (!sectionData) return null;
 

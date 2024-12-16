@@ -157,7 +157,6 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
       setLoaded(true);
       setUserInputData(initialData);
     }
-    console.log(initialData);
   }, []);
 
   useEffect(() => {

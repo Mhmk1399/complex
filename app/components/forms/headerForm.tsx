@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
 import { Layout, Link, HeaderSection } from "@/lib/types";
 import MarginPaddingEditor from "../sections/editor";
+import React from "react";
 interface HeaderFormProps {
   layout: Layout;
   setUserInputData: React.Dispatch<React.SetStateAction<HeaderSection>>;
@@ -96,8 +97,52 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
         setting: updatedJson.children.sections[0].setting,
       }));
     }
-  };
+  }; 
+   useEffect(() => {
+    const initialData = {
+      ...defaultValues,
+      ...Compiler(layout, selectedComponent),
+    };
+    setUserInputData(initialData);
+    setIsDataReady(true);
+  }, [selectedComponent]);
+ console.log(userInputData);
+ 
+  useEffect(() => {
+    setMargin({
+      top: Number(userInputData?.setting?.marginTop) || 0,
+      bottom: Number(userInputData?.setting?.marginBottom) || 0,
+      right: Number(userInputData?.setting?.marginRight) || 0,
+      left: Number(userInputData?.setting?.marginLeft) || 0,
+    });
 
+    setPadding({
+      top: Number(userInputData?.setting?.paddingTop) || 0,
+      bottom: Number(userInputData?.setting?.paddingBottom) || 0,
+      right: Number(userInputData?.setting?.paddingRight) || 0,
+      left: Number(userInputData?.setting?.paddingLeft) || 0,
+    });
+  }, [userInputData?.setting]);
+
+  useEffect(() => {
+    const initialData = {
+      ...defaultValues,
+      ...Compiler(layout, selectedComponent),
+    };
+    setUserInputData(initialData);
+    setIsDataReady(true);
+  }, []);
+
+
+  if (!isDataReady) {
+    return (
+      <div className="p-3 max-w-4xl mx-auto bg-gray-200 rounded-xl mt-4" dir="rtl">
+        <div className="flex items-center justify-center h-40">
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      </div>
+    );
+  }
   const handleUpdate = (
     type: "margin" | "padding",
     updatedValues: BoxValues
@@ -126,41 +171,10 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
       }));
     }
   };
-  useEffect(() => {
-    setMargin({
-      top: Number(userInputData?.setting?.marginTop) || 0,
-      bottom: Number(userInputData?.setting?.marginBottom) || 0,
-      right: Number(userInputData?.setting?.marginRight) || 0,
-      left: Number(userInputData?.setting?.marginLeft) || 0,
-    });
+ 
 
-    setPadding({
-      top: Number(userInputData?.setting?.paddingTop) || 0,
-      bottom: Number(userInputData?.setting?.paddingBottom) || 0,
-      right: Number(userInputData?.setting?.paddingRight) || 0,
-      left: Number(userInputData?.setting?.paddingLeft) || 0,
-    });
-  }, [userInputData?.setting]);
 
-  useEffect(() => {
-    const initialData = {
-      ...defaultValues,
-      ...Compiler(layout, selectedComponent),
-    };
-    setUserInputData(initialData);
-    setIsDataReady(true);
-  }, []);
-  useEffect(() => {
-    const initialData = {
-      ...defaultValues,
-      ...Compiler(layout, selectedComponent),
-    };
-    setUserInputData(initialData);
-    setIsDataReady(true);
-  }, [selectedComponent]);
-  if (!isDataReady) {
-    return <div>Loading...</div>; // Or your preferred loading indicator
-  }
+
 
   // First, add this helper function at the top with the other interfaces
   const ColorInput = ({
@@ -273,18 +287,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
     }));
   };
 
-  const handleSettingChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setUserInputData((prev: HeaderSection) => ({
-      ...prev,
-      setting: {
-        ...prev.setting,
-        [name]: value,
-      },
-    }));
-  };
+ 
 
   return (
     <div

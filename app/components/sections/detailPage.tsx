@@ -137,7 +137,6 @@ const DetailPage: React.FC<DetailPageProps> = ({
         setSelectedImage(data.images[0]?.imageSrc || "");
         setLoading(false);
 
-        // console.log(typeof data.images, data.images);
       } catch (error) {
         console.error("Error fetching product details:", error);
         setLoading(false);
@@ -173,7 +172,6 @@ const DetailPage: React.FC<DetailPageProps> = ({
 };
 
 
-  console.log("Section Data:", sectionData);
   if (!sectionData) {
     return null;
   }

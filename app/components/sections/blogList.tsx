@@ -146,7 +146,6 @@ const BlogList: React.FC<BlogListProps> = ({
           description: blog.description,
         }));
         setBlogData(blogInfo);
-        console.log(data);
       } catch (error) {
         console.error("Error fetching blogs:", error);
       }
