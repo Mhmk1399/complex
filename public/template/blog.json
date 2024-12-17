@@ -1,5 +1,6 @@
 {
   "children": {
+    "type": "BlogList",
     "sections": [
       {
         "type": "BlogList",
@@ -14,31 +15,20 @@
             "date": "2024-12-01",
             "btnText": "مطالعه بیشتر",
             "btnLink": "/blog/1"
-          },
-          {
-            "blogId": 2,
-            "imageSrc": "/assets/images/blog2.jpg",
-            "imageAlt": "بلاگ ۲",
-            "title": "عنوان دومین بلاگ",
-            "description": "موضوعات هیجان‌انگیز در این بلاگ بررسی شده‌اند.",
-            "author": "نویسنده ۲",
-            "date": "2024-12-02",
-            "btnText": "مطالعه بیشتر",
-            "btnLink": "/blog/2"
           }
         ],
         "setting": {
           "gridColumns": 2,
-          "paddingTop": 70,
+          "paddingTop": "70",
           "paddingBottom": "30",
-          "paddinLeft": "0",
+          "paddingLeft": "0",
           "paddingRight": "10",
           "marginTop": "15",
           "marginBottom": "15",
           "backgroundColor": "#f8f9fa",
-          "cardBackgroundColor": "#ffffff",
+          "cardBackgroundColor": "#ffffff", 
           "textColor": "#000000",
-          "cardBorderRadius": 10,
+          "cardBorderRadius": "10",
           "btnBackgroundColor": "#e4e4e4",
           "buttonColor": "#ffffff"
         }

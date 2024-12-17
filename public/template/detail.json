@@ -1,5 +1,6 @@
 {
   "children": {
+    "type": "DetailPage",
     "sections": [
       {
         "type": "DetailPage",
@@ -25,7 +26,21 @@
             "id": "PRD-001",
             "inventory": 150,
             "btnText": "افزودن به سبد خرید",
-            "btnLink": "/cart/add/1"
+            "btnLink": "/cart/add/1",
+            "setting": {
+              "imageWidth": "700",
+              "imageHeight": "450",
+              "imageRadius": "20",
+              "productNameColor": "#FCA311",
+              "productNameFontSize": "30",
+              "productNameFontWeight": "bold",
+              "priceColor": "#2ECC71",
+              "priceFontSize": "24",
+              "descriptionColor": "#e4e4e4",
+              "descriptionFontSize": "16",
+              "btnBackgroundColor": "#3498DB",
+              "btnTextColor": "#FFFFFF"
+            }
           }
         ],
         "setting": {
@@ -35,11 +50,11 @@
           "productNameColor": "#FCA311",
           "productNameFontSize": "30",
           "productNameFontWeight": "bold",
-          "priceColor": "#2ECC71",
           "statusColor": "#ffffff",
+          "statusFontSize": "16",
           "categoryColor": "#ffffff",
           "categoryFontSize": "16",
-          "statusFontSize": "16",
+          "priceColor": "#2ECC71",
           "priceFontSize": "24",
           "descriptionColor": "#e4e4e4",
           "descriptionFontSize": "16",
@@ -49,8 +64,10 @@
           "paddingBottom": "20",
           "marginTop": "60",
           "marginBottom": "60",
-          "paddinRight": "10",
-          "paddinLeft": "10",
+          "paddingLeft": "10",
+          "paddingRight": "10",
+          "marginLeft": "0",
+          "marginRight": "0",
           "backgroundColor": "#003566"
         }
       }

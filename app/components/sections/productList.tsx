@@ -63,11 +63,12 @@ const ProductList: React.FC<ProductListProps> = ({
         });
 
         const data = await response.json();
-
+        console.log(data);
+        
         if (data?.products) {
           const productInfo = data.products.map((product: any) => ({
             ...product,
-            images: product.images || [],
+            images: product.images ,
           }));
           console.log(productInfo);
 

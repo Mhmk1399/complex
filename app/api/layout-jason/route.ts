@@ -11,11 +11,11 @@ export async function GET() {
   try {
     const layout = await Layout.findOne();
     
-    if (!layout) {
-      // If no layout exists, you could return the default null.json data
-      const defaultLayout = await import('@/public/template/null.json');
-      return NextResponse.json(defaultLayout.default);
-    }
+    // if (!layout) {
+    //   // If no layout exists, you could return the default null.json data
+    //   const defaultLayout = await import('@/public/template/null.json');
+    //   return NextResponse.json(defaultLayout.default);
+    // }
 
     return NextResponse.json(layout);
   } catch (error) {
@@ -34,32 +34,74 @@ export async function POST(request: Request) {
     }
     
     try {
-        const body = await request.json();
-        const { mode, layout } = body;
-
-        // Find existing layout or create new one
-        const existingLayout = await Layout.findOne();
+       
         
-        if (existingLayout) {
-            // Update existing layout
-            const updatedLayout = await Layout.findOneAndUpdate(
-                {},
-                { ...layout },
-                { new: true }
-            );
-            return NextResponse.json(updatedLayout);
-        } else {
-            // Create new layout
-            const newLayout = new Layout(layout);
-            await newLayout.save();
-            return NextResponse.json(newLayout);
-        }
+        const body = await request.json();
+         
+        const newLayout = new Layout(body);
+        await newLayout.save();
+        return NextResponse.json(newLayout);
+        // const layoutToSave = {
+        //     type: "layout",
+        //     settings: body.layout?.settings || {},
+        //     sections: {
+        //         sectionHeader: body.layout?.sections?.sectionHeader || {},
+        //         children: body.layout?.sections?.children || {},
+        //         sectionFooter: body.layout?.sections?.sectionFooter || {}
+        //     },
+        //     order: ["section-header", "children", "section-footer"]
+        // };
+
+        
+        // if (existingLayout) {
+        //     const updatedLayout = await Layout.findOneAndUpdate(
+        //         {},
+        //         layoutToSave,
+        //         { new: true }
+        //     );
+        //     return NextResponse.json(updatedLayout);
+        // } else {
+        //     const newLayout = new Layout(layoutToSave);
+        //     await newLayout.save();
+        //     return NextResponse.json(newLayout);
+        // }
         
     } catch (error) {
         console.error("Error saving layout:", error);
         return NextResponse.json(
-            { error: 'Failed to save layout' },
+            { error: 'Failed to save layout', details: error },
             { status: 500 }
         );
     }
 }
+
+
+export async function DELETE(request: Request) {
+    await connect();
+    if (!connect) {
+        console.log("POST_ERROR", "Database connection failed");
+        return new NextResponse("Database connection error", { status: 500 });
+    }
+
+    try {
+        const body = await request.json();
+        const { mode, layout } = body;  
+        const deletedLayout = await Layout.findOneAndDelete();
+        if (!deletedLayout) {
+            return NextResponse.json(
+                { error: 'Layout not found' },
+                { status: 404 }
+            );
+        }
+        return NextResponse.json(deletedLayout);
+    }
+    catch (error) {
+        console.error("Error deleting layout:", error);
+        return NextResponse.json(
+            { error: 'Failed to delete layout' },
+            { status: 500 }
+        );
+    }
+
+}
+        

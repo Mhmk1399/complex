@@ -91,7 +91,7 @@ useEffect(() => {
         ...prevLayout,
         sections: {
           ...prevLayout.sections,
-          children: DetailPage.children as unknown as DetailPageChildren,
+          children: DetailPage.children  as DetailPageChildren,
         },
       }));
     } else if (selectedRoute === "store") {
@@ -99,7 +99,7 @@ useEffect(() => {
         ...prevLayout,
         sections: {
           ...prevLayout.sections,
-          children: Store.children as unknown as StoreChildren,
+          children: Store.children  as StoreChildren,
         },
       }));
     } else if (selectedRoute === "BlogList") {
@@ -107,7 +107,7 @@ useEffect(() => {
         ...prevLayout,
         sections: {
           ...prevLayout.sections,
-          children: Blog.children as unknown as BlogChildren,
+          children: Blog.children as  BlogChildren,
         },
       }));
     } else if (selectedRoute === "BlogDetail") {
@@ -115,15 +115,15 @@ useEffect(() => {
         ...prevLayout,
         sections: {
           ...prevLayout.sections,
-          children: BlogDetail.children as unknown as BlogDetailChildren,
+          children: BlogDetail.children as BlogDetailChildren,
         },
       }));
     } else {
-      setLayout((prevLayout) => ({
+      setLayout((prevLayout: Layout) => ({
         ...prevLayout,
         sections: {
           ...prevLayout.sections,
-          children: currentLayoutData.sections.children,
+          children: currentLayoutData.sections.children as Layout['sections']['children'],
         },
       }));
     }
@@ -138,26 +138,26 @@ useEffect(() => {
     const routeConfigs = {
       about: About.children as AboutChildren,
       contact: Contact.children as AboutChildren,
-      DetailPage: DetailPage.children as unknown as DetailPageChildren,
-      store: Store.children as unknown as StoreChildren,
-      BlogList: Blog.children as unknown as BlogChildren,
-      BlogDetail: BlogDetail.children as unknown as BlogDetailChildren,
+      DetailPage: DetailPage.children as  DetailPageChildren,
+      store: Store.children as StoreChildren,
+      BlogList: Blog.children  as BlogChildren,
+      BlogDetail: BlogDetail.children as BlogDetailChildren,
       // Add default case for custom routes
-      default: currentLayoutData.sections.children
-    };
+      default: currentLayoutData.sections.children}
 
-    setLayout((prevLayout: Layout) => ({
-      ...prevLayout,
-      sections: {
-        ...prevLayout.sections,
-        children: routeConfigs[selectedRoute] || routeConfigs.default,
-      },
-    }));
-  }, [selectedRoute, activeMode]);
+    const children = routeConfigs[selectedRoute as keyof typeof routeConfigs] || routeConfigs.default;
 
-  const handleSave = async () => {
-    setSaveStatus("saving");
-    try {
+    if (children) {
+      setLayout((prevLayout: Layout) => ({
+        ...prevLayout,
+        sections: {
+          ...prevLayout.sections,
+          children: children as Layout['sections']['children'],
+        },
+      }));
+    }
+  }, [selectedRoute, activeMode]);const handleSave = async () => {
+    setSaveStatus("saving");    try {
 
       const response = await fetch("/api/saveLayout", {
         method: "POST",

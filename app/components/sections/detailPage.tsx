@@ -138,7 +138,7 @@ const DetailPage: React.FC<DetailPageProps> = ({
         setLoading(false);
 
       } catch (error) {
-        console.error("Error fetching product details:", error);
+        console.log("Error fetching product details:", error);
         setLoading(false);
       }
     };
