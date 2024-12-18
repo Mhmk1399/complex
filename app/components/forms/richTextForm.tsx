@@ -17,11 +17,7 @@ interface BoxValues {
   right: number;
 }
 
-interface MarginPaddingEditorProps {
-  margin: BoxValues;
-  padding: BoxValues;
-  onChange: (type: "margin" | "padding", updatedValues: BoxValues) => void;
-}
+
 
 const ColorInput = ({
   label,
@@ -73,7 +69,6 @@ export const RichText: React.FC<RichTextFormProps> = ({
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
   const [inputText, setInputText] = useState("");
-  const [json, setJson] = useState(null);
   const [dropdownAnimation, setDropdownAnimation] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -92,7 +87,6 @@ export const RichText: React.FC<RichTextFormProps> = ({
       });
 
       const updatedJson = await response.json();
-      setJson(updatedJson);
 
       // Update the form data with new JSON
       setUserInputData((prevData) => ({
@@ -186,22 +180,7 @@ export const RichText: React.FC<RichTextFormProps> = ({
     setTimeout(() => setIsUpdating(false), 100);
   };
   
-  // Similarly update handleSettingChange
-  const handleSettingChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    if (isUpdating) return;
-    setIsUpdating(true);
-    const { name, value } = e.target;
-    setUserInputData((prev: RichTextSection) => ({
-      ...prev,
-      setting: {
-        ...prev.setting,
-        [name]: value,
-      },
-    }));
-    setTimeout(() => setIsUpdating(false), 100);
-  };
+
   return (
     <div
       className="p-2 max-w-4xl mx-auto bg-gray-200 rounded-xl my-4"

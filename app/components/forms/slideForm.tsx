@@ -19,11 +19,7 @@ interface BoxValues {
   right: number;
 }
 
-interface MarginPaddingEditorProps {
-  margin: BoxValues;
-  padding: BoxValues;
-  onChange: (type: "margin" | "padding", updatedValues: BoxValues) => void;
-}
+
 
 interface Block {
   imageSrc?: string;
@@ -86,7 +82,6 @@ export const SlideForm: React.FC<SlideFormProps> = ({
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState({});
   const [inputText, setInputText] = useState("");
-  const [json, setJson] = useState(null);
   const [dropdownAnimation, setDropdownAnimation] = useState(false);
 
 
@@ -105,7 +100,6 @@ export const SlideForm: React.FC<SlideFormProps> = ({
       });
 
       const updatedJson = await response.json();
-      setJson(updatedJson);
 
       // Update the form data with new JSON
       setUserInputData((prevData) => ({

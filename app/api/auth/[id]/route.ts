@@ -1,9 +1,21 @@
 import User from "@/models/users";
 import connect from "@/lib/data";
-import { NextRequest, NextResponse } from "next/server";
-import bcryptjs from "bcryptjs";
+import {  NextResponse } from "next/server";
+import { type NextRequest } from 'next/server'
 
-const logOperation = (operation: string, userId: string, details?: any) => {
+import bcryptjs from "bcryptjs";
+interface UserUpdateData {
+  name?: string;
+  email?: string;
+  password?: string;
+}
+type OperationDetails = {
+  message?: string;
+  error?: Error;
+  data?: Record<string, unknown>;
+};
+
+const logOperation = (operation: string, userId: string, details?: OperationDetails) => {
   console.log(
     `[${new Date().toISOString()}] ${operation} - User ID: ${userId}`
   );
@@ -11,6 +23,7 @@ const logOperation = (operation: string, userId: string, details?: any) => {
     console.log("Details:", JSON.stringify(details, null, 2));
   }
 };
+
 
 export const DELETE = async (
   req: NextRequest,
@@ -21,12 +34,12 @@ export const DELETE = async (
 
   await connect();
   if (!connect) {
-    logOperation("DELETE_ERROR", userId, "Database connection failed");
+    logOperation("DELETE_ERROR", userId, { message: "Database connection failed" });
     return new NextResponse("Database connection error", { status: 500 });
   }
 
   if (!userId) {
-    logOperation("DELETE_ERROR", userId, "Missing user ID");
+    logOperation("DELETE_ERROR", userId, { message: "Missing user ID" });
     return new NextResponse("User ID is required", { status: 400 });
   }
 
@@ -38,42 +51,45 @@ export const DELETE = async (
       { status: 200 }
     );
   } catch (error) {
-    logOperation("DELETE_ERROR", userId, error);
+    logOperation("DELETE_ERROR", userId, { error: error as Error });
     return new NextResponse("Error deleting user", { status: 500 });
   }
 };
 
-export const GET = async (
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) => {
-  const userId = params.id;
+
+export async function GET(
+  request: NextRequest,
+  context: { params: { id: string } }
+) {
+  const userId = context.params.id;
   logOperation("GET_ATTEMPT", userId);
 
   await connect();
   if (!connect) {
-    logOperation("GET_ERROR", userId, "Database connection failed");
+    logOperation("GET_ERROR", userId, { message: "Database connection failed" });
     return new NextResponse("Database connection error", { status: 500 });
   }
 
   if (!userId) {
-    logOperation("GET_ERROR", userId, "Missing user ID");
+    logOperation("GET_ERROR", userId, { message: "Missing user ID" });
     return new NextResponse("User ID is required", { status: 400 });
   }
 
   try {
     const user = await User.findById(userId).select("-password");
     if (!user) {
-      logOperation("GET_ERROR", userId, "User not found");
+      logOperation("GET_ERROR", userId, { message: "User not found" });
       return new NextResponse("User not found", { status: 404 });
     }
-    logOperation("GET_SUCCESS", userId, user);
+    logOperation("GET_SUCCESS", userId, { data: user.toObject() });
     return new NextResponse(JSON.stringify(user), { status: 200 });
   } catch (error) {
-    logOperation("GET_ERROR", userId, error);
+    logOperation("GET_ERROR", userId, { error: error as Error });
     return new NextResponse("Error fetching user", { status: 500 });
   }
-};
+}
+
+
 
 export const PATCH = async (
   req: NextRequest,
@@ -84,12 +100,12 @@ export const PATCH = async (
 
   await connect();
   if (!connect) {
-    logOperation("PATCH_ERROR", userId, "Database connection failed");
+    logOperation("PATCH_ERROR", userId, { message: "Database connection failed" });
     return new NextResponse("Database connection error", { status: 500 });
   }
 
   if (!userId) {
-    logOperation("PATCH_ERROR", userId, "Missing user ID");
+    logOperation("PATCH_ERROR", userId, { message: "Missing user ID" });
     return new NextResponse("User ID is required", { status: 400 });
   }
 
@@ -97,7 +113,8 @@ export const PATCH = async (
     const body = await req.json();
     const { name, email, password } = body;
 
-    const updateData: any = {};
+    const updateData: UserUpdateData = {};
+
     if (name) updateData.name = name;
     if (email) updateData.email = email;
     if (password) {
@@ -110,11 +127,11 @@ export const PATCH = async (
     }).select("-password");
 
     if (!updatedUser) {
-      logOperation("PATCH_ERROR", userId, "User not found");
+      logOperation("PATCH_ERROR", userId, { message: "User not found" });
       return new NextResponse("User not found", { status: 404 });
     }
 
-    logOperation("PATCH_SUCCESS", userId, updatedUser);
+    logOperation("PATCH_SUCCESS", userId, { data: updatedUser.toObject() });
     return new NextResponse(
       JSON.stringify({
         message: "User updated successfully",
@@ -123,7 +140,7 @@ export const PATCH = async (
       { status: 200 }
     );
   } catch (error) {
-    logOperation("PATCH_ERROR", userId, error);
+    logOperation("PATCH_ERROR", userId, { error: error as Error });
     return new NextResponse("Error updating user", { status: 500 });
   }
 };

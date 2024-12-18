@@ -141,9 +141,7 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
     setting: {},
     type: "collapse",
   };
-  if (!sectionData) {
-    return null;
-  }
+
   useEffect(() => {
     if (sectionData?.blocks) {
       const blocksArray = Object.keys(sectionData.blocks)
@@ -152,6 +150,11 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
       setBlocks(blocksArray);
     }
   }, [sectionData]);
+
+  if (!sectionData) {
+    return null;
+  }
+ 
 
 
 

@@ -3,24 +3,25 @@ import { HfInference } from '@huggingface/inference';
 import fs from 'fs';
 import path from 'path';
 import Fuse from 'fuse.js';
+import { Layout } from '@/lib/types';
+interface JsonDataset extends Layout {
+  input: string;
+  output: Record<string, string | number>;
+}
 
 const hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
 
-// Load JSON Dataset
-function loadJson(filePath: string) {
+
+
+function loadJson(filePath: string): JsonDataset {
   try {
     return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    console.log('JSON file loaded successfully.');
   } catch (error) {
     console.error('Failed to load JSON file:', error);
     throw new Error('JSON file load failed.');
   }
 }
 
-// Save JSON
-function saveJson(filePath: string, data: any) {
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-}
 
 // Deep Update for JSON Structure
 // function deepUpdate(obj: any, updates: any) {
@@ -41,16 +42,17 @@ function saveJson(filePath: string, data: any) {
 
 // Fuzzy Matching for Enhanced Understanding
 const dataset = loadJson(path.join(process.cwd(), 'data', 'nlp_dataset.json')); // Assuming your dataset file
-const fuse = new Fuse(dataset, { keys: ['input'], threshold: 0.3 });
+const fuse = new Fuse([dataset], { keys: ['input'], threshold: 0.3 });
 
-function fuzzyMatch(input: string): any {
+function fuzzyMatch(input: string): Record<string, string | number> | null {
   const result = fuse.search(input);
   console.log('Fuzzy match result:', result);
   if (result.length) {
-    return (result[0].item as { output: any }).output;
+    return (result[0].item as JsonDataset).output;
   }
   return null;
-} 
+}
+
 function parseInputWithRegex(input: string) {
   const updates: { [key: string]: string | number } = {};
 
@@ -145,7 +147,9 @@ export async function POST(request: Request) {
 
     // Update JSON Data
     // deepUpdate(jsonData, updates);
-
+    function saveJson(filePath: string, data: Layout) {
+      fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+    }
     // Save Updated JSON
     saveJson(filePath, jsonData);
 

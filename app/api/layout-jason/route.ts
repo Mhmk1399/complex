@@ -20,7 +20,7 @@ export async function GET() {
     return NextResponse.json(layout);
   } catch (error) {
     return NextResponse.json(
-      { error: 'Failed to fetch layout data' },
+      { error: 'Failed to fetch layout data'+error },
       { status: 500 }
     );
   }
@@ -85,8 +85,8 @@ export async function DELETE(request: Request) {
 
     try {
         const body = await request.json();
-        const { mode, layout } = body;  
-        const deletedLayout = await Layout.findOneAndDelete();
+        const id = body.id;  
+        const deletedLayout = await Layout.findOneAndDelete(id);
         if (!deletedLayout) {
             return NextResponse.json(
                 { error: 'Layout not found' },

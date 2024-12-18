@@ -4,7 +4,6 @@ import { Delete } from "../C-D";
 import {
   BlogListSection,
   BlogListSetting,
-  BlogSection,
   Layout,
 } from "@/lib/types";
 import { useEffect, useState } from "react";

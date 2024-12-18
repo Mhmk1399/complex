@@ -479,7 +479,7 @@ export interface Layout {
     colorSchema: ColorSchema;
   };
   sections: {
-    find(arg0: (section: any) => boolean): unknown;
+    find(arg0: (section: Section) => boolean): Section | undefined;
     slideshow: SlideSection;
     richtext: RichTextSection;
     sectionHeader: HeaderSection;
@@ -724,9 +724,9 @@ export interface ProductStoreLayout {
 }
 
 
-export interface productCard {
-  blocks: any;
-  setting: any;
+export interface ProductCard {
+  blocks: ProductListSection[];
+  setting: ProductBlockSetting;
   cardBorderRadius?: string;
   cardBackground?: string;
   imageWidth?: string;
@@ -743,19 +743,20 @@ export interface productCard {
   btnBackgroundColor?: string;
   btnColor?: string;
 }
-// export interface ProductCardData {
-//   imageSrc: string[];
-//   imageAlt: string[];
-//   name: string;
-//   description: string;
-//   price: string;
-//   category: string;
-//   status: string;
-//   discount: string;
-//   id: string;
-//   innventory: string;
-// }
-
+export interface DetailPageBlockSettings {
+  imageWidth: string;
+  imageHeight: string;
+  imageRadius: string;
+  productNameColor: string;
+  productNameFontSize: string;
+  productNameFontWeight: string;
+  priceColor: string;
+  priceFontSize: string;
+  descriptionColor: string;
+  descriptionFontSize: string;
+  btnBackgroundColor: string;
+  btnTextColor: string;
+}
 export interface ProductImage {
   imageSrc: string;
   imageAlt: string;
@@ -824,7 +825,7 @@ export interface DetailPageBlock {
   };
 }
 
-export interface DetailPageSettings {
+export interface DetailPageSettings extends CommonSettings {
   imageWidth: string;
   imageHeight: string;
   imageRadius: string;
@@ -850,7 +851,6 @@ export interface DetailPageSettings {
   marginLeft: string;
   marginRight: string;
   backgroundColor: string;
-  // [key: string]: any; // Allows dynamic properties
 }
 
 export interface DetailPageSection {

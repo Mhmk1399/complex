@@ -1,7 +1,7 @@
 "use client";
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
-import { SlideSection, Layout, SlideBlock } from "@/lib/types";
+import { SlideSection, Layout } from "@/lib/types";
 import { Delete } from "../C-D";
 import Link from "next/link";
 

@@ -1,8 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { BlogDetailBlockSetting, BlogDetailSection, Layout } from "@/lib/types";
+import {  BlogDetailSection, Layout } from "@/lib/types";
 import Image from "next/image";
-import { Delete } from "../C-D";
 import { styled } from "styled-components";
 
 interface BlogDetailProps {

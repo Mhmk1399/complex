@@ -16,11 +16,7 @@ interface BoxValues {
   right: number;
 }
 
-interface MarginPaddingEditorProps {
-  margin: BoxValues;
-  padding: BoxValues;
-  onChange: (type: "margin" | "padding", updatedValues: BoxValues) => void;
-}
+
 
 const ColorInput = ({
   label,
@@ -57,7 +53,6 @@ export const BannerForm: React.FC<BannerFormProps> = ({
   selectedComponent,
 }) => {
   const [inputText, setInputText] = useState("");
-  const [json, setJson] = useState(null);
   const [margin, setMargin] = React.useState<BoxValues>({
     top: 0,
     bottom: 0,
@@ -90,7 +85,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
       });
 
       const updatedJson = await response.json();
-      setJson(updatedJson);
+      
 
       // Update the form data with new JSON
       setUserInputData((prevData) => ({

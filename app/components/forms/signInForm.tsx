@@ -132,6 +132,8 @@ export const SignInForm = () => {
       setIsSuccess(response.ok);
       setShowModal(true);
     } catch (error) {
+      console.log("Error submitting form data:", error);
+      
       setIsSuccess(false);
       setShowModal(true);
     }

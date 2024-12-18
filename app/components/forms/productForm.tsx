@@ -17,12 +17,6 @@ interface BoxValues {
   right: number;
 }
 
-interface MarginPaddingEditorProps {
-  margin: BoxValues;
-  padding: BoxValues;
-  onChange: (type: "margin" | "padding", updatedValues: BoxValues) => void;
-}
-
 const ColorInput = ({
   label,
   name,
@@ -58,7 +52,6 @@ export const ProductListForm: React.FC<ProductListProps> = ({
   selectedComponent,
 }) => {
   const [inputText, setInputText] = useState("");
-  const [json, setJson] = useState(null);
   const [dropdownAnimation, setDropdownAnimation] = useState(false);
 
   const handleLiveInput = async (
@@ -76,7 +69,6 @@ export const ProductListForm: React.FC<ProductListProps> = ({
       });
 
       const updatedJson = await response.json();
-      setJson(updatedJson);
 
       // Update the form data with new JSON
       setUserInputData((prevData) => ({
@@ -154,40 +146,9 @@ export const ProductListForm: React.FC<ProductListProps> = ({
     const initialData = Compiler(layout, selectedComponent);
     setUserInputData(initialData[0]);
   }, [selectedComponent]);
-  const handleBlockChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setUserInputData((prev: ProductSection) => ({
-      ...prev,
-      blocks: {
-        ...prev?.blocks,
-        [name]: value,
-      },
-    }));
-  };
-  const handleProductChange = (index: number, field: string, value: string) => {
-    setUserInputData((prev) => ({
-      ...prev,
-      blocks: prev.blocks.map((block, i) =>
-        i === index ? { ...block, [field]: value } : block
-      ),
-    }));
-  };
-
-  const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setUserInputData((prev: ProductSection) => ({
-      ...prev,
-      blocks: {
-        ...prev.blocks,
-        setting: {
-          ...prev.setting,
-          [name]: value,
-        },
-      },
-    }));
-  };
+  
+  
+  
 
 // Add this state to control updates
 const [isUpdating, setIsUpdating] = useState(false);

@@ -66,7 +66,6 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
   const [inputText, setInputText] = useState("");
-  const [json, setJson] = useState(null);
   const [dropdownAnimation, setDropdownAnimation] = useState(false);
 
   const handleLiveInput = async (
@@ -84,7 +83,6 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
       });
 
       const updatedJson = await response.json();
-      setJson(updatedJson);
 
       // Update the form data with new JSON
       setUserInputData((prevData) => ({

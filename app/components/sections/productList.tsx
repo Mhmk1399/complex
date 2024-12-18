@@ -66,7 +66,7 @@ const ProductList: React.FC<ProductListProps> = ({
         console.log(data);
         
         if (data?.products) {
-          const productInfo = data.products.map((product: any) => ({
+          const productInfo = data.products.map((product: ProductCardData) => ({
             ...product,
             images: product.images ,
           }));

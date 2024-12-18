@@ -17,11 +17,7 @@ interface BoxValues {
   right: number;
 }
 
-interface MarginPaddingEditorProps {
-  margin: BoxValues;
-  padding: BoxValues;
-  onChange: (type: "margin" | "padding", updatedValues: BoxValues) => void;
-}
+
 const ColorInput = ({
   label,
   name,
@@ -72,7 +68,6 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
   const [isHeadingOpen, setIsHeadingOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
   const [inputText, setInputText] = useState("");
-  const [json, setJson] = useState(null);
   const [dropdownAnimation, setDropdownAnimation] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -92,7 +87,6 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
       });
 
       const updatedJson = await response.json();
-      setJson(updatedJson);
 
       // Update the form data with new JSON
       setUserInputData((prevData) => ({

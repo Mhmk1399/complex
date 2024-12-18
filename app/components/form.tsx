@@ -697,7 +697,7 @@ export const Form = ({
                   items={orders}
                   strategy={verticalListSortingStrategy}
                 >
-                  {orders.map((id: string, handleClick) => (
+                  {orders.map((id: string) => (
                     <SortableItem key={id} id={id} />
                   ))}
                 </SortableContext>
