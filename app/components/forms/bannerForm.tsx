@@ -96,15 +96,10 @@ export const BannerForm: React.FC<BannerFormProps> = ({
         body: JSON.stringify(requestBody),
       });
 
-<<<<<<< Updated upstream
-      const updatedJson = await response.json();
-      
-=======
       const result = await response.json();
       console.log("API response:", result); // Debug log
->>>>>>> Stashed changes
 
-      if (result.success && result.data) {
+      if (result.success && result.data) {``
         setUserInputData((prevData) => ({
           ...prevData,
           blocks: {
