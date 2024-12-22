@@ -1,107 +1,74 @@
 import connect from "@/lib/data";
-import { Layout } from '@/models/layout';
 import { NextResponse } from 'next/server';
+import jwt from 'jsonwebtoken';
+import fs from 'fs';
+import path from 'path';
 
-export async function GET() {
-    await connect();
-    if (!connect) {
-        console.log("POST_ERROR", "Database connection failed");
-        return new NextResponse("Database connection error", { status: 500 });
-      }
+export async function GET(request: Request) {
+  await connect();
+  if (!connect) {
+    console.log("POST_ERROR", "Database connection failed");
+    return new NextResponse("Database connection error", { status: 500 });
+  }
+
   try {
-    const layout = await Layout.findOne();
-    
-    // if (!layout) {
-    //   // If no layout exists, you could return the default null.json data
-    //   const defaultLayout = await import('@/public/template/null.json');
-    //   return NextResponse.json(defaultLayout.default);
-    // }
+    // Get the token from the request headers
+    const token = request.headers.get('Authorization')?.split(' ')[1];
+    if (!token) {
+      return NextResponse.json(
+        { error: 'Token not found in request headers' },
+        { status: 400 }
+      );
+    }
 
-    return NextResponse.json(layout);
+    // Decode the JWT token without verifying it
+    let decodedToken;
+    try {
+      decodedToken = jwt.decode(token);
+      if (!decodedToken) {
+        throw new Error('Failed to decode token');
+      }
+    } catch (error) {
+      return NextResponse.json(
+        { error: 'Invalid token' },
+        { status: 401 }
+      );
+    }
+
+    // Get the template directory from the decoded token
+    const templateDir = (decodedToken as jwt.JwtPayload).templatesDirectory;
+    if (!templateDir) {
+      return NextResponse.json(
+        { error: 'Template directory not found in token' },
+        { status: 400 }
+      );
+    }
+
+    // Read the file in the template directory
+    const filePath = path.join(templateDir, 'detail.json'); // Replace 'your-file-name.ext' with the actual file name
+    const fileContent = await new Promise<Buffer>((resolve, reject) => {
+      fs.readFile(filePath, (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+    });
+
+    // Respond with the file content
+    return new NextResponse(fileContent, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/octet-stream', // Adjust the content type as needed
+        'Content-Disposition': `attachment; filename="${path.basename(filePath)}"`,
+      },
+    });
+
   } catch (error) {
     return NextResponse.json(
-      { error: 'Failed to fetch layout data'+error },
+      { error: 'Failed to fetch file: ' + error },
       { status: 500 }
     );
   }
 }
- 
-export async function POST(request: Request) {
-    await connect();
-    if (!connect) {
-        console.log("POST_ERROR", "Database connection failed");
-        return new NextResponse("Database connection error", { status: 500 });
-    }
-    
-    try {
-       
-        
-        const body = await request.json();
-         
-        const newLayout = new Layout(body);
-        await newLayout.save();
-        return NextResponse.json(newLayout);
-        // const layoutToSave = {
-        //     type: "layout",
-        //     settings: body.layout?.settings || {},
-        //     sections: {
-        //         sectionHeader: body.layout?.sections?.sectionHeader || {},
-        //         children: body.layout?.sections?.children || {},
-        //         sectionFooter: body.layout?.sections?.sectionFooter || {}
-        //     },
-        //     order: ["section-header", "children", "section-footer"]
-        // };
-
-        
-        // if (existingLayout) {
-        //     const updatedLayout = await Layout.findOneAndUpdate(
-        //         {},
-        //         layoutToSave,
-        //         { new: true }
-        //     );
-        //     return NextResponse.json(updatedLayout);
-        // } else {
-        //     const newLayout = new Layout(layoutToSave);
-        //     await newLayout.save();
-        //     return NextResponse.json(newLayout);
-        // }
-        
-    } catch (error) {
-        console.error("Error saving layout:", error);
-        return NextResponse.json(
-            { error: 'Failed to save layout', details: error },
-            { status: 500 }
-        );
-    }
-}
-
-
-export async function DELETE(request: Request) {
-    await connect();
-    if (!connect) {
-        console.log("POST_ERROR", "Database connection failed");
-        return new NextResponse("Database connection error", { status: 500 });
-    }
-
-    try {
-        const body = await request.json();
-        const id = body.id;  
-        const deletedLayout = await Layout.findOneAndDelete(id);
-        if (!deletedLayout) {
-            return NextResponse.json(
-                { error: 'Layout not found' },
-                { status: 404 }
-            );
-        }
-        return NextResponse.json(deletedLayout);
-    }
-    catch (error) {
-        console.error("Error deleting layout:", error);
-        return NextResponse.json(
-            { error: 'Failed to delete layout' },
-            { status: 500 }
-        );
-    }
-
-}
-        

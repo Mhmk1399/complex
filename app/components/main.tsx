@@ -5,6 +5,7 @@ import { Form } from "./form";
 import data from "../../public/template/null.json";
 import smData from "../../public/template/nullSm.json";
 import Image from "next/image";
+
 import {
   AboutChildren,
   BlogChildren,
@@ -21,6 +22,7 @@ import Blog from "@/public/template/blog.json";
 import BlogDetail from "@/public/template/blogDetail.json";
 import { motion } from "framer-motion";
 import Link from "next/link";
+// Example client-side code to send the token to the server
 
 export const Main = () => {
   const Data = data as unknown as Layout;
@@ -48,23 +50,46 @@ export const Main = () => {
     setActiveRoutes(prevRoutes => [...prevRoutes, newRoute]);
   };
 // Replace the direct import with API call
-useEffect(() => {
-  const fetchLayout = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch('/api/layout-jason');
-      const Data = await response.json();
-      console.log("Layout data:", Data);
-      
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching layout:', error);
-      setLoading(false);
-    }
-  };
+const sendTokenToServer = async () => {
+  const token = localStorage.getItem('token');
 
-  fetchLayout();
+  if (!token) {
+    console.error('Token not found in local storage');
+    return;
+  }
+
+  try {
+    const response = await fetch('/api/layout-jason', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      console.log('Server responded with an error:', response.statusText);
+      return;
+    }
+
+    const data = await response.json().catch(() => {
+      console.log('Failed to parse response as JSON');
+      return null;
+    });
+
+    if (data) {
+      console.log( data);
+    }
+    
+  } catch (error) {
+    console.log('Error sending token to server:', error);
+  }
+};
+
+useEffect(() => {
+  sendTokenToServer();
 }, []);
+
 
   useEffect(() => {
     setLoading(false);
@@ -217,12 +242,13 @@ useEffect(() => {
               e.currentTarget.style.setProperty("--x", `${x}%`);
               e.currentTarget.style.setProperty("--y", `${y}%`);
             }}
-            className="sticky top-0 z-50  backdrop-blur-2xl bg-gradient-to-br from-[#0052D4] to-[#6FB1FC] shadow-md cursor-pointer"
-          >
+            className="sticky top-0 z-50  backdrop-blur-2xl bg-gradient-to-br from-[#0052D4] to-[#6FB1FC]
+             shadow-md cursor-pointer">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
               <div className="flex flex-col sm:flex-row items-center justify-center py-4 gap-x-5 space-y-4 sm:space-y-0">
                 <motion.button
-                  className={`w-full sm:w-auto bg-pink-400 text-white lg:-ml-12 px-3 py-2.5 rounded-full font-medium transition-all duration-300 transform`}
+                  className={`w-full sm:w-auto bg-pink-400 text-white lg:-ml-12 px-3 py-2.5 rounded-full font-medium 
+                    transition-all duration-300 transform`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >

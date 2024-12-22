@@ -127,6 +127,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ productData }) => {
     imageSrc: "",
     imageAlt: "",
   };
+  
 
   return (
     <Card dir="rtl">

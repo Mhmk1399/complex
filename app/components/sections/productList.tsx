@@ -63,14 +63,12 @@ const ProductList: React.FC<ProductListProps> = ({
         });
 
         const data = await response.json();
-        console.log(data);
         
         if (data?.products) {
           const productInfo = data.products.map((product: ProductCardData) => ({
             ...product,
             images: product.images ,
           }));
-          console.log(productInfo);
 
           setProductData(productInfo);
         }
@@ -85,7 +83,8 @@ const ProductList: React.FC<ProductListProps> = ({
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
   ) as ProductSection;
-
+ 
+ 
   if (!sectionData) {
     return null;
   }

@@ -1,10 +1,10 @@
 {
   
     "children": {
-      "type": "store",
+      "type": "ProductList",
       "sections": [
         {
-          "type": "store",
+          "type": "ProductList",
           "blocks": [
             {
               "productId": 1,

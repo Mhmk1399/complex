@@ -707,6 +707,7 @@ export interface ProductListSection {
   price: string;
   btnText: string;
   btnLink: string;
+  storeId: string;
 }
 
 export interface ProductSection {
@@ -773,6 +774,7 @@ export interface ProductCardData {
   inventory?: string;
   createdAt?: string;
   updatedAt?: string;
+  storeId?: string;
 }
 export interface ProductCardSetting {
   cardBorderRadius?: string;

@@ -26,7 +26,6 @@ const logOperation = (operation: string, userId: string, details?: OperationDeta
 
 
 export const DELETE = async (
-  req: NextRequest,
   { params }: { params: { id: string } }
 ) => {
   const userId = params.id;

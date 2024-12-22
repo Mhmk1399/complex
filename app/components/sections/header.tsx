@@ -185,7 +185,7 @@ const Header: React.FC<HeaderProps> = ({
   
 
   if (!sectionData || !isHeaderSection(sectionData)) {
-    // console.log("Section data is missing or invalid.");
+    //  ("Section data is missing or invalid.");
     return null;
   }
 
