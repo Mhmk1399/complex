@@ -74,25 +74,45 @@ export const BannerForm: React.FC<BannerFormProps> = ({
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     event.preventDefault();
+    console.log("Sending input:", inputText); // Debug log
 
-    if (inputText.trim()) {
-      const response = await fetch("/api/update-json", {
+    if (!inputText?.trim()) {
+      console.log("Input is empty");
+      return;
+    }
+
+    try {
+      const requestBody = {
+        userInput: inputText,
+        
+      };
+      console.log("Request body:", requestBody); // Debug log
+
+      const response = await fetch("/api/handleInputs", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ inputText }),
+        body: JSON.stringify(requestBody),
       });
 
-      const updatedJson = await response.json();
-      
+      const result = await response.json();
+      console.log("API response:", result); // Debug log
 
-      // Update the form data with new JSON
-      setUserInputData((prevData) => ({
-        ...prevData,
-        blocks: updatedJson.children.sections[0].blocks,
-        setting: updatedJson.children.sections[0].setting,
-      }));
+      if (result.success && result.data) {``
+        setUserInputData((prevData) => ({
+          ...prevData,
+          blocks: {
+            ...prevData.blocks,
+            setting: {
+              ...prevData.blocks.setting,
+              ...result.data.blocks.setting,
+            },
+          },
+        }));
+      }
+    } catch (error) {
+      console.error("Fetch error:", error);
     }
   };
 
@@ -181,10 +201,8 @@ export const BannerForm: React.FC<BannerFormProps> = ({
       },
     }));
     setTimeout(() => setIsUpdating(false), 100);
-
   };
 
-  
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -601,11 +619,12 @@ export const BannerForm: React.FC<BannerFormProps> = ({
               <textarea
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                className="p-2 rounded-xl border-2 border-blue-300  focus:outline-none"
+                className="p-2 rounded-xl border-2 border-blue-300 focus:outline-none"
                 rows={5}
                 style={{ width: "100%" }}
                 placeholder="یک جمله فارسی وارد کنید..."
               />
+
               <button
                 onClick={handleLiveInput}
                 style={{

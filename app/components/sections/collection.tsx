@@ -155,29 +155,28 @@ export const Collection: React.FC<CollectionProps> = ({
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("/api/collections");
-        const data = await response.json();
+        // const response = await fetch("/api/collections");
+        // const data = await response.json();
 
-        const collectionData = data.collections || [];
-        setCollections(collectionData);
-        // Set initial filtered products from 'all' collection
-        const allCollection = data.collections.find(
-          (c: CollectionData) => c.name === "all"
-        );
-        
-        if (allCollection) {
-          const formattedProducts = allCollection.products.map(
-            (product: CollectionData['products'][0]) => ({
-              id: product._id,
-              name: product.name,
-              price: product.price,
-              imageSrc: product.images?.imageSrc || "/assets/images/pro2.jpg",
-              imageAlt: product.images?.imageAlt || product.name,
-              btnText: "خرید محصول",
-            })
-          );
-          setFilteredProducts(formattedProducts);
-        }
+        // const collectionData = data.collections || [];
+        // setCollections(collectionData);
+        // // Set initial filtered products from 'all' collection
+        // const allCollection = data.collections.find(
+        //   (c: any) => c.name === "all"
+        // );
+        // if (allCollection) {
+        //   const formattedProducts = allCollection.products.map(
+        //     (product: any) => ({
+        //       id: product._id,
+        //       name: product.name,
+        //       price: product.price,
+        //       imageSrc: product.images?.imageSrc || "/assets/images/pro2.jpg",
+        //       imageAlt: product.images?.imageAlt || product.name,
+        //       btnText: "خرید محصول",
+        //     })
+        //   );
+        //   setFilteredProducts(formattedProducts);
+        // }
       } catch (error) {
          ("Error fetching products:", error);
       }

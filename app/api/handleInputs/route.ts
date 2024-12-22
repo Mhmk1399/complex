@@ -2,7 +2,9 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
-    const { userInput } = await req.json();
+    const  inputdata  = await req.json();
+    console.log('Received input:', inputdata);
+    const { userInput } = inputdata;
     console.log('Received input:', userInput);
 
     const ollamaRequest = {
