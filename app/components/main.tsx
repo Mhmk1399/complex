@@ -2,10 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { Preview } from "./preview";
 import { Form } from "./form";
-import data from "../../public/template/null.json";
 import smData from "../../public/template/nullSm.json";
 import Image from "next/image";
-
+import nullJson from "../../public/template/null.json";
 import {
   AboutChildren,
   BlogChildren,
@@ -25,7 +24,7 @@ import Link from "next/link";
 // Example client-side code to send the token to the server
 
 export const Main = () => {
-  const Data = data as unknown as Layout;
+  const [Data , setData] = useState<Layout>(nullJson as unknown as Layout);
   const [loading, setLoading] = useState(true);
   const [layout, setLayout] = useState<Layout>(Data);
   const [smLayout] = useState<Layout>(smData as unknown as Layout);
@@ -33,13 +32,14 @@ export const Main = () => {
   const [previewWidth, setPreviewWidth] = useState<"sm" | "default">("default");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedComponent, setSelectedComponent] =
-    useState<string>("sectionHeader");
+    useState<string>("");
   const [saveStatus, setSaveStatus] = useState<
     "idle" | "saving" | "saved" | "error"
   >("idle");
   const [orders, setOrders] = useState<string[]>([]);
   const [selectedRoute, setSelectedRoute] = useState<string>("home");
-  const [activeRoutes, setActiveRoutes] = useState([{ value: 'home', name: '' },
+  const [activeRoutes, setActiveRoutes] = useState([
+  { value: 'home', name: '' },
   { value: 'about', name: 'درباره' },
   { value: 'contact', name: 'ارتباط' },
   { value: 'store', name: 'فروشگاه' },
@@ -49,6 +49,7 @@ export const Main = () => {
   const handleAddRoute = (newRoute: { value: string, name: string }) => {
     setActiveRoutes(prevRoutes => [...prevRoutes, newRoute]);
   };
+
 // Replace the direct import with API call
 const sendTokenToServer = async () => {
   const token = localStorage.getItem('token');
@@ -63,7 +64,9 @@ const sendTokenToServer = async () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}`,
+        'selectedRoute': selectedRoute,
+        'activeMode': activeMode
       }
     });
 
@@ -78,21 +81,29 @@ const sendTokenToServer = async () => {
     });
 
     if (data) {
-      console.log( data);
+      setLayout(data); 
+      setData(data);
+      setLoading(false)
     }
-    
+    console.log(layout);
+
   } catch (error) {
     console.log('Error sending token to server:', error);
   }
 };
 
 useEffect(() => {
+  setLoading(true)
   sendTokenToServer();
 }, []);
 
+useEffect(() => {
+  setLoading(true)
+  sendTokenToServer();
+}, [activeMode, selectedRoute]);
+
 
   useEffect(() => {
-    setLoading(false);
     const currentLayoutData = activeMode === "sm" ? smData : Data;
     
     if (selectedRoute === "about") {
@@ -152,7 +163,7 @@ useEffect(() => {
         },
       }));
     }
-  }, [selectedRoute, activeMode]);
+  }, [selectedRoute, activeMode ]);
 
   const [newRouteName, setNewRouteName] = useState('');
   const [newRouteValue, setNewRouteValue] = useState('');
@@ -181,31 +192,31 @@ useEffect(() => {
         },
       }));
     }
-  }, [selectedRoute, activeMode]);const handleSave = async () => {
-    setSaveStatus("saving");    try {
-
-      const response = await fetch("/api/saveLayout", {
+  }, [selectedRoute, activeMode])
+  const handleSave = async () => {
+    setSaveStatus("saving");
+    try {
+      const response = await fetch("/api/layout-jason", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${localStorage.getItem("token")}`,
+          'selectedRoute': selectedRoute,
+          'activeMode': activeMode
         },
-
-        body: JSON.stringify({
-          mode: activeMode,
-          layout: activeMode === "sm" ? smLayout : layout,
-        }),
+        body: JSON.stringify(layout),
       });
-
+  
       const result = await response.json(); // Get response data
       console.log("Save response:", result); // Debug log
       if (!response.ok) {
         throw new Error("Failed to save layout");
       }
-
+  
       setSaveStatus("saved");
       setTimeout(() => setSaveStatus("idle"), 2000);
     } catch (error) {
-      console.error("Error saving layout:", error);
+      console.log("Error saving layout:", error);
       setSaveStatus("error");
       setTimeout(() => setSaveStatus("idle"), 2000);
     }
