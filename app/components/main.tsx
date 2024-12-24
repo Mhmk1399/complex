@@ -84,8 +84,10 @@ const sendTokenToServer = async () => {
       setLayout(data); 
       setData(data);
       setLoading(false)
+      console.log('Layout data fetched:', data);
+      
     }
-    console.log(layout);
+    
 
   } catch (error) {
     console.log('Error sending token to server:', error);
