@@ -3,8 +3,7 @@ import { NextResponse, NextRequest } from "next/server";
 import User from "@/models/users";
 import bcrypt from "bcryptjs";
 import vendor from "@/models/vendor";
-
-const jwt = require("jsonwebtoken");
+import jwt from 'jsonwebtoken'; // Fixed require() style import
 
 export async function login(req: NextRequest) {
   const { email, password } = await req.json();
@@ -27,7 +26,7 @@ export async function login(req: NextRequest) {
         vendorId: user.vendorId?._id || null,
         vendorName: user.vendorId?.name || null,
       },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET as string,
       { expiresIn: "1h" }
     );
 
@@ -44,18 +43,18 @@ export async function login(req: NextRequest) {
       },
       redirectUrl,
     });
-  } catch (error) {
+  } catch (err: unknown) {
+    console.error("Login error:", err);
     return NextResponse.json({ message: "Error logging in" }, { status: 500 });
   }
 }
 
-export async function POST(request: Request) {
-  const { name, email, password, role } = await request.json();
+export async function POST(request: NextRequest) {
+  const { name, email, password } = await request.json();
 
   try {
     await connect();
 
-    // First create the user as vendor
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
       name,
@@ -65,14 +64,12 @@ export async function POST(request: Request) {
     });
     await newUser.save();
 
-    // Then create their vendor profile
     const newVendor = new vendor({
       name: `${name}'s Store`,
       owner: newUser._id,
     });
     await newVendor.save();
 
-    // Update user with vendorId
     await User.findByIdAndUpdate(newUser._id, {
       vendorId: newVendor._id,
     });
@@ -84,7 +81,7 @@ export async function POST(request: Request) {
         vendorId: newVendor._id,
         vendorName: newVendor.name,
       },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET as string,
       { expiresIn: "1h" }
     );
 
@@ -96,8 +93,8 @@ export async function POST(request: Request) {
       },
       { status: 201 }
     );
-  } catch (error) {
-    console.error("Error creating vendor account:", error);
+  } catch (err: unknown) {
+    console.error("Error creating vendor account:", err);
     return NextResponse.json(
       { message: "Error creating vendor account" },
       { status: 500 }
@@ -105,13 +102,13 @@ export async function POST(request: Request) {
   }
 }
 
-export async function GET(request: Request) {
+export async function GET() {
   await connect();
   try {
     const users = await User.find();
     return NextResponse.json({ users }, { status: 200 });
-  } catch (error) {
-    console.error("Error fetching users:", error);
+  } catch (err: unknown) {
+    console.error("Error fetching users:", err);
     return NextResponse.json(
       { message: "Error fetching users" },
       { status: 500 }

@@ -278,6 +278,48 @@ export interface RichTextSection {
   setting: CommonSettings;
   type: "rich-text";
 }
+export interface StoreSection {
+  type: "store";
+  blocks: {
+    productId: number;
+    imageSrc: string;
+    imageAlt: string;
+    name: string;
+    description: string;
+    price: string;
+    btnText: string;
+    btnLink: string;
+    setting: {
+      imageWidth: string;
+      imageHeight: string;
+      imageRadius: string;
+      productNameColor: string;
+      productNameFontSize: string;
+      productNameFontWeight: string;
+      priceColor: string;
+      priceFontSize: string;
+      descriptionColor: string;
+      descriptionFontSize: string;
+      btnBackgroundColor: string;
+      btnTextColor: string;
+    };
+  }[];
+  setting: {
+    gridColumns: number;
+    paddingTop: string;  // Changed from number to string
+    paddingBottom: string;
+    paddingLeft: string;
+    paddingRight: string;
+    marginTop: string;
+    marginBottom: string;
+    marginLeft: string;
+    marginRight: string;
+    backgroundColor: string;
+    cardBackgroundColor: string;
+    cardBorderRadius: string;
+  };
+}
+
 
 export interface Section {
   setting: CommonSettings;
@@ -287,9 +329,14 @@ export interface Section {
     | ImageTextBlock
     | MultiColumnBlock
     | NewsLetterBlock
-    | RichTextBlock;
+    | RichTextBlock
+    | StoreSection['blocks']      // Add store blocks
+    | BlogSection['blocks']       // Add blog blocks
+    | BlogDetailSection['blocks'] // Add blog detail blocks
+    | DetailPageSection['blocks']; // Add detail page blocks
   type: string;
 }
+
 export interface ImageTextBlockSetting extends CommonSettings {
   headingColor: string;
   headingFontSize: string;
@@ -432,7 +479,7 @@ export interface Layout {
     colorSchema: ColorSchema;
   };
   sections: {
-    find(arg0: (section: any) => boolean): unknown;
+    find(arg0: (section: Section) => boolean): Section | undefined;
     slideshow: SlideSection;
     richtext: RichTextSection;
     sectionHeader: HeaderSection;
@@ -660,6 +707,7 @@ export interface ProductListSection {
   price: string;
   btnText: string;
   btnLink: string;
+  storeId: string;
 }
 
 export interface ProductSection {
@@ -675,15 +723,11 @@ export interface ProductStoreLayout {
     order: string[];
   };
 }
-export interface StoreChildren {
-  type: "store";
-  sections: ProductSection[];
-  order: string[];
-}
 
-export interface productCard {
-  blocks: any;
-  setting: any;
+
+export interface ProductCard {
+  blocks: ProductListSection[];
+  setting: ProductBlockSetting;
   cardBorderRadius?: string;
   cardBackground?: string;
   imageWidth?: string;
@@ -700,19 +744,20 @@ export interface productCard {
   btnBackgroundColor?: string;
   btnColor?: string;
 }
-// export interface ProductCardData {
-//   imageSrc: string[];
-//   imageAlt: string[];
-//   name: string;
-//   description: string;
-//   price: string;
-//   category: string;
-//   status: string;
-//   discount: string;
-//   id: string;
-//   innventory: string;
-// }
-
+export interface DetailPageBlockSettings {
+  imageWidth: string;
+  imageHeight: string;
+  imageRadius: string;
+  productNameColor: string;
+  productNameFontSize: string;
+  productNameFontWeight: string;
+  priceColor: string;
+  priceFontSize: string;
+  descriptionColor: string;
+  descriptionFontSize: string;
+  btnBackgroundColor: string;
+  btnTextColor: string;
+}
 export interface ProductImage {
   imageSrc: string;
   imageAlt: string;
@@ -729,6 +774,7 @@ export interface ProductCardData {
   inventory?: string;
   createdAt?: string;
   updatedAt?: string;
+  storeId?: string;
 }
 export interface ProductCardSetting {
   cardBorderRadius?: string;
@@ -781,7 +827,7 @@ export interface DetailPageBlock {
   };
 }
 
-export interface DetailPageSettings {
+export interface DetailPageSettings extends CommonSettings {
   imageWidth: string;
   imageHeight: string;
   imageRadius: string;
@@ -807,7 +853,6 @@ export interface DetailPageSettings {
   marginLeft: string;
   marginRight: string;
   backgroundColor: string;
-  // [key: string]: any; // Allows dynamic properties
 }
 
 export interface DetailPageSection {
@@ -816,14 +861,7 @@ export interface DetailPageSection {
   setting: DetailPageSettings;
 }
 
-export interface DetailPageChildren {
-  type: "DetailPage";
-  sections: DetailPageSection[];
-  order: string[];
-}
-// export interface DetailPageMain {
-//   children: DetailPageChildren;
-// }
+
 
 export interface CollectionBlockSetting extends CommonSettings {
   headingColor: string;
@@ -857,7 +895,7 @@ export interface CollectionProduct {
 }
 
 export interface CollectionSection {
-  type: "Collection";
+  type:string;
   blocks: {
     heading: string;
     products: CollectionProduct[];
@@ -902,17 +940,17 @@ export interface BlogListFormProps {
   selectedComponent: string;
 }
 export interface BlogListSection {
-  type: "BlogList";
+  type: string;
   blocks: BlogBlock[];
   setting: BlogListSetting;
 }
 export interface BlogChildren {
-  type: "BlogList";
-  sections: BlogListSection[];
+  type: string;
+  sections: BlogSection[];
   order: string[];
 }
 export interface BlogSection {
-  type: "BlogList";  // Changed from string to literal type
+  type: string;  // Changed from string to literal type
   blocks: BlogBlock[];
   setting: BlogListSetting;
 }
@@ -978,8 +1016,44 @@ export interface BlogDetailSection {
   setting: BlogDetailBlockSetting;
   type: "BlogDetail";
 }
+
+export interface DetailPageChildren {
+  type: string;
+  sections: DetailPageSection[];
+  order: string[];
+}
+
+
+export interface StoreChildren {
+ 
+    type: string;
+    sections: StoreSection[];
+    order: string[];
+ 
+}
+
+
 export interface BlogDetailChildren {
-  type: "BlogDetail";
+  type: string;
   sections: BlogDetailSection[];
   order: string[];
+}
+
+// Add these new type guards
+export interface LayoutResponse {
+  children: {
+    type: string;
+    sections: Section[];
+    order: string[];
+  };
+}
+
+export interface RouteLayout {
+  about: AboutChildren;
+  contact: AboutChildren; 
+  store: StoreChildren;
+  DetailPage: DetailPageChildren;
+  BlogList: BlogChildren;
+  BlogDetail: BlogDetailChildren;
+  home: Children;
 }

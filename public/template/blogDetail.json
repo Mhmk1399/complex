@@ -1,5 +1,6 @@
 {
   "children": {
+    "type": "BlogDetail",
     "sections": [
       {
         "type": "BlogDetail",
@@ -58,14 +59,14 @@
           "dateFontSize": "14",
           "readTimeColor": "#7F8C8D",
           "readTimeFontSize": "14",
+          "sectionSpacing": "30",
           "paddingTop": "70",
           "paddingBottom": "30",
-          "paddinLeft": "0",
+          "paddingLeft": "0",
           "paddingRight": "10",
           "marginTop": "15",
           "marginBottom": "15",
-          "backgroundColor": "#FFFFFF",
-          "sectionSpacing": "30"
+          "backgroundColor": "#FFFFFF"
         }
       }
     ],

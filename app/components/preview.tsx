@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import Header from "./sections/header";
 import RichText from "./sections/richText";
 import Banner from "./sections/banner";
@@ -37,7 +36,6 @@ export const Preview: React.FC<PreviewProps> = ({
   selectedComponent,
   setLayout,
   previewWidth,
-  setPreviewWidth,
 }) => {
   const componentMap = {
     Header,

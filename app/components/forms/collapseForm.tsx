@@ -14,11 +14,7 @@ interface BoxValues {
   right: number;
 }
 
-interface MarginPaddingEditorProps {
-  margin: BoxValues;
-  padding: BoxValues;
-  onChange: (type: "margin" | "padding", updatedValues: BoxValues) => void;
-}
+
 
 interface CollapseFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<CollapseSection>>;
@@ -78,7 +74,6 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
   const [inputText, setInputText] = useState("");
-  const [json, setJson] = useState(null);
   const [dropdownAnimation, setDropdownAnimation] = useState(false);
 
   const handleLiveInput = async (
@@ -96,7 +91,6 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
       });
 
       const updatedJson = await response.json();
-      setJson(updatedJson);
 
       // Update the form data with new JSON
       setUserInputData((prevData) => ({
@@ -157,7 +151,6 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
       setLoaded(true);
       setUserInputData(initialData);
     }
-    console.log(initialData);
   }, []);
 
   useEffect(() => {

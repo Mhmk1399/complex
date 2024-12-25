@@ -69,6 +69,7 @@ import {
   NewsLetterSection,
   RichTextSection,
   Section,
+  BlogDetailSection,
 } from "@/lib/types";
 import { MultiColumnForm } from "./forms/multiColomnForm";
 import { SlideForm } from "./forms/slideForm";
@@ -94,7 +95,12 @@ type FormData =
   | RichTextSection
   | ContactFormProps
   | MultiColumnSection
-  | ProductSection;
+  | ProductSection
+  | DetailPageSection
+  | BlogDetailSection
+  | BlogSection;
+
+
 
 interface FormProps {
   selectedComponent: string;
@@ -411,10 +417,10 @@ export const Form = ({
           <BlogDetailForm
             setUserInputData={
               setUserInputData as React.Dispatch<
-                React.SetStateAction<DetailPageSection>
+                React.SetStateAction<BlogDetailSection>
               >
             }
-            userInputData={userInputData as DetailPageSection}
+            userInputData={userInputData as BlogDetailSection}
             layout={layout}
             selectedComponent={selectedComponent}
           />
@@ -691,7 +697,7 @@ export const Form = ({
                   items={orders}
                   strategy={verticalListSortingStrategy}
                 >
-                  {orders.map((id: string, handleClick) => (
+                  {orders.map((id: string) => (
                     <SortableItem key={id} id={id} />
                   ))}
                 </SortableContext>

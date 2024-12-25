@@ -1,4 +1,4 @@
-import  { NextRequest, NextResponse } from 'next/server';
+import  {  NextResponse } from 'next/server';
 import connect from "@/lib/data";
 import Vendor from '@/models/vendor';
 import User from '@/models/users';
@@ -28,7 +28,7 @@ export async function POST(request: Request) {
     }
   }
   
-  export const GET = async (req: NextRequest, { params }: { params: { vendorId: string } }) => {
+  export const GET = async () => {
     try {
       await connect();
   

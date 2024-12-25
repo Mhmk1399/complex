@@ -15,7 +15,16 @@ interface HeaderProps {
   selectedComponent: string;
   previewWidth: "sm" | "default";
 }
-
+const LoaderContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 80px;
+  background-color: #14213D;
+  position: absolute;
+  z-index: 40;
+`;
 // Styled components
 const SectionHeader = styled.section<{
   $data: HeaderSection;
@@ -147,6 +156,7 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [preview, setPreview] = useState(previewWidth);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (window.innerWidth <= 425) {
@@ -155,14 +165,27 @@ const Header: React.FC<HeaderProps> = ({
       setPreview(previewWidth);
     }
   }, [previewWidth]);
+  useEffect(() => {
+    if (layout?.sections?.sectionHeader) {
+      setIsLoading(false);
+    }
+  }, [layout]);
+  if (isLoading) {
+    return (
+      <LoaderContainer>
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+      </LoaderContainer>
+    );
+  }
 
   const sectionData = layout?.sections?.sectionHeader as HeaderSection;
   const isHeaderSection = (section: SectionType): section is HeaderSection => {
     return section?.type === "header" && "blocks" in section;
   };
+  
 
   if (!sectionData || !isHeaderSection(sectionData)) {
-    console.error("Section data is missing or invalid.");
+    //  ("Section data is missing or invalid.");
     return null;
   }
 

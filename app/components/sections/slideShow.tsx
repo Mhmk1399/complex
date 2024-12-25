@@ -1,7 +1,7 @@
 "use client";
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
-import { SlideSection, Layout, SlideBlock } from "@/lib/types";
+import { SlideSection, Layout } from "@/lib/types";
 import { Delete } from "../C-D";
 import Link from "next/link";
 
@@ -162,9 +162,15 @@ const SlideShow: React.FC<SlideShowProps> = ({
     }
   }, [previewWidth]);
 
-  const sectionData = layout.sections.children?.sections.find(
+  const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
   ) as SlideSection;
+  
+  // Also add an early return if layout is not properly initialized
+  if (!layout || !layout.sections) {
+    return null;
+  }
+  
 
   if (!sectionData) return null;
 

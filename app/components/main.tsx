@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { Preview } from "./preview";
 import { Form } from "./form";
-import data from "../../public/template/null.json";
 import smData from "../../public/template/nullSm.json";
 import Image from "next/image";
+import nullJson from "../../public/template/null.json";
 import {
   AboutChildren,
   BlogChildren,
@@ -21,23 +21,25 @@ import Blog from "@/public/template/blog.json";
 import BlogDetail from "@/public/template/blogDetail.json";
 import { motion } from "framer-motion";
 import Link from "next/link";
+// Example client-side code to send the token to the server
 
 export const Main = () => {
-  const Data = data as unknown as Layout;
+  const [Data , setData] = useState<Layout>(nullJson as unknown as Layout);
   const [loading, setLoading] = useState(true);
   const [layout, setLayout] = useState<Layout>(Data);
-  const [smLayout, setSmLayout] = useState<Layout>(smData as unknown as Layout);
+  const [smLayout] = useState<Layout>(smData as unknown as Layout);
   const [activeMode, setActiveMode] = useState<"sm" | "lg">("lg");
   const [previewWidth, setPreviewWidth] = useState<"sm" | "default">("default");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedComponent, setSelectedComponent] =
-    useState<string>("sectionHeader");
+    useState<string>("");
   const [saveStatus, setSaveStatus] = useState<
     "idle" | "saving" | "saved" | "error"
   >("idle");
   const [orders, setOrders] = useState<string[]>([]);
   const [selectedRoute, setSelectedRoute] = useState<string>("home");
-  const [activeRoutes, setActiveRoutes] = useState([{ value: 'home', name: '' },
+  const [activeRoutes, setActiveRoutes] = useState([
+  { value: 'home', name: '' },
   { value: 'about', name: 'درباره' },
   { value: 'contact', name: 'ارتباط' },
   { value: 'store', name: 'فروشگاه' },
@@ -48,10 +50,64 @@ export const Main = () => {
     setActiveRoutes(prevRoutes => [...prevRoutes, newRoute]);
   };
 
-  useEffect(() => {
-    setLoading(false);
-    const currentLayoutData = activeMode === "sm" ? smData : Data;
+// Replace the direct import with API call
+const sendTokenToServer = async () => {
+  const token = localStorage.getItem('token');
 
+  if (!token) {
+    console.error('Token not found in local storage');
+    return;
+  }
+
+  try {
+    const response = await fetch('/api/layout-jason', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'selectedRoute': selectedRoute,
+        'activeMode': activeMode
+      }
+    });
+
+    if (!response.ok) {
+      console.log('Server responded with an error:', response.statusText);
+      return;
+    }
+
+    const data = await response.json().catch(() => {
+      console.log('Failed to parse response as JSON');
+      return null;
+    });
+
+    if (data) {
+      setLayout(data); 
+      setData(data);
+      setLoading(false)
+      console.log('Layout data fetched:', data);
+      
+    }
+    
+
+  } catch (error) {
+    console.log('Error sending token to server:', error);
+  }
+};
+
+useEffect(() => {
+  setLoading(true)
+  sendTokenToServer();
+}, []);
+
+useEffect(() => {
+  setLoading(true)
+  sendTokenToServer();
+}, [activeMode, selectedRoute]);
+
+
+  useEffect(() => {
+    const currentLayoutData = activeMode === "sm" ? smData : Data;
+    
     if (selectedRoute === "about") {
       setLayout((prevLayout: Layout) => ({
         ...prevLayout,
@@ -73,7 +129,7 @@ export const Main = () => {
         ...prevLayout,
         sections: {
           ...prevLayout.sections,
-          children: DetailPage.children as unknown as DetailPageChildren,
+          children: DetailPage.children  as DetailPageChildren,
         },
       }));
     } else if (selectedRoute === "store") {
@@ -81,16 +137,15 @@ export const Main = () => {
         ...prevLayout,
         sections: {
           ...prevLayout.sections,
-          children: Store.children as unknown as StoreChildren,
+          children: Store.children  as StoreChildren,
         },
       }));
-      console.log(layout);
     } else if (selectedRoute === "BlogList") {
       setLayout((prevLayout: Layout) => ({
         ...prevLayout,
         sections: {
           ...prevLayout.sections,
-          children: Blog.children as unknown as BlogChildren,
+          children: Blog.children as  BlogChildren,
         },
       }));
     } else if (selectedRoute === "BlogDetail") {
@@ -98,20 +153,19 @@ export const Main = () => {
         ...prevLayout,
         sections: {
           ...prevLayout.sections,
-          children: BlogDetail.children as unknown as BlogDetailChildren,
+          children: BlogDetail.children as BlogDetailChildren,
         },
       }));
     } else {
-      setLayout((prevLayout) => ({
+      setLayout((prevLayout: Layout) => ({
         ...prevLayout,
         sections: {
           ...prevLayout.sections,
-          children: currentLayoutData.sections.children,
+          children: currentLayoutData.sections.children as Layout['sections']['children'],
         },
       }));
     }
-    console.log(layout);
-  }, [selectedRoute, activeMode]);
+  }, [selectedRoute, activeMode ]);
 
   const [newRouteName, setNewRouteName] = useState('');
   const [newRouteValue, setNewRouteValue] = useState('');
@@ -122,50 +176,49 @@ export const Main = () => {
     const routeConfigs = {
       about: About.children as AboutChildren,
       contact: Contact.children as AboutChildren,
-      DetailPage: DetailPage.children as unknown as DetailPageChildren,
-      store: Store.children as unknown as StoreChildren,
-      BlogList: Blog.children as unknown as BlogChildren,
-      BlogDetail: BlogDetail.children as unknown as BlogDetailChildren,
+      DetailPage: DetailPage.children as  DetailPageChildren,
+      store: Store.children as StoreChildren,
+      BlogList: Blog.children  as BlogChildren,
+      BlogDetail: BlogDetail.children as BlogDetailChildren,
       // Add default case for custom routes
-      default: currentLayoutData.sections.children
-    };
+      default: currentLayoutData.sections.children}
 
-    setLayout((prevLayout: Layout) => ({
-      ...prevLayout,
-      sections: {
-        ...prevLayout.sections,
-        children: routeConfigs[selectedRoute] || routeConfigs.default,
-      },
-    }));
-  }, [selectedRoute, activeMode]);
+    const children = routeConfigs[selectedRoute as keyof typeof routeConfigs] || routeConfigs.default;
 
+    if (children) {
+      setLayout((prevLayout: Layout) => ({
+        ...prevLayout,
+        sections: {
+          ...prevLayout.sections,
+          children: children as Layout['sections']['children'],
+        },
+      }));
+    }
+  }, [selectedRoute, activeMode])
   const handleSave = async () => {
     setSaveStatus("saving");
     try {
-      console.log("Saving mode:", activeMode);
-
-      const response = await fetch("/api/saveLayout", {
+      const response = await fetch("/api/layout-jason", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${localStorage.getItem("token")}`,
+          'selectedRoute': selectedRoute,
+          'activeMode': activeMode
         },
-
-        body: JSON.stringify({
-          mode: activeMode,
-          layout: activeMode === "sm" ? smLayout : layout,
-        }),
+        body: JSON.stringify(layout),
       });
-
+  
       const result = await response.json(); // Get response data
       console.log("Save response:", result); // Debug log
       if (!response.ok) {
         throw new Error("Failed to save layout");
       }
-
+  
       setSaveStatus("saved");
       setTimeout(() => setSaveStatus("idle"), 2000);
     } catch (error) {
-      console.error("Error saving layout:", error);
+      console.log("Error saving layout:", error);
       setSaveStatus("error");
       setTimeout(() => setSaveStatus("idle"), 2000);
     }
@@ -202,12 +255,13 @@ export const Main = () => {
               e.currentTarget.style.setProperty("--x", `${x}%`);
               e.currentTarget.style.setProperty("--y", `${y}%`);
             }}
-            className="sticky top-0 z-50  backdrop-blur-2xl bg-gradient-to-br from-[#0052D4] to-[#6FB1FC] shadow-md cursor-pointer"
-          >
+            className="sticky top-0 z-50  backdrop-blur-2xl bg-gradient-to-br from-[#0052D4] to-[#6FB1FC]
+             shadow-md cursor-pointer">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
               <div className="flex flex-col sm:flex-row items-center justify-center py-4 gap-x-5 space-y-4 sm:space-y-0">
                 <motion.button
-                  className={`w-full sm:w-auto bg-pink-400 text-white lg:-ml-12 px-3 py-2.5 rounded-full font-medium transition-all duration-300 transform`}
+                  className={`w-full sm:w-auto bg-pink-400 text-white lg:-ml-12 px-3 py-2.5 rounded-full font-medium 
+                    transition-all duration-300 transform`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >

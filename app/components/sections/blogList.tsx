@@ -4,7 +4,6 @@ import { Delete } from "../C-D";
 import {
   BlogListSection,
   BlogListSetting,
-  BlogSection,
   Layout,
 } from "@/lib/types";
 import { useEffect, useState } from "react";
@@ -146,7 +145,6 @@ const BlogList: React.FC<BlogListProps> = ({
           description: blog.description,
         }));
         setBlogData(blogInfo);
-        console.log(data);
       } catch (error) {
         console.error("Error fetching blogs:", error);
       }

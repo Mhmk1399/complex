@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const ProductScema = new mongoose.Schema(
-  {
+  { storeId: { type: String, required: true },
     images: {
       imageSrc: { type: String, required: true },
       imageAlt: { type: String, required: true },

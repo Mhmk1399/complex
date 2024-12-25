@@ -1,8 +1,6 @@
 import Image from "next/image";
 import styled from "styled-components";
-import { productCard, ProductCardData } from "@/lib/types";
-import { useState } from "react";
-
+import type { ProductCard, ProductCardData } from "@/lib/types";
 interface ProductCardProps {
   productData: ProductCardData;
 }
@@ -25,7 +23,7 @@ const defaultSetting = {
 };
 
 const Card = styled.div<{
-  $setting?: productCard;
+  $setting?: ProductCard;
 }>`
   display: flex;
   flex-direction: column;
@@ -46,7 +44,7 @@ const Card = styled.div<{
 `;
 
 const ProductImage = styled(Image)<{
-  $settings?: productCard;
+  $settings?: ProductCard;
   $productData?: ProductCardData;
 }>`
   object-fit: cover;
@@ -62,7 +60,7 @@ const ProductImage = styled(Image)<{
 `;
 
 const ProductName = styled.h3<{
-  $settings?: productCard;
+  $settings?: ProductCard;
   $productData?: ProductCardData;
 }>`
   font-size: ${(props) =>
@@ -75,7 +73,7 @@ const ProductName = styled.h3<{
 `;
 
 const ProductDescription = styled.p<{
-  $settings?: productCard;
+  $settings?: ProductCard;
   $productData?: ProductCardData;
 }>`
   font-size: ${(props) =>
@@ -90,7 +88,7 @@ const ProductDescription = styled.p<{
 `;
 
 const ProductPrice = styled.span<{
-  $settings?: productCard;
+  $settings?: ProductCard;
   $productData?: ProductCardData;
 }>`
   font-size: ${(props) =>
@@ -101,7 +99,7 @@ const ProductPrice = styled.span<{
 `;
 
 const BuyButton = styled.button<{
-  $settings?: productCard;
+  $settings?: ProductCard;
   $productData?: ProductCardData;
 }>`
   display: inline-block;
@@ -123,12 +121,13 @@ const BuyButton = styled.button<{
 `;
 
 const ProductCard: React.FC<ProductCardProps> = ({ productData }) => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const currentImageIndex=0;
 
   const currentImage = productData.images[currentImageIndex] || {
     imageSrc: "",
     imageAlt: "",
   };
+  
 
   return (
     <Card dir="rtl">

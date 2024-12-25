@@ -1,8 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { BlogDetailBlockSetting, BlogDetailSection, Layout } from "@/lib/types";
+import {  BlogDetailSection, Layout } from "@/lib/types";
 import Image from "next/image";
-import { Delete } from "../C-D";
 import { styled } from "styled-components";
 
 interface BlogDetailProps {
@@ -78,7 +77,6 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
         const response = await fetch(`/api/blogs/${blogId}`); // Fetching blog with ID 1
         const data = await response.json();
         setBlog(data);
-        console.log(data, "data");
       } catch (error) {
         console.error("Error fetching blog:", error);
       } finally {
@@ -97,8 +95,7 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
     return null;
   }
 
-  console.log(sectionData, "sectionData blogDetail");
-  console.log(actualName, "actualName ");
+
 
   if (loading) return <div>Loading...</div>;
   if (!blog) return <div>Blog not found</div>;

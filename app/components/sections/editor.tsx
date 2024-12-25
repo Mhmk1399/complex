@@ -75,13 +75,7 @@ const PaddingMarginBox = styled.div`
   padding: 10px;
 `;
 
-const InputLabel = styled.div`
-  position: absolute;
-  font-size: 0.9rem;
-  font-weight: bold;
-  color: #ecf0f1;
-  text-align: center;
-`;
+
 
 const MarginPaddingEditor: React.FC<MarginPaddingEditorProps> = ({
   margin,

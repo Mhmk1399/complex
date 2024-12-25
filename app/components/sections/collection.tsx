@@ -3,6 +3,19 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Delete } from "../C-D";
 import Link from "next/link";
+interface CollectionData {
+  _id: string;
+  name: string;
+  products: Array<{
+    _id: string;
+    name: string;
+    price: number;
+    images?: {
+      imageSrc: string;
+      imageAlt: string;
+    };
+  }>;
+}
 
 interface CollectionProps {
   productId: string;
@@ -133,9 +146,8 @@ export const Collection: React.FC<CollectionProps> = ({
       setPreview(previewWidth);
     }
   }, [previewWidth]);
-  // const [products, setProducts] = useState<ProductData[]>([]);
 
-  const [collections, setCollections] = useState<any[]>([]);
+  const [collections, setCollections] = useState<CollectionData[]>([]);
   const [selectedCollection, setSelectedCollection] = useState("all");
   const [filteredProducts, setFilteredProducts] = useState<ProductData[]>([]);
 
@@ -143,30 +155,30 @@ export const Collection: React.FC<CollectionProps> = ({
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("/api/collections");
-        const data = await response.json();
+        // const response = await fetch("/api/collections");
+        // const data = await response.json();
 
-        const collectionData = data.collections || [];
-        setCollections(collectionData);
-        // Set initial filtered products from 'all' collection
-        const allCollection = data.collections.find(
-          (c: any) => c.name === "all"
-        );
-        if (allCollection) {
-          const formattedProducts = allCollection.products.map(
-            (product: any) => ({
-              id: product._id,
-              name: product.name,
-              price: product.price,
-              imageSrc: product.images?.imageSrc || "/assets/images/pro2.jpg",
-              imageAlt: product.images?.imageAlt || product.name,
-              btnText: "خرید محصول",
-            })
-          );
-          setFilteredProducts(formattedProducts);
-        }
+        // const collectionData = data.collections || [];
+        // setCollections(collectionData);
+        // // Set initial filtered products from 'all' collection
+        // const allCollection = data.collections.find(
+        //   (c: any) => c.name === "all"
+        // );
+        // if (allCollection) {
+        //   const formattedProducts = allCollection.products.map(
+        //     (product: any) => ({
+        //       id: product._id,
+        //       name: product.name,
+        //       price: product.price,
+        //       imageSrc: product.images?.imageSrc || "/assets/images/pro2.jpg",
+        //       imageAlt: product.images?.imageAlt || product.name,
+        //       btnText: "خرید محصول",
+        //     })
+        //   );
+        //   setFilteredProducts(formattedProducts);
+        // }
       } catch (error) {
-        console.log("Error fetching products:", error);
+         ("Error fetching products:", error);
       }
     };
 
@@ -181,7 +193,7 @@ export const Collection: React.FC<CollectionProps> = ({
     );
     if (selectedCollectionData) {
       const formattedProducts = selectedCollectionData.products.map(
-        (product: any) => ({
+        (product: CollectionData['products'][0]) => ({
           id: product._id,
           name: product.name,
           price: product.price,
@@ -201,7 +213,6 @@ export const Collection: React.FC<CollectionProps> = ({
     return null; // or return a loading state/placeholder
   }
 
-  // console.log(sectionData);
 
   return (
     <>

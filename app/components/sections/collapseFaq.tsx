@@ -141,9 +141,7 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
     setting: {},
     type: "collapse",
   };
-  if (!sectionData) {
-    return null;
-  }
+
   useEffect(() => {
     if (sectionData?.blocks) {
       const blocksArray = Object.keys(sectionData.blocks)
@@ -153,8 +151,12 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
     }
   }, [sectionData]);
 
-  // console.log(actualName , "actualName");
-  // console.log(sectionData , "sectionData");
+  if (!sectionData) {
+    return null;
+  }
+ 
+
+
 
   // Ensure blocks is an array
 
