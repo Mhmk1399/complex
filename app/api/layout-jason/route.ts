@@ -3,7 +3,6 @@ import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import fs from 'fs';
 import path from 'path';
-import { log } from "console";
 
 export async function GET(request: Request) {
   await connect();
@@ -17,9 +16,6 @@ export async function GET(request: Request) {
     const token = request.headers.get('Authorization')?.split(' ')[1];
     const routeName=request.headers.get('selectedRoute') 
     const activeMode=request.headers.get('activeMode')||'lg'
-
-
-   
 
     
     if (!token) {
@@ -226,8 +222,17 @@ export async function POST(request: Request) {
       const sectionHeader = newLayout.sections.sectionHeader;
       const children = newLayout.sections.children;
       const sectionFooter = newLayout.sections.sectionFooter;
+      const containerRoute = path.join(templateDir,'home'+activeMode+'.json');
+      const home = await new Promise<Buffer>((resolve, reject) => {
+        fs.readFile(containerRoute, (err, data) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(data);
+          }
+      })
+      })
 
-      
       const childrenDir = path.join(templateDir, routeName+activeMode+'.json');
       if (!fs.existsSync(childrenDir)) {
         fs.mkdirSync(childrenDir, { recursive: true });
@@ -260,4 +265,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-}
+}''
