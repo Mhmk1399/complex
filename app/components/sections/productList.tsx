@@ -59,7 +59,11 @@ const ProductList: React.FC<ProductListProps> = ({
       try {
         const response = await fetch("/api/products", {
           method: "GET",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "token": localStorage.getItem("token") || "",
+          },
+          
         });
 
         const data = await response.json();

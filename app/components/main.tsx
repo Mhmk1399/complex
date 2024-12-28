@@ -21,6 +21,8 @@ import Blog from "@/public/template/blog.json";
 import BlogDetail from "@/public/template/blogDetail.json";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { ToastContainer, toast, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // Example client-side code to send the token to the server
 
 export const Main = () => {
@@ -33,22 +35,119 @@ export const Main = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedComponent, setSelectedComponent] =
     useState<string>("");
+  const [deleteModal, setDeleteModal] = useState(false);
   const [saveStatus, setSaveStatus] = useState<
     "idle" | "saving" | "saved" | "error"
   >("idle");
   const [orders, setOrders] = useState<string[]>([]);
   const [selectedRoute, setSelectedRoute] = useState<string>("home");
   const [activeRoutes, setActiveRoutes] = useState([
-  { value: 'home', name: '' },
-  { value: 'about', name: 'درباره' },
-  { value: 'contact', name: 'ارتباط' },
-  { value: 'store', name: 'فروشگاه' },
-  { value: 'DetailPage', name: 'جزئیات' },
-  { value: 'BlogList', name: 'وبلاگ' },
-  { value: 'BlogDetail', name: 'وبلاگ' }]);
-  const handleAddRoute = (newRoute: { value: string, name: string }) => {
-    setActiveRoutes(prevRoutes => [...prevRoutes, newRoute]);
-  };
+    "home","about","contact"
+]);
+const handleAddRoute = async ({name}: { name: string }) => {
+  if (routes.includes(name)) {
+    toast.error('Route already exists!', { autoClose: 3000 });
+    return;
+  }
+    
+  const token = localStorage.getItem('token');
+  if (!token) {
+    console.error('Token not found');
+    return;
+  }
+
+  try {
+    const response = await fetch('/api/route-handler', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `${token}`,
+        'new-route':name
+      },
+      body: JSON.stringify({ name })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to add route');
+    }
+
+    const result = await response.json();
+    console.log('Route added successfully:', result);
+    fetchRoutes(); // Fetch updated routes
+    toast.success('Route added successfully!', { autoClose: 3000 });
+  } catch (error) {
+    console.error('Error adding route:', error);
+    toast.error('Failed to add route!', { autoClose: 3000 });
+  }
+  console.log('useEffect token:', token);
+  
+  if (!token) {
+    console.log('Token not found in local storage');
+    return;
+  }
+
+  fetch('/api/route-handler', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  })
+    .then(response => {
+      if (!response.ok) {
+        console.log('Server responded with an error:', response.statusText);
+        return null;
+      }
+
+      return response.json();
+    })
+    .then(data => {
+      if (data) {
+        setActiveRoutes(data);
+        console.log('Route data:', data);
+        
+      }
+    })
+    .catch(error => {
+      console.log('Error sending token to server:', error);
+    });
+    fetchRoutes();
+};
+useEffect(() => {
+  const token = localStorage.getItem('token');
+  console.log('useEffect token:', token);
+  
+  if (!token) {
+    console.log('Token not found in local storage');
+    return;
+  }
+
+  fetch('/api/route-handler', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  })
+    .then(response => {
+      if (!response.ok) {
+        console.log('Server responded with an error:', response.statusText);
+        return null;
+      }
+
+      return response.json();
+    })
+    .then(data => {
+      if (data) {
+        setActiveRoutes(data);
+        console.log('Route data:', data);
+        
+      }
+    })
+    .catch(error => {
+      console.log('Error sending token to server:', error);
+    });
+}, []);
 
 // Replace the direct import with API call
 const sendTokenToServer = async () => {
@@ -83,9 +182,7 @@ const sendTokenToServer = async () => {
     if (data) {
       setLayout(data); 
       setData(data);
-      setLoading(false)
-      console.log('Layout data fetched:', data);
-      
+      setLoading(false)      
     }
     
 
@@ -105,70 +202,7 @@ useEffect(() => {
 }, [activeMode, selectedRoute]);
 
 
-  useEffect(() => {
-    const currentLayoutData = activeMode === "sm" ? smData : Data;
-    
-    if (selectedRoute === "about") {
-      setLayout((prevLayout: Layout) => ({
-        ...prevLayout,
-        sections: {
-          ...prevLayout.sections,
-          children: About.children as AboutChildren,
-        },
-      }));
-    } else if (selectedRoute === "contact") {
-      setLayout((prevLayout: Layout) => ({
-        ...prevLayout,
-        sections: {
-          ...prevLayout.sections,
-          children: Contact.children as AboutChildren,
-        },
-      }));
-    } else if (selectedRoute === "DetailPage") {
-      setLayout((prevLayout: Layout) => ({
-        ...prevLayout,
-        sections: {
-          ...prevLayout.sections,
-          children: DetailPage.children  as DetailPageChildren,
-        },
-      }));
-    } else if (selectedRoute === "store") {
-      setLayout((prevLayout: Layout) => ({
-        ...prevLayout,
-        sections: {
-          ...prevLayout.sections,
-          children: Store.children  as StoreChildren,
-        },
-      }));
-    } else if (selectedRoute === "BlogList") {
-      setLayout((prevLayout: Layout) => ({
-        ...prevLayout,
-        sections: {
-          ...prevLayout.sections,
-          children: Blog.children as  BlogChildren,
-        },
-      }));
-    } else if (selectedRoute === "BlogDetail") {
-      setLayout((prevLayout: Layout) => ({
-        ...prevLayout,
-        sections: {
-          ...prevLayout.sections,
-          children: BlogDetail.children as BlogDetailChildren,
-        },
-      }));
-    } else {
-      setLayout((prevLayout: Layout) => ({
-        ...prevLayout,
-        sections: {
-          ...prevLayout.sections,
-          children: currentLayoutData.sections.children as Layout['sections']['children'],
-        },
-      }));
-    }
-  }, [selectedRoute, activeMode ]);
-
   const [newRouteName, setNewRouteName] = useState('');
-  const [newRouteValue, setNewRouteValue] = useState('');
   useEffect(() => {
     setLoading(false);
     const currentLayoutData = activeMode === "sm" ? smData : Data;
@@ -223,10 +257,78 @@ useEffect(() => {
       setTimeout(() => setSaveStatus("idle"), 2000);
     }
   };
+
   const handleModeChange = (mode: "lg" | "sm") => {
     setActiveMode(mode);
     const newLayout = mode === "sm" ? smLayout : Data;
     setLayout(newLayout);
+  };
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [routes, setRoutes] = useState<string[]>([]);
+  const fetchRoutes = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Token not found');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/route-handler', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch routes');
+      }
+
+      const result = await response.json();
+      setRoutes(result);
+      setActiveRoutes(result);
+    } catch (error) {
+      console.error('Error fetching routes:', error);
+    }
+  };
+  useEffect(() => {
+    fetchRoutes();
+  }, []);
+
+  const handleDeleteRoute = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Token not found');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/route-handler', {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `${token}`,
+          'route': selectedRoute
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete route');
+      }
+
+      const result = await response.json();
+      console.log('Route deleted successfully:', result);
+      fetchRoutes(); // Fetch updated routes
+      setSelectedRoute('home');
+      toast.success('Route deleted successfully!', { autoClose: 3000 });
+    } catch (error) {
+      console.log('Error deleting route:', error);
+      toast.error('Failed to delete route!', { autoClose: 3000 });
+    }
+    fetchRoutes();
+    setSelectedRoute('home');
+    sendTokenToServer();
+
+
   };
   return (
     <div>
@@ -347,7 +449,14 @@ useEffect(() => {
                   افزودن مسیر
                 </motion.button>
 
-
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setIsDeleteModalOpen(true)}
+                  className="px-3 py-2 bg-red-500 text-white rounded-xl shadow-md hover:bg-red-600"
+                >
+                  حذف مسیر
+                </motion.button>
 
                 <motion.select
                   whileHover={{ scale: 1.02 }}
@@ -359,9 +468,9 @@ useEffect(() => {
              shadow-sm focus:border-gray-200 focus:ring-2 focus:ring-gray-200 
              transition-all duration-300"
                 >
-                  {activeRoutes.map((route) => (
-                    <option key={route.value} value={route.value}>
-                      {route.name || route.value}
+                  {activeRoutes.map((route , index) => (
+                    <option key={  index} value={route}>
+                      {route}
                     </option>
                   ))}
                 </motion.select>
@@ -400,24 +509,17 @@ useEffect(() => {
                 type="text"
                 placeholder="نام مسیر"
                 value={newRouteName}
-                onChange={(e) => setNewRouteName(e.target.value)}
+                onChange={(e) => {setNewRouteName(e.target.value)
+                console.log(newRouteName)
+                }}
                 className="w-full p-2 border rounded-lg"
                 dir="rtl"
               />
-              <input
-                type="text"
-                placeholder="آدرس مسیر"
-                value={newRouteValue}
-                onChange={(e) => setNewRouteValue(e.target.value)}
-                className="w-full p-2 border rounded-lg"
-                dir="rtl"
-              />
+             
               <div className="flex justify-end space-x-2 space-x-reverse">
                 <button
                   onClick={() => {
-                    handleAddRoute({ value: newRouteValue, name: newRouteName });
-                    setNewRouteName('');
-                    setNewRouteValue('');
+                    handleAddRoute({ name: newRouteName });
                     setIsModalOpen(false);
                   }}
                   className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
@@ -435,6 +537,53 @@ useEffect(() => {
           </motion.div>
         </div>
       )}
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white p-6 rounded-xl shadow-lg w-96"
+          >
+            <h3 className="text-lg font-bold mb-4 text-right">حذف مسیر</h3>
+            <div className="space-y-4">
+              <select
+                value={selectedRoute}
+                onChange={(e) => setSelectedRoute(e.target.value)}
+                className="w-full p-2 border rounded-lg"
+                dir="rtl"
+              >
+                <option value="">انتخاب مسیر</option>
+                {routes
+                .filter(route => !['home', 'about', 'contact'].includes(route))
+                .map((route) => (
+                  <option key={route} value={route}>
+                    {route}
+                  </option>
+                ))}
+              </select>
+              <div className="flex justify-end space-x-2 space-x-reverse">
+                <button
+                  onClick={() => {
+                    handleDeleteRoute();
+                    setSelectedRoute('');
+                    setIsDeleteModalOpen(false);
+                  }}
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                >
+                  حذف
+                </button>
+                <button
+                  onClick={() => setIsDeleteModalOpen(false)}
+                  className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+                >
+                  انصراف
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    <ToastContainer position="top-left" transition={Slide} />
     </div>
   );
 };

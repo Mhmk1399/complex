@@ -26,6 +26,7 @@ interface BlogData {
   date: string;
   btnText: string;
   btnLink: string;
+  storeId: string;
 }
 
 const SectionBlogList = styled.section<{
@@ -135,18 +136,20 @@ const BlogList: React.FC<BlogListProps> = ({
         });
 
         const data = await response.json();
-
-        const blogInfo = data.blogs.map((blog: BlogData) => ({
-          ...blog,
-          // btnText: "مطالعه بیشتر",
-          btnLink: `/blog/${blog.blogId}`,
-          imageSrc: "/assets/images/pro3.jpg", // Add a default image
-          imageAlt: blog.title,
-          description: blog.description,
-        }));
-        setBlogData(blogInfo);
+        console.log("data", data);
+        
+        // const blogInfo = data.blogs.map((blog: BlogData) => ({
+        //   ...blog,
+        //   // btnText: "مطالعه بیشتر",
+        //   btnLink: `/blog/${blog.blogId}`,
+        //   imageSrc: "/assets/images/pro3.jpg", // Add a default image
+        //   imageAlt: blog.title,
+        //   description: blog.description,
+        //   storeId: blog.storeId,
+        // }));
+        // setBlogData(blogInfo);
       } catch (error) {
-        console.error("Error fetching blogs:", error);
+        console.log("Error fetching blogs:", error);
       }
     };
 

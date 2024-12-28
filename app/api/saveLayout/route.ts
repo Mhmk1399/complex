@@ -35,7 +35,6 @@ export async function POST(req: NextRequest) {
       mode === "sm" ? "nullSm.json" : "null.json"
     );
     
-    console.log('Writing to path:', jsonPath);
 
     const layoutJson = JSON.stringify(layout, null, 2);
     

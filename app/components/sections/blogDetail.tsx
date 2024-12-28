@@ -74,9 +74,11 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const response = await fetch(`/api/blogs/${blogId}`); // Fetching blog with ID 1
+        const response = await fetch(`/api/blogs`); // Fetching blog with ID 1
         const data = await response.json();
-        setBlog(data);
+        console.log("data", data);
+        
+        setBlog(data.blogs[0]);
       } catch (error) {
         console.error("Error fetching blog:", error);
       } finally {
