@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Preview } from "./preview";
 import { Form } from "./form";
 import smData from "../../public/template/nullSm.json";
@@ -21,20 +21,20 @@ import Blog from "@/public/template/blog.json";
 import BlogDetail from "@/public/template/blogDetail.json";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ToastContainer, toast, Slide } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import TourGuide from "./sections/guideTour";
 // Example client-side code to send the token to the server
 
 export const Main = () => {
-  const [Data , setData] = useState<Layout>(nullJson as unknown as Layout);
+  const [Data, setData] = useState<Layout>(nullJson as unknown as Layout);
   const [loading, setLoading] = useState(true);
   const [layout, setLayout] = useState<Layout>(Data);
   const [smLayout] = useState<Layout>(smData as unknown as Layout);
   const [activeMode, setActiveMode] = useState<"sm" | "lg">("lg");
   const [previewWidth, setPreviewWidth] = useState<"sm" | "default">("default");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedComponent, setSelectedComponent] =
-    useState<string>("");
+  const [selectedComponent, setSelectedComponent] = useState<string>("");
   const [deleteModal, setDeleteModal] = useState(false);
   const [saveStatus, setSaveStatus] = useState<
     "idle" | "saving" | "saved" | "error"
@@ -42,167 +42,164 @@ export const Main = () => {
   const [orders, setOrders] = useState<string[]>([]);
   const [selectedRoute, setSelectedRoute] = useState<string>("home");
   const [activeRoutes, setActiveRoutes] = useState([
-    "home","about","contact"
-]);
-const handleAddRoute = async ({name}: { name: string }) => {
-  if (routes.includes(name)) {
-    toast.error('Route already exists!', { autoClose: 3000 });
-    return;
-  }
-    
-  const token = localStorage.getItem('token');
-  if (!token) {
-    console.error('Token not found');
-    return;
-  }
-
-  try {
-    const response = await fetch('/api/route-handler', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `${token}`,
-        'new-route':name
-      },
-      body: JSON.stringify({ name })
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to add route');
-    }
-
-    const result = await response.json();
-    console.log('Route added successfully:', result);
-    fetchRoutes(); // Fetch updated routes
-    toast.success('Route added successfully!', { autoClose: 3000 });
-  } catch (error) {
-    console.error('Error adding route:', error);
-    toast.error('Failed to add route!', { autoClose: 3000 });
-  }
-  console.log('useEffect token:', token);
-  
-  if (!token) {
-    console.log('Token not found in local storage');
-    return;
-  }
-
-  fetch('/api/route-handler', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  })
-    .then(response => {
-      if (!response.ok) {
-        console.log('Server responded with an error:', response.statusText);
-        return null;
-      }
-
-      return response.json();
-    })
-    .then(data => {
-      if (data) {
-        setActiveRoutes(data);
-        console.log('Route data:', data);
-        
-      }
-    })
-    .catch(error => {
-      console.log('Error sending token to server:', error);
-    });
-    fetchRoutes();
-};
-useEffect(() => {
-  const token = localStorage.getItem('token');
-  console.log('useEffect token:', token);
-  
-  if (!token) {
-    console.log('Token not found in local storage');
-    return;
-  }
-
-  fetch('/api/route-handler', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  })
-    .then(response => {
-      if (!response.ok) {
-        console.log('Server responded with an error:', response.statusText);
-        return null;
-      }
-
-      return response.json();
-    })
-    .then(data => {
-      if (data) {
-        setActiveRoutes(data);
-        console.log('Route data:', data);
-        
-      }
-    })
-    .catch(error => {
-      console.log('Error sending token to server:', error);
-    });
-}, []);
-
-// Replace the direct import with API call
-const sendTokenToServer = async () => {
-  const token = localStorage.getItem('token');
-
-  if (!token) {
-    console.error('Token not found in local storage');
-    return;
-  }
-
-  try {
-    const response = await fetch('/api/layout-jason', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        'selectedRoute': selectedRoute,
-        'activeMode': activeMode
-      }
-    });
-
-    if (!response.ok) {
-      console.log('Server responded with an error:', response.statusText);
+    "home",
+    "about",
+    "contact",
+  ]);
+  const handleAddRoute = async ({ name }: { name: string }) => {
+    if (routes.includes(name)) {
+      toast.error("Route already exists!", { autoClose: 3000 });
       return;
     }
 
-    const data = await response.json().catch(() => {
-      console.log('Failed to parse response as JSON');
-      return null;
-    });
-
-    if (data) {
-      setLayout(data); 
-      setData(data);
-      setLoading(false)      
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("Token not found");
+      return;
     }
-    
 
-  } catch (error) {
-    console.log('Error sending token to server:', error);
-  }
-};
+    try {
+      const response = await fetch("/api/route-handler", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+          "new-route": name,
+        },
+        body: JSON.stringify({ name }),
+      });
 
-useEffect(() => {
-  setLoading(true)
-  sendTokenToServer();
-}, []);
+      if (!response.ok) {
+        throw new Error("Failed to add route");
+      }
 
-useEffect(() => {
-  setLoading(true)
-  sendTokenToServer();
-}, [activeMode, selectedRoute]);
+      const result = await response.json();
+      console.log("Route added successfully:", result);
+      fetchRoutes(); // Fetch updated routes
+      toast.success("Route added successfully!", { autoClose: 3000 });
+    } catch (error) {
+      console.error("Error adding route:", error);
+      toast.error("Failed to add route!", { autoClose: 3000 });
+    }
+    console.log("useEffect token:", token);
 
+    if (!token) {
+      console.log("Token not found in local storage");
+      return;
+    }
 
-  const [newRouteName, setNewRouteName] = useState('');
+    fetch("/api/route-handler", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          console.log("Server responded with an error:", response.statusText);
+          return null;
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        if (data) {
+          setActiveRoutes(data);
+          console.log("Route data:", data);
+        }
+      })
+      .catch((error) => {
+        console.log("Error sending token to server:", error);
+      });
+    fetchRoutes();
+  };
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    console.log("useEffect token:", token);
+
+    if (!token) {
+      console.log("Token not found in local storage");
+      return;
+    }
+
+    fetch("/api/route-handler", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          console.log("Server responded with an error:", response.statusText);
+          return null;
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        if (data) {
+          setActiveRoutes(data);
+          console.log("Route data:", data);
+        }
+      })
+      .catch((error) => {
+        console.log("Error sending token to server:", error);
+      });
+  }, []);
+
+  // Replace the direct import with API call
+  const sendTokenToServer = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.error("Token not found in local storage");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/layout-jason", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          selectedRoute: selectedRoute,
+          activeMode: activeMode,
+        },
+      });
+
+      if (!response.ok) {
+        console.log("Server responded with an error:", response.statusText);
+        return;
+      }
+
+      const data = await response.json().catch(() => {
+        console.log("Failed to parse response as JSON");
+        return null;
+      });
+
+      if (data) {
+        setLayout(data);
+        setData(data);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log("Error sending token to server:", error);
+    }
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    sendTokenToServer();
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    sendTokenToServer();
+  }, [activeMode, selectedRoute]);
+
+  const [newRouteName, setNewRouteName] = useState("");
   useEffect(() => {
     setLoading(false);
     const currentLayoutData = activeMode === "sm" ? smData : Data;
@@ -210,25 +207,28 @@ useEffect(() => {
     const routeConfigs = {
       about: About.children as AboutChildren,
       contact: Contact.children as AboutChildren,
-      DetailPage: DetailPage.children as  DetailPageChildren,
+      DetailPage: DetailPage.children as DetailPageChildren,
       store: Store.children as StoreChildren,
-      BlogList: Blog.children  as BlogChildren,
+      BlogList: Blog.children as BlogChildren,
       BlogDetail: BlogDetail.children as BlogDetailChildren,
       // Add default case for custom routes
-      default: currentLayoutData.sections.children}
+      default: currentLayoutData.sections.children,
+    };
 
-    const children = routeConfigs[selectedRoute as keyof typeof routeConfigs] || routeConfigs.default;
+    const children =
+      routeConfigs[selectedRoute as keyof typeof routeConfigs] ||
+      routeConfigs.default;
 
     if (children) {
       setLayout((prevLayout: Layout) => ({
         ...prevLayout,
         sections: {
           ...prevLayout.sections,
-          children: children as Layout['sections']['children'],
+          children: children as Layout["sections"]["children"],
         },
       }));
     }
-  }, [selectedRoute, activeMode])
+  }, [selectedRoute, activeMode]);
   const handleSave = async () => {
     setSaveStatus("saving");
     try {
@@ -236,19 +236,19 @@ useEffect(() => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          'Authorization': `Bearer ${localStorage.getItem("token")}`,
-          'selectedRoute': selectedRoute,
-          'activeMode': activeMode
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          selectedRoute: selectedRoute,
+          activeMode: activeMode,
         },
         body: JSON.stringify(layout),
       });
-  
+
       const result = await response.json(); // Get response data
       console.log("Save response:", result); // Debug log
       if (!response.ok) {
         throw new Error("Failed to save layout");
       }
-  
+
       setSaveStatus("saved");
       setTimeout(() => setSaveStatus("idle"), 2000);
     } catch (error) {
@@ -266,29 +266,29 @@ useEffect(() => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [routes, setRoutes] = useState<string[]>([]);
   const fetchRoutes = async () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      console.error('Token not found');
+      console.error("Token not found");
       return;
     }
 
     try {
-      const response = await fetch('/api/route-handler', {
-        method: 'GET',
+      const response = await fetch("/api/route-handler", {
+        method: "GET",
         headers: {
-          'Authorization': `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch routes');
+        throw new Error("Failed to fetch routes");
       }
 
       const result = await response.json();
       setRoutes(result);
       setActiveRoutes(result);
     } catch (error) {
-      console.error('Error fetching routes:', error);
+      console.error("Error fetching routes:", error);
     }
   };
   useEffect(() => {
@@ -296,40 +296,43 @@ useEffect(() => {
   }, []);
 
   const handleDeleteRoute = async () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      console.error('Token not found');
+      console.error("Token not found");
       return;
     }
 
     try {
-      const response = await fetch('/api/route-handler', {
-        method: 'DELETE',
+      const response = await fetch("/api/route-handler", {
+        method: "DELETE",
         headers: {
-          'Authorization': `${token}`,
-          'route': selectedRoute
-        }
+          Authorization: `${token}`,
+          route: selectedRoute,
+        },
       });
 
       if (!response.ok) {
-        throw new Error('Failed to delete route');
+        throw new Error("Failed to delete route");
       }
 
       const result = await response.json();
-      console.log('Route deleted successfully:', result);
+      console.log("Route deleted successfully:", result);
       fetchRoutes(); // Fetch updated routes
-      setSelectedRoute('home');
-      toast.success('Route deleted successfully!', { autoClose: 3000 });
+      setSelectedRoute("home");
+      toast.success("Route deleted successfully!", { autoClose: 3000 });
     } catch (error) {
-      console.log('Error deleting route:', error);
-      toast.error('Failed to delete route!', { autoClose: 3000 });
+      console.log("Error deleting route:", error);
+      toast.error("Failed to delete route!", { autoClose: 3000 });
     }
     fetchRoutes();
-    setSelectedRoute('home');
+    setSelectedRoute("home");
     sendTokenToServer();
-
-
   };
+
+  const saveButtonRef = useRef<HTMLButtonElement>(null);
+  const addRouteButtonRef = useRef<HTMLButtonElement>(null);
+  const deleteRouteButtonRef = useRef<HTMLButtonElement>(null);
+  const previewToggleRef = useRef<HTMLDivElement>(null);
   return (
     <div>
       {loading ? (
@@ -358,7 +361,8 @@ useEffect(() => {
               e.currentTarget.style.setProperty("--y", `${y}%`);
             }}
             className="sticky top-0 z-50  backdrop-blur-2xl bg-gradient-to-br from-[#0052D4] to-[#6FB1FC]
-             shadow-md cursor-pointer">
+             shadow-md cursor-pointer"
+          >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
               <div className="flex flex-col sm:flex-row items-center justify-center py-4 gap-x-5 space-y-4 sm:space-y-0">
                 <motion.button
@@ -374,25 +378,27 @@ useEffect(() => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handleSave}
+                  ref={saveButtonRef}
                   disabled={saveStatus === "saving"}
                   className={`w-fitlg:-ml-12 px-3 py-2.5 rounded-full font-medium transition-all duration-300 transform
-                  ${saveStatus === "saving"
+                  ${
+                    saveStatus === "saving"
                       ? "bg-blue-900"
                       : saveStatus === "saved"
-                        ? "bg-green-500"
-                        : saveStatus === "error"
-                          ? "bg-red-500"
-                          : "bg-gradient-to-r from-blue-200 to-blue-600 hover:from-blue-600 hover:to-blue-200"
-                    }
+                      ? "bg-green-500"
+                      : saveStatus === "error"
+                      ? "bg-red-500"
+                      : "bg-gradient-to-r from-blue-200 to-blue-600 hover:from-blue-600 hover:to-blue-200"
+                  }
                   text-white shadow-md hover:shadow-lg`}
                 >
                   {saveStatus === "saving"
                     ? "...در حال ذخیره"
                     : saveStatus === "saved"
-                      ? " ! ذخیره شد "
-                      : saveStatus === "error"
-                        ? "ارور"
-                        : "ذخیره تنظیمات"}
+                    ? " ! ذخیره شد "
+                    : saveStatus === "error"
+                    ? "ارور"
+                    : "ذخیره تنظیمات"}
                 </motion.button>
 
                 {/* View Mode Toggles */}
@@ -404,11 +410,13 @@ useEffect(() => {
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={() => handleModeChange("sm")}
+                    
                     className={`p-2 rounded-lg hidden lg:block transition-all duration-300 shadow-md hover:shadow-gray-500
-                    ${previewWidth === "sm"
+                    ${
+                      previewWidth === "sm"
                         ? "bg-yellow-500 shadow-lg"
                         : "bg-gray-200 hover:bg-gray-300"
-                      }`}
+                    }`}
                   >
                     <Image
                       onClick={() => setPreviewWidth("sm")}
@@ -425,10 +433,11 @@ useEffect(() => {
                     whileTap={{ scale: 0.9 }}
                     onClick={() => handleModeChange("lg")}
                     className={`p-2 rounded-lg hidden lg:block transition-all duration-300 shadow-md hover:shadow-gray-500
-                    ${previewWidth === "default"
+                    ${
+                      previewWidth === "default"
                         ? "bg-yellow-500 shadow-lg"
                         : "bg-gray-200 hover:bg-gray-300"
-                      }`}
+                    }`}
                   >
                     <Image
                       src="/assets/images/computer.png"
@@ -444,6 +453,7 @@ useEffect(() => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setIsModalOpen(true)}
+                  ref={addRouteButtonRef}
                   className="px-3 py-2 bg-blue-500 text-white rounded-xl shadow-md hover:bg-blue-600"
                 >
                   افزودن مسیر
@@ -452,6 +462,7 @@ useEffect(() => {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  ref={deleteRouteButtonRef}
                   onClick={() => setIsDeleteModalOpen(true)}
                   className="px-3 py-2 bg-red-500 text-white rounded-xl shadow-md hover:bg-red-600"
                 >
@@ -468,13 +479,12 @@ useEffect(() => {
              shadow-sm focus:border-gray-200 focus:ring-2 focus:ring-gray-200 
              transition-all duration-300"
                 >
-                  {activeRoutes.map((route , index) => (
-                    <option key={  index} value={route}>
+                  {activeRoutes.map((route, index) => (
+                    <option key={index} value={route}>
                       {route}
                     </option>
                   ))}
                 </motion.select>
-
               </div>
             </div>
           </motion.div>
@@ -503,19 +513,22 @@ useEffect(() => {
             animate={{ scale: 1, opacity: 1 }}
             className="bg-white p-6 rounded-xl shadow-lg w-96"
           >
-            <h3 className="text-lg font-bold mb-4 text-right">افزودن مسیر جدید</h3>
+            <h3 className="text-lg font-bold mb-4 text-right">
+              افزودن مسیر جدید
+            </h3>
             <div className="space-y-4">
               <input
                 type="text"
                 placeholder="نام مسیر"
                 value={newRouteName}
-                onChange={(e) => {setNewRouteName(e.target.value)
-                console.log(newRouteName)
+                onChange={(e) => {
+                  setNewRouteName(e.target.value);
+                  console.log(newRouteName);
                 }}
                 className="w-full p-2 border rounded-lg"
                 dir="rtl"
               />
-             
+
               <div className="flex justify-end space-x-2 space-x-reverse">
                 <button
                   onClick={() => {
@@ -554,18 +567,20 @@ useEffect(() => {
               >
                 <option value="">انتخاب مسیر</option>
                 {routes
-                .filter(route => !['home', 'about', 'contact'].includes(route))
-                .map((route) => (
-                  <option key={route} value={route}>
-                    {route}
-                  </option>
-                ))}
+                  .filter(
+                    (route) => !["home", "about", "contact"].includes(route)
+                  )
+                  .map((route) => (
+                    <option key={route} value={route}>
+                      {route}
+                    </option>
+                  ))}
               </select>
               <div className="flex justify-end space-x-2 space-x-reverse">
                 <button
                   onClick={() => {
                     handleDeleteRoute();
-                    setSelectedRoute('');
+                    setSelectedRoute("");
                     setIsDeleteModalOpen(false);
                   }}
                   className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
@@ -583,7 +598,13 @@ useEffect(() => {
           </motion.div>
         </div>
       )}
-    <ToastContainer position="top-left" transition={Slide} />
+      <ToastContainer position="top-left" transition={Slide} />
+      <TourGuide
+        saveButtonRef={saveButtonRef}
+        addRouteButtonRef={addRouteButtonRef}
+        deleteRouteButtonRef={deleteRouteButtonRef}
+        previewToggleRef={previewToggleRef}
+      />{" "}
     </div>
   );
 };
