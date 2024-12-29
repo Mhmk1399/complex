@@ -105,19 +105,8 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
   return (
     <SectionBlogDetail
       $data={sectionData}
-      className={`mx-2 rounded-lg transition-all duration-150 relative ${
-        selectedComponent === actualName ? "border-4 border-blue-500" : ""
-      }`}
-      dir="rtl"
-      onClick={() => setSelectedComponent(actualName)}
     >
-      {actualName === selectedComponent ? (
-        <div className="absolute w-fit -top-5 -left-1 z-10 flex ">
-          <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
-            {actualName}
-          </div>
-        </div>
-      ) : null}
+     
       <div className="cover-image flex mx-auto items-center">
         <Image
           src={blog.coverImage ? blog.coverImage : "/assets/images/pro3.jpg"}
