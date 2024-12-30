@@ -458,7 +458,7 @@ export const Form = ({
           onClick={() => setIsModalOpen(true)}
           className="m-2 px-4 py-2  bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors"
         >
-          {!isModalOpen ? "انتخاب سکشن" : "بازگشت به تنظیمات"}
+          {!isModalOpen ? "انتخاب سکشن" : " انتخاب سکشن"}
         </button>
       )}
     </div>
@@ -475,9 +475,208 @@ export const Form = ({
         </button>
         {isFormOpen && (
           <>
+            {isModalOpen && (
+              <motion.div
+                dir="rtl"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[9999] overflow-y-auto"
+              >
+                <motion.div
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  transition={{
+                    type: "spring",
+                    damping: 25,
+                    stiffness: 200,
+                  }}
+                  className="bg-white p-6 rounded-lg w-[100%] max-h-[60vh] max-w-5xl overflow-auto shadow-lg relative"
+                >
+                  <div className=" -mr-7 -mt-8 sticky -top-8 right-0">
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => setIsModalOpen(false)}
+                      className="text-gray-500 hover:text-gray-700 text-lg font-semibold m-4"
+                    >
+                      ✕
+                    </motion.button>
+                  </div>
+                  {/* Modal content will go here */}
+                  <motion.div
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="modal-content flex flex-col items-center justify-center gap-12"
+                  >
+                    <div
+                      onClick={() => addSection("RichText")}
+                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${richtextImage.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"متن غنی"}
+                      </span>
+                    </div>
+
+                    <div
+                      onClick={() => addSection("ImageText")}
+                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${ImageTextImage.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"عکس نوشته"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("Banner")}
+                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${bannerImage.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"بنر"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("CollapseFaq")}
+                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${CollapseFaqImage.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "top",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"سوالات متداول"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("ContactForm")}
+                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${contactImage.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "top",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"ارتباط با ما"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("NewsLetter")}
+                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${newsLetterImage.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "top",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {" خبرنامه"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("MultiColumn")}
+                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${multiColumnImage.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"ستون ها"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("SlideShow")}
+                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${slideShowImage.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "top",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {" اسلاید شو"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("MultiRow")}
+                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${multiRowImage.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "top",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"  ردیف ها"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("Video")}
+                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${video.src})`,
+                        backgroundSize: "contain",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"   ویدیو"}
+                      </span>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              </motion.div>
+            )}
             {/* Desktop Sidebar */}
             <div
-              className="hidden lg:block fixed right-0 top-0 h-screen w-80 bg-gray-50 shadow-lg overflow-y-auto"
+              className="hidden lg:block fixed right-0 top-0 h-screen w-80 bg-gray-50/60 rounded-xl backdrop-blur-sm shadow-lg overflow-y-auto"
               style={{ zIndex: 1000 }}
             >
               {ordersButton}
@@ -488,7 +687,7 @@ export const Form = ({
                 </h2>
                 {showOrdersMenu ? (
                   <div
-                    className="bg-white p-4 my-5 rounded-lg shadow-md"
+                    className="bg-gray-100 p-4 my-5 rounded-lg shadow-md"
                     dir="rtl"
                   >
                     <h3 className="text-2xl text-black font-semibold mb-4">
@@ -498,205 +697,6 @@ export const Form = ({
                     {/* Add Modal Trigger Button */}
 
                     {/* Modal Component */}
-                    {isModalOpen && (
-                      <motion.div
-                        dir="rtl"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 overflow-y-auto"
-                      >
-                        <motion.div
-                          initial={{ y: "100%" }}
-                          animate={{ y: 0 }}
-                          transition={{
-                            type: "spring",
-                            damping: 25,
-                            stiffness: 200,
-                          }}
-                          className="bg-white p-6 rounded-lg w-[100%] max-h-[60vh] max-w-5xl overflow-auto shadow-lg relative"
-                        >
-                          <div className=" mb-4 sticky ">
-                            <motion.button
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                              onClick={() => setIsModalOpen(false)}
-                              className="text-gray-500 hover:text-gray-700 text-lg font-semibold m-4"
-                            >
-                              ✕
-                            </motion.button>
-                          </div>
-                          {/* Modal content will go here */}
-                          <motion.div
-                            initial={{ y: 20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 0.4 }}
-                            className="modal-content flex flex-col items-center justify-center gap-12"
-                          >
-                            <div
-                              onClick={() => addSection("RichText")}
-                              className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                              style={{
-                                ...imageContainerStyle,
-                                backgroundImage: `url(${richtextImage.src})`,
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
-                                backgroundRepeat: "no-repeat",
-                              }}
-                            >
-                              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                              <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                {"متن غنی"}
-                              </span>
-                            </div>
-
-                            <div
-                              onClick={() => addSection("ImageText")}
-                              className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                              style={{
-                                ...imageContainerStyle,
-                                backgroundImage: `url(${ImageTextImage.src})`,
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
-                                backgroundRepeat: "no-repeat",
-                              }}
-                            >
-                              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                              <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                {"عکس نوشته"}
-                              </span>
-                            </div>
-                            <div
-                              onClick={() => addSection("Banner")}
-                              className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                              style={{
-                                ...imageContainerStyle,
-                                backgroundImage: `url(${bannerImage.src})`,
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
-                                backgroundRepeat: "no-repeat",
-                              }}
-                            >
-                              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                              <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                {"بنر"}
-                              </span>
-                            </div>
-                            <div
-                              onClick={() => addSection("CollapseFaq")}
-                              className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                              style={{
-                                ...imageContainerStyle,
-                                backgroundImage: `url(${CollapseFaqImage.src})`,
-                                backgroundSize: "cover",
-                                backgroundPosition: "top",
-                                backgroundRepeat: "no-repeat",
-                              }}
-                            >
-                              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                              <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                {"سوالات متداول"}
-                              </span>
-                            </div>
-                            <div
-                              onClick={() => addSection("ContactForm")}
-                              className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                              style={{
-                                ...imageContainerStyle,
-                                backgroundImage: `url(${contactImage.src})`,
-                                backgroundSize: "cover",
-                                backgroundPosition: "top",
-                                backgroundRepeat: "no-repeat",
-                              }}
-                            >
-                              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                              <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                {"ارتباط با ما"}
-                              </span>
-                            </div>
-                            <div
-                              onClick={() => addSection("NewsLetter")}
-                              className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                              style={{
-                                ...imageContainerStyle,
-                                backgroundImage: `url(${newsLetterImage.src})`,
-                                backgroundSize: "cover",
-                                backgroundPosition: "top",
-                                backgroundRepeat: "no-repeat",
-                              }}
-                            >
-                              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                              <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                {" خبرنامه"}
-                              </span>
-                            </div>
-                            <div
-                              onClick={() => addSection("MultiColumn")}
-                              className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                              style={{
-                                ...imageContainerStyle,
-                                backgroundImage: `url(${multiColumnImage.src})`,
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
-                                backgroundRepeat: "no-repeat",
-                              }}
-                            >
-                              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                              <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                {"ستون ها"}
-                              </span>
-                            </div>
-                            <div
-                              onClick={() => addSection("SlideShow")}
-                              className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                              style={{
-                                ...imageContainerStyle,
-                                backgroundImage: `url(${slideShowImage.src})`,
-                                backgroundSize: "cover",
-                                backgroundPosition: "top",
-                                backgroundRepeat: "no-repeat",
-                              }}
-                            >
-                              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                              <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                {" اسلاید شو"}
-                              </span>
-                            </div>
-                            <div
-                              onClick={() => addSection("MultiRow")}
-                              className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                              style={{
-                                ...imageContainerStyle,
-                                backgroundImage: `url(${multiRowImage.src})`,
-                                backgroundSize: "cover",
-                                backgroundPosition: "top",
-                                backgroundRepeat: "no-repeat",
-                              }}
-                            >
-                              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                              <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                {"  ردیف ها"}
-                              </span>
-                            </div>
-                            <div
-                              onClick={() => addSection("Video")}
-                              className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                              style={{
-                                ...imageContainerStyle,
-                                backgroundImage: `url(${video.src})`,
-                                backgroundSize: "contain",
-                                backgroundPosition: "center",
-                                backgroundRepeat: "no-repeat",
-                              }}
-                            >
-                              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                              <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                {"   ویدیو"}
-                              </span>
-                            </div>
-                          </motion.div>
-                        </motion.div>
-                      </motion.div>
-                    )}
 
                     <DndContext
                       sensors={sensors}
@@ -776,8 +776,8 @@ export const Form = ({
               animate={{ y: isOpen ? 0 : "calc(100% - 40px)" }}
               dragConstraints={{ top: 0, bottom: 0 }}
               className="lg:hidden fixed bottom-0 left-0 right-0 bg-white z-50 bg-opacity-90 rounded-t-3xl shadow-2xl 
-              sm:w-[95%] sm:mx-auto sm:left-[2.5%] 
-              md:w-[85%] md:mx-auto md:left-[7.5%]"
+              sm:w-[95%]  
+              md:w-[100%] "
             >
               <div
                 className="h-10 w-full flex justify-center items-center cursor-pointer"
@@ -825,14 +825,14 @@ export const Form = ({
                           stiffness: 300,
                           duration: 0.6,
                         }}
-                        className="bg-white/60 relative backdrop-blur-sm h-[100vh] rounded-2xl mx-2 w-full overflow-y-hidden shadow-lg"
+                        className="bg-white/60 relative backdrop-blur-sm h-[100vh] rounded-2xl  w-full overflow-y-auto shadow-lg"
                       >
                         <div className="mb-4 absolute top-2 right-2 z-10">
                           <motion.button
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                             onClick={() => setIsModalOpen(false)}
-                            className="text-white hover:text-gray-700 text-2xl font-bold"
+                            className="text-white hover:text-gray-700 text-2xl p-1 font-bold"
                           >
                             ✕
                           </motion.button>
