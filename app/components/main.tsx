@@ -24,7 +24,6 @@ import Link from "next/link";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TourGuide from "./sections/guideTour";
-// Example client-side code to send the token to the server
 
 export const Main = () => {
   const [Data, setData] = useState<Layout>(nullJson as unknown as Layout);
@@ -35,7 +34,11 @@ export const Main = () => {
   const [previewWidth, setPreviewWidth] = useState<"sm" | "default">("default");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState<string>("");
-  const [deleteModal, setDeleteModal] = useState(false);
+  const [activeElement, setActiveElement] = useState<
+    "save" | "delete" | "preview" | "sitePreview" | "addRoute" | "changeRoute"
+  >("save");
+  // const [deleteModal, setDeleteModal] = useState(false);
+
   const [saveStatus, setSaveStatus] = useState<
     "idle" | "saving" | "saved" | "error"
   >("idle");
@@ -46,6 +49,7 @@ export const Main = () => {
     "about",
     "contact",
   ]);
+
   const handleAddRoute = async ({ name }: { name: string }) => {
     if (routes.includes(name)) {
       toast.error("Route already exists!", { autoClose: 3000 });
@@ -328,11 +332,29 @@ export const Main = () => {
     setSelectedRoute("home");
     sendTokenToServer();
   };
+  // Add this useEffect to control the guide flow
 
   const saveButtonRef = useRef<HTMLButtonElement>(null);
   const addRouteButtonRef = useRef<HTMLButtonElement>(null);
   const deleteRouteButtonRef = useRef<HTMLButtonElement>(null);
+  const changeRouteRef = useRef<HTMLSelectElement>(null);
   const previewToggleRef = useRef<HTMLDivElement>(null);
+  const sitePreviewRef = useRef<HTMLButtonElement>(null);
+  
+
+  const getHighlightClass = (
+    ref: React.RefObject<HTMLButtonElement | HTMLDivElement | HTMLSelectElement>,
+  ) => {
+    if(localStorage.getItem("hasSeenTour") === "true") {
+      return "";
+    }
+    if (ref.current && activeElement === ref.current.id) {
+      return "ring-4 ring-purple-600 ring-offset-2 animate-pulse scale-110 transition-all duration-300 z-50";
+    }
+
+    return "";
+  };
+
   return (
     <div>
       {loading ? (
@@ -363,24 +385,31 @@ export const Main = () => {
             className="sticky top-0 z-50  backdrop-blur-2xl bg-gradient-to-br from-[#0052D4] to-[#6FB1FC]
              shadow-md cursor-pointer"
           >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
-              <div className="flex flex-col sm:flex-row items-center justify-center py-4 gap-x-5 space-y-4 sm:space-y-0">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 ">
+              <div className="flex flex-col sm:flex-row  items-center justify-center py-4 gap-x-5 space-y-4 sm:space-y-0">
                 <motion.button
-                  className={`w-full sm:w-auto bg-pink-400 text-white lg:-ml-12 px-3 py-2.5 rounded-full font-medium 
+                  id="sitePreview"
+                  className={`w-full ${getHighlightClass(
+                    sitePreviewRef
+                  )} sm:w-auto bg-pink-400  text-white lg:-ml-12 px-3 py-2.5 rounded-full font-medium 
                     transition-all duration-300 transform`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  ref={sitePreviewRef}
                 >
                   <Link href="/">نمایش سایت</Link>
                 </motion.button>
                 {/* Save Button with Animation */}
                 <motion.button
+                  id="save"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handleSave}
                   ref={saveButtonRef}
                   disabled={saveStatus === "saving"}
-                  className={`w-fitlg:-ml-12 px-3 py-2.5 rounded-full font-medium transition-all duration-300 transform
+                  className={`w-fitlg:-ml-12 ${getHighlightClass(
+                    saveButtonRef
+                  )} px-3 py-2.5 rounded-full font-medium transition-all duration-300 transform
                   ${
                     saveStatus === "saving"
                       ? "bg-blue-900"
@@ -388,7 +417,7 @@ export const Main = () => {
                       ? "bg-green-500"
                       : saveStatus === "error"
                       ? "bg-red-500"
-                      : "bg-gradient-to-r from-blue-200 to-blue-600 hover:from-blue-600 hover:to-blue-200"
+                      : "bg-[#FFBF00] hover:bg-yellow-200"
                   }
                   text-white shadow-md hover:shadow-lg`}
                 >
@@ -402,7 +431,13 @@ export const Main = () => {
                 </motion.button>
 
                 {/* View Mode Toggles */}
-                <div className="flex items-center flex-row-reverse space-x-3">
+                <div
+                  id="preview"
+                  ref={previewToggleRef}
+                  className={`flex ${getHighlightClass(
+                    previewToggleRef
+                  )} items-center flex-row-reverse space-x-3`}
+                >
                   <span className="text-sm text-gray-50 ml-2 hidden lg:block font-semibold">
                     : تنظیمات پیش نمایش
                   </span>
@@ -410,12 +445,11 @@ export const Main = () => {
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={() => handleModeChange("sm")}
-                    
-                    className={`p-2 rounded-lg hidden lg:block transition-all duration-300 shadow-md hover:shadow-gray-500
+                    className={`p-2 rounded-lg hidden  lg:block transition-all duration-300 shadow-md hover:shadow-gray-500
                     ${
                       previewWidth === "sm"
-                        ? "bg-yellow-500 shadow-lg"
-                        : "bg-gray-200 hover:bg-gray-300"
+                        ? "bg-yellow-600 shadow-lg"
+                        : "bg-[#FFBF00] hover:bg-gray-300"
                     }`}
                   >
                     <Image
@@ -435,8 +469,8 @@ export const Main = () => {
                     className={`p-2 rounded-lg hidden lg:block transition-all duration-300 shadow-md hover:shadow-gray-500
                     ${
                       previewWidth === "default"
-                        ? "bg-yellow-500 shadow-lg"
-                        : "bg-gray-200 hover:bg-gray-300"
+                        ? "bg-yellow-600 shadow-lg"
+                        : "bg-[#FFBF00] hover:bg-gray-300"
                     }`}
                   >
                     <Image
@@ -450,21 +484,27 @@ export const Main = () => {
                   </motion.button>
                 </div>
                 <motion.button
+                  id="addRoute"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setIsModalOpen(true)}
                   ref={addRouteButtonRef}
-                  className="px-3 py-2 bg-blue-500 text-white rounded-xl shadow-md hover:bg-blue-600"
+                  className={`px-3 ${getHighlightClass(
+                    addRouteButtonRef
+                  )} py-2 bg-[#32936F] text-white rounded-xl shadow-md hover:bg-green-400`}
                 >
                   افزودن مسیر
                 </motion.button>
 
                 <motion.button
+                  id="delete"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   ref={deleteRouteButtonRef}
                   onClick={() => setIsDeleteModalOpen(true)}
-                  className="px-3 py-2 bg-red-500 text-white rounded-xl shadow-md hover:bg-red-600"
+                  className={`px-3 ${getHighlightClass(
+                    deleteRouteButtonRef
+                  )} py-2 bg-[#E83F6F] text-white rounded-xl shadow-md hover:bg-red-600`}
                 >
                   حذف مسیر
                 </motion.button>
@@ -472,12 +512,15 @@ export const Main = () => {
                 <motion.select
                   whileHover={{ scale: 1.02 }}
                   dir="rtl"
-                  id="page-settings"
+                  ref={changeRouteRef}
+                  id="changeRoute"
                   value={selectedRoute}
                   onChange={(e) => setSelectedRoute(e.target.value)}
-                  className="w-[100px]  px-2 py-1 bg-gray-200 rounded-xl border-2 border-gray-200 
+                  className={`w-[100px] ${getHighlightClass(
+                    changeRouteRef
+                  )} px-2 py-1 bg-gray-200 rounded-xl border-2 border-gray-200 
              shadow-sm focus:border-gray-200 focus:ring-2 focus:ring-gray-200 
-             transition-all duration-300"
+             transition-all duration-300`}
                 >
                   {activeRoutes.map((route, index) => (
                     <option key={index} value={route}>
@@ -604,7 +647,10 @@ export const Main = () => {
         addRouteButtonRef={addRouteButtonRef}
         deleteRouteButtonRef={deleteRouteButtonRef}
         previewToggleRef={previewToggleRef}
-      />{" "}
+        sitePreviewRef={sitePreviewRef}
+        changeRouteRef={changeRouteRef}
+        setActiveElement={setActiveElement}
+      />
     </div>
   );
 };

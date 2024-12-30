@@ -9,12 +9,14 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground: #ededed;
+    
   }
 }
 
 body {
   background: var(--background);
   font-family: var(--font-cairo), sans-serif;
+  
 }
 .loadingContainer {
   position: fixed;

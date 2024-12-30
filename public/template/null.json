@@ -44,7 +44,7 @@
           "imageHeight": "60",
           "imageRadius": "30",
           "itemColor": "#14213D",
-          "itemFontSize": "15",
+          "itemFontSize": "10",
           "itemFontWeight": "bold",
           "itemHoverColor": "#ffffff",
           "backgroundColorNavbar": "#FCA311"

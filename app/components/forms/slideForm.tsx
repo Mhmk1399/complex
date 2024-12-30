@@ -19,8 +19,6 @@ interface BoxValues {
   right: number;
 }
 
-
-
 interface Block {
   imageSrc?: string;
   text?: string;
@@ -83,7 +81,6 @@ export const SlideForm: React.FC<SlideFormProps> = ({
   const [isContentOpen, setIsContentOpen] = useState({});
   const [inputText, setInputText] = useState("");
   const [dropdownAnimation, setDropdownAnimation] = useState(false);
-
 
   const handleLiveInput = async (
     event: React.MouseEvent<HTMLButtonElement>
@@ -170,7 +167,6 @@ export const SlideForm: React.FC<SlideFormProps> = ({
       },
     }));
     setTimeout(() => setIsUpdating(false), 100);
-
   };
   const [margin, setMargin] = React.useState<BoxValues>({
     top: 0,
@@ -378,9 +374,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
               <div className="grid grid-cols-1 gap-6">
                 {/* Text Settings */}
                 <div className="space-y-4 bg-gray-100 rounded-lg p-4">
-                  <h4 className="font-bold text-sky-700 mb-3">
-                    تنظیمات سربرگ
-                  </h4>
+                  <h4 className="font-bold text-sky-700 mb-3">تنظیمات سربرگ</h4>
                   <div className="space-y-3">
                     <div>
                       <label className="text-sm text-gray-600 mb-1 block">
@@ -423,10 +417,6 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                         }
                         onChange={handleSettingChange}
                       />
-                      <div>
-                        {userInputData?.setting?.textColor?.toString() ??
-                          "#333333"}
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -484,17 +474,11 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                         }
                         onChange={handleSettingChange}
                       />
-                      <div>
-                        {userInputData?.setting?.descriptionColor?.toString() ??
-                          "#333333"}
-                      </div>
                     </div>
                   </div>
                 </div>
                 <div className="space-y-4 bg-gray-100 rounded-lg p-4">
-                  <h4 className="font-bold text-sky-700 mb-3">
-                    تنظیمات تصویر
-                  </h4>
+                  <h4 className="font-bold text-sky-700 mb-3">تنظیمات تصویر</h4>
                   <div className="space-y-3">
                     <div>
                       <label className="text-sm text-gray-600 mb-1 block">
@@ -570,10 +554,6 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                         }
                         onChange={handleSettingChange}
                       />
-                      <div>
-                        {userInputData?.setting?.btnTextColor?.toString() ??
-                          "#333333"}
-                      </div>
                     </div>
 
                     <div className="p-3  rounded-lg">
@@ -586,10 +566,24 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                         }
                         onChange={handleSettingChange}
                       />
-                      <div>
-                        {userInputData?.setting?.btnBackgroundColor?.toString() ??
-                          "#333333"}
-                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-4 bg-gray-100 rounded-lg p-4">
+                  <h4 className="font-bold text-sky-700 mb-3">
+                    تنظیمات پس زمینه
+                  </h4>
+                  <div className="space-y-3">
+                    <div className="p-3 rounded-lg">
+                      <ColorInput
+                        label="رنگ  پس زمینه"
+                        name="backgroundColorBox"
+                        value={
+                          userInputData?.setting?.backgroundColorBox?.toString() ??
+                          "#ffffff"
+                        }
+                        onChange={handleSettingChange}
+                      />
                     </div>
                   </div>
                 </div>
@@ -742,7 +736,6 @@ export const SlideForm: React.FC<SlideFormProps> = ({
             </div>
           )}
         </div>
-
       </div>
     </>
   );
