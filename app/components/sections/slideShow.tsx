@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { SlideSection, Layout } from "@/lib/types";
 import { Delete } from "../C-D";
 import Link from "next/link";
+import { Layout } from "@/models/layout";
 
 interface SlideShowProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -153,7 +154,9 @@ const SlideShow: React.FC<SlideShowProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
-
+  useEffect(() => {
+    setCurrentIndex(0)
+  }, [layout]);
   useEffect(() => {
     if (window.innerWidth <= 425) {
       setPreview("sm");
@@ -175,6 +178,7 @@ const SlideShow: React.FC<SlideShowProps> = ({
   if (!sectionData) return null;
 
   const { blocks } = sectionData;
+  
 
   const handleNext = () =>
     setCurrentIndex((prev) => (prev + 1) % blocks.length);

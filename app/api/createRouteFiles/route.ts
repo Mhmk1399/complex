@@ -67,7 +67,7 @@ export default function Page() {
       const routePath = pathname.split("/").pop() || "home";
 
       const response = await fetch(
-        process.env.NEXT_PUBLIC_API_URL+/api/sections?+$routePath,
+        process.env.NEXT_PUBLIC_API_URL+'/api/sections?'+$routePath,
         {
           cache: "no-store",
         }
