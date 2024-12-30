@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { SlideSection, Layout } from "@/lib/types";
 import { Delete } from "../C-D";
 import Link from "next/link";
-import { Layout } from "@/models/layout";
 
 interface SlideShowProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
