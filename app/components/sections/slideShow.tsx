@@ -153,9 +153,8 @@ const SlideShow: React.FC<SlideShowProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
-  useEffect(() => {
-    setCurrentIndex(0)
-  }, [layout]);
+
+
   useEffect(() => {
     if (window.innerWidth <= 425) {
       setPreview("sm");
@@ -183,6 +182,11 @@ const SlideShow: React.FC<SlideShowProps> = ({
     setCurrentIndex((prev) => (prev + 1) % blocks.length);
   const handlePrev = () =>
     setCurrentIndex((prev) => (prev - 1 + blocks.length) % blocks.length);
+  if (currentIndex >= blocks.length) {
+    setCurrentIndex(blocks.length - 1);
+    return null;
+  }
+  
 
   return (
     <SectionSlideShow
