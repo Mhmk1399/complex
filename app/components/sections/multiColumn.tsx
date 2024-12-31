@@ -71,12 +71,15 @@ const ColumnContainer = styled.div<{
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
-  display: flex;
+  // display: flex;
   gap: ${(props) => (props.$preview === "sm" ? "10px" : "20px")};
   justify-content: center;
-  align-items: stretch;
-  flex-wrap: wrap;
+  align-items: center;
   width: 100%;
+  flex-direction: ${(props) => (props.$preview === "sm" ? "column" : "row")};
+  @media (max-width: 769px) {
+    flex-direction: ${(props) => (props.$preview === "sm" ? "column" : "row")};
+  }
 `;
 
 const Column = styled.div<{
@@ -92,6 +95,7 @@ const Column = styled.div<{
   display: flex;
   flex-direction: column;
   position: relative;
+  width: 100%;
 `;
 
 const Title = styled.h3<{
@@ -181,7 +185,7 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
   const [preview, setPreview] = useState(previewWidth);
 
   useEffect(() => {
-    if (window.innerWidth <= 425) {
+    if (window.innerWidth < 426) {
       setPreview("sm");
     } else {
       setPreview(previewWidth);

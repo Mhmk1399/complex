@@ -79,9 +79,7 @@ const SlideHeading = styled.h3<{
 }>`
   color: ${(props) => props.$data.textColor || "#000"};
   font-size: ${(props) =>
-    props.$preview === "sm"
-      ? "18"
-      : props.$data?.textFontSize || "22"}px;
+    props.$preview === "sm" ? "18" : props.$data?.textFontSize || "22"}px;
   font-weight: ${(props) => props.$data.textFontWeight || "bold"};
   margin-top: 5px;
   text-align: center;
@@ -133,12 +131,12 @@ const NextButton = styled(NavButton)`
 `;
 
 const Button = styled.button<{
-  $data: SlideSection["setting"];
+  $data: SlideSection;
 }>`
   text-align: center;
   background-color: ${(props) =>
-    props.$data?.setting?.btnBackgroundColor || "#007bff"};
-  color: ${(props) => props.$data?.setting?.btnTextColor || "#fff"};
+    props.$data?.setting?.btnBackgroundColor || ""};
+  color: ${(props) => props.$data?.setting?.btnTextColor || ""};
   padding: 10px 20px;
 `;
 
@@ -153,8 +151,9 @@ const SlideShow: React.FC<SlideShowProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
-
-
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [layout]);
   useEffect(() => {
     if (window.innerWidth <= 425) {
       setPreview("sm");
@@ -166,17 +165,15 @@ const SlideShow: React.FC<SlideShowProps> = ({
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
   ) as SlideSection;
-  
+
   // Also add an early return if layout is not properly initialized
   if (!layout || !layout.sections) {
     return null;
   }
-  
 
   if (!sectionData) return null;
 
   const { blocks } = sectionData;
-  
 
   const handleNext = () =>
     setCurrentIndex((prev) => (prev + 1) % blocks.length);
@@ -269,14 +266,18 @@ const SlideShow: React.FC<SlideShowProps> = ({
                 >
                   {slide.description}
                 </SlideDescription>
-                <Button $data={sectionData.setting}>
-                  <Link href={slide.btnLink ? slide.btnLink : "#"} target="_blank">
+                <Button $data={sectionData}>
+                  <Link
+                    href={slide.btnLink ? slide.btnLink : "#"}
+                    target="_blank"
+                  >
                     {slide.btnText ? slide.btnText : "بیشتر بخوانید"}
                   </Link>
                 </Button>
               </SlideTextBox>
             </Slide>
-          ))}        </SlidesWrapper>
+          ))}{" "}
+        </SlidesWrapper>
         <PrevButton onClick={handlePrev}>{"<"}</PrevButton>
         <NextButton onClick={handleNext}>{">"}</NextButton>
       </SlideContainer>

@@ -10,7 +10,7 @@ interface ContactFormProps {
   >;
   userInputData: ContactFormDataSection;
   layout: Layout;
-  selectedComponent: string;
+  selectedComponent: string; 
 }
 interface BoxValues {
   top: number;

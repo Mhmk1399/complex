@@ -149,7 +149,7 @@ useEffect(() => {
   const [isUpdating, setIsUpdating] = useState(false);
 
   const handleSettingChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
   ) => {
     if (isUpdating) return;
 
@@ -400,7 +400,7 @@ useEffect(() => {
                 />
               </svg>
               <h3 className="font-semibold text-gray-700">
-                تنظیمات رنگ و سایز
+                تنظیمات استایل
               </h3>
             </div>
             <svg

@@ -63,7 +63,7 @@ const BannerTextBox = styled.div<{
   opacity: ${(props) => props.$data.blocks.setting.opacityTextBox || "1"};
   background-color: ${(props) =>
     props.$data.blocks.setting.backgroundColorBox || "rgba(0, 0, 0, 0.5)"};
-  padding: ${(props) => (props.$preview === "sm" ? "20px 40px" : "50px 200px")};
+  padding: ${(props) => (props.$preview === "sm" ? "20px 30px" : "70px 200px")};
   border-radius: ${(props) =>
     props.$data.blocks.setting.backgroundBoxRadious || "10"}px;
 `;
@@ -117,7 +117,7 @@ const Banner: React.FC<props> = ({
   const [preview, setPreview] = useState(previewWidth);
 
   useEffect(() => {
-    if (window.innerWidth <= 425) {
+    if (window.innerWidth < 426) {
       setPreview("sm");
     } else {
       setPreview(previewWidth);

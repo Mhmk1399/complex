@@ -140,7 +140,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
     });
   }, [userInputData?.setting]);
   useEffect(() => {
-    if (layout && selectedComponent) {
+    if (layout && selectedComponent) { 
       const initialData = Compiler(layout, selectedComponent);
       if (initialData?.length) {
         setUserInputData(initialData[0]);
@@ -155,10 +155,9 @@ export const FooterForm: React.FC<FooterFormProps> = ({
     setUserInputData((prev) => ({
       ...prev,
       blocks: {
-        ...prev.blocks,
+        ...prev?.blocks,
         [name]: value,
       },
-      // type: "Footer",
     }));
   };
 
@@ -171,7 +170,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
       blocks: {
         ...(prev?.blocks || {}),
         setting: {
-          ...prev?.blocks?.setting,
+          ...prev.blocks.setting,
           [name]: value,
         },
       },
@@ -204,7 +203,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
           onClick={() => setIsContentOpen(!isContentOpen)}
           className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
         >
-          <div className="flex items-center gap-2 ">
+          <div className="flex items-center gap-2">
             <svg
               className="w-5 h-5 text-blue-500"
               fill="none"
@@ -238,14 +237,14 @@ export const FooterForm: React.FC<FooterFormProps> = ({
         </button>
         {isContentOpen && (
           <>
-            <h3 className="font-semibold mb-2 p-4 animate-slideDown">محتوا</h3>
+            <h3 className="font-semibold mb-2 p-4 animate-slideDown">محتوا</h3> 
             <div className="space-y-4 p-4 animate-slideDown">
               <div>
                 <label className="block mb-1">متن</label>
                 <input
                   type="text"
                   name="text"
-                  value={userInputData?.blocks?.text}
+                  value={userInputData?.blocks?.text || "متن سربلاک"}
                   onChange={handleBlockChange}
                   className="w-full p-2 border rounded"
                 />
@@ -321,7 +320,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
       <div className="mb-6 bg-white p-2 rounded-xl shadow-sm border border-gray-100 mt-4">
         <button
           onClick={() => setIsStyleSettingsOpen(!isStyleSettingsOpen)}
-          className="w-full flex justify-between items-center p-3 hover:bg-gray-50 rounded-xl transition-all duration-200"
+          className="w-full flex justify-between items-center p-2 hover:bg-gray-50 rounded-xl transition-all duration-200"
         >
           <div className="flex items-center gap-2">
             <svg

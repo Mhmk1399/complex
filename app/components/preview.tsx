@@ -63,16 +63,12 @@ export const Preview: React.FC<PreviewProps> = ({
           previewWidth === "default" ? "flex-col" : "mr-64"
         }`}
       >
-        
         {/* Add this wrapper */}
         <div
           className={`h-[90vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide lg:mt-1 lg:ml-5 ${
             previewWidth === "sm" ? "w-[425px]" : "w-full lg:w-[75%]"
           }`}
-      
-        
         >
-
           <Header
             setSelectedComponent={setSelectedComponent}
             layout={layout}
@@ -111,9 +107,6 @@ export const Preview: React.FC<PreviewProps> = ({
             selectedComponent={selectedComponent}
             previewWidth={previewWidth} // Pass the state to components
           />
-        
-        
-        
         </div>
       </div>
     </div>
