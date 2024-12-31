@@ -536,6 +536,8 @@ export interface SlideSection {
     marginTop: string;
     marginBottom: string;
     backgroundBoxRadius: string;
+    btnBackgroundColor: string;
+    btnTextColor: string;
   };
   type: "slideshow";
 }

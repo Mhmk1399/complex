@@ -29,7 +29,6 @@ export const Main = () => {
   const [Data, setData] = useState<Layout>(nullJson as unknown as Layout);
   const [loading, setLoading] = useState(true);
   const [layout, setLayout] = useState<Layout>(Data);
-  const [smLayout] = useState<Layout>(smData as unknown as Layout);
   const [activeMode, setActiveMode] = useState<"sm" | "lg">("lg");
   const [previewWidth, setPreviewWidth] = useState<"sm" | "default">("default");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -37,7 +36,6 @@ export const Main = () => {
   const [activeElement, setActiveElement] = useState<
     "save" | "delete" | "preview" | "sitePreview" | "addRoute" | "changeRoute"
   >("save");
-  // const [deleteModal, setDeleteModal] = useState(false);
 
   const [saveStatus, setSaveStatus] = useState<
     "idle" | "saving" | "saved" | "error"
@@ -264,8 +262,9 @@ export const Main = () => {
 
   const handleModeChange = (mode: "lg" | "sm") => {
     setActiveMode(mode);
-    const newLayout = mode === "sm" ? smLayout : Data;
-    setLayout(newLayout);
+    setLoading(false);
+
+
   };
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [routes, setRoutes] = useState<string[]>([]);
@@ -340,12 +339,11 @@ export const Main = () => {
   const changeRouteRef = useRef<HTMLSelectElement>(null);
   const previewToggleRef = useRef<HTMLDivElement>(null);
   const sitePreviewRef = useRef<HTMLButtonElement>(null);
-  
 
   const getHighlightClass = (
-    ref: React.RefObject<HTMLButtonElement | HTMLDivElement | HTMLSelectElement>,
+    ref: React.RefObject<HTMLButtonElement | HTMLDivElement | HTMLSelectElement>
   ) => {
-    if(localStorage.getItem("hasSeenTour") === "true") {
+    if (localStorage.getItem("hasSeenTour") === "true") {
       return "";
     }
     if (ref.current && activeElement === ref.current.id) {
