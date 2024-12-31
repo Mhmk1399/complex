@@ -487,10 +487,10 @@ export const Form = ({
                   animate={{ y: 0 }}
                   transition={{
                     type: "spring",
-                    damping: 30,
-                    stiffness: 100,
+                    damping: 40,
+                    stiffness: 150,
                   }}
-                  className="bg-white/30 backdrop-blur-sm border-4 border-gray-300 p-6 rounded-xl w-[100%] max-h-[60vh] max-w-5xl overflow-auto shadow-lg relative"
+                  className="bg-white/30 backdrop-blur-lg border-4 border-gray-300 p-6 rounded-xl w-[100%] max-h-[60vh] max-w-5xl overflow-auto shadow-lg relative"
                 >
                   <div className=" -mr-7 -mt-8 sticky -top-8 right-0">
                     <motion.button
