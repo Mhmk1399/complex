@@ -480,7 +480,7 @@ export const Form = ({
                 dir="rtl"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[9999] overflow-y-auto"
+                className="fixed inset-0 hidden  bg-black bg-opacity-50 lg:flex items-center justify-center z-[9999] overflow-y-auto"
               >
                 <motion.div
                   initial={{ y: "100%" }}
@@ -490,14 +490,14 @@ export const Form = ({
                     damping: 25,
                     stiffness: 200,
                   }}
-                  className="bg-white p-6 rounded-lg w-[100%] max-h-[60vh] max-w-5xl overflow-auto shadow-lg relative"
+                  className="bg-white/30 backdrop-blur-sm border-4 border-gray-300 p-6 rounded-xl w-[100%] max-h-[60vh] max-w-5xl overflow-auto shadow-lg relative"
                 >
                   <div className=" -mr-7 -mt-8 sticky -top-8 right-0">
                     <motion.button
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => setIsModalOpen(false)}
-                      className="text-gray-500 hover:text-gray-700 text-lg font-semibold m-4"
+                      className="text-gray-100 hover:text-gray-500 text-lg font-semibold m-4"
                     >
                       ✕
                     </motion.button>
@@ -676,7 +676,7 @@ export const Form = ({
             )}
             {/* Desktop Sidebar */}
             <div
-              className="hidden lg:block fixed right-0 top-0 h-screen w-80 bg-gray-50/60 rounded-xl backdrop-blur-sm shadow-lg overflow-y-auto"
+              className="hidden lg:block fixed right-0 top-0 h-screen w-80 bg-gray-50/30 rounded-xl backdrop-blur-sm shadow-lg overflow-y-auto"
               style={{ zIndex: 1000 }}
             >
               {ordersButton}
@@ -687,7 +687,7 @@ export const Form = ({
                 </h2>
                 {showOrdersMenu ? (
                   <div
-                    className="bg-gray-100 p-4 my-5 rounded-lg shadow-md"
+                    className="bg-gray-100/50 p-4 my-5 rounded-xl shadow-md"
                     dir="rtl"
                   >
                     <h3 className="text-2xl text-black font-semibold mb-4">
@@ -736,19 +736,19 @@ export const Form = ({
                     damping: 20,
                     duration: 0.5,
                   }}
-                  className="fixed lg:hidden inset-0 h-screen w-80 bg-white shadow-lg overflow-y-auto z-[9999]"
+                  className="fixed lg:hidden inset-0 h-screen w-80 bg-white/70 shadow-lg overflow-y-auto z-[9999] rounded-xl"
                 >
                   <span
-                    className=" ml-2 top-1 absolute text-2xl text-black rounded-full cursor-pointer p-2"
+                    className=" ml-2 top-3 border border-gray-400 absolute text-2xl text-gray-600 hover:bg-gray-200 rounded-full cursor-pointer pb-1 px-3 z-[10000]"
                     onClick={() => setShowOrdersMenu(!showOrdersMenu)}
                   >
                     x
                   </span>
                   <div
-                    className="bg-white p-4 my-5 rounded-lg shadow-md"
+                    className="bg-white/20 p-4 my-5 rounded-lg backdrop-blur-md shadow-md"
                     dir="rtl"
                   >
-                    <h3 className="text-2xl text-black font-semibold mb-4">
+                    <h3 className="text-2xl text-black font-semibold mb-4 border-b border-gray-400 pb-2">
                       جابجایی سکشن
                     </h3>
                     <DndContext

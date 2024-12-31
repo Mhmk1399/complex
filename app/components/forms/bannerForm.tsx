@@ -281,6 +281,18 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                 className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
               />
             </div>
+            <div className="p-3 bg-gray-50 rounded-lg">
+              <label className="block mb-2 text-sm font-bold text-gray-700">
+                لینک عکس
+              </label>
+              <input
+                type="text"
+                name="imageLink"
+                value={userInputData?.blocks?.imageLink ?? "vg"}
+                onChange={handleBlockChange}
+                className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              />
+            </div>
 
             {/* Header Input */}
             <div className="p-3 bg-gray-50 rounded-lg">
