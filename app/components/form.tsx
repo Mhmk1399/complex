@@ -480,17 +480,23 @@ export const Form = ({
                 dir="rtl"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 0.91 }}
-                className="fixed inset-0 hidden  bg-black bg-opacity-50 lg:flex items-center justify-center z-[9999] overflow-y-auto"
+
+
+
+
+
+                className="fixed inset-0 hidden backdrop-blur-sm  bg-black bg-opacity-50 lg:flex items-center justify-center z-[9999] overflow-y-auto"
               >
                 <motion.div
                   initial={{ y: "100%" }}
                   animate={{ y: 0 }}
                   transition={{
                     type: "spring",
-                    damping: 40,
-                    stiffness: 150,
+                    damping: 15,
+                    stiffness: 300,
+                    duration:0.8,
                   }}
-                  className="bg-white/30 backdrop-blur-lg border-4 border-gray-300 p-6 rounded-xl w-[100%] max-h-[60vh] max-w-5xl overflow-auto shadow-lg relative"
+                  className="bg-white/40 backdrop-blur-xl border-4 border-gray-300 p-6 rounded-xl w-[100%] max-h-[60vh] max-w-5xl overflow-auto shadow-lg relative"
                 >
                   <div className=" -mr-7 -mt-8 sticky -top-8 right-0">
                     <motion.button
