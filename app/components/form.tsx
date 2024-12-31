@@ -479,7 +479,7 @@ export const Form = ({
               <motion.div
                 dir="rtl"
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                animate={{ opacity: 0.91 }}
                 className="fixed inset-0 hidden  bg-black bg-opacity-50 lg:flex items-center justify-center z-[9999] overflow-y-auto"
               >
                 <motion.div
@@ -487,8 +487,8 @@ export const Form = ({
                   animate={{ y: 0 }}
                   transition={{
                     type: "spring",
-                    damping: 25,
-                    stiffness: 200,
+                    damping: 30,
+                    stiffness: 100,
                   }}
                   className="bg-white/30 backdrop-blur-sm border-4 border-gray-300 p-6 rounded-xl w-[100%] max-h-[60vh] max-w-5xl overflow-auto shadow-lg relative"
                 >

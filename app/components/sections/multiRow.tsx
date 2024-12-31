@@ -28,6 +28,8 @@ const Section = styled.section<{
     props.$data.setting?.backgroundColorMultiRow || "#ffffff"};
   width: ${(props) => (props.$preview === "sm" ? "auto" : "100%")};
   border-radius: 12px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const RowContainer = styled.div<{
@@ -55,6 +57,12 @@ const Row = styled.div<{
   background-color: ${(props) =>
     props.$data.setting?.backgroundColorBox || "#f9f9f9"};
   border-radius: 18px;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+  }
 `;
 
 const ContentWrapper = styled.div<{
@@ -169,7 +177,7 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
   const [preview, setPreview] = useState(previewWidth);
 
   useEffect(() => {
-    if (window.innerWidth <= 425) {
+    if (window.innerWidth < 426) {
       setPreview("sm");
     } else {
       setPreview(previewWidth);

@@ -170,7 +170,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
       blocks: {
         ...(prev?.blocks || {}),
         setting: {
-          ...prev?.blocks?.setting,
+          ...prev.blocks.setting,
           [name]: value,
         },
       },

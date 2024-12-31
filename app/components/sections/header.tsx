@@ -239,7 +239,7 @@ const Header: React.FC<HeaderProps> = ({
 
         <MenuButton
           $preview={preview}
-          className="absolute top-5 left-1 p-4"
+          className="absolute top-2 left-1 p-4"
           $data={sectionData}
           $previewWidth={previewWidth}
           onClick={() => setIsOpen(!isOpen)}

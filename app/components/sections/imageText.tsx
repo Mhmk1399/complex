@@ -33,6 +33,9 @@ const Section = styled.section<{
   background-color: ${(props) =>
     props.$data.blocks?.setting?.background || "transparent"};
   flex-direction: ${(props) => (props.$preview === "sm" ? "column" : "row")};
+  @media (max-width: 769px) {
+    flex-direction: column;
+  }
 `;
 
 const Image = styled.img<{
@@ -129,7 +132,7 @@ const ImageText: React.FC<ImageTextProps> = ({
   const [preview, setPreview] = useState(previewWidth);
 
   useEffect(() => {
-    if (window.innerWidth <= 425) {
+    if (window.innerWidth < 426) {
       setPreview("sm");
     } else {
       setPreview(previewWidth);
