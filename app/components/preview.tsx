@@ -19,7 +19,7 @@ import BlogDetail from "./sections/blogDetail";
 
 // First update the PreviewProps interface
 interface PreviewProps {
-  layout: Layout;
+  layout: Layout ;
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   orders: string[];
   selectedComponent: string;

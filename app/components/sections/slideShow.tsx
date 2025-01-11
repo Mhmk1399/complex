@@ -151,9 +151,7 @@ const SlideShow: React.FC<SlideShowProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
-  useEffect(() => {
-    setCurrentIndex(0);
-  }, [layout]);
+  
   useEffect(() => {
     if (window.innerWidth <= 425) {
       setPreview("sm");

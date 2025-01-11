@@ -107,13 +107,7 @@ useEffect(() => {
   console.log('dependency', selectedComponent);
   setLoading(false);
 }, [selectedComponent]);
-  // useEffect(() => {
-  //   const initialData = Compiler(layout, selectedComponent)[0];
-  //   if (initialData) {
-  //     setUserInputData(initialData);
-  //   }
-  //   console.log('nodependency', selectedComponent);
-  // }, []);
+ 
   console.log("userInputData", userInputData.blocks);
   const handelAddBlock = () => {
     setUserInputData((prev: SlideSection) => {

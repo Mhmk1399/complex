@@ -184,7 +184,7 @@ export const Main = () => {
       if (data) {
         setLayout(data);
         setData(data);
-        setLoading(false);
+          setLoading(false);
       }
     } catch (error) {
       console.log("Error sending token to server:", error);
@@ -197,13 +197,11 @@ export const Main = () => {
   }, []);
 
   useEffect(() => {
-    setLoading(true);
     sendTokenToServer();
   }, [activeMode, selectedRoute]);
 
   const [newRouteName, setNewRouteName] = useState("");
   useEffect(() => {
-    setLoading(false);
     const currentLayoutData = activeMode === "sm" ? smData : Data;
 
     const routeConfigs = {
@@ -262,7 +260,6 @@ export const Main = () => {
 
   const handleModeChange = (mode: "lg" | "sm") => {
     setActiveMode(mode);
-    setLoading(false);
 
 
   };
@@ -356,13 +353,24 @@ export const Main = () => {
   return (
     <div>
       {loading ? (
-        <div className="fixed top-0 left-0 w-[75%] h-full flex fle justify-center items-center bg-white bg-opacity-90 z-50">
-          <div className="flex space-x-1">
-            <div className="w-4 h-4 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-            <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-            <div className="w-4 h-4 bg-blue-600 rounded-full animate-bounce"></div>
-          </div>
-        </div>
+    <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-white bg-opacity-90 z-50">
+   <div className="card">
+  <div className="loader">
+    <p>loading</p>
+    <div className="words px-2">
+      <span className="word font-thin italic">buttons</span>
+      <span className="word font-thin italic">forms</span>
+      <span className="word font-thin italic">switches</span>
+      <span className="word font-thin italic">cards</span>
+      <span className="word font-thin italic">buttons</span>
+    </div>
+  </div>
+</div>
+
+  </div>
+  
+   
+        
       ) : (
         <div className="min-h-screen ">
           <motion.div

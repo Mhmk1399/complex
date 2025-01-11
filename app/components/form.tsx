@@ -103,7 +103,7 @@ type FormData =
 interface FormProps {
   selectedComponent: string;
   setLayout: (data: Layout) => void;
-  layout: Layout;
+  layout: Layout ;
   orders: string[];
   setOrders: React.Dispatch<React.SetStateAction<string[]>>;
 }
