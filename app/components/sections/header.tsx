@@ -15,16 +15,16 @@ interface HeaderProps {
   selectedComponent: string;
   previewWidth: "sm" | "default";
 }
-const LoaderContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 80px;
-  background-color: #14213D;
-  position: absolute;
-  z-index: 40;
-`;
+// const LoaderContainer = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   width: 100%;
+//   height: 80px;
+//   background-color: #14213d;
+//   position: absolute;
+//   z-index: 40;
+// `;
 // Styled components
 const SectionHeader = styled.section<{
   $data: HeaderSection;
@@ -142,6 +142,7 @@ const MenuButton = styled.button<{
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
+
   color: ${(props) => props.$data.blocks.setting.itemColor || "#000"};
   position: absolute;
   top: ${(props) => (props.$preview === "sm" ? "top-1" : "top-5")};
@@ -168,12 +169,11 @@ const Header: React.FC<HeaderProps> = ({
     if (layout?.sections?.sectionHeader) {
     }
   }, [layout]);
- 
+
   const sectionData = layout?.sections?.sectionHeader as HeaderSection;
   const isHeaderSection = (section: SectionType): section is HeaderSection => {
     return section?.type === "header" && "blocks" in section;
   };
-  
 
   if (!sectionData || !isHeaderSection(sectionData)) {
     //  ("Section data is missing or invalid.");
