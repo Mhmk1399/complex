@@ -129,7 +129,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const sectionData = layout.sections?.children?.sections?.find(
-    (section) => section.type === "ContactForm"
+    (section) => section.type === actualName
   ) as ContactFormDataSection;
   if (!sectionData) {
     return null;
