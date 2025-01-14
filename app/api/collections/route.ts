@@ -26,8 +26,9 @@ export async function GET() {
         return NextResponse.json({ message: "Error fetching collections" }, { status: 500 });
     }
 }
-export const DELETE = async (req: NextRequest, { params }: { params: { id: string } }) => {
-    const collectionId = params.id;
+export const DELETE = async (req: NextRequest) => {
+    const collectionId = req.nextUrl.pathname.split('/').pop();
+
     console.log('DELETE_ATTEMPT', collectionId);
 
     await connect();

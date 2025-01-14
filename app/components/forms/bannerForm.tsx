@@ -99,7 +99,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
       const result = await response.json();
       console.log("API response:", result); // Debug log
 
-      if (result.success && result.data) {``
+      if (result.success && result.data) {
         setUserInputData((prevData) => ({
           ...prevData,
           blocks: {

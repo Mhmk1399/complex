@@ -2,7 +2,6 @@ import { NextRequest,NextResponse } from "next/server";
 import jwt from 'jsonwebtoken';
 import fs from 'fs';
 import path from 'path';
-import { createRouteFiles, deleteRouteFiles } from "../createRouteFiles/route";
 
 
 export  async function GET (request: NextRequest)  {
@@ -22,7 +21,7 @@ export  async function GET (request: NextRequest)  {
       }
     } catch (error) {
       return NextResponse.json(
-        { error: 'Invalid token' },
+        { error: 'Invalid token'+error },
         { status: 401 }
       );
     }
@@ -42,7 +41,7 @@ export  async function GET (request: NextRequest)  {
       fileNames = fs.readdirSync(templateDir);
     } catch (error) {
       return NextResponse.json(
-        { error: 'Failed to read template directory' },
+        { error: 'Failed to read template directory'+error },
         { status: 500 }
       );
     }
@@ -74,7 +73,7 @@ export async function POST(request: NextRequest) {
     }
   } catch (error) {
     return NextResponse.json(
-      { error: 'Invalid token' },
+      { error: 'Invalid token'+error },
       { status: 401 }
     );
   }
@@ -136,7 +135,7 @@ export async function POST(request: NextRequest) {
     }
   } catch (error) {
     return NextResponse.json(
-      { error: 'Invalid token' },
+      { error: 'Invalid token'+error },
       { status: 401 }
     );
   }
@@ -175,4 +174,54 @@ console.log(lgFilePath);
     { message: 'Files deleted successfully' },
     { status: 200 }
   );
+}
+async function deleteRouteFiles(route: string, payload: jwt.JwtPayload) {
+  const templateDir = payload.templatesDirectory;
+  if (!templateDir) {
+    throw new Error('Template directory not found in token');
+  }
+
+  // Define file paths
+  const smFilePath = path.join(templateDir, `${route}sm.json`);
+  const lgFilePath = path.join(templateDir, `${route}lg.json`);
+
+  // Delete the files
+  try {
+    fs.unlinkSync(smFilePath);
+    fs.unlinkSync(lgFilePath);
+    console.log('Files deleted successfully');
+  } catch (error) {
+    console.error('Error deleting files:', error);
+    throw new Error('Failed to delete files');
+  }
+}
+
+async function createRouteFiles(newRoute: string, payload: jwt.JwtPayload) {
+  const templateDir = payload.templatesDirectory;
+  if (!templateDir) {
+    throw new Error('Template directory not found in token');
+  }
+
+  // Create the JSON content
+  const jsonContent = {
+    children: {
+      type: newRoute,
+      sections: [],
+      order: []
+    }
+  };
+
+  // Define file paths
+  const smFilePath = path.join(templateDir, `${newRoute}sm.json`);
+  const lgFilePath = path.join(templateDir, `${newRoute}lg.json`);
+
+  // Write the JSON content to the files
+  try {
+    fs.writeFileSync(smFilePath, JSON.stringify(jsonContent, null, 2));
+    fs.writeFileSync(lgFilePath, JSON.stringify(jsonContent, null, 2));
+    console.log('Files created successfully');
+  } catch (error) {
+    console.error('Error writing files:', error);
+    throw new Error('Failed to create files');
+  }
 }

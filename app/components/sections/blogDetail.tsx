@@ -56,11 +56,8 @@ const SectionBlogDetail = styled.div<{
 `;
 
 const BlogDetail: React.FC<BlogDetailProps> = ({
-  setSelectedComponent,
   layout,
   actualName,
-  selectedComponent,
-  blogId,
 }) => {
   const [blog, setBlog] = useState<BlogData>({
     title: "",

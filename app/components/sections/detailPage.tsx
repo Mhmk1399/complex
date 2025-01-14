@@ -138,8 +138,8 @@ const DetailPage: React.FC<DetailPageProps> = ({
         setLoading(false);
 
       } catch (error) {
-         ("Error fetching product details:", error);
         setLoading(false);
+        console.log("Error fetching product details:", error);
       }
     };
 
@@ -147,7 +147,8 @@ const DetailPage: React.FC<DetailPageProps> = ({
       fetchProductDetails();
     }
   }, [productId]);
-
+  console.log(product);
+  
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">

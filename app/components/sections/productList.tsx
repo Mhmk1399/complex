@@ -77,7 +77,7 @@ const ProductList: React.FC<ProductListProps> = ({
           setProductData(productInfo);
         }
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.log("Error fetching products:", error);
       }
     };
 
