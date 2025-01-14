@@ -1,6 +1,5 @@
 "use client";
 import styled from "styled-components";
-import { Delete } from "../C-D";
 import {
   BlogListSection,
   BlogListSetting,
@@ -118,15 +117,11 @@ const BlogCard = styled.div<{
 `;
 
 const BlogList: React.FC<BlogListProps> = ({
-  setSelectedComponent,
   layout,
   actualName,
-  selectedComponent,
-  setLayout,
 }) => {
   const [blogData, setBlogData] = useState<BlogData[]>([]);
 
-  // Add this useEffect to fetch blogs
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
@@ -138,16 +133,16 @@ const BlogList: React.FC<BlogListProps> = ({
         const data = await response.json();
         console.log("data", data);
         
-        // const blogInfo = data.blogs.map((blog: BlogData) => ({
-        //   ...blog,
-        //   // btnText: "مطالعه بیشتر",
-        //   btnLink: `/blog/${blog.blogId}`,
-        //   imageSrc: "/assets/images/pro3.jpg", // Add a default image
-        //   imageAlt: blog.title,
-        //   description: blog.description,
-        //   storeId: blog.storeId,
-        // }));
-        // setBlogData(blogInfo);
+        const blogInfo = data.blogs.map((blog: BlogData) => ({
+          ...blog,
+          // btnText: "مطالعه بیشتر",
+          btnLink: `/blog/${blog.blogId}`,
+          imageSrc: "/assets/images/pro3.jpg", // Add a default image
+          imageAlt: blog.title,
+          description: blog.description,
+          storeId: blog.storeId,
+        }));
+        setBlogData(blogInfo);
       } catch (error) {
         console.log("Error fetching blogs:", error);
       }

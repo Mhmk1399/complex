@@ -74,7 +74,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
   const [inputText, setInputText] = useState("");
-  const [dropdownAnimation, setDropdownAnimation] = useState(false);
+  const [dropdownAnimation] = useState(false);
 
   const handleLiveInput = async (
     event: React.MouseEvent<HTMLButtonElement>

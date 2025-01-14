@@ -203,7 +203,8 @@ const TourGuide: React.FC<TourGuideProps> = ({
         right: rect.left,
       });
     }
-  }, [currentStep, isTourVisible]);
+  }, [currentStep, isTourVisible, steps]);
+  
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {

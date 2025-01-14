@@ -1,27 +1,35 @@
 import fs from 'fs';
 import path from 'path';
 import jwt from 'jsonwebtoken';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function createRouteFiles(newRoute: string, decodedToken: jwt.JwtPayload) {
-    const targetDir = decodedToken.targetDirectory;
-    const routeName = newRoute;
-    const appDir = path.join(targetDir, 'app', routeName);
+export async function POST(request: NextRequest) {
+    const token = request.headers.get('Authorization')?.split(' ')[1];
+    const newRoute = request.headers.get('new-route');
 
-    // Create the directory
-    try {
-        fs.mkdirSync(appDir);
-        console.log('Directory created successfully');
-    } catch (error) {
-        console.error('Error creating directory:', error);
-        return Response.json(
-            { error: 'Failed to create directory' },
-            { status: 500 }
+    if (!token || !newRoute) {
+        return NextResponse.json(
+            { error: 'Missing token or route name' },
+            { status: 400 }
         );
     }
 
-    // Create the page.tsx file and add a string to it
-    const pageFilePath = path.join(appDir, 'page.tsx');
-    const fileContent = `"use client";
+    let decodedToken;
+    try {
+        decodedToken = jwt.decode(token);
+        if (!decodedToken) {
+            throw new Error('Failed to decode token');
+        }
+
+        const targetDir = (decodedToken as jwt.JwtPayload).targetDirectory;
+        const appDir = path.join(targetDir, 'app', newRoute);
+
+        // Create directory and files
+        fs.mkdirSync(appDir, { recursive: true });
+        
+        // Create page.tsx with existing content
+        const pageFilePath = path.join(appDir, 'page.tsx');
+        const fileContent = `"use client";
 import { useEffect, useState } from "react";
 import ImageText from "@/components/imageText";
 import ContactForm from "@/components/contactForm";
@@ -114,34 +122,44 @@ export default function Page() {
     </>
   );
 }`;
-
-    try {
         fs.writeFileSync(pageFilePath, fileContent);
-        console.log('page.tsx file created successfully');
+
+        return NextResponse.json({ 
+            message: 'Route created successfully' 
+        }, { status: 201 });
+
     } catch (error) {
-        console.error('Error creating page.tsx file:', error);
-        return Response.json(
-            { error: 'Failed to create page.tsx file' },
-            { status: 500 }
-        );
+        return NextResponse.json({ 
+            error: 'Failed to create route' +error
+        }, { status: 500 });
     }
 }
-export async function deleteRouteFiles (route: string, decodedToken: jwt.JwtPayload) {
-    
-   
-   
-    const targetDir = decodedToken.targetDirectory;
-    const routeName = route;
-    const appDir = path.join(targetDir, 'app', routeName);
-    try {
-        fs.rmdirSync(appDir, { recursive: true });
-        console.log('Directory deleted successfully');
-    } catch (error) {
-        console.error('Error deleting directory:', error);
-        return Response.json(
-            { error: 'Failed to delete directory' },
-            { status: 500 }
+
+export async function DELETE(request: NextRequest) {
+    const token = request.headers.get('Authorization')?.split(' ')[1];
+    const routeToDelete = request.headers.get('route-name');
+
+    if (!token || !routeToDelete) {
+        return NextResponse.json(
+            { error: 'Missing token or route name' },
+            { status: 400 }
         );
     }
-    
+
+    try {
+        const decodedToken = jwt.decode(token) as jwt.JwtPayload;
+        const targetDir = decodedToken.targetDirectory;
+        const appDir = path.join(targetDir, 'app', routeToDelete);
+
+        fs.rmdirSync(appDir, { recursive: true });
+
+        return NextResponse.json({ 
+            message: 'Route deleted successfully' 
+        }, { status: 200 });
+
+    } catch (error) {
+        return NextResponse.json({ 
+            error: 'Failed to delete route' +error
+        }, { status: 500 });
+    }
 }

@@ -33,7 +33,8 @@ export async function GET(request: Request) {
         throw new Error("Failed to decode token");
       }
     } catch (error) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+
+      return NextResponse.json({ error: "Invalid token"+error }, { status: 401 });
     }
 
     // Get the template directory from the decoded token
@@ -163,7 +164,6 @@ export async function GET(request: Request) {
     );
   }
 }
-
 export async function POST(request: Request) {
   await connect();
   if (!connect) {
@@ -191,7 +191,7 @@ export async function POST(request: Request) {
         throw new Error("Failed to decode token");
       }
     } catch (error) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+      return NextResponse.json({ error: "Invalid token"+error }, { status: 401 });
     }
     // Get the template directory from the decoded token
     const templateDir = (decodedToken as jwt.JwtPayload).templatesDirectory;
@@ -216,23 +216,7 @@ export async function POST(request: Request) {
       });
     } else if (routeName != "home") {
       try {
-        const sectionHeader = newLayout.sections.sectionHeader;
         const children = newLayout.sections.children;
-        const sectionFooter = newLayout.sections.sectionFooter;
-        const containerRoute = path.join(
-          templateDir,
-          "home" + activeMode + ".json"
-        );
-        const home = await new Promise<Buffer>((resolve, reject) => {
-          fs.readFile(containerRoute, (err, data) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(data);
-            }
-          });
-        });
-
         const childrenDir = path.join(
           templateDir,
           routeName + activeMode + ".json"
@@ -276,4 +260,4 @@ export async function POST(request: Request) {
     );
   }
 }
-("");
+

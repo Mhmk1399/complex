@@ -98,7 +98,7 @@ const ProductPrice = styled.span<{
   margin: 8px 0;
 `;
 
-const BuyButton = styled.button<{
+const BuyButton = styled.a<{
   $settings?: ProductCard;
   $productData?: ProductCardData;
 }>`
@@ -148,7 +148,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ productData }) => {
         
       </ProductPrice>
       <BuyButton
-        // href={`/products?id=${productData.id}`}
+        href={`/products?id=${productData.id}`}
         $productData={productData}
       >
         خرید

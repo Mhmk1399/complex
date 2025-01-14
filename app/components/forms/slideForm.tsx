@@ -73,7 +73,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
   const [isContentOpen, setIsContentOpen] = useState({});
   const [inputText, setInputText] = useState("");
   const [dropdownAnimation, setDropdownAnimation] = useState(false);
- const [loading, setLoading] = useState(true);
+//  const [loading, setLoading] = useState(true);
   const handleLiveInput = async (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -105,7 +105,7 @@ useEffect(() => {
     setUserInputData(initialData);
   }
   console.log('dependency', selectedComponent);
-  setLoading(false);
+  // setLoading(false);
 }, [selectedComponent]);
  
   console.log("userInputData", userInputData.blocks);

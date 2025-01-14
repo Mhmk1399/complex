@@ -27,11 +27,13 @@ interface CollectionProps {
   previewWidth: "sm" | "default";
 }
 interface ProductData {
-  id: string;
+  _id: string;
   name: string;
   price: number;
-  imageSrc: string;
-  imageAlt: string;
+  images?: {
+    imageSrc: string;
+    imageAlt: string;
+  }
   btnText: string;
 }
 
@@ -155,30 +157,31 @@ export const Collection: React.FC<CollectionProps> = ({
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // const response = await fetch("/api/collections");
-        // const data = await response.json();
+        const response = await fetch("/api/collections");
+        const data = await response.json();
 
-        // const collectionData = data.collections || [];
-        // setCollections(collectionData);
-        // // Set initial filtered products from 'all' collection
-        // const allCollection = data.collections.find(
-        //   (c: any) => c.name === "all"
-        // );
-        // if (allCollection) {
-        //   const formattedProducts = allCollection.products.map(
-        //     (product: any) => ({
-        //       id: product._id,
-        //       name: product.name,
-        //       price: product.price,
-        //       imageSrc: product.images?.imageSrc || "/assets/images/pro2.jpg",
-        //       imageAlt: product.images?.imageAlt || product.name,
-        //       btnText: "خرید محصول",
-        //     })
-        //   );
-        //   setFilteredProducts(formattedProducts);
-        // }
+        const collectionData = data.collections || [];
+        setCollections(collectionData);
+        // Set initial filtered products from 'all' collection
+        const allCollection = data.collections.find(
+          (c: CollectionData) => c.name === "all"
+        );
+        if (allCollection) {
+          const formattedProducts = allCollection.products.map(
+            (product: ProductData) => ({
+              id: product._id,
+              name: product.name,
+              price: product.price,
+              imageSrc: product.images?.imageSrc || "/assets/images/pro2.jpg",
+              imageAlt: product.images?.imageAlt || product.name,
+              btnText: "خرید محصول",
+            })
+          );
+          setFilteredProducts(formattedProducts);
+        }
       } catch (error) {
-         ("Error fetching products:", error);
+         console.log("Error fetching collections:", error);
+        
       }
     };
 
@@ -194,7 +197,7 @@ export const Collection: React.FC<CollectionProps> = ({
     if (selectedCollectionData) {
       const formattedProducts = selectedCollectionData.products.map(
         (product: CollectionData['products'][0]) => ({
-          id: product._id,
+          _id: product._id,
           name: product.name,
           price: product.price,
           imageSrc: product.images?.imageSrc || "/assets/images/pro2.jpg",
@@ -304,7 +307,7 @@ export const Collection: React.FC<CollectionProps> = ({
             <ProductCard
               $preview={preview}
               $previewWidth={previewWidth}
-              key={product.id}
+              key={product._id}
               $setting={sectionData.setting}
               $isLarge={index === 0}
               style={
@@ -314,8 +317,8 @@ export const Collection: React.FC<CollectionProps> = ({
               }
             >
               <ProductImage
-                src={product.imageSrc || "/assets/images/pro2.jpg"}
-                alt={product.imageAlt}
+                src={product.images?.imageSrc || "/assets/images/pro2.jpg"}
+                alt={product.images?.imageAlt}
                 $setting={sectionData.setting}
               />
               <ProductInfo>
@@ -326,7 +329,7 @@ export const Collection: React.FC<CollectionProps> = ({
                   {product.price}
                 </ProductPrice>
                 <BuyButton
-                  href={`/detailpages/${product.id}`}
+                  href={`/detailpages/${product._id}`}
                   $setting={sectionData.setting}
                 >
                   {product.btnText}

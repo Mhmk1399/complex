@@ -17,7 +17,7 @@ interface BoxValues {
   right: number;
 }
 
-type BlockKey = `${string}${number}`;
+// type BlockKey = `${string}${number}`;
 
 
 

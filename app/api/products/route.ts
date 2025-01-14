@@ -49,7 +49,7 @@ export async function GET(request: Request) {
       }
     } catch (error) {
       return NextResponse.json(
-        { error: 'Invalid token' },
+        { error: 'Invalid token'+error },
         { status: 401 }
       );
     }

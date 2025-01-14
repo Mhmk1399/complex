@@ -100,7 +100,6 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
     setUserInputData(initialData);
     setIsDataReady(true);
   }, [selectedComponent]);
-  (userInputData);
  
   useEffect(() => {
     setMargin({
