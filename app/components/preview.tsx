@@ -65,7 +65,7 @@ export const Preview: React.FC<PreviewProps> = ({
       >
         {/* Add this wrapper */}
         <div
-          className={`h-[90vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide lg:mt-1 lg:ml-5 ${
+          className={`h-[86vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide  lg:ml-5 ${
             previewWidth === "sm" ? "w-[425px]" : "w-full lg:w-[75%]"
           }`}
         >
@@ -75,7 +75,7 @@ export const Preview: React.FC<PreviewProps> = ({
             selectedComponent={selectedComponent}
             previewWidth={previewWidth} // Pass the state to components
           />
-          <div className="grid grid-cols-1 mt-32">
+          <div className="grid grid-cols-1 mt-28">
             {orders.map((componentName, index) => {
               const baseComponentName = componentName.split("-")[0];
               const Component =

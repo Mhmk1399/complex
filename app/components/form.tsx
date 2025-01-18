@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { DragEndEvent } from "@dnd-kit/core";
+import toast from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import richtextImage from "@/public/assets/images/richtext.png";
 import ImageTextImage from "@/public/assets/images/imagetext.png";
 import bannerImage from "@/public/assets/images/banner.jpg";
@@ -22,6 +24,8 @@ import collapseSm from "@/public/assets/images/collapseSm.png";
 import bannerSm from "@/public/assets/images/BannerSm.png";
 import imagetextSm from "@/public/assets/images/imagetextSm.png";
 import richtextSm from "@/public/assets/images/richtextSm.png";
+import collectionSm from "@/public/assets/images/collectionsm.png";
+import collection from "@/public/assets/images/collection.png";
 
 import {
   DndContext,
@@ -103,7 +107,7 @@ type FormData =
 interface FormProps {
   selectedComponent: string;
   setLayout: (data: Layout) => void;
-  layout: Layout ;
+  layout: Layout;
   orders: string[];
   setOrders: React.Dispatch<React.SetStateAction<string[]>>;
 }
@@ -130,6 +134,17 @@ export const Form = ({
   );
   const addSection = (componentName: string) => {
     Create(componentName, layout, setLayout);
+    setIsModalOpen(false); // Close the modal after adding section
+    toast.success(`${componentName} اضافه شد`, {
+      position: "top-center",
+      duration: 2000,
+      style: {
+        background: "#4CAF50",
+        color: "#fff",
+        borderRadius: "10px",
+        padding: "16px",
+      },
+    });
   };
 
   const imageContainerStyle = {
@@ -466,6 +481,7 @@ export const Form = ({
 
   return (
     <>
+      <Toaster />
       <div>
         <button
           onClick={() => setIsFormOpen(!isFormOpen)}
@@ -495,10 +511,10 @@ export const Form = ({
                 >
                   <div className=" -mr-7 -mt-8 sticky -top-8 right-0">
                     <motion.button
-                      whileHover={{ scale: 1.1 }}
+                      whileHover={{ scale: 1.3 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => setIsModalOpen(false)}
-                      className="text-gray-100 hover:text-gray-500 text-lg font-semibold m-4"
+                      className="text-gray-100 hover:text-gray-300 text-lg font-semibold m-4 transition-all duration-150 ease-in-out"
                     >
                       ✕
                     </motion.button>
@@ -512,7 +528,7 @@ export const Form = ({
                   >
                     <div
                       onClick={() => addSection("RichText")}
-                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
                       style={{
                         ...imageContainerStyle,
                         backgroundImage: `url(${richtextImage.src})`,
@@ -529,7 +545,7 @@ export const Form = ({
 
                     <div
                       onClick={() => addSection("ImageText")}
-                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
                       style={{
                         ...imageContainerStyle,
                         backgroundImage: `url(${ImageTextImage.src})`,
@@ -545,7 +561,7 @@ export const Form = ({
                     </div>
                     <div
                       onClick={() => addSection("Banner")}
-                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
                       style={{
                         ...imageContainerStyle,
                         backgroundImage: `url(${bannerImage.src})`,
@@ -561,7 +577,7 @@ export const Form = ({
                     </div>
                     <div
                       onClick={() => addSection("CollapseFaq")}
-                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
                       style={{
                         ...imageContainerStyle,
                         backgroundImage: `url(${CollapseFaqImage.src})`,
@@ -577,7 +593,7 @@ export const Form = ({
                     </div>
                     <div
                       onClick={() => addSection("ContactForm")}
-                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
                       style={{
                         ...imageContainerStyle,
                         backgroundImage: `url(${contactImage.src})`,
@@ -593,7 +609,7 @@ export const Form = ({
                     </div>
                     <div
                       onClick={() => addSection("NewsLetter")}
-                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
                       style={{
                         ...imageContainerStyle,
                         backgroundImage: `url(${newsLetterImage.src})`,
@@ -609,7 +625,7 @@ export const Form = ({
                     </div>
                     <div
                       onClick={() => addSection("MultiColumn")}
-                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
                       style={{
                         ...imageContainerStyle,
                         backgroundImage: `url(${multiColumnImage.src})`,
@@ -625,7 +641,7 @@ export const Form = ({
                     </div>
                     <div
                       onClick={() => addSection("SlideShow")}
-                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
                       style={{
                         ...imageContainerStyle,
                         backgroundImage: `url(${slideShowImage.src})`,
@@ -641,7 +657,7 @@ export const Form = ({
                     </div>
                     <div
                       onClick={() => addSection("MultiRow")}
-                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
                       style={{
                         ...imageContainerStyle,
                         backgroundImage: `url(${multiRowImage.src})`,
@@ -657,7 +673,7 @@ export const Form = ({
                     </div>
                     <div
                       onClick={() => addSection("Video")}
-                      className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
                       style={{
                         ...imageContainerStyle,
                         backgroundImage: `url(${video.src})`,
@@ -669,6 +685,22 @@ export const Form = ({
                       <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
                       <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         {"   ویدیو"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("Collection")}
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${collection.src})`,
+                        backgroundSize: "contain",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"کالکشن"}
                       </span>
                     </div>
                   </motion.div>
@@ -843,7 +875,7 @@ export const Form = ({
                           initial={{ y: 0, opacity: 0 }}
                           animate={{ y: 20, opacity: 1 }}
                           transition={{ delay: 0.3 }}
-                          className="p-2 overflow-y-visible w-[80%] mx-auto mb-54 z-50 flex flex-col items-center gap-2"
+                          className="p-2 overflow-y-visible w-[80%] mx-auto mb-72 z-50 flex flex-col items-center gap-2"
                         >
                           <div
                             onClick={() => addSection("RichText")}
@@ -864,7 +896,7 @@ export const Form = ({
                           </div>
                           <div
                             onClick={() => addSection("ImageText")}
-                            className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
                             style={{
                               ...imageContainerStyle,
                               backgroundImage: `url(${imagetextSm.src})`,
@@ -881,7 +913,7 @@ export const Form = ({
                           </div>
                           <div
                             onClick={() => addSection("Banner")}
-                            className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
                             style={{
                               ...imageContainerStyle,
                               backgroundImage: `url(${bannerSm.src})`,
@@ -898,7 +930,7 @@ export const Form = ({
                           </div>
                           <div
                             onClick={() => addSection("CollapseFaq")}
-                            className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
                             style={{
                               ...imageContainerStyle,
                               backgroundImage: `url(${collapseSm.src})`,
@@ -916,7 +948,7 @@ export const Form = ({
                           </div>
                           <div
                             onClick={() => addSection("ContactForm")}
-                            className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
                             style={{
                               ...imageContainerStyle,
                               backgroundImage: `url(${contactSm.src})`,
@@ -934,7 +966,7 @@ export const Form = ({
                           </div>
                           <div
                             onClick={() => addSection("NewsLetter")}
-                            className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
                             style={{
                               ...imageContainerStyle,
                               backgroundImage: `url(${newsletterSm.src})`,
@@ -951,7 +983,7 @@ export const Form = ({
                           </div>
                           <div
                             onClick={() => addSection("MultiColumn")}
-                            className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
                             style={{
                               ...imageContainerStyle,
                               backgroundImage: `url(${columnSm.src})`,
@@ -969,7 +1001,7 @@ export const Form = ({
                           </div>
                           <div
                             onClick={() => addSection("SlideShow")}
-                            className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
                             style={{
                               ...imageContainerStyle,
                               backgroundImage: `url(${slideSm.src})`,
@@ -987,7 +1019,7 @@ export const Form = ({
                           </div>
                           <div
                             onClick={() => addSection("MultiRow")}
-                            className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
                             style={{
                               ...imageContainerStyle,
                               backgroundImage: `url(${rowSm.src})`,
@@ -1005,7 +1037,7 @@ export const Form = ({
                           </div>
                           <div
                             onClick={() => addSection("Video")}
-                            className="flex flex-col items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
                             style={{
                               ...imageContainerStyle,
                               backgroundImage: `url(${videoSm.src})`,
@@ -1019,6 +1051,24 @@ export const Form = ({
                             <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
                             <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                               ویدیو
+                            </span>
+                          </div>
+                          <div
+                            onClick={() => addSection("Collection")}
+                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                            style={{
+                              ...imageContainerStyle,
+                              backgroundImage: `url(${collectionSm.src})`,
+                              backgroundSize: "cover",
+                              maxWidth: "100%",
+                              height: "20rem",
+                              backgroundPosition: "center",
+                              backgroundRepeat: "no-repeat",
+                            }}
+                          >
+                            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                            <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              {"کالکشن"}
                             </span>
                           </div>
                         </motion.div>

@@ -27,7 +27,7 @@ import TourGuide from "./sections/guideTour";
 
 export const Main = () => {
   const [Data, setData] = useState<Layout>(nullJson as unknown as Layout);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [layout, setLayout] = useState<Layout>(Data);
   const [activeMode, setActiveMode] = useState<"sm" | "lg">("lg");
   const [previewWidth, setPreviewWidth] = useState<"sm" | "default">("default");
@@ -184,7 +184,7 @@ export const Main = () => {
       if (data) {
         setLayout(data);
         setData(data);
-          setLoading(false);
+        // setLoading(false);
       }
     } catch (error) {
       console.log("Error sending token to server:", error);
@@ -192,7 +192,7 @@ export const Main = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
+    // setLoading(true);
     sendTokenToServer();
   }, []);
 
@@ -260,8 +260,6 @@ export const Main = () => {
 
   const handleModeChange = (mode: "lg" | "sm") => {
     setActiveMode(mode);
-
-
   };
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [routes, setRoutes] = useState<string[]>([]);
@@ -352,70 +350,66 @@ export const Main = () => {
 
   return (
     <div>
-      {loading ? (
-    <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-white bg-opacity-90 z-50">
-   <div className="card">
-  <div className="loader">
-    <p>loading</p>
-    <div className="words px-2">
-      <span className="word font-thin italic">buttons</span>
-      <span className="word font-thin italic">forms</span>
-      <span className="word font-thin italic">switches</span>
-      <span className="word font-thin italic">cards</span>
-      <span className="word font-thin italic">buttons</span>
-    </div>
-  </div>
-</div>
-
-  </div>
-  
-   
-        
-      ) : (
-        <div className="min-h-screen ">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            whileHover={{
-              background:
-                "radial-gradient(circle at var(--x) var(--y), #4facfe 0%, #0052D4 50%)",
-              transition: { duration: 0.3 },
-            }}
-            onMouseMove={(e) => {
-              const rect = e.currentTarget.getBoundingClientRect();
-              const x = ((e.clientX - rect.left) / rect.width) * 100;
-              const y = ((e.clientY - rect.top) / rect.height) * 100;
-              e.currentTarget.style.setProperty("--x", `${x}%`);
-              e.currentTarget.style.setProperty("--y", `${y}%`);
-            }}
-            className="sticky top-0 z-50  backdrop-blur-2xl bg-gradient-to-br from-[#0052D4] to-[#6FB1FC]
+      {/* {loading ? (
+        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-white bg-opacity-90 z-50">
+          <div className="card">
+            <div className="loader">
+              <p>loading</p>
+              <div className="words px-2">
+                <span className="word font-thin italic">buttons</span>
+                <span className="word font-thin italic">forms</span>
+                <span className="word font-thin italic">switches</span>
+                <span className="word font-thin italic">cards</span>
+                <span className="word font-thin italic">buttons</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : ( */}
+      <div className="min-h-screen ">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          whileHover={{
+            background:
+              "radial-gradient(circle at var(--x) var(--y), #4facfe 0%, #0052D4 50%)",
+            transition: { duration: 0.3 },
+          }}
+          onMouseMove={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            e.currentTarget.style.setProperty("--x", `${x}%`);
+            e.currentTarget.style.setProperty("--y", `${y}%`);
+          }}
+          className="sticky top-0 z-50 backdrop-blur-2xl bg-gradient-to-br from-[#0052D4] to-[#6FB1FC]
              shadow-md cursor-pointer"
-          >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 ">
-              <div className="flex flex-col sm:flex-row  items-center justify-center py-4 gap-x-5 space-y-4 sm:space-y-0">
-                <motion.button
-                  id="sitePreview"
-                  className={`w-full ${getHighlightClass(
-                    sitePreviewRef
-                  )} sm:w-auto bg-pink-400  text-white lg:-ml-12 px-3 py-2.5 rounded-full font-medium 
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 ">
+            <div className="flex lg:flex-row flex-wrap  items-center justify-center py-4 gap-x-5 space-y-4 sm:space-y-0">
+              <motion.button
+                id="sitePreview"
+                className={` ${getHighlightClass(
+                  sitePreviewRef
+                )} lg:w-auto bg-pink-400  text-white lg:-ml-12 px-3 py-2.5 mt-4 md:mt-0 rounded-full font-medium 
                     transition-all duration-300 transform`}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  ref={sitePreviewRef}
-                >
-                  <Link href="/">نمایش سایت</Link>
-                </motion.button>
-                {/* Save Button with Animation */}
-                <motion.button
-                  id="save"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={handleSave}
-                  ref={saveButtonRef}
-                  disabled={saveStatus === "saving"}
-                  className={`w-fitlg:-ml-12 ${getHighlightClass(
-                    saveButtonRef
-                  )} px-3 py-2.5 rounded-full font-medium transition-all duration-300 transform
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                ref={sitePreviewRef}
+              >
+                <Link href="/">نمایش سایت</Link>
+              </motion.button>
+              {/* Save Button with Animation */}
+              <motion.button
+                id="save"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleSave}
+                ref={saveButtonRef}
+                disabled={saveStatus === "saving"}
+                className={`w-fitlg:-ml-12 ${getHighlightClass(
+                  saveButtonRef
+                )} px-3 py-2.5 rounded-full font-medium transition-all duration-300 transform
                   ${
                     saveStatus === "saving"
                       ? "bg-blue-900"
@@ -426,135 +420,135 @@ export const Main = () => {
                       : "bg-[#FFBF00] hover:bg-yellow-200"
                   }
                   text-white shadow-md hover:shadow-lg`}
-                >
-                  {saveStatus === "saving"
-                    ? "...در حال ذخیره"
-                    : saveStatus === "saved"
-                    ? " ! ذخیره شد "
-                    : saveStatus === "error"
-                    ? "ارور"
-                    : "ذخیره تنظیمات"}
-                </motion.button>
+              >
+                {saveStatus === "saving"
+                  ? "...در حال ذخیره"
+                  : saveStatus === "saved"
+                  ? " ! ذخیره شد "
+                  : saveStatus === "error"
+                  ? "ارور"
+                  : "ذخیره تنظیمات"}
+              </motion.button>
 
-                {/* View Mode Toggles */}
-                <div
-                  id="preview"
-                  ref={previewToggleRef}
-                  className={`flex ${getHighlightClass(
-                    previewToggleRef
-                  )} items-center flex-row-reverse space-x-3`}
-                >
-                  <span className="text-sm text-gray-50 ml-2 hidden lg:block font-semibold">
-                    : تنظیمات پیش نمایش
-                  </span>
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => handleModeChange("sm")}
-                    className={`p-2 rounded-lg hidden  lg:block transition-all duration-300 shadow-md hover:shadow-gray-500
+              {/* View Mode Toggles */}
+              <div
+                id="preview"
+                ref={previewToggleRef}
+                className={`flex ${getHighlightClass(
+                  previewToggleRef
+                )} items-center flex-row-reverse space-x-3`}
+              >
+                <span className="text-sm text-gray-50 ml-2 hidden lg:block font-semibold">
+                  : تنظیمات پیش نمایش
+                </span>
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => handleModeChange("sm")}
+                  className={`p-2 rounded-lg hidden  lg:block transition-all duration-300 shadow-md hover:shadow-gray-500
                     ${
                       previewWidth === "sm"
                         ? "bg-yellow-600 shadow-lg"
                         : "bg-[#FFBF00] hover:bg-gray-300"
                     }`}
-                  >
-                    <Image
-                      onClick={() => setPreviewWidth("sm")}
-                      src="/assets/images/smartphone.png"
-                      alt="Mobile View"
-                      width={24}
-                      height={24}
-                      className="transform transition-transform"
-                    />
-                  </motion.button>
+                >
+                  <Image
+                    onClick={() => setPreviewWidth("sm")}
+                    src="/assets/images/smartphone.png"
+                    alt="Mobile View"
+                    width={24}
+                    height={24}
+                    className="transform transition-transform"
+                  />
+                </motion.button>
 
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => handleModeChange("lg")}
-                    className={`p-2 rounded-lg hidden lg:block transition-all duration-300 shadow-md hover:shadow-gray-500
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => handleModeChange("lg")}
+                  className={`p-2 rounded-lg hidden lg:block transition-all duration-300 shadow-md hover:shadow-gray-500
                     ${
                       previewWidth === "default"
                         ? "bg-yellow-600 shadow-lg"
                         : "bg-[#FFBF00] hover:bg-gray-300"
                     }`}
-                  >
-                    <Image
-                      src="/assets/images/computer.png"
-                      onClick={() => setPreviewWidth("default")}
-                      alt="Desktop View"
-                      width={24}
-                      height={24}
-                      className="transform transition-transform"
-                    />
-                  </motion.button>
-                </div>
-                <motion.button
-                  id="addRoute"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setIsModalOpen(true)}
-                  ref={addRouteButtonRef}
-                  className={`px-3 ${getHighlightClass(
-                    addRouteButtonRef
-                  )} py-2 bg-[#32936F] text-white rounded-xl shadow-md hover:bg-green-400`}
                 >
-                  افزودن مسیر
+                  <Image
+                    src="/assets/images/computer.png"
+                    onClick={() => setPreviewWidth("default")}
+                    alt="Desktop View"
+                    width={24}
+                    height={24}
+                    className="transform transition-transform"
+                  />
                 </motion.button>
+              </div>
+              <motion.button
+                id="addRoute"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setIsModalOpen(true)}
+                ref={addRouteButtonRef}
+                className={`px-3 ${getHighlightClass(
+                  addRouteButtonRef
+                )} py-2 bg-[#32936F] text-white rounded-xl shadow-md hover:bg-green-400`}
+              >
+                افزودن مسیر
+              </motion.button>
 
-                <motion.button
-                  id="delete"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  ref={deleteRouteButtonRef}
-                  onClick={() => setIsDeleteModalOpen(true)}
-                  className={`px-3 ${getHighlightClass(
-                    deleteRouteButtonRef
-                  )} py-2 bg-[#E83F6F] text-white rounded-xl shadow-md hover:bg-red-600`}
-                >
-                  حذف مسیر
-                </motion.button>
+              <motion.button
+                id="delete"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                ref={deleteRouteButtonRef}
+                onClick={() => setIsDeleteModalOpen(true)}
+                className={`px-3 ${getHighlightClass(
+                  deleteRouteButtonRef
+                )} py-2 bg-[#E83F6F] text-white rounded-xl shadow-md hover:bg-red-600`}
+              >
+                حذف مسیر
+              </motion.button>
 
-                <motion.select
-                  whileHover={{ scale: 1.02 }}
-                  dir="rtl"
-                  ref={changeRouteRef}
-                  id="changeRoute"
-                  value={selectedRoute}
-                  onChange={(e) => setSelectedRoute(e.target.value)}
-                  className={`w-[100px] ${getHighlightClass(
-                    changeRouteRef
-                  )} px-2 py-1 bg-gray-200 rounded-xl border-2 border-gray-200 
+              <motion.select
+                whileHover={{ scale: 1.02 }}
+                dir="rtl"
+                ref={changeRouteRef}
+                id="changeRoute"
+                value={selectedRoute}
+                onChange={(e) => setSelectedRoute(e.target.value)}
+                className={`w-[100px] ${getHighlightClass(
+                  changeRouteRef
+                )} px-2 py-1 bg-gray-200 rounded-xl border-2 border-gray-200 
              shadow-sm focus:border-gray-200 focus:ring-2 focus:ring-gray-200 
              transition-all duration-300`}
-                >
-                  {activeRoutes.map((route, index) => (
-                    <option key={index} value={route}>
-                      {route}
-                    </option>
-                  ))}
-                </motion.select>
-              </div>
+              >
+                {activeRoutes.map((route, index) => (
+                  <option key={index} value={route}>
+                    {route}
+                  </option>
+                ))}
+              </motion.select>
             </div>
-          </motion.div>
-          <Preview
-            layout={layout}
-            setSelectedComponent={setSelectedComponent}
-            orders={orders}
-            selectedComponent={selectedComponent}
-            setLayout={setLayout}
-            previewWidth={previewWidth}
-            setPreviewWidth={setPreviewWidth}
-          />
-          <Form
-            selectedComponent={selectedComponent}
-            setLayout={setLayout}
-            layout={layout}
-            orders={orders}
-            setOrders={setOrders}
-          />
-        </div>
-      )}
+          </div>
+        </motion.div>
+        <Preview
+          layout={layout}
+          setSelectedComponent={setSelectedComponent}
+          orders={orders}
+          selectedComponent={selectedComponent}
+          setLayout={setLayout}
+          previewWidth={previewWidth}
+          setPreviewWidth={setPreviewWidth}
+        />
+        <Form
+          selectedComponent={selectedComponent}
+          setLayout={setLayout}
+          layout={layout}
+          orders={orders}
+          setOrders={setOrders}
+        />
+      </div>
+      {/* )} */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <motion.div

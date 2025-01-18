@@ -41,9 +41,9 @@
           }
         ],
         "setting": {
-          "imageWidth": "50px",
-          "imageHeight": "50px",
-          "imageRadius": "30px",
+          "imageWidth": "50",
+          "imageHeight": "50",
+          "imageRadius": "30",
           "itemColor": "#14213D",
           "itemFontSize": "20",
           "itemFontWeight": "bold",
@@ -54,8 +54,8 @@
       "setting": {
         "paddingTop": "20",
         "paddingBottom": "20",
-        "marginTop": "0px",
-        "marginBottom": "0px",
+        "marginTop": "0",
+        "marginBottom": "0",
         "navbarPosition": "fixed"
       }
     },

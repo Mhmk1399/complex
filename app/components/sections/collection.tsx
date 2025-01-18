@@ -323,10 +323,10 @@ export const Collection: React.FC<CollectionProps> = ({
               />
               <ProductInfo>
                 <ProductName $setting={sectionData.setting}>
-                  {product.name}
+                  {product.name || "نام محصول"}
                 </ProductName>
                 <ProductPrice $setting={sectionData.setting}>
-                  {product.price}
+                  {product.price || "قیمت محصول"}
                 </ProductPrice>
                 <BuyButton
                   href={`/detailpages/${product._id}`}

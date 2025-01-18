@@ -198,7 +198,7 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
           dir="rtl"
         >
           {/* Style Settings */}
-          <div className="mb-6 bg-white p-0.5 rounded-lg border-b-2 border-gray-300">
+          <div className="mb-6 bg-white  rounded-lg border-b-2 border-gray-300">
             <button
               onClick={() => setIsStyleSettingsOpen(!isStyleSettingsOpen)}
               className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
@@ -237,8 +237,8 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
             </button>
             {isStyleSettingsOpen && (
               <>
-                <h2 className="text-xl font-bold my-4">تنظیمات سربرگ مجموعه</h2>
-                <div className="grid md:grid-cols-1 gap-4 animate-slideDown">
+                <h2 className="text-xl font-bold my-4 pr-2">تنظیمات سربرگ مجموعه</h2>
+                <div className="grid md:grid-cols-1 p-4 gap-4 animate-slideDown">
                   <h4 className="font-semibold mb-2">تنظیمات سربرگ مجموعه</h4>
                   <label> سایز سربرگ</label>
                   <input
@@ -269,8 +269,8 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
                     onChange={handleSettingChange}
                   />
                 </div>
-                <h4 className="font-semibold my-4">تنظیمات ظاهری</h4>
-                <div className="grid md:grid-cols-1 gap-4">
+                <h4 className="font-semibold my-4 pr-2">تنظیمات ظاهری</h4>
+                <div className="grid md:grid-cols-1 p-4 gap-4">
                   <ColorInput
                     label="رنگ پس زمینه"
                     name="backgroundColor"
@@ -328,7 +328,7 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
             </div> */}
 
                 {/* Border Radius Settings */}
-                <div className="mt-4">
+                <div className="mt-4 p-4">
                   <label className="block mb-1">گردی گوشه‌های کارت</label>
                   <input
                     type="range"
@@ -343,7 +343,7 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
                   />
                 </div>
 
-                <div className="mt-4">
+                <div className=" p-4">
                   <label className="block mb-1">گردی گوشه‌های تصویر</label>
                   <input
                     type="range"

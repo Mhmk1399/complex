@@ -205,7 +205,7 @@ const Header: React.FC<HeaderProps> = ({
       $data={sectionData}
       className={`w-full ${
         previewWidth === "default" ? "w-[75%]" : "w-[28%]"
-      } px-1 transition-all duration-150 mt-4 ease-in-out ${
+      } px-1 transition-all duration-150  ease-in-out ${
         selectedComponent === "sectionHeader" ? "border-4 border-blue-500" : ""
       }`}
       dir="rtl"
@@ -230,7 +230,7 @@ const Header: React.FC<HeaderProps> = ({
 
         <MenuButton
           $preview={preview}
-          className="absolute top-2 left-1 p-4"
+          className="absolute top-0 left-1 p-5"
           $data={sectionData}
           $previewWidth={previewWidth}
           onClick={() => setIsOpen(!isOpen)}
