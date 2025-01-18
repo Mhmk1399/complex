@@ -3,167 +3,54 @@ import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import fs from "fs";
 import path from "path";
+import { fetchGitHubFile } from '@/utilities/github';
+
 
 export async function GET(request: Request) {
   await connect();
-  if (!connect) {
-    console.log("GET_ERROR", "Database connection failed");
-    return new NextResponse("Database connection error", { status: 500 });
-  }
-
+  
   try {
-    // Get the token from the request headers
-    const token = request.headers.get("Authorization")?.split(" ")[1];
     const routeName = request.headers.get("selectedRoute");
     const activeMode = request.headers.get("activeMode") || "lg";
 
-    if (!token) {
-      return NextResponse.json(
-        { error: "Token not found in request headers" },
-        { status: 400 }
-      );
+    // Handle home route
+    if (routeName === "home") {
+      const homeFilePath = `public/template/home${activeMode}.json`;
+      const homeContent = JSON.parse(await fetchGitHubFile(homeFilePath));
+      return NextResponse.json(homeContent, { status: 200 });
     }
 
-    // Decode the JWT token
-    let decodedToken;
+    // Handle other routes
     try {
-      decodedToken = jwt.decode(token);
+      // Fetch route-specific content
+      const routeFilePath = `public/template/${routeName}${activeMode}.json`;
+      const routeContent = JSON.parse(await fetchGitHubFile(routeFilePath));
 
-      if (!decodedToken) {
-        throw new Error("Failed to decode token");
-      }
+      // Fetch home content for header and footer
+      const homeFilePath = `public/template/home${activeMode}.json`;
+      const homeContent = JSON.parse(await fetchGitHubFile(homeFilePath));
+
+      // Construct layout
+      const layout = {
+        sections: {
+          sectionHeader: homeContent.sections.sectionHeader,
+          children: routeContent.children,
+          sectionFooter: homeContent.sections.sectionFooter,
+        },
+      };
+
+      return NextResponse.json(layout, { status: 200 });
     } catch (error) {
-
-      return NextResponse.json({ error: "Invalid token"+error }, { status: 401 });
+      console.log("Error fetching route content:", error);
+      return NextResponse.json({ error: "Failed to fetch route content" }, { status: 404 });
     }
 
-    // Get the template directory from the decoded token
-    const templateDir = (decodedToken as jwt.JwtPayload).templatesDirectory;
-    console.log("templateDir", templateDir);
-    if (!templateDir || !routeName) {
-      return NextResponse.json(
-        { error: "Template directory or route not found in token" },
-        { status: 400 }
-      );
-    }
-
-    // Read the file in the template directory
-    const filePath = path.join(templateDir, routeName + activeMode + ".json"); // Replace 'your-file-name.ext' with the actual file name
-
-    let fileContent;
-    if (routeName == "home") {
-      fileContent = await new Promise<Buffer>((resolve, reject) => {
-        fs.readFile(filePath, (err, data) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(data);
-          }
-        });
-      });
-    }
-    if (routeName != "home") {
-      try {
-        const filePath = path.join(
-          templateDir,
-          routeName + activeMode + ".json"
-        );
-        if (!fs.existsSync(filePath)) {
-          return NextResponse.json(
-            { error: "File not found" },
-            { status: 404 }
-          );
-        }
-        const fileContent = await new Promise<Buffer>((resolve, reject) => {
-          fs.readFile(filePath, (err, data) => {
-            if (err) {
-              reject(console.log("error in fs function", err));
-            } else {
-              resolve(data);
-            }
-          });
-        });
-        console.log("fileContent", fileContent);
-        if (!fileContent) {
-          console.log("error fileContent", fileContent);
-
-          return NextResponse.json(
-            { error: "Failed to read file" },
-            { status: 500 }
-          );
-        }
-        const containerRoute = path.join(
-          templateDir,
-          "home" + activeMode + ".json"
-        );
-        const container = await new Promise<Buffer>((resolve, reject) => {
-          fs.readFile(containerRoute, (err, data) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(data);
-            }
-          });
-        });
-
-        const routeEntry = JSON.parse(container.toString());
-        const childernEntry = JSON.parse(fileContent.toString());
-
-        const sectionHeader = routeEntry.sections.sectionHeader;
-        const sectionFooter = routeEntry.sections.sectionFooter;
-        if (!sectionHeader || !sectionFooter || !routeEntry.sections.children) {
-          return NextResponse.json(
-            { error: "Section header or footer not found" },
-            { status: 404 }
-          );
-        }
-
-        const children = childernEntry.children;
-
-        const layout = {
-          sections: {
-            sectionHeader,
-            children,
-            sectionFooter,
-          },
-        };
-        if (!layout) {
-          return NextResponse.json(
-            { error: "Layout not found" },
-            { status: 404 }
-          );
-        }
-
-        return new NextResponse(JSON.stringify(layout), {
-          status: 200,
-          headers: {
-            "Content-Type": "application/json", // Adjust the content type as needed
-          },
-        });
-      } catch (error) {
-        console.log("catch error", error);
-
-        return NextResponse.json(
-          { error: "Failed to fetch file: " + error },
-          { status: 500 }
-        );
-      }
-    }
-
-    // Respond with the file content
-    return new NextResponse(fileContent, {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json", // Adjust the content type as needed
-      },
-    });
   } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to fetch file: " + error },
-      { status: 500 }
-    );
+    console.log("Error processing request:", error);
+    return NextResponse.json({ error: "Failed to process request" }, { status: 500 });
   }
 }
+
 export async function POST(request: Request) {
   await connect();
   if (!connect) {

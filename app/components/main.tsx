@@ -49,23 +49,18 @@ export const Main = () => {
   ]);
 
   const handleAddRoute = async ({ name }: { name: string }) => {
+    console.log(setData)
     if (routes.includes(name)) {
       toast.error("Route already exists!", { autoClose: 3000 });
       return;
     }
 
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("Token not found");
-      return;
-    }
 
     try {
       const response = await fetch("/api/route-handler", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `${token}`,
           "new-route": name,
         },
         body: JSON.stringify({ name }),
@@ -83,18 +78,12 @@ export const Main = () => {
       console.error("Error adding route:", error);
       toast.error("Failed to add route!", { autoClose: 3000 });
     }
-    console.log("useEffect token:", token);
 
-    if (!token) {
-      console.log("Token not found in local storage");
-      return;
-    }
 
     fetch("/api/route-handler", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {
@@ -117,19 +106,13 @@ export const Main = () => {
     fetchRoutes();
   };
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    console.log("useEffect token:", token);
 
-    if (!token) {
-      console.log("Token not found in local storage");
-      return;
-    }
+
 
     fetch("/api/route-handler", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {
@@ -149,47 +132,37 @@ export const Main = () => {
       .catch((error) => {
         console.log("Error sending token to server:", error);
       });
-  }, []);
+  }, [selectedRoute, activeMode]);
 
   // Replace the direct import with API call
   const sendTokenToServer = async () => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      console.error("Token not found in local storage");
-      return;
-    }
-
+    // Get URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const repoUrl = urlParams.get('repoUrl');
+  
     try {
       const response = await fetch("/api/layout-jason", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-          selectedRoute: selectedRoute,
-          activeMode: activeMode,
+          "selectedRoute": selectedRoute,
+          "activeMode": activeMode,
+          "repoUrl": repoUrl || '', // Pass the extracted repoUrl
         },
       });
-
+  
       if (!response.ok) {
         console.log("Server responded with an error:", response.statusText);
         return;
       }
-
-      const data = await response.json().catch(() => {
-        console.log("Failed to parse response as JSON");
-        return null;
-      });
-
-      if (data) {
-        setLayout(data);
-        setData(data);
-        // setLoading(false);
-      }
+  
+      const data = await response.json();
+      return data;
     } catch (error) {
-      console.log("Error sending token to server:", error);
+      console.log("Error sending request:", error);
     }
   };
+  
 
   useEffect(() => {
     // setLoading(true);
@@ -236,7 +209,6 @@ export const Main = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
           selectedRoute: selectedRoute,
           activeMode: activeMode,
         },
@@ -264,17 +236,11 @@ export const Main = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [routes, setRoutes] = useState<string[]>([]);
   const fetchRoutes = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("Token not found");
-      return;
-    }
 
     try {
       const response = await fetch("/api/route-handler", {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -294,17 +260,12 @@ export const Main = () => {
   }, []);
 
   const handleDeleteRoute = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("Token not found");
-      return;
-    }
+
 
     try {
       const response = await fetch("/api/route-handler", {
         method: "DELETE",
         headers: {
-          Authorization: `${token}`,
           route: selectedRoute,
         },
       });
@@ -338,9 +299,7 @@ export const Main = () => {
   const getHighlightClass = (
     ref: React.RefObject<HTMLButtonElement | HTMLDivElement | HTMLSelectElement>
   ) => {
-    if (localStorage.getItem("hasSeenTour") === "true") {
-      return "";
-    }
+   
     if (ref.current && activeElement === ref.current.id) {
       return "ring-4 ring-purple-600 ring-offset-2 animate-pulse scale-110 transition-all duration-300 z-50";
     }
