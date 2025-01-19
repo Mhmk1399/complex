@@ -69,3 +69,34 @@ export async function saveGitHubFile(filePath: string, content: string): Promise
         throw new Error("Failed to save file to GitHub");
     }
 }
+
+export async function deleteGitHubFile(filePath: string): Promise<void> {
+    const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${filePath}`;
+
+    try {
+        // Get the current file to get its SHA (required for deletion)
+        const currentFile = await axios.get(url, {
+            headers: {
+                Authorization: `Bearer ${GITHUB_TOKEN}`,
+                Accept: "application/vnd.github.v3+json",
+            },
+        });
+
+        const payload = {
+            message: `Delete ${filePath}`,
+            sha: currentFile.data.sha
+        };
+
+        await axios.delete(url, {
+            headers: {
+                Authorization: `Bearer ${GITHUB_TOKEN}`,
+                Accept: "application/vnd.github.v3+json",
+            },
+            data: payload
+        });
+
+    } catch (error: any) {
+        console.error("Error deleting file from GitHub:", error.response?.data || error.message);
+        throw new Error("Failed to delete file from GitHub");
+    }
+}
