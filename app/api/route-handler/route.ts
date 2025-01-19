@@ -4,89 +4,63 @@ import fs from 'fs';
 import path from 'path';
 
 
-export  async function GET (request: NextRequest)  {
-    const token = request.headers.get('Authorization')?.split(' ')[1];
-  
-    if (!token) {
-        return NextResponse.json(
-            { error: 'Missing token' },
-            { status: 401 }
-        );
-    }
-    let decodedToken;
-    try {
-      decodedToken = jwt.decode(token);
-      if (!decodedToken) {
-        throw new Error('Failed to decode token');
-      }
-    } catch (error) {
-      return NextResponse.json(
-        { error: 'Invalid token'+error },
-        { status: 401 }
-      );
-    }
+import { Octokit } from "@octokit/rest";
 
-    // Get the template directory from the decoded token
-    const templateDir = (decodedToken as jwt.JwtPayload).templatesDirectory;
-    if (!templateDir) {
-      return NextResponse.json(
-        { error: 'Template directory or route not found in token' },
-        { status: 400 }
-      );
-    }
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const GITHUB_OWNER = "Mhmk1399";
+const GITHUB_REPO = "userwebsite";
 
-    // Read the file names in the template directory
-    let fileNames;
-    try {
-      fileNames = fs.readdirSync(templateDir);
-    } catch (error) {
-      return NextResponse.json(
-        { error: 'Failed to read template directory'+error },
-        { status: 500 }
-      );
-    }
-
-    // Filter and process file names
-    const filteredNames = Array.from(new Set(
-      fileNames
-        .filter(name => name !== '.DS_Store') // Exclude .DS_Store
-        .map(name => name.replace(/lg\.json$|sm\.json$|\.json$/, ''))
-    ));
-
-    return NextResponse.json(filteredNames);
-}
-// post method for route
-export async function POST(request: NextRequest) {
-  const token = request.headers.get('Authorization')
-  const newRoute = request.headers.get('new-route');
-  if (!token) {
-    return NextResponse.json(
-      { error: 'Missing token' },
-      { status: 401 }
-    );
-  }
-  let decodedToken;
+export async function GET(request: Request) {
   try {
-    decodedToken = jwt.decode(token);
-    if (!decodedToken) {
-      throw new Error('Failed to decode token');
+    const octokit = new Octokit({
+      auth: GITHUB_TOKEN
+    });
+
+    const response = await octokit.repos.getContent({
+      owner: GITHUB_OWNER,
+      repo: GITHUB_REPO,
+      path: 'public/template'
+    });
+
+    if (Array.isArray(response.data)) {
+      const fileNames = response.data
+        .filter(item => item.type === 'file')
+        .map(file => file.name.replace(/\.json$/, ''))
+        .map(name => name.replace(/(lg|sm|Lg|Sm)$/, ''))
+        .filter((name, index, array) => array.indexOf(name) === index);
+    
+      return NextResponse.json(fileNames, { status: 200 });
     }
+    
+
+    return NextResponse.json([], { status: 200 });
+
   } catch (error) {
     return NextResponse.json(
-      { error: 'Invalid token'+error },
-      { status: 401 }
+      { error: 'Failed to fetch template directory contents' },
+      { status: 500 }
     );
   }
+}
+
+// post method for route
+export async function POST(request: NextRequest) {
+  const newRoute = request.headers.get('new-route');
+ 
+ 
+    const octokit = new Octokit({
+      auth: GITHUB_TOKEN
+    });
+
+    const response = await octokit.repos.getContent({
+      owner: GITHUB_OWNER,
+      repo: GITHUB_REPO,
+      path: 'public/template'
+    });
 
   // Get the template directory from the decoded token
-  const templateDir = (decodedToken as jwt.JwtPayload).templatesDirectory;
-  if (!templateDir || !newRoute) {
-    return NextResponse.json(
-      { error: 'Template directory or route not found in token' },
-      { status: 400 }
-    );
-  }
-  await createRouteFiles(newRoute, decodedToken as jwt.JwtPayload);
+
+  await createRouteFiles(newRoute,response);
   // Create the JSON content
   const jsonContent = {
     children: {
@@ -97,8 +71,8 @@ export async function POST(request: NextRequest) {
   };
 
   // Define file paths
-  const smFilePath = path.join(templateDir, `${newRoute}sm.json`);
-  const lgFilePath = path.join(templateDir, `${newRoute}lg.json`);
+  const smFilePath = path.join(response, `${newRoute}sm.json`);
+  const lgFilePath = path.join(response, `${newRoute}lg.json`);
 
   // Write the JSON content to the files
   try {

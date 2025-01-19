@@ -136,9 +136,9 @@ export const Main = () => {
 
   // Replace the direct import with API call
   const sendTokenToServer = async () => {
-    // Get URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const repoUrl = urlParams.get('repoUrl');
+    console.log("Fetching data with params:", { repoUrl, selectedRoute, activeMode });
   
     try {
       const response = await fetch("/api/layout-jason", {
@@ -147,28 +147,31 @@ export const Main = () => {
           "Content-Type": "application/json",
           "selectedRoute": selectedRoute,
           "activeMode": activeMode,
-          "repoUrl": repoUrl || '', // Pass the extracted repoUrl
+          "repoUrl": repoUrl || '',
         },
       });
   
+      console.log("API Response status:", response.status);
       if (!response.ok) {
-        console.log("Server responded with an error:", response.statusText);
+        console.log("Server error:", response.statusText);
         return;
       }
   
       const data = await response.json();
+      console.log("Fetched layout data:", data);
+      setData(data);
+      setLayout(data);
       return data;
     } catch (error) {
-      console.log("Error sending request:", error);
+      console.log("Error in data fetch:", error);
     }
   };
   
 
   useEffect(() => {
-    // setLoading(true);
+    console.log("Route or mode changed:", { selectedRoute, activeMode });
     sendTokenToServer();
-  }, []);
-
+  }, [activeMode, selectedRoute]);
   useEffect(() => {
     sendTokenToServer();
   }, [activeMode, selectedRoute]);
@@ -176,7 +179,11 @@ export const Main = () => {
   const [newRouteName, setNewRouteName] = useState("");
   useEffect(() => {
     const currentLayoutData = activeMode === "sm" ? smData : Data;
-
+    console.log("Current layout data:", {
+      activeMode,
+      selectedRoute,
+      currentLayoutData: activeMode === "sm" ? smData : Data
+    });
     const routeConfigs = {
       about: About.children as AboutChildren,
       contact: Contact.children as AboutChildren,
@@ -249,6 +256,7 @@ export const Main = () => {
       }
 
       const result = await response.json();
+      console.log("Fetched routes:", result);
       setRoutes(result);
       setActiveRoutes(result);
     } catch (error) {
