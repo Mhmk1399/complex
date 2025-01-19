@@ -117,7 +117,7 @@ export async function listGitHubTemplates(): Promise<string[]> {
             return response.data
                 .filter(item => item.type === 'file')
                 .map(file => file.name.replace(/\.json$/, ''))
-                .map(name => name.replace(/(lg|sm)$/, ''))
+                .map(name => name.replace(/(lg|sm|Sm|Lg)$/, ''))
                 .filter((name, index, array) => array.indexOf(name) === index);
         }
 
