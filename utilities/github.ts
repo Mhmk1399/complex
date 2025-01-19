@@ -100,3 +100,31 @@ export async function deleteGitHubFile(filePath: string): Promise<void> {
         throw new Error("Failed to delete file from GitHub");
     }
 }
+
+
+export async function listGitHubTemplates(): Promise<string[]> {
+    const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/public/template`;
+
+    try {
+        const response = await axios.get(url, {
+            headers: {
+                Authorization: `Bearer ${GITHUB_TOKEN}`,
+                Accept: "application/vnd.github.v3+json",
+            },
+        });
+
+        if (Array.isArray(response.data)) {
+            return response.data
+                .filter(item => item.type === 'file')
+                .map(file => file.name.replace(/\.json$/, ''))
+                .map(name => name.replace(/(lg|sm)$/, ''))
+                .filter((name, index, array) => array.indexOf(name) === index);
+        }
+
+        return [];
+
+    } catch (error: any) {
+        console.error("Error listing templates from GitHub:", error.response?.data || error.message);
+        throw new Error("Failed to list templates from GitHub");
+    }
+}
