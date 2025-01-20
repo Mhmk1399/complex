@@ -2,24 +2,36 @@ import axios from "axios";
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN; // Add this to your .env file
 const GITHUB_OWNER = "Mhmk1399";
-const GITHUB_REPO = "userwebsite";
+
 
 /**
  * Fetches the raw content of a file from the GitHub repository.
  * @param filePath - Path of the file in the repository (e.g., "public/template/homesm.json").
  * @returns The raw content of the file as a string.
  */
-export async function fetchGitHubFile(filePath: string): Promise<string> {
+
+function getRepoFromUrl(url: string | null): string {
+    if (!url) return "userwebsite"; // default fallback
+    
+    try {
+        const decodedUrl = decodeURIComponent(url);
+        return decodedUrl.split('/').pop() || "userwebsite";
+    } catch {
+        return "userwebsite";
+    }
+}
+
+export async function fetchGitHubFile(filePath: string, repoUrl?: string): Promise<string> {
+    const GITHUB_REPO = getRepoFromUrl(repoUrl || null);
     const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${filePath}`;
     console.log("Fetching URL:", url);
 
     try {
         const response = await axios.get(url, {
             headers: {
-                Authorization: `Bearer ${GITHUB_TOKEN}`, // Provide your GitHub token here
-                Accept: "application/vnd.github.v3+json", // Fetch metadata (including content)
+                Authorization: `Bearer ${GITHUB_TOKEN}`,
+                Accept: "application/vnd.github.v3+json",
             },
-            
         });
 
         // Extract Base64-encoded content and decode it
@@ -37,7 +49,8 @@ export async function fetchGitHubFile(filePath: string): Promise<string> {
     }
 }
 
-export async function saveGitHubFile(filePath: string, content: string): Promise<void> {
+export async function saveGitHubFile(filePath: string, content: string, repoUrl?: string): Promise<void> {
+    const GITHUB_REPO = getRepoFromUrl(repoUrl || null);
     const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${filePath}`;
 
     try {
@@ -70,7 +83,8 @@ export async function saveGitHubFile(filePath: string, content: string): Promise
     }
 }
 
-export async function deleteGitHubFile(filePath: string): Promise<void> {
+export async function deleteGitHubFile(filePath: string, repoUrl?: string): Promise<void> {
+    const GITHUB_REPO = getRepoFromUrl(repoUrl || null);
     const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${filePath}`;
 
     try {
@@ -102,7 +116,8 @@ export async function deleteGitHubFile(filePath: string): Promise<void> {
 }
 
 
-export async function listGitHubTemplates(): Promise<string[]> {
+export async function listGitHubTemplates(repoUrl?: string): Promise<string[]> {
+    const GITHUB_REPO = getRepoFromUrl(repoUrl || null);
     const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/public/template`;
 
     try {
@@ -130,7 +145,7 @@ export async function listGitHubTemplates(): Promise<string[]> {
 }
 
 
-export async function createRoutePage(routeName: string): Promise<void> {
+export async function createRoutePage(routeName: string, repoUrl?: string): Promise<void> {
     const pageContent = `"use client";
 import { useEffect, useState } from "react";
 import ImageText from "@/components/imageText";
@@ -233,10 +248,10 @@ export default function Page() {
 `;
 
     const filePath = `app/${routeName}/page.tsx`;
-    await saveGitHubFile(filePath, pageContent);
+    await saveGitHubFile(filePath, pageContent, repoUrl);
 }
 
-export async function deleteRoutePage(routeName: string): Promise<void> {
+export async function deleteRoutePage(routeName: string,repoUrl?: string): Promise<void> {
     const filePath = `app/${routeName}/page.tsx`;
-    await deleteGitHubFile(filePath);
+    await deleteGitHubFile(filePath,repoUrl);
 }

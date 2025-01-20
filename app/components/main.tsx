@@ -49,6 +49,8 @@ export const Main = () => {
   ]);
 
   const handleAddRoute = async ({ name }: { name: string }) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const repoUrl = urlParams.get('repoUrl');
     console.log(setData)
     if (routes.includes(name)) {
       toast.error("Route already exists!", { autoClose: 3000 });
@@ -62,6 +64,7 @@ export const Main = () => {
         headers: {
           "Content-Type": "application/json",
           "new-route": name,
+          repoUrl: repoUrl || '',
         },
         body: JSON.stringify({ name }),
       });
@@ -84,6 +87,7 @@ export const Main = () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "repoUrl": repoUrl || '',
       },
     })
       .then((response) => {
@@ -106,6 +110,9 @@ export const Main = () => {
     fetchRoutes();
   };
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const repoUrl = urlParams.get('repoUrl');
+    console.log("Fetching data with params:", { repoUrl, selectedRoute, activeMode });
 
 
 
@@ -113,6 +120,7 @@ export const Main = () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "repoUrl": repoUrl || '',
       },
     })
       .then((response) => {
@@ -211,13 +219,17 @@ export const Main = () => {
   }, [selectedRoute, activeMode]);
   const handleSave = async () => {
     setSaveStatus("saving");
+    const urlParams = new URLSearchParams(window.location.search);
+    const repoUrl = urlParams.get('repoUrl');
+    console.log("Fetching data with params:", { repoUrl, selectedRoute, activeMode });
     try {
       const response = await fetch("/api/layout-jason", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          selectedRoute: selectedRoute,
-          activeMode: activeMode,
+          "selectedRoute": selectedRoute,
+          "activeMode": activeMode,
+          "repoUrl": repoUrl || '',
         },
         body: JSON.stringify(layout),
       });
@@ -243,11 +255,16 @@ export const Main = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [routes, setRoutes] = useState<string[]>([]);
   const fetchRoutes = async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const repoUrl = urlParams.get('repoUrl');
+    console.log("Fetching data with params:", { repoUrl, selectedRoute, activeMode });
 
     try {
       const response = await fetch("/api/route-handler", {
         method: "GET",
         headers: {
+          "Content-Type": "application/json",
+          "repoUrl": repoUrl || '',
         },
       });
 
@@ -268,13 +285,17 @@ export const Main = () => {
   }, []);
 
   const handleDeleteRoute = async () => {
-
+    const urlParams = new URLSearchParams(window.location.search);
+    const repoUrl = urlParams.get('repoUrl');
+    console.log("Fetching data with params:", { repoUrl, selectedRoute, activeMode });
 
     try {
       const response = await fetch("/api/route-handler", {
         method: "DELETE",
         headers: {
+          "Content-Type": "application/json",
           route: selectedRoute,
+          "repoUrl": repoUrl || '',
         },
       });
 

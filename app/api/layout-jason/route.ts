@@ -9,6 +9,11 @@ export async function GET(request: Request) {
   try {
     const routeName = request.headers.get("selectedRoute");
     const activeMode = request.headers.get("activeMode") || "lg";
+    const repoUrl = request.headers.get("repoUrl");
+    if (!routeName || !activeMode || !repoUrl) {
+      return NextResponse.json({ error: "Missing required parameters" }, { status: 400 });
+    }
+
     const headers = {
       'Cache-Control': 'no-cache, no-store, must-revalidate',
       'Pragma': 'no-cache',
@@ -18,7 +23,8 @@ export async function GET(request: Request) {
     // Handle home route
     if (routeName === "home") {
       const homeFilePath = `public/template/home${activeMode}.json`;
-      const homeContent = JSON.parse(await fetchGitHubFile(homeFilePath));
+      console.log("Fetching home layout from:", homeFilePath);
+      const homeContent = JSON.parse(await fetchGitHubFile(homeFilePath, repoUrl));
       return NextResponse.json(homeContent, { status: 200, headers });
     }
 
@@ -26,11 +32,12 @@ export async function GET(request: Request) {
     try {
       // Fetch route-specific content
       const routeFilePath = `public/template/${routeName}${activeMode}.json`;
-      const routeContent = JSON.parse(await fetchGitHubFile(routeFilePath));
+        console.log("Fetching route content from:", routeFilePath);
+      const routeContent = JSON.parse(await fetchGitHubFile(routeFilePath, repoUrl));
 
       // Fetch home content for header and footer
       const homeFilePath = `public/template/home${activeMode}.json`;
-      const homeContent = JSON.parse(await fetchGitHubFile(homeFilePath));
+      const homeContent = JSON.parse(await fetchGitHubFile(homeFilePath, repoUrl));
 
       // Construct layout
       const layout = {
@@ -60,10 +67,15 @@ export async function POST(request: Request) {
   try {
     const routeName = request.headers.get("selectedRoute");
     const activeMode = request.headers.get("activeMode") || "lg";
+    const repoUrl = request.headers.get("repoUrl");
+    if (!routeName || !activeMode || !repoUrl) {
+      return NextResponse.json({ error: "Missing required parameters" }, { status: 400 });
+    }
 
     console.log("Request details:", {
       routeName,
-      activeMode
+      activeMode,
+      repoUrl
     });
 
 
@@ -77,7 +89,7 @@ export async function POST(request: Request) {
     if (routeName === "home") {
       const filePath = `public/template/${routeName}${activeMode}.json`;
       console.log("Saving home layout to:", filePath);
-      await saveGitHubFile(filePath, JSON.stringify(newLayout, null, 2));
+      await saveGitHubFile(filePath, JSON.stringify(newLayout, null, 2), repoUrl);
       console.log("Home layout saved successfully");
       return NextResponse.json({ message: "Layout saved successfully" }, { status: 200 });
     } 
@@ -85,7 +97,7 @@ export async function POST(request: Request) {
     const children = newLayout.sections.children;
     const filePath = `public/template/${routeName}${activeMode}.json`;
     console.log("Saving children layout to:", filePath, { hasChildren: !!children });
-    await saveGitHubFile(filePath, JSON.stringify({ children }, null, 2));
+    await saveGitHubFile(filePath, JSON.stringify({ children }, null, 2),repoUrl);
     console.log("Children layout saved successfully");
     return NextResponse.json({ message: "Children section saved successfully" }, { status: 200 });
 

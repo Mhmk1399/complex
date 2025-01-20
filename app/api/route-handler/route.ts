@@ -3,9 +3,13 @@ import { saveGitHubFile, deleteGitHubFile, listGitHubTemplates, createRoutePage,
 
 
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const repoUrl = request.headers.get("repoUrl");
+  if (!repoUrl) {
+    return NextResponse.json({ error: "Missing repoUrl" }, { status: 400 });
+  }
   try {
-    const templates = await listGitHubTemplates();
+    const templates = await listGitHubTemplates(repoUrl);
     return NextResponse.json(templates, { status: 200 });
   } catch (error) {
     console.log("Error fetching template directory contents:", error);
@@ -21,6 +25,10 @@ export async function GET() {
 // post method for route
 export async function POST(request: NextRequest) {
   const newRoute = request.headers.get('new-route');
+  const repoUrl = request.headers.get("repoUrl");
+  if (!repoUrl) {
+    return NextResponse.json({ error: "Missing repoUrl" }, { status: 400 });
+  }
 
   if (!newRoute) {
     return NextResponse.json(
@@ -44,9 +52,9 @@ export async function POST(request: NextRequest) {
     const smFilePath = `public/template/${newRoute}sm.json`;
 
     // Save files to GitHub using the saveGitHubFile function
-    await saveGitHubFile(lgFilePath, JSON.stringify(jsonContent, null, 2));
-    await saveGitHubFile(smFilePath, JSON.stringify(jsonContent, null, 2));
-    await createRoutePage(newRoute);
+    await saveGitHubFile(lgFilePath, JSON.stringify(jsonContent, null, 2),repoUrl);
+    await saveGitHubFile(smFilePath, JSON.stringify(jsonContent, null, 2),repoUrl);
+    await createRoutePage(newRoute,repoUrl);
 
     return NextResponse.json(
       { message: 'Route files created successfully' },
@@ -65,6 +73,10 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   const route = request.headers.get('route');
+  const repoUrl = request.headers.get("repoUrl");
+  if (!repoUrl) {
+    return NextResponse.json({ error: "Missing repoUrl" }, { status: 400 });
+  }
 
   if (!route) {
     return NextResponse.json(
@@ -78,9 +90,9 @@ export async function DELETE(request: NextRequest) {
     const lgFilePath = `public/template/${route}lg.json`;
     const smFilePath = `public/template/${route}sm.json`;
 
-    await deleteGitHubFile(lgFilePath);
-    await deleteGitHubFile(smFilePath);
-    await deleteRoutePage(route);
+    await deleteGitHubFile(lgFilePath,repoUrl);
+    await deleteGitHubFile(smFilePath,repoUrl);
+    await deleteRoutePage(route,repoUrl);
 
 
     return NextResponse.json(
