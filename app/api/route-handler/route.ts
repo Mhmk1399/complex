@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { saveGitHubFile, deleteGitHubFile, listGitHubTemplates } from "@/utilities/github";
+import { saveGitHubFile, deleteGitHubFile, listGitHubTemplates, createRoutePage, deleteRoutePage } from "@/utilities/github";
 
 
 
@@ -22,6 +22,13 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   const newRoute = request.headers.get('new-route');
 
+  if (!newRoute) {
+    return NextResponse.json(
+      { error: 'New route name is required' },
+      { status: 400 }
+    );
+  }
+
   try {
     // Create the JSON content template for new routes
     const jsonContent = {
@@ -39,6 +46,7 @@ export async function POST(request: NextRequest) {
     // Save files to GitHub using the saveGitHubFile function
     await saveGitHubFile(lgFilePath, JSON.stringify(jsonContent, null, 2));
     await saveGitHubFile(smFilePath, JSON.stringify(jsonContent, null, 2));
+    await createRoutePage(newRoute);
 
     return NextResponse.json(
       { message: 'Route files created successfully' },
@@ -72,6 +80,8 @@ export async function DELETE(request: NextRequest) {
 
     await deleteGitHubFile(lgFilePath);
     await deleteGitHubFile(smFilePath);
+    await deleteRoutePage(route);
+
 
     return NextResponse.json(
       { message: 'Route files deleted successfully' },

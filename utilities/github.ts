@@ -128,3 +128,35 @@ export async function listGitHubTemplates(): Promise<string[]> {
         throw new Error("Failed to list templates from GitHub");
     }
 }
+
+
+export async function createRoutePage(routeName: string): Promise<void> {
+    const pageContent = `
+import { fetchGitHubFile } from "@/utilities/github";
+
+export default async function ${routeName}Page() {
+    const lgData = await fetchGitHubFile('public/template/${routeName}lg.json');
+    const smData = await fetchGitHubFile('public/template/${routeName}sm.json');
+    
+    return (
+        <div>
+            {/* Desktop Version */}
+            <div className="hidden md:block">
+                {JSON.parse(lgData)}
+            </div>
+            {/* Mobile Version */}
+            <div className="block md:hidden">
+                {JSON.parse(smData)}
+            </div>
+        </div>
+    );
+}`;
+
+    const filePath = `app/${routeName}/page.tsx`;
+    await saveGitHubFile(filePath, pageContent);
+}
+
+export async function deleteRoutePage(routeName: string): Promise<void> {
+    const filePath = `app/${routeName}/page.tsx`;
+    await deleteGitHubFile(filePath);
+}
