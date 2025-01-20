@@ -132,7 +132,7 @@ export async function listGitHubTemplates(): Promise<string[]> {
 
 export async function createRoutePage(routeName: string): Promise<void> {
     const pageContent = `
-import { fetchGitHubFile } from "@/utilities/github";
+import { fetchGitHubFile } from "../../utils/githubFetcher";
 
 export default async function ${routeName}Page() {
     const lgData = await fetchGitHubFile('public/template/${routeName}lg.json');
