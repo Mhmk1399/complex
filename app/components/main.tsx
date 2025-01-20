@@ -29,7 +29,7 @@ export const Main = () => {
   const [Data, setData] = useState<Layout>(nullJson as unknown as Layout);
   // const [loading, setLoading] = useState(true);
   const [layout, setLayout] = useState<Layout>(Data);
-  const [activeMode, setActiveMode] = useState<"sm" | "lg">("lg");
+  const [activeMode, setActiveMode] = useState<"sm" | "lg">("sm");
   const [previewWidth, setPreviewWidth] = useState<"sm" | "default">("default");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState<string>("");
