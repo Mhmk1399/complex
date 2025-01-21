@@ -29,7 +29,7 @@ export const Main = () => {
   const [Data, setData] = useState<Layout>(nullJson as unknown as Layout);
   // const [loading, setLoading] = useState(true);
   const [layout, setLayout] = useState<Layout>(Data);
-  const [activeMode, setActiveMode] = useState<"sm" | "lg">("lg");
+  const [activeMode, setActiveMode] = useState<"sm" | "lg">("sm");
   const [previewWidth, setPreviewWidth] = useState<"sm" | "default">("default");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState<string>("");
@@ -49,24 +49,22 @@ export const Main = () => {
   ]);
 
   const handleAddRoute = async ({ name }: { name: string }) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const repoUrl = urlParams.get('repoUrl');
+    console.log(setData)
     if (routes.includes(name)) {
       toast.error("Route already exists!", { autoClose: 3000 });
       return;
     }
 
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("Token not found");
-      return;
-    }
 
     try {
       const response = await fetch("/api/route-handler", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `${token}`,
           "new-route": name,
+          repoUrl: repoUrl || '',
         },
         body: JSON.stringify({ name }),
       });
@@ -83,18 +81,13 @@ export const Main = () => {
       console.error("Error adding route:", error);
       toast.error("Failed to add route!", { autoClose: 3000 });
     }
-    console.log("useEffect token:", token);
 
-    if (!token) {
-      console.log("Token not found in local storage");
-      return;
-    }
 
     fetch("/api/route-handler", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        "repoUrl": repoUrl || '',
       },
     })
       .then((response) => {
@@ -117,19 +110,17 @@ export const Main = () => {
     fetchRoutes();
   };
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    console.log("useEffect token:", token);
+    const urlParams = new URLSearchParams(window.location.search);
+    const repoUrl = urlParams.get('repoUrl');
+    console.log("Fetching data with params:", { repoUrl, selectedRoute, activeMode });
 
-    if (!token) {
-      console.log("Token not found in local storage");
-      return;
-    }
+
 
     fetch("/api/route-handler", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        "repoUrl": repoUrl || '',
       },
     })
       .then((response) => {
@@ -149,53 +140,46 @@ export const Main = () => {
       .catch((error) => {
         console.log("Error sending token to server:", error);
       });
-  }, []);
+  }, [selectedRoute, activeMode]);
 
   // Replace the direct import with API call
   const sendTokenToServer = async () => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      console.error("Token not found in local storage");
-      return;
-    }
-
+    const urlParams = new URLSearchParams(window.location.search);
+    const repoUrl = urlParams.get('repoUrl');
+    console.log("Fetching data with params:", { repoUrl, selectedRoute, activeMode });
+  
     try {
       const response = await fetch("/api/layout-jason", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-          selectedRoute: selectedRoute,
-          activeMode: activeMode,
+          "selectedRoute": selectedRoute,
+          "activeMode": activeMode,
+          "repoUrl": repoUrl || '',
         },
       });
-
+  
+      console.log("API Response status:", response.status);
       if (!response.ok) {
-        console.log("Server responded with an error:", response.statusText);
+        console.log("Server error:", response.statusText);
         return;
       }
-
-      const data = await response.json().catch(() => {
-        console.log("Failed to parse response as JSON");
-        return null;
-      });
-
-      if (data) {
-        setLayout(data);
-        setData(data);
-        // setLoading(false);
-      }
+  
+      const data = await response.json();
+      console.log("Fetched layout data:", data);
+      setData(data);
+      setLayout(data);
+      return data;
     } catch (error) {
-      console.log("Error sending token to server:", error);
+      console.log("Error in data fetch:", error);
     }
   };
+  
 
   useEffect(() => {
-    // setLoading(true);
+    console.log("Route or mode changed:", { selectedRoute, activeMode });
     sendTokenToServer();
-  }, []);
-
+  }, [activeMode, selectedRoute]);
   useEffect(() => {
     sendTokenToServer();
   }, [activeMode, selectedRoute]);
@@ -203,7 +187,11 @@ export const Main = () => {
   const [newRouteName, setNewRouteName] = useState("");
   useEffect(() => {
     const currentLayoutData = activeMode === "sm" ? smData : Data;
-
+    console.log("Current layout data:", {
+      activeMode,
+      selectedRoute,
+      currentLayoutData: activeMode === "sm" ? smData : Data
+    });
     const routeConfigs = {
       about: About.children as AboutChildren,
       contact: Contact.children as AboutChildren,
@@ -231,14 +219,17 @@ export const Main = () => {
   }, [selectedRoute, activeMode]);
   const handleSave = async () => {
     setSaveStatus("saving");
+    const urlParams = new URLSearchParams(window.location.search);
+    const repoUrl = urlParams.get('repoUrl');
+    console.log("Fetching data with params:", { repoUrl, selectedRoute, activeMode });
     try {
       const response = await fetch("/api/layout-jason", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          selectedRoute: selectedRoute,
-          activeMode: activeMode,
+          "selectedRoute": selectedRoute,
+          "activeMode": activeMode,
+          "repoUrl": repoUrl || '',
         },
         body: JSON.stringify(layout),
       });
@@ -264,17 +255,16 @@ export const Main = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [routes, setRoutes] = useState<string[]>([]);
   const fetchRoutes = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("Token not found");
-      return;
-    }
+    const urlParams = new URLSearchParams(window.location.search);
+    const repoUrl = urlParams.get('repoUrl');
+    console.log("Fetching data with params:", { repoUrl, selectedRoute, activeMode });
 
     try {
       const response = await fetch("/api/route-handler", {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          "repoUrl": repoUrl || '',
         },
       });
 
@@ -283,6 +273,7 @@ export const Main = () => {
       }
 
       const result = await response.json();
+      console.log("Fetched routes:", result);
       setRoutes(result);
       setActiveRoutes(result);
     } catch (error) {
@@ -294,18 +285,17 @@ export const Main = () => {
   }, []);
 
   const handleDeleteRoute = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("Token not found");
-      return;
-    }
+    const urlParams = new URLSearchParams(window.location.search);
+    const repoUrl = urlParams.get('repoUrl');
+    console.log("Fetching data with params:", { repoUrl, selectedRoute, activeMode });
 
     try {
       const response = await fetch("/api/route-handler", {
         method: "DELETE",
         headers: {
-          Authorization: `${token}`,
+          "Content-Type": "application/json",
           route: selectedRoute,
+          "repoUrl": repoUrl || '',
         },
       });
 
@@ -338,9 +328,7 @@ export const Main = () => {
   const getHighlightClass = (
     ref: React.RefObject<HTMLButtonElement | HTMLDivElement | HTMLSelectElement>
   ) => {
-    if (localStorage.getItem("hasSeenTour") === "true") {
-      return "";
-    }
+   
     if (ref.current && activeElement === ref.current.id) {
       return "ring-4 ring-purple-600 ring-offset-2 animate-pulse scale-110 transition-all duration-300 z-50";
     }
