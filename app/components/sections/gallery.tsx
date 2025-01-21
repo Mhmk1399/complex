@@ -6,6 +6,7 @@ import { Layout, GallerySection } from "@/lib/types";
 import { useState, useEffect } from "react";
 import { Delete } from "../C-D";
 
+
 interface GalleryProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
