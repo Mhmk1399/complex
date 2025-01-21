@@ -46,8 +46,7 @@ const Slide = styled.div<{ $active: boolean; $data: SlideBannerSection }>`
   width: 100%;
   height: 100%;
   opacity: ${(props) => (props.$active ? 1 : 0)};
-  transition: ${(props) => props.$data.blocks.setting.slideTransition};
-  //   opacity 0.5s ease-in-out;
+  transition: opacity 0.7s ease-in-out;
 `;
 
 const NavigationButtons = styled.div`
@@ -116,14 +115,6 @@ const SlideBanner: React.FC<props> = ({
   const [currentSlide, setCurrentSlide] = useState(0);
   const [preview, setPreview] = useState(previewWidth);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-  console.log("slide banner", layout);
-  console.log("actualName", actualName);
-  console.log("previewWidth", previewWidth);
-  console.log("selectedComponent", selectedComponent);
-
-  
-
   useEffect(() => {
     if (window.innerWidth < 426) {
       setPreview("sm");

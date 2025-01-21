@@ -11,7 +11,7 @@ export const Create = (
   const templateData = Compiler(data, sectionName)[0];
 
   if (templateData) {
-    const uniqueComponentName = `${sectionName}-${uuidv4()}`;
+    const uniqueComponentName = `${sectionName}-${uuidv4().slice(0, 8)}`;
     // Create new section with proper structure
     const newSection = {
       ...templateData,
