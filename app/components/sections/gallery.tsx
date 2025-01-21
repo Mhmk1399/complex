@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Layout, GallerySection } from "@/lib/types";
 import { useState, useEffect } from "react";
 import { Delete } from "../C-D";
-import { identity } from "lodash";
 
 interface GalleryProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -171,15 +170,20 @@ const Gallery: React.FC<GalleryProps> = ({
       )}
 
       <ImageGrid $data={sectionData} $preview={preview}>
-        {images.map((image, id) => (
-          <ImageWrapper key={id} $data={sectionData}>
-            <Image
-              src={image.imageSrc}
-              alt={image.imageAlt}
-              width={3000}
-              height={3000}
-              className="w-full h-full object-cover"
-            />
+        {images.map((image, index) => (
+          <ImageWrapper key={index} $data={sectionData}>
+            <Link
+              href={image.imageLink ? image.imageLink : "#"}
+              target="_blank"
+            >
+              <Image
+                src={image.imageSrc}
+                alt={image.imageAlt}
+                width={3000}
+                height={3000}
+                className="w-full h-full object-cover"
+              />
+            </Link>
           </ImageWrapper>
         ))}
       </ImageGrid>
