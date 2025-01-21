@@ -545,6 +545,12 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
                   </div>
                 </div>
               </div>
+              <ColorInput
+                label="رنگ پس زمینه"
+                name="background"
+                value={userInputData?.blocks?.setting?.background || "#000000"}
+                onChange={handleBlockSettingChange}
+              />
             </div>
           </div>
         )}
