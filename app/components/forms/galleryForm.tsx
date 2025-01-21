@@ -304,7 +304,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
                     <label className="block mb-2">آدرس تصویر</label>
                     <input
                       type="text"
-                      value={image.imageSrc}
+                      value={image.imageSrc || ""}
                       onChange={(e) =>
                         handleImageChange(index, "imageSrc", e.target.value)
                       }
@@ -315,7 +315,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
                     <label className="block mb-2">متن جایگزین</label>
                     <input
                       type="text"
-                      value={image.imageAlt}
+                      value={image.imageAlt || ""}
                       onChange={(e) =>
                         handleImageChange(index, "imageAlt", e.target.value)
                       }

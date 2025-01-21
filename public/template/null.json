@@ -412,29 +412,32 @@
               {
                 "imageSrc": "/assets/images/banner.jpg",
                 "imageAlt": "Gallery Image 1",
-                "imageLink": "/image1"
+                "imageLink": "#"
               },
               {
                 "imageSrc": "/assets/images/banner1.jpg",
-                "imageAlt": "Gallery Image 2"
+                "imageAlt": "Gallery Image 2",
+                "imageLink": "#"
               },
               {
                 "imageSrc": "/assets/images/banner.jpg",
                 "imageAlt": "Gallery Image 1",
-                "imageLink": "/image1"
+                "imageLink": "#"
               },
               {
                 "imageSrc": "/assets/images/banner1.jpg",
-                "imageAlt": "Gallery Image 2"
+                "imageAlt": "Gallery Image 2",
+                "imageLink": "#"
               },
               {
                 "imageSrc": "/assets/images/banner.jpg",
                 "imageAlt": "Gallery Image 1",
-                "imageLink": "/image1"
+                "imageLink": "#"
               },
               {
                 "imageSrc": "/assets/images/banner1.jpg",
-                "imageAlt": "Gallery Image 2"
+                "imageAlt": "Gallery Image 2",
+                "imageLink": "#"
               }
             ],
             "setting": {

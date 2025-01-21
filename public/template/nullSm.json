@@ -352,29 +352,32 @@
               {
                 "imageSrc": "/assets/images/banner.jpg",
                 "imageAlt": "Gallery Image 1",
-                "imageLink": "/image1"
+                "imageLink": "#"
               },
               {
                 "imageSrc": "/assets/images/banner1.jpg",
-                "imageAlt": "Gallery Image 2"
+                "imageAlt": "Gallery Image 2",
+                "imageLink": "#"
               },
               {
                 "imageSrc": "/assets/images/banner.jpg",
                 "imageAlt": "Gallery Image 1",
-                "imageLink": "/image1"
+                "imageLink": "#"
               },
               {
                 "imageSrc": "/assets/images/banner1.jpg",
-                "imageAlt": "Gallery Image 2"
+                "imageAlt": "Gallery Image 2",
+                "imageLink": "#"
               },
               {
                 "imageSrc": "/assets/images/banner.jpg",
                 "imageAlt": "Gallery Image 1",
-                "imageLink": "/image1"
+                "imageLink": "#"
               },
               {
                 "imageSrc": "/assets/images/banner1.jpg",
-                "imageAlt": "Gallery Image 2"
+                "imageAlt": "Gallery Image 2",
+                "imageLink": "#"
               }
             ],
             "setting": {
@@ -388,7 +391,7 @@
               "imageWidth": "300",
               "imageHeight": "200",
               "imageRadius": "8",
-              "gridColumns": "2",
+              "gridColumns": "3",
               "gridGap": "20"
             }
           },

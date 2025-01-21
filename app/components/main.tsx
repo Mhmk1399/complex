@@ -50,13 +50,12 @@ export const Main = () => {
 
   const handleAddRoute = async ({ name }: { name: string }) => {
     const urlParams = new URLSearchParams(window.location.search);
-    const repoUrl = urlParams.get('repoUrl');
-    console.log(setData)
+    const repoUrl = urlParams.get("repoUrl");
+    console.log(setData);
     if (routes.includes(name)) {
       toast.error("Route already exists!", { autoClose: 3000 });
       return;
     }
-
 
     try {
       const response = await fetch("/api/route-handler", {
@@ -64,7 +63,7 @@ export const Main = () => {
         headers: {
           "Content-Type": "application/json",
           "new-route": name,
-          repoUrl: repoUrl || '',
+          repoUrl: repoUrl || "",
         },
         body: JSON.stringify({ name }),
       });
@@ -76,18 +75,35 @@ export const Main = () => {
       const result = await response.json();
       console.log("Route added successfully:", result);
       fetchRoutes(); // Fetch updated routes
-      toast.success("Route added successfully!", { autoClose: 3000 });
+      toast.success("مسیر جدید ساخته شد", {
+        autoClose: 3000,
+        style: {
+          background: "#00ff00",
+          color: "#fff",
+          fontSize: "16px",
+          textAlign: "center",
+          direction: "rtl",
+        },
+      });
     } catch (error) {
       console.error("Error adding route:", error);
-      toast.error("Failed to add route!", { autoClose: 3000 });
+      toast.error("مشکل در ساخت مسیر", {
+        autoClose: 3000,
+        style: {
+          background: "#ff0000",
+          color: "#fff",
+          fontSize: "16px",
+          textAlign: "center",
+          direction: "rtl",
+        },
+      });
     }
-
 
     fetch("/api/route-handler", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "repoUrl": repoUrl || '',
+        repoUrl: repoUrl || "",
       },
     })
       .then((response) => {
@@ -111,16 +127,18 @@ export const Main = () => {
   };
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const repoUrl = urlParams.get('repoUrl');
-    console.log("Fetching data with params:", { repoUrl, selectedRoute, activeMode });
-
-
+    const repoUrl = urlParams.get("repoUrl");
+    console.log("Fetching data with params:", {
+      repoUrl,
+      selectedRoute,
+      activeMode,
+    });
 
     fetch("/api/route-handler", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "repoUrl": repoUrl || '',
+        repoUrl: repoUrl || "",
       },
     })
       .then((response) => {
@@ -145,26 +163,30 @@ export const Main = () => {
   // Replace the direct import with API call
   const sendTokenToServer = async () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const repoUrl = urlParams.get('repoUrl');
-    console.log("Fetching data with params:", { repoUrl, selectedRoute, activeMode });
-  
+    const repoUrl = urlParams.get("repoUrl");
+    console.log("Fetching data with params:", {
+      repoUrl,
+      selectedRoute,
+      activeMode,
+    });
+
     try {
       const response = await fetch("/api/layout-jason", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "selectedRoute": selectedRoute,
-          "activeMode": activeMode,
-          "repoUrl": repoUrl || '',
+          selectedRoute: selectedRoute,
+          activeMode: activeMode,
+          repoUrl: repoUrl || "",
         },
       });
-  
+
       console.log("API Response status:", response.status);
       if (!response.ok) {
         console.log("Server error:", response.statusText);
         return;
       }
-  
+
       const data = await response.json();
       console.log("Fetched layout data:", data);
       setData(data);
@@ -174,7 +196,6 @@ export const Main = () => {
       console.log("Error in data fetch:", error);
     }
   };
-  
 
   useEffect(() => {
     console.log("Route or mode changed:", { selectedRoute, activeMode });
@@ -190,7 +211,7 @@ export const Main = () => {
     console.log("Current layout data:", {
       activeMode,
       selectedRoute,
-      currentLayoutData: activeMode === "sm" ? smData : Data
+      currentLayoutData: activeMode === "sm" ? smData : Data,
     });
     const routeConfigs = {
       about: About.children as AboutChildren,
@@ -220,16 +241,20 @@ export const Main = () => {
   const handleSave = async () => {
     setSaveStatus("saving");
     const urlParams = new URLSearchParams(window.location.search);
-    const repoUrl = urlParams.get('repoUrl');
-    console.log("Fetching data with params:", { repoUrl, selectedRoute, activeMode });
+    const repoUrl = urlParams.get("repoUrl");
+    console.log("Fetching data with params:", {
+      repoUrl,
+      selectedRoute,
+      activeMode,
+    });
     try {
       const response = await fetch("/api/layout-jason", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "selectedRoute": selectedRoute,
-          "activeMode": activeMode,
-          "repoUrl": repoUrl || '',
+          selectedRoute: selectedRoute,
+          activeMode: activeMode,
+          repoUrl: repoUrl || "",
         },
         body: JSON.stringify(layout),
       });
@@ -256,15 +281,19 @@ export const Main = () => {
   const [routes, setRoutes] = useState<string[]>([]);
   const fetchRoutes = async () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const repoUrl = urlParams.get('repoUrl');
-    console.log("Fetching data with params:", { repoUrl, selectedRoute, activeMode });
+    const repoUrl = urlParams.get("repoUrl");
+    console.log("Fetching data with params:", {
+      repoUrl,
+      selectedRoute,
+      activeMode,
+    });
 
     try {
       const response = await fetch("/api/route-handler", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "repoUrl": repoUrl || '',
+          repoUrl: repoUrl || "",
         },
       });
 
@@ -286,8 +315,12 @@ export const Main = () => {
 
   const handleDeleteRoute = async () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const repoUrl = urlParams.get('repoUrl');
-    console.log("Fetching data with params:", { repoUrl, selectedRoute, activeMode });
+    const repoUrl = urlParams.get("repoUrl");
+    console.log("Fetching data with params:", {
+      repoUrl,
+      selectedRoute,
+      activeMode,
+    });
 
     try {
       const response = await fetch("/api/route-handler", {
@@ -295,7 +328,7 @@ export const Main = () => {
         headers: {
           "Content-Type": "application/json",
           route: selectedRoute,
-          "repoUrl": repoUrl || '',
+          repoUrl: repoUrl || "",
         },
       });
 
@@ -307,10 +340,32 @@ export const Main = () => {
       console.log("Route deleted successfully:", result);
       fetchRoutes(); // Fetch updated routes
       setSelectedRoute("home");
-      toast.success("Route deleted successfully!", { autoClose: 3000 });
+      toast.success(" حذف مسیر انجام شد! ", {
+        autoClose: 3000,
+        style: {
+          backgroundColor: "#007bff",
+          color: "#fff",
+          fontSize: "16px",
+          fontWeight: "bold",
+          borderRadius: "5px",
+          padding: "10px",
+          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+        },
+      });
     } catch (error) {
       console.log("Error deleting route:", error);
-      toast.error("Failed to delete route!", { autoClose: 3000 });
+      toast.error("مشکل در حذف مسیر", {
+        autoClose: 3000,
+        style: {
+          background: "#ff0000",
+          color: "#fff",
+          fontSize: "16px",
+          fontWeight: "bold",
+          borderRadius: "5px",
+          padding: "10px",
+          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+        },
+      });
     }
     fetchRoutes();
     setSelectedRoute("home");
@@ -328,7 +383,6 @@ export const Main = () => {
   const getHighlightClass = (
     ref: React.RefObject<HTMLButtonElement | HTMLDivElement | HTMLSelectElement>
   ) => {
-   
     if (ref.current && activeElement === ref.current.id) {
       return "ring-4 ring-purple-600 ring-offset-2 animate-pulse scale-110 transition-all duration-300 z-50";
     }
@@ -473,26 +527,26 @@ export const Main = () => {
               </div>
               <motion.button
                 id="addRoute"
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsModalOpen(true)}
                 ref={addRouteButtonRef}
                 className={`px-3 ${getHighlightClass(
                   addRouteButtonRef
-                )} py-2 bg-[#32936F] text-white rounded-xl shadow-md hover:bg-green-400`}
+                )} py-2 bg-[#32936F] text-white rounded-xl shadow-md hover:bg-green-600`}
               >
                 افزودن مسیر
               </motion.button>
 
               <motion.button
                 id="delete"
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.95 }}
                 ref={deleteRouteButtonRef}
                 onClick={() => setIsDeleteModalOpen(true)}
                 className={`px-3 ${getHighlightClass(
                   deleteRouteButtonRef
-                )} py-2 bg-[#E83F6F] text-white rounded-xl shadow-md hover:bg-red-600`}
+                )} py-2 bg-[#E83F6F] text-white rounded-xl shadow-md hover:bg-red-500`}
               >
                 حذف مسیر
               </motion.button>
@@ -542,9 +596,9 @@ export const Main = () => {
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-white p-6 rounded-xl shadow-lg w-96"
+            className="bg-white/20 p-6 border border-gray-300 backdrop-blur-sm rounded-xl shadow-lg w-96"
           >
-            <h3 className="text-lg font-bold mb-4 text-right">
+            <h3 className="text-lg font-bold text-white mb-4 text-right">
               افزودن مسیر جدید
             </h3>
             <div className="space-y-4">
@@ -566,7 +620,7 @@ export const Main = () => {
                     handleAddRoute({ name: newRouteName });
                     setIsModalOpen(false);
                   }}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                  className="px-4 py-2 mx-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
                 >
                   ذخیره
                 </button>
@@ -586,9 +640,11 @@ export const Main = () => {
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-white p-6 rounded-xl shadow-lg w-96"
+            className="bg-white/20 p-6 border border-gray-300 backdrop-blur-sm rounded-xl shadow-lg w-96"
           >
-            <h3 className="text-lg font-bold mb-4 text-right">حذف مسیر</h3>
+            <h3 className="text-lg font-bold mb-4 text-white text-right">
+              حذف مسیر
+            </h3>
             <div className="space-y-4">
               <select
                 value={selectedRoute}
@@ -614,7 +670,7 @@ export const Main = () => {
                     setSelectedRoute("");
                     setIsDeleteModalOpen(false);
                   }}
-                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                  className="px-4 py-2 mx-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
                 >
                   حذف
                 </button>
@@ -629,7 +685,7 @@ export const Main = () => {
           </motion.div>
         </div>
       )}
-      <ToastContainer position="top-left" transition={Slide} />
+      <ToastContainer position="top-right" transition={Slide} />
       <TourGuide
         saveButtonRef={saveButtonRef}
         addRouteButtonRef={addRouteButtonRef}
