@@ -91,7 +91,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
       setUserInputData((prevData) => ({
         ...prevData,
         blocks: updatedJson.children.sections[0].blocks,
-        setting: updatedJson.children.sections[0].setting,
+        setting: updatedJson.children.sections[0].setting, // Update the setting property
       }));
     }
   };

@@ -74,6 +74,7 @@ import {
   RichTextSection,
   Section,
   BlogDetailSection,
+  GallerySection,
 } from "@/lib/types";
 import { MultiColumnForm } from "./forms/multiColomnForm";
 import { SlideForm } from "./forms/slideForm";
@@ -85,6 +86,7 @@ import { DetailForm } from "./forms/detailForm";
 import { CollectionForm } from "./forms/collectionForm";
 import BlogListForm from "./forms/blogForm";
 import { BlogDetailForm } from "./forms/blogDetailForm";
+import GalleryForm from "./forms/galleryForm";
 type FormData =
   | HeaderSection
   | MultiRowSection
@@ -134,7 +136,20 @@ export const Form = ({
   );
   const addSection = (componentName: string) => {
     Create(componentName, layout, setLayout);
-    setIsModalOpen(false); // Close the modal after adding section
+    setIsModalOpen(false);
+
+    setTimeout(() => {
+      const previewContainer = document.querySelector(
+        '[data-preview-container="true"]'
+      );
+      if (previewContainer) {
+        previewContainer.scrollTo({
+          top: previewContainer.scrollHeight / 1.1,
+          behavior: "smooth",
+        });
+      }
+    }, 300);
+
     toast.success(`${componentName} اضافه شد`, {
       position: "top-center",
       duration: 2000,
@@ -238,6 +253,19 @@ export const Form = ({
               >
             }
             userInputData={userInputData as RichTextSection}
+            layout={layout}
+            selectedComponent={selectedComponent}
+          />
+        );
+      case "Gallery":
+        return (
+          <GalleryForm
+            setUserInputData={
+              setUserInputData as React.Dispatch<
+                React.SetStateAction<GallerySection>
+              >
+            }
+            userInputData={userInputData as GallerySection}
             layout={layout}
             selectedComponent={selectedComponent}
           />

@@ -16,10 +16,12 @@ import DetailPage from "./sections/detailPage";
 import { Collection } from "./sections/collection";
 import BlogList from "./sections/blogList";
 import BlogDetail from "./sections/blogDetail";
+import Gallery from "./sections/gallery";
+
 
 // First update the PreviewProps interface
 interface PreviewProps {
-  layout: Layout ;
+  layout: Layout;
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   orders: string[];
   selectedComponent: string;
@@ -54,6 +56,7 @@ export const Preview: React.FC<PreviewProps> = ({
     Collection,
     BlogList,
     BlogDetail,
+    Gallery
   };
 
   return (
@@ -65,7 +68,8 @@ export const Preview: React.FC<PreviewProps> = ({
       >
         {/* Add this wrapper */}
         <div
-          className={`h-[86vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide  lg:ml-5 ${
+          data-preview-container="true"
+          className={`h-[86vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide lg:ml-5 ${
             previewWidth === "sm" ? "w-[425px]" : "w-full lg:w-[75%]"
           }`}
         >
@@ -75,7 +79,7 @@ export const Preview: React.FC<PreviewProps> = ({
             selectedComponent={selectedComponent}
             previewWidth={previewWidth} // Pass the state to components
           />
-          <div className="grid grid-cols-1 mt-28">
+          <div className="grid grid-cols-1 mt-32">
             {orders.map((componentName, index) => {
               const baseComponentName = componentName.split("-")[0];
               const Component =

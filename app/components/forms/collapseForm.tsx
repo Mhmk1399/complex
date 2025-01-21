@@ -102,7 +102,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
   };
 
   const handleUpdate = (
-    type: "margin" | "padding",
+    type: "margin" | "padding", // Add padding type here
     updatedValues: BoxValues
   ) => {
     if (type === "margin") {
