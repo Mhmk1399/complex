@@ -17,6 +17,7 @@ import { Collection } from "./sections/collection";
 import BlogList from "./sections/blogList";
 import BlogDetail from "./sections/blogDetail";
 import Gallery from "./sections/gallery";
+import SlideBanner from "./sections/slideBanner";
 
 
 // First update the PreviewProps interface
@@ -56,7 +57,8 @@ export const Preview: React.FC<PreviewProps> = ({
     Collection,
     BlogList,
     BlogDetail,
-    Gallery
+    Gallery,
+    SlideBanner
   };
 
   return (

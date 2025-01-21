@@ -75,6 +75,7 @@ import {
   Section,
   BlogDetailSection,
   GallerySection,
+  SlideBannerSection,
 } from "@/lib/types";
 import { MultiColumnForm } from "./forms/multiColomnForm";
 import { SlideForm } from "./forms/slideForm";
@@ -87,6 +88,7 @@ import { CollectionForm } from "./forms/collectionForm";
 import BlogListForm from "./forms/blogForm";
 import { BlogDetailForm } from "./forms/blogDetailForm";
 import GalleryForm from "./forms/galleryForm";
+import { SlideBannerForm } from "./forms/slideBannerForm";
 type FormData =
   | HeaderSection
   | MultiRowSection
@@ -279,6 +281,19 @@ export const Form = ({
               >
             }
             userInputData={userInputData as HeaderSection}
+            layout={layout}
+            selectedComponent={selectedComponent}
+          />
+        );
+      case "SlideBanner":
+        return (
+          <SlideBannerForm
+            setUserInputData={
+              setUserInputData as React.Dispatch<
+                React.SetStateAction<SlideBannerSection>
+              >
+            }
+            userInputData={userInputData as SlideBannerSection}
             layout={layout}
             selectedComponent={selectedComponent}
           />

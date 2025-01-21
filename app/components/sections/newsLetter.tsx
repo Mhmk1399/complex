@@ -102,6 +102,7 @@ const NewsLetter: React.FC<NewsLetterProps> = ({
     (section) => section.type === actualName
   ) as NewsLetterSection;
 
+  
   if (!sectionData) return null;
 
   return (

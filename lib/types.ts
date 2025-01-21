@@ -1092,3 +1092,37 @@ export interface GallerySection {
   blocks: GalleryBlock;
   setting: GallerySectionSetting;
 }
+export interface SlideBannerBlockSetting extends CommonSettings {
+  autoplay: boolean;
+  autoplaySpeed: number;
+  slideTransition: string;
+  navigationStyle: string;
+  arrowsPosition: string;
+  opacityImage: string;
+  imageRadious: string;
+  imageBehavior: string;
+  height: string;
+  bgArrow: string;
+  activeDotColor: string;
+  inactiveDotColor: string;
+}
+
+export interface SlideItem {
+  imageSrc: string;
+  imageAlt: string;
+  heading: string;
+  description: string;
+  link: string;
+}
+
+export interface SlideBannerBlock {
+  slides: SlideItem[];
+  setting: SlideBannerBlockSetting;
+}
+
+export interface SlideBannerSection {
+  type: "SlideBanner";
+  blocks: SlideBannerBlock;
+  setting: CommonSettings;
+}
+
