@@ -64,87 +64,11 @@
       "type": "header"
     },
     "children": {
-      "type": "home",
       "sections": [
-        {
-          "type": "Banner",
-          "blocks": {
-            "imageSrc": "/assets/images/ban.jpg",
-            "imageAlt": "",
-            "text": "lggggg",
-            "description": " توضیحات بنر",
-            "setting": {
-              "descriptionColor": "#E5E5E5",
-              "descriptionFontSize": "22",
-              "descriptionFontWeight": "bold",
-              "textColor": "#FCA311",
-              "textFontSize": "71",
-              "textFontWeight": "bold",
-              "backgroundColorBox": "#14213d",
-              "backgroundBoxRadious": "54",
-              "opacityImage": "1",
-              "opacityTextBox": "0.7",
-              "imageRadious": "14",
-              "imageBehavior": "cover"
-            }
-          },
-          "setting": {
-            "paddingTop": "30",
-            "paddingBottom": "30",
-            "marginTop": "20",
-            "marginBottom": "20",
-            "imageBehavior": "cover",
-            "paddingLeft": "10",
-            "paddingRight": "10"
-          }
-        },
-        {
-          "type": "SlideShow",
-          "blocks": [
-            {
-              "imageSrc": "/assets/images/banner3.jpg",
-              "imageAlt": "",
-              "text": "اسلاید اول",
-              "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
-              "btnLink": "",
-              "btnText": "دکمه"
-            },
-            {
-              "imageSrc": "/assets/images/banner1.jpg",
-              "imageAlt": "",
-              "text": "اسلاید دوم",
-              "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
-              "link": "#",
-              "btnText": "دکمه"
-            }
-          ],
-          "setting": {
-            "paddingTop": "20",
-            "paddingBottom": "20",
-            "marginTop": "10",
-            "marginBottom": "10",
-            "paddinRight": "0",
-            "paddinLeft": "0",
-            "descriptionColor": "#E5E5E5",
-            "descriptionFontSize": "16",
-            "descriptionFontWeight": "normal",
-            "textColor": "#FFFFFF",
-            "textFontSize": "24",
-            "textFontWeight": "bold",
-            "btnTextColor": "#ee2020",
-            "btnBackgroundColor": "#FCA311",
-            "backgroundColorBox": "#14213D",
-            "backgroundBoxRadius": "40",
-            "opacityImage": 1,
-            "imageWidth": "700",
-            "imageHeight": "500",
-            "imageRadious": "40"
-          }
-        },
         {
           "type": "RichText",
           "blocks": {
-            "textHeading": "سربرگ محصول",
+            "textHeading": "سربرل",
             "description": "توضیحات درباره محصول",
             "btnText": "دکمه",
             "btnLink": "/",
@@ -174,7 +98,7 @@
           "blocks": {
             "imageSrc": "/assets/images/banner3.jpg",
             "imageAlt": "",
-            "heading": "سربرگ محصول",
+            "heading": "سربرگufcjvjchxhx محصول",
             "description": "توضیحات درباره محصول",
             "btnLink": "/",
             "btnText": "دکمه",
@@ -520,11 +444,149 @@
             "marginBottom": "20px",
             "backgroundColor": "#FCA311"
           }
+        },
+        {
+          "type": "Banner-65757aba-d7b7-499b-930c-a78d8fbc6563",
+          "blocks": {
+            "imageSrc": "/assets/images/ban.jpg",
+            "imageAlt": "",
+            "heading": "",
+            "description": " توضیحات بنر",
+            "text": "lggggg",
+            "setting": {
+              "descriptionColor": "#E5E5E5",
+              "descriptionFontSize": "22",
+              "descriptionFontWeight": "bold",
+              "textColor": "#FCA311",
+              "textFontSize": "71",
+              "textFontWeight": "bold",
+              "backgroundColorBox": "#14213d",
+              "backgroundBoxRadious": "54",
+              "opacityImage": "1",
+              "opacityTextBox": "0.7",
+              "imageRadious": "14",
+              "imageBehavior": "cover"
+            }
+          },
+          "setting": {
+            "paddingTop": "30",
+            "paddingBottom": "30",
+            "marginTop": "20",
+            "marginBottom": "20",
+            "imageBehavior": "cover",
+            "paddingLeft": "10",
+            "paddingRight": "10"
+          }
+        },
+        {
+          "type": "Banner-cad8f9bb-fbd9-4474-94f4-2f1b1980a0fa",
+          "blocks": {
+            "imageSrc": "/assets/images/ban.jpg",
+            "imageAlt": "",
+            "heading": "",
+            "description": " توضیحات بنر",
+            "text": "lggggg",
+            "setting": {
+              "descriptionColor": "#E5E5E5",
+              "descriptionFontSize": "22",
+              "descriptionFontWeight": "bold",
+              "textColor": "#FCA311",
+              "textFontSize": "71",
+              "textFontWeight": "bold",
+              "backgroundColorBox": "#14213d",
+              "backgroundBoxRadious": "54",
+              "opacityImage": "1",
+              "opacityTextBox": "0.7",
+              "imageRadious": "14",
+              "imageBehavior": "cover"
+            }
+          },
+          "setting": {
+            "paddingTop": "30",
+            "paddingBottom": "30",
+            "marginTop": "20",
+            "marginBottom": "20",
+            "imageBehavior": "cover",
+            "paddingLeft": "10",
+            "paddingRight": "10"
+          }
+        },
+        {
+          "type": "SpecialOffer",
+          "blocks": {
+            "textHeading": "پیشنهاد شگفت‌ انگیز",
+            "setting": {
+              "headingColor": "#FFFFFF",
+              "headingFontSize": "32",
+              "headingFontWeight": "bold",
+              "productNameColor": "#000000",
+              "priceColor": "#EF394E",
+              "descriptionColor": "#666666",
+              "btnBg": "#EF394E",
+              "btnTextColor": "#ffffff",
+              "cardBackground": "#EF394E",
+              "cardBorderRadius": "8",
+              "imageRadius": "8",
+              "gridColumns": "4"
+            }
+          },
+          "setting": {
+            "paddingTop": "30",
+            "paddingBottom": "30",
+            "marginTop": "20",
+            "marginBottom": "20",
+            "backgroundColor": "#EF394E",
+            "paddingLeft": "10",
+            "paddingRight": "10"
+          }
+        },
+        {
+          "type": "Story",
+          "blocks": {
+            "stories": [
+              {
+                "id": "1",
+                "imageUrl": "/assets/images/pro1.jpg",
+                "title": "تخفیف ویژه",
+                "link": "/special-offers"
+              },
+              {
+                "id": "2", 
+                "imageUrl": "/assets/images/pro2.jpg",
+                "title": "جدیدترین‌ها",
+                "link": "/new-arrivals"
+              },
+              {
+                "id": "3",
+                "imageUrl": "/assets/images/pro3.jpg", 
+                "title": "پیشنهاد روز",
+                "link": "/daily-deals"
+              }
+            ],
+            "setting": {
+              "storyRingColor": "#ef394e",
+              "viewedRingColor": "#e0e0e0",
+              "titleColor": "#666666",
+              "titleFontSize": "12",
+              "titleFontWeight": "normal",
+              "imageWidth": "70px",
+              "imageHeight": "70px",
+              "imageRadius": "500"
+            }
+          },
+          "setting": {
+            "paddingTop": "20",
+            "paddingBottom": "20", 
+            "marginTop": "10",
+            "marginBottom": "10",
+            "backgroundColor": "#ffffff"
+          }
         }
+        
+        
       ],
       "order": [
-        "Banner",
-        "SlideShow",
+        "Banner-cad8f9bb-fbd9-4474-94f4-2f1b1980a0fa",
         "RichText",
         "ImageText",
         "Video",
@@ -534,7 +596,10 @@
         "MultiColumn",
         "MultiRow",
         "NewsLetter-1",
-        "Collection"
+        "Collection",
+        "Banner-65757aba-d7b7-499b-930c-a78d8fbc6563",
+        "SpecialOffer",
+        "Story"
       ]
     },
     "sectionFooter": {

@@ -74,6 +74,8 @@ import {
   RichTextSection,
   Section,
   BlogDetailSection,
+  StorySection,
+  SpecialOfferSection,
 } from "@/lib/types";
 import { MultiColumnForm } from "./forms/multiColomnForm";
 import { SlideForm } from "./forms/slideForm";
@@ -85,6 +87,8 @@ import { DetailForm } from "./forms/detailForm";
 import { CollectionForm } from "./forms/collectionForm";
 import BlogListForm from "./forms/blogForm";
 import { BlogDetailForm } from "./forms/blogDetailForm";
+import { StoryForm } from "./forms/storyForm";
+import { SpecialForm } from "./forms/specialForm";
 type FormData =
   | HeaderSection
   | MultiRowSection
@@ -124,7 +128,7 @@ export const Form = ({
   const [showOrdersMenu, setShowOrdersMenu] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(true); // New state for form visibility
-
+console.log(selectedComponent)
   // Setup sensors for dnd-kit
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -451,6 +455,31 @@ export const Form = ({
             selectedComponent={selectedComponent}
           />
         );
+        case "Story":
+          return (
+            <StoryForm
+              setUserInputData={
+                setUserInputData as React.Dispatch<
+                  React.SetStateAction<StorySection>
+                >
+              }
+              userInputData={userInputData as StorySection}
+              layout={layout}
+              selectedComponent={selectedComponent}
+            />
+          );
+          case "SpecialOffer":
+          return (
+              <SpecialForm
+              setUserInputData={
+                setUserInputData as React.Dispatch<
+                  React.SetStateAction<SpecialOfferSection>
+                >
+              }
+              userInputData={userInputData as SpecialOfferSection}
+              layout={layout}
+              selectedComponent={selectedComponent}
+            />);
       default:
         return <div>یک سکشن را برای تنظیمات کلیک کنید...</div>;
     }

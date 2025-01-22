@@ -36,7 +36,7 @@ const Card = styled.div<{
   padding: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   height: 400px;
-
+min-width: 250px;
   @media (max-width: 425px) {
     margin: 10px 5px;
     height: 350px;
@@ -122,6 +122,7 @@ const BuyButton = styled.a<{
 
 const ProductCard: React.FC<ProductCardProps> = ({ productData }) => {
   const currentImageIndex=0;
+console.log(productData.images);
 
   const currentImage = productData.images[currentImageIndex] || {
     imageSrc: "",

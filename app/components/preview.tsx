@@ -16,6 +16,8 @@ import DetailPage from "./sections/detailPage";
 import { Collection } from "./sections/collection";
 import BlogList from "./sections/blogList";
 import BlogDetail from "./sections/blogDetail";
+import { SpecialOffer } from "./sections/specialOffer";
+import { Story } from "./sections/story";
 
 // First update the PreviewProps interface
 interface PreviewProps {
@@ -54,7 +56,10 @@ export const Preview: React.FC<PreviewProps> = ({
     Collection,
     BlogList,
     BlogDetail,
+    SpecialOffer,
+    Story
   };
+console.log(selectedComponent);
 
   return (
     <div>

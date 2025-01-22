@@ -483,6 +483,7 @@ export interface Layout {
     slideshow: SlideSection;
     richtext: RichTextSection;
     sectionHeader: HeaderSection;
+
     children:
       | Children
       | AboutChildren
@@ -777,6 +778,7 @@ export interface ProductCardData {
   createdAt?: string;
   updatedAt?: string;
   storeId?: string;
+  _id?: string;
 }
 export interface ProductCardSetting {
   cardBorderRadius?: string;
@@ -1058,4 +1060,58 @@ export interface RouteLayout {
   BlogList: BlogChildren;
   BlogDetail: BlogDetailChildren;
   home: Children;
+}
+export interface SpecialOfferBlockSetting extends CommonSettings {
+  gridColumns: number;
+  imageRadius: string;
+  productNameColor: string;
+  priceColor: string;
+  descriptionColor: string;
+  btnBackgroundColor: string;
+  btnTextColor: string;
+  cardBackground: string;
+  cardBorderRadius: string;
+  paddingTop: string;
+  paddingBottom: string;
+  marginTop: string;
+  marginBottom: string;
+
+}
+
+export interface SpecialOfferBlock {
+  textHeading: string;
+  products: SpecialOfferSection[];
+  setting: SpecialOfferBlockSetting;
+}
+
+export interface SpecialOfferSection {
+  type: "SpecialOffer";
+  blocks: SpecialOfferBlock;
+  setting: SpecialOfferBlockSetting;
+}
+export interface StoryBlockSetting extends CommonSettings {
+  storyRingColor: string;
+  viewedRingColor: string;
+  titleColor: string;
+  titleFontSize: string;
+  titleFontWeight: string;
+  imageWidth: string;
+  imageHeight: string;
+  imageRadius: string;
+}
+
+export interface StoryBlock {
+  stories: {
+    id: string;
+    imageUrl: string;
+    title: string;
+    link: string;
+  }[];
+  setting: StoryBlockSetting;
+}
+
+export interface StorySection {
+  type: "Story";
+  blocks: StoryBlock;
+  setting: CommonSettings;
 }

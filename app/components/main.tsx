@@ -78,7 +78,7 @@ export const Main = () => {
       fetchRoutes(); // Fetch updated routes
       toast.success("Route added successfully!", { autoClose: 3000 });
     } catch (error) {
-      console.error("Error adding route:", error);
+      console.log("Error adding route:", error);
       toast.error("Failed to add route!", { autoClose: 3000 });
     }
 
@@ -277,7 +277,7 @@ export const Main = () => {
       setRoutes(result);
       setActiveRoutes(result);
     } catch (error) {
-      console.error("Error fetching routes:", error);
+      console.log("Error fetching routes:", error);
     }
   };
   useEffect(() => {
