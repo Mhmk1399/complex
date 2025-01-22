@@ -1095,7 +1095,8 @@ export interface GallerySectionSetting {
   paddingBottom: string;
   marginTop: string;
   marginBottom: string;
-
+  paddingLeft: string;
+  paddingRight: string;
 }
 
 export interface SpecialOfferBlock {
