@@ -44,6 +44,7 @@ const SectionHeader = styled.section<{
   position: absolute;
   width: 100%;
   z-index: 40;
+  
 `;
 
 const LogoContainer = styled.div<{
@@ -110,6 +111,7 @@ const NavItems = styled.div<{
     visibility: ${$isOpen ? "visible" : "hidden"};
     transform: translateY(${$isOpen ? "0" : "-90px"});
   `}
+  
 `;
 
 const NavItem = styled(Link)<{
@@ -130,6 +132,7 @@ const NavItem = styled(Link)<{
   &:hover {
     color: ${(props) => props.$data.blocks.setting.itemHoverColor || "#000"};
   }
+
 `;
 
 const MenuButton = styled.button<{
@@ -203,7 +206,7 @@ const Header: React.FC<HeaderProps> = ({
       $preview={preview}
       $previewWidth={previewWidth}
       $data={sectionData}
-      className={`w-full ${
+      className={`w-full  ${
         previewWidth === "default" ? "w-[75%]" : "w-[28%]"
       } px-1 transition-all duration-150  ease-in-out ${
         selectedComponent === "sectionHeader" ? "border-4 border-blue-500" : ""

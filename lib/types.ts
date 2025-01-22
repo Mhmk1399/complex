@@ -103,7 +103,6 @@ export interface CommonSettings {
   paddingLeft?: string;
   marginRight?: string;
   marginLeft?: string;
-
 }
 
 export interface HeaderBlockSettings extends CommonSettings {
@@ -149,7 +148,6 @@ export interface BannerBlockSettings extends CommonSettings {
   opacityTextBox: string;
   imageRadious: string;
   imageBehavior: string;
-  
 }
 export interface BannerBlock {
   imageSrc: string;
@@ -306,7 +304,7 @@ export interface StoreSection {
   }[];
   setting: {
     gridColumns: number;
-    paddingTop: string;  // Changed from number to string
+    paddingTop: string; // Changed from number to string
     paddingBottom: string;
     paddingLeft: string;
     paddingRight: string;
@@ -320,7 +318,6 @@ export interface StoreSection {
   };
 }
 
-
 export interface Section {
   setting: CommonSettings;
   blocks:
@@ -330,10 +327,11 @@ export interface Section {
     | MultiColumnBlock
     | NewsLetterBlock
     | RichTextBlock
-    | StoreSection['blocks']      // Add store blocks
-    | BlogSection['blocks']       // Add blog blocks
-    | BlogDetailSection['blocks'] // Add blog detail blocks
-    | DetailPageSection['blocks']; // Add detail page blocks
+    | GalleryBlock
+    | StoreSection["blocks"] // Add store blocks
+    | BlogSection["blocks"] // Add blog blocks
+    | BlogDetailSection["blocks"] // Add blog detail blocks
+    | DetailPageSection["blocks"]; // Add detail page blocks
   type: string;
 }
 
@@ -727,7 +725,6 @@ export interface ProductStoreLayout {
   };
 }
 
-
 export interface ProductCard {
   blocks: ProductListSection[];
   setting: ProductBlockSetting;
@@ -865,8 +862,6 @@ export interface DetailPageSection {
   setting: DetailPageSettings;
 }
 
-
-
 export interface CollectionBlockSetting extends CommonSettings {
   headingColor: string;
   headingFontSize: string;
@@ -899,7 +894,7 @@ export interface CollectionProduct {
 }
 
 export interface CollectionSection {
-  type:string;
+  type: string;
   blocks: {
     heading: string;
     products: CollectionProduct[];
@@ -954,7 +949,7 @@ export interface BlogChildren {
   order: string[];
 }
 export interface BlogSection {
-  type: string;  // Changed from string to literal type
+  type: string; // Changed from string to literal type
   blocks: BlogBlock[];
   setting: BlogListSetting;
 }
@@ -1027,15 +1022,11 @@ export interface DetailPageChildren {
   order: string[];
 }
 
-
 export interface StoreChildren {
- 
-    type: string;
-    sections: StoreSection[];
-    order: string[];
- 
+  type: string;
+  sections: StoreSection[];
+  order: string[];
 }
-
 
 export interface BlogDetailChildren {
   type: string;
@@ -1054,7 +1045,7 @@ export interface LayoutResponse {
 
 export interface RouteLayout {
   about: AboutChildren;
-  contact: AboutChildren; 
+  contact: AboutChildren;
   store: StoreChildren;
   DetailPage: DetailPageChildren;
   BlogList: BlogChildren;
@@ -1070,7 +1061,36 @@ export interface SpecialOfferBlockSetting extends CommonSettings {
   btnBackgroundColor: string;
   btnTextColor: string;
   cardBackground: string;
-  cardBorderRadius: string;
+  cardBorderRadius: string;}
+export interface GalleryImage {
+  imageSrc: string;
+  imageAlt: string;
+  imageLink?: string;
+}
+
+export interface GalleryBlockSetting {
+  titleColor: string;
+  titleFontSize: string;
+  titleFontWeight: string;
+  descriptionColor: string;
+  descriptionFontSize: string;
+  descriptionFontWeight: string;
+  background: string;
+  imageWidth: string;
+  imageHeight: string;
+  imageRadius: string;
+  gridColumns: string;
+  gridGap: string;
+}
+
+export interface GalleryBlock {
+  title: string;
+  description: string;
+  images: GalleryImage[];
+  setting: GalleryBlockSetting;
+}
+
+export interface GallerySectionSetting {
   paddingTop: string;
   paddingBottom: string;
   marginTop: string;
@@ -1114,4 +1134,47 @@ export interface StorySection {
   type: "Story";
   blocks: StoryBlock;
   setting: CommonSettings;
+
+  paddingRight: string;
+  paddingLeft: string;
 }
+
+export interface GallerySection {
+  type: "Gallery";
+  blocks: GalleryBlock;
+  setting: GallerySectionSetting;
+}
+export interface SlideBannerBlockSetting extends CommonSettings {
+  autoplay: boolean;
+  autoplaySpeed: number;
+  slideTransition: string;
+  navigationStyle: string;
+  arrowsPosition: string;
+  opacityImage: string;
+  imageRadious: string;
+  imageBehavior: string;
+  height: string;
+  bgArrow: string;
+  activeDotColor: string;
+  inactiveDotColor: string;
+}
+
+export interface SlideItem {
+  imageSrc: string;
+  imageAlt: string;
+  heading: string;
+  description: string;
+  link: string;
+}
+
+export interface SlideBannerBlock {
+  slides: SlideItem[];
+  setting: SlideBannerBlockSetting;
+}
+
+export interface SlideBannerSection {
+  type: "SlideBanner";
+  blocks: SlideBannerBlock;
+  setting: CommonSettings;
+}
+

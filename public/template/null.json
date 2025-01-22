@@ -53,7 +53,7 @@
       "setting": {
         "paddingTop": "20",
         "paddingBottom": "20",
-        "marginTop": "0",
+        "marginTop": "20",
         "marginBottom": "20",
         "marginRight": "0",
         "marginLeft": "0",
@@ -65,6 +65,129 @@
     },
     "children": {
       "sections": [
+        {
+          "type": "SlideBanner",
+          "setting": {
+            "marginTop": "20",
+            "marginBottom": "0",
+            "paddingTop": "0",
+            "paddingBottom": "0",
+            "paddingLeft": "0",
+            "paddingRight": "0"
+          },
+          "blocks": {
+            "slides": [
+              {
+                "imageSrc": "/assets/images/banner1.jpg",
+                "imageAlt": "Slide 1",
+                "heading": "عنوان اسلاید اول",
+                "description": "توضیحات اسلاید اول",
+                "link": "#"
+              },
+              {
+                "imageSrc": "/assets/images/pro3.jpg",
+                "imageAlt": "Slide 2",
+                "heading": "عنوان اسلاید دوم",
+                "description": "توضیحات اسلاید دوم",
+                "link": "#"
+              },
+              {
+                "imageSrc": "/assets/images/ban.jpg",
+                "imageAlt": "Slide 3",
+                "heading": "عنوان اسلاید سوم",
+                "description": "توضیحات اسلاید سوم",
+                "link": "#"
+              }
+            ],
+            "setting": {
+              "autoplay": true,
+              "autoplaySpeed": 3000,
+              "slideTransition": "fade",
+              "navigationStyle": "arrows",
+              "arrowsPosition": "bottom-right",
+              "height": "500",
+              "bgArrow": "#ffffff",
+              "activeDotColor":"#ffffff",
+              "inactiveDotColor":"#000000"
+            }
+          }
+        },
+
+        {
+          "type": "Banner",
+          "blocks": {
+            "imageSrc": "/assets/images/ban.jpg",
+            "imageAlt": "",
+            "text": "lggggg",
+            "description": " توضیحات بنر",
+            "setting": {
+              "descriptionColor": "#E5E5E5",
+              "descriptionFontSize": "22",
+              "descriptionFontWeight": "bold",
+              "textColor": "#FCA311",
+              "textFontSize": "71",
+              "textFontWeight": "bold",
+              "backgroundColorBox": "#14213d",
+              "backgroundBoxRadious": "54",
+              "opacityImage": "1",
+              "opacityTextBox": "0.7",
+              "imageRadious": "14",
+              "imageBehavior": "cover"
+            }
+          },
+          "setting": {
+            "paddingTop": "30",
+            "paddingBottom": "30",
+            "marginTop": "20",
+            "marginBottom": "20",
+            "imageBehavior": "cover",
+            "paddingLeft": "10",
+            "paddingRight": "10"
+          }
+        },
+        {
+          "type": "SlideShow",
+          "blocks": [
+            {
+              "imageSrc": "/assets/images/banner3.jpg",
+              "imageAlt": "",
+              "text": "اسلاید اول",
+              "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
+              "btnLink": "",
+              "btnText": "دکمه"
+            },
+            {
+              "imageSrc": "/assets/images/banner1.jpg",
+              "imageAlt": "",
+              "text": "اسلاید دوم",
+              "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
+              "link": "#",
+              "btnText": "دکمه"
+            }
+          ],
+          "setting": {
+            "paddingTop": "20",
+            "paddingBottom": "20",
+            "marginTop": "10",
+            "marginBottom": "10",
+            "paddinRight": "0",
+            "paddinLeft": "0",
+            "descriptionColor": "#E5E5E5",
+            "descriptionFontSize": "16",
+            "descriptionFontWeight": "normal",
+            "textColor": "#FFFFFF",
+            "textFontSize": "24",
+            "textFontWeight": "bold",
+            "btnTextColor": "#ee2020",
+            "btnBackgroundColor": "#FCA311",
+            "backgroundColorBox": "#14213D",
+            "backgroundBoxRadius": "40",
+            "opacityImage": 1,
+            "imageWidth": "700",
+            "imageHeight": "500",
+            "imageRadious": "40"
+          }
+        },
         {
           "type": "RichText",
           "blocks": {
@@ -328,6 +451,68 @@
           }
         },
         {
+          "type": "Gallery",
+          "blocks": {
+            "title": "گالری تصاویر",
+            "description": "مجموعه ای از بهترین تصاویر ما",
+            "images": [
+              {
+                "imageSrc": "/assets/images/banner.jpg",
+                "imageAlt": "Gallery Image 1",
+                "imageLink": "#"
+              },
+              {
+                "imageSrc": "/assets/images/banner1.jpg",
+                "imageAlt": "Gallery Image 2",
+                "imageLink": "#"
+              },
+              {
+                "imageSrc": "/assets/images/banner.jpg",
+                "imageAlt": "Gallery Image 1",
+                "imageLink": "#"
+              },
+              {
+                "imageSrc": "/assets/images/banner1.jpg",
+                "imageAlt": "Gallery Image 2",
+                "imageLink": "#"
+              },
+              {
+                "imageSrc": "/assets/images/banner.jpg",
+                "imageAlt": "Gallery Image 1",
+                "imageLink": "#"
+              },
+              {
+                "imageSrc": "/assets/images/banner1.jpg",
+                "imageAlt": "Gallery Image 2",
+                "imageLink": "#"
+              }
+            ],
+            "setting": {
+              "titleColor": "#333333",
+              "titleFontSize": "32",
+              "titleFontWeight": "bold",
+              "descriptionColor": "#666666",
+              "descriptionFontSize": "16",
+              "descriptionFontWeight": "normal",
+              "background": "#ffffff",
+              "imageWidth": "300",
+              "imageHeight": "200",
+              "imageRadius": "8",
+              "gridColumns": "3",
+              "gridGap": "20"
+            }
+          },
+          "setting": {
+            "paddingTop": "40",
+            "paddingBottom": "40",
+            "marginTop": "20",
+            "marginBottom": "20",
+            "paddingRight": "0",
+            "paddingLeft": "0"
+          }
+        },
+
+        {
           "type": "MultiRow",
           "title": "سربرگ ردیف ها",
           "blocks": [
@@ -587,6 +772,9 @@
       ],
       "order": [
         "Banner-cad8f9bb-fbd9-4474-94f4-2f1b1980a0fa",
+        "SlideBanner",
+        "Banner",
+        "SlideShow",
         "RichText",
         "ImageText",
         "Video",
@@ -594,6 +782,7 @@
         "NewsLetter",
         "CollapseFaq",
         "MultiColumn",
+        "Gallery",
         "MultiRow",
         "NewsLetter-1",
         "Collection",
@@ -645,9 +834,5 @@
       }
     }
   },
-  "order": [
-    "section-header",
-    "children",
-    "section-footer"
-  ]
+  "order": ["section-header", "children", "section-footer"]
 }

@@ -76,6 +76,8 @@ import {
   BlogDetailSection,
   StorySection,
   SpecialOfferSection,
+  GallerySection,
+  SlideBannerSection,
 } from "@/lib/types";
 import { MultiColumnForm } from "./forms/multiColomnForm";
 import { SlideForm } from "./forms/slideForm";
@@ -89,6 +91,8 @@ import BlogListForm from "./forms/blogForm";
 import { BlogDetailForm } from "./forms/blogDetailForm";
 import { StoryForm } from "./forms/storyForm";
 import { SpecialForm } from "./forms/specialForm";
+import GalleryForm from "./forms/galleryForm";
+import { SlideBannerForm } from "./forms/slideBannerForm";
 type FormData =
   | HeaderSection
   | MultiRowSection
@@ -138,7 +142,20 @@ console.log(selectedComponent)
   );
   const addSection = (componentName: string) => {
     Create(componentName, layout, setLayout);
-    setIsModalOpen(false); // Close the modal after adding section
+    setIsModalOpen(false);
+
+    setTimeout(() => {
+      const previewContainer = document.querySelector(
+        '[data-preview-container="true"]'
+      );
+      if (previewContainer) {
+        previewContainer.scrollTo({
+          top: previewContainer.scrollHeight / 1.1,
+          behavior: "smooth",
+        });
+      }
+    }, 300);
+
     toast.success(`${componentName} اضافه شد`, {
       position: "top-center",
       duration: 2000,
@@ -246,6 +263,19 @@ console.log(selectedComponent)
             selectedComponent={selectedComponent}
           />
         );
+      case "Gallery":
+        return (
+          <GalleryForm
+            setUserInputData={
+              setUserInputData as React.Dispatch<
+                React.SetStateAction<GallerySection>
+              >
+            }
+            userInputData={userInputData as GallerySection}
+            layout={layout}
+            selectedComponent={selectedComponent}
+          />
+        );
       case "sectionHeader":
         return (
           <HeaderForm
@@ -255,6 +285,19 @@ console.log(selectedComponent)
               >
             }
             userInputData={userInputData as HeaderSection}
+            layout={layout}
+            selectedComponent={selectedComponent}
+          />
+        );
+      case "SlideBanner":
+        return (
+          <SlideBannerForm
+            setUserInputData={
+              setUserInputData as React.Dispatch<
+                React.SetStateAction<SlideBannerSection>
+              >
+            }
+            userInputData={userInputData as SlideBannerSection}
             layout={layout}
             selectedComponent={selectedComponent}
           />
