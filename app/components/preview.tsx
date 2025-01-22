@@ -60,7 +60,7 @@ export const Preview: React.FC<PreviewProps> = ({
     BlogList,
     BlogDetail,
     SpecialOffer,
-    Story
+    Story,
     Gallery,
     SlideBanner
   };
