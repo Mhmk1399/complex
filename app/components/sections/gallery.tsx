@@ -160,7 +160,7 @@ const Gallery: React.FC<GalleryProps> = ({
             className="font-extrabold text-xl hover:bg-blue-500 bg-red-500 pb-1 rounded-r-lg px-3 text-white transform transition-all duration-300"
             onClick={() => setShowDeleteModal(true)}
           >
-            x
+             x
           </button>
         </div>
       )}
