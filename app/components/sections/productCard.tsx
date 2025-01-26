@@ -35,11 +35,11 @@ const Card = styled.div<{
   margin: 10px;
   padding: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  height: 400px;
+  height: 320px;
 min-width: 250px;
   @media (max-width: 425px) {
     margin: 10px 5px;
-    height: 350px;
+    height: 250px;
   }
 `;
 
@@ -131,13 +131,14 @@ console.log(productData.images);
   
 
   return (
+    
     <Card dir="rtl">
       <ProductImage
         $productData={productData}
         src={currentImage.imageSrc || "/assets/images/pro2.jpg"}
         alt={currentImage.imageAlt || "Product Image"}
-        width={4000}
-        height={4000}
+        width={2000}
+        height={2000}
       />
       <ProductName $productData={productData}>{productData.name}</ProductName>
       <ProductDescription $productData={productData}>
@@ -148,12 +149,10 @@ console.log(productData.images);
 
         
       </ProductPrice>
-      <BuyButton
-        href={`/products?id=${productData.id}`}
-        $productData={productData}
-      >
-        خرید
-      </BuyButton>
+      
+      
+      
+      
     </Card>
   );
 };

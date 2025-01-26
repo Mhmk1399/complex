@@ -67,19 +67,19 @@ const ImageGrid = styled.div<{
         : props.$data?.blocks?.setting?.gridColumns || "3"},
     1fr
   );
-  gap: ${(props) => props.$data?.blocks?.setting?.gridGap || "20"}px;
+  gap: ${(props) => props.$data?.blocks?.setting?.gridGap || "10"}px;
   padding: 0 20px;
 `;
 
 const ImageWrapper = styled.div<{ $data: GallerySection }>`
   position: relative;
-  height: ${(props) => props.$data?.blocks?.setting?.imageHeight || "200"}px;
-  height: ${(props) => props.$data?.blocks?.setting?.imageWidth || "200"}px;
+  height: ${(props) => props.$data?.blocks?.setting?.imageHeight || "100"}px;
+  width: ${(props) => props.$data?.blocks?.setting?.imageWidth || "200"}px;
   border-radius: ${(props) =>
     props.$data?.blocks?.setting?.imageRadius || "8"}px;
   overflow: hidden;
   transition: transform 0.3s ease;
-
+  object-fit: fill;
   &:hover {
     transform: scale(1.05);
   }
@@ -171,7 +171,7 @@ const Gallery: React.FC<GalleryProps> = ({
 
       <ImageGrid $data={sectionData} $preview={preview}>
         {images.map((image, index) => (
-          <ImageWrapper key={index} $data={sectionData}>
+          <ImageWrapper key={index} $data={sectionData} >
             <Link href={image.imageLink ? image.imageLink : "#"}>
               <Image
                 src={image.imageSrc}

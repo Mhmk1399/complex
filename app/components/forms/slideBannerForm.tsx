@@ -109,50 +109,31 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
     }));
   };
 
-  const handleSettingChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setUserInputData((prev: SlideBannerSection) => ({
-      ...prev,
-      blocks: {
-        ...prev.blocks,
-        setting: {
-          ...prev.blocks.setting,
-          [name]: value,
-        },
-      },
-    }));
-  };
+  const [isUpdating, setIsUpdating] = useState(false);
 
-//   const handleSpacingUpdate = (
-//     type: "margin" | "padding",
-//     updatedValues: BoxValues
-//   ) => {
-//     if (type === "margin") {
-//       setMargin(updatedValues);
-//       setUserInputData((prev: SlideBannerSection) => ({
-//         ...prev,
-//         setting: {
-//           ...prev.setting,
-//           marginTop: updatedValues.top.toString(),
-//           marginBottom: updatedValues.bottom.toString(),
-//         },
-//       }));
-//     } else {
-//       setPadding(updatedValues);
-//       setUserInputData((prev: SlideBannerSection) => ({
-//         ...prev,
-//         setting: {
-//           ...prev.setting,
-//           paddingTop: updatedValues.top.toString(),
-//           paddingBottom: updatedValues.bottom.toString(),
-//           paddingLeft: updatedValues.left.toString(),
-//           paddingRight: updatedValues.right.toString(),
-//         },
-//       }));
-//     }
-//   };
+const handleSettingChange = (
+  e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+) => {
+  if (isUpdating) return;
+  setIsUpdating(true);
+  
+  const { name, value } = e.target;
+  setUserInputData((prev: SlideBannerSection) => ({
+    ...prev,
+    blocks: {
+      ...prev.blocks,
+      setting: {
+        ...prev.blocks.setting,
+        [name]: value,
+      },
+    },
+  }));
+
+  setTimeout(() => setIsUpdating(false), 100);
+};
+
+
+
 
   return (
     <div

@@ -112,12 +112,15 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
       },
     }));
   };
-
+  const[isUpdating, setIsUpdating] = useState(false);
   const handleBlockSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
+    
     const { name, value } = e.target;
-    setUserInputData((prev) => ({
+    setUserInputData((prev: GallerySection) => ({
       ...prev,
       blocks: {
         ...prev.blocks,
@@ -127,6 +130,8 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
         },
       },
     }));
+  
+    setTimeout(() => setIsUpdating(false), 100);
   };
 
   const handleImageChange = (index: number, field: string, value: string) => {

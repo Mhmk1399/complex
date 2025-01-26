@@ -435,10 +435,10 @@
               "descriptionFontSize": "16",
               "descriptionFontWeight": "normal",
               "background": "#ffffff",
-              "imageWidth": "300",
-              "imageHeight": "200",
+              "imageWidth": "180",
+              "imageHeight": "150",
               "imageRadius": "8",
-              "gridColumns": "3",
+              "gridColumns": "2",
               "gridGap": "20"
             }
           },

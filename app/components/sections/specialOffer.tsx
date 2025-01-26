@@ -131,7 +131,8 @@ const ScrollContainer = styled.div<{
     },
     {
       images: [{
-        imageSrc: "/assets/images/product-detail.jpg",
+                imageSrc: "",
+
         imageAlt: "hosein"
       }],
       _id: "67724b53ba6f18debeb2f326",
@@ -150,7 +151,8 @@ const ScrollContainer = styled.div<{
     },
     {
       images: [{
-        imageSrc: "/assets/images/product-detail.jpg",
+                imageSrc: "",
+
         imageAlt: "محصول"
       }],
       _id: "67823bb967997894dbc40a8d",
@@ -169,7 +171,8 @@ const ScrollContainer = styled.div<{
     },
     {
       images: [{
-        imageSrc: "/assets/images/product-detail.jpg",
+                imageSrc: "",
+
         imageAlt: "محصول"
       }],
       _id: "6782440467997894dbc40ab5",
@@ -208,7 +211,8 @@ const ScrollContainer = styled.div<{
     },
     {
       images: [{
-        imageSrc: "/assets/images/product-detail.jpg",
+                imageSrc: "",
+
         imageAlt: "محصول"
       }],
       _id: "6784bd16a4ac6b5c32f83ea1",
@@ -227,7 +231,8 @@ const ScrollContainer = styled.div<{
     },
     {
       images: [{
-        imageSrc: "/assets/images/product-detail.jpg",
+                imageSrc: "",
+
         imageAlt: "محصول"
       }],
       _id: "6784bd33a4ac6b5c32f83ea3",
@@ -246,7 +251,8 @@ const ScrollContainer = styled.div<{
     },
     {
       images: [{
-        imageSrc: "/assets/images/product-detail.jpg",
+                imageSrc: "",
+
         imageAlt: "محصول1"
       }],
       _id: "6784ee04a509c286fd7932d7",
@@ -265,7 +271,8 @@ const ScrollContainer = styled.div<{
     },
     {
       images: [{
-        imageSrc: "/assets/images/product-detail.jpg",
+                imageSrc: "",
+
         imageAlt: "محصول2"
       }],
       _id: "6784ee24a509c286fd7932d9",
@@ -284,7 +291,8 @@ const ScrollContainer = styled.div<{
     },
     {
       images: [{
-        imageSrc: "/assets/images/product-detail.jpg",
+                imageSrc: "",
+
         imageAlt: "test "
       }],
       _id: "67869948d90e358680c368fb",
@@ -303,7 +311,8 @@ const ScrollContainer = styled.div<{
     },
     {
       images:[ {
-        imageSrc: "/assets/images/product-detail.jpg",
+                imageSrc: "",
+
         imageAlt: "محصول"
       }],
       _id: "678da249c2aaf5f90996e60c",
@@ -447,7 +456,7 @@ const ScrollContainer = styled.div<{
       >
               {sectionData.blocks?.textHeading}
             </Heading>
-            <svg xmlns="http://www.w3.org/2000/svg" height="80px" viewBox="0 -960 960 960" width="80px" fill="#FFFFFF">
+            <svg xmlns="http://www.w3.org/2000/svg" height="80px" viewBox="0 -960 960 960" width="80px" fill={sectionData.blocks?.setting.headingColor}>
               <path d="M300-520q-58 0-99-41t-41-99q0-58 41-99t99-41q58 0 99 41t41 99q0 58-41 99t-99 41Zm0-80q25 0 42.5-17.5T360-660q0-25-17.5-42.5T300-720q-25 0-42.5 17.5T240-660q0 25 17.5 42.5T300-600Zm360 440q-58 0-99-41t-41-99q0-58 41-99t99-41q58 0 99 41t41 99q0 58-41 99t-99 41Zm0-80q25 0 42.5-17.5T720-300q0-25-17.5-42.5T660-360q-25 0-42.5 17.5T600-300q0 25 17.5 42.5T660-240Zm-444 80-56-56 584-584 56 56-584 584Z"/>
             </svg>
           </div>

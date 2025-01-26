@@ -172,25 +172,33 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
         }));
     };
 
-    const handleBlockSettingChange = (
+    const[isUpdating, setIsUpdating] = useState(false);
+      const handleBlockSettingChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-    ) => {
+      ) => {
+        if (isUpdating) return;
+        setIsUpdating(true);
+        
         const { name, value } = e.target;
-        setUserInputData((prev) => ({
-            ...prev,
-            blocks: {
-                ...prev.blocks,
-                setting: {
-                    ...prev.blocks.setting,
-                    [name]: value,
-                },
+        setUserInputData((prev: SpecialOfferSection) => ({
+          ...prev,
+          blocks: {
+            ...prev.blocks,
+            setting: {
+              ...prev.blocks.setting,
+              [name]: value,
             },
+          },
         }));
-    };
+      
+        setTimeout(() => setIsUpdating(false), 100);
+      };
 
     const handleSettingChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => {
+        if (isUpdating) return;
+        setIsUpdating(true);
         const { name, value } = e.target;
         setUserInputData((prev) => ({
             ...prev,
@@ -199,6 +207,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
                 [name]: value,
             },
         }));
+        setTimeout(() => setIsUpdating(false), 100);
     };
 
     return (

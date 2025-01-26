@@ -78,6 +78,8 @@ import {
   SpecialOfferSection,
   GallerySection,
   SlideBannerSection,
+  OfferRowSection,
+  BrandsSection,
 } from "@/lib/types";
 import { MultiColumnForm } from "./forms/multiColomnForm";
 import { SlideForm } from "./forms/slideForm";
@@ -93,6 +95,8 @@ import { StoryForm } from "./forms/storyForm";
 import { SpecialForm } from "./forms/specialForm";
 import GalleryForm from "./forms/galleryForm";
 import { SlideBannerForm } from "./forms/slideBannerForm";
+import { OfferRowForm } from "./forms/offerRowForm";
+import { BrandsForm } from "./forms/brandsForm";
 type FormData =
   | HeaderSection
   | MultiRowSection
@@ -523,6 +527,32 @@ console.log(selectedComponent)
               layout={layout}
               selectedComponent={selectedComponent}
             />);
+            case "OfferRow":
+              return (
+              <OfferRowForm
+              setUserInputData={
+                setUserInputData as React.Dispatch<
+                  React.SetStateAction<OfferRowSection>
+                >
+              }
+              userInputData={userInputData as OfferRowSection}
+              layout={layout}
+              selectedComponent={selectedComponent}
+            />
+          );
+          case"Brands":
+            return (
+              <BrandsForm
+              setUserInputData={
+                setUserInputData as React.Dispatch<
+                  React.SetStateAction<BrandsSection>
+                >
+              }
+              userInputData={userInputData as BrandsSection}
+              layout={layout}
+              selectedComponent={selectedComponent}
+            />
+          );
       default:
         return <div>یک سکشن را برای تنظیمات کلیک کنید...</div>;
     }

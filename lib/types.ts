@@ -103,6 +103,8 @@ export interface CommonSettings {
   paddingLeft?: string;
   marginRight?: string;
   marginLeft?: string;
+  borderRadius?: string;
+  border: string;
 }
 
 export interface HeaderBlockSettings extends CommonSettings {
@@ -1179,3 +1181,95 @@ export interface SlideBannerSection {
   setting: CommonSettings;
 }
 
+export interface OfferRowBlockSetting extends CommonSettings {
+  titleColor: string;
+  titleText: string;
+  buttonColor: string;
+  buttonTextColor: string;
+  gradientFromColor: string;
+  gradientToColor: string;
+}
+
+export interface OfferItem {
+  id: string;
+  title: string;
+  imageUrl: string;
+  price: number;
+  originalPrice: number;
+  discount: number;
+}
+
+export interface OfferRowBlock {
+  offers: OfferItem[];
+  setting: OfferRowBlockSetting;
+}
+
+export interface OfferRowSection {
+  type: "OfferRow";
+  blocks: OfferRowBlock;
+  setting: CommonSettings & {
+    buttonText: string;
+    buttonLink: string;
+    gradientFromColor: string;
+  gradientToColor: string;
+  };
+}
+export interface BrandItem {
+  id: number;
+  name: string;
+  logo: string;
+  link: string;
+}
+
+export interface BrandsBlockSetting extends CommonSettings {
+  headingColor: string;
+  headingFontSize: string;
+  headingFontWeight: string;
+  brandNameColor: string;
+  brandNameFontSize: string;
+  brandNameFontWeight: string;
+  cardBackground: string;
+  cardBorderRadius: string;
+  cardHoverShadow: string;
+  gridColumns: string;
+  logoWidth: string;
+  logoHeight: string;
+}
+
+export interface BrandsBlock {
+  heading: string;
+  brands: BrandItem[];
+  setting: BrandsBlockSetting;
+}
+
+export interface BrandsSection {
+  type: "Brands";
+  blocks: BrandsBlock;
+  setting: CommonSettings;
+}
+export interface ProductRowBlockSetting extends CommonSettings {
+  gridColumns: number;
+  imageRadius: string;
+  productNameColor: string;
+  priceColor: string;
+  descriptionColor: string;
+  btnBackgroundColor: string;
+  btnTextColor: string;
+  cardBackground: string;
+  cardBorderRadius: string;
+  headingColor: string;
+  headingFontSize: string;
+  headingFontWeight: string;
+}
+
+export interface ProductRowBlock {
+  textHeading: string;
+  products: ProductRowSection[];
+  setting: ProductRowBlockSetting;
+}
+
+export interface ProductRowSection {
+  type: "ProductRow";
+  blocks: ProductRowBlock;
+  setting: ProductRowBlockSetting;
+}

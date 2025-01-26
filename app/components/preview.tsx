@@ -20,6 +20,9 @@ import { SpecialOffer } from "./sections/specialOffer";
 import { Story } from "./sections/story";
 import Gallery from "./sections/gallery";
 import SlideBanner from "./sections/slideBanner";
+import { OfferRow } from "./sections/offerRow";
+import { Brands } from "./sections/brands";
+import { ProductsRow } from "./sections/productsRow";
 
 
 // First update the PreviewProps interface
@@ -62,7 +65,10 @@ export const Preview: React.FC<PreviewProps> = ({
     SpecialOffer,
     Story,
     Gallery,
-    SlideBanner
+    SlideBanner,
+    OfferRow,
+    Brands,
+    ProductsRow
   };
 console.log(selectedComponent);
 
@@ -86,7 +92,9 @@ console.log(selectedComponent);
             selectedComponent={selectedComponent}
             previewWidth={previewWidth} // Pass the state to components
           />
+          
           <div className="grid grid-cols-1 mt-32">
+          
             {orders.map((componentName, index) => {
               const baseComponentName = componentName.split("-")[0];
               const Component =
