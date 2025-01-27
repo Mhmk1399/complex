@@ -136,7 +136,7 @@ export const Form = ({
   const [showOrdersMenu, setShowOrdersMenu] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(true); // New state for form visibility
-console.log(selectedComponent)
+  console.log(selectedComponent);
   // Setup sensors for dnd-kit
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -502,57 +502,58 @@ console.log(selectedComponent)
             selectedComponent={selectedComponent}
           />
         );
-        case "Story":
-          return (
-            <StoryForm
-              setUserInputData={
-                setUserInputData as React.Dispatch<
-                  React.SetStateAction<StorySection>
-                >
-              }
-              userInputData={userInputData as StorySection}
-              layout={layout}
-              selectedComponent={selectedComponent}
-            />
-          );
-          case "SpecialOffer":
-          return (
-              <SpecialForm
-              setUserInputData={
-                setUserInputData as React.Dispatch<
-                  React.SetStateAction<SpecialOfferSection>
-                >
-              }
-              userInputData={userInputData as SpecialOfferSection}
-              layout={layout}
-              selectedComponent={selectedComponent}
-            />);
-            case "OfferRow":
-              return (
-              <OfferRowForm
-              setUserInputData={
-                setUserInputData as React.Dispatch<
-                  React.SetStateAction<OfferRowSection>
-                >
-              }
-              userInputData={userInputData as OfferRowSection}
-              layout={layout}
-              selectedComponent={selectedComponent}
-            />
-          );
-          case"Brands":
-            return (
-              <BrandsForm
-              setUserInputData={
-                setUserInputData as React.Dispatch<
-                  React.SetStateAction<BrandsSection>
-                >
-              }
-              userInputData={userInputData as BrandsSection}
-              layout={layout}
-              selectedComponent={selectedComponent}
-            />
-          );
+      case "Story":
+        return (
+          <StoryForm
+            setUserInputData={
+              setUserInputData as React.Dispatch<
+                React.SetStateAction<StorySection>
+              >
+            }
+            userInputData={userInputData as StorySection}
+            layout={layout}
+            selectedComponent={selectedComponent}
+          />
+        );
+      case "SpecialOffer":
+        return (
+          <SpecialForm
+            setUserInputData={
+              setUserInputData as React.Dispatch<
+                React.SetStateAction<SpecialOfferSection>
+              >
+            }
+            userInputData={userInputData as SpecialOfferSection}
+            layout={layout}
+            selectedComponent={selectedComponent}
+          />
+        );
+      case "OfferRow":
+        return (
+          <OfferRowForm
+            setUserInputData={
+              setUserInputData as React.Dispatch<
+                React.SetStateAction<OfferRowSection>
+              >
+            }
+            userInputData={userInputData as OfferRowSection}
+            layout={layout}
+            selectedComponent={selectedComponent}
+          />
+        );
+      case "Brands":
+        return (
+          <BrandsForm
+            setUserInputData={
+              setUserInputData as React.Dispatch<
+                React.SetStateAction<BrandsSection>
+              >
+            }
+            userInputData={userInputData as BrandsSection}
+            layout={layout}
+            selectedComponent={selectedComponent}
+          />
+        );
       default:
         return <div>یک سکشن را برای تنظیمات کلیک کنید...</div>;
     }
@@ -584,10 +585,10 @@ console.log(selectedComponent)
   return (
     <>
       <Toaster />
-      <div>
+      <div >
         <button
           onClick={() => setIsFormOpen(!isFormOpen)}
-          className="absolute top-2 right-5 z-[9999] hidden text-lg lg:block px-3 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-500 transition-colors"
+          className="absolute top-2 right-5 z-[9999] hidden text-lg lg:block px-2 py-1 bg-sky-600 text-white rounded-lg hover:bg-sky-500 transition-colors"
         >
           {isFormOpen ? "✕" : "☰"}
         </button>
@@ -603,6 +604,7 @@ console.log(selectedComponent)
                 <motion.div
                   initial={{ y: "100%" }}
                   animate={{ y: 0 }}
+                  
                   transition={{
                     type: "spring",
                     damping: 15,
@@ -810,53 +812,70 @@ console.log(selectedComponent)
               </motion.div>
             )}
             {/* Desktop Sidebar */}
-            <div
-              className="hidden lg:block fixed right-0 top-0 h-screen w-80 bg-gray-50/30 rounded-xl backdrop-blur-sm shadow-lg overflow-y-auto"
-              style={{ zIndex: 1000 }}
-            >
-              {ordersButton}
+            {isFormOpen && (
+              <AnimatePresence mode="wait">
+                <motion.div
+                  initial={{ x: "100%", opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: "100%", opacity: 0 }}
+                  transition={{
+                    type: "tween",
+                    stiffness: 100,
+                    damping: 20,
+                    duration: 0.5,
+                    ease: "easeInOut",
+                  }}
+                  className="fixed right-0 top-0 h-screen w-80 ease-in-out bg-gray-100/70 border-l-2  border-white/40 rounded backdrop-blur-lg overflow-y-auto"
+                  style={{ zIndex: 1000 }}
+                >
+                  {ordersButton}
 
-              <div className="p-6">
-                <h2 className="text-2xl font-bold text-gray-800" dir="rtl">
-                  {showOrdersMenu ? "ترتیب سکشن" : "تنظیمات سکشن"}
-                </h2>
-                {showOrdersMenu ? (
-                  <div
-                    className="bg-gray-100/50 p-4 my-5 rounded-xl shadow-md"
-                    dir="rtl"
-                  >
-                    <h3 className="text-2xl text-black font-semibold mb-4">
-                      جابجایی سکشن
-                    </h3>
-
-                    {/* Add Modal Trigger Button */}
-
-                    {/* Modal Component */}
-
-                    <DndContext
-                      sensors={sensors}
-                      collisionDetection={closestCenter}
-                      onDragEnd={handleDragEnd}
+                  <div className="p-6">
+                    <h2
+                      className="text-2xl font-bold text-gray-800 pr-4"
+                      dir="rtl"
                     >
-                      <SortableContext
-                        items={orders}
-                        strategy={verticalListSortingStrategy}
+                      {showOrdersMenu ? "ترتیب سکشن" : "تنظیمات سکشن"}
+                    </h2>
+                    {showOrdersMenu ? (
+                      <div
+                        className="bg-gray-100/50 p-4 my-5 rounded-xl shadow-md"
+                        dir="rtl"
                       >
-                        {orders.map((id: string) => (
-                          <SortableItem key={id} id={id} />
-                        ))}
-                      </SortableContext>
-                    </DndContext>
+                        <h3 className="text-2xl text-black font-semibold mb-4">
+                          جابجایی سکشن
+                        </h3>
+
+                        {/* Add Modal Trigger Button */}
+
+                        {/* Modal Component */}
+
+                        <DndContext
+                          sensors={sensors}
+                          collisionDetection={closestCenter}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <SortableContext
+                            items={orders}
+                            strategy={verticalListSortingStrategy}
+                          >
+                            {orders.map((id: string) => (
+                              <SortableItem key={id} id={id} />
+                            ))}
+                          </SortableContext>
+                        </DndContext>
+                      </div>
+                    ) : (
+                      renderFormContent(
+                        setUserInputData,
+                        userInputData as Section,
+                        selectedComponent
+                      )
+                    )}
                   </div>
-                ) : (
-                  renderFormContent(
-                    setUserInputData,
-                    userInputData as Section,
-                    selectedComponent
-                  )
-                )}
-              </div>
-            </div>
+                </motion.div>
+              </AnimatePresence>
+            )}
 
             {/* Mobile/Tablet Bottom Sheet */}
             <AnimatePresence mode="wait">
