@@ -82,8 +82,8 @@ console.log(selectedComponent);
         {/* Add this wrapper */}
         <div
           data-preview-container="true"
-          className={`h-[86vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide lg:ml-5 ${
-            previewWidth === "sm" ? "w-[425px]" : "w-full lg:w-[75%]"
+          className={`h-[86vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide mx-auto ${
+            previewWidth === "sm" ? "w-[425px]" : "w-full lg:w-[98%]"
           }`}
         >
           <Header
