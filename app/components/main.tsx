@@ -410,7 +410,7 @@ export const Main = () => {
           </div>
         </div>
       ) : ( */}
-      <div className="min-h-screen ">
+      <div className="min-h-screen">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -426,7 +426,7 @@ export const Main = () => {
             e.currentTarget.style.setProperty("--x", `${x}%`);
             e.currentTarget.style.setProperty("--y", `${y}%`);
           }}
-          className="sticky top-0 z-50  backdrop-blur-2xl bg-gradient-to-br from-[#0052D4] to-[#6FB1FC]
+          className="sticky top-0 z-50 backdrop-blur-2xl bg-gradient-to-br from-[#0052D4] to-[#6FB1FC]
              shadow-md cursor-pointer"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 ">
