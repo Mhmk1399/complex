@@ -38,6 +38,9 @@ const SlideContainer = styled.div`
   width: 100%;
   height: 100%;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 const Slide = styled.div<{ $active: boolean; $data: SlideBannerSection }>`
   position: absolute;
@@ -45,10 +48,12 @@ const Slide = styled.div<{ $active: boolean; $data: SlideBannerSection }>`
   left: 0;
   width: 100%;
   height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   opacity: ${(props) => (props.$active ? 1 : 0)};
   transition: opacity 0.7s ease-in-out;
 `;
-
 const NavigationButtons = styled.div`
   position: absolute;
   bottom: 20px;
@@ -203,12 +208,16 @@ const SlideBanner: React.FC<props> = ({
             $data={sectionData}
           >
             <Image
-              src={slide.imageSrc}
-              alt={slide.imageAlt}
-              width={preview === "sm" ? 300 : 3000}
-              height={preview === "sm" ? 300 : 3000}
-              className="w-full h-full object-cover"
-            />
+  src={slide.imageSrc}
+  alt={slide.imageAlt}
+  width={preview === "sm" ? 300 : 10000}
+  height={preview === "sm" ? 300 : 2000}
+  className="w-full h-full object-cover"
+  style={{
+    objectFit: 'cover',
+  }}
+/>
+
           </Slide>
         ))}
       </SlideContainer>
