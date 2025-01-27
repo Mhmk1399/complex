@@ -32,7 +32,7 @@ import gallery from "@/public/assets/images/gallery.png";
 import market from "@/public/assets/images/market.png";
 import newproduct from "@/public/assets/images/newproduct.png";
 import offer from "@/public/assets/images/offer.png";
-import porforosh from "@/public/assets/images/porforosh.png";
+// import porforosh from "@/public/assets/images/porforosh.png";
 import slidebanner from "@/public/assets/images/slidebanner.png";
 import story from "@/public/assets/images/story.png";
 

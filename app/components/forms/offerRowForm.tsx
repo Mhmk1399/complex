@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Compiler } from "../compiler";
-import { Layout, OfferRowBlock, OfferRowSection } from "@/lib/types";
+import { Layout, OfferRowSection } from "@/lib/types";
 import MarginPaddingEditor from "../sections/editor";
 import debounce from "lodash/debounce"; // Add this import
 
