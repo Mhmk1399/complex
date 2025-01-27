@@ -734,6 +734,12 @@
                 "imageUrl": "/assets/images/pro3.jpg",
                 "title": "پیشنهاد روز",
                 "link": "/daily-deals"
+              },
+              {
+                "id": "4",
+                "imageUrl": "/assets/images/pro4.jpg",
+                "title": "پیشنهاد روز",
+                "link": "/daily-deals"
               }
             ],
             "setting": {
