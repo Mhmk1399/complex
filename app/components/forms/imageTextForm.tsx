@@ -225,8 +225,8 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
 
   return (
     <div
-      className="p-2 max-w-4xl mx-auto bg-gray-200 rounded-xl my-4"
-      dir="rtl"
+    className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4"
+    dir="rtl"
     >
       <hr />
       <h2 className="text-xl font-bold my-4">تنظیمات عکس متن</h2>

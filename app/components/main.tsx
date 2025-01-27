@@ -6,6 +6,15 @@ import smData from "../../public/template/nullSm.json";
 import Image from "next/image";
 import nullJson from "../../public/template/null.json";
 import {
+  FaHome,
+  FaInfoCircle,
+  FaEnvelope,
+  FaStore,
+  FaBlog,
+  FaNewspaper,
+} from "react-icons/fa";
+
+import {
   AboutChildren,
   BlogChildren,
   BlogDetailChildren,
@@ -19,7 +28,7 @@ import Store from "@/public/template/product.json";
 import DetailPage from "@/public/template/detail.json";
 import Blog from "@/public/template/blog.json";
 import BlogDetail from "@/public/template/blogDetail.json";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -27,6 +36,7 @@ import TourGuide from "./sections/guideTour";
 
 export const Main = () => {
   const [Data, setData] = useState<Layout>(nullJson as unknown as Layout);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   // const [loading, setLoading] = useState(true);
   const [layout, setLayout] = useState<Layout>(Data);
   const [activeMode, setActiveMode] = useState<"sm" | "lg">("sm");
@@ -126,6 +136,14 @@ export const Main = () => {
         console.log("Error sending token to server:", error);
       });
     fetchRoutes();
+  };
+  const routeIcons = {
+    home: FaHome,
+    about: FaInfoCircle,
+    contact: FaEnvelope,
+    store: FaStore,
+    blog: FaBlog,
+    news: FaNewspaper,
   };
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -386,7 +404,7 @@ export const Main = () => {
     ref: React.RefObject<HTMLButtonElement | HTMLDivElement | HTMLSelectElement>
   ) => {
     if (ref.current && activeElement === ref.current.id) {
-      return "ring-4 ring-purple-600 ring-offset-2 animate-pulse scale-110 transition-all duration-300 z-50";
+      // return "ring-4 ring-purple-600 ring-offset-2 animate-pulse scale-110 transition-all duration-300 z-50";
     }
 
     return "";
@@ -414,11 +432,11 @@ export const Main = () => {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          whileHover={{
-            background:
-              "radial-gradient(circle at var(--x) var(--y), #4facfe 0%, #0052D4 50%)",
-            transition: { duration: 0.3 },
-          }}
+          // whileHover={{
+          //   background:
+          //     "radial-gradient(circle at var(--x) var(--y), #4facfe 0%, #0052D4 50%)",
+          //   transition: { duration: 0.9 },
+          // }}
           onMouseMove={(e) => {
             const rect = e.currentTarget.getBoundingClientRect();
             const x = ((e.clientX - rect.left) / rect.width) * 100;
@@ -426,51 +444,63 @@ export const Main = () => {
             e.currentTarget.style.setProperty("--x", `${x}%`);
             e.currentTarget.style.setProperty("--y", `${y}%`);
           }}
-          className="sticky top-0 z-50 backdrop-blur-2xl bg-gradient-to-br from-[#0052D4] to-[#6FB1FC]
-             shadow-md cursor-pointer"
+          className="sticky  top-0 z-50 backdrop-blur-2xl bg-gradient-to-br  from-[#e4e4e4]/60 to-[#fff]
+             shadow-sm cursor-pointer"
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 ">
-            <div className="flex lg:flex-row flex-wrap  items-center justify-center py-4 gap-x-5 space-y-4 sm:space-y-0">
+          <div className="max-w-ull mx-auto px-4 sm:px-6 lg:px-8 ">
+            <div className="flex lg:flex-row flex-wrap items-center mt-3 md:mt-0 justify-center gap-x-0 md:py-2 md:gap-x-1 lg:py-0  sm:space-y-0">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                className="md:flex hidden  items-center border-r pr-2 border-gray-300 absolute left-2 gap-2 px-3 py-0.5"
+              >
+                <span className="text-sm font-medium">{selectedRoute}</span>
+                {routeIcons[selectedRoute as keyof typeof routeIcons] &&
+                  React.createElement(
+                    routeIcons[selectedRoute as keyof typeof routeIcons],
+                    {
+                      className: "w-4 h-4",
+                    }
+                  )}
+              </motion.button>
               <motion.button
                 id="sitePreview"
                 className={` ${getHighlightClass(
                   sitePreviewRef
-                )} lg:w-auto bg-pink-400  text-white lg:-ml-12 px-3 py-2.5 mt-4 md:mt-0 rounded-full font-medium 
+                )} lg:w-auto text-xs font-semibold border-r pr-2 border-gray-400 lg:-ml-12 px-3 md:mt-0 
                     transition-all duration-300 transform`}
-                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 ref={sitePreviewRef}
               >
                 <Link href="/">نمایش سایت</Link>
               </motion.button>
+
               {/* Save Button with Animation */}
               <motion.button
                 id="save"
-                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleSave}
                 ref={saveButtonRef}
                 disabled={saveStatus === "saving"}
-                className={`w-fitlg:-ml-12 ${getHighlightClass(
+                className={`w-fulllg:-ml-12 ${getHighlightClass(
                   saveButtonRef
-                )} px-3 py-2.5 rounded-full font-medium transition-all duration-300 transform
+                )} px-1  text-xs font-semibold border-r pr-2 border-gray-800 transition-all duration-300 transform
                   ${
                     saveStatus === "saving"
-                      ? "bg-blue-900"
+                      ? "bg-blue-400 px-2 pl-2 py-1 rounded-xl text-white border-none"
                       : saveStatus === "saved"
-                      ? "bg-green-500"
+                      ? "bg-green-400 px-2 pl-2 py-1 rounded-xl text-white border-none"
                       : saveStatus === "error"
-                      ? "bg-red-500"
-                      : "bg-[#FFBF00] hover:bg-yellow-200"
+                      ? "bg-red-400 pl-2 py-1 rounded-xl text-white border-none"
+                      : ""
                   }
-                  text-white shadow-md hover:shadow-lg`}
+                  text-black`}
               >
                 {saveStatus === "saving"
-                  ? "...در حال ذخیره"
+                  ? "در حال ذخیره"
                   : saveStatus === "saved"
-                  ? " ! ذخیره شد "
+                  ? "ذخیره شد"
                   : saveStatus === "error"
-                  ? "ارور"
+                  ? "ناموفق"
                   : "ذخیره تنظیمات"}
               </motion.button>
 
@@ -482,19 +512,10 @@ export const Main = () => {
                   previewToggleRef
                 )} items-center flex-row-reverse space-x-3`}
               >
-                <span className="text-sm text-gray-50 ml-2 hidden lg:block font-semibold">
-                  : تنظیمات پیش نمایش
-                </span>
                 <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
                   onClick={() => handleModeChange("sm")}
-                  className={`p-2 rounded-lg hidden  lg:block transition-all duration-300 shadow-md hover:shadow-gray-500
-                    ${
-                      previewWidth === "sm"
-                        ? "bg-yellow-600 shadow-lg"
-                        : "bg-[#FFBF00] hover:bg-gray-300"
-                    }`}
+                  className={`py-1.5 px-1 rounded-lg hidden ml-2 lg:block transition-all duration-300
+                    ${previewWidth === "sm" ? " " : "bg-[#e4e4e4]/10 "}`}
                 >
                   <Image
                     onClick={() => setPreviewWidth("sm")}
@@ -507,15 +528,9 @@ export const Main = () => {
                 </motion.button>
 
                 <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
                   onClick={() => handleModeChange("lg")}
-                  className={`p-2 rounded-lg hidden lg:block transition-all duration-300 shadow-md hover:shadow-gray-500
-                    ${
-                      previewWidth === "default"
-                        ? "bg-yellow-600 shadow-lg"
-                        : "bg-[#FFBF00] hover:bg-gray-300"
-                    }`}
+                  className={`py-1.5 rounded-lg hidden lg:block transition-all duration-300 
+                    ${previewWidth === "default" ? " " : "bg-[#e4e4e4]/5 "}`}
                 >
                   <Image
                     src="/assets/images/computer.png"
@@ -535,7 +550,7 @@ export const Main = () => {
                 ref={addRouteButtonRef}
                 className={`px-3 ${getHighlightClass(
                   addRouteButtonRef
-                )} py-2 bg-[#32936F] text-white rounded-xl shadow-md hover:bg-green-600`}
+                )}  text-xs font-semibold border-x pr-2 border-gray-400 hover:bg-transparent`}
               >
                 افزودن مسیر
               </motion.button>
@@ -548,30 +563,55 @@ export const Main = () => {
                 onClick={() => setIsDeleteModalOpen(true)}
                 className={`px-3 ${getHighlightClass(
                   deleteRouteButtonRef
-                )} py-2 bg-[#E83F6F] text-white rounded-xl shadow-md hover:bg-red-500`}
+                )} text-xs font-semibold border-r pr-2 border-gray-400 hover:bg-transparent`}
               >
                 حذف مسیر
               </motion.button>
+              <motion.label className="relative my-2 md:my-0 text-xs font-semibold inline-flex items-center cursor-pointer">
+                <motion.div className="relative">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className="flex items-center gap-2 px-3 py-0.5  backdrop-blur-xl rounded-md"
+                  >
+                    <span className="text-sm font-medium">{selectedRoute}</span>
+                    <motion.svg
+                      animate={{ rotate: isDropdownOpen ? 180 : 0 }}
+                      className="w-4 h-4"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                    </motion.svg>
+                  </motion.button>
 
-              <motion.select
-                whileHover={{ scale: 1.02 }}
-                dir="rtl"
-                ref={changeRouteRef}
-                id="changeRoute"
-                value={selectedRoute}
-                onChange={(e) => setSelectedRoute(e.target.value)}
-                className={`w-[100px] ${getHighlightClass(
-                  changeRouteRef
-                )} px-2 py-1 bg-gray-200 rounded-xl border-2 border-gray-200 
-             shadow-sm focus:border-gray-200 focus:ring-2 focus:ring-gray-200 
-             transition-all duration-300`}
-              >
-                {activeRoutes.map((route, index) => (
-                  <option key={index} value={route}>
-                    {route}
-                  </option>
-                ))}
-              </motion.select>
+                  <AnimatePresence>
+                    {isDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="absolute mt-2 w-20 bg-white/90 backdrop-blur-xl rounded-xl shadow-xl border border-white/80 z-50"
+                        dir="rtl"
+                      >
+                        {activeRoutes.map((route) => (
+                          <motion.button
+                            key={route}
+                            onClick={() => {
+                              setSelectedRoute(route);
+                              setIsDropdownOpen(false);
+                            }}
+                            className=" px-2 py-2 text-left rounded-lg text-sm transition-colors "
+                          >
+                            {route}
+                          </motion.button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+                : مسیرها
+              </motion.label>
             </div>
           </div>
         </motion.div>

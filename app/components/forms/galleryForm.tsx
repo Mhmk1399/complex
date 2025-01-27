@@ -112,13 +112,13 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
       },
     }));
   };
-  const[isUpdating, setIsUpdating] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const handleBlockSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     if (isUpdating) return;
     setIsUpdating(true);
-    
+
     const { name, value } = e.target;
     setUserInputData((prev: GallerySection) => ({
       ...prev,
@@ -130,7 +130,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
         },
       },
     }));
-  
+
     setTimeout(() => setIsUpdating(false), 100);
   };
 
@@ -173,7 +173,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
 
   return (
     <div
-      className="p-4 max-w-4xl mx-auto bg-gray-200 rounded-xl my-4"
+      className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4"
       dir="rtl"
     >
       <h2 className="text-xl font-bold mb-4">تنظیمات گالری</h2>

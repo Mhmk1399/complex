@@ -18,8 +18,6 @@ interface BoxValues {
   right: number;
 }
 
-
-
 const ColorInput = ({
   label,
   name,
@@ -163,7 +161,10 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
   };
 
   return (
-    <div className="p-2 max-w-4xl mx-auto bg-gray-200 my-4" dir="rtl">
+    <div
+      className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4"
+      dir="rtl"
+    >
       <h2 className="text-xl font-bold my-4">تنظیمات جزئیات بلاگ</h2>
 
       {/* Title Settings */}

@@ -124,7 +124,10 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
     setTimeout(() => setIsUpdating(false), 100);
   };
 
-  const handleUpdate = (type: "margin" | "padding", updatedValues: BoxValues) => {
+  const handleUpdate = (
+    type: "margin" | "padding",
+    updatedValues: BoxValues
+  ) => {
     if (type === "margin") {
       setMargin(updatedValues);
       setUserInputData((prev) => ({
@@ -149,7 +152,10 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
   };
 
   return (
-    <div className="p-3 max-w-4xl mx-auto bg-gray-200 rounded-xl my-4" dir="rtl">
+    <div
+      className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4"
+      dir="rtl"
+    >
       <h2 className="text-xl font-bold my-4">تنظیمات برندها</h2>
 
       {/* Content Section */}
@@ -205,22 +211,29 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
               }
               className="w-full p-2 border rounded mb-4"
             />
-            
+
             {userInputData?.blocks?.brands.map((brand, index) => (
-              <div key={brand.id} className="p-3 bg-gray-50 rounded-lg space-y-3 mb-4">
+              <div
+                key={brand.id}
+                className="p-3 bg-gray-50 rounded-lg space-y-3 mb-4"
+              >
                 <h4 className="font-semibold">برند {index + 1}</h4>
                 <input
                   type="text"
                   placeholder="نام برند"
                   value={brand.name}
-                  onChange={(e) => handleBrandChange(index, "name", e.target.value)}
+                  onChange={(e) =>
+                    handleBrandChange(index, "name", e.target.value)
+                  }
                   className="w-full p-2 border rounded"
                 />
                 <input
                   type="text"
                   placeholder="لوگو"
                   value={brand.logo}
-                  onChange={(e) => handleBrandChange(index, "logo", e.target.value)}
+                  onChange={(e) =>
+                    handleBrandChange(index, "logo", e.target.value)
+                  }
                   className="w-full p-2 border rounded"
                 />
               </div>
@@ -283,7 +296,9 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
                   <input
                     type="range"
                     name="headingFontSize"
-                    value={userInputData?.blocks?.setting?.headingFontSize || 32}
+                    value={
+                      userInputData?.blocks?.setting?.headingFontSize || 32
+                    }
                     onChange={handleSettingChange}
                     className="w-full"
                     min="24"
@@ -304,7 +319,9 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
                   <input
                     type="range"
                     name="brandNameFontSize"
-                    value={userInputData?.blocks?.setting?.brandNameFontSize || 16}
+                    value={
+                      userInputData?.blocks?.setting?.brandNameFontSize || 16
+                    }
                     onChange={handleSettingChange}
                     className="w-full"
                     min="12"

@@ -284,10 +284,10 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
 
   return (
     <div
-      className="p-3 max-w-4xl mx-auto bg-gray-200 rounded-xl mt-4"
+      className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4"
       dir="rtl"
     >
-      <h2 className="text-xl font-bold my-4">تنظیمات نو بار</h2>
+      <h2 className="text-lg font-bold my-4">تنظیمات نو بار</h2>
 
       <div className="mb-6 bg-white rounded-lg">
         <button

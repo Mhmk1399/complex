@@ -4,6 +4,7 @@ import { AnimatePresence } from "framer-motion";
 import { DragEndEvent } from "@dnd-kit/core";
 import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
+import { FaBars, FaExchangeAlt, FaPuzzlePiece } from "react-icons/fa";
 import richtextImage from "@/public/assets/images/richtext.png";
 import ImageTextImage from "@/public/assets/images/imagetext.png";
 import bannerImage from "@/public/assets/images/banner.jpg";
@@ -26,6 +27,14 @@ import imagetextSm from "@/public/assets/images/imagetextSm.png";
 import richtextSm from "@/public/assets/images/richtextSm.png";
 import collectionSm from "@/public/assets/images/collectionsm.png";
 import collection from "@/public/assets/images/collection.png";
+import brand from "@/public/assets/images/brand.png";
+import gallery from "@/public/assets/images/gallery.png";
+import market from "@/public/assets/images/market.png";
+import newproduct from "@/public/assets/images/newproduct.png";
+import offer from "@/public/assets/images/offer.png";
+import porforosh from "@/public/assets/images/porforosh.png";
+import slidebanner from "@/public/assets/images/slidebanner.png";
+import story from "@/public/assets/images/story.png";
 
 import {
   DndContext,
@@ -212,10 +221,10 @@ export const Form = ({
         style={style}
         {...attributes}
         {...listeners}
-        className="p-3 bg-white border rounded-2xl flex items-center gap-2 cursor-grab mb-2"
+        className="p-2 bg-white border focus:bg-blue-300 group focus:text-white  rounded-2xl flex items-center gap-1 cursor-grab mb-2"
       >
-        <span className="text-gray-400">☰</span>
-        <span>{id}</span>
+        <span className="text-gray-400 group-focus:text-white">☰</span>
+        <span className="text-sm group-focus:text-white ">{id}</span>
       </div>
     );
   };
@@ -560,23 +569,38 @@ export const Form = ({
   };
 
   const ordersButton = (
-    <div className="flex justify-between mt-12 items-center">
+    <div
+      className="flex bg-transparent flex-row mr-4  rounded-2xl mx-2 justify-end items-end mt-9  
+    transition-all duration-300"
+    >
       <button
         onClick={() => setShowOrdersMenu(!showOrdersMenu)}
-        className={
-          !showOrdersMenu
-            ? `w-fit  m-2 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors`
-            : "w-fit m-2 px-4 py-2 bg-yellow-500 text-white rounded-full hover:bg-red-600 transition-colors"
-        }
+        className={`
+      flex items-center gap-2 m-2 px-2 py-1 text-sm font-medium
+      ${!showOrdersMenu ? "bg-blue-500 text-white" : " text-gray-700"} 
+      rounded-full transition-all duration-300 transform
+    `}
       >
-        {!showOrdersMenu ? "جابجایی" : "منو"}
+        {!showOrdersMenu ? (
+          <>
+            جابجایی
+            <FaExchangeAlt className="w-4 h-4 text-gray-100" />
+          </>
+        ) : (
+          <>
+            منو
+            <FaBars className="w-4 h-4 text-blue-400" />
+          </>
+        )}
       </button>
+
       {showOrdersMenu && (
         <button
           onClick={() => setIsModalOpen(true)}
-          className="m-2 px-4 py-2  bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors"
+          className="flex items-center text-nowrap gap-2 m-2 px-2 py-1 text-sm font-medium text-gray-700 rounded-full transition-all duration-300 transform"
         >
-          {!isModalOpen ? "انتخاب سکشن" : " انتخاب سکشن"}
+          انتخاب سکشن
+          <FaPuzzlePiece className="w-4 h-4 text-blue-400" />
         </button>
       )}
     </div>
@@ -585,13 +609,37 @@ export const Form = ({
   return (
     <>
       <Toaster />
-      <div >
-        <button
+      <div>
+        <motion.button
+          className=" absolute top-1 right-4 z-[9999] hidden text-lg animate-pulse lg:block py-1 text-black rounded-lg hover:bg-slate-500 transition-colors hover:bg-gray-100/10 backdrop-blur-sm"
           onClick={() => setIsFormOpen(!isFormOpen)}
-          className="absolute top-2 right-5 z-[9999] hidden text-lg lg:block px-2 py-1 bg-sky-600 text-white rounded-lg hover:bg-sky-500 transition-colors"
         >
-          {isFormOpen ? "✕" : "☰"}
-        </button>
+          <motion.div
+            animate={isFormOpen ? "open" : "closed"}
+            variants={{
+              open: { rotate: 90 },
+              closed: { rotate: 0 },
+            }}
+            transition={{ duration: 0.45 }}
+          >
+            {isFormOpen ? (
+              // Horizontal dots for close
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="4" cy="12" r="2" />
+                <circle cx="12" cy="12" r="2" />
+                <circle cx="20" cy="12" r="2" />
+              </svg>
+            ) : (
+              // Vertical dots for open
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="4" r="2" />
+                <circle cx="12" cy="12" r="2" />
+                <circle cx="12" cy="20" r="2" />
+              </svg>
+            )}
+          </motion.div>
+        </motion.button>
+
         {isFormOpen && (
           <>
             {isModalOpen && (
@@ -604,7 +652,6 @@ export const Form = ({
                 <motion.div
                   initial={{ y: "100%" }}
                   animate={{ y: 0 }}
-                  
                   transition={{
                     type: "spring",
                     damping: 15,
@@ -630,6 +677,118 @@ export const Form = ({
                     transition={{ delay: 0.4 }}
                     className="modal-content flex flex-col items-center justify-center gap-12"
                   >
+                    <div
+                      onClick={() => addSection("SpecialOffer")}
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${offer.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"پیشنهاد شگفت انگیز"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("OfferRow")}
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${market.src})`,
+                        backgroundSize: "contain",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"پیشنهاد های هفتگی"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("ProductsRow")}
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${newproduct.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"محصولات"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("Brands")}
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${brand.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"برند"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("Gallery")}
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${gallery.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"گالری"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("SlideBanner")}
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${slidebanner.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"بنر"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("Story")}
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${story.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"استوری"}
+                      </span>
+                    </div>
                     <div
                       onClick={() => addSection("RichText")}
                       className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
@@ -825,26 +984,26 @@ export const Form = ({
                     duration: 0.5,
                     ease: "easeInOut",
                   }}
-                  className="fixed right-0 top-0 h-screen w-80 ease-in-out bg-gray-100/70 border-l-2  border-white/40 rounded backdrop-blur-lg overflow-y-auto"
+                  className="fixed right-0 hidden lg:block top-0 h-screen w-80 ease-in-out bg-[#f8f9fa] border-l-2  border-white/40 rounded backdrop-blur-sm overflow-y-auto"
                   style={{ zIndex: 1000 }}
                 >
                   {ordersButton}
 
-                  <div className="p-6">
+                  <div className="p-2 ">
                     <h2
-                      className="text-2xl font-bold text-gray-800 pr-4"
+                      className="text-xl mb-2 font-bold text-[#343a40] pr-4"
                       dir="rtl"
                     >
                       {showOrdersMenu ? "ترتیب سکشن" : "تنظیمات سکشن"}
                     </h2>
                     {showOrdersMenu ? (
                       <div
-                        className="bg-gray-100/50 p-4 my-5 rounded-xl shadow-md"
+                        className=" p-4 bg-white rounded-lg shadow-lg"
                         dir="rtl"
                       >
-                        <h3 className="text-2xl text-black font-semibold mb-4">
+                        {/* <h3 className="text-xl text-[#343a40] font-semibold mb-4">
                           جابجایی سکشن
-                        </h3>
+                        </h3> */}
 
                         {/* Add Modal Trigger Button */}
 
@@ -946,7 +1105,7 @@ export const Form = ({
                   onClick={() => setShowOrdersMenu(!showOrdersMenu)}
                   className={
                     !showOrdersMenu
-                      ? `w-fit m-2 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors`
+                      ? `w-fit m-2 px-4 py-2 bg-blue-500 text-white rounded-full  transition-colors`
                       : "w-fit m-2 px-4 py-2 bg-yellow-500 text-white rounded-full hover:bg-red-600 transition-colors"
                   }
                 >

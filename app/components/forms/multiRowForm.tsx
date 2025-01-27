@@ -17,7 +17,6 @@ interface BoxValues {
   right: number;
 }
 
-
 const ColorInput = ({
   label,
   name,
@@ -81,19 +80,18 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
           imageSrc: "/assets/images/banner1.jpg",
           imageAlt: "",
           btnLable: `دکمه ${prev.blocks.length + 1}`,
-          btnLink: "#"
-        }
-      ]
+          btnLink: "#",
+        },
+      ],
     }));
   };
 
   const handleDeleteRow = (index: number) => {
     setUserInputData((prev: MultiRowSection) => ({
       ...prev,
-      blocks: prev.blocks.filter((_, i) => i !== index)
+      blocks: prev.blocks.filter((_, i) => i !== index),
     }));
   };
-
 
   const handleLiveInput = async (
     event: React.MouseEvent<HTMLButtonElement>
@@ -214,7 +212,7 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
         <p>Loading...</p>
       ) : (
         <div
-          className="p-2 max-w-4xl mx-auto bg-gray-200 rounded-xl my-4"
+          className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4"
           dir="rtl"
         >
           <h2 className="text-xl font-bold my-4">ردیف ها</h2>
@@ -242,8 +240,9 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                 <h3 className="font-semibold text-gray-700">سربرگ</h3>
               </div>
               <svg
-                className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isHeadingOpen ? "rotate-180" : ""
-                  }`}
+                className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                  isHeadingOpen ? "rotate-180" : ""
+                }`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -319,15 +318,26 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                       }}
                       className="p-1 hover:bg-red-100 rounded-full cursor-pointer"
                     >
-                      <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      <svg
+                        className="w-5 h-5 text-red-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
                       </svg>
                     </span>
                   </div>
                 </div>
                 <svg
-                  className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${openRows[index] ? "rotate-180" : ""
-                    }`}
+                  className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                    openRows[index] ? "rotate-180" : ""
+                  }`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -340,7 +350,6 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                   />
                 </svg>
               </button>
-
 
               {/* Row Content */}
               {openRows[index] && (
@@ -465,8 +474,9 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                 <h3 className="font-semibold text-gray-700">تنظیمات استایل</h3>
               </div>
               <svg
-                className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isStyleSettingsOpen ? "rotate-180" : ""
-                  }`}
+                className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                  isStyleSettingsOpen ? "rotate-180" : ""
+                }`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -685,7 +695,6 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                     </div>
                   </div>
 
-
                   {/* Layout Settings */}
                   <div className="mt-4">
                     <label className="block mb-1">جایگاه تصویر</label>
@@ -750,8 +759,9 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                 <h3 className="font-semibold text-gray-700">تنظیمات دستوری</h3>
               </div>
               <svg
-                className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${dropdownAnimation ? "rotate-180" : ""
-                  }`}
+                className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                  dropdownAnimation ? "rotate-180" : ""
+                }`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -820,8 +830,9 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                 <h3 className="font-semibold text-gray-700">تنظیمات فاصله</h3>
               </div>
               <svg
-                className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isSpacingOpen ? "rotate-180" : ""
-                  }`}
+                className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                  isSpacingOpen ? "rotate-180" : ""
+                }`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

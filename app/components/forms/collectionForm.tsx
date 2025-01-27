@@ -17,7 +17,6 @@ interface BoxValues {
   right: number;
 }
 
-
 const ColorInput = ({
   label,
   name,
@@ -169,7 +168,7 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
   // };
 
   const [isUpdating, setIsUpdating] = useState(false);
-  
+
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -184,9 +183,7 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
       },
     }));
     setTimeout(() => setIsUpdating(false), 100);
-
   };
-  
 
   return (
     <>
@@ -194,7 +191,7 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
         <p>Loading...</p>
       ) : (
         <div
-          className="p-2 max-w-4xl mx-auto bg-gray-200 rounded-xl my-4"
+          className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4"
           dir="rtl"
         >
           {/* Style Settings */}
@@ -237,7 +234,9 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
             </button>
             {isStyleSettingsOpen && (
               <>
-                <h2 className="text-xl font-bold my-4 pr-2">تنظیمات سربرگ مجموعه</h2>
+                <h2 className="text-xl font-bold my-4 pr-2">
+                  تنظیمات سربرگ مجموعه
+                </h2>
                 <div className="grid md:grid-cols-1 p-4 gap-4 animate-slideDown">
                   <h4 className="font-semibold mb-2">تنظیمات سربرگ مجموعه</h4>
                   <label> سایز سربرگ</label>
