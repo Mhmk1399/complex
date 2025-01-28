@@ -65,8 +65,6 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
-  const [inputText, setInputText] = useState("");
-  const [dropdownAnimation, setDropdownAnimation] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {

@@ -19,21 +19,20 @@ interface props {
 const SlideBannerSection = styled.section<{
   $data: SlideBannerSection;
   $previewWidth: "sm" | "default";
-  $preview: "sm" | "default";
 }>`
   position: relative;
   width: 100%;
-  padding-top: ${(props) => props.$data.setting.paddingTop}px;
-  padding-bottom: ${(props) => props.$data.setting.paddingBottom}px;
-  padding-left: ${(props) => props.$data.setting.paddingLeft}px;
-  padding-right: ${(props) => props.$data.setting.paddingRight}px;
-  height: ${(props) => props.$data.blocks.setting.height || "200"}px;
-  margin-top: ${(props) => props.$data.setting.marginTop || "30"}px;
-  margin-bottom: ${(props) => props.$data.setting.marginBottom}px;
+  padding-top: ${(props) => props.$data.setting?.paddingTop || "20"}px;
+  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20"}px;
+  padding-left: ${(props) => props.$data.setting?.paddingLeft || "20"}px;
+  padding-right: ${(props) => props.$data.setting?.paddingRight || "20"}px;
+  height: ${300}px;
+  margin-top: ${(props) => props.$data.setting?.marginTop || "30"}px;
+  margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20"}px;
   overflow: hidden;
 `;
 
-const SlideContainer = styled.div`
+const SlideContainer = styled.div<{ $previewWidth: "sm" | "default" }>`
   position: relative;
   width: 100%;
   height: 100%;
@@ -42,7 +41,11 @@ const SlideContainer = styled.div`
   align-items: center;
   justify-content: center;
 `;
-const Slide = styled.div<{ $active: boolean; $data: SlideBannerSection }>`
+const Slide = styled.div<{ 
+  $active: boolean; 
+  $data: SlideBannerSection;
+  $previewWidth: "sm" | "default";
+}>`
   position: absolute;
   top: 0;
   left: 0;
@@ -149,8 +152,7 @@ const SlideBanner: React.FC<props> = ({
   return (
     <SlideBannerSection
       $data={sectionData}
-      $preview={preview}
-      $previewWidth={previewWidth}
+      $previewWidth={preview}
       onClick={() => setSelectedComponent(actualName)}
       className={`transition-all duration-150 ease-in-out relative ${
         selectedComponent === actualName ? "border-4 border-blue-500 " : ""
@@ -200,23 +202,28 @@ const SlideBanner: React.FC<props> = ({
         </div>
       ) : null}
 
-      <SlideContainer>
+      <SlideContainer  $previewWidth={preview}>
         {sectionData.blocks.slides.map((slide, index) => (
           <Slide
             key={index}
             $active={currentSlide === index}
             $data={sectionData}
+            $previewWidth={preview}
           >
-            <Image
+           <Image
   src={slide.imageSrc}
   alt={slide.imageAlt}
-  width={preview === "sm" ? 300 : 10000}
-  height={preview === "sm" ? 300 : 2000}
-  className="w-full h-full object-cover"
+  width={1920}
+  height={1080}
+  className="w-full h-full"
   style={{
-    objectFit: 'cover',
+    objectFit: preview === "sm" ? "cover" : "cover",
+    objectPosition: "center"
   }}
+  priority={true}
+  quality={100}
 />
+
 
           </Slide>
         ))}
@@ -242,5 +249,7 @@ const SlideBanner: React.FC<props> = ({
       </DotsContainer>
     </SlideBannerSection>
   );
+
 };
+
 export default SlideBanner;

@@ -484,18 +484,18 @@
               "descriptionFontSize": "16",
               "descriptionFontWeight": "normal",
               "background": "#ffffff",
-              "imageWidth": "250",
-              "imageHeight": "180",
+              "imageWidth": "330",
+              "imageHeight": "200",
               "imageRadius": "8",
               "gridColumns": "4",
               "gridGap": "20"
             }
           },
           "setting": {
-            "paddingTop": "40",
-            "paddingBottom": "40",
-            "marginTop": "20",
-            "marginBottom": "20",
+            "paddingTop": "0",
+            "paddingBottom": "0",
+            "marginTop": "0",
+            "marginBottom": "0",
             "paddingRight": "0",
             "paddingLeft": "0"
           }
@@ -927,8 +927,8 @@
               "descriptionFontSize": "16",
               "descriptionFontWeight": "normal",
               "background": "#ffffff",
-              "imageWidth": "520",
-              "imageHeight": "180",
+              "imageWidth": "680",
+              "imageHeight": "250",
               "imageRadius": "8",
               "gridColumns": "2",
               "gridGap": "20"
