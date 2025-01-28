@@ -14,8 +14,6 @@ interface BoxValues {
   right: number;
 }
 
-
-
 interface CollapseFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<CollapseSection>>;
   userInputData: CollapseSection;
@@ -155,26 +153,27 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
   const handleAddBlock = () => {
     setUserInputData((prev: CollapseSection) => {
       const newBlockNumber = prev.blocks.length + 1;
-      
+
       const newBlock: CollapseBlock = {
         [`text${newBlockNumber}`]: `عنوان ${newBlockNumber}`,
         [`content${newBlockNumber}`]: `محتوای ${newBlockNumber}`,
-        setting:prev.setting,
-        links: []
+        setting: prev.setting,
+        links: [],
       };
-  
+
       return {
         ...prev,
-        blocks: [...prev.blocks, newBlock]
+        blocks: [...prev.blocks, newBlock],
       };
-    });  };  
+    });
+  };
   const handleDeleteBlock = (index: number) => {
     setUserInputData((prev: CollapseSection) => ({
       ...prev,
-      blocks: prev.blocks.filter((_, i) => i !== index)
+      blocks: prev.blocks.filter((_, i) => i !== index),
     }));
   };
-  
+
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     if (initialData) {
@@ -196,7 +195,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (isUpdating) return;
     setIsUpdating(true);
-    
+
     const { name, value } = e.target;
     setUserInputData((prev: CollapseSection) => ({
       ...prev,
@@ -205,13 +204,17 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
         [name]: value,
       },
     }));
-  
+
     setTimeout(() => setIsUpdating(false), 100);
   };
-  const handleBlockSettingChange = (index: number, field: string, value: string) => {
+  const handleBlockSettingChange = (
+    index: number,
+    field: string,
+    value: string
+  ) => {
     if (isUpdating) return;
     setIsUpdating(true);
-  
+
     setUserInputData((prev: CollapseSection) => ({
       ...prev,
       blocks: prev.blocks.map((block: CollapseBlock, i: number) =>
@@ -223,10 +226,9 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
           : block
       ),
     }));
-  
+
     setTimeout(() => setIsUpdating(false), 100);
   };
-  
 
   return (
     <>
@@ -234,7 +236,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
         <p>Loading...</p>
       ) : (
         <div
-          className="p-2 max-w-4xl mx-auto my-4 rounded-xl bg-gray-200"
+          className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4"
           dir="rtl"
         >
           <h2 className="text-xl font-bold my-4">تنظیمات آکاردئون</h2>
@@ -277,7 +279,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                 />
               </svg>
             </button>
-  
+
             {/* Content */}
             {isContentOpen && (
               <div className="p-4 border-t border-gray-100">
@@ -301,7 +303,8 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                   onChange={handleSettingChange}
                 />
                 <div className="text-sm text-gray-500">
-                  {userInputData?.setting?.headingColor?.toString() ?? "#333333"}
+                  {userInputData?.setting?.headingColor?.toString() ??
+                    "#333333"}
                 </div>
                 <div className="p-3 bg-gray-50 rounded-lg">
                   <label>سایز سربرگ</label>
@@ -309,12 +312,14 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                     type="range"
                     name="headingFontSize"
                     value={
-                      userInputData?.setting?.headingFontSize?.toString() ?? "18"
+                      userInputData?.setting?.headingFontSize?.toString() ??
+                      "18"
                     }
                     onChange={handleSettingChange}
                   />
                   <div className="text-sm text-gray-500">
-                    {userInputData?.setting?.headingFontSize?.toString() ?? "18px"}
+                    {userInputData?.setting?.headingFontSize?.toString() ??
+                      "18px"}
                     px
                   </div>
                 </div>
@@ -340,7 +345,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
               </div>
             )}
           </div>
-  
+
           {/* Collapse Items */}
           {userInputData.blocks.map((block, index) => (
             <div
@@ -371,8 +376,9 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                       d="M19 9l-7 7-7-7"
                     />
                   </svg>
-                  <h3 className="font-semibold text-gray-700">آکاردئون {index + 1}</h3>
-                  
+                  <h3 className="font-semibold text-gray-700">
+                    آکاردئون {index + 1}
+                  </h3>
                 </div>
                 <svg
                   className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
@@ -396,12 +402,20 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                 <div className="p-4 border-t border-gray-100 space-y-4">
                   {/* Title Input */}
                   <div className="p-3 bg-gray-50 rounded-lg">
-                    <label className="block mb-2 text-sm font-bold text-gray-700">عنوان</label>
+                    <label className="block mb-2 text-sm font-bold text-gray-700">
+                      عنوان
+                    </label>
                     <input
                       type="text"
-                      value={String(block[`text${index + 1}` as keyof typeof block] || "")}
+                      value={String(
+                        block[`text${index + 1}` as keyof typeof block] || ""
+                      )}
                       onChange={(e) =>
-                        handleBlockChange(index, `text${index + 1}`, e.target.value)
+                        handleBlockChange(
+                          index,
+                          `text${index + 1}`,
+                          e.target.value
+                        )
                       }
                       className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                     />
@@ -409,11 +423,19 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
 
                   {/* Content Textarea */}
                   <div className="p-3 bg-gray-50 rounded-lg">
-                    <label className="block mb-2 text-sm font-bold text-gray-700">محتوا</label>
+                    <label className="block mb-2 text-sm font-bold text-gray-700">
+                      محتوا
+                    </label>
                     <textarea
-                      value={String(block[`content${index + 1}` as keyof typeof block] || "")}
+                      value={String(
+                        block[`content${index + 1}` as keyof typeof block] || ""
+                      )}
                       onChange={(e) =>
-                        handleBlockChange(index, `content${index + 1}`, e.target.value)
+                        handleBlockChange(
+                          index,
+                          `content${index + 1}`,
+                          e.target.value
+                        )
                       }
                       className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                       rows={3}
@@ -422,7 +444,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
 
                   {/* Color Settings */}
                   <div className="p-3 bg-gray-50 rounded-lg space-y-4">
-                  <ColorInput
+                    <ColorInput
                       label={`رنگ عنوان ${index + 1}`}
                       name={`textColor${index + 1}`}
                       value={String(
@@ -454,7 +476,9 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                       max="100"
                       value={String(
                         userInputData?.blocks?.[index]?.setting?.[
-                          `textFontSize${index + 1}` as keyof CollapseBlockSetting
+                          `textFontSize${
+                            index + 1
+                          }` as keyof CollapseBlockSetting
                         ] ?? "16"
                       )}
                       onChange={(e) =>
@@ -469,7 +493,9 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                     <span className="text-gray-500 text-sm">
                       {String(
                         userInputData?.blocks?.[index]?.setting?.[
-                          `textFontSize${index + 1}` as keyof CollapseBlockSetting
+                          `textFontSize${
+                            index + 1
+                          }` as keyof CollapseBlockSetting
                         ] ?? "16"
                       )}
                       px
@@ -480,7 +506,9 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                       name={`textFontWeight${index + 1}`}
                       value={
                         userInputData?.blocks?.[index]?.setting?.[
-                          `textFontWeight${index + 1}` as keyof CollapseBlockSetting
+                          `textFontWeight${
+                            index + 1
+                          }` as keyof CollapseBlockSetting
                         ]?.toString() ?? "normal"
                       }
                       onChange={(e) =>
@@ -500,7 +528,9 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                       name={`contentColor${index + 1}`}
                       value={String(
                         userInputData?.blocks?.[index]?.setting?.[
-                          `contentColor${index + 1}` as keyof CollapseBlockSetting
+                          `contentColor${
+                            index + 1
+                          }` as keyof CollapseBlockSetting
                         ] ?? "#000000"
                       )}
                       onChange={(e) =>
@@ -514,7 +544,9 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                     <span className="text-gray-500 text-sm">
                       {String(
                         userInputData?.blocks?.[index]?.setting?.[
-                          `contentColor${index + 1}` as keyof CollapseBlockSetting
+                          `contentColor${
+                            index + 1
+                          }` as keyof CollapseBlockSetting
                         ] ?? "#000000"
                       )}
                     </span>
@@ -527,7 +559,9 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                       max="100"
                       value={String(
                         userInputData?.blocks?.[index]?.setting?.[
-                          `contentFontSize${index + 1}` as keyof CollapseBlockSetting
+                          `contentFontSize${
+                            index + 1
+                          }` as keyof CollapseBlockSetting
                         ] ?? "14"
                       )}
                       onChange={(e) =>
@@ -542,7 +576,9 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                     <span className="text-gray-500 text-sm">
                       {String(
                         userInputData?.blocks?.[index]?.setting?.[
-                          `contentFontSize${index + 1}` as keyof CollapseBlockSetting
+                          `contentFontSize${
+                            index + 1
+                          }` as keyof CollapseBlockSetting
                         ] ?? "14"
                       )}
                       px
@@ -553,7 +589,9 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                       name={`contentFontWeight${index + 1}`}
                       value={
                         userInputData?.blocks?.[index]?.setting?.[
-                          `contentFontWeight${index + 1}` as keyof CollapseBlockSetting
+                          `contentFontWeight${
+                            index + 1
+                          }` as keyof CollapseBlockSetting
                         ]?.toString() ?? "normal"
                       }
                       onChange={(e) =>
@@ -567,7 +605,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                     >
                       <option value="light">نازک</option>
                       <option value="bold">ضخیم</option>
-                    </select>                
+                    </select>
                   </div>
 
                   {/* Delete Button */}
@@ -579,8 +617,18 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                       }}
                       className="p-1 hover:bg-red-100 rounded-full cursor-pointer"
                     >
-                      <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      <svg
+                        className="w-5 h-5 text-red-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
                       </svg>
                     </span>
                   </div>
@@ -596,10 +644,12 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
             +
             <div className="bg-blue-500 w-full pb-0.5 group-hover:bg-blue-600 group-hover:pb-1 transition-all"></div>
           </button>
-  
+
           {dropdownAnimation && (
             <div className="flex flex-col gap-2 p-2 animate-slideDown">
-              <h4 className="text-pink-500 font-semibold p-2 text-sm">هر تغییری که لازم دارید اعمال کنید بنویسید</h4>
+              <h4 className="text-pink-500 font-semibold p-2 text-sm">
+                هر تغییری که لازم دارید اعمال کنید بنویسید
+              </h4>
               <textarea
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
@@ -622,7 +672,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
               </button>
             </div>
           )}
-  
+
           {/* Spacing Settings Dropdown */}
           <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
             {/* Dropdown Header */}
@@ -662,7 +712,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                 />
               </svg>
             </button>
-  
+
             {/* Dropdown Content */}
             {isSpacingOpen && (
               <div className="p-4 border-t border-gray-100 animate-slideDown">
@@ -680,4 +730,4 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
       )}
     </>
   );
-}
+};

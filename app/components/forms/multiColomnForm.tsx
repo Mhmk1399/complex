@@ -19,9 +19,6 @@ interface BoxValues {
 
 // type BlockKey = `${string}${number}`;
 
-
-
-
 const ColorInput = ({
   label,
   name,
@@ -73,8 +70,6 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
   const [inputText, setInputText] = useState("");
   const [dropdownAnimation, setDropdownAnimation] = useState(false);
 
-
-
   const handleLiveInput = async (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -108,15 +103,15 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
         [`description${newColumnNum}`]: `محتوای ${newColumnNum}`,
         [`imageSrc${newColumnNum}`]: "",
         [`btnLable${newColumnNum}`]: `دکمه ${newColumnNum}`,
-        [`btnLink${newColumnNum}`]: "#"
+        [`btnLink${newColumnNum}`]: "#",
       };
 
       return {
         ...prev,
         blocks: {
           ...prev.blocks,
-          [newColumnNum - 1]: newBlock
-        }
+          [newColumnNum - 1]: newBlock,
+        },
       };
     });
   };
@@ -127,14 +122,17 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
       delete newBlocks[columnIndex];
 
       // Reindex remaining blocks
-      const reindexedBlocks = Object.values(newBlocks).reduce((acc, block, idx) => {
-        acc[idx] = block;
-        return acc;
-      }, {} as typeof prev.blocks);
+      const reindexedBlocks = Object.values(newBlocks).reduce(
+        (acc, block, idx) => {
+          acc[idx] = block;
+          return acc;
+        },
+        {} as typeof prev.blocks
+      );
 
       return {
         ...prev,
-        blocks: reindexedBlocks
+        blocks: reindexedBlocks,
       };
     });
   };
@@ -192,7 +190,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
     if (initialData) {
       setUserInputData({
         ...initialData,
-        blocks: initialData.blocks || {} // Ensure blocks is never undefined
+        blocks: initialData.blocks || {}, // Ensure blocks is never undefined
       });
     }
   }, [selectedComponent]);
@@ -202,7 +200,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
   ) => {
     const { name, value } = e.target;
     const fieldName = `${name}${columnNum}` as keyof MultiColumnBlock;
-    
+
     setUserInputData((prev: MultiColumnSection) => ({
       ...prev,
       blocks: {
@@ -210,14 +208,10 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
         [columnNum - 1]: {
           ...prev.blocks[columnNum - 1],
           [fieldName]: value,
-        }
-      }
+        },
+      },
     }));
   };
-  
-
-
-
 
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -240,7 +234,10 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
   };
 
   return (
-    <div className="p-2 max-w-4xl mx-auto rounded-xl bg-gray-200 my-4" dir="rtl">
+    <div
+      className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4"
+      dir="rtl"
+    >
       <h2 className="text-xl font-bold my-4">تنظیمات ستون ها</h2>
 
       {/* Main Heading Settings */}
@@ -250,13 +247,35 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
           className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
         >
           <div className="flex items-center gap-2">
-            <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            <svg
+              className="w-5 h-5 text-blue-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+              />
             </svg>
             <h3 className="font-semibold text-gray-700">سربرگ</h3>
           </div>
-          <svg className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isHeadingOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          <svg
+            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+              isHeadingOpen ? "rotate-180" : ""
+            }`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
           </svg>
         </button>
 
@@ -281,16 +300,36 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
         Object.keys(userInputData.blocks).map((columnKey) => {
           const columnNum = parseInt(columnKey) + 1;
           return (
-            <div key={columnKey} className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
+            <div
+              key={columnKey}
+              className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100"
+            >
               <button
-                onClick={() => setOpenColumns((prev) => ({ ...prev, [columnNum]: !prev[columnNum] }))}
+                onClick={() =>
+                  setOpenColumns((prev) => ({
+                    ...prev,
+                    [columnNum]: !prev[columnNum],
+                  }))
+                }
                 className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
               >
                 <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  <svg
+                    className="w-5 h-5 text-blue-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
                   </svg>
-                  <h3 className="font-semibold text-gray-700">ستون {columnNum}</h3>
+                  <h3 className="font-semibold text-gray-700">
+                    ستون {columnNum}
+                  </h3>
                 </div>
                 <div className="flex items-center gap-2">
                   <span
@@ -300,12 +339,34 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
                     }}
                     className="p-1 hover:bg-red-100 rounded-full cursor-pointer"
                   >
-                    <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    <svg
+                      className="w-5 h-5 text-red-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
                     </svg>
                   </span>
-                  <svg className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${openColumns[columnNum] ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  <svg
+                    className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                      openColumns[columnNum] ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </div>
               </button>
@@ -313,46 +374,58 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
               {openColumns[columnNum as number] && (
                 <div className="p-4 border-t border-gray-100 space-y-4 animate-slideDown">
                   {/* Column Content */}
-                  <label > title</label>
+                  <label> title</label>
                   <input
-  type="text"
-  name="title"
-  value={userInputData?.blocks[columnNum - 1]?.[`title${columnNum}` as keyof MultiColumnBlock] || ''}
-  onChange={(e) => handleBlockChange(e, columnNum)}
-  className="w-full p-2 border border-gray-200 rounded-lg"
-  placeholder="Title"
-/>
-<label > Description </label>
-<input
-  type="text" 
-  name="description"
-  value={userInputData?.blocks[columnNum - 1]?.[`description${columnNum}` as keyof MultiColumnBlock] || ''}
-  onChange={(e) => handleBlockChange(e, columnNum)}
-  className="w-full p-2 border border-gray-200 rounded-lg"
-  placeholder="Description"
-/>
-<label > btn Lable </label>
-<input
-  type="text" 
-  name="btnLable"
-  value={userInputData?.blocks[columnNum - 1]?.[`btnLable${columnNum}` as keyof MultiColumnBlock] || ''}
-  onChange={(e) => handleBlockChange(e, columnNum)}
-  className="w-full p-2 border border-gray-200 rounded-lg"
-  placeholder=" btn Lable"
-/>
-<label > btn Link </label>
-<input
-  type="text" 
-  name="btnLink"
-  value={userInputData?.blocks[columnNum - 1]?.[`btnLink${columnNum}` as keyof MultiColumnBlock] || ''}
-  onChange={(e) => handleBlockChange(e, columnNum)}
-  className="w-full p-2 border border-gray-200 rounded-lg"
-  placeholder="btn Link"
-/>
-                
-
-                
-                 
+                    type="text"
+                    name="title"
+                    value={
+                      userInputData?.blocks[columnNum - 1]?.[
+                        `title${columnNum}` as keyof MultiColumnBlock
+                      ] || ""
+                    }
+                    onChange={(e) => handleBlockChange(e, columnNum)}
+                    className="w-full p-2 border border-gray-200 rounded-lg"
+                    placeholder="Title"
+                  />
+                  <label> Description </label>
+                  <input
+                    type="text"
+                    name="description"
+                    value={
+                      userInputData?.blocks[columnNum - 1]?.[
+                        `description${columnNum}` as keyof MultiColumnBlock
+                      ] || ""
+                    }
+                    onChange={(e) => handleBlockChange(e, columnNum)}
+                    className="w-full p-2 border border-gray-200 rounded-lg"
+                    placeholder="Description"
+                  />
+                  <label> btn Lable </label>
+                  <input
+                    type="text"
+                    name="btnLable"
+                    value={
+                      userInputData?.blocks[columnNum - 1]?.[
+                        `btnLable${columnNum}` as keyof MultiColumnBlock
+                      ] || ""
+                    }
+                    onChange={(e) => handleBlockChange(e, columnNum)}
+                    className="w-full p-2 border border-gray-200 rounded-lg"
+                    placeholder=" btn Lable"
+                  />
+                  <label> btn Link </label>
+                  <input
+                    type="text"
+                    name="btnLink"
+                    value={
+                      userInputData?.blocks[columnNum - 1]?.[
+                        `btnLink${columnNum}` as keyof MultiColumnBlock
+                      ] || ""
+                    }
+                    onChange={(e) => handleBlockChange(e, columnNum)}
+                    className="w-full p-2 border border-gray-200 rounded-lg"
+                    placeholder="btn Link"
+                  />
                 </div>
               )}
             </div>
@@ -365,9 +438,6 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
         +
         <div className="bg-blue-500 w-full pb-0.5 group-hover:bg-blue-600 group-hover:pb-1 transition-all"></div>
       </button>
-
-
-
 
       {/* Style Settings */}
 
@@ -393,8 +463,9 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
             <h3 className="font-semibold text-gray-700">تنظیمات استایل</h3>
           </div>
           <svg
-            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isStyleSettingsOpen ? "rotate-180" : ""
-              }`}
+            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+              isStyleSettingsOpen ? "rotate-180" : ""
+            }`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -635,8 +706,9 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
               <h3 className="font-semibold text-gray-700">تنظیمات دستوری</h3>
             </div>
             <svg
-              className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${dropdownAnimation ? "rotate-180" : ""
-                }`}
+              className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                dropdownAnimation ? "rotate-180" : ""
+              }`}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -705,8 +777,9 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
               <h3 className="font-semibold text-gray-700">تنظیمات فاصله</h3>
             </div>
             <svg
-              className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isSpacingOpen ? "rotate-180" : ""
-                }`}
+              className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                isSpacingOpen ? "rotate-180" : ""
+              }`}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

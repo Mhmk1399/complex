@@ -146,35 +146,35 @@ export const ProductListForm: React.FC<ProductListProps> = ({
     const initialData = Compiler(layout, selectedComponent);
     setUserInputData(initialData[0]);
   }, [selectedComponent]);
-  
-  
-  
 
-// Add this state to control updates
-const [isUpdating, setIsUpdating] = useState(false);
+  // Add this state to control updates
+  const [isUpdating, setIsUpdating] = useState(false);
 
-// Modify your change handlers to include debouncing
-const handleSettingChange = (
-  e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-) => {
-  if (isUpdating) return;
-  setIsUpdating(true);
-  
-  const { name, value } = e.target;
-  setUserInputData((prev: ProductSection) => ({
-    ...prev,
-    setting: {
-      ...prev.setting,
-      [name]: value,
-    },
-  }));
+  // Modify your change handlers to include debouncing
+  const handleSettingChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
 
-  // Reset the updating flag after a short delay
-  setTimeout(() => setIsUpdating(false), 100);
-};
+    const { name, value } = e.target;
+    setUserInputData((prev: ProductSection) => ({
+      ...prev,
+      setting: {
+        ...prev.setting,
+        [name]: value,
+      },
+    }));
+
+    // Reset the updating flag after a short delay
+    setTimeout(() => setIsUpdating(false), 100);
+  };
 
   return (
-    <div className=" p-2 bg-gray-200 my-4 rounded-lg" dir="rtl">
+    <div
+      className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4"
+      dir="rtl"
+    >
       <h3 className="text-xl font-bold text-right p-1 my-4">تنظیمات فروشگاه</h3>
       <div className=" rounded-lg flex flex-col ">
         <button

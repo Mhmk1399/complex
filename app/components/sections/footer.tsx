@@ -141,6 +141,7 @@ const Footer: React.FC<FooterProps> = ({
   }, [previewWidth]);
   const sectionData = layout?.sections?.sectionFooter as FooterSection;
 
+
   if (!sectionData) {
     return null;
   }
@@ -188,7 +189,7 @@ const Footer: React.FC<FooterProps> = ({
         $previewWidth={previewWidth}
         $data={sectionData}
       >
-        {text}
+        {text || "Footer Text"}
       </FooterText>
 
       <FooterDescription

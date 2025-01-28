@@ -19,7 +19,6 @@ interface BoxValues {
   right: number;
 }
 
-
 const ColorInput = ({
   label,
   name,
@@ -73,7 +72,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
   const [isContentOpen, setIsContentOpen] = useState({});
   const [inputText, setInputText] = useState("");
   const [dropdownAnimation, setDropdownAnimation] = useState(false);
-//  const [loading, setLoading] = useState(true);
+  //  const [loading, setLoading] = useState(true);
   const handleLiveInput = async (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -98,16 +97,16 @@ export const SlideForm: React.FC<SlideFormProps> = ({
       }));
     }
   };
-console.log(selectedComponent);
-useEffect(() => {
-  const initialData = Compiler(layout, selectedComponent)[0];
-  if (initialData) {
-    setUserInputData(initialData);
-  }
-  console.log('dependency', selectedComponent);
-  // setLoading(false);
-}, [selectedComponent]);
- 
+  console.log(selectedComponent);
+  useEffect(() => {
+    const initialData = Compiler(layout, selectedComponent)[0];
+    if (initialData) {
+      setUserInputData(initialData);
+    }
+    console.log("dependency", selectedComponent);
+    // setLoading(false);
+  }, [selectedComponent]);
+
   console.log("userInputData", userInputData.blocks);
   const handelAddBlock = () => {
     setUserInputData((prev: SlideSection) => {
@@ -125,8 +124,6 @@ useEffect(() => {
     });
   };
 
-
-
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     index: number,
@@ -143,7 +140,9 @@ useEffect(() => {
   const [isUpdating, setIsUpdating] = useState(false);
 
   const handleSettingChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => {
     if (isUpdating) return;
 
@@ -223,34 +222,78 @@ useEffect(() => {
     return null;
   }
   console.log("userInputData", userInputData);
-  
 
   return (
     <>
       <div
-        className="p-3 rounded-xl max-w-4xl mx-auto mt-4 bg-gray-200"
+        className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4"
         dir="rtl"
       >
         <h2 className="text-xl font-bold my-4">تنظیمات اسلاید شو</h2>
 
         {/* Slides Content */}
-        {Array.isArray(userInputData?.blocks) && userInputData.blocks.map((block, index) => (
-          <div
-            key={index}
-            className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100 mt-4"
-          >
-            <button
-              onClick={() =>
-                setIsContentOpen((prev) => ({
-                  ...prev,
-                  [index]: !prev[index as keyof typeof prev],
-                }))
-              }
-              className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
+        {Array.isArray(userInputData?.blocks) &&
+          userInputData.blocks.map((block, index) => (
+            <div
+              key={index}
+              className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100 mt-4"
             >
-              <div className="flex items-center gap-2">
+              <button
+                onClick={() =>
+                  setIsContentOpen((prev) => ({
+                    ...prev,
+                    [index]: !prev[index as keyof typeof prev],
+                  }))
+                }
+                className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
+              >
+                <div className="flex items-center gap-2">
+                  <svg
+                    className="w-5 h-5 text-blue-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    />
+                  </svg>
+                  <h3 className="font-semibold text-gray-700">
+                    اسلاید {index + 1}
+                  </h3>
+                  <div className="flex items-center gap-2">
+                    <span
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteBlock(index);
+                      }}
+                      className="p-1 hover:bg-red-100 rounded-full cursor-pointer"
+                    >
+                      <svg
+                        className="w-5 h-5 text-red-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
                 <svg
-                  className="w-5 h-5 text-blue-500"
+                  className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                    isContentOpen[index as keyof typeof isContentOpen]
+                      ? "rotate-180"
+                      : ""
+                  }`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -259,112 +302,78 @@ useEffect(() => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    d="M19 9l-7 7-7-7"
                   />
                 </svg>
-                <h3 className="font-semibold text-gray-700">
-                  اسلاید {index + 1}
-                </h3>
-                <div className="flex items-center gap-2">
-                    <span
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteBlock(index);
-                      }}
-                      className="p-1 hover:bg-red-100 rounded-full cursor-pointer"
-                    >
-                      <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </span>
+              </button>
+
+              {isContentOpen[index as keyof typeof isContentOpen] && (
+                <div className="p-4 border-t border-gray-100 space-y-4 animate-slideDown">
+                  <div className="p-3 bg-gray-50 rounded-lg">
+                    <label className="block mb-2 text-sm font-bold text-gray-700">
+                      تصویر
+                    </label>
+                    <input
+                      type="text"
+                      value={block.imageSrc || ""}
+                      onChange={(e) => handleBlockChange(e, index, "imageSrc")}
+                      className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    />
                   </div>
-              </div>
-              <svg
-                className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-                  isContentOpen[index as keyof typeof isContentOpen]
-                    ? "rotate-180"
-                    : ""
-                }`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </button>
 
-            {isContentOpen[index as keyof typeof isContentOpen] && (
-              <div className="p-4 border-t border-gray-100 space-y-4 animate-slideDown">
-                <div className="p-3 bg-gray-50 rounded-lg">
-                  <label className="block mb-2 text-sm font-bold text-gray-700">
-                    تصویر
-                  </label>
-                  <input
-                    type="text"
-                    value={block.imageSrc || ""}
-                    onChange={(e) => handleBlockChange(e, index, "imageSrc")}
-                    className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                  />
+                  <div className="p-3 bg-gray-50 rounded-lg">
+                    <label className="block mb-2 text-sm font-bold text-gray-700">
+                      عنوان
+                    </label>
+                    <input
+                      type="text"
+                      value={block.text || ""}
+                      onChange={(e) => handleBlockChange(e, index, "text")}
+                      className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    />
+                  </div>
+
+                  <div className="p-3 bg-gray-50 rounded-lg">
+                    <label className="block mb-2 text-sm font-bold text-gray-700">
+                      توضیحات
+                    </label>
+                    <textarea
+                      value={block.description || ""}
+                      onChange={(e) =>
+                        handleBlockChange(e, index, "description")
+                      }
+                      className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      rows={3}
+                    />
+                  </div>
+
+                  <div className="p-3 bg-gray-50 rounded-lg">
+                    <label className="block mb-2 text-sm font-bold text-gray-700">
+                      متن دکمه
+                    </label>
+                    <input
+                      type="text"
+                      value={block.btnText || ""}
+                      onChange={(e) => handleBlockChange(e, index, "btnText")}
+                      className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    />
+                  </div>
+
+                  <div className="p-3 bg-gray-50 rounded-lg">
+                    <label className="block mb-2 text-sm font-bold text-gray-700">
+                      لینک دکمه
+                    </label>
+                    <input
+                      type="text"
+                      value={block.btnLink || ""}
+                      onChange={(e) => handleBlockChange(e, index, "btnLink")}
+                      className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    />
+                  </div>
                 </div>
-
-                <div className="p-3 bg-gray-50 rounded-lg">
-                  <label className="block mb-2 text-sm font-bold text-gray-700">
-                    عنوان
-                  </label>
-                  <input
-                    type="text"
-                    value={block.text || ""}
-                    onChange={(e) => handleBlockChange(e, index, "text")}
-                    className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                  />
-                </div>
-
-                <div className="p-3 bg-gray-50 rounded-lg">
-                  <label className="block mb-2 text-sm font-bold text-gray-700">
-                    توضیحات
-                  </label>
-                  <textarea
-                    value={block.description || ""}
-                    onChange={(e) => handleBlockChange(e, index, "description")}
-                    className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                    rows={3}
-                  />
-                </div>
-
-                <div className="p-3 bg-gray-50 rounded-lg">
-                  <label className="block mb-2 text-sm font-bold text-gray-700">
-                    متن دکمه
-                  </label>
-                  <input
-                    type="text"
-                    value={block.btnText || ""}
-                    onChange={(e) => handleBlockChange(e, index, "btnText")}
-                    className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                  />
-                </div>
-
-                <div className="p-3 bg-gray-50 rounded-lg">
-                  <label className="block mb-2 text-sm font-bold text-gray-700">
-                    لینک دکمه
-                  </label>
-                  <input
-                    type="text"
-                    value={block.btnLink || ""}
-                    onChange={(e) => handleBlockChange(e, index, "btnLink")}
-                    className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                  />
-                </div>
-
-              
-              </div>
-            )}
-          </div>
-        ))}
+              )}
+            </div>
+          ))}
         {/* Add Block Button */}
         <button
           onClick={handelAddBlock}
@@ -393,9 +402,7 @@ useEffect(() => {
                   d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
                 />
               </svg>
-              <h3 className="font-semibold text-gray-700">
-                تنظیمات استایل
-              </h3>
+              <h3 className="font-semibold text-gray-700">تنظیمات استایل</h3>
             </div>
             <svg
               className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${

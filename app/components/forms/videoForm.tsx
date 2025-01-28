@@ -11,8 +11,6 @@ interface BoxValues {
   right: number;
 }
 
-
-
 const ColorInput = ({
   label,
   name,
@@ -157,32 +155,31 @@ export const VideoForm: React.FC<VideoFormProps> = ({
 
   const [isUpdating, setIsUpdating] = useState(false);
 
-const handleBlockSettingChange = (
-  e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-) => {
-  if (isUpdating) return;
-  setIsUpdating(true);
-  const { name, value, type } = e.target;
-  const inputValue = type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
+  const handleBlockSettingChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
+    const { name, value, type } = e.target;
+    const inputValue =
+      type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
 
-  setUserInputData((prev: VideoSection) => ({
-    ...prev,
-    blocks: {
-      ...prev.blocks,
-      setting: {
-        ...prev.blocks.setting,
-        [name]: inputValue,
+    setUserInputData((prev: VideoSection) => ({
+      ...prev,
+      blocks: {
+        ...prev.blocks,
+        setting: {
+          ...prev.blocks.setting,
+          [name]: inputValue,
+        },
       },
-    },
-  }));
-  setTimeout(() => setIsUpdating(false), 100);
-};
-
-
+    }));
+    setTimeout(() => setIsUpdating(false), 100);
+  };
 
   return (
     <div
-      className="p-2 max-w-4xl mx-auto bg-gray-200 rounded-xl my-4"
+      className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4"
       dir="rtl"
     >
       <h2 className="text-xl font-bold my-4">تنظیمات ویدیو</h2>

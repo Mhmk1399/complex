@@ -4,6 +4,7 @@ import { AnimatePresence } from "framer-motion";
 import { DragEndEvent } from "@dnd-kit/core";
 import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
+import { FaBars, FaExchangeAlt, FaPuzzlePiece } from "react-icons/fa";
 import richtextImage from "@/public/assets/images/richtext.png";
 import ImageTextImage from "@/public/assets/images/imagetext.png";
 import bannerImage from "@/public/assets/images/banner.jpg";
@@ -26,6 +27,14 @@ import imagetextSm from "@/public/assets/images/imagetextSm.png";
 import richtextSm from "@/public/assets/images/richtextSm.png";
 import collectionSm from "@/public/assets/images/collectionsm.png";
 import collection from "@/public/assets/images/collection.png";
+import brand from "@/public/assets/images/brand.png";
+import gallery from "@/public/assets/images/gallery.png";
+import market from "@/public/assets/images/market.png";
+import newproduct from "@/public/assets/images/newproduct.png";
+import offer from "@/public/assets/images/offer.png";
+// import porforosh from "@/public/assets/images/porforosh.png";
+import slidebanner from "@/public/assets/images/slidebanner.png";
+import story from "@/public/assets/images/story.png";
 
 import {
   DndContext,
@@ -136,7 +145,7 @@ export const Form = ({
   const [showOrdersMenu, setShowOrdersMenu] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(true); // New state for form visibility
-console.log(selectedComponent)
+  console.log(selectedComponent);
   // Setup sensors for dnd-kit
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -212,10 +221,10 @@ console.log(selectedComponent)
         style={style}
         {...attributes}
         {...listeners}
-        className="p-3 bg-white border rounded-2xl flex items-center gap-2 cursor-grab mb-2"
+        className="p-2 bg-white border focus:bg-blue-300 group focus:text-white  rounded-2xl flex items-center gap-1 cursor-grab mb-2"
       >
-        <span className="text-gray-400">☰</span>
-        <span>{id}</span>
+        <span className="text-gray-400 group-focus:text-white">☰</span>
+        <span className="text-sm group-focus:text-white ">{id}</span>
       </div>
     );
   };
@@ -502,80 +511,96 @@ console.log(selectedComponent)
             selectedComponent={selectedComponent}
           />
         );
-        case "Story":
-          return (
-            <StoryForm
-              setUserInputData={
-                setUserInputData as React.Dispatch<
-                  React.SetStateAction<StorySection>
-                >
-              }
-              userInputData={userInputData as StorySection}
-              layout={layout}
-              selectedComponent={selectedComponent}
-            />
-          );
-          case "SpecialOffer":
-          return (
-              <SpecialForm
-              setUserInputData={
-                setUserInputData as React.Dispatch<
-                  React.SetStateAction<SpecialOfferSection>
-                >
-              }
-              userInputData={userInputData as SpecialOfferSection}
-              layout={layout}
-              selectedComponent={selectedComponent}
-            />);
-            case "OfferRow":
-              return (
-              <OfferRowForm
-              setUserInputData={
-                setUserInputData as React.Dispatch<
-                  React.SetStateAction<OfferRowSection>
-                >
-              }
-              userInputData={userInputData as OfferRowSection}
-              layout={layout}
-              selectedComponent={selectedComponent}
-            />
-          );
-          case"Brands":
-            return (
-              <BrandsForm
-              setUserInputData={
-                setUserInputData as React.Dispatch<
-                  React.SetStateAction<BrandsSection>
-                >
-              }
-              userInputData={userInputData as BrandsSection}
-              layout={layout}
-              selectedComponent={selectedComponent}
-            />
-          );
+      case "Story":
+        return (
+          <StoryForm
+            setUserInputData={
+              setUserInputData as React.Dispatch<
+                React.SetStateAction<StorySection>
+              >
+            }
+            userInputData={userInputData as StorySection}
+            layout={layout}
+            selectedComponent={selectedComponent}
+          />
+        );
+      case "SpecialOffer":
+        return (
+          <SpecialForm
+            setUserInputData={
+              setUserInputData as React.Dispatch<
+                React.SetStateAction<SpecialOfferSection>
+              >
+            }
+            userInputData={userInputData as SpecialOfferSection}
+            layout={layout}
+            selectedComponent={selectedComponent}
+          />
+        );
+      case "OfferRow":
+        return (
+          <OfferRowForm
+            setUserInputData={
+              setUserInputData as React.Dispatch<
+                React.SetStateAction<OfferRowSection>
+              >
+            }
+            userInputData={userInputData as OfferRowSection}
+            layout={layout}
+            selectedComponent={selectedComponent}
+          />
+        );
+      case "Brands":
+        return (
+          <BrandsForm
+            setUserInputData={
+              setUserInputData as React.Dispatch<
+                React.SetStateAction<BrandsSection>
+              >
+            }
+            userInputData={userInputData as BrandsSection}
+            layout={layout}
+            selectedComponent={selectedComponent}
+          />
+        );
       default:
         return <div>یک سکشن را برای تنظیمات کلیک کنید...</div>;
     }
   };
 
   const ordersButton = (
-    <div className="flex justify-between mt-12 items-center">
+    <div
+      className="flex bg-transparent flex-row mr-4  rounded-2xl mx-2 justify-end items-end mt-9  
+    transition-all duration-300"
+    >
       <button
         onClick={() => setShowOrdersMenu(!showOrdersMenu)}
-        className={
-          !showOrdersMenu
-            ? `w-fit  m-2 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors`
-            : "w-fit m-2 px-4 py-2 bg-yellow-500 text-white rounded-full hover:bg-red-600 transition-colors"
-        }
+        className={`
+      flex items-center gap-2 m-2 px-2 py-1 text-sm font-medium
+      ${!showOrdersMenu ? "bg-blue-500 text-white" : " text-gray-700"} 
+      rounded-full transition-all duration-300 transform
+    `}
       >
-        {!showOrdersMenu ? "جابجایی" : "منو"}
+        {!showOrdersMenu ? (
+          <>
+            جابجایی
+            <FaExchangeAlt className="w-4 h-4 text-gray-100" />
+          </>
+        ) : (
+          <>
+            منو
+            <FaBars className="w-4 h-4 text-blue-400" />
+          </>
+        )}
       </button>
+
       {showOrdersMenu && (
         <button
           onClick={() => setIsModalOpen(true)}
-          className="m-2 px-4 py-2  bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors"
+          className="flex items-center text-nowrap gap-2 m-2 px-2 py-1 text-sm font-medium text-gray-700 rounded-full transition-all duration-300 transform"
         >
-          {!isModalOpen ? "انتخاب سکشن" : " انتخاب سکشن"}
+          انتخاب سکشن
+          <FaPuzzlePiece className="w-4 h-4 text-blue-400" />
         </button>
       )}
     </div>
@@ -585,12 +610,36 @@ console.log(selectedComponent)
     <>
       <Toaster />
       <div>
-        <button
+        <motion.button
+          className=" absolute top-1 right-4 z-[9999] hidden text-lg animate-pulse lg:block py-1 text-black rounded-lg hover:bg-slate-500 transition-colors hover:bg-gray-100/10 backdrop-blur-sm"
           onClick={() => setIsFormOpen(!isFormOpen)}
-          className="absolute top-2 right-5 z-[9999] hidden text-lg lg:block px-3 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-500 transition-colors"
         >
-          {isFormOpen ? "✕" : "☰"}
-        </button>
+          <motion.div
+            animate={isFormOpen ? "open" : "closed"}
+            variants={{
+              open: { rotate: 90 },
+              closed: { rotate: 0 },
+            }}
+            transition={{ duration: 0.45 }}
+          >
+            {isFormOpen ? (
+              // Horizontal dots for close
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="4" cy="12" r="2" />
+                <circle cx="12" cy="12" r="2" />
+                <circle cx="20" cy="12" r="2" />
+              </svg>
+            ) : (
+              // Vertical dots for open
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="4" r="2" />
+                <circle cx="12" cy="12" r="2" />
+                <circle cx="12" cy="20" r="2" />
+              </svg>
+            )}
+          </motion.div>
+        </motion.button>
+
         {isFormOpen && (
           <>
             {isModalOpen && (
@@ -598,7 +647,7 @@ console.log(selectedComponent)
                 dir="rtl"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 0.91 }}
-                className="fixed inset-0 hidden backdrop-blur-sm  bg-black bg-opacity-50 lg:flex items-center justify-center z-[9999] overflow-y-auto"
+                className="fixed inset-0 hidden backdrop-blur-md  bg-black bg-opacity-80 lg:flex items-center justify-center z-[9999] overflow-y-auto"
               >
                 <motion.div
                   initial={{ y: "100%" }}
@@ -609,7 +658,7 @@ console.log(selectedComponent)
                     stiffness: 300,
                     duration: 0.8,
                   }}
-                  className="bg-white/40 backdrop-blur-xl border-4 border-gray-300 p-6 rounded-xl w-[100%] max-h-[60vh] max-w-5xl overflow-auto shadow-lg relative"
+                  className="bg-white/40 backdrop-blur-xl border-2 border-gray-300 p-6 rounded-xl w-[100%] max-h-[60vh] max-w-5xl overflow-auto shadow-lg relative"
                 >
                   <div className=" -mr-7 -mt-8 sticky -top-8 right-0">
                     <motion.button
@@ -628,6 +677,118 @@ console.log(selectedComponent)
                     transition={{ delay: 0.4 }}
                     className="modal-content flex flex-col items-center justify-center gap-12"
                   >
+                    <div
+                      onClick={() => addSection("SpecialOffer")}
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${offer.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"پیشنهاد شگفت انگیز"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("OfferRow")}
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${market.src})`,
+                        backgroundSize: "contain",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"پیشنهاد های هفتگی"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("ProductsRow")}
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${newproduct.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"محصولات"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("Brands")}
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${brand.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"برند"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("Gallery")}
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${gallery.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"گالری"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("SlideBanner")}
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${slidebanner.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"بنر"}
+                      </span>
+                    </div>
+                    <div
+                      onClick={() => addSection("Story")}
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${story.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"استوری"}
+                      </span>
+                    </div>
                     <div
                       onClick={() => addSection("RichText")}
                       className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
@@ -810,53 +971,70 @@ console.log(selectedComponent)
               </motion.div>
             )}
             {/* Desktop Sidebar */}
-            <div
-              className="hidden lg:block fixed right-0 top-0 h-screen w-80 bg-gray-50/30 rounded-xl backdrop-blur-sm shadow-lg overflow-y-auto"
-              style={{ zIndex: 1000 }}
-            >
-              {ordersButton}
+            {isFormOpen && (
+              <AnimatePresence mode="wait">
+                <motion.div
+                  initial={{ x: "100%", opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: "100%", opacity: 0 }}
+                  transition={{
+                    type: "tween",
+                    stiffness: 100,
+                    damping: 20,
+                    duration: 0.5,
+                    ease: "easeInOut",
+                  }}
+                  className="fixed right-0 hidden lg:block top-0 h-screen w-80 ease-in-out bg-[#f8f9fa] border-l-2  border-white/40 rounded backdrop-blur-sm overflow-y-auto"
+                  style={{ zIndex: 1000 }}
+                >
+                  {ordersButton}
 
-              <div className="p-6">
-                <h2 className="text-2xl font-bold text-gray-800" dir="rtl">
-                  {showOrdersMenu ? "ترتیب سکشن" : "تنظیمات سکشن"}
-                </h2>
-                {showOrdersMenu ? (
-                  <div
-                    className="bg-gray-100/50 p-4 my-5 rounded-xl shadow-md"
-                    dir="rtl"
-                  >
-                    <h3 className="text-2xl text-black font-semibold mb-4">
-                      جابجایی سکشن
-                    </h3>
-
-                    {/* Add Modal Trigger Button */}
-
-                    {/* Modal Component */}
-
-                    <DndContext
-                      sensors={sensors}
-                      collisionDetection={closestCenter}
-                      onDragEnd={handleDragEnd}
+                  <div className="p-2 ">
+                    <h2
+                      className="text-xl mb-2 font-bold text-[#343a40] pr-4"
+                      dir="rtl"
                     >
-                      <SortableContext
-                        items={orders}
-                        strategy={verticalListSortingStrategy}
+                      {showOrdersMenu ? "ترتیب سکشن" : "تنظیمات سکشن"}
+                    </h2>
+                    {showOrdersMenu ? (
+                      <div
+                        className=" p-4 bg-white rounded-lg shadow-lg"
+                        dir="rtl"
                       >
-                        {orders.map((id: string) => (
-                          <SortableItem key={id} id={id} />
-                        ))}
-                      </SortableContext>
-                    </DndContext>
+                        {/* <h3 className="text-xl text-[#343a40] font-semibold mb-4">
+                          جابجایی سکشن
+                        </h3> */}
+
+                        {/* Add Modal Trigger Button */}
+
+                        {/* Modal Component */}
+
+                        <DndContext
+                          sensors={sensors}
+                          collisionDetection={closestCenter}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <SortableContext
+                            items={orders}
+                            strategy={verticalListSortingStrategy}
+                          >
+                            {orders.map((id: string) => (
+                              <SortableItem key={id} id={id} />
+                            ))}
+                          </SortableContext>
+                        </DndContext>
+                      </div>
+                    ) : (
+                      renderFormContent(
+                        setUserInputData,
+                        userInputData as Section,
+                        selectedComponent
+                      )
+                    )}
                   </div>
-                ) : (
-                  renderFormContent(
-                    setUserInputData,
-                    userInputData as Section,
-                    selectedComponent
-                  )
-                )}
-              </div>
-            </div>
+                </motion.div>
+              </AnimatePresence>
+            )}
 
             {/* Mobile/Tablet Bottom Sheet */}
             <AnimatePresence mode="wait">
@@ -927,7 +1105,7 @@ console.log(selectedComponent)
                   onClick={() => setShowOrdersMenu(!showOrdersMenu)}
                   className={
                     !showOrdersMenu
-                      ? `w-fit m-2 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors`
+                      ? `w-fit m-2 px-4 py-2 bg-blue-500 text-white rounded-full  transition-colors`
                       : "w-fit m-2 px-4 py-2 bg-yellow-500 text-white rounded-full hover:bg-red-600 transition-colors"
                   }
                 >

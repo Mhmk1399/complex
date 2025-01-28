@@ -17,8 +17,6 @@ interface BoxValues {
   right: number;
 }
 
-
-
 const ColorInput = ({
   label,
   name,
@@ -105,7 +103,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
       setUserInputData((prev: FooterSection) => ({
         ...prev,
         setting: {
-          ...prev.setting,
+          ...(prev.setting || {}), // Provide fallback empty object
           marginTop: updatedValues.top.toString(),
           marginBottom: updatedValues.bottom.toString(),
         },
@@ -115,7 +113,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
       setUserInputData((prev: FooterSection) => ({
         ...prev,
         setting: {
-          ...prev.setting,
+          ...(prev.setting || {}), // Provide fallback empty object
           paddingTop: updatedValues.top.toString(),
           paddingBottom: updatedValues.bottom.toString(),
           paddingLeft: updatedValues.left.toString(),
@@ -124,6 +122,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
       }));
     }
   };
+
   useEffect(() => {
     setMargin({
       top: Number(userInputData?.setting?.marginTop) || 0,
@@ -140,11 +139,20 @@ export const FooterForm: React.FC<FooterFormProps> = ({
     });
   }, [userInputData?.setting]);
   useEffect(() => {
-    if (layout && selectedComponent) { 
-      const initialData = Compiler(layout, selectedComponent);
-      if (initialData?.length) {
-        setUserInputData(initialData[0]);
-      }
+    const initialData = Compiler(layout, selectedComponent);
+    console.log(initialData);
+    if (initialData) {
+      // Ensure a default setting object exists
+      setUserInputData({
+        ...initialData,
+        setting: initialData.setting || {
+          marginTop: "0",
+          marginBottom: "0",
+          paddingTop: "0",
+          paddingBottom: "0",
+        },
+        blocks: initialData.blocks || {},
+      });
     }
   }, [selectedComponent]);
 
@@ -192,7 +200,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
 
   return (
     <div
-      className="p-2 max-w-4xl mx-auto bg-gray-200 rounded-xl my-4"
+      className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4"
       dir="rtl"
     >
       <h2 className="text-xl font-bold my-4">تنظیمات فوتر</h2>
@@ -237,7 +245,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
         </button>
         {isContentOpen && (
           <>
-            <h3 className="font-semibold mb-2 p-4 animate-slideDown">محتوا</h3> 
+            <h3 className="font-semibold mb-2 p-4 animate-slideDown">محتوا</h3>
             <div className="space-y-4 p-4 animate-slideDown">
               <div>
                 <label className="block mb-1">متن</label>
@@ -255,7 +263,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
                 <textarea
                   name="description"
                   value={
-                    userInputData?.blocks?.description ??
+                    userInputData?.blocks?.description ||
                     "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد"
                   }
                   onChange={handleBlockChange}

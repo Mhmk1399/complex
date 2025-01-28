@@ -11,8 +11,6 @@ interface BoxValues {
   right: number;
 }
 
-
-
 const ColorInput = ({
   label,
   name,
@@ -86,7 +84,7 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
     right: 0,
   });
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
- 
+
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
 
   const handleUpdate = (
@@ -153,7 +151,10 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
   };
 
   return (
-    <div className="space-y-6 px-2 py-3 my-4 bg-gray-200 rounded-lg" dir="rtl">
+    <div
+      className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4"
+      dir="rtl"
+    >
       <h3 className="text-lg my-4 px-2 font-semibold">تنظیمات بلاگ</h3>
       <div className="bg-gray-50  rounded-lg shadow">
         <button

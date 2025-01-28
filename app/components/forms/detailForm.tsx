@@ -17,7 +17,6 @@ interface BoxValues {
   right: number;
 }
 
-
 const ColorInput = ({
   label,
   name,
@@ -151,8 +150,6 @@ export const DetailForm: React.FC<DetailFormProps> = ({
     }
   }, [selectedComponent]);
 
-  
-
   const [isUpdating, setIsUpdating] = useState(false);
 
   const handleSettingChange = (
@@ -160,7 +157,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
   ) => {
     if (isUpdating) return;
     setIsUpdating(true);
-    
+
     const { name, value } = e.target;
     setUserInputData((prev: DetailPageSection) => ({
       ...prev,
@@ -169,12 +166,15 @@ export const DetailForm: React.FC<DetailFormProps> = ({
         [name]: value,
       },
     }));
-    
+
     setTimeout(() => setIsUpdating(false), 100);
   };
 
   return (
-    <div className="p-2 max-w-4xl  my-4 rounded-lg bg-gray-200" dir="rtl">
+    <div
+      className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4"
+      dir="rtl"
+    >
       <h2 className="text-xl font-bold my-4 px-2">تنظیمات صفحه محصول</h2>
       <div className="grid grid-cols-1  gap-1">
         <button
