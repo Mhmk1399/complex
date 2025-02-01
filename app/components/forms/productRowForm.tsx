@@ -72,6 +72,7 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
   }, []);
+  const [collections, setCollections] = useState<Array<{name: string, _id: string}>>([]);
 
   useEffect(() => {
     setMargin({
@@ -88,7 +89,19 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
       left: Number(userInputData?.setting?.paddingLeft) || 0,
     });
   }, [userInputData?.setting]);
-
+  useEffect(() => {
+    const fetchSpecialOffers = async () => {
+      try {
+        const response = await fetch("/api/collections");
+        const data = await response.json();
+        setCollections(data.collections);
+      } catch (error) {
+        console.error("Error fetching special offers:", error);
+      }
+    };
+  
+    fetchSpecialOffers();
+  }, []);
   const handleUpdate = (
     type: "margin" | "padding",
     updatedValues: BoxValues
@@ -228,6 +241,25 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
                 className="w-full p-2 border rounded"
               />
             </div>
+            <div className="mt-4">
+  <label className="block mb-2 text-sm font-bold text-gray-700">
+    انتخاب کالکشن
+  </label>
+  <select
+    name="selectedCollection"
+    value={userInputData?.blocks?.setting?.selectedCollection || ""}
+    onChange={handleBlockSettingChange}
+    className="w-full p-2 border rounded"
+  >
+    <option value="">انتخاب کنید</option>
+    {collections.map((collection) => (
+      <option key={collection._id} value={collection._id}>
+        {collection.name}
+      </option>
+    ))}
+  </select>
+</div>
+
           </div>
         )}
       </div>

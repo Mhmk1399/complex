@@ -56,8 +56,8 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
-  const [inputText, setInputText] = useState("");
-  const [dropdownAnimation, setDropdownAnimation] = useState(false);
+  const [collections, setCollections] = useState<Array<{name: string, _id: string}>>([]);
+
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
@@ -122,51 +122,64 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
       }));
     }
   };
-
-  const handleLiveInput = async (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
-    console.log("Sending input:", inputText);
-
-    if (!inputText?.trim()) {
-      console.log("Input is empty");
-      return;
-    }
-
-    try {
-      const requestBody = {
-        userInput: inputText,
-      };
-      console.log("Request body:", requestBody);
-
-      const response = await fetch("/api/handleInputs", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      const result = await response.json();
-      console.log("API response:", result);
-
-      if (result.success && result.data) {
-        setUserInputData((prevData) => ({
-          ...prevData,
-          blocks: {
-            ...prevData.blocks,
-            setting: {
-              ...prevData.blocks.setting,
-              ...result.data.blocks.setting,
-            },
-          },
-        }));
+  useEffect(() => {
+    const fetchSpecialOffers = async () => {
+      try {
+        const response = await fetch("/api/collections");
+        const data = await response.json();
+        setCollections(data.collections);
+      } catch (error) {
+        console.error("Error fetching special offers:", error);
       }
-    } catch (error) {
-      console.error("Fetch error:", error);
-    }
-  };
+    };
+  
+    fetchSpecialOffers();
+  }, []);
+
+  // const handleLiveInput = async (
+  //   event: React.MouseEvent<HTMLButtonElement>
+  // ) => {
+  //   event.preventDefault();
+  //   console.log("Sending input:", inputText);
+
+  //   if (!inputText?.trim()) {
+  //     console.log("Input is empty");
+  //     return;
+  //   }
+
+  //   try {
+  //     const requestBody = {
+  //       userInput: inputText,
+  //     };
+  //     console.log("Request body:", requestBody);
+
+  //     const response = await fetch("/api/handleInputs", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(requestBody),
+  //     });
+
+  //     const result = await response.json();
+  //     console.log("API response:", result);
+
+  //     if (result.success && result.data) {
+  //       setUserInputData((prevData) => ({
+  //         ...prevData,
+  //         blocks: {
+  //           ...prevData.blocks,
+  //           setting: {
+  //             ...prevData.blocks.setting,
+  //             ...result.data.blocks.setting,
+  //           },
+  //         },
+  //       }));
+  //     }
+  //   } catch (error) {
+  //     console.error("Fetch error:", error);
+  //   }
+  // };
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -233,21 +246,42 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
       {/* Content Section */}
 
       {isContentOpen && (
-        <div className="p-4 border-t border-gray-100">
-          <div className="">
-            <label className="block mb-2 text-sm font-bold text-gray-700">
-              عنوان بخش
-            </label>
-            <input
-              type="text"
-              name="textHeading"
-              value={userInputData?.blocks?.textHeading || ""}
-              onChange={handleBlockChange}
-              className="w-full p-2 border rounded"
-            />
-          </div>
-        </div>
-      )}
+  <div className="p-4 border-t border-gray-100">
+    <div className="space-y-4">
+      <div>
+        <label className="block mb-2 text-sm font-bold text-gray-700">
+          عنوان بخش
+        </label>
+        <input
+          type="text"
+          name="textHeading"
+          value={userInputData?.blocks?.textHeading || ""}
+          onChange={handleBlockChange}
+          className="w-full p-2 border rounded"
+        />
+      </div>
+      
+      <div>
+        <label className="block mb-2 text-sm font-bold text-gray-700">
+          انتخاب کالکشن
+        </label>
+        <select
+          name="selectedCollection"
+          value={userInputData?.blocks?.setting?.selectedCollection || ""}
+          onChange={handleBlockSettingChange}
+          className="w-full p-2 border rounded"
+        >
+          <option value="">انتخاب کنید</option>
+          {collections.map((collection) => (
+            <option key={collection._id} value={collection._id}>
+              {collection.name}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  </div>
+)}
 
       {/* Style Settings */}
 

@@ -1093,6 +1093,8 @@ export interface SpecialOfferBlockSetting extends CommonSettings {
   btnTextColor: string;
   cardBackground: string;
   cardBorderRadius: string;
+  selectedCollection: string;
+
 }
 export interface GalleryImage {
   imageSrc: string;
@@ -1290,6 +1292,7 @@ export interface ProductRowBlockSetting extends CommonSettings {
   headingColor: string;
   headingFontSize: string;
   headingFontWeight: string;
+  selectedCollection: string;
 }
 
 export interface ProductRowBlock {
