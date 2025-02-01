@@ -72,7 +72,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
     </>
   );
 
-  // Modify the useEffect to include default values
+  // Modify the useEffect to include default values to
 
   const [isDataReady, setIsDataReady] = React.useState(false);
   const [margin, setMargin] = React.useState<BoxValues>({
