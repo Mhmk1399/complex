@@ -928,6 +928,7 @@
             "textHeading": " محصولات جدید ",
 
             "setting": {
+              "selectedCollection": "",
               "headingColor": "#000000",
               "headingFontSize": "22",
               "headingFontWeight": "bold",
