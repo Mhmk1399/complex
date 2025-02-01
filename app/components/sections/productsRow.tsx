@@ -13,246 +13,7 @@ interface ProductsRowProps {
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
   previewWidth: "sm" | "default";
 }
-const products = [
-    {
-      images: [{
-        imageSrc: "",
-        imageAlt: "mohammad"
-      }],
-      _id: "677117dba08192d1da911b0b",
-      name: "mohammad",
-      description: "emohammad amani",
-      category: "دسته بندی",
-      price: "1000000",
-      status: "available",
-      discount: "0",
-      id: "1",
-      innventory: "3",
-      storeId: "store_m58avrgi2vn5vu",
-      createdAt: "2024-12-29T09:35:23.118Z",
-      updatedAt: "2024-12-29T13:55:46.614Z",
-     
-    },
-    {
-      images: [{
-        imageSrc: "",
-        imageAlt: "mohammad"
-      }],
-      _id: "677117dca08192d1da911b0d",
-      name: "mohammad",
-      description: "mohammad amani",
-      category: "دسته بندی",
-      price: "1000000222",
-      status: "available",
-      discount: "0",
-      id: "1",
-      innventory: "2",
-      storeId: "store_m58avrgi2vn5vu",
-      createdAt: "2024-12-29T09:35:24.993Z",
-      updatedAt: "2024-12-29T14:36:07.223Z",
-  
-    },
-    {
-      images: [{
-                imageSrc: "",
 
-        imageAlt: "hosein"
-      }],
-      _id: "67724b53ba6f18debeb2f326",
-      name: "hosein",
-      description: "hosein zolghadr",
-      category: "ghavi",
-      price: "137900",
-      status: "available",
-      discount: "0",
-      id: "1",
-      innventory: "1",
-      storeId: "store_m58avrgi2vn5vu",
-      createdAt: "2024-12-30T07:27:15.321Z",
-      updatedAt: "2024-12-30T07:27:15.321Z",
-     
-    },
-    {
-      images: [{
-                imageSrc: "",
-
-        imageAlt: "محصول"
-      }],
-      _id: "67823bb967997894dbc40a8d",
-      name: "نام محصول",
-      description: "توضیحات محصول",
-      category: "دسته بندی",
-      price: "0",
-      status: "available",
-      discount: "0",
-      id: "1",
-      innventory: "0",
-      storeId: "store_m5rxu4p3vtt4it",
-      createdAt: "2025-01-11T09:36:57.022Z",
-      updatedAt: "2025-01-11T09:36:57.022Z",
-
-    },
-    {
-      images: [{
-                imageSrc: "",
-
-        imageAlt: "محصول"
-      }],
-      _id: "6782440467997894dbc40ab5",
-      name: "نام محصول",
-      description: "توضیحات محصول",
-      category: "دسته بندی",
-      price: "0",
-      status: "available",
-      discount: "0",
-      id: "1",
-      innventory: "0",
-      storeId: "store_m5rxu4p3vtt4it",
-      createdAt: "2025-01-11T10:12:20.388Z",
-      updatedAt: "2025-01-11T10:12:20.388Z",
-     
-    },
-   
-    {
-      images: [{
-        imageSrc: "",
-        imageAlt: "y6yy6y"
-      }],
-      _id: "6784bd0da4ac6b5c32f83e9f",
-      name: "123344",
-      description: "6y6y6cdcdcfef",
-      category: "دسته بند6y6y6yی",
-      price: "6666",
-      status: "unavailable",
-      discount: "15",
-      id: "1",
-      innventory: "6",
-      storeId: "store_m5tl58b5uqb5du",
-      createdAt: "2025-01-13T07:13:17.747Z",
-      updatedAt: "2025-01-14T08:14:43.205Z",
-     
-    },
-    {
-      images: [{
-                imageSrc: "",
-
-        imageAlt: "محصول"
-      }],
-      _id: "6784bd16a4ac6b5c32f83ea1",
-      name: "نام محصول",
-      description: "توضیحات محصول",
-      category: "دسته بندی",
-      price: "0",
-      status: "available",
-      discount: "0",
-      id: "1",
-      innventory: "0",
-      storeId: "store_m5tl58b5uqb5du",
-      createdAt: "2025-01-13T07:13:26.304Z",
-      updatedAt: "2025-01-13T07:13:26.304Z",
-      
-    },
-    {
-      images: [{
-                imageSrc: "",
-
-        imageAlt: "محصول"
-      }],
-      _id: "6784bd33a4ac6b5c32f83ea3",
-      name: "نام محصول",
-      description: "توضیحات محصول",
-      category: "دسته بندی",
-      price: "0",
-      status: "available",
-      discount: "0",
-      id: "1",
-      innventory: "0",
-      storeId: "store_m5tl58b5uqb5du",
-      createdAt: "2025-01-13T07:13:55.382Z",
-      updatedAt: "2025-01-13T07:13:55.382Z",
-   
-    },
-    {
-      images: [{
-                imageSrc: "",
-
-        imageAlt: "محصول1"
-      }],
-      _id: "6784ee04a509c286fd7932d7",
-      name: "نام محصول1",
-      description: "توضیحات محصول11111",
-      category: "دسته بندی",
-      price: "100000",
-      status: "available",
-      discount: "10",
-      id: "1",
-      innventory: "12",
-      storeId: "store_m5tr1xydyi8okv",
-      createdAt: "2025-01-13T10:42:12.812Z",
-      updatedAt: "2025-01-13T10:42:12.812Z",
-    
-    },
-    {
-      images: [{
-                imageSrc: "",
-
-        imageAlt: "محصول2"
-      }],
-      _id: "6784ee24a509c286fd7932d9",
-      name: "نام محصول2",
-      description: "توضیحات محصول2",
-      category: "دسته بندی",
-      price: "200000",
-      status: "available",
-      discount: "36",
-      id: "1",
-      innventory: "12",
-      storeId: "store_m5tr1xydyi8okv",
-      createdAt: "2025-01-13T10:42:44.880Z",
-      updatedAt: "2025-01-13T10:42:44.880Z",
-    
-    },
-    {
-      images: [{
-                imageSrc: "",
-
-        imageAlt: "test "
-      }],
-      _id: "67869948d90e358680c368fb",
-      name: "نامtest",
-      description: "توضیحات test",
-      category: "دسته بندی",
-      price: "200000",
-      status: "available",
-      discount: "20",
-      id: "1",
-      innventory: "21",
-      storeId: "store_m5wq385budr23k",
-      createdAt: "2025-01-14T17:05:12.224Z",
-      updatedAt: "2025-01-14T17:05:12.224Z",
-   
-    },
-    {
-      images:[ {
-                imageSrc: "",
-
-        imageAlt: "محصول"
-      }],
-      _id: "678da249c2aaf5f90996e60c",
-      name: "نام محصول",
-      description: "توضیحات محصول",
-      category: "دسته بندی",
-      price: "0",
-      status: "available",
-      discount: "0",
-      id: "1",
-      innventory: "0",
-      storeId: "store_m63zjws4fznrke",
-      createdAt: "2025-01-20T01:09:29.945Z",
-      updatedAt: "2025-01-20T01:09:29.945Z",
-     
-    }
-  ];
 const ScrollContainer = styled.div<{
   $data: ProductRowSection;
 }>`
@@ -342,6 +103,7 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [collectionProducts, setCollectionProducts] = useState([]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -356,7 +118,30 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, [previewWidth]);
-
+  useEffect(() => {
+    const fetchCollectionProducts = async () => {
+      try {
+        const collectionId = sectionData?.blocks?.setting?.selectedCollection;
+        if (!collectionId) return;
+  
+        const response = await fetch(`/api/collections/id`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'collectionId': collectionId
+          }
+        });
+        const data = await response.json();
+        setCollectionProducts(data.collections[0].products);
+      } catch (error) {
+        console.error("Error fetching collection products:", error);
+      }
+    };
+  
+    fetchCollectionProducts();
+  }, [actualName, layout]);
+  if (!layout || !layout.sections) {
+    return null;
+  }
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
   ) as ProductRowSection;
@@ -373,6 +158,8 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
       });
     }
   };
+ 
+  if (!layout || !layout.sections || !sectionData) return null;
 
   return (
     <div className="px-2">
@@ -402,10 +189,18 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
       </Heading>
 
       <ProductsRowSection ref={containerRef} $data={sectionData} $isMobile={preview === "sm"}>
-        {products.map((product) => (
-          <ProductCard key={product._id} productData={product} />
-        ))}
-      </ProductsRowSection>
+  {collectionProducts.length > 0 ? (
+    collectionProducts.map((product,idx) => (
+      <ProductCard key={idx} productData={product} />
+    ))
+  ) : (
+    <div className="flex flex-row items-center justify-start lg:justify-end w-full">
+      <span className="text-gray-500 text-xl justify-center text-center w-full flex lg:gap-5">
+        لطفا یک مجموعه را انتخاب کنید
+      </span>
+    </div>
+  )}
+</ProductsRowSection>
 
       <ScrollButton className="left bg-white" onClick={() => handleScroll('left')} $data={sectionData}>
         <svg width="24" height="24" viewBox="0 0 24 24">

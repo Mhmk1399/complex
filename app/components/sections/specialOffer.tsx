@@ -1,6 +1,6 @@
 "use client";
 import styled from "styled-components";
-import type { Layout, SpecialOfferSection } from "@/lib/types";
+import type { Layout, ProductCardData, SpecialOfferSection } from "@/lib/types";
 import ProductCard from "./productCard";
 import { useEffect, useState, useRef } from "react";
 import { Delete } from "../C-D";
@@ -90,246 +90,7 @@ const ScrollContainer = styled.div<{
       right: 10px;
     }
   `;
-  const products = [
-    {
-      images: [{
-        imageSrc: "",
-        imageAlt: "mohammad"
-      }],
-      _id: "677117dba08192d1da911b0b",
-      name: "mohammad",
-      description: "emohammad amani",
-      category: "دسته بندی",
-      price: "1000000",
-      status: "available",
-      discount: "0",
-      id: "1",
-      innventory: "3",
-      storeId: "store_m58avrgi2vn5vu",
-      createdAt: "2024-12-29T09:35:23.118Z",
-      updatedAt: "2024-12-29T13:55:46.614Z",
-     
-    },
-    {
-      images: [{
-        imageSrc: "",
-        imageAlt: "mohammad"
-      }],
-      _id: "677117dca08192d1da911b0d",
-      name: "mohammad",
-      description: "mohammad amani",
-      category: "دسته بندی",
-      price: "1000000222",
-      status: "available",
-      discount: "0",
-      id: "1",
-      innventory: "2",
-      storeId: "store_m58avrgi2vn5vu",
-      createdAt: "2024-12-29T09:35:24.993Z",
-      updatedAt: "2024-12-29T14:36:07.223Z",
   
-    },
-    {
-      images: [{
-                imageSrc: "",
-
-        imageAlt: "hosein"
-      }],
-      _id: "67724b53ba6f18debeb2f326",
-      name: "hosein",
-      description: "hosein zolghadr",
-      category: "ghavi",
-      price: "137900",
-      status: "available",
-      discount: "0",
-      id: "1",
-      innventory: "1",
-      storeId: "store_m58avrgi2vn5vu",
-      createdAt: "2024-12-30T07:27:15.321Z",
-      updatedAt: "2024-12-30T07:27:15.321Z",
-     
-    },
-    {
-      images: [{
-                imageSrc: "",
-
-        imageAlt: "محصول"
-      }],
-      _id: "67823bb967997894dbc40a8d",
-      name: "نام محصول",
-      description: "توضیحات محصول",
-      category: "دسته بندی",
-      price: "0",
-      status: "available",
-      discount: "0",
-      id: "1",
-      innventory: "0",
-      storeId: "store_m5rxu4p3vtt4it",
-      createdAt: "2025-01-11T09:36:57.022Z",
-      updatedAt: "2025-01-11T09:36:57.022Z",
-
-    },
-    {
-      images: [{
-                imageSrc: "",
-
-        imageAlt: "محصول"
-      }],
-      _id: "6782440467997894dbc40ab5",
-      name: "نام محصول",
-      description: "توضیحات محصول",
-      category: "دسته بندی",
-      price: "0",
-      status: "available",
-      discount: "0",
-      id: "1",
-      innventory: "0",
-      storeId: "store_m5rxu4p3vtt4it",
-      createdAt: "2025-01-11T10:12:20.388Z",
-      updatedAt: "2025-01-11T10:12:20.388Z",
-     
-    },
-   
-    {
-      images: [{
-        imageSrc: "/assets/images/product-detail.jpg6",
-        imageAlt: "y6yy6y"
-      }],
-      _id: "6784bd0da4ac6b5c32f83e9f",
-      name: "123344",
-      description: "6y6y6cdcdcfef",
-      category: "دسته بند6y6y6yی",
-      price: "6666",
-      status: "unavailable",
-      discount: "15",
-      id: "1",
-      innventory: "6",
-      storeId: "store_m5tl58b5uqb5du",
-      createdAt: "2025-01-13T07:13:17.747Z",
-      updatedAt: "2025-01-14T08:14:43.205Z",
-     
-    },
-    {
-      images: [{
-                imageSrc: "",
-
-        imageAlt: "محصول"
-      }],
-      _id: "6784bd16a4ac6b5c32f83ea1",
-      name: "نام محصول",
-      description: "توضیحات محصول",
-      category: "دسته بندی",
-      price: "0",
-      status: "available",
-      discount: "0",
-      id: "1",
-      innventory: "0",
-      storeId: "store_m5tl58b5uqb5du",
-      createdAt: "2025-01-13T07:13:26.304Z",
-      updatedAt: "2025-01-13T07:13:26.304Z",
-      
-    },
-    {
-      images: [{
-                imageSrc: "",
-
-        imageAlt: "محصول"
-      }],
-      _id: "6784bd33a4ac6b5c32f83ea3",
-      name: "نام محصول",
-      description: "توضیحات محصول",
-      category: "دسته بندی",
-      price: "0",
-      status: "available",
-      discount: "0",
-      id: "1",
-      innventory: "0",
-      storeId: "store_m5tl58b5uqb5du",
-      createdAt: "2025-01-13T07:13:55.382Z",
-      updatedAt: "2025-01-13T07:13:55.382Z",
-   
-    },
-    {
-      images: [{
-                imageSrc: "",
-
-        imageAlt: "محصول1"
-      }],
-      _id: "6784ee04a509c286fd7932d7",
-      name: "نام محصول1",
-      description: "توضیحات محصول11111",
-      category: "دسته بندی",
-      price: "100000",
-      status: "available",
-      discount: "10",
-      id: "1",
-      innventory: "12",
-      storeId: "store_m5tr1xydyi8okv",
-      createdAt: "2025-01-13T10:42:12.812Z",
-      updatedAt: "2025-01-13T10:42:12.812Z",
-    
-    },
-    {
-      images: [{
-                imageSrc: "",
-
-        imageAlt: "محصول2"
-      }],
-      _id: "6784ee24a509c286fd7932d9",
-      name: "نام محصول2",
-      description: "توضیحات محصول2",
-      category: "دسته بندی",
-      price: "200000",
-      status: "available",
-      discount: "36",
-      id: "1",
-      innventory: "12",
-      storeId: "store_m5tr1xydyi8okv",
-      createdAt: "2025-01-13T10:42:44.880Z",
-      updatedAt: "2025-01-13T10:42:44.880Z",
-    
-    },
-    {
-      images: [{
-                imageSrc: "",
-
-        imageAlt: "test "
-      }],
-      _id: "67869948d90e358680c368fb",
-      name: "نامtest",
-      description: "توضیحات test",
-      category: "دسته بندی",
-      price: "200000",
-      status: "available",
-      discount: "20",
-      id: "1",
-      innventory: "21",
-      storeId: "store_m5wq385budr23k",
-      createdAt: "2025-01-14T17:05:12.224Z",
-      updatedAt: "2025-01-14T17:05:12.224Z",
-   
-    },
-    {
-      images:[ {
-                imageSrc: "",
-
-        imageAlt: "محصول"
-      }],
-      _id: "678da249c2aaf5f90996e60c",
-      name: "نام محصول",
-      description: "توضیحات محصول",
-      category: "دسته بندی",
-      price: "0",
-      status: "available",
-      discount: "0",
-      id: "1",
-      innventory: "0",
-      storeId: "store_m63zjws4fznrke",
-      createdAt: "2025-01-20T01:09:29.945Z",
-      updatedAt: "2025-01-20T01:09:29.945Z",
-     
-    }
-  ];
   export const SpecialOffer: React.FC<SpecialOfferProps> = ({
     setSelectedComponent,
     layout,
@@ -338,9 +99,7 @@ const ScrollContainer = styled.div<{
     setLayout,
     previewWidth,
   }) => {
-  
-    const specialOfferProducts = products;
-    
+    const [specialOfferProducts, setSpecialOfferProducts] = useState<ProductCardData[]>([]);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [preview, setPreview] = useState(previewWidth);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -357,7 +116,31 @@ const ScrollContainer = styled.div<{
       window.addEventListener('resize', handleResize);
       return () => window.removeEventListener('resize', handleResize);
     }, [previewWidth]);
+    useEffect(() => {
+      const fetchSpecialOffers = async () => {
+        try {
+          const sectionData = layout?.sections?.children?.sections.find(
+            (section) => section.type === actualName
+          ) as SpecialOfferSection;
+          
+          const collectionId = sectionData?.blocks?.setting?.selectedCollection;
+          if (!collectionId) return;
   
+          const response = await fetch(`/api/collections/id`, {
+            headers: {
+              'Content-Type': 'application/json',
+              'collectionId': collectionId
+            }
+          });
+          const data = await response.json();
+          setSpecialOfferProducts(data.collections[0].products);
+        } catch (error) {
+          console.error("Error fetching special offers:", error);
+        }
+      };
+  
+      fetchSpecialOffers();
+    }, [actualName, layout]);
     const sectionData = layout?.sections?.children?.sections.find(
       (section) => section.type === actualName
     ) as SpecialOfferSection;
@@ -367,21 +150,9 @@ const ScrollContainer = styled.div<{
     }
   
     if (!sectionData) return null;
-  // useEffect(() => {
-  //     const fetchSpecialOffers = async () => {
-  //       try {
-  //         const response = await fetch("/api/products");
-  //         const data = await response.json();
-  //         if (data?.products) {
-  //           setSpecialOfferProducts(data.products);
-  //         }
-  //       } catch (error) {
-  //         console.error("Error fetching special offers:", error);
-  //       }
-  //     };
-  
-  //     fetchSpecialOffers();
-  //   }, []);
+  // Inside the SpecialOffer component
+
+
     const handleScroll = (direction: 'left' | 'right') => {
       if (containerRef.current) {
         const scrollAmount = 400;
@@ -456,14 +227,22 @@ const ScrollContainer = styled.div<{
       >
               {sectionData.blocks?.textHeading}
             </Heading>
-            <svg xmlns="http://www.w3.org/2000/svg" height="80px" viewBox="0 -960 960 960" width="80px" fill={sectionData.blocks?.setting.headingColor}>
+            <svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill={sectionData.blocks?.setting.headingColor}>
               <path d="M300-520q-58 0-99-41t-41-99q0-58 41-99t99-41q58 0 99 41t41 99q0 58-41 99t-99 41Zm0-80q25 0 42.5-17.5T360-660q0-25-17.5-42.5T300-720q-25 0-42.5 17.5T240-660q0 25 17.5 42.5T300-600Zm360 440q-58 0-99-41t-41-99q0-58 41-99t99-41q58 0 99 41t41 99q0 58-41 99t-99 41Zm0-80q25 0 42.5-17.5T720-300q0-25-17.5-42.5T660-360q-25 0-42.5 17.5T600-300q0 25 17.5 42.5T660-240Zm-444 80-56-56 584-584 56 56-584 584Z"/>
             </svg>
           </div>
           
-          {specialOfferProducts.map((product) => (
+          {specialOfferProducts.length > 0 && specialOfferProducts.map((product) => (
             <ProductCard key={product._id} productData={product} />
           ))}
+          {specialOfferProducts.length === 0 && (
+  <div className="flex flex-row items-center justify-start  lg:justify-end  w-full ">
+   
+      <span className="text-white text-3xl justify-center text-center w-full flex lg:gap-5">لطفا یک مجموعه را انتخاب کنید
+      <svg className={`${previewWidth=="sm" && 'hidden'} sm:hidden`} xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#ffffff"><path d="M479.99-280q15.01 0 25.18-10.15 10.16-10.16 10.16-25.17 0-15.01-10.15-25.18-10.16-10.17-25.17-10.17-15.01 0-25.18 10.16-10.16 10.15-10.16 25.17 0 15.01 10.15 25.17Q464.98-280 479.99-280Zm-31.32-155.33h66.66V-684h-66.66v248.67ZM480.18-80q-82.83 0-155.67-31.5-72.84-31.5-127.18-85.83Q143-251.67 111.5-324.56T80-480.33q0-82.88 31.5-155.78Q143-709 197.33-763q54.34-54 127.23-85.5T480.33-880q82.88 0 155.78 31.5Q709-817 763-763t85.5 127Q880-563 880-480.18q0 82.83-31.5 155.67Q817-251.67 763-197.46q-54 54.21-127 85.84Q563-80 480.18-80Zm.15-66.67q139 0 236-97.33t97-236.33q0-139-96.87-236-96.88-97-236.46-97-138.67 0-236 96.87-97.33 96.88-97.33 236.46 0 138.67 97.33 236 97.33 97.33 236.33 97.33ZM480-480Z"/></svg>
+      </span>
+  </div>
+)}
         </SpecialOfferSection>
   
         <ScrollButton className="left bg-white" onClick={() => handleScroll('left')} $data={sectionData}>
@@ -479,5 +258,4 @@ const ScrollContainer = styled.div<{
         </ScrollButton>
       </ScrollContainer>
     );
-  };
-  
+  };  

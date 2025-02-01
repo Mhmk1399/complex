@@ -3,7 +3,6 @@ import { Layout, ProductRowSection } from "@/lib/types";
 import React from "react";
 import MarginPaddingEditor from "../sections/editor";
 import { Compiler } from "../compiler";
-import { TabButtons } from "../tabButtons";
 
 interface ProductRowFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<ProductRowSection>>;
@@ -73,6 +72,7 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
   }, []);
+  const [collections, setCollections] = useState<Array<{name: string, _id: string}>>([]);
 
   useEffect(() => {
     setMargin({
@@ -89,7 +89,19 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
       left: Number(userInputData?.setting?.paddingLeft) || 0,
     });
   }, [userInputData?.setting]);
-
+  useEffect(() => {
+    const fetchSpecialOffers = async () => {
+      try {
+        const response = await fetch("/api/collections");
+        const data = await response.json();
+        setCollections(data.collections);
+      } catch (error) {
+        console.error("Error fetching special offers:", error);
+      }
+    };
+  
+    fetchSpecialOffers();
+  }, []);
   const handleUpdate = (
     type: "margin" | "padding",
     updatedValues: BoxValues
@@ -172,118 +184,223 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
     setTimeout(() => setIsUpdating(false), 100);
   };
 
-  const handleTabChange = (tab: "content" | "style" | "spacing") => {
-    setIsContentOpen(tab === "content");
-    setIsStyleSettingsOpen(tab === "style");
-    setIsSpacingOpen(tab === "spacing");
-  };
-  useEffect(() => {
-    setIsContentOpen(true);
-  }, []);
-
   return (
-    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
-      <h2 className="text-lg font-bold mb-4">تنظیمات محصولات</h2>
-
-      {/* Tabs */}
-
-      <TabButtons onTabChange={handleTabChange} />
+    <div className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4" dir="rtl">
+      <h2 className="text-xl font-bold my-4">تنظیمات محصولات</h2>
 
       {/* Content Section */}
-
-      {isContentOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
-          <div className=" rounded-lg">
-            <label className="block mb-2 text-sm font-bold text-gray-700">
-              عنوان بخش
-            </label>
-            <input
-              type="text"
-              name="textHeading"
-              value={userInputData?.blocks?.textHeading || ""}
-              onChange={handleBlockChange}
-              className="w-full p-2 border rounded"
-            />
+      <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
+        <button
+          onClick={() => setIsContentOpen(!isContentOpen)}
+          className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl"
+        >
+          <div className="flex items-center gap-2">
+            <svg
+              className="w-5 h-5 text-blue-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+              />
+            </svg>
+            <h3 className="font-semibold text-gray-700">محتوا</h3>
           </div>
-        </div>
-      )}
+          <svg
+            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+              isContentOpen ? "rotate-180" : ""
+            }`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </button>
+
+        {isContentOpen && (
+          <div className="p-4 border-t border-gray-100">
+            <div className="p-3 bg-gray-50 rounded-lg">
+              <label className="block mb-2 text-sm font-bold text-gray-700">
+                عنوان بخش
+              </label>
+              <input
+                type="text"
+                name="textHeading"
+                value={userInputData?.blocks?.textHeading || ""}
+                onChange={handleBlockChange}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+            <div className="mt-4">
+  <label className="block mb-2 text-sm font-bold text-gray-700">
+    انتخاب کالکشن
+  </label>
+  <select
+    name="selectedCollection"
+    value={userInputData?.blocks?.setting?.selectedCollection || ""}
+    onChange={handleBlockSettingChange}
+    className="w-full p-2 border rounded"
+  >
+    <option value="">انتخاب کنید</option>
+    {collections.map((collection) => (
+      <option key={collection._id} value={collection._id}>
+        {collection.name}
+      </option>
+    ))}
+  </select>
+</div>
+
+          </div>
+        )}
+      </div>
 
       {/* Style Settings */}
+      <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
+        <button
+          onClick={() => setIsStyleSettingsOpen(!isStyleSettingsOpen)}
+          className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl"
+        >
+          <div className="flex items-center gap-2">
+            <svg
+              className="w-5 h-5 text-blue-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+              />
+            </svg>
+            <h3 className="font-semibold text-gray-700">تنظیمات ظاهری</h3>
+          </div>
+          <svg
+            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+              isStyleSettingsOpen ? "rotate-180" : ""
+            }`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </button>
 
-      {isStyleSettingsOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
-          <div className="grid grid-cols-1 gap-4">
-            <div className=" rounded-lg">
-              <h4 className="font-semibold text-sky-700 my-4">تنظیمات عنوان</h4>
-              <ColorInput
-                label="رنگ عنوان"
-                name="headingColor"
-                value={
-                  userInputData?.blocks?.setting?.headingColor || "#000000"
-                }
-                onChange={handleBlockSettingChange}
-              />
-              <label>سایز عنوان</label>
-              <input
-                type="range"
-                name="headingFontSize"
-                min="16"
-                max="100"
-                value={userInputData?.blocks?.setting?.headingFontSize || "32"}
-                onChange={handleBlockSettingChange}
-                className="w-full"
-              />
-              <div className="text-gray-500">
-                {userInputData?.blocks?.setting?.headingFontSize}px
+        {isStyleSettingsOpen && (
+          <div className="p-4 border-t border-gray-100">
+            <div className="grid md:grid-cols-1 gap-4">
+              <div className="p-3 bg-gray-100 rounded-lg">
+                <h4 className="font-semibold text-sky-700 my-4">تنظیمات عنوان</h4>
+                <ColorInput
+                  label="رنگ عنوان"
+                  name="headingColor"
+                  value={userInputData?.blocks?.setting?.headingColor || "#000000"}
+                  onChange={handleBlockSettingChange}
+                />
+                <label>سایز عنوان</label>
+                <input
+                  type="range"
+                  name="headingFontSize"
+                  min="16"
+                  max="48"
+                  value={userInputData?.blocks?.setting?.headingFontSize || "32"}
+                  onChange={handleBlockSettingChange}
+                  className="w-full"
+                />
+                <select
+                  name="headingFontWeight"
+                  value={userInputData?.blocks?.setting?.headingFontWeight || "normal"}
+                  onChange={handleBlockSettingChange}
+                  className="w-full p-2 border rounded mt-2"
+                >
+                  <option value="bold">ضخیم</option>
+                  <option value="normal">معمولی</option>
+                </select>
               </div>
-              <label
-                htmlFor="
-              "
-                className="block my-2 text-sm "
-              >
-                وزن عنوان
-              </label>
-              <select
-                name="headingFontWeight"
-                value={
-                  userInputData?.blocks?.setting?.headingFontWeight || "normal"
-                }
-                onChange={handleBlockSettingChange}
-                className="w-full p-2 border rounded mt-2"
-              >
-                <option value="bold">ضخیم</option>
-                <option value="normal">معمولی</option>
-              </select>
-            </div>
 
-            <div className="p-3 bg-gray-100 rounded-lg">
-              <h4 className="font-semibold text-sky-700 my-4">
-                تنظیمات کارت محصول
-              </h4>
-              <ColorInput
-                label="رنگ پس زمینه کارت"
-                name="backgroundColor"
-                value={userInputData?.setting.backgroundColor || "#FFFFFF"}
-                onChange={handleSettingChange}
-              />
+              <div className="p-3 bg-gray-100 rounded-lg">
+                <h4 className="font-semibold text-sky-700 my-4">تنظیمات کارت محصول</h4>
+                <ColorInput
+                  label="رنگ پس زمینه کارت"
+                  name="backgroundColor"
+                  value={userInputData?.setting.backgroundColor || "#FFFFFF"}
+                  onChange={handleSettingChange}
+                />
+                
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Spacing Settings */}
-
-      {isSpacingOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
-          <div className="bg-gray-50 rounded-lg flex items-center justify-center">
-            <MarginPaddingEditor
-              margin={margin}
-              padding={padding}
-              onChange={handleUpdate}
-            />
+      <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
+        <button
+          onClick={() => setIsSpacingOpen(!isSpacingOpen)}
+          className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl"
+        >
+          <div className="flex items-center gap-2">
+            <svg
+              className="w-5 h-5 text-blue-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+              />
+            </svg>
+            <h3 className="font-semibold text-gray-700">تنظیمات فاصله</h3>
           </div>
-        </div>
-      )}
+          <svg
+            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+              isSpacingOpen ? "rotate-180" : ""
+            }`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </button>
+
+        {isSpacingOpen && (
+          <div className="p-4 border-t border-gray-100">
+            <div className="bg-gray-50 rounded-lg p-2 flex items-center justify-center">
+              <MarginPaddingEditor
+                margin={margin}
+                padding={padding}
+                onChange={handleUpdate}
+              />
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
