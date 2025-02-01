@@ -32,7 +32,6 @@ import gallery from "@/public/assets/images/gallery.png";
 import market from "@/public/assets/images/market.png";
 import newproduct from "@/public/assets/images/newproduct.png";
 import offer from "@/public/assets/images/offer.png";
-// import porforosh from "@/public/assets/images/porforosh.png";
 import slidebanner from "@/public/assets/images/slidebanner.png";
 import story from "@/public/assets/images/story.png";
 
@@ -108,6 +107,7 @@ import { SlideBannerForm } from "./forms/slideBannerForm";
 import { OfferRowForm } from "./forms/offerRowForm";
 import { BrandsForm } from "./forms/brandsForm";
 import { ProductRowForm } from "./forms/productRowForm";
+import { styled } from "styled-components";
 type FormData =
   | HeaderSection
   | MultiRowSection
@@ -132,7 +132,7 @@ type FormData =
   | OfferRowSection
   | BrandsSection
   | CollectionSection
-  |ProductRowSection
+  | ProductRowSection
   | BlogSection;
 
 interface FormProps {
@@ -144,6 +144,44 @@ interface FormProps {
   isFormOpen: boolean;
   setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+// Start scrollbar styles for webkit browsers
+const scrollbarStyles = `
+  /* Scrollbar Track */
+  ::-webkit-scrollbar {
+    width: 6px; /* Smaller width for the scrollbar */
+    height: 6px; /* Smaller height for horizontal scrollbar */
+  }
+
+  /* Scrollbar Thumb */
+  ::-webkit-scrollbar-thumb {
+    background: #adb5bd; /* Color of the scrollbar thumb */
+    border-radius: 3px; /* Rounded corners */
+  }
+
+  /* Scrollbar Thumb on Hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #6c757d; /* Darker color on hover */
+  }
+
+  /* Scrollbar Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color of the scrollbar track */
+    border-radius: 3px; /* Rounded corners */
+  }
+
+  /* Scrollbar Track on Hover */
+  ::-webkit-scrollbar-track:hover {
+    background: #ddd; /* Lighter color on hover */
+  }
+`;
+const FormContainer = styled.div`
+  ${scrollbarStyles}
+  overflow-y: auto; /* Ensure the container is scrollable */
+  max-height: 80vh; /* Adjust height as needed */
+`;
+
+// End scrollbar styles for webkit browsers
 
 export const Form = ({
   selectedComponent,
@@ -639,7 +677,7 @@ export const Form = ({
   );
 
   return (
-    <>
+    <FormContainer>
       <Toaster />
       <div>
         <motion.button
@@ -1016,7 +1054,7 @@ export const Form = ({
                     duration: 0.5,
                     ease: "easeInOut",
                   }}
-                  className="fixed right-0 hidden lg:block top-0 h-screen w-80 ease-in-out bg-white/60 border-l-2  border-white/40 rounded backdrop-blur-lg overflow-y-auto"
+                  className="fixed right-0 hidden lg:block top-0 h-screen w-[270px] ease-in-out bg-white/60 border-l-2  border-white/40 rounded backdrop-blur-lg overflow-y-auto"
                   style={{ zIndex: 1000 }}
                 >
                   {ordersButton}
@@ -1404,6 +1442,6 @@ export const Form = ({
           </>
         )}
       </div>
-    </>
+    </FormContainer>
   );
 };

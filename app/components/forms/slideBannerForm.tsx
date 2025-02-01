@@ -3,6 +3,7 @@ import { Compiler } from "../compiler";
 import { Layout, SlideBannerSection } from "@/lib/types";
 import React from "react";
 import MarginPaddingEditor from "../sections/editor";
+import { TabButtons } from "../tabButtons";
 
 interface SlideBannerFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<SlideBannerSection>>;
@@ -131,236 +132,128 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
 
     setTimeout(() => setIsUpdating(false), 100);
   };
+  const handleTabChange = (tab: "content" | "style" | "spacing") => {
+    setIsContentOpen(tab === "content");
+    setIsStyleSettingsOpen(tab === "style");
+    setIsSpacingOpen(tab === "spacing");
+  };
+  useEffect(() => {
+    setIsContentOpen(true);
+  }, []);
 
   return (
-    <div
-      className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4"
-      dir="rtl"
-    >
-      <h2 className="text-xl font-bold my-4">تنظیمات اسلایدر</h2>
-
+    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+      <h2 className="text-lg font-bold mb-4">تنظیمات اسلایدر</h2>
+      <TabButtons onTabChange={handleTabChange} />
       {/* Content Section */}
-      <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
-        <button
-          onClick={() => setIsContentOpen(!isContentOpen)}
-          className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
-        >
-          <div className="flex items-center gap-2">
-            <svg
-              className="w-5 h-5 text-blue-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-              />
-            </svg>
-            <h3 className="font-semibold text-gray-700">محتوا</h3>
-          </div>
-          <svg
-            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-              isContentOpen ? "rotate-180" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
 
-        {isContentOpen && (
-          <div className="p-4 border-t border-gray-100 animate-slideDown">
-            {userInputData?.blocks?.slides?.map((slide, index) => (
-              <div key={index} className="mb-4 p-4 bg-gray-50 rounded-lg">
-                <h4 className="font-semibold mb-2">اسلاید {index + 1}</h4>
-                <div className="space-y-2">
-                  <label
-                    htmlFor="
+      {isContentOpen && (
+        <div className="p-4 border-t border-gray-100 animate-slideDown">
+          {userInputData?.blocks?.slides?.map((slide, index) => (
+            <div key={index} className="mb-4 p-4 bg-gray-50 rounded-lg">
+              <h4 className="font-semibold mb-2">اسلاید {index + 1}</h4>
+              <div className="space-y-2">
+                <label
+                  htmlFor="
                     "
-                  >
-                    تصویر
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="آدرس تصویر"
-                    value={slide.imageSrc}
-                    onChange={(e) =>
-                      handleSlideChange(index, "imageSrc", e.target.value)
-                    }
-                    className="w-full mb-2 p-2 border rounded"
-                  />
-                  <label className="mt-2">متن جایگزین تصویر</label>
-                  <input
-                    type="text"
-                    placeholder="متن جایگزین تصویر"
-                    value={slide.imageAlt}
-                    onChange={(e) =>
-                      handleSlideChange(index, "imageAlt", e.target.value)
-                    }
-                    className="w-full p-2 border rounded"
-                  />
-                </div>
+                >
+                  تصویر
+                </label>
+                <input
+                  type="text"
+                  placeholder="آدرس تصویر"
+                  value={slide.imageSrc}
+                  onChange={(e) =>
+                    handleSlideChange(index, "imageSrc", e.target.value)
+                  }
+                  className="w-full mb-2 p-2 border rounded"
+                />
+                <label className="mt-2">متن جایگزین تصویر</label>
+                <input
+                  type="text"
+                  placeholder="متن جایگزین تصویر"
+                  value={slide.imageAlt}
+                  onChange={(e) =>
+                    handleSlideChange(index, "imageAlt", e.target.value)
+                  }
+                  className="w-full p-2 border rounded"
+                />
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Style Settings */}
-      <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
-        <button
-          onClick={() => setIsStyleSettingsOpen(!isStyleSettingsOpen)}
-          className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
-        >
-          <div className="flex items-center gap-2">
-            <svg
-              className="w-5 h-5 text-blue-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+
+      {isStyleSettingsOpen && (
+        <div className="p-4 border-t border-gray-100 animate-slideDown">
+          <div className="space-y-4">
+            <div className=" rounded-lg">
+              <label className="block mb-2">ارتفاع اسلایدر</label>
+              <input
+                type="range"
+                name="height"
+                min="150"
+                max="1000"
+                value={userInputData?.blocks?.setting?.height || "200"}
+                onChange={handleSettingChange}
+                className="w-full"
               />
-            </svg>
-            <h3 className="font-semibold text-gray-700">تنظیمات استایل</h3>
-          </div>
-          <svg
-            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-              isStyleSettingsOpen ? "rotate-180" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
-        {isStyleSettingsOpen && (
-          <div className="p-4 border-t border-gray-100 animate-slideDown">
-            <div className="space-y-4">
-              <div className="p-3 bg-gray-50 rounded-lg">
-                <label className="block mb-2">ارتفاع اسلایدر</label>
-                <input
-                  type="range"
-                  name="height"
-                  min="200"
-                  max="800"
-                  value={userInputData?.blocks?.setting?.height || "200"}
-                  onChange={handleSettingChange}
-                  className="w-full"
-                />
-                <span className="text-sm text-gray-500">
-                  {userInputData?.blocks?.setting?.height}px
-                </span>
-              </div>
-              <div>
-                <ColorInput
-                  label="رنگ فلش ها"
-                  name="bgArrow"
-                  value={
-                    userInputData?.blocks?.setting?.bgArrow?.toString() ??
-                    "#333333"
-                  }
-                  onChange={handleSettingChange}
-                />
-              </div>
-              <div>
-                <ColorInput
-                  label="رنگ نقطه‌های غیرفعال (در صورت نیاز)"
-                  name="inactiveDotColor"
-                  value={
-                    userInputData?.blocks?.setting?.inactiveDotColor?.toString() ??
-                    "#333333"
-                  }
-                  onChange={handleSettingChange}
-                />
-              </div>
-              <div>
-                <ColorInput
-                  label="رنگ نقطه‌ی فعال (در صورت نیاز)"
-                  name="activeDotColor"
-                  value={
-                    userInputData?.blocks?.setting?.activeDotColor?.toString() ??
-                    "#333333"
-                  }
-                  onChange={handleSettingChange}
-                />
-              </div>
+              <span className="text-sm text-gray-500">
+                {userInputData?.blocks?.setting?.height}px
+              </span>
+            </div>
+            <div>
+              <ColorInput
+                label="رنگ فلش ها"
+                name="bgArrow"
+                value={
+                  userInputData?.blocks?.setting?.bgArrow?.toString() ??
+                  "#333333"
+                }
+                onChange={handleSettingChange}
+              />
+            </div>
+            <div>
+              <ColorInput
+                label="رنگ نقطه‌های غیرفعال (در صورت نیاز)"
+                name="inactiveDotColor"
+                value={
+                  userInputData?.blocks?.setting?.inactiveDotColor?.toString() ??
+                  "#333333"
+                }
+                onChange={handleSettingChange}
+              />
+            </div>
+            <div>
+              <ColorInput
+                label="رنگ نقطه‌ی فعال (در صورت نیاز)"
+                name="activeDotColor"
+                value={
+                  userInputData?.blocks?.setting?.activeDotColor?.toString() ??
+                  "#333333"
+                }
+                onChange={handleSettingChange}
+              />
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Spacing Settings */}
-      <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
-        <button
-          onClick={() => setIsSpacingOpen(!isSpacingOpen)}
-          className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
-        >
-          <div className="flex items-center gap-2">
-            <svg
-              className="w-5 h-5 text-blue-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-              />
-            </svg>
-            <h3 className="font-semibold text-gray-700">تنظیمات فاصله</h3>
-          </div>
-          <svg
-            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-              isSpacingOpen ? "rotate-180" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
 
-        {isSpacingOpen && (
-          <div className="p-4 border-t border-gray-100 animate-slideDown">
-            <div className="bg-gray-50 rounded-lg p-2 flex items-center justify-center">
-              <MarginPaddingEditor
-                margin={margin}
-                padding={padding}
-                onChange={handleUpdate}
-              />
-            </div>
+      {isSpacingOpen && (
+        <div className="p-4 border-t border-gray-100 animate-slideDown">
+          <div className="bg-gray-50 rounded-lg p-2 flex items-center justify-center">
+            <MarginPaddingEditor
+              margin={margin}
+              padding={padding}
+              onChange={handleUpdate}
+            />
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

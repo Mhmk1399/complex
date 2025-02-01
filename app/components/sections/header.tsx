@@ -135,10 +135,10 @@ const Logo = styled.img<{
 
 const SearchContainer = styled.div`
   position: relative;
-  flex: 1;
+  // flex: 1;
   @media (min-width: 768px) {
     margin-right: 1rem;
-    margin-left: 500px;
+    // margin-left: 500px;
   }
 `;
 
@@ -268,7 +268,7 @@ const MobileMenuButton = styled.button<{
   $isOpen: boolean;
   $previewWidth: "sm" | "default";
 }>`
-  display: ${(props) => (props.$previewWidth === "sm" ? "block" : "none")};ظ
+  display: ${(props) => (props.$previewWidth === "sm" ? "block" : "none")};
   background: none;
   border: none;
   padding: 10px;

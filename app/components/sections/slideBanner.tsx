@@ -26,7 +26,7 @@ const SlideBannerSection = styled.section<{
   padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20"}px;
   padding-left: ${(props) => props.$data.setting?.paddingLeft || "20"}px;
   padding-right: ${(props) => props.$data.setting?.paddingRight || "20"}px;
-  height: ${300}px;
+  height: ${(props) => props.$data.blocks?.setting?.height || "20"}px;
   margin-top: ${(props) => props.$data.setting?.marginTop || "30"}px;
   margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20"}px;
   overflow: hidden;
@@ -41,8 +41,8 @@ const SlideContainer = styled.div<{ $previewWidth: "sm" | "default" }>`
   align-items: center;
   justify-content: center;
 `;
-const Slide = styled.div<{ 
-  $active: boolean; 
+const Slide = styled.div<{
+  $active: boolean;
   $data: SlideBannerSection;
   $previewWidth: "sm" | "default";
 }>`
@@ -202,7 +202,7 @@ const SlideBanner: React.FC<props> = ({
         </div>
       ) : null}
 
-      <SlideContainer  $previewWidth={preview}>
+      <SlideContainer $previewWidth={preview}>
         {sectionData.blocks.slides.map((slide, index) => (
           <Slide
             key={index}
@@ -210,21 +210,19 @@ const SlideBanner: React.FC<props> = ({
             $data={sectionData}
             $previewWidth={preview}
           >
-           <Image
-  src={slide.imageSrc}
-  alt={slide.imageAlt}
-  width={1920}
-  height={1080}
-  className="w-full h-full"
-  style={{
-    objectFit: preview === "sm" ? "cover" : "cover",
-    objectPosition: "center"
-  }}
-  priority={true}
-  quality={100}
-/>
-
-
+            <Image
+              src={slide.imageSrc}
+              alt={slide.imageAlt}
+              width={1920}
+              height={1080}
+              className="w-full h-full"
+              style={{
+                objectFit: preview === "sm" ? "cover" : "cover",
+                objectPosition: "center",
+              }}
+              priority={true}
+              quality={100}
+            />
           </Slide>
         ))}
       </SlideContainer>
@@ -249,7 +247,6 @@ const SlideBanner: React.FC<props> = ({
       </DotsContainer>
     </SlideBannerSection>
   );
-
 };
 
 export default SlideBanner;

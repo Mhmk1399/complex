@@ -149,7 +149,6 @@ export interface HeaderSection {
     marginTop: string;
     marginBottom: string;
     bgColor: string;
-
   };
 }
 
@@ -1093,7 +1092,8 @@ export interface SpecialOfferBlockSetting extends CommonSettings {
   btnBackgroundColor: string;
   btnTextColor: string;
   cardBackground: string;
-  cardBorderRadius: string;}
+  cardBorderRadius: string;
+}
 export interface GalleryImage {
   imageSrc: string;
   imageAlt: string;
@@ -1241,7 +1241,7 @@ export interface OfferRowSection {
     buttonText: string;
     buttonLink: string;
     gradientFromColor: string;
-  gradientToColor: string;
+    gradientToColor: string;
   };
 }
 export interface BrandItem {
