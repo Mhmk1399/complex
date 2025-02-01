@@ -295,624 +295,178 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
   };
 
   return (
-    <div
-      className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4"
-      dir="rtl"
-    >
+    <div className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4" dir="rtl">
       <h2 className="text-lg font-bold my-4">تنظیمات نو بار</h2>
-
-      <div className="mb-6 bg-white rounded-lg">
+  
+      {/* Tabs */}
+      <div className="flex gap-2 mb-4">
         <button
-          onClick={() => setIsContentOpen(!isContentOpen)}
-          className="w-full flex justify-between items-center p-3 bg-white hover:bg-gray-50 rounded-xl transition-all duration-200"
+          onClick={() => {
+            setIsContentOpen(true);
+            setIsStyleSettingsOpen(false);
+            setIsSpacingOpen(false);
+          }}
+          className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+            isContentOpen ? "bg-blue-500 text-white" : "bg-white text-gray-700"
+          }`}
         >
-          <div className="flex items-center gap-2 ">
-            <svg
-              className="w-5 h-5 text-blue-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-              />
-            </svg>
-            <h3 className="font-semibold mb-2">لوگو </h3>
-          </div>
-          <svg
-            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-              isContentOpen ? "rotate-180" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
+          محتوا
         </button>
-        {isContentOpen && (
-          <>
-            <div className="p-4 animate-slideDown">
-              <label className="block mb-1" htmlFor="imageLogo">
-                لوگو
-              </label>
-              <input
-                type="text"
-                id="imageLogo"
-                name="imageLogo"
-                value={userInputData?.blocks?.imageLogo || ""}
-                onChange={handleBlockChange}
-                className="w-full p-2 border rounded mb-2"
-              />
-
-              <label className="block " htmlFor="imageAlt">
-                متن جایگزین تصویر
-              </label>
-              <input
-                type="text"
-                id="imageAlt"
-                name="imageAlt"
-                value={userInputData?.blocks?.imageAlt || "logo"}
-                onChange={handleBlockChange}
-                className="w-full p-2 border rounded"
-              />
-              <label className="block my-2" htmlFor="imageWidth">
-                عرض لوگو
-              </label>
-              <input
-                type="range"
-                id="imageWidth"
-                name="imageWidth"
-                value={userInputData?.blocks?.setting?.imageWidth?.toLocaleString()}
-                onChange={handleBlockSettingChange}
-                className="p-2 w-full border rounded"
-              />
-              <div className="text-gray-500 text-sm">
-                {userInputData?.blocks?.setting?.imageWidth}px
-              </div>
-
-              <label className="block mb-1" htmlFor="imageHeight">
-                ارتفاع لوگو
-              </label>
-              <input
-                type="range"
-                id="imageHeight"
-                name="imageHeight"
-                value={userInputData?.blocks?.setting.imageHeight?.toLocaleString()}
-                onChange={handleBlockSettingChange}
-                className="p-2 w-full border rounded"
-              />
-              <div className="text-gray-500 text-sm">
-                {userInputData?.blocks?.setting?.imageHeight}px
-              </div>
-              {/* <div className="flex flex-col gap-4">
-                <div>
-                  <label className="block mb-1" htmlFor="marginLeft">
-                    جابجایی لوگو به چپ
-                  </label>
-                  <input
-                    type="range"
-                    id="marginLeft"
-                    name="marginLeft"
-                    min="-200"
-                    max="200"
-                    value={userInputData?.blocks?.setting.marginLeft || 0}
-                    onChange={handleBlockSettingChange}
-                    className="w-full p-2 border rounded"
-                  />
-                  <div className="text-gray-500 text-sm mt-1">
-                    {userInputData?.blocks?.setting?.marginLeft || 0}px
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block mb-1" htmlFor="marginRight">
-                    جابجایی لوگو به راست
-                  </label>
-                  <input
-                    type="range"
-                    id="marginRight"
-                    name="marginRight"
-                    min="-200"
-                    max="200"
-                    value={userInputData?.blocks?.setting.marginRight || 0}
-                    onChange={handleBlockSettingChange}
-                    className="w-full p-2 border rounded"
-                  />
-                  <div className="text-gray-500 text-sm mt-1">
-                    {userInputData?.blocks?.setting?.marginRight || 0}px
-                  </div>
-                </div>
-              </div> */}
-            </div>
-          </>
-        )}
+        <button
+          onClick={() => {
+            setIsStyleSettingsOpen(true);
+            setIsContentOpen(false);
+            setIsSpacingOpen(false);
+          }}
+          className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+            isStyleSettingsOpen ? "bg-blue-500 text-white" : "bg-white text-gray-700"
+          }`}
+        >
+          استایل
+        </button>
+        <button
+          onClick={() => {
+            setIsSpacingOpen(true);
+            setIsContentOpen(false);
+            setIsStyleSettingsOpen(false);
+          }}
+          className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+            isSpacingOpen ? "bg-blue-500 text-white" : "bg-white text-gray-700"
+          }`}
+        >
+          فاصله
+        </button>
       </div>
-
-      {/* Style Settings */}
-
-      <div className="mb-6 bg-white rounded-lg">
-        <button
-          onClick={() => setIsStyleSettingsOpen(!isStyleSettingsOpen)}
-          className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
-        >
-          <div className="flex items-center gap-2">
-            <svg
-              className="w-5 h-5 text-blue-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-              />
-            </svg>
-            <h3 className="font-semibold text-gray-700">تنظیمات استایل</h3>
+  
+      {/* Content Tab */}
+      {isContentOpen && (
+        <div className="bg-white rounded-lg p-4 animate-slideDown">
+          <label className="block mb-1" htmlFor="imageLogo">
+            لوگو
+          </label>
+          <input
+            type="text"
+            id="imageLogo"
+            name="imageLogo"
+            value={userInputData?.blocks?.imageLogo || ""}
+            onChange={handleBlockChange}
+            className="w-full p-2 border rounded mb-2"
+          />
+  
+          <label className="block" htmlFor="imageAlt">
+            متن جایگزین تصویر
+          </label>
+          <input
+            type="text"
+            id="imageAlt"
+            name="imageAlt"
+            value={userInputData?.blocks?.imageAlt || "logo"}
+            onChange={handleBlockChange}
+            className="w-full p-2 border rounded"
+          />
+          <label className="block my-2" htmlFor="imageWidth">
+            عرض لوگو
+          </label>
+          <input
+            type="range"
+            id="imageWidth"
+            name="imageWidth"
+            value={userInputData?.blocks?.setting?.imageWidth?.toLocaleString()}
+            onChange={handleBlockSettingChange}
+            className="p-2 w-full border rounded"
+          />
+          <div className="text-gray-500 text-sm">
+            {userInputData?.blocks?.setting?.imageWidth}px
           </div>
-          <svg
-            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-              isStyleSettingsOpen ? "rotate-180" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
+  
+          <label className="block mb-1" htmlFor="imageHeight">
+            ارتفاع لوگو
+          </label>
+          <input
+            type="range"
+            id="imageHeight"
+            name="imageHeight"
+            value={userInputData?.blocks?.setting.imageHeight?.toLocaleString()}
+            onChange={handleBlockSettingChange}
+            className="p-2 w-full border rounded"
+          />
+          <div className="text-gray-500 text-sm">
+            {userInputData?.blocks?.setting?.imageHeight}px
+          </div>
+        </div>
+      )}
+  
+      {/* Style Tab */}
+      {isStyleSettingsOpen && (
+        <div className="bg-white rounded-lg p-4 animate-slideDown">
+          <div className="grid md:grid-cols-2 grid-cols-2 gap-6">
+            <ColorInput
+              label="رنگ پس زمینه"
+              name="bgColor"
+              value={userInputData?.blocks?.setting?.bgColor?.toLocaleString()}
+              onChange={handleBlockSettingChange}
             />
-          </svg>
-        </button>
-        {isStyleSettingsOpen && (
-          <>
-            <div className="grid md:grid-cols-2 grid-cols-2 gap-6 p-4 animate-slideDown">
-              <ColorInput
-                label="رنگ پس زمینه"
-                name="bgColor"
-                value={userInputData?.blocks?.setting?.bgColor?.toLocaleString()}
-                onChange={handleBlockSettingChange}
-              />
-
-              <ColorInput
-                label="رنک آیتم ها"
-                name="itemColor"
-                value={userInputData?.blocks?.setting.itemColor?.toLocaleString()}
-                onChange={handleBlockSettingChange}
-              />
-
-              <ColorInput
-                label="رنگ آیتم ها در صورت رفتن موس بر روی آنها"
-                name="itemHoverColor"
-                value={userInputData?.blocks?.setting.itemHoverColor?.toLocaleString()}
-                onChange={handleBlockSettingChange}
-              />
-
-              <label className="block mb-1" htmlFor="titleFontSize">
-                سایز عنوان
-              </label>
-              <input
-                type="range"
-                id="itemFontSize"
-                name="itemFontSize"
-                value={userInputData?.blocks?.setting?.itemFontSize?.toLocaleString()}
-                onChange={handleBlockSettingChange}
-                className="p-2 border rounded"
-              />
-              <div className="text-gray-500 text-sm -mt-5">
-                {userInputData?.blocks?.setting?.itemFontSize}px
-              </div>
-              <br />
-              <label className="block mb-1" htmlFor="titleFontSize">
-                فاصله بین عنوان ها
-              </label>
-              <input
-                type="range"
-                id="gap"
-                name="gap"
-                value={userInputData?.blocks?.setting?.gap?.toLocaleString()}
-                onChange={handleBlockSettingChange}
-                className="p-2 border rounded"
-              />
-              <div className="text-gray-500 text-sm -mt-5">
-                {userInputData?.blocks?.setting?.gap}px
-              </div>
-            </div>
-          </>
-        )}
-      </div>
-
-      {/* Navigation Links */}
-      <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
-        <button
-          onClick={() => setIsAnnouncementOpen(!isAnnouncementOpen)}
-          className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
-        >
-          <div className="flex justify-center items-center gap-2">
-            <svg
-              width="24px"
-              height="24px"
-              viewBox="0 0 15.00 15.00"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              stroke="#000000"
-              strokeWidth="0.045"
-              className=""
-            >
-              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-              <g
-                id="SVGRepo_tracerCarrier"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                stroke="#CCCCCC"
-                strokeWidth="0.5"
-              >
-                {" "}
-                <path
-                  d="M5.5 11.4928L5.91594 11.2154C5.8232 11.0763 5.66712 10.9928 5.5 10.9928V11.4928ZM7.5 14.4909L7.08406 14.7683C7.1768 14.9074 7.33288 14.9909 7.5 14.9909C7.66712 14.9909 7.8232 14.9074 7.91594 14.7683L7.5 14.4909ZM9.5 11.4928V10.9928C9.33288 10.9928 9.1768 11.0763 9.08406 11.2154L9.5 11.4928ZM5.08406 11.7703L7.08406 14.7683L7.91594 14.2134L5.91594 11.2154L5.08406 11.7703ZM7.91594 14.7683L9.91594 11.7703L9.08406 11.2154L7.08406 14.2134L7.91594 14.7683ZM9.5 11.9928H13.5V10.9928H9.5V11.9928ZM13.5 11.9928C14.3288 11.9928 15 11.3226 15 10.4935H14C14 10.7697 13.7772 10.9928 13.5 10.9928V11.9928ZM15 10.4935V1.49935H14V10.4935H15ZM15 1.49935C15 0.670259 14.3288 0 13.5 0V1C13.7772 1 14 1.22316 14 1.49935H15ZM13.5 0H1.5V1H13.5V0ZM1.5 0C0.671165 0 0 0.670259 0 1.49935H1C1 1.22316 1.22283 1 1.5 1V0ZM0 1.49935V10.4935H1V1.49935H0ZM0 10.4935C0 11.3226 0.671165 11.9928 1.5 11.9928V10.9928C1.22284 10.9928 1 10.7697 1 10.4935H0ZM1.5 11.9928H5.5V10.9928H1.5V11.9928ZM5 8H10V7H5V8ZM4 5H11V4H4V5Z"
-                  fill="#3b82f6"
-                ></path>{" "}
-              </g>
-              <g id="SVGRepo_iconCarrier">
-                {" "}
-                <path
-                  d="M5.5 11.4928L5.91594 11.2154C5.8232 11.0763 5.66712 10.9928 5.5 10.9928V11.4928ZM7.5 14.4909L7.08406 14.7683C7.1768 14.9074 7.33288 14.9909 7.5 14.9909C7.66712 14.9909 7.8232 14.9074 7.91594 14.7683L7.5 14.4909ZM9.5 11.4928V10.9928C9.33288 10.9928 9.1768 11.0763 9.08406 11.2154L9.5 11.4928ZM5.08406 11.7703L7.08406 14.7683L7.91594 14.2134L5.91594 11.2154L5.08406 11.7703ZM7.91594 14.7683L9.91594 11.7703L9.08406 11.2154L7.08406 14.2134L7.91594 14.7683ZM9.5 11.9928H13.5V10.9928H9.5V11.9928ZM13.5 11.9928C14.3288 11.9928 15 11.3226 15 10.4935H14C14 10.7697 13.7772 10.9928 13.5 10.9928V11.9928ZM15 10.4935V1.49935H14V10.4935H15ZM15 1.49935C15 0.670259 14.3288 0 13.5 0V1C13.7772 1 14 1.22316 14 1.49935H15ZM13.5 0H1.5V1H13.5V0ZM1.5 0C0.671165 0 0 0.670259 0 1.49935H1C1 1.22316 1.22283 1 1.5 1V0ZM0 1.49935V10.4935H1V1.49935H0ZM0 10.4935C0 11.3226 0.671165 11.9928 1.5 11.9928V10.9928C1.22284 10.9928 1 10.7697 1 10.4935H0ZM1.5 11.9928H5.5V10.9928H1.5V11.9928ZM5 8H10V7H5V8ZM4 5H11V4H4V5Z"
-                  fill="#3b82f6"
-                ></path>{" "}
-              </g>
-            </svg>
-            <h3 className="font-semibold text-gray-700">نوار اطلاع‌رسانی</h3>
-          </div>
-          <svg
-            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-              isAnnouncementOpen ? "rotate-180" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
+  
+            <ColorInput
+              label="رنک آیتم ها"
+              name="itemColor"
+              value={userInputData?.blocks?.setting.itemColor?.toLocaleString()}
+              onChange={handleBlockSettingChange}
             />
-          </svg>
-        </button>
-
-        {isAnnouncementOpen && (
-          <div className="p-4 border-t space-y-4">
-            <div>
-              <label className="block mb-2">متن اطلاع‌رسانی</label>
-              <textarea
-                name="announcementText"
-                value={userInputData.blocks.setting?.announcementText || ""}
-                onChange={handleAnnouncementChange}
-                className="w-full p-2 border rounded"
-                rows={2}
-              />
-            </div>
-
-            <div className="grid grid-cols-1 gap-4">
-              <div>
-                <ColorInput
-                  label="رنک پس زمینه "
-                  name="announcementBgColor"
-                  value={userInputData?.blocks?.setting.announcementBgColor?.toLocaleString()}
-                  onChange={handleBlockSettingChange}
-                />
-              </div>
-
-              <div>
-                <ColorInput
-                  label="رنگ متن"
-                  name="announcementTextColor"
-                  value={userInputData?.blocks?.setting.announcementTextColor?.toLocaleString()}
-                  onChange={handleBlockSettingChange}
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block mb-2">اندازه فونت</label>
-              <input
-                type="range"
-                name="announcementFontSize"
-                min="12"
-                max="20"
-                value={
-                  userInputData.blocks.setting?.announcementFontSize || "14"
-                }
-                onChange={handleBlockSettingChange}
-                className="w-full"
-              />
-              <span className="text-sm text-gray-500">
-                {userInputData.blocks.setting?.announcementFontSize || "14"}px
-              </span>
-            </div>
-          </div>
-        )}
-      </div>
-      <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
-        <button
-          onClick={() => setIsFormOpen(!isFormOpen)}
-          className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
-        >
-          <div className="flex items-center gap-2">
-            <svg
-              fill="#3b82f6 "
-              width="24px"
-              height="24px"
-              viewBox="0 0 100 100"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-              <g
-                id="SVGRepo_tracerCarrier"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              ></g>
-              <g id="SVGRepo_iconCarrier">
-                <rect
-                  x="19"
-                  y="18.92"
-                  width="60"
-                  height="16"
-                  rx="4"
-                  ry="4"
-                ></rect>
-                <rect
-                  x="19"
-                  y="40.92"
-                  width="27"
-                  height="16"
-                  rx="4"
-                  ry="4"
-                ></rect>
-                <rect
-                  x="19"
-                  y="62.92"
-                  width="27"
-                  height="16"
-                  rx="4"
-                  ry="4"
-                ></rect>
-                <rect
-                  x="52"
-                  y="40.92"
-                  width="27"
-                  height="16"
-                  rx="4"
-                  ry="4"
-                ></rect>
-                <rect
-                  x="52"
-                  y="62.92"
-                  width="27"
-                  height="16"
-                  rx="4"
-                  ry="4"
-                ></rect>
-              </g>
-            </svg>
-            <h3 className="font-semibold text-gray-700">آیتم های سربرگ</h3>
-          </div>
-          <svg
-            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-              isFormOpen ? "rotate-180" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
+  
+            <ColorInput
+              label="رنگ آیتم ها در صورت رفتن موس بر روی آنها"
+              name="itemHoverColor"
+              value={userInputData?.blocks?.setting.itemHoverColor?.toLocaleString()}
+              onChange={handleBlockSettingChange}
             />
-          </svg>
-        </button>
-
-        {isFormOpen && (
-          <div className="p-4 space-y-4 animate-slideDown">
-            <h3 className="font-semibold mb-2">آیتم های سربرگ</h3>
-            <label className="block mb-1" htmlFor="linkSelect">
-              یک آیتم را انتخاب کنید
+  
+            <label className="block mb-1" htmlFor="titleFontSize">
+              سایز عنوان
             </label>
-            <select
-              id="linkSelect"
-              onChange={handleLinkSelect}
-              className="w-full p-2 border rounded mb-4"
-              defaultValue=""
-            >
-              <option value="">انتخاب کنید</option>
-              {linkOptions.map((link, index) => (
-                <option key={`${link.url}-${index}`} value={link.url}>
-                  {link.name}
-                </option>
-              ))}
-            </select>
-
-            <div className="space-y-2">
-              {userInputData.blocks.links.map((link, index) => (
-                <div
-                  key={`${link.url}-${index}`}
-                  className="flex items-center justify-between bg-gray-100 p-2 rounded"
-                >
-                  <span>
-                    {link.name} - {link.url}
-                  </span>
-                  <button
-                    onClick={() => removeLink(link.url)}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    حذف
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
-        <button
-          onClick={() => setDropdownAnimation(!dropdownAnimation)}
-          className="w-full flex justify-between items-center p-2 hover:bg-gray-50 rounded-xl transition-all duration-200"
-        >
-          <div className="flex items-center gap-2 ">
-            <svg
-              width="31px"
-              height="40px"
-              viewBox="-6.4 -6.4 76.80 76.80"
-              xmlns="http://www.w3.org/2000/svg"
-              strokeWidth="2.56"
-              stroke="#3b82f6 "
-              fill="none"
-              transform="matrix(1, 0, 0, 1, 0, 0)rotate(0)"
-              className="mr-1"
-            >
-              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-              <g
-                id="SVGRepo_tracerCarrier"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                stroke="#CCCCCC"
-                strokeWidth="0.128"
-              ></g>
-              <g id="SVGRepo_iconCarrier">
-                <circle cx="34.52" cy="11.43" r="5.82"></circle>
-                <circle cx="53.63" cy="31.6" r="5.82"></circle>
-                <circle cx="34.52" cy="50.57" r="5.82"></circle>
-                <circle cx="15.16" cy="42.03" r="5.82"></circle>
-                <circle cx="15.16" cy="19.27" r="5.82"></circle>
-                <circle cx="34.51" cy="29.27" r="4.7"></circle>
-                <line x1="20.17" y1="16.3" x2="28.9" y2="12.93"></line>
-                <line x1="38.6" y1="15.59" x2="49.48" y2="27.52"></line>
-                <line x1="50.07" y1="36.2" x2="38.67" y2="46.49"></line>
-                <line x1="18.36" y1="24.13" x2="30.91" y2="46.01"></line>
-                <line x1="20.31" y1="44.74" x2="28.7" y2="48.63"></line>
-                <line x1="17.34" y1="36.63" x2="31.37" y2="16.32"></line>
-                <line x1="20.52" y1="21.55" x2="30.34" y2="27.1"></line>
-                <line x1="39.22" y1="29.8" x2="47.81" y2="30.45"></line>
-                <line x1="34.51" y1="33.98" x2="34.52" y2="44.74"></line>
-              </g>
-            </svg>
-            <h3 className="font-semibold text-gray-700">تنظیمات دستوری</h3>
-          </div>
-          <svg
-            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-              dropdownAnimation ? "rotate-180" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
+            <input
+              type="range"
+              id="itemFontSize"
+              name="itemFontSize"
+              value={userInputData?.blocks?.setting?.itemFontSize?.toLocaleString()}
+              onChange={handleBlockSettingChange}
+              className="p-2 border rounded"
             />
-          </svg>
-        </button>
-        {dropdownAnimation && (
-          <>
-            <div className="flex flex-col gap-2 p-2 animate-slideDown">
-              <h4 className="text-pink-500 font-semibold p-2 text-sm">
-                هر تغییری که لازم دارید اعمال کنید بنویسید
-              </h4>
-              <textarea
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                className="p-2 rounded-xl border-2 border-blue-300  focus:outline-none"
-                rows={5}
-                style={{ width: "100%" }}
-                placeholder="یک جمله فارسی وارد کنید..."
-              />
-              <button
-                onClick={handleLiveInput}
-                style={{
-                  marginTop: "10px",
-                  backgroundColor: "#007bff",
-                  color: "white",
-                  borderRadius: "5px",
-                  padding: "5px",
-                }}
-              >
-                تبدیل
-              </button>
+            <div className="text-gray-500 text-sm -mt-5">
+              {userInputData?.blocks?.setting?.itemFontSize}px
             </div>
-          </>
-        )}
-      </div>
-
-      <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
-        {/* Dropdown Header */}
-
-        <button
-          onClick={() => setIsSpacingOpen(!isSpacingOpen)}
-          className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
-        >
-          <div className="flex items-center gap-2">
-            <svg
-              className="w-5 h-5 text-blue-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-              />
-            </svg>
-            <h3 className="font-semibold text-gray-700">تنظیمات فاصله</h3>
-          </div>
-          <svg
-            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-              isSpacingOpen ? "rotate-180" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
+            <br />
+            <label className="block mb-1" htmlFor="titleFontSize">
+              فاصله بین عنوان ها
+            </label>
+            <input
+              type="range"
+              id="gap"
+              name="gap"
+              value={userInputData?.blocks?.setting?.gap?.toLocaleString()}
+              onChange={handleBlockSettingChange}
+              className="p-2 border rounded"
             />
-          </svg>
-        </button>
-
-        {/* Dropdown Content */}
-        {isSpacingOpen && (
-          <div className="p-4 border-t border-gray-100 animate-slideDown">
-            <div className="bg-gray-50 rounded-lg p-2 flex items-center justify-center">
-              <MarginPaddingEditor
-                margin={margin}
-                padding={padding}
-                onChange={handleUpdate}
-              />
+            <div className="text-gray-500 text-sm -mt-5">
+              {userInputData?.blocks?.setting?.gap}px
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
+  
+      {/* Space Tab */}
+      {isSpacingOpen && (
+        <div className="bg-white rounded-lg p-4 animate-slideDown">
+          <div className="bg-gray-50 rounded-lg p-2 flex items-center justify-center">
+            <MarginPaddingEditor
+              margin={margin}
+              padding={padding}
+              onChange={handleUpdate}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
+  
 };
