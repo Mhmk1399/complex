@@ -11,58 +11,108 @@
   "sections": {
     "sectionHeader": {
       "blocks": {
-        "imageLogo": "",
-        "imageAlt": "",
+        "imageLogo": "/assets/images/logo.webp",
+        "imageAlt": "دیجی‌کالا",
         "links": [
           {
-            "name": "خانه",
-            "url": "/"
+            "name": "دسته‌بندی کالاها",
+            "url": "/categories",
+            "megaMenu": [
+              {
+                "title": "کالای دیجیتال",
+                "items": [
+                  {
+                    "name": "گوشی موبایل",
+                    "url": "/mobile"
+                  },
+                  {
+                    "name": "لپ تاپ",
+                    "url": "/laptop"
+                  },
+                  {
+                    "name": "تبلت",
+                    "url": "/tablet"
+                  }
+                ]
+              },
+              {
+                "title": "لوازم خانگی",
+                "items": [
+                  {
+                    "name": "یخچال",
+                    "url": "/refrigerator",
+                    "image": "/assets/images/fridge.jpg"
+                  },
+                  {
+                    "name": "ماشین لباسشویی",
+                    "url": "/washing-machine",
+                    "image": "/assets/images/washer.jpg"
+                  }
+                ]
+              }
+            ]
           },
           {
-            "name": "درباره ",
-            "url": "/about"
+            "name": "شگفت‌انگیزها",
+            "url": "/offers"
           },
           {
-            "name": "ارتباط  ",
-            "url": "/contact"
+            "name": "سوپرمارکت",
+            "url": "/supermarket"
           },
           {
-            "name": "بلاگ",
-            "url": "/blog"
+            "name": "پرفروش‌ترین‌ها",
+            "url": "/best-sellers"
           },
           {
-            "name": "فروشگاه",
-            "url": "/shop"
+            "name": "تخفیف‌ها و پیشنهادها",
+            "url": "/discounts"
           },
           {
-            "name": "ورود/عضویت",
-            "url": "/login"
+            "name": "سوالی دارید؟",
+            "url": "/faq"
+          },
+          {
+            "name": "فروشنده شوید",
+            "url": "/become-seller"
           }
         ],
         "setting": {
           "imageWidth": "60",
           "imageHeight": "60",
           "imageRadius": "30",
-          "itemColor": "#14213D",
-          "itemFontSize": "15",
-          "itemFontWeight": "bold",
-          "itemHoverColor": "#ffffff",
-          "backgroundColorNavbar": "#FCA311"
+          "itemColor": "#6c757d",
+          "itemFontSize": "14",
+          "itemFontWeight": "normal",
+          "itemHoverColor": "#e4e4e4",
+          "backgroundColorNavbar": "#FCA311",
+          "searchBarBorderColor": "#E5E7EB",
+          "searchBarBorderRadius": "9999",
+          "buttonBorderColor": "#E5E7EB",
+          "buttonBorderRadius": "8",
+          "locationButtonBgColor": "#FFF7ED",
+          "locationButtonTextColor": "#EA580C",
+          "announcementText": "ارسال رایگان برای خرید‌های بالای ۵۰۰ هزار تومان!",
+          "announcementBgColor": "#f1b80c",
+          "announcementTextColor": "#ffffff",
+          "announcementFontSize": "14",
+          "bgColor": "#ffffff",
+          "gap": "10"
         }
       },
       "setting": {
-        "paddingTop": "20",
-        "paddingBottom": "20",
+        "paddingTop": "0",
+        "paddingBottom": "0",
+        "paddingLeft": "0",
+        "paddingRight": "0",
         "marginTop": "20",
-        "marginBottom": "20",
-        "marginRight": "0",
-        "marginLeft": "0",
-        "paddinRight": "0",
-        "paddinLeft": "0",
-        "navbarPosition": "fixed"
+        "marginBottom": "0",
+        "navbarPosition": "fixed",
+        "bgColor": "#d7163c"
       },
       "type": "header"
     },
+
     "children": {
       "sections": [
         {
@@ -846,7 +896,7 @@
           "type": "ProductsRow",
           "blocks": {
             "textHeading": " محصولات جدید ",
-           
+
             "setting": {
               "headingColor": "#000000",
               "headingFontSize": "22",
@@ -917,7 +967,6 @@
                 "imageAlt": "Gallery Image 2",
                 "imageLink": "#"
               }
-            
             ],
             "setting": {
               "titleColor": "#333333",
@@ -954,7 +1003,6 @@
         "Brands",
         "ProductsRow",
         "Gallery-2"
-
       ]
     },
     "sectionFooter": {

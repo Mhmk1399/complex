@@ -3,6 +3,7 @@ import { Interpolation } from "styled-components";
 import { Substitute } from "styled-components/dist/types";
 
 export interface Link {
+  megaMenu: any;
   name: string;
   url: string;
 }
@@ -116,9 +117,18 @@ export interface HeaderBlockSettings extends CommonSettings {
   itemFontWeight: string;
   itemHoverColor: string;
   backgroundColorNavbar: string;
-  titleColor: string;
-  marginRight?: string;
-  marginLeft?: string;
+  searchBarBorderColor: string;
+  searchBarBorderRadius: string;
+  buttonBorderColor: string;
+  buttonBorderRadius: string;
+  locationButtonBgColor: string;
+  locationButtonTextColor: string;
+  announcementText: string;
+  announcementBgColor: string;
+  announcementTextColor: string;
+  announcementFontSize: string;
+  bgColor: string;
+  gap: string;
 }
 export interface HeaderBlock {
   imageLogo: string;
@@ -134,8 +144,28 @@ export interface HeaderSection {
     navbarPosition: string;
     paddingTop: string;
     paddingBottom: string;
+    paddingLeft: string;
+    paddingRight: string;
+    marginTop: string;
     marginBottom: string;
+    bgColor: string;
+
   };
+}
+
+interface MegaMenuItem {
+  title: string;
+  items: {
+    name: string;
+    url: string;
+    image?: string;
+  }[];
+}
+
+interface LinkHeader {
+  name: string;
+  url: string;
+  megaMenu?: MegaMenuItem[];
 }
 export interface BannerBlockSettings extends CommonSettings {
   descriptionColor: string;

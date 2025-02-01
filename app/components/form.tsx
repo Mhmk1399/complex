@@ -611,7 +611,7 @@ export const Form = ({
       <Toaster />
       <div>
         <motion.button
-          className=" absolute top-1 right-4 z-[9999] hidden text-lg animate-pulse lg:block py-1 text-black rounded-lg hover:bg-slate-500 transition-colors hover:bg-gray-100/10 backdrop-blur-sm"
+          className=" absolute top-1 right-4 z-[9999] hidden text-lg animate-pulse lg:block py-1 text-black rounded-lg hover:bg-slate-100 transition-colors hover:bg-gray-100/10 backdrop-blur-sm"
           onClick={() => setIsFormOpen(!isFormOpen)}
         >
           <motion.div

@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
 import { Layout, Link, HeaderSection } from "@/lib/types";
 import MarginPaddingEditor from "../sections/editor";
@@ -15,8 +15,6 @@ interface BoxValues {
   left: number;
   right: number;
 }
-
-
 
 export const HeaderForm: React.FC<HeaderFormProps> = ({
   setUserInputData,
@@ -46,6 +44,33 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
       marginBottom: "0",
     },
   };
+  const ColorInput = ({
+    label,
+    name,
+    value,
+    onChange,
+  }: {
+    label: string;
+    name: string;
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  }) => (
+    <>
+      <label className="block mb-1" htmlFor={name}>
+        {label}
+      </label>
+      <div className="flex flex-col gap-3 items-center">
+        <input
+          type="color"
+          id={name}
+          name={name}
+          value={value || "#000000"}
+          onChange={onChange}
+          className="border  p-0.5 rounded-full"
+        />
+      </div>
+    </>
+  );
 
   // Modify the useEffect to include default values
 
@@ -68,6 +93,8 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
   const [inputText, setInputText] = useState("");
   const [dropdownAnimation, setDropdownAnimation] = useState(false);
+  const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false);
+
   const handleLiveInput = async (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -91,8 +118,8 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
         setting: updatedJson.children.sections[0].setting,
       }));
     }
-  }; 
-   useEffect(() => {
+  };
+  useEffect(() => {
     const initialData = {
       ...defaultValues,
       ...Compiler(layout, selectedComponent),
@@ -100,7 +127,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
     setUserInputData(initialData);
     setIsDataReady(true);
   }, [selectedComponent]);
- 
+
   useEffect(() => {
     setMargin({
       top: Number(userInputData?.setting?.marginTop) || 0,
@@ -126,10 +153,12 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
     setIsDataReady(true);
   }, []);
 
-
   if (!isDataReady) {
     return (
-      <div className="p-3 max-w-4xl mx-auto bg-gray-200 rounded-xl mt-4" dir="rtl">
+      <div
+        className="p-3 max-w-4xl mx-auto bg-gray-200 rounded-xl mt-4"
+        dir="rtl"
+      >
         <div className="flex items-center justify-center h-40">
           <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
         </div>
@@ -164,39 +193,8 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
       }));
     }
   };
- 
-
-
-
 
   // First, add this helper function at the top with the other interfaces
-  const ColorInput = ({
-    label,
-    name,
-    value,
-    onChange,
-  }: {
-    label: string;
-    name: string;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  }) => (
-    <>
-      <label className="block mb-1" htmlFor={name}>
-        {label}
-      </label>
-      <div className="flex flex-col gap-3 items-center">
-        <input
-          type="color"
-          id={name}
-          name={name}
-          value={value || "#000000"}
-          onChange={onChange}
-          className="border  p-0.5 rounded-full"
-        />
-      </div>
-    </>
-  );
 
   const urlToPersianNameMap: { [key: string]: string } = {
     "/": "خانه",
@@ -279,8 +277,21 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
       },
     }));
   };
-
- 
+  const handleAnnouncementChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setUserInputData((prev) => ({
+      ...prev,
+      blocks: {
+        ...prev.blocks,
+        setting: {
+          ...prev.blocks.setting,
+          [name]: value,
+        },
+      },
+    }));
+  };
 
   return (
     <div
@@ -348,7 +359,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
                 type="text"
                 id="imageAlt"
                 name="imageAlt"
-                value={userInputData?.blocks?.imageAlt}
+                value={userInputData?.blocks?.imageAlt || "logo"}
                 onChange={handleBlockChange}
                 className="w-full p-2 border rounded"
               />
@@ -381,7 +392,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
               <div className="text-gray-500 text-sm">
                 {userInputData?.blocks?.setting?.imageHeight}px
               </div>
-              <div className="flex flex-col gap-4">
+              {/* <div className="flex flex-col gap-4">
                 <div>
                   <label className="block mb-1" htmlFor="marginLeft">
                     جابجایی لوگو به چپ
@@ -419,7 +430,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
                     {userInputData?.blocks?.setting?.marginRight || 0}px
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </>
         )}
@@ -468,16 +479,9 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
           <>
             <div className="grid md:grid-cols-2 grid-cols-2 gap-6 p-4 animate-slideDown">
               <ColorInput
-                label="رنگ عنوان"
-                name="titleColor"
-                value={userInputData?.blocks?.setting?.titleColor?.toLocaleString()}
-                onChange={handleBlockSettingChange}
-              />
-
-              <ColorInput
                 label="رنگ پس زمینه"
-                name="backgroundColorNavbar"
-                value={userInputData?.blocks?.setting?.backgroundColorNavbar?.toLocaleString()}
+                name="bgColor"
+                value={userInputData?.blocks?.setting?.bgColor?.toLocaleString()}
                 onChange={handleBlockSettingChange}
               />
 
@@ -506,14 +510,141 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
                 onChange={handleBlockSettingChange}
                 className="p-2 border rounded"
               />
+              <div className="text-gray-500 text-sm -mt-5">
+                {userInputData?.blocks?.setting?.itemFontSize}px
+              </div>
+              <br />
+              <label className="block mb-1" htmlFor="titleFontSize">
+                فاصله بین عنوان ها
+              </label>
+              <input
+                type="range"
+                id="gap"
+                name="gap"
+                value={userInputData?.blocks?.setting?.gap?.toLocaleString()}
+                onChange={handleBlockSettingChange}
+                className="p-2 border rounded"
+              />
+              <div className="text-gray-500 text-sm -mt-5">
+                {userInputData?.blocks?.setting?.gap}px
+              </div>
             </div>
           </>
         )}
       </div>
 
       {/* Navigation Links */}
+      <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
+        <button
+          onClick={() => setIsAnnouncementOpen(!isAnnouncementOpen)}
+          className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
+        >
+          <div className="flex justify-center items-center gap-2">
+            <svg
+              width="24px"
+              height="24px"
+              viewBox="0 0 15.00 15.00"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              stroke="#000000"
+              strokeWidth="0.045"
+              className=""
+            >
+              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+              <g
+                id="SVGRepo_tracerCarrier"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                stroke="#CCCCCC"
+                strokeWidth="0.5"
+              >
+                {" "}
+                <path
+                  d="M5.5 11.4928L5.91594 11.2154C5.8232 11.0763 5.66712 10.9928 5.5 10.9928V11.4928ZM7.5 14.4909L7.08406 14.7683C7.1768 14.9074 7.33288 14.9909 7.5 14.9909C7.66712 14.9909 7.8232 14.9074 7.91594 14.7683L7.5 14.4909ZM9.5 11.4928V10.9928C9.33288 10.9928 9.1768 11.0763 9.08406 11.2154L9.5 11.4928ZM5.08406 11.7703L7.08406 14.7683L7.91594 14.2134L5.91594 11.2154L5.08406 11.7703ZM7.91594 14.7683L9.91594 11.7703L9.08406 11.2154L7.08406 14.2134L7.91594 14.7683ZM9.5 11.9928H13.5V10.9928H9.5V11.9928ZM13.5 11.9928C14.3288 11.9928 15 11.3226 15 10.4935H14C14 10.7697 13.7772 10.9928 13.5 10.9928V11.9928ZM15 10.4935V1.49935H14V10.4935H15ZM15 1.49935C15 0.670259 14.3288 0 13.5 0V1C13.7772 1 14 1.22316 14 1.49935H15ZM13.5 0H1.5V1H13.5V0ZM1.5 0C0.671165 0 0 0.670259 0 1.49935H1C1 1.22316 1.22283 1 1.5 1V0ZM0 1.49935V10.4935H1V1.49935H0ZM0 10.4935C0 11.3226 0.671165 11.9928 1.5 11.9928V10.9928C1.22284 10.9928 1 10.7697 1 10.4935H0ZM1.5 11.9928H5.5V10.9928H1.5V11.9928ZM5 8H10V7H5V8ZM4 5H11V4H4V5Z"
+                  fill="#3b82f6"
+                ></path>{" "}
+              </g>
+              <g id="SVGRepo_iconCarrier">
+                {" "}
+                <path
+                  d="M5.5 11.4928L5.91594 11.2154C5.8232 11.0763 5.66712 10.9928 5.5 10.9928V11.4928ZM7.5 14.4909L7.08406 14.7683C7.1768 14.9074 7.33288 14.9909 7.5 14.9909C7.66712 14.9909 7.8232 14.9074 7.91594 14.7683L7.5 14.4909ZM9.5 11.4928V10.9928C9.33288 10.9928 9.1768 11.0763 9.08406 11.2154L9.5 11.4928ZM5.08406 11.7703L7.08406 14.7683L7.91594 14.2134L5.91594 11.2154L5.08406 11.7703ZM7.91594 14.7683L9.91594 11.7703L9.08406 11.2154L7.08406 14.2134L7.91594 14.7683ZM9.5 11.9928H13.5V10.9928H9.5V11.9928ZM13.5 11.9928C14.3288 11.9928 15 11.3226 15 10.4935H14C14 10.7697 13.7772 10.9928 13.5 10.9928V11.9928ZM15 10.4935V1.49935H14V10.4935H15ZM15 1.49935C15 0.670259 14.3288 0 13.5 0V1C13.7772 1 14 1.22316 14 1.49935H15ZM13.5 0H1.5V1H13.5V0ZM1.5 0C0.671165 0 0 0.670259 0 1.49935H1C1 1.22316 1.22283 1 1.5 1V0ZM0 1.49935V10.4935H1V1.49935H0ZM0 10.4935C0 11.3226 0.671165 11.9928 1.5 11.9928V10.9928C1.22284 10.9928 1 10.7697 1 10.4935H0ZM1.5 11.9928H5.5V10.9928H1.5V11.9928ZM5 8H10V7H5V8ZM4 5H11V4H4V5Z"
+                  fill="#3b82f6"
+                ></path>{" "}
+              </g>
+            </svg>
+            <h3 className="font-semibold text-gray-700">نوار اطلاع‌رسانی</h3>
+          </div>
+          <svg
+            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+              isAnnouncementOpen ? "rotate-180" : ""
+            }`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </button>
 
-      <div className="mb-6 bg-white rounded-lg">
+        {isAnnouncementOpen && (
+          <div className="p-4 border-t space-y-4">
+            <div>
+              <label className="block mb-2">متن اطلاع‌رسانی</label>
+              <textarea
+                name="announcementText"
+                value={userInputData.blocks.setting?.announcementText || ""}
+                onChange={handleAnnouncementChange}
+                className="w-full p-2 border rounded"
+                rows={2}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 gap-4">
+              <div>
+                <ColorInput
+                  label="رنک پس زمینه "
+                  name="announcementBgColor"
+                  value={userInputData?.blocks?.setting.announcementBgColor?.toLocaleString()}
+                  onChange={handleBlockSettingChange}
+                />
+              </div>
+
+              <div>
+                <ColorInput
+                  label="رنگ متن"
+                  name="announcementTextColor"
+                  value={userInputData?.blocks?.setting.announcementTextColor?.toLocaleString()}
+                  onChange={handleBlockSettingChange}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block mb-2">اندازه فونت</label>
+              <input
+                type="range"
+                name="announcementFontSize"
+                min="12"
+                max="20"
+                value={
+                  userInputData.blocks.setting?.announcementFontSize || "14"
+                }
+                onChange={handleBlockSettingChange}
+                className="w-full"
+              />
+              <span className="text-sm text-gray-500">
+                {userInputData.blocks.setting?.announcementFontSize || "14"}px
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
         <button
           onClick={() => setIsFormOpen(!isFormOpen)}
           className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
@@ -636,7 +767,6 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
         )}
       </div>
 
-
       <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
         <button
           onClick={() => setDropdownAnimation(!dropdownAnimation)}
@@ -729,7 +859,6 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
         )}
       </div>
 
-          
       <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
         {/* Dropdown Header */}
 
