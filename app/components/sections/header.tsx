@@ -295,7 +295,7 @@ const MobileMenu = styled.div<{
     props.$previewWidth === "sm" && props.$isOpen ? "80%" : "0"};
   height: ${(props) =>
     props.$previewWidth === "sm" && props.$isOpen ? "100vh" : "0"};
-
+  transition: right 0.3s ease-in-out;
   @media (max-width: 768px) {
     display: inline;
     position: fixed;
@@ -553,28 +553,29 @@ const Header: React.FC<HeaderProps> = ({
           ))}
         </NavList>
       </NavContainer>
-
-      <MobileMenu
-        className="z-[9999] transition-all duration-300 bg-white"
-        $previewWidth={previewWidth}
-        $isOpen={isMenuOpen}
-      >
-        <MobileNavList>
-          <LocationButton style={{ width: "100%", marginBottom: "20px" }}>
-            <MapPin size={16} /> شهر خود را انتخاب کنید
-          </LocationButton>
-          {sectionData.blocks.links?.map((link, index) => (
-            <MobileNavItem
-              key={index}
-              href={link.url}
-              $data={sectionData}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              {link.name}
-            </MobileNavItem>
-          ))}
-        </MobileNavList>
-      </MobileMenu>
+      <div>
+        <MobileMenu
+          className="z-[9999] transition-all duration-300 bg-white"
+          $previewWidth={previewWidth}
+          $isOpen={isMenuOpen}
+        >
+          <MobileNavList>
+            <LocationButton style={{ width: "100%", marginBottom: "20px" }}>
+              <MapPin size={16} /> شهر خود را انتخاب کنید
+            </LocationButton>
+            {sectionData.blocks.links?.map((link, index) => (
+              <MobileNavItem
+                key={index}
+                href={link.url}
+                $data={sectionData}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {link.name}
+              </MobileNavItem>
+            ))}
+          </MobileNavList>
+        </MobileMenu>
+      </div>
 
       <Overlay $isOpen={isMenuOpen} onClick={() => setIsMenuOpen(false)} />
     </HeaderWrapper>

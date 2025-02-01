@@ -947,7 +947,7 @@
             "paddingBottom": "30",
             "marginTop": "20",
             "marginBottom": "20",
-            "backgroundColor": "#000000",
+            "backgroundColor": "#ffffff",
             "paddingLeft": "10",
             "paddingRight": "10"
           }
@@ -1025,6 +1025,15 @@
       ],
       "order": [
         "Story",
+        "MultiRow",
+        "MultiColumn",
+        "CollapseFaq",
+        "NewsLetter",
+        "Video",
+        "Collection",
+        "Banner",
+        "SlideShow",
+        "ImageText",
         "SlideBanner",
         "SpecialOffer",
         "OfferRow",
