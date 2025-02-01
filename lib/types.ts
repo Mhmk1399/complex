@@ -1218,6 +1218,8 @@ export interface OfferRowBlockSetting extends CommonSettings {
   buttonTextColor: string;
   gradientFromColor: string;
   gradientToColor: string;
+  buttonText: string;
+  buttonLink: string;
 }
 
 export interface OfferItem {

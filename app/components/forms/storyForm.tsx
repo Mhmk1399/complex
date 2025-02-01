@@ -258,9 +258,8 @@ export const StoryForm: React.FC<StoryFormProps> = ({
       )}
 
       {/* Spacing Settings */}
-      <div className="mb-6  rounded-xl shadow-sm border border-gray-100">
         {isSpacingOpen && (
-          <div className="p-4 border-t border-gray-100">
+          <div className="p-4 border-t border-gray-100 animate-slideDown">
             <div className="bg-gray-50 rounded-lg flex items-center justify-center">
               <MarginPaddingEditor
                 margin={margin}
@@ -270,7 +269,6 @@ export const StoryForm: React.FC<StoryFormProps> = ({
             </div>
           </div>
         )}
-      </div>
     </div>
   );
 };

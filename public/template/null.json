@@ -834,10 +834,10 @@
             }
           },
           "setting": {
-            "paddingTop": "20",
-            "paddingBottom": "20",
-            "marginTop": "10",
-            "marginBottom": "10",
+            "paddingTop": "0",
+            "paddingBottom": "0",
+            "marginTop": "0",
+            "marginBottom": "0",
             "backgroundColor": "#ffffff"
           }
         },
@@ -851,7 +851,9 @@
               "buttonColor": "#ffffff",
               "buttonTextColor": "#000000",
               "gradientFromColor": "#f3f4f6",
-              "gradientToColor": "#e5e7eb"
+              "gradientToColor": "#e5e7eb",
+              "buttonText": "مشاهده همه",
+              "buttonLink": "/special-offers"
             }
           },
           "setting": {
@@ -938,7 +940,6 @@
               "btnBg": "#EF394E",
               "btnTextColor": "#ffffff",
               "cardBorderRadius": "8"
-
             }
           },
           "setting": {
@@ -1045,9 +1046,9 @@
           "descriptionFontSize": "18",
           "descriptionFontWeight": "normal",
           "linkColor": "#0077b6",
-          "logoWidth": "80px",
-          "logoHeight": "80px",
-          "logoRadius": "10px"
+          "logoWidth": "80",
+          "logoHeight": "80",
+          "logoRadius": "10"
         },
         "text": "سربرگ قسمت پایین سایت",
         "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
