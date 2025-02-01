@@ -210,9 +210,10 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
   const handleLinkSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedUrl = e.target.value;
 
-    const newLink = {
+    const newLink: Link = {
       name: urlToPersianNameMap[selectedUrl] || "نامشخص", // Default to "نامشخص" if no mapping is found
       url: selectedUrl,
+      megaMenu: null, // or provide a default value for megaMenu
     };
 
     setUserInputData((prev: HeaderSection) => ({

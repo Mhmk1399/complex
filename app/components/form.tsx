@@ -144,8 +144,15 @@ export const Form = ({
   const [isOpen, setIsOpen] = useState(false);
   const [showOrdersMenu, setShowOrdersMenu] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isFormOpen, setIsFormOpen] = useState(true); // New state for form visibility
-  console.log(selectedComponent);
+  const [isFormOpen, setIsFormOpen] = useState(false); //  state for form visibility
+
+  // Open form when a component is selected
+  useEffect(() => {
+    if (selectedComponent) {
+      setIsFormOpen(true);
+    }
+  }, [selectedComponent]);
+
   // Setup sensors for dnd-kit
   const sensors = useSensors(
     useSensor(PointerSensor),
