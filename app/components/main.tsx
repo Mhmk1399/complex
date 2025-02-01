@@ -57,6 +57,24 @@ export const Main = () => {
     "about",
     "contact",
   ]);
+// useEffect(() => {
+//   const handleWindowSize = () => {
+//     if (window.innerWidth <= 425) {
+//       setPreviewWidth("sm");
+//     } else {
+//       setPreviewWidth("default");
+//     }
+//   };
+
+//   // Initial check on mount
+//   handleWindowSize();
+
+//   // Optional: Add listener for window resize
+//   window.addEventListener('resize', handleWindowSize);
+
+//   // Cleanup
+//   return () => window.removeEventListener('resize', handleWindowSize);
+// }, []);
 
   const handleAddRoute = async ({ name }: { name: string }) => {
     const urlParams = new URLSearchParams(window.location.search);

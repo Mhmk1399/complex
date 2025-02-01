@@ -39,7 +39,7 @@ const Card = styled.div<{
 min-width: 250px;
   @media (max-width: 425px) {
     margin: 10px 5px;
-    height: 250px;
+    height: 320px;
   }
 `;
 

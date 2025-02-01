@@ -155,7 +155,7 @@
               "slideTransition": "fade",
               "navigationStyle": "arrows",
               "arrowsPosition": "bottom-right",
-              "height": "500",
+              "height": "200",
               "bgArrow": "#ffffff",
               "activeDotColor": "#ffffff",
               "inactiveDotColor": "#000000"
@@ -534,18 +534,18 @@
               "descriptionFontSize": "16",
               "descriptionFontWeight": "normal",
               "background": "#ffffff",
-              "imageWidth": "250",
-              "imageHeight": "180",
+              "imageWidth": "170",
+              "imageHeight": "100",
               "imageRadius": "8",
-              "gridColumns": "4",
-              "gridGap": "20"
+              "gridColumns": "2",
+              "gridGap": "10"
             }
           },
           "setting": {
-            "paddingTop": "40",
-            "paddingBottom": "40",
-            "marginTop": "20",
-            "marginBottom": "20",
+            "paddingTop": "0",
+            "paddingBottom": "0",
+            "marginTop": "0",
+            "marginBottom": "0",
             "paddingRight": "0",
             "paddingLeft": "0"
           }
@@ -976,10 +976,10 @@
               "descriptionFontSize": "16",
               "descriptionFontWeight": "normal",
               "background": "#ffffff",
-              "imageWidth": "520",
-              "imageHeight": "180",
+              "imageWidth": "360",
+              "imageHeight": "165",
               "imageRadius": "8",
-              "gridColumns": "2",
+              "gridColumns": "1",
               "gridGap": "20"
             }
           },
