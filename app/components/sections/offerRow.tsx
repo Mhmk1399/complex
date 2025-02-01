@@ -4,6 +4,7 @@ import { Layout, OfferRowSection } from "@/lib/types";
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { Delete } from "../C-D";
+import Link from "next/link";
 
 interface OfferRowProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -19,10 +20,10 @@ const OffersContainer = styled.div<{
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
-  margin-top: ${props => props.$data.setting?.marginTop || "10"}px;
-  margin-bottom: ${props => props.$data.setting?.marginBottom || "10"}px;
-  padding-top: ${props => props.$data.setting?.paddingTop || "20"}px;
-  padding-bottom: ${props => props.$data.setting?.paddingBottom || "20"}px;
+  margin-top: ${(props) => props.$data.setting?.marginTop || "10"}px;
+  margin-bottom: ${(props) => props.$data.setting?.marginBottom || "10"}px;
+  padding-top: ${(props) => props.$data.setting?.paddingTop || "20"}px;
+  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20"}px;
 `;
 
 const OffersWrapper = styled.section<{
@@ -38,22 +39,21 @@ const OffersWrapper = styled.section<{
   gap: 30px;
   padding: 8px;
   scroll-behavior: smooth;
-  background: linear-gradient(to right, 
-    ${props => props.$data.setting?.gradientFromColor || '#e5e7eb'}, 
-    ${props => props.$data.setting?.gradientToColor || '#d1d5db'}
+  background: linear-gradient(
+    to right,
+    ${(props) => props.$data.setting?.gradientFromColor || "#e5e7eb"},
+    ${(props) => props.$data.setting?.gradientToColor || "#d1d5db"}
   );
-  
+
   border-radius: 0.75rem;
 `;
-
 
 const OfferItem = styled.div`
   display: flex;
   cursor: pointer;
   flex-direction: row;
-  
+
   align-items: center;
-  
 
   .offer-image {
     width: 80px;
@@ -76,12 +76,12 @@ export const OfferRow: React.FC<OfferRowProps> = ({
   selectedComponent,
   setSelectedComponent,
   setLayout,
-  previewWidth
+  previewWidth,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
-console.warn(previewWidth);
+  console.warn(previewWidth);
 
   useEffect(() => {
     if (window.innerWidth <= 424) {
@@ -96,7 +96,7 @@ console.warn(previewWidth);
   ) as OfferRowSection;
 
   if (!sectionData) return null;
-  console.log('sectionData', sectionData);
+  console.log("sectionData", sectionData);
 
   const offers = [
     {
@@ -123,19 +123,19 @@ console.warn(previewWidth);
       originalPrice: 520000,
       discount: 15,
     },
-    
   ];
-  console.log(selectedComponent)
+  console.log(selectedComponent);
   return (
     <OffersContainer
       $data={sectionData}
       $preview={preview}
       $previewWidth={previewWidth}
       onClick={() => setSelectedComponent(actualName)}
-      className={`transition-all duration-150 ease-in-out relative  ${selectedComponent === actualName
+      className={`transition-all duration-150 ease-in-out relative  ${
+        selectedComponent === actualName
           ? "border-4 border-blue-500 rounded-2xl shadow-lg"
           : ""
-        }`}
+      }`}
     >
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center">
@@ -180,17 +180,33 @@ console.warn(previewWidth);
         </div>
       )}
 
-      <OffersWrapper ref={containerRef} $data={sectionData} $previewWidth={previewWidth} className={`flex gap-4 flex-col  ${preview === "sm" ? "flex-col" : "flex-row lg:flex-row"}`}>
+      <OffersWrapper
+        ref={containerRef}
+        $data={sectionData}
+        $previewWidth={previewWidth}
+        className={`flex gap-4 flex-col  ${
+          preview === "sm" ? "flex-col" : "flex-row lg:flex-row"
+        }`}
+      >
         <div className="flex items-center justify-start gap-4 flex-row">
-          <Image src={"/assets/images/fresh.webp"} alt="Offer" width={80} height={50} />
+          <Image
+            src={"/assets/images/fresh.webp"}
+            alt="Offer"
+            width={80}
+            height={50}
+          />
           <h2
             className={`text-lg font-bold lg:text-2xl lg:w-1/4 w-full text-nowrap`}
-            style={{ color: sectionData.blocks.setting?.titleColor || '#059669' }}
+            style={{
+              color: sectionData.blocks.setting?.titleColor || "#059669",
+            }}
           >
             {sectionData.blocks.setting?.titleText}
           </h2>
         </div>
-        <div className={`flex  mr-2 items-center justify-center gap-2 lg:gap-4`}>
+        <div
+          className={`flex  mr-2 items-center justify-center gap-2 lg:gap-4`}
+        >
           {offers.map((offer) => (
             <OfferItem key={offer.id} className="relative">
               <Image
@@ -200,47 +216,62 @@ console.warn(previewWidth);
                 height={60}
                 className="offer-image rounded-full"
               />
-              <span className="discount-badge bottom-0 text-xs absolute">{offer.discount}%</span>
+              <span className="discount-badge bottom-0 text-xs absolute">
+                {offer.discount}%
+              </span>
             </OfferItem>
           ))}
-         { <button className=" bg-white lg:hidden rounded-full w-fit px-4 py-2 my-4 lg:mr-8 text-lg items-center"> <svg
-          fill={sectionData.blocks.setting?.buttonTextColor || '#000000'}
-          xmlns="http://www3.org/2000/svg"
-          height="24px"
-          viewBox="0 -960 960 960"
-          width="24px"
-        >
-          <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
-        </svg>
-        </button>}
-        {previewWidth==="sm"&&
-          <button className=" bg-white  rounded-full w-fit px-4 py-2 my-4 lg:mr-8 text-lg items-center"> <svg
-          fill={sectionData.blocks.setting?.buttonTextColor || '#000000'}
-          xmlns="http://www3.org/2000/svg"
-          height="24px"
-          viewBox="0 -960 960 960"
-          width="24px"
-        >
-          <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
-        </svg>
-        </button>}
+          {
+            <button className=" bg-white lg:hidden rounded-full w-fit px-4 py-2 my-4 lg:mr-8 text-lg items-center">
+              {" "}
+              <svg
+                fill={sectionData.blocks.setting?.buttonTextColor || "#000000"}
+                xmlns="http://www3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+              >
+                <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
+              </svg>
+            </button>
+          }
+          {previewWidth === "sm" && (
+            <button className=" bg-white  rounded-full w-fit px-4 py-2 my-4 lg:mr-8 text-lg items-center">
+              {" "}
+              <svg
+                fill={sectionData.blocks.setting?.buttonTextColor || "#000000"}
+                xmlns="http://www3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+              >
+                <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
+              </svg>
+            </button>
+          )}
         </div>
-        {previewWidth=="default" &&<button
-            className="rounded-full px-4 py-2 my-4 text-lg mr-auto font-semibold hidden  lg:flex flex-row-reverse gap-x-2 items-center"
-            style={{ background: sectionData.blocks.setting?.buttonColor || '#ffffff', color: sectionData.blocks.setting?.buttonTextColor || '#000000' }}
-          ><svg
-            fill={sectionData.blocks.setting?.buttonTextColor || '#000000'}
-            xmlns="http://www3.org/2000/svg"
-            height="24px"
-            viewBox="0 -960 960 960"
-            width="24px"
+        {previewWidth == "default" && (
+          <button
+            className="rounded-full px-4 py-2 my-4 text-lg mr-auto font-semibold hidden hover:opacity-65  lg:flex flex-row-reverse gap-x-2 items-center"
+            style={{
+              background: sectionData.blocks.setting?.buttonColor || "#ffffff",
+              color: sectionData.blocks.setting?.buttonTextColor || "#000000",
+            }}
           >
+            <svg
+              fill={sectionData.blocks.setting?.buttonTextColor || "#000000"}
+              xmlns="http://www3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+            >
               <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
             </svg>
-            {sectionData.setting?.buttonText || 'مشاهده همه'}</button>}
-          
-         
-
+            <Link href={sectionData.blocks.setting?.buttonLink || "/"}>
+              {sectionData.blocks?.setting?.buttonText || "مشاهده همه"}
+            </Link>
+          </button>
+        )}
       </OffersWrapper>
     </OffersContainer>
   );

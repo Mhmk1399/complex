@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
 import { Layout, OfferRowSection } from "@/lib/types";
 import MarginPaddingEditor from "../sections/editor";
-import debounce from "lodash/debounce"; // Add this import
+// import debounce from "lodash/debounce"; // Add this import
 import { TabButtons } from "../tabButtons";
 
 interface OfferRowFormProps {
@@ -30,7 +30,7 @@ const ColorInput = ({
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => (
-  <div className="p-3 bg-gray-100 rounded-lg">
+  <div className="p-3  rounded-lg">
     <label className="block mb-1">{label}</label>
     <input
       type="color"
@@ -66,26 +66,12 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
+  console.log(isUpdating);
+
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
   }, []);
-
-  const handleSettingChange = useCallback(
-    debounce((e: React.ChangeEvent<HTMLInputElement>) => {
-      if (isUpdating) return;
-
-      const { name, value } = e.target;
-      setUserInputData((prev: OfferRowSection) => ({
-        ...prev,
-        setting: {
-          ...prev.setting,
-          [name]: value,
-        },
-      }));
-    }, 100),
-    []
-  );
 
   const handleUpdate = (
     type: "margin" | "padding",
@@ -125,13 +111,15 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
   return (
     <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-lg font-bold mb-4">تنظیمات پیشنهاد ویژه</h2>
+
       {/* Tabs */}
-      {/* Use the TabButtons component */}
+
       <TabButtons onTabChange={handleTabChange} />
+
       {/* Content Section */}
 
       {isContentOpen && (
-        <div className="p-4 border-t border-gray-100 space-y-4">
+        <div className="p-4 border-t border-gray-100 space-y-4 animate-slideDown">
           <div className="p-3 bg-gray-50 rounded-lg space-y-3">
             <input
               type="text"
@@ -154,17 +142,38 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
             <input
               type="text"
               placeholder="متن دکمه"
-              value={userInputData?.setting?.buttonText || ""}
-              onChange={(e) => handleSettingChange(e)}
-              name="buttonText"
+              value={userInputData?.blocks?.setting?.buttonText || ""}
+              onChange={(e) => {
+                setUserInputData((prev) => ({
+                  ...prev,
+                  blocks: {
+                    ...prev.blocks,
+                    setting: {
+                      ...prev.blocks.setting,
+                      buttonText: e.target.value,
+                    },
+                  },
+                }));
+              }}
               className="w-full p-2 border rounded"
             />
+
             <input
               type="text"
               placeholder="لینک دکمه"
-              value={userInputData?.setting?.buttonLink || ""}
-              onChange={(e) => handleSettingChange(e)}
-              name="buttonLink"
+              value={userInputData?.blocks?.setting?.buttonLink || ""}
+              onChange={(e) => {
+                setUserInputData((prev) => ({
+                  ...prev,
+                  blocks: {
+                    ...prev.blocks,
+                    setting: {
+                      ...prev.blocks.setting,
+                      buttonLink: e.target.value,
+                    },
+                  },
+                }));
+              }}
               className="w-full p-2 border rounded"
             />
           </div>
@@ -174,7 +183,7 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
       {/* Style Settings */}
 
       {isStyleSettingsOpen && (
-        <div className="p-4 border-t border-gray-100">
+        <div className="p-4 border-t border-gray-100 animate-slideDown">
           <div className="grid gap-4">
             <ColorInput
               label="رنگ عنوان"
@@ -272,8 +281,8 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
 
       {/* Spacing Settings */}
       {isSpacingOpen && (
-        <div className="bg-white rounded-lg p-4 animate-slideDown">
-          <div className="bg-gray-50 rounded-lg p-2 flex items-center justify-center">
+        <div className="p-4 border-t border-gray-100 animate-slideDown">
+          <div className="bg-gray-50 rounded-lg flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}
               padding={padding}

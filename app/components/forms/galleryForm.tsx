@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Layout, GallerySection } from "@/lib/types";
 import { Compiler } from "../compiler";
 import MarginPaddingEditor from "../sections/editor";
+import { TabButtons } from "../tabButtons";
 
 interface GalleryFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<GallerySection>>;
@@ -65,6 +66,9 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
   const [isImagesOpen, setIsImagesOpen] = useState(false);
+
+  console.log(setIsImagesOpen);
+  
 
   const handleUpdate = (
     type: "margin" | "padding",
@@ -171,450 +175,356 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
     }));
   };
 
+  const handleTabChange = (tab: "content" | "style" | "spacing") => {
+    setIsContentOpen(tab === "content");
+    setIsStyleSettingsOpen(tab === "style");
+    setIsSpacingOpen(tab === "spacing");
+  };
+  useEffect(() => {
+    setIsContentOpen(true);
+  }, []);
+
   return (
-    <div
-      className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4"
-      dir="rtl"
-    >
-      <h2 className="text-xl font-bold mb-4">تنظیمات گالری</h2>
+    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+      <h2 className="text-lg font-bold mb-4">تنظیمات گالری</h2>
+
+      {/* Tabs */}
+
+      <TabButtons onTabChange={handleTabChange} />
 
       {/* Content Section */}
-      <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
-        <button
-          onClick={() => setIsContentOpen(!isContentOpen)}
-          className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
-        >
-          <div className="flex items-center gap-2">
-            <svg
-              className="w-5 h-5 text-blue-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-              />
-            </svg>
-            <h3 className="font-semibold text-gray-700">سربرگ</h3>
-          </div>
-          <svg
-            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-              isContentOpen ? "rotate-180" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
 
-        {isContentOpen && (
-          <div className="p-4 border-t border-gray-100 animate-slideDown">
-            <div className="space-y-4">
-              <div>
-                <label className="block mb-2">عنوان</label>
-                <input
-                  type="text"
-                  name="title"
-                  value={userInputData?.blocks?.title || ""}
-                  onChange={handleBlockChange}
-                  className="w-full p-2 border rounded"
-                />
-              </div>
-              <div>
-                <label className="block mb-2">توضیحات</label>
-                <textarea
-                  name="description"
-                  value={userInputData?.blocks?.description || ""}
-                  onChange={handleBlockChange}
-                  className="w-full p-2 border rounded"
-                  rows={3}
-                />
-              </div>
+      {isContentOpen && (
+        <div className="p-4 border-t border-gray-100 animate-slideDown">
+          <div className="space-y-4">
+            <div>
+              <label className="block mb-2">عنوان</label>
+              <input
+                type="text"
+                name="title"
+                value={userInputData?.blocks?.title || "عنوان"}
+                onChange={handleBlockChange}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+            <div>
+              <label className="block mb-2">توضیحات</label>
+              <textarea
+                name="description"
+                value={userInputData?.blocks?.description || "توضیحات"}
+                onChange={handleBlockChange}
+                className="w-full p-2 border rounded"
+                rows={3}
+              />
+            </div>
+            <div className=" border-t  border-gray-100 animate-slideDown">
+              <button
+                onClick={addNewImage}
+                className="mb-4 bg-blue-500 text-white px-4 py-2 rounded"
+              >
+                افزودن تصویر جدید
+              </button>
+
+              {userInputData?.blocks?.images?.map((image, index) => (
+                <div key={index} className="mb-4 p-4 border h-full rounded">
+                  <div className="flex justify-between items-center mb-4">
+                    <h4>تصویر {index + 1}</h4>
+                    <button
+                      onClick={() => removeImage(index)}
+                      className="text-red-500"
+                    >
+                      حذف
+                    </button>
+                  </div>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block mb-2">آدرس تصویر</label>
+                      <input
+                        type="text"
+                        value={image.imageSrc || ""}
+                        onChange={(e) =>
+                          handleImageChange(index, "imageSrc", e.target.value)
+                        }
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
+                    <div>
+                      <label className="block mb-2">متن جایگزین</label>
+                      <input
+                        type="text"
+                        value={image.imageAlt || ""}
+                        onChange={(e) =>
+                          handleImageChange(index, "imageAlt", e.target.value)
+                        }
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
+                    <div>
+                      <label className="block mb-2">لینک (اختیاری)</label>
+                      <input
+                        type="text"
+                        value={image.imageLink || ""}
+                        onChange={(e) =>
+                          handleImageChange(index, "imageLink", e.target.value)
+                        }
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Images Section */}
-      <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
-        <button
-          onClick={() => setIsImagesOpen(!isImagesOpen)}
-          className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl"
-        >
-          <div className="flex items-center gap-2">
-            <svg
-              className="w-5 h-5 text-blue-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
-            <span className="font-semibold">تصاویر</span>
-          </div>
-          <svg
-            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-              isImagesOpen ? "rotate-180" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+
+      {isImagesOpen && (
+        <div className="p-4 border-t border-gray-100 animate-slideDown">
+          <button
+            onClick={addNewImage}
+            className="mb-4 bg-blue-500 text-white px-4 py-2 rounded"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
+            افزودن تصویر جدید
+          </button>
 
-        {isImagesOpen && (
-          <div className="p-4 border-t border-gray-100 animate-slideDown">
-            <button
-              onClick={addNewImage}
-              className="mb-4 bg-blue-500 text-white px-4 py-2 rounded"
-            >
-              افزودن تصویر جدید
-            </button>
-
-            {userInputData?.blocks?.images?.map((image, index) => (
-              <div key={index} className="mb-6 p-4 border rounded">
-                <div className="flex justify-between items-center mb-4">
-                  <h4>تصویر {index + 1}</h4>
-                  <button
-                    onClick={() => removeImage(index)}
-                    className="text-red-500"
-                  >
-                    حذف
-                  </button>
+          {userInputData?.blocks?.images?.map((image, index) => (
+            <div key={index} className="mb-6 p-4 border rounded">
+              <div className="flex justify-between items-center mb-4">
+                <h4>تصویر {index + 1}</h4>
+                <button
+                  onClick={() => removeImage(index)}
+                  className="text-red-500"
+                >
+                  حذف
+                </button>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <label className="block mb-2">آدرس تصویر</label>
+                  <input
+                    type="text"
+                    value={image.imageSrc || ""}
+                    onChange={(e) =>
+                      handleImageChange(index, "imageSrc", e.target.value)
+                    }
+                    className="w-full p-2 border rounded"
+                  />
                 </div>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block mb-2">آدرس تصویر</label>
-                    <input
-                      type="text"
-                      value={image.imageSrc || ""}
-                      onChange={(e) =>
-                        handleImageChange(index, "imageSrc", e.target.value)
-                      }
-                      className="w-full p-2 border rounded"
-                    />
-                  </div>
-                  <div>
-                    <label className="block mb-2">متن جایگزین</label>
-                    <input
-                      type="text"
-                      value={image.imageAlt || ""}
-                      onChange={(e) =>
-                        handleImageChange(index, "imageAlt", e.target.value)
-                      }
-                      className="w-full p-2 border rounded"
-                    />
-                  </div>
-                  <div>
-                    <label className="block mb-2">لینک (اختیاری)</label>
-                    <input
-                      type="text"
-                      value={image.imageLink || ""}
-                      onChange={(e) =>
-                        handleImageChange(index, "imageLink", e.target.value)
-                      }
-                      className="w-full p-2 border rounded"
-                    />
-                  </div>
+                <div>
+                  <label className="block mb-2">متن جایگزین</label>
+                  <input
+                    type="text"
+                    value={image.imageAlt || ""}
+                    onChange={(e) =>
+                      handleImageChange(index, "imageAlt", e.target.value)
+                    }
+                    className="w-full p-2 border rounded"
+                  />
+                </div>
+                <div>
+                  <label className="block mb-2">لینک (اختیاری)</label>
+                  <input
+                    type="text"
+                    value={image.imageLink || ""}
+                    onChange={(e) =>
+                      handleImageChange(index, "imageLink", e.target.value)
+                    }
+                    className="w-full p-2 border rounded"
+                  />
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Style Settings */}
-      <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
-        <button
-          onClick={() => setIsStyleSettingsOpen(!isStyleSettingsOpen)}
-          className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
-        >
-          <div className="flex items-center gap-2">
-            <svg
-              className="w-5 h-5 text-blue-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-              />
-            </svg>
-            <h3 className="font-semibold text-gray-700">تنظیمات استایل</h3>
-          </div>
-          <svg
-            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-              isStyleSettingsOpen ? "rotate-180" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
 
-        {isStyleSettingsOpen && (
-          <div className="p-4 border-t border-gray-100 animate-slideDown">
-            <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
-              {/* Title Settings */}
-              <div className="space-y-4">
-                <h4 className="font-bold">تنظیمات عنوان</h4>
-                <div>
-                  <label className="block mb-2">سایز فونت عنوان</label>
-                  <input
-                    type="range"
-                    name="titleFontSize"
-                    min="16"
-                    max="48"
-                    value={
-                      userInputData?.blocks?.setting?.titleFontSize || "24"
-                    }
-                    onChange={handleBlockSettingChange}
-                    className="w-full"
-                  />
-                  <div className="text-gray-500">
-                    {userInputData?.blocks?.setting?.titleFontSize}px
-                  </div>
+      {isStyleSettingsOpen && (
+        <div className="p-4 border-t border-gray-100 animate-slideDown">
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+            {/* Title Settings */}
+            <div className="space-y-4">
+              <h4 className="font-bold">تنظیمات عنوان</h4>
+              <div>
+                <label className="block mb-2">سایز فونت عنوان</label>
+                <input
+                  type="range"
+                  name="titleFontSize"
+                  min="16"
+                  max="48"
+                  value={userInputData?.blocks?.setting?.titleFontSize || "24"}
+                  onChange={handleBlockSettingChange}
+                  className="w-full"
+                />
+                <div className="text-gray-500">
+                  {userInputData?.blocks?.setting?.titleFontSize}px
                 </div>
-                <div>
-                  <label className="block mb-2">وزن فونت عنوان</label>
-                  <select
-                    name="titleFontWeight"
-                    value={
-                      userInputData?.blocks?.setting?.titleFontWeight?.toString() ??
-                      "0"
-                    }
-                    onChange={handleBlockSettingChange}
-                    className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="bold">ضخیم</option>
-                    <option value="normal">نرمال</option>
-                  </select>
-                </div>
-                <ColorInput
-                  label="رنگ عنوان"
-                  name="titleColor"
+              </div>
+              <div>
+                <label className="block mb-2">وزن فونت عنوان</label>
+                <select
+                  name="titleFontWeight"
                   value={
-                    userInputData?.blocks?.setting?.titleColor || "#000000"
+                    userInputData?.blocks?.setting?.titleFontWeight?.toString() ??
+                    "0"
                   }
                   onChange={handleBlockSettingChange}
-                />
-              </div>
-              <div className="space-y-4">
-                <h4 className="font-bold">تنظیمات توضیحات</h4>
-                <div>
-                  <label className="block mb-2">سایز فونت توضیحات</label>
-                  <input
-                    type="range"
-                    name="descriptionFontSize"
-                    min="16"
-                    max="48"
-                    value={
-                      userInputData?.blocks?.setting?.descriptionFontSize ||
-                      "24"
-                    }
-                    onChange={handleBlockSettingChange}
-                    className="w-full"
-                  />
-                  <div className="text-gray-500">
-                    {userInputData?.blocks?.setting?.descriptionFontSize}px
-                  </div>
-                </div>
-                <div>
-                  <label className="block mb-2">وزن فونت توضیحات</label>
-                  <select
-                    name="descriptionFontWeight"
-                    value={
-                      userInputData?.blocks?.setting?.descriptionFontWeight?.toString() ??
-                      "0"
-                    }
-                    onChange={handleBlockSettingChange}
-                    className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="bold">ضخیم</option>
-                    <option value="normal">نرمال</option>
-                  </select>
-                </div>
-                <ColorInput
-                  label="رنگ توضیحات"
-                  name="descriptionColor"
-                  value={
-                    userInputData?.blocks?.setting?.descriptionColor ||
-                    "#000000"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-              </div>
-
-              {/* Grid Settings */}
-              <div className="space-y-4">
-                <h4 className="font-bold">تنظیمات شبکه</h4>
-                <div>
-                  <label className="block mb-2">تعداد ستون‌ها</label>
-                  <input
-                    type="number"
-                    name="gridColumns"
-                    min="1"
-                    max="6"
-                    value={userInputData?.blocks?.setting?.gridColumns || "3"}
-                    onChange={handleBlockSettingChange}
-                    className="w-full p-2 border rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block mb-2">فاصله بین تصاویر</label>
-                  <input
-                    type="range"
-                    name="gridGap"
-                    value={userInputData?.blocks?.setting?.gridGap || "20"}
-                    onChange={handleBlockSettingChange}
-                    className="w-full p-2 border rounded"
-                  />
-                  <div className="text-gray-500">
-                    {userInputData?.blocks?.setting?.gridGap}px
-                  </div>
-                </div>
-              </div>
-
-              {/* Image Settings */}
-              <div className="space-y-4">
-                <h4 className="font-bold">تنظیمات تصاویر</h4>
-                <div>
-                  <label className="block mb-2">ارتفاع تصاویر</label>
-                  <input
-                    type="number"
-                    name="imageHeight"
-                    value={userInputData?.blocks?.setting?.imageHeight || "200"}
-                    onChange={handleBlockSettingChange}
-                    className="w-full p-2 border rounded"
-                  />
-                  <div className="text-gray-500">
-                    {userInputData?.blocks?.setting?.imageHeight}px
-                  </div>
-                </div>
-                <div>
-                  <label className="block mb-2">عرض تصاویر</label>
-                  <input
-                    type="number"
-                    name="imageWidth"
-                    value={userInputData?.blocks?.setting?.imageWidth || "200"}
-                    onChange={handleBlockSettingChange}
-                    className="w-full p-2 border rounded"
-                  />
-                  <div className="text-gray-500">
-                    {userInputData?.blocks?.setting?.imageWidth}px
-                  </div>
-                </div>
-                <div>
-                  <label className="block mb-2">گردی گوشه‌ها</label>
-                  <input
-                    type="range"
-                    name="imageRadius"
-                    value={userInputData?.blocks?.setting?.imageRadius || "8"}
-                    onChange={handleBlockSettingChange}
-                    className="w-full p-2 border rounded"
-                  />
-                  <div className="text-gray-500">
-                    {userInputData?.blocks?.setting?.imageRadius}px
-                  </div>
-                </div>
+                  className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="bold">ضخیم</option>
+                  <option value="normal">نرمال</option>
+                </select>
               </div>
               <ColorInput
-                label="رنگ پس زمینه"
-                name="background"
-                value={userInputData?.blocks?.setting?.background || "#000000"}
+                label="رنگ عنوان"
+                name="titleColor"
+                value={userInputData?.blocks?.setting?.titleColor || "#000000"}
                 onChange={handleBlockSettingChange}
               />
             </div>
-          </div>
-        )}
-      </div>
-
-      {/* Spacing Settings */}
-      <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
-        {/* Dropdown Header */}
-
-        <button
-          onClick={() => setIsSpacingOpen(!isSpacingOpen)}
-          className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
-        >
-          <div className="flex items-center gap-2">
-            <svg
-              className="w-5 h-5 text-blue-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-              />
-            </svg>
-            <h3 className="font-semibold text-gray-700">تنظیمات فاصله</h3>
-          </div>
-          <svg
-            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-              isSpacingOpen ? "rotate-180" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
-
-        {/* Dropdown Content */}
-        {isSpacingOpen && (
-          <div className="p-4 border-t border-gray-100 animate-slideDown">
-            <div className="bg-gray-50 rounded-lg p-2 flex items-center justify-center">
-              <MarginPaddingEditor
-                margin={margin}
-                padding={padding}
-                onChange={handleUpdate}
+            <div className="space-y-4">
+              <h4 className="font-bold">تنظیمات توضیحات</h4>
+              <div>
+                <label className="block mb-2">سایز فونت توضیحات</label>
+                <input
+                  type="range"
+                  name="descriptionFontSize"
+                  min="16"
+                  max="48"
+                  value={
+                    userInputData?.blocks?.setting?.descriptionFontSize || "24"
+                  }
+                  onChange={handleBlockSettingChange}
+                  className="w-full"
+                />
+                <div className="text-gray-500">
+                  {userInputData?.blocks?.setting?.descriptionFontSize}px
+                </div>
+              </div>
+              <div>
+                <label className="block mb-2">وزن فونت توضیحات</label>
+                <select
+                  name="descriptionFontWeight"
+                  value={
+                    userInputData?.blocks?.setting?.descriptionFontWeight?.toString() ??
+                    "0"
+                  }
+                  onChange={handleBlockSettingChange}
+                  className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="bold">ضخیم</option>
+                  <option value="normal">نرمال</option>
+                </select>
+              </div>
+              <ColorInput
+                label="رنگ توضیحات"
+                name="descriptionColor"
+                value={
+                  userInputData?.blocks?.setting?.descriptionColor || "#000000"
+                }
+                onChange={handleBlockSettingChange}
               />
             </div>
+
+            {/* Grid Settings */}
+            <div className="space-y-4">
+              <h4 className="font-bold">تنظیمات شبکه</h4>
+              <div>
+                <label className="block mb-2">تعداد ستون‌ها</label>
+                <input
+                  type="number"
+                  name="gridColumns"
+                  min="1"
+                  max="6"
+                  value={userInputData?.blocks?.setting?.gridColumns || "3"}
+                  onChange={handleBlockSettingChange}
+                  className="w-full p-2 border rounded"
+                />
+              </div>
+              <div>
+                <label className="block mb-2">فاصله بین تصاویر</label>
+                <input
+                  type="range"
+                  name="gridGap"
+                  value={userInputData?.blocks?.setting?.gridGap || "20"}
+                  onChange={handleBlockSettingChange}
+                  className="w-full p-2 border rounded"
+                />
+                <div className="text-gray-500">
+                  {userInputData?.blocks?.setting?.gridGap}px
+                </div>
+              </div>
+            </div>
+
+            {/* Image Settings */}
+            <div className="space-y-4">
+              <h4 className="font-bold">تنظیمات تصاویر</h4>
+              <div>
+                <label className="block mb-2">ارتفاع تصاویر</label>
+                <input
+                  type="number"
+                  name="imageHeight"
+                  value={userInputData?.blocks?.setting?.imageHeight || "200"}
+                  onChange={handleBlockSettingChange}
+                  className="w-full p-2 border rounded"
+                />
+                <div className="text-gray-500">
+                  {userInputData?.blocks?.setting?.imageHeight}px
+                </div>
+              </div>
+              <div>
+                <label className="block mb-2">عرض تصاویر</label>
+                <input
+                  type="number"
+                  name="imageWidth"
+                  value={userInputData?.blocks?.setting?.imageWidth || "200"}
+                  onChange={handleBlockSettingChange}
+                  className="w-full p-2 border rounded"
+                />
+                <div className="text-gray-500">
+                  {userInputData?.blocks?.setting?.imageWidth}px
+                </div>
+              </div>
+              <div>
+                <label className="block mb-2">گردی گوشه‌ها</label>
+                <input
+                  type="range"
+                  name="imageRadius"
+                  value={userInputData?.blocks?.setting?.imageRadius || "8"}
+                  onChange={handleBlockSettingChange}
+                  className="w-full p-2 border rounded"
+                />
+                <div className="text-gray-500">
+                  {userInputData?.blocks?.setting?.imageRadius}px
+                </div>
+              </div>
+            </div>
+            <ColorInput
+              label="رنگ پس زمینه"
+              name="background"
+              value={userInputData?.blocks?.setting?.background || "#000000"}
+              onChange={handleBlockSettingChange}
+            />
           </div>
-        )}
-      </div>
+        </div>
+      )}
+
+      {/* Spacing Settings */}
+
+      {isSpacingOpen && (
+        <div className="p-4 border-t border-gray-100 animate-slideDown">
+          <div className="bg-gray-50 rounded-lg p-2 flex items-center justify-center">
+            <MarginPaddingEditor
+              margin={margin}
+              padding={padding}
+              onChange={handleUpdate}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

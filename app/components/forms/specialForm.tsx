@@ -180,6 +180,8 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
   //     console.error("Fetch error:", error);
   //   }
   // };
+
+
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -286,7 +288,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
       {/* Style Settings */}
 
       {isStyleSettingsOpen && (
-        <div className="p-4 border-t border-gray-100">
+        <div className="p-4 border-t border-gray-100 animate-slideDown">
           <div className="grid md:grid-cols-1 gap-4">
             <div className="rounded-lg">
               <h4 className="font-semibold text-sky-700 my-4">تنظیمات عنوان</h4>
@@ -337,7 +339,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
       {/* Spacing Settings */}
 
       {isSpacingOpen && (
-        <div className="p-4 border-t border-gray-100">
+        <div className="p-4 border-t border-gray-100 animate-slideDown">
           <div className="bg-gray-50 rounded-lg flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

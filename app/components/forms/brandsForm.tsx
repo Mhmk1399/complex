@@ -3,6 +3,7 @@ import { Compiler } from "../compiler";
 import { Layout, BrandsSection } from "@/lib/types";
 import React from "react";
 import MarginPaddingEditor from "../sections/editor";
+import { TabButtons } from "../tabButtons";
 
 interface BrandsFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<BrandsSection>>;
@@ -149,262 +150,156 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
     }
   };
 
+  const handleTabChange = (tab: "content" | "style" | "spacing") => {
+    setIsContentOpen(tab === "content");
+    setIsStyleSettingsOpen(tab === "style");
+    setIsSpacingOpen(tab === "spacing");
+  };
+  useEffect(() => {
+    setIsContentOpen(true);
+  }, []);
+
   return (
-    <div
-      className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4"
-      dir="rtl"
-    >
-      <h2 className="text-xl font-bold my-4">تنظیمات برندها</h2>
+    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+      <h2 className="text-lg font-bold mb-4">تنظیمات برندها</h2>
+
+      {/* Tabs */}
+
+      <TabButtons onTabChange={handleTabChange} />
 
       {/* Content Section */}
-      <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
-        <button
-          onClick={() => setIsContentOpen(!isContentOpen)}
-          className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl"
-        >
-          <div className="flex items-center gap-2">
-            <svg
-              className="w-5 h-5 text-blue-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+
+      {isContentOpen && (
+        <div className="p-4 border-t border-gray-100 animate-slideDown">
+          <input
+            type="text"
+            placeholder="عنوان"
+            value={userInputData?.blocks?.heading || ""}
+            onChange={(e) =>
+              setUserInputData((prev) => ({
+                ...prev,
+                blocks: { ...prev.blocks, heading: e.target.value },
+              }))
+            }
+            className="w-full p-2 border rounded mb-4"
+          />
+
+          {userInputData?.blocks?.brands.map((brand, index) => (
+            <div
+              key={brand.id}
+              className="p-3 bg-gray-50 rounded-lg space-y-3 mb-4"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+              <h4 className="font-semibold">برند {index + 1}</h4>
+              <input
+                type="text"
+                placeholder="نام برند"
+                value={brand.name}
+                onChange={(e) =>
+                  handleBrandChange(index, "name", e.target.value)
+                }
+                className="w-full p-2 border rounded"
               />
-            </svg>
-            <h3 className="font-semibold text-gray-700">محتوا</h3>
-          </div>
-          <svg
-            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-              isContentOpen ? "rotate-180" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
-
-        {isContentOpen && (
-          <div className="p-4 border-t border-gray-100">
-            <input
-              type="text"
-              placeholder="عنوان"
-              value={userInputData?.blocks?.heading || ""}
-              onChange={(e) =>
-                setUserInputData((prev) => ({
-                  ...prev,
-                  blocks: { ...prev.blocks, heading: e.target.value },
-                }))
-              }
-              className="w-full p-2 border rounded mb-4"
-            />
-
-            {userInputData?.blocks?.brands.map((brand, index) => (
-              <div
-                key={brand.id}
-                className="p-3 bg-gray-50 rounded-lg space-y-3 mb-4"
-              >
-                <h4 className="font-semibold">برند {index + 1}</h4>
-                <input
-                  type="text"
-                  placeholder="نام برند"
-                  value={brand.name}
-                  onChange={(e) =>
-                    handleBrandChange(index, "name", e.target.value)
-                  }
-                  className="w-full p-2 border rounded"
-                />
-                <input
-                  type="text"
-                  placeholder="لوگو"
-                  value={brand.logo}
-                  onChange={(e) =>
-                    handleBrandChange(index, "logo", e.target.value)
-                  }
-                  className="w-full p-2 border rounded"
-                />
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+              <input
+                type="text"
+                placeholder="لوگو"
+                value={brand.logo}
+                onChange={(e) =>
+                  handleBrandChange(index, "logo", e.target.value)
+                }
+                className="w-full p-2 border rounded"
+              />
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Style Settings */}
-      <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
-        <button
-          onClick={() => setIsStyleSettingsOpen(!isStyleSettingsOpen)}
-          className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl"
-        >
-          <div className="flex items-center gap-2">
-            <svg
-              className="w-5 h-5 text-blue-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+
+      {isStyleSettingsOpen && (
+        <div className="p-4 border-t border-gray-100 animate-slideDown">
+          <div className="grid gap-4">
+            <div className=" rounded-lg">
+              <ColorInput
+                label="رنگ عنوان"
+                name="headingColor"
+                value={userInputData?.blocks?.setting?.headingColor}
+                onChange={handleSettingChange}
               />
-            </svg>
-            <h3 className="font-semibold text-gray-700">تنظیمات ظاهری</h3>
-          </div>
-          <svg
-            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-              isStyleSettingsOpen ? "rotate-180" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
-
-        {isStyleSettingsOpen && (
-          <div className="p-4 border-t border-gray-100">
-            <div className="grid gap-4">
-              <div className="p-3 bg-gray-100 rounded-lg">
-                <ColorInput
-                  label="رنگ عنوان"
-                  name="headingColor"
-                  value={userInputData?.blocks?.setting?.headingColor}
+              <div className="mt-3">
+                <label className="block">سایز عنوان</label>
+                <input
+                  type="range"
+                  name="headingFontSize"
+                  value={userInputData?.blocks?.setting?.headingFontSize || 32}
                   onChange={handleSettingChange}
+                  className="w-full"
+                  min="24"
+                  max="48"
                 />
-                <div className="mt-3">
-                  <label className="block">سایز عنوان</label>
-                  <input
-                    type="range"
-                    name="headingFontSize"
-                    value={
-                      userInputData?.blocks?.setting?.headingFontSize || 32
-                    }
-                    onChange={handleSettingChange}
-                    className="w-full"
-                    min="24"
-                    max="48"
-                  />
-                </div>
               </div>
+            </div>
 
-              <div className="p-3 bg-gray-100 rounded-lg">
-                <ColorInput
-                  label="رنگ نام برند"
-                  name="brandNameColor"
-                  value={userInputData?.blocks?.setting?.brandNameColor}
+            <div className=" rounded-lg">
+              <ColorInput
+                label="رنگ نام برند"
+                name="brandNameColor"
+                value={userInputData?.blocks?.setting?.brandNameColor}
+                onChange={handleSettingChange}
+              />
+              <div className="mt-3">
+                <label className="block">سایز نام برند</label>
+                <input
+                  type="range"
+                  name="brandNameFontSize"
+                  value={
+                    userInputData?.blocks?.setting?.brandNameFontSize || 16
+                  }
                   onChange={handleSettingChange}
+                  className="w-full"
+                  min="12"
+                  max="24"
                 />
-                <div className="mt-3">
-                  <label className="block">سایز نام برند</label>
-                  <input
-                    type="range"
-                    name="brandNameFontSize"
-                    value={
-                      userInputData?.blocks?.setting?.brandNameFontSize || 16
-                    }
-                    onChange={handleSettingChange}
-                    className="w-full"
-                    min="12"
-                    max="24"
-                  />
-                </div>
               </div>
+            </div>
 
-              <div className="p-3 bg-gray-100 rounded-lg">
-                <label className="block mb-2">اندازه لوگو</label>
-                <div className="flex gap-4">
-                  <input
-                    type="number"
-                    name="logoWidth"
-                    placeholder="عرض"
-                    value={userInputData?.blocks?.setting?.logoWidth || 96}
-                    onChange={handleSettingChange}
-                    className="w-1/2 p-2 border rounded"
-                  />
-                  <input
-                    type="number"
-                    name="logoHeight"
-                    placeholder="ارتفاع"
-                    value={userInputData?.blocks?.setting?.logoHeight || 96}
-                    onChange={handleSettingChange}
-                    className="w-1/2 p-2 border rounded"
-                  />
-                </div>
+            <div className="rounded-lg">
+              <label className="block mb-2">اندازه لوگو</label>
+              <div className="flex gap-4">
+                <input
+                  type="number"
+                  name="logoWidth"
+                  placeholder="عرض"
+                  value={userInputData?.blocks?.setting?.logoWidth || 96}
+                  onChange={handleSettingChange}
+                  className="w-1/2 p-2 border rounded"
+                />
+                <input
+                  type="number"
+                  name="logoHeight"
+                  placeholder="ارتفاع"
+                  value={userInputData?.blocks?.setting?.logoHeight || 96}
+                  onChange={handleSettingChange}
+                  className="w-1/2 p-2 border rounded"
+                />
               </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Spacing Settings */}
-      <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100">
-        <button
-          onClick={() => setIsSpacingOpen(!isSpacingOpen)}
-          className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl"
-        >
-          <div className="flex items-center gap-2">
-            <svg
-              className="w-5 h-5 text-blue-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-              />
-            </svg>
-            <h3 className="font-semibold text-gray-700">تنظیمات فاصله</h3>
-          </div>
-          <svg
-            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-              isSpacingOpen ? "rotate-180" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
 
-        {isSpacingOpen && (
-          <div className="p-4 border-t border-gray-100">
-            <div className="bg-gray-50 rounded-lg p-2 flex items-center justify-center">
-              <MarginPaddingEditor
-                margin={margin}
-                padding={padding}
-                onChange={handleUpdate}
-              />
-            </div>
+      {isSpacingOpen && (
+        <div className="p-4 border-t border-gray-100 animate-slideDown">
+          <div className="bg-gray-50 rounded-lg flex items-center justify-center">
+            <MarginPaddingEditor
+              margin={margin}
+              padding={padding}
+              onChange={handleUpdate}
+            />
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

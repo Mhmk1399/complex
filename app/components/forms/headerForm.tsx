@@ -488,7 +488,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
 
       {/* Space Tab */}
       {isSpacingOpen && (
-        <div className="p-4 border-t border-gray-100">
+        <div className="p-4 border-t border-gray-100 animate-slideDown">
           <div className="bg-gray-50 rounded-lg flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

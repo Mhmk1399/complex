@@ -100,7 +100,7 @@ body {
   display: none; /* Chrome, Safari and Opera */
 }
 
-/* 
+
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -114,8 +114,7 @@ body {
 
 .animate-slideDown {
   animation: slideDown 0.5s ease-in-out forwards;
-} */
-/* From Uiverse.io by kennyotsu */ 
+}
 .card {
   /* color used to softly clip top and bottom of the .words container */
   --bg-color: #eafdff;

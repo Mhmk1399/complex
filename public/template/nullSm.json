@@ -49,6 +49,36 @@
                     "image": "/assets/images/washer.jpg"
                   }
                 ]
+              },
+              {
+                "title": "لوازم خانگی",
+                "items": [
+                  {
+                    "name": "یخچال",
+                    "url": "/refrigerator",
+                    "image": "/assets/images/fridge.jpg"
+                  },
+                  {
+                    "name": "ماشین لباسشویی",
+                    "url": "/washing-machine",
+                    "image": "/assets/images/washer.jpg"
+                  }
+                ]
+              },
+              {
+                "title": "لوازم خانگی",
+                "items": [
+                  {
+                    "name": "یخچال",
+                    "url": "/refrigerator",
+                    "image": "/assets/images/fridge.jpg"
+                  },
+                  {
+                    "name": "ماشین لباسشویی",
+                    "url": "/washing-machine",
+                    "image": "/assets/images/washer.jpg"
+                  }
+                ]
               }
             ]
           },
@@ -155,7 +185,7 @@
               "slideTransition": "fade",
               "navigationStyle": "arrows",
               "arrowsPosition": "bottom-right",
-              "height": "200",
+              "height": "500",
               "bgArrow": "#ffffff",
               "activeDotColor": "#ffffff",
               "inactiveDotColor": "#000000"
@@ -534,11 +564,11 @@
               "descriptionFontSize": "16",
               "descriptionFontWeight": "normal",
               "background": "#ffffff",
-              "imageWidth": "170",
-              "imageHeight": "100",
+              "imageWidth": "330",
+              "imageHeight": "200",
               "imageRadius": "8",
-              "gridColumns": "2",
-              "gridGap": "10"
+              "gridColumns": "4",
+              "gridGap": "20"
             }
           },
           "setting": {
@@ -804,10 +834,10 @@
             }
           },
           "setting": {
-            "paddingTop": "20",
-            "paddingBottom": "20",
-            "marginTop": "10",
-            "marginBottom": "10",
+            "paddingTop": "0",
+            "paddingBottom": "0",
+            "marginTop": "0",
+            "marginBottom": "0",
             "backgroundColor": "#ffffff"
           }
         },
@@ -821,7 +851,9 @@
               "buttonColor": "#ffffff",
               "buttonTextColor": "#000000",
               "gradientFromColor": "#f3f4f6",
-              "gradientToColor": "#e5e7eb"
+              "gradientToColor": "#e5e7eb",
+              "buttonText": "مشاهده همه",
+              "buttonLink": "/special-offers"
             }
           },
           "setting": {
@@ -898,6 +930,7 @@
             "textHeading": " محصولات جدید ",
 
             "setting": {
+              "selectedCollection": "",
               "headingColor": "#000000",
               "headingFontSize": "22",
               "headingFontWeight": "bold",
@@ -906,10 +939,7 @@
               "descriptionColor": "#666666",
               "btnBg": "#EF394E",
               "btnTextColor": "#ffffff",
-              "cardBackground": "#EF394E",
-              "cardBorderRadius": "8",
-              "imageRadius": "8",
-              "gridColumns": "4"
+              "cardBorderRadius": "8"
             }
           },
           "setting": {
@@ -917,7 +947,7 @@
             "paddingBottom": "30",
             "marginTop": "20",
             "marginBottom": "20",
-            "backgroundColor": "#ffffff",
+            "backgroundColor": "#000000",
             "paddingLeft": "10",
             "paddingRight": "10"
           }
@@ -976,10 +1006,10 @@
               "descriptionFontSize": "16",
               "descriptionFontWeight": "normal",
               "background": "#ffffff",
-              "imageWidth": "360",
-              "imageHeight": "165",
+              "imageWidth": "680",
+              "imageHeight": "250",
               "imageRadius": "8",
-              "gridColumns": "1",
+              "gridColumns": "2",
               "gridGap": "20"
             }
           },
@@ -1016,9 +1046,9 @@
           "descriptionFontSize": "18",
           "descriptionFontWeight": "normal",
           "linkColor": "#0077b6",
-          "logoWidth": "80px",
-          "logoHeight": "80px",
-          "logoRadius": "10px"
+          "logoWidth": "80",
+          "logoHeight": "80",
+          "logoRadius": "10"
         },
         "text": "سربرگ قسمت پایین سایت",
         "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
