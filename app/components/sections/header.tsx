@@ -8,148 +8,339 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { Search, ShoppingCart, User, MapPin } from "lucide-react";
 
 interface HeaderProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
+  actualName: string;
   selectedComponent: string;
+  setLayout: React.Dispatch<React.SetStateAction<Layout>>;
   previewWidth: "sm" | "default";
 }
-// const LoaderContainer = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   width: 100%;
-//   height: 80px;
-//   background-color: #14213d;
-//   position: absolute;
-//   z-index: 40;
-// `;
+
 // Styled components
-const SectionHeader = styled.section<{
+const HeaderWrapper = styled.header<{
   $data: HeaderSection;
   $previewWidth: "sm" | "default";
-  $preview: "sm" | "default";
 }>`
-  display: ${(props) => (props.$preview === "sm" ? "block" : "flex")};
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding-top: ${(props) => props.$data.setting.paddingTop || "0"}px;
-  padding-bottom: ${(props) => props.$data.setting.paddingBottom || "0"}px;
-  margin-top: ${(props) => props.$data.setting.marginTop || "0"}px;
-  margin-bottom: ${(props) => props.$data.setting.marginBottom || "0"}px;
-  background-color: ${(props) =>
-    props.$data?.blocks?.setting?.backgroundColorNavbar || "#14213D"};
-  position: absolute;
   width: 100%;
-  z-index: 40;
-  
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  position: relative;
+  margin-top: ${(props) => props.$data.setting?.marginTop || "0"}px;
+  margin-bottom: ${(props) => props.$data?.setting?.marginBottom}px;
+  padding-top: ${(props) => props.$data?.setting?.paddingTop}px;
+  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom}px;
+  padding-left: ${(props) => props.$data?.setting?.paddingLeft}px;
+  padding-right: ${(props) => props.$data?.setting?.paddingRight};
+  background-color: ${(props) =>
+    props.$data?.blocks?.setting?.bgColor || "#000"};
+
+  ${(props) =>
+    props.$previewWidth === "sm" &&
+    `
+    max-width: 425px;
+    padding: 0.5rem;
+    
+    ${MainSection} {
+      flex-direction: column;
+      padding: 0.5rem;
+    }
+    
+    ${SearchContainer} {
+      width: 100%;
+      margin: 0.5rem 0;
+    }
+    
+    ${SearchInput} {
+      width: 100%;
+    }
+    
+    ${Logo} {
+      width: 40px;
+      height: 40px;
+    }
+    
+    ${NavContainer} {
+      display: none;
+    }
+    
+    ${ActionButtons} {
+      width: 100%;
+      justify-content: space-between;
+    }
+  `}
 `;
 
-const LogoContainer = styled.div<{
+const ItemsContainer = styled.div<{ $data: HeaderSection }>`
+  display: flex;
+  align-items: start;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem;
+`;
+
+const AnnouncementBar = styled.div<{
   $data: HeaderSection;
 }>`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   width: 100%;
-  padding: 0 1rem;
+  background-color: ${(props) =>
+    props.$data.blocks?.setting?.announcementBgColor || "#f1b80c"};
+  color: ${(props) =>
+    props.$data.blocks?.setting?.announcementTextColor || "#ffffff"};
+  padding: 17px 16px;
+  text-align: center;
+  font-size: ${(props) =>
+    props.$data.blocks.setting?.announcementFontSize || "14"}px;
 
   @media (max-width: 768px) {
-    width: 100%;
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+`;
+
+const MainSection = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: row-reverse;
+  padding: 0.5rem 1.5rem;
+
+  @media (max-width: 768px) {
+    padding: 0.75rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  }
+`;
+
+const LogoContainer = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.5rem;
+  @media (max-width: 768px) {
+    width: fit-content;
   }
 `;
 
 const Logo = styled.img<{
   $data: HeaderSection;
-  $previewWidth: "sm" | "default";
-  $preview: "sm" | "default";
 }>`
-  width: ${(props) =>
-    props.$preview === "sm"
-      ? `${Number(props.$data.blocks.setting.imageWidth || "100") / 2}`
-      : `${props.$data.blocks.setting.imageWidth || "auto"}`}px;
-  height: ${(props) =>
-    props.$preview === "sm"
-      ? `${Number(props.$data.blocks.setting.imageHeight || "50") / 2}`
-      : `${props.$data.blocks.setting.imageHeight || "auto"}`}px;
-  // margin-right: ${(props) =>
-    props.$data.blocks.setting.marginRight || "0"}px;
-  // margin-left: ${(props) => props.$data.blocks.setting.marginLeft || "0"}px;
-  transition: all 0.3s ease-in-out;
-  position: relative;
-  transform: translateX(
-    ${(props) =>
-      `calc(${props.$data.blocks.setting.marginRight || 0}px - ${
-        props.$data.blocks.setting.marginLeft || 0
-      }px)`}
-  );
+  width: ${(props) => props.$data.blocks.setting?.imageWidth || "60"}px;
+  height: ${(props) => props.$data.blocks.setting?.imageHeight || "60"}px;
+  border-radius: ${(props) =>
+    props.$data.blocks.setting?.imageRadius || "30"}px;
+  margin-left: auto;
 `;
 
-const NavItems = styled.div<{
-  $isOpen: boolean;
-  $previewWidth: "sm" | "default";
-  $preview: "sm" | "default";
-}>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
-  transition: all 0.3s ease-in-out;
+const SearchContainer = styled.div`
+  position: relative;
+  flex: 1;
+  @media (min-width: 768px) {
+    margin-right: 1rem;
+    margin-left: 500px;
+  }
+`;
 
-  ${({ $preview, $isOpen }) =>
-    $preview === "sm" &&
-    `
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+const SearchInput = styled.input`
+  width: 500px;
+  padding: 0.5rem 2.5rem 0.5rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  text-align: right;
+  background-color: #f3f4f6;
+
+  @media (max-width: 768px) {
     width: 100%;
-    max-height: ${$isOpen ? "500px" : "0"};
-    opacity: ${$isOpen ? "1" : "0"};
-    overflow: hidden;
-    visibility: ${$isOpen ? "visible" : "hidden"};
-    transform: translateY(${$isOpen ? "0" : "-90px"});
-  `}
-  
+    padding: 0.5rem 1rem;
+  }
+
+  &:focus {
+    outline: none;
+    ring: 1px solid #000;
+  }
+`;
+
+const NavContainer = styled.nav`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1.5rem;
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const NavList = styled.ul<{
+  $data: HeaderSection;
+  $previewWidth: "sm" | "default";
+}>`
+  display: ${(props) => (props.$previewWidth === "sm" ? "none" : "flex")};
+  align-items: center;
+  flex-direction: row-reverse;
+  gap: ${(props) => props.$data.blocks.setting?.gap || "1"}px;
 `;
 
 const NavItem = styled(Link)<{
   $data: HeaderSection;
-  $previewWidth: "sm" | "default";
-  $preview: "sm" | "default";
 }>`
-  color: ${(props) => props.$data.blocks.setting.itemColor || "#000"};
-  font-size: ${(props) =>
-    props.$preview === "sm"
-      ? `16`
-      : `${props.$data.blocks.setting.itemFontSize || "14"}`}px;
+  color: ${(props) => props.$data.blocks.setting?.itemColor || "#000"};
+  font-size: ${(props) => props.$data.blocks.setting?.itemFontSize || "14"}px;
   font-weight: ${(props) =>
-    props.$data.blocks.setting.itemFontWeight || "normal"};
-  padding: ${(props) =>
-    props.$preview === "sm" ? "0.25rem 0.5rem" : "0.5rem 1rem"};
-  transition: all 0.2s ease-in-out;
-  &:hover {
-    color: ${(props) => props.$data.blocks.setting.itemHoverColor || "#000"};
-  }
+    props.$data.blocks.setting?.itemFontWeight || "normal"};
+  cursor: pointer;
+  text-align: right;
 
+  &:hover {
+    color: ${(props) =>
+      props.$data.blocks.setting?.itemHoverColor || "#FCA311"};
+  }
+`;
+const MegaMenu = styled.div`
+  position: absolute;
+  direction: rtl;
+  top: 100%;
+  right: 0;
+  width: 50rem;
+  background: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 50;
+  display: flex;
+  flex-direction: row;
 `;
 
-const MenuButton = styled.button<{
-  $data: HeaderSection;
+const NavItemWrapper = styled.li`
+  position: relative;
+
+  &:hover ${MegaMenu} {
+    opacity: 1;
+    visibility: visible;
+  }
+`;
+
+const MegaMenuTitle = styled.h3`
+  font-weight: 400;
+  color: #374151;
+  text-wrap: nowrap;
+  font-size: 1rem;
+`;
+const CategoryIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const ActionButtons = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  width: 100%;
+  @media (max-width: 768px) {
+    justify-content: space-between;
+  }
+`;
+
+const LoginButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid #e4e4e4;
+  border-radius: 0.5rem;
+  color: #6c757d;
+  text-wrap: nowrap;
+`;
+
+const LocationButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  background-color: #fff7ed;
+  color: #ea580c;
+  border-radius: 0.5rem;
+`;
+const MobileMenuButton = styled.button<{
+  $isOpen: boolean;
   $previewWidth: "sm" | "default";
-  $preview: "sm" | "default";
 }>`
-  display: ${({ $preview }) => ($preview === "sm" ? "block" : "none")};
+  display: ${(props) => (props.$previewWidth === "sm" ? "block" : "none")};ظ
   background: none;
   border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-
-  color: ${(props) => props.$data.blocks.setting.itemColor || "#000"};
-  position: absolute;
-  top: ${(props) => (props.$preview === "sm" ? "top-1" : "top-5")};
+  padding: 10px;
   z-index: 100;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;
+
+const MobileMenu = styled.div<{
+  $isOpen: boolean;
+  $previewWidth: "sm" | "default";
+}>`
+  display: ${(props) =>
+    props.$previewWidth === "sm" && props.$isOpen ? "inline" : "none"};
+  position: ${(props) =>
+    props.$previewWidth === "sm" && props.$isOpen ? "absolute" : "none"};
+  top: ${(props) =>
+    props.$previewWidth === "sm" && props.$isOpen ? "0" : "-100%"};
+  right: ${(props) =>
+    props.$previewWidth === "sm" && props.$isOpen ? "0" : "-100%"};
+  width: ${(props) =>
+    props.$previewWidth === "sm" && props.$isOpen ? "80%" : "0"};
+  height: ${(props) =>
+    props.$previewWidth === "sm" && props.$isOpen ? "100vh" : "0"};
+
+  @media (max-width: 768px) {
+    display: inline;
+    position: fixed;
+    top: 0;
+    right: ${(props) => (props.$isOpen ? "0" : "-100%")};
+    width: 80%;
+    height: 100vh;
+    background: white;
+    transition: right 0.3s ease-in-out;
+    box-shadow: ${(props) =>
+      props.$isOpen ? "-5px 0 15px rgba(0,0,0,0.1)" : "none"};
+    z-index: 99;
+  }
+`;
+
+const MobileNavList = styled.div`
+  padding: 80px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+`;
+
+const MobileNavItem = styled(NavItem)`
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 16px;
+  width: 100%;
+  display: block;
+`;
+
+const Overlay = styled.div<{ $isOpen: boolean }>`
+  display: none;
+  opacity: ${(props) => (props.$isOpen ? "1" : "0")};
+  @media (max-width: 768px) {
+    display: ${(props) => (props.$isOpen ? "block" : "none")};
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 98;
+  }
 `;
 
 const Header: React.FC<HeaderProps> = ({
@@ -158,11 +349,17 @@ const Header: React.FC<HeaderProps> = ({
   selectedComponent,
   previewWidth,
 }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
+  const [hoverd, setHoverd] = useState(0);
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+    // Prevent body scroll when menu is open
+    document.body.style.overflow = !isMenuOpen ? "hidden" : "unset";
+  };
 
   useEffect(() => {
-    if (window.innerWidth <= 425) {
+    if (window.innerWidth <= 424) {
       setPreview("sm");
     } else {
       setPreview(previewWidth);
@@ -182,6 +379,7 @@ const Header: React.FC<HeaderProps> = ({
     //  ("Section data is missing or invalid.");
     return null;
   }
+  console.log(hoverd);
 
   const { blocks } = sectionData;
 
@@ -199,66 +397,187 @@ const Header: React.FC<HeaderProps> = ({
     return null;
   }
 
-  const { imageLogo, imageAlt, links } = blocks;
-
   return (
-    <SectionHeader
-      $preview={preview}
-      $previewWidth={previewWidth}
+    <HeaderWrapper
       $data={sectionData}
-      className={`w-full  ${
-        previewWidth === "default" ? "w-[75%]" : "w-[28%]"
-      } px-1 transition-all duration-150  ease-in-out ${
-        selectedComponent === "sectionHeader" ? "border-4 border-blue-500" : ""
-      }`}
-      dir="rtl"
+      $previewWidth={previewWidth}
       onClick={() => setSelectedComponent("sectionHeader")}
+      className={`transition-all  duration-150 ease-in-out  ${
+        selectedComponent === "sectionHeader"
+          ? "border-4 border-blue-500 rounded-2xl shadow-lg "
+          : ""
+      }`}
     >
       {"sectionHeader" === selectedComponent ? (
         <div className="absolute w-fit -top-5 -left-1 z-10 flex ">
-          <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
+          <div className="bg-blue-500 py-1 px-4 rounded-lg text-white">
             {"sectionHeader"}
           </div>
         </div>
       ) : null}
-      <LogoContainer $data={sectionData}>
-        <Logo
-          $preview={preview}
-          className={`${isOpen ? "hidden" : "block"}`}
-          $data={sectionData}
-          $previewWidth={previewWidth}
-          src={imageLogo || "/assets/images/logo.webp"}
-          alt={imageAlt}
-        />
+      <AnnouncementBar $data={sectionData}>
+        {sectionData.blocks.setting?.announcementText ||
+          "ارسال رایگان برای خرید‌های بالای ۵۰۰ هزار تومان!"}
+      </AnnouncementBar>
 
-        <MenuButton
-          $preview={preview}
-          className="absolute top-0 left-1 p-5"
-          $data={sectionData}
-          $previewWidth={previewWidth}
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? "X" : "☰"}
-        </MenuButton>
-      </LogoContainer>
-      <NavItems
-        $isOpen={isOpen}
-        $previewWidth={previewWidth}
-        $preview={preview}
-      >
-        {links?.map((link, index) => (
-          <NavItem
-            $preview={preview}
+      <MainSection>
+        <div className="flex flex-row-reverse items-center gap-6 justify-end w-full">
+          <LogoContainer>
+            <Logo
+              $data={sectionData}
+              src={sectionData.blocks.imageLogo || "/assets/images/logo.webp"}
+              alt={sectionData.blocks.imageAlt}
+            />
+          </LogoContainer>
+
+          <SearchContainer className="">
+            <SearchInput placeholder="جستجو" />
+            <Search
+              style={{
+                position: "absolute",
+                left: "12px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                color: "#6b7280",
+              }}
+              size={20}
+            />
+          </SearchContainer>
+        </div>
+
+        <ActionButtons>
+          <div className="flex items-center gap-2">
+            <ShoppingCart className="text-gray-400" size={24} />
+            <LoginButton>
+              <User size={18} /> ورود | ثبت‌نام
+            </LoginButton>
+          </div>
+
+          <MobileMenuButton
+            $isOpen={isMenuOpen}
             $previewWidth={previewWidth}
-            $data={sectionData}
-            key={index}
-            href={link.url}
+            onClick={toggleMenu}
           >
-            {link.name}
-          </NavItem>
-        ))}
-      </NavItems>
-    </SectionHeader>
+            {isMenuOpen ? (
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className={`${isMenuOpen ? "opacity-0" : "block"}`}
+              >
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </MobileMenuButton>
+        </ActionButtons>
+      </MainSection>
+
+      <NavContainer>
+        <LocationButton>
+          <MapPin size={16} /> شهر خود را انتخاب کنید
+        </LocationButton>
+        <NavList $previewWidth={previewWidth} $data={sectionData}>
+          {sectionData.blocks.links?.map((link, index) => (
+            <NavItemWrapper key={index}>
+              <NavItem href={link.url} $data={sectionData}>
+                {link.name === "دسته‌بندی کالاها" ? (
+                  <CategoryIconWrapper>
+                    {link.name}
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                  </CategoryIconWrapper>
+                ) : (
+                  link.name
+                )}
+              </NavItem>
+              {link.megaMenu && (
+                <div className="flex items-center gap-4">
+                  <MegaMenu>
+                    <div className="flex flex-col">
+                      {link.megaMenu.map(
+                        (category: { title: string }, idx: number) => (
+                          <div
+                            className={`border-l ${
+                              idx === hoverd ? "bg-gray-100" : ""
+                            } group py-4 text-right px-6  hover:bg-gray-100 border-gray-200`}
+                            key={idx}
+                            onMouseEnter={() => {
+                              setHoverd(idx);
+                            }}
+                          >
+                            <MegaMenuTitle className="group-hover:font-bold text-right">
+                              {category.title}
+                            </MegaMenuTitle>
+                          </div>
+                        )
+                      )}
+                    </div>
+                    <ItemsContainer $data={sectionData}>
+                      {sectionData.blocks.links[0].megaMenu[hoverd]?.items.map(
+                        (item: { name: string }, idx: number) => (
+                          <div
+                            key={idx}
+                            className=" group py-2 text-center px-2 hover:border-b border-red-500 "
+                          >
+                            {item.name}
+                          </div>
+                        )
+                      )}
+                    </ItemsContainer>
+                  </MegaMenu>
+                </div>
+              )}
+            </NavItemWrapper>
+          ))}
+        </NavList>
+      </NavContainer>
+
+      <MobileMenu
+        className="z-[9999] transition-all duration-300 bg-white"
+        $previewWidth={previewWidth}
+        $isOpen={isMenuOpen}
+      >
+        <MobileNavList>
+          <LocationButton style={{ width: "100%", marginBottom: "20px" }}>
+            <MapPin size={16} /> شهر خود را انتخاب کنید
+          </LocationButton>
+          {sectionData.blocks.links?.map((link, index) => (
+            <MobileNavItem
+              key={index}
+              href={link.url}
+              $data={sectionData}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              {link.name}
+            </MobileNavItem>
+          ))}
+        </MobileNavList>
+      </MobileMenu>
+
+      <Overlay $isOpen={isMenuOpen} onClick={() => setIsMenuOpen(false)} />
+    </HeaderWrapper>
   );
 };
 

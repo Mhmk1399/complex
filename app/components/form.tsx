@@ -154,8 +154,15 @@ export const Form = ({
   const [isOpen, setIsOpen] = useState(false);
   const [showOrdersMenu, setShowOrdersMenu] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isFormOpen, setIsFormOpen] = useState(true); // New state for form visibility
-  console.log(selectedComponent);
+  const [isFormOpen, setIsFormOpen] = useState(false); //  state for form visibility
+
+  // Open form when a component is selected
+  useEffect(() => {
+    if (selectedComponent) {
+      setIsFormOpen(true);
+    }
+  }, [selectedComponent]);
+
   // Setup sensors for dnd-kit
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -633,7 +640,7 @@ export const Form = ({
       <Toaster />
       <div>
         <motion.button
-          className=" absolute top-1 right-4 z-[9999] hidden text-lg animate-pulse lg:block py-1 text-black rounded-lg hover:bg-slate-500 transition-colors hover:bg-gray-100/10 backdrop-blur-sm"
+          className=" absolute top-1 right-4 z-[9999] hidden text-lg animate-pulse lg:block py-1 text-black rounded-lg hover:bg-slate-100 transition-colors hover:bg-gray-100/10 backdrop-blur-sm"
           onClick={() => setIsFormOpen(!isFormOpen)}
         >
           <motion.div
