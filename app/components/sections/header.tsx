@@ -13,9 +13,7 @@ import { Search, ShoppingCart, User, MapPin } from "lucide-react";
 interface HeaderProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
-  actualName: string;
   selectedComponent: string;
-  setLayout: React.Dispatch<React.SetStateAction<Layout>>;
   previewWidth: "sm" | "default";
 }
 
@@ -352,6 +350,8 @@ const Header: React.FC<HeaderProps> = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
   const [hoverd, setHoverd] = useState(0);
+
+  console.log("preview", preview);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
     // Prevent body scroll when menu is open

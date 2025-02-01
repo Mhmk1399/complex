@@ -3,7 +3,7 @@ import { Interpolation } from "styled-components";
 import { Substitute } from "styled-components/dist/types";
 
 export interface Link {
-  megaMenu: any;
+  megaMenu: MegaMenuItem[];
   name: string;
   url: string;
 }
@@ -162,11 +162,11 @@ interface MegaMenuItem {
   }[];
 }
 
-interface LinkHeader {
-  name: string;
-  url: string;
-  megaMenu?: MegaMenuItem[];
-}
+// interface LinkHeader {
+//   name: string;
+//   url: string;
+//   megaMenu?: MegaMenuItem[];
+// }
 export interface BannerBlockSettings extends CommonSettings {
   descriptionColor: string;
   descriptionFontSize: string;

@@ -40,12 +40,14 @@ export const Main = () => {
   // const [loading, setLoading] = useState(true);
   const [layout, setLayout] = useState<Layout>(Data);
   const [activeMode, setActiveMode] = useState<"sm" | "lg">("sm");
-  const [previewWidth, setPreviewWidth] = useState<"sm" | "default">("default");
+  const [previewWidth, setPreviewWidth] = useState<"sm" | "default">("sm");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState<string>("");
   const [activeElement, setActiveElement] = useState<
     "save" | "delete" | "preview" | "sitePreview" | "addRoute" | "changeRoute"
   >("save");
+  const [isFormOpen, setIsFormOpen] = useState(false); //  state for form visibility
+
 
   const [saveStatus, setSaveStatus] = useState<
     "idle" | "saving" | "saved" | "error"
@@ -641,6 +643,7 @@ export const Main = () => {
           setLayout={setLayout}
           previewWidth={previewWidth}
           setPreviewWidth={setPreviewWidth}
+          isFormOpen={isFormOpen}
         />
         <Form
           selectedComponent={selectedComponent}
@@ -648,6 +651,8 @@ export const Main = () => {
           layout={layout}
           orders={orders}
           setOrders={setOrders}
+          isFormOpen={isFormOpen}
+          setIsFormOpen={setIsFormOpen}
         />
       </div>
       {/* )} */}

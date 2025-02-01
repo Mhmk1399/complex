@@ -24,7 +24,6 @@ import { OfferRow } from "./sections/offerRow";
 import { Brands } from "./sections/brands";
 import { ProductsRow } from "./sections/productsRow";
 
-
 // First update the PreviewProps interface
 interface PreviewProps {
   layout: Layout;
@@ -34,6 +33,7 @@ interface PreviewProps {
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
   previewWidth: "sm" | "default";
   setPreviewWidth: (mode: "sm" | "default") => void;
+  isFormOpen: boolean;
 }
 
 // Then use it in the component
@@ -44,6 +44,7 @@ export const Preview: React.FC<PreviewProps> = ({
   selectedComponent,
   setLayout,
   previewWidth,
+  isFormOpen,
 }) => {
   const componentMap = {
     Header,
@@ -68,23 +69,24 @@ export const Preview: React.FC<PreviewProps> = ({
     SlideBanner,
     OfferRow,
     Brands,
-    ProductsRow
+    ProductsRow,
   };
-console.log(selectedComponent);
+  console.log(previewWidth);
+
 
   return (
     <div>
       <div
         className={`flex relative justify-center ${
-          previewWidth === "default" ? "flex-col" : "mr-64"
+          previewWidth === "default" ? "flex-col" : ""
         }`}
       >
         {/* Add this wrapper */}
         <div
           data-preview-container="true"
-          className={`h-[85vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide mx-auto ${
-            previewWidth === "sm" ? "w-[425px]" : "w-full lg:w-[98%]"
-          }`}
+          className={`h-[85vh] relative border border-gray-200 rounded-lg overflow-y-auto scrollbar-hide  ${
+            previewWidth === "sm" && "w-[425px]"
+          } ${previewWidth === "default" && isFormOpen && "w-[75%] mr-auto ml-2"} `}
         >
           <Header
             setSelectedComponent={setSelectedComponent}
@@ -92,9 +94,8 @@ console.log(selectedComponent);
             selectedComponent={selectedComponent}
             previewWidth={previewWidth} // Pass the state to components
           />
-          
+
           <div className="grid grid-cols-1 mt-32">
-          
             {orders.map((componentName, index) => {
               const baseComponentName = componentName.split("-")[0];
               const Component =
