@@ -88,37 +88,11 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
     right: 0,
   });
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
-  const [isFormOpen, setIsFormOpen] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
-  const [inputText, setInputText] = useState("");
-  const [dropdownAnimation, setDropdownAnimation] = useState(false);
-  const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false);
 
-  const handleLiveInput = async (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
 
-    if (inputText.trim()) {
-      const response = await fetch("/api/update-json", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ inputText }),
-      });
 
-      const updatedJson = await response.json();
-
-      // Update the form data with new JSON
-      setUserInputData((prevData) => ({
-        ...prevData,
-        blocks: updatedJson.children.sections[0].blocks,
-        setting: updatedJson.children.sections[0].setting,
-      }));
-    }
-  };
   useEffect(() => {
     const initialData = {
       ...defaultValues,
@@ -213,7 +187,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
     const newLink: Link = {
       name: urlToPersianNameMap[selectedUrl] || "نامشخص", // Default to "نامشخص" if no mapping is found
       url: selectedUrl,
-      megaMenu: null, // or provide a default value for megaMenu
+      megaMenu: [], // or provide a default value for megaMenu
     };
 
     setUserInputData((prev: HeaderSection) => ({
