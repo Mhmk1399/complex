@@ -56,8 +56,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
-  const [inputText, setInputText] = useState("");
-  const [dropdownAnimation, setDropdownAnimation] = useState(false);
+
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
@@ -123,50 +122,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
     }
   };
 
-  const handleLiveInput = async (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
-    console.log("Sending input:", inputText);
 
-    if (!inputText?.trim()) {
-      console.log("Input is empty");
-      return;
-    }
-
-    try {
-      const requestBody = {
-        userInput: inputText,
-      };
-      console.log("Request body:", requestBody);
-
-      const response = await fetch("/api/handleInputs", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      const result = await response.json();
-      console.log("API response:", result);
-
-      if (result.success && result.data) {
-        setUserInputData((prevData) => ({
-          ...prevData,
-          blocks: {
-            ...prevData.blocks,
-            setting: {
-              ...prevData.blocks.setting,
-              ...result.data.blocks.setting,
-            },
-          },
-        }));
-      }
-    } catch (error) {
-      console.error("Fetch error:", error);
-    }
-  };
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {

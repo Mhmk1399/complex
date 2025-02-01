@@ -3,7 +3,6 @@ import { Compiler } from "../compiler";
 import { Layout, StorySection } from "@/lib/types";
 import React from "react";
 import MarginPaddingEditor from "../sections/editor";
-import { FaImage, FaPalette, FaArrowsAlt } from "react-icons/fa";
 import { TabButtons } from "../tabButtons";
 
 interface StoryFormProps {
