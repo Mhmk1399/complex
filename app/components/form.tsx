@@ -131,6 +131,8 @@ interface FormProps {
   layout: Layout;
   orders: string[];
   setOrders: React.Dispatch<React.SetStateAction<string[]>>;
+  isFormOpen: boolean;
+  setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const Form = ({
@@ -139,12 +141,13 @@ export const Form = ({
   layout,
   orders,
   setOrders,
+  isFormOpen,
+  setIsFormOpen,
 }: FormProps) => {
   const [userInputData, setUserInputData] = useState<FormData>({} as FormData);
   const [isOpen, setIsOpen] = useState(false);
   const [showOrdersMenu, setShowOrdersMenu] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isFormOpen, setIsFormOpen] = useState(false); //  state for form visibility
 
   // Open form when a component is selected
   useEffect(() => {
@@ -991,14 +994,14 @@ export const Form = ({
                     duration: 0.5,
                     ease: "easeInOut",
                   }}
-                  className="fixed right-0 hidden lg:block top-0 h-screen w-80 ease-in-out bg-[#f8f9fa] border-l-2  border-white/40 rounded backdrop-blur-sm overflow-y-auto"
+                  className="fixed right-0 hidden lg:block top-0 h-screen w-80 ease-in-out bg-white/60 border-l-2  border-white/40 rounded backdrop-blur-lg overflow-y-auto"
                   style={{ zIndex: 1000 }}
                 >
                   {ordersButton}
 
                   <div className="p-2 ">
                     <h2
-                      className="text-xl mb-2 font-bold text-[#343a40] pr-4"
+                      className="text-xl mb-2 border-b-2 text-right pb-2 w-fit border-blue-500 font-bold text-[#343a40] ml-auto"
                       dir="rtl"
                     >
                       {showOrdersMenu ? "ترتیب سکشن" : "تنظیمات سکشن"}

@@ -13,9 +13,7 @@ import { Search, ShoppingCart, User, MapPin } from "lucide-react";
 interface HeaderProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
-  actualName: string;
   selectedComponent: string;
-  setLayout: React.Dispatch<React.SetStateAction<Layout>>;
   previewWidth: "sm" | "default";
 }
 
