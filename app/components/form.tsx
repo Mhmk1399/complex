@@ -89,6 +89,7 @@ import {
   SlideBannerSection,
   OfferRowSection,
   BrandsSection,
+  ProductRowSection,
 } from "@/lib/types";
 import { MultiColumnForm } from "./forms/multiColomnForm";
 import { SlideForm } from "./forms/slideForm";
@@ -106,6 +107,7 @@ import GalleryForm from "./forms/galleryForm";
 import { SlideBannerForm } from "./forms/slideBannerForm";
 import { OfferRowForm } from "./forms/offerRowForm";
 import { BrandsForm } from "./forms/brandsForm";
+import { ProductRowForm } from "./forms/productRowForm";
 type FormData =
   | HeaderSection
   | MultiRowSection
@@ -123,6 +125,14 @@ type FormData =
   | ProductSection
   | DetailPageSection
   | BlogDetailSection
+  | StorySection
+  | SpecialOfferSection
+  | GallerySection
+  | SlideBannerSection
+  | OfferRowSection
+  | BrandsSection
+  | CollectionSection
+  |ProductRowSection
   | BlogSection;
 
 interface FormProps {
@@ -563,11 +573,23 @@ export const Form = ({
             selectedComponent={selectedComponent}
           />
         );
+      case "ProductsRow":
+        return (
+          <ProductRowForm
+            setUserInputData={
+              setUserInputData as React.Dispatch<
+                React.SetStateAction<ProductRowSection>
+              >
+            }
+            userInputData={userInputData as ProductRowSection}
+            layout={layout}
+            selectedComponent={selectedComponent}
+          />
+        );
       default:
         return <div>یک سکشن را برای تنظیمات کلیک کنید...</div>;
     }
   };
-
   const ordersButton = (
     <div
       className="flex bg-transparent flex-row mr-4  rounded-2xl mx-2 justify-end items-end mt-9  

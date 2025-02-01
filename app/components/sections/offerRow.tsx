@@ -125,7 +125,7 @@ console.warn(previewWidth);
     },
     
   ];
-
+  console.log(selectedComponent)
   return (
     <OffersContainer
       $data={sectionData}
