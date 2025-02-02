@@ -1039,6 +1039,8 @@ export interface BlogDetailBlockSetting extends CommonSettings {
   readTimeColor: string;
   readTimeFontSize: string;
   sectionSpacing: string;
+  metaColor: string;
+  metaFontSize: string;
 }
 
 export interface BlogDetailSection {

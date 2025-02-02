@@ -201,7 +201,7 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
           <TabButtons onTabChange={handleTabChange} />
 
           {isContentOpen && (
-            <div className="p-4 border-t border-gray-100 animate-slideDown">
+            <div className="p-4 animate-slideDown">
               <div className="rounded-lg">
                 <label htmlFor="" className="block mb-2 font-bold">
                   متن سربرگ
@@ -222,8 +222,8 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
               </div>
               <br />
               <label htmlFor="" className="block mb-2 font-bold">
-                 ردیف ها
-                </label>
+                ردیف ها
+              </label>
               {userInputData?.blocks?.map((block, index) => (
                 <div
                   key={index}
@@ -625,16 +625,16 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
 
           {/* Dropdown Content */}
           {isSpacingOpen && (
-          <div className="p-4 border-t border-gray-100 animate-slideDown">
-            <div className="bg-gray-50 rounded-lg flex items-center justify-center">
-              <MarginPaddingEditor
-                margin={margin}
-                padding={padding}
-                onChange={handleUpdate}
-              />
+            <div className="p-4 border-t border-gray-100 animate-slideDown">
+              <div className="bg-gray-50 rounded-lg flex items-center justify-center">
+                <MarginPaddingEditor
+                  margin={margin}
+                  padding={padding}
+                  onChange={handleUpdate}
+                />
+              </div>
             </div>
-          </div>
-        )}
+          )}
         </div>
       )}
     </>

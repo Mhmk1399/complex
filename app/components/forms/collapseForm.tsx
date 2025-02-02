@@ -226,7 +226,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
           <TabButtons onTabChange={handleTabChange} />
 
           {isContentOpen && (
-            <div className="p-4 border-t border-gray-100">
+            <div className="p-4 ">
               <div className=" rounded-lg">
                 <label htmlFor="" className="block mb-2 font-bold">
                   متن سربرگ

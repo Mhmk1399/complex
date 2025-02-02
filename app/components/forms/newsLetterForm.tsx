@@ -171,7 +171,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
       {/* Content Section */}
 
       {isContentOpen && (
-        <div className="p-4 border-t border-gray-100 space-y-4 animate-slideDown">
+        <div className="p-4 space-y-4 animate-slideDown">
           <div className=" rounded-lg">
             <label className="block mb-2 text-sm font-bold text-gray-700">
               سربرگ

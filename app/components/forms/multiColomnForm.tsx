@@ -225,7 +225,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
       {/* Main Heading Settings */}
 
       {isContentOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
+        <div className="p-4 animate-slideDown">
           <div className=" rounded-lg">
             <label htmlFor="" className="block mb-2 font-bold">
               متن سربرگ

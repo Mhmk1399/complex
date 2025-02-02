@@ -68,7 +68,6 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
   const [isImagesOpen, setIsImagesOpen] = useState(false);
 
   console.log(setIsImagesOpen);
-  
 
   const handleUpdate = (
     type: "margin" | "padding",

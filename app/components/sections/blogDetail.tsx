@@ -1,8 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {  BlogDetailSection, Layout } from "@/lib/types";
+import { BlogDetailSection, Layout } from "@/lib/types";
 import Image from "next/image";
 import { styled } from "styled-components";
+import { Delete } from "../C-D";
 
 interface BlogDetailProps {
   blogId: string;
@@ -53,11 +54,19 @@ const SectionBlogDetail = styled.div<{
     overflow: hidden;
     margin-bottom: 24px;
   }
+  .blog-meta {
+    color: ${(props) => props.$data?.setting?.metaColor || "#2C2C2C"};
+    font-size: ${(props) => props.$data?.setting?.metaFontSize || 16}px;
+    margin-bottom: 12px;
+  }
 `;
 
 const BlogDetail: React.FC<BlogDetailProps> = ({
+  setSelectedComponent,
   layout,
   actualName,
+  selectedComponent,
+  setLayout,
 }) => {
   const [blog, setBlog] = useState<BlogData>({
     title: "",
@@ -67,6 +76,7 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
     createdAt: "",
   });
   const [loading, setLoading] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -74,7 +84,7 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
         const response = await fetch(`/api/blogs`); // Fetching blog with ID 1
         const data = await response.json();
         console.log("data", data);
-        
+
         setBlog(data.blogs[0]);
       } catch (error) {
         console.error("Error fetching blog:", error);
@@ -94,16 +104,63 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
     return null;
   }
 
-
-
   if (loading) return <div>Loading...</div>;
   if (!blog) return <div>Blog not found</div>;
 
   return (
     <SectionBlogDetail
       $data={sectionData}
+      onClick={() => setSelectedComponent(actualName)}
+      className={`transition-all duration-150 ease-in-out relative ${
+        selectedComponent === actualName
+          ? "border-4 border-blue-500 rounded-lg shadow-lg "
+          : ""
+      }`}
     >
-     
+      {showDeleteModal && (
+        <div className="fixed inset-0  bg-black bg-opacity-70 z-50 flex items-center justify-center ">
+          <div className="bg-white p-8 rounded-lg">
+            <h3 className="text-lg font-bold mb-4">
+              مطمئن هستید؟
+              <span className="text-blue-400 font-bold mx-1">
+                {actualName}
+              </span>{" "}
+              آیا از حذف{" "}
+            </h3>
+            <div className="flex gap-4 justify-end">
+              <button
+                className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                انصراف
+              </button>
+              <button
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 "
+                onClick={() => {
+                  Delete(actualName, layout, setLayout);
+                  setShowDeleteModal(false);
+                }}
+              >
+                حذف
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {actualName === selectedComponent ? (
+        <div className="absolute w-fit -top-5 -left-1 z-10 flex">
+          <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
+            {actualName}
+          </div>
+          <button
+            className="font-extrabold text-xl hover:bg-blue-500 bg-red-500 pb-1 rounded-r-lg px-3 text-white transform transition-all ease-in-out duration-300"
+            onClick={() => setShowDeleteModal(true)}
+          >
+            x
+          </button>
+        </div>
+      ) : null}
       <div className="cover-image flex mx-auto items-center">
         <Image
           src={blog.coverImage ? blog.coverImage : "/assets/images/pro3.jpg"}
@@ -113,13 +170,27 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
         />
       </div>
 
-      <h1 className="blog-title mb-6 mr-2">{blog.title}</h1>
+      <h1 className="blog-title text-right">{blog.title}</h1>
 
-      <div className="blog-content mr-2">{blog.content}</div>
-      <div className="flex flex-col items-center gap-4 mb-8 mr-2">
-        <span>{blog.author}نویسنده : </span>
-        <span>{blog.createdAt}</span>
+      <div className="blog-meta text-right">
+        <span>{blog.author} : نویسنده </span>
+        <br />
+        <span>
+          تاریخ :
+          {blog.createdAt &&
+            new Intl.DateTimeFormat("fa-IR", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              calendar: "persian",
+            }).format(new Date(blog.createdAt))}
+        </span>
       </div>
+
+      <div
+        className="blog-content text-right"
+        dangerouslySetInnerHTML={{ __html: blog.content }}
+      />
     </SectionBlogDetail>
   );
 };

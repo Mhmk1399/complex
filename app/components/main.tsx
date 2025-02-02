@@ -58,6 +58,10 @@ export const Main = () => {
     "home",
     "about",
     "contact",
+    "store",
+    "BlogList",
+    "BlogDetail",
+    "DetailPage",
   ]);
 // useEffect(() => {
 //   const handleWindowSize = () => {
