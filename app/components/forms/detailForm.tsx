@@ -66,33 +66,8 @@ export const DetailForm: React.FC<DetailFormProps> = ({
   });
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
-  const [inputText, setInputText] = useState("");
-  const [dropdownAnimation, setDropdownAnimation] = useState(false);
 
-  const handleLiveInput = async (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
-
-    if (inputText.trim()) {
-      const response = await fetch("/api/update-json", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ inputText }),
-      });
-
-      const updatedJson = await response.json();
-
-      // Update the form data with new JSON
-      setUserInputData((prevData) => ({
-        ...prevData,
-        blocks: updatedJson.children.sections[0].blocks,
-        setting: updatedJson.children.sections[0].setting,
-      }));
-    }
-  };
+  
 
   const handleUpdate = (
     type: "margin" | "padding",

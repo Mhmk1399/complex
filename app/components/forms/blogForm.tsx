@@ -47,7 +47,6 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
   selectedComponent,
 }) => {
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
-  const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
 
   const [margin, setMargin] = React.useState<BoxValues>({
@@ -127,13 +126,10 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
   };
 
   const handleTabChange = (tab: "content" | "style" | "spacing") => {
-    setIsContentOpen(tab === "content");
     setIsStyleSettingsOpen(tab === "style");
     setIsSpacingOpen(tab === "spacing");
   };
-  useEffect(() => {
-    setIsContentOpen(true);
-  }, []);
+ 
 
   return (
     <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
