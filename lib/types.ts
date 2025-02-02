@@ -807,6 +807,7 @@ export interface ProductCardData {
   updatedAt?: string;
   storeId?: string;
   _id?: string;
+  properties?: string | null;
 }
 export interface ProductCardSetting {
   cardBorderRadius?: string;
@@ -885,6 +886,12 @@ export interface DetailPageSettings extends CommonSettings {
   marginLeft: string;
   marginRight: string;
   backgroundColor: string;
+  boxRadius: string;
+  backgroundColorBox: string;
+  propertyKeyColor: string;
+  propertyValueColor: string;
+  propertyBg: string;
+  
 }
 
 export interface DetailPageSection {

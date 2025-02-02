@@ -4,6 +4,7 @@ import { Layout, DetailPageSection } from "@/lib/types";
 import React from "react";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
+//
 
 interface DetailFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<DetailPageSection>>;
@@ -66,8 +67,6 @@ export const DetailForm: React.FC<DetailFormProps> = ({
   });
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
-
-  
 
   const handleUpdate = (
     type: "margin" | "padding",
@@ -196,8 +195,8 @@ export const DetailForm: React.FC<DetailFormProps> = ({
                 <input
                   type="range"
                   name="imageRadius"
-                  min={50}
-                  max={500}
+                  min={0}
+                  max={300}
                   value={userInputData?.setting?.imageRadius || "40"}
                   onChange={handleSettingChange}
                   className="w-full p-2 border rounded"
@@ -219,7 +218,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
                 <ColorInput
                   label="رنگ نام محصول"
                   name="productNameColor"
-                  value={userInputData?.setting?.productNameColor || "#FCA311"}
+                  value={userInputData?.setting?.productNameColor || "#000"}
                   onChange={handleSettingChange}
                 />
               </div>
@@ -399,6 +398,63 @@ export const DetailForm: React.FC<DetailFormProps> = ({
                 value={userInputData?.setting?.backgroundColor || "#FCA311"}
                 onChange={handleSettingChange}
               />
+            </div>
+          </div>
+          <div className="mb-6 rounded-lg">
+            <h4 className="font-semibold mb-3 text-sky-700">تنظیمات باکس</h4>
+            <div>
+              <ColorInput
+                label="رنگ پس زمینه باکس"
+                name="backgroundColorBox"
+                value={userInputData?.setting?.backgroundColorBox || "#FCA311"}
+                onChange={handleSettingChange}
+              />
+            </div>
+            <div>
+              <label className="block mb-1">گردی گوشه‌های باکس</label>
+              <input
+                type="range"
+                name="boxRadius"
+                min={0}
+                max={300}
+                value={userInputData?.setting?.boxRadius || "40"}
+                onChange={handleSettingChange}
+                className="w-full p-2 border rounded"
+              />
+              <div className="text-sm text-gray-700">
+                {userInputData?.setting?.imageRadius}px
+              </div>
+            </div>
+          </div>
+          <div className="mb-6 rounded-lg">
+            <h4 className="font-semibold mb-3 text-sky-700">
+              تنظیمات ویژگی ها
+            </h4>
+            <div>
+              <ColorInput
+                label="رنگ عنوان ویژگی"
+                name="propertyKeyColor"
+                value={userInputData?.setting?.propertyKeyColor || "#FCA311"}
+                onChange={handleSettingChange}
+              />
+            </div>
+            <div>
+              <ColorInput
+                label="رنگ متن ویژگی"
+                name="propertyValueColor"
+                value={userInputData?.setting?.propertyValueColor || "#FCA311"}
+                onChange={handleSettingChange}
+              />
+             
+            </div>
+            <div>
+              <ColorInput
+                label="رنگ پس زمینه ویژگی"
+                name="propertyBg"
+                value={userInputData?.setting?.propertyBg || "#FCA311"}
+                onChange={handleSettingChange}
+              />
+             
             </div>
           </div>
         </>
