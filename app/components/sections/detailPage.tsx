@@ -17,6 +17,7 @@ interface DetailPageProps {
   actualName: string;
   selectedComponent: string;
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
+  previewWidth: "sm" | "default";
 }
 const defaultProperties = [
   { key: "نوع اتصال", value: "بی‌سیم", tooltip: "بی‌سیم " },
@@ -27,6 +28,7 @@ const defaultProperties = [
 ];
 const SectionDetailPage = styled.div<{
   $data: DetailPageSection;
+  $preview: "sm" | "default";
 }>`
   padding-top: ${(props) => props.$data?.setting?.paddingTop || 0}px;
   padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || 0}px;
@@ -36,6 +38,7 @@ const SectionDetailPage = styled.div<{
   margin-bottom: ${(props) => props.$data?.setting?.marginBottom || 0}px;
   background-color: ${(props) =>
     props.$data?.setting?.backgroundColor || "#ffffff"};
+  height: ${(props) => (props.$preview === "sm" ? "50rem" : "full")};
 
   .product-name {
     color: ${(props) => props.$data?.setting?.productNameColor || "#000000"};
@@ -131,8 +134,18 @@ const DetailPage: React.FC<DetailPageProps> = ({
   actualName,
   selectedComponent,
   setLayout,
+  previewWidth,
 }) => {
+  const [preview, setPreview] = useState(previewWidth);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  useEffect(() => {
+    if (window.innerWidth <= 425) {
+      setPreview("sm");
+    } else {
+      setPreview(previewWidth);
+    }
+  }, [previewWidth]);
   const [product, setProduct] = useState<ProductCardData>({
     images: [],
     name: "",
@@ -201,8 +214,9 @@ const DetailPage: React.FC<DetailPageProps> = ({
 
   return (
     <SectionDetailPage
+      $preview={preview}
       $data={sectionData}
-      className={` mx-2 rounded-lg px-4 py-8 transition-all duration-150 ease-in-out relative ${
+      className={` mx-2 rounded-lg px-4 min-h-fit py-8 transition-all duration-150 ease-in-out relative ${
         selectedComponent === actualName
           ? "border-4 border-blue-500 rounded-lg shadow-lg "
           : ""
@@ -266,7 +280,11 @@ const DetailPage: React.FC<DetailPageProps> = ({
           </div>
 
           <div className="relative">
-            <div className="flex gap-3 overflow-x-auto py-2 px-1">
+            <div
+              className={`flex gap-3 py-2  ${
+                preview === "sm" ? "min-w-full" : " overflow-x-auto"
+              }`}
+            >
               {Array.isArray(product.images) && product.images.length > 0
                 ? product.images.map((image: ProductImage, index: number) => (
                     <div
@@ -320,7 +338,11 @@ const DetailPage: React.FC<DetailPageProps> = ({
         </div>
 
         {/* Product Info Section */}
-        <div className="space-y-8 lg:-mr-64">
+        <div
+          className={`space-y-8 lg:-mr-64 ${
+            preview === "sm" ? "mt-96 pr-16" : ""
+          }`}
+        >
           <h1 className="product-name">{product.name || "نام محصول"}</h1>
           <p className="product-description text-wrap">
             {product.description ||
@@ -350,7 +372,13 @@ const DetailPage: React.FC<DetailPageProps> = ({
             </div>
           </div>
 
-          <div className="lg:absolute lg:left-8 lg:-top-2 lg:w-[300px]">
+          <div
+            className={` ${
+              preview === "sm"
+                ? "   "
+                : "lg:absolute lg:left-8 lg:-top-2 lg:w-[300px]"
+            } `}
+          >
             <div className="bg-white bg-box rounded-xl shadow-lg p-6 space-y-3">
               {/* Price and Discount Section */}
               <div className="flex flex-col gap-2">
