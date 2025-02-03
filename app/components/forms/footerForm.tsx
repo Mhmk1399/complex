@@ -68,8 +68,6 @@ export const FooterForm: React.FC<FooterFormProps> = ({
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
 
- 
-
   const handleUpdate = (
     type: "margin" | "padding",
     updatedValues: BoxValues
@@ -251,7 +249,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
               <input
                 type="text"
                 name="telegramLink"
-                value={userInputData?.blocks?.telegramLink ?? "لینک پیام رسان"}
+                value={userInputData?.blocks?.telegramLink ?? "لینک  تلگرام"}
                 onChange={handleBlockChange}
                 className="w-full p-2 border rounded"
               />
@@ -475,6 +473,77 @@ export const FooterForm: React.FC<FooterFormProps> = ({
             >
               افزودن لینک جدید
             </button>
+          </div>
+          {/* Trust Icons Settings */}
+          <h4 className="font-semibold mb-2 ">تنظیمات آیکون‌های اعتماد</h4>
+          <div className="grid md:grid-cols-1 gap-4 p-4">
+            <ColorInput
+              label="رنگ پس زمینه آیکون"
+              name="trustIconBackground"
+              value={
+                userInputData?.blocks?.setting?.trustIconBackground ?? "#f8f9fa"
+              }
+              onChange={handleBlockSettingChange}
+            />
+
+            <ColorInput
+              label="رنگ آیکون"
+              name="trustIconColor"
+              value={userInputData?.blocks?.setting?.trustIconColor ?? "red"}
+              onChange={handleBlockSettingChange}
+            />
+
+            <div>
+              <label className="block mb-1">سایز متن آیتم‌ها</label>
+              <input
+                type="range"
+                name="trustItemSize"
+                min="12"
+                max="24"
+                step="1"
+                value={userInputData?.blocks?.setting?.trustItemSize ?? "14"}
+                onChange={handleBlockSettingChange}
+                className="w-full"
+              />
+              <div className="text-gray-500 text-sm">
+                {userInputData?.blocks?.setting?.trustItemSize ?? "14px"}
+              </div>
+            </div>
+
+            <ColorInput
+              label="رنگ متن آیتم‌ها"
+              name="trustItemColor"
+              value={userInputData?.blocks?.setting?.trustItemColor ?? "#333"}
+              onChange={handleBlockSettingChange}
+            />
+
+            <ColorInput
+              label="رنگ دکمه اسکرول"
+              name="scrollButtonColor"
+              value={
+                userInputData?.blocks?.setting?.scrollButtonColor ?? "#000"
+              }
+              onChange={handleBlockSettingChange}
+            />
+
+            <ColorInput
+              label="پس زمینه دکمه اسکرول"
+              name="scrollButtonBg"
+              value={
+                userInputData?.blocks?.setting?.scrollButtonBg ?? "transparent"
+              }
+              onChange={handleBlockSettingChange}
+            />
+          </div>
+          {/* End of Trust Icons Settings */}
+          <h4 className="font-semibold mb-2 ">تنظیمات لینک دسته بندی</h4>
+          <div className="grid md:grid-cols-1 gap-4 p-4">
+            <ColorInput
+              label="تنظیمات لینک دسته بندی"
+              name="categoryColor"
+              value={userInputData?.blocks?.setting?.categoryColor ?? "#333"}
+              onChange={handleBlockSettingChange}
+            />
           </div>
         </>
       )}
