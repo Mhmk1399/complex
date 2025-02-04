@@ -48,7 +48,6 @@ export const Main = () => {
   >("save");
   const [isFormOpen, setIsFormOpen] = useState(false); //  state for form visibility
 
-
   const [saveStatus, setSaveStatus] = useState<
     "idle" | "saving" | "saved" | "error"
   >("idle");
@@ -63,24 +62,24 @@ export const Main = () => {
     "BlogDetail",
     "DetailPage",
   ]);
-// useEffect(() => {
-//   const handleWindowSize = () => {
-//     if (window.innerWidth <= 425) {
-//       setPreviewWidth("sm");
-//     } else {
-//       setPreviewWidth("default");
-//     }
-//   };
+  // useEffect(() => {
+  //   const handleWindowSize = () => {
+  //     if (window.innerWidth <= 425) {
+  //       setPreviewWidth("sm");
+  //     } else {
+  //       setPreviewWidth("default");
+  //     }
+  //   };
 
-//   // Initial check on mount
-//   handleWindowSize();
+  //   // Initial check on mount
+  //   handleWindowSize();
 
-//   // Optional: Add listener for window resize
-//   window.addEventListener('resize', handleWindowSize);
+  //   // Optional: Add listener for window resize
+  //   window.addEventListener('resize', handleWindowSize);
 
-//   // Cleanup
-//   return () => window.removeEventListener('resize', handleWindowSize);
-// }, []);
+  //   // Cleanup
+  //   return () => window.removeEventListener('resize', handleWindowSize);
+  // }, []);
 
   const handleAddRoute = async ({ name }: { name: string }) => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -452,7 +451,7 @@ export const Main = () => {
           </div>
         </div>
       ) : ( */}
-      <div className="min-h-screen">
+      <div className="min-h-screen ">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -468,11 +467,11 @@ export const Main = () => {
             e.currentTarget.style.setProperty("--x", `${x}%`);
             e.currentTarget.style.setProperty("--y", `${y}%`);
           }}
-          className="sticky  top-0 z-50 backdrop-blur-2xl bg-gradient-to-br  from-[#e4e4e4]/60 to-[#fff]
+          className="sticky  top-0 z-50 backdrop-blur-2xl bg-gradient-to-br py-2 lg:py-0.5  from-[#e4e4e4]/60 to-[#fff]
              shadow-sm cursor-pointer"
         >
-          <div className="max-w-ull mx-auto px-4 sm:px-6 lg:px-8 ">
-            <div className="flex lg:flex-row flex-wrap items-center mt-3 md:mt-0 justify-center gap-x-0 md:py-2 md:gap-x-1 lg:py-0  sm:space-y-0">
+          <div className=" mx-auto px-4 sm:px-6 lg:px-8 ">
+            <div className="flex lg:flex-row flex-wrap items-center  md:mt-0 justify-center gap-x-0 md:py-2 md:gap-x-1 lg:py-0  sm:space-y-0">
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 className="md:flex hidden  items-center border-r pr-2 border-gray-300 absolute left-2 gap-2 px-3 py-0.5"
