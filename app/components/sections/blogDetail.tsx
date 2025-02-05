@@ -83,7 +83,6 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
       try {
         const response = await fetch(`/api/blogs`); // Fetching blog with ID 1
         const data = await response.json();
-        console.log("data", data);
 
         setBlog(data.blogs[0]);
       } catch (error) {

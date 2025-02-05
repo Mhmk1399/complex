@@ -84,7 +84,6 @@ export const Main = () => {
   const handleAddRoute = async ({ name }: { name: string }) => {
     const urlParams = new URLSearchParams(window.location.search);
     const repoUrl = urlParams.get("repoUrl");
-    console.log(setData);
     if (routes.includes(name)) {
       toast.error("Route already exists!", { autoClose: 3000 });
       return;
@@ -106,7 +105,8 @@ export const Main = () => {
       }
 
       const result = await response.json();
-      console.log("Route added successfully:", result);
+      console.log("Route added:", result);
+      
       fetchRoutes(); // Fetch updated routes
       toast.success("مسیر جدید ساخته شد", {
         autoClose: 3000,
@@ -152,7 +152,6 @@ export const Main = () => {
       .then((data) => {
         if (data) {
           setActiveRoutes(data);
-          console.log("Route data:", data);
         }
       })
       .catch((error) => {
@@ -224,14 +223,12 @@ export const Main = () => {
         },
       });
 
-      console.log("API Response status:", response.status);
       if (!response.ok) {
         console.log("Server error:", response.statusText);
         return;
       }
 
       const data = await response.json();
-      console.log("Fetched layout data:", data);
       setData(data);
       setLayout(data);
       return data;
@@ -241,7 +238,6 @@ export const Main = () => {
   };
 
   useEffect(() => {
-    console.log("Route or mode changed:", { selectedRoute, activeMode });
     sendTokenToServer();
   }, [activeMode, selectedRoute]);
   useEffect(() => {
@@ -251,11 +247,7 @@ export const Main = () => {
   const [newRouteName, setNewRouteName] = useState("");
   useEffect(() => {
     const currentLayoutData = activeMode === "sm" ? smData : Data;
-    console.log("Current layout data:", {
-      activeMode,
-      selectedRoute,
-      currentLayoutData: activeMode === "sm" ? smData : Data,
-    });
+   
     const routeConfigs = {
       about: About.children as AboutChildren,
       contact: Contact.children as AboutChildren,
@@ -325,12 +317,6 @@ export const Main = () => {
   const fetchRoutes = async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const repoUrl = urlParams.get("repoUrl");
-    console.log("Fetching data with params:", {
-      repoUrl,
-      selectedRoute,
-      activeMode,
-    });
-
     try {
       const response = await fetch("/api/route-handler", {
         method: "GET",

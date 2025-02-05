@@ -13,8 +13,10 @@ import {
   FaArrowUp,
 } from "react-icons/fa";
 interface Category {
-  id: number;
+  _id: string;
   name: string;
+  children: string[];
+  storeId: string;
   slug: string;
 }
 
@@ -266,26 +268,58 @@ const CategoryGrid = styled.div<{
   $previewWidth: "sm" | "default";
 }>`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: ${(props) => (props.$preview === "sm" ? "10px" : "20px")};
-  // width: 100%;
-  max-width: 400px;
-  padding: ${(props) => (props.$preview === "sm" ? "10px" : "10px")};
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  width: 100%;
+  max-width: 1200px;
+  padding: ${(props) => (props.$preview === "sm" ? "10px" : "20px")};
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
 `;
 
-const CategoryLink = styled(Link)<{
+const ParentCategoryLink = styled(Link)<{
   $data: FooterSection;
 }>`
   color: ${(props) => props.$data?.blocks?.setting?.categoryColor || "#000000"};
-  font-weight: bold;
-  padding: 2px;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 8px;
   text-align: center;
-  border-radius: 4px;
+  border-radius: 6px;
   transition: all 0.3s ease;
-  font-size: 14px;
+  background-color: ${(props) =>
+    props.$data?.blocks?.setting?.categoryBg || "#fff"};
+  border: 1px solid #e9ecef;
 
   &:hover {
     opacity: 0.7;
+    transform: translateX(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+`;
+
+const ChildCategoryLink = styled(Link)<{
+  $data: FooterSection;
+}>`
+  color: ${(props) => props.$data?.blocks?.setting?.categoryColor || "#666666"};
+  font-weight: 500;
+  font-size: 14px;
+  padding: 4px 12px;
+  text-align: right;
+  transition: all 0.3s ease;
+
+  &:hover {
+    opacity: 0.8;
+    transform: translateX(2px);
   }
 `;
 
@@ -310,20 +344,57 @@ const Footer: React.FC<FooterProps> = ({
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("/api/categories");
+        const response = await fetch("/api/category");
         const data = await response.json();
+
         setCategories(data);
       } catch (error) {
         console.log("Error fetching categories", error);
-        
+
         // Default categories if fetch fails
         setCategories([
-          { id: 1, name: "لپ تاپ", slug: "laptops" },
-          { id: 2, name: "موبایل", slug: "phones" },
-          { id: 3, name: "تبلت", slug: "tablets" },
-          { id: 4, name: "ساعت هوشمند", slug: "smartwatches" },
-          { id: 5, name: "هدفون", slug: "headphones" },
-          { id: 6, name: "لوازم جانبی", slug: "accessories" },
+          {
+            _id: "1",
+            name: "لپ تاپ",
+            children: [],
+            storeId: "",
+            slug: "laptops",
+          },
+          {
+            _id: "2",
+            name: "موبایل",
+            children: [],
+            storeId: "",
+            slug: "phones",
+          },
+          {
+            _id: "3",
+            name: "تبلت",
+            children: [],
+            storeId: "",
+            slug: "tablets",
+          },
+          {
+            _id: "4",
+            name: "ساعت هوشمند",
+            children: [],
+            storeId: "",
+            slug: "smartwatches",
+          },
+          {
+            _id: "5",
+            name: "هدفون",
+            children: [],
+            storeId: "",
+            slug: "headphones",
+          },
+          {
+            _id: "6",
+            name: "لوازم جانبی",
+            children: [],
+            storeId: "",
+            slug: "accessories",
+          },
         ]);
       }
     };
@@ -445,7 +516,7 @@ const Footer: React.FC<FooterProps> = ({
         ))}
       </TrustIconsContainer>
 
-      <div className="flex flex-col-reverse gap-6 lg:flex-row-reverse items-center justify-around w-full ">
+      <div className="flex flex-col-reverse gap-6 lg:flex-col-reverse items-center justify-center w-full ">
         <SocialLinks $preview={preview} $previewWidth={previewWidth}>
           <Link
             href={instagramLink ? instagramLink : "/"}
@@ -489,15 +560,35 @@ const Footer: React.FC<FooterProps> = ({
         </SocialLinks>
 
         <CategoryGrid $preview={preview} $previewWidth={previewWidth}>
-          {categories.map((category) => (
-            <CategoryLink
-              key={category.id}
-              href={`/category/${category.slug}`}
-              $data={sectionData}
-            >
-              {category.name}
-            </CategoryLink>
-          ))}
+          {categories
+            .filter((category) => category.children.length > 0)
+            .map((category) => (
+              <div key={category._id} className="flex flex-col gap-3">
+                <ParentCategoryLink
+                  href={`/category/${category.name}`}
+                  $data={sectionData}
+                >
+                  {category.name}
+                </ParentCategoryLink>
+
+                <div className="flex flex-col gap-2 pr-4 border-r-2 border-gray-200">
+                  {category.children.map((childId, index) => {
+                    const childCategory = categories.find(
+                      (cat) => cat._id === childId
+                    );
+                    return childCategory ? (
+                      <ChildCategoryLink
+                        key={`${category._id}-${childId}-${index}`}
+                        href={`/category/${childCategory.name}`}
+                        $data={sectionData}
+                      >
+                        {childCategory.name}
+                      </ChildCategoryLink>
+                    ) : null;
+                  })}
+                </div>
+              </div>
+            ))}
         </CategoryGrid>
       </div>
 

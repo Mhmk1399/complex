@@ -71,7 +71,6 @@ export const Preview: React.FC<PreviewProps> = ({
     Brands,
     ProductsRow,
   };
-  console.log(previewWidth);
 
 
   return (

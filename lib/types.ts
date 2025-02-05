@@ -129,6 +129,10 @@ export interface HeaderBlockSettings extends CommonSettings {
   announcementFontSize: string;
   bgColor: string;
   gap: string;
+  megaMenuBg: string;
+  categoryItemColor: string;
+  categoryItemSize: string;
+  categoryItemHoverColor:string;
 }
 export interface HeaderBlock {
   imageLogo: string;
@@ -437,6 +441,7 @@ export interface FooterBlockSetting {
   logoHeight: string;
   logoRadius: string;
   backgroundColor: string;
+  categoryBg: string;
 }
 
 export interface FooterLink {

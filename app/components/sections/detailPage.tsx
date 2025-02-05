@@ -168,7 +168,6 @@ const DetailPage: React.FC<DetailPageProps> = ({
           throw new Error(await response.text());
         }
         const data = await response.json();
-        console.log(data);
         setProduct(data);
 
         setSelectedImage(data.images[0]?.imageSrc || "");
@@ -183,7 +182,6 @@ const DetailPage: React.FC<DetailPageProps> = ({
       fetchProductDetails();
     }
   }, [productId]);
-  console.log(product);
 
   if (loading) {
     return (

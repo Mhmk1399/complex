@@ -33,7 +33,7 @@ interface ProductData {
   images?: {
     imageSrc: string;
     imageAlt: string;
-  }
+  };
   btnText: string;
 }
 
@@ -42,17 +42,13 @@ const CollectionWrapper = styled.div<{
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
-  padding-top: ${(props) => props.$setting?.paddingTop}px;
-  padding-bottom: ${(props) => props.$setting?.paddingBottom}px;
-  padding-right: ${(props) => props.$setting?.paddingRight}px;
-  padding-left: ${(props) => props.$setting?.paddingLeft}px;
-  margin-top: ${(props) => props.$setting?.marginTop}px;
-  margin-bottom: ${(props) => props.$setting?.marginBottom}px;
+  padding: ${(props) => props.$setting?.paddingTop}px;
   background-color: ${(props) => props.$setting?.backgroundColor};
-  // width: ${(props) => (props.$preview === "sm" ? "425px" : "100%")};
-  margin-left: 10px;
-  margin-right: 10px;
-  border-radius: 12px;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(8px);
+  margin: 20px;
+  transition: all 0.4s ease-in-out;
 `;
 const Heading = styled.h2<{ $setting: CollectionBlockSetting }>`
   color: ${(props) => props.$setting?.headingColor};
@@ -81,52 +77,93 @@ const ProductCard = styled.div<{
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
-  background: ${(props) => props.$setting.cardBackground};
-  border-radius: ${(props) => props.$setting.cardBorderRadius}px;
+  position: relative;
+  border-radius: ${(props) => props.$setting?.imageRadius}px;
   overflow: hidden;
-  transition: transform 0.3s ease;
-  display: flex;
-  flex-direction: column;
   cursor: pointer;
+
   &:hover {
-    transform: scale(0.99);
+    img {
+      transform: scale(1.05);
+    }
+
+    .product-info {
+      transform: translateY(0);
+      opacity: 1;
+    }
   }
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  // width: ${(props) => (props.$isLarge ? "100%" : "calc(49% - 100px)")};
 `;
 
 const ProductImage = styled.img<{ $setting: CollectionBlockSetting }>`
   width: 100%;
-  height: 300px;
+  height: 350px;
   object-fit: cover;
-  border-radius: ${(props) => props.$setting.imageRadius}px;
+  transition: transform 0.5s ease;
+  border-radius: ${(props) => props.$setting?.imageRadius}px;
 `;
 
 const ProductInfo = styled.div`
-  padding: 16px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 25px;
+  &:hover {
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.7) 0%,
+      rgba(0, 0, 0, 0.4) 50%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
+  transform: translateY(20%);
+  opacity: 1;
+  transition: all 0.4s ease-in-out;
+  class: product-info;
 `;
 
 const ProductName = styled.h3<{ $setting: CollectionBlockSetting }>`
-  color: ${(props) => props.$setting.productNameColor};
+  color: ${(props) => props.$setting?.productNameColor};
+  margin-bottom: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  transform: translateY(10px);
+  transition: transform 0.3s ease;
+
+  ${ProductInfo}:hover & {
+    transform: translateY(0);
+  }
 `;
 
 const ProductPrice = styled.div<{ $setting: CollectionBlockSetting }>`
-  color: ${(props) => props.$setting.priceColor};
+  color: ${(props) => props.$setting?.priceColor};
   font-size: 16px;
-  margin: 8px 0;
+  margin: 12px 0;
+  transform: translateY(10px);
+  transition: transform 0.3s ease 0.1s;
+
+  ${ProductInfo}:hover & {
+    transform: translateY(0);
+  }
 `;
 
 const BuyButton = styled(Link)<{ $setting: CollectionBlockSetting }>`
-  background: ${(props) => props.$setting.btnBackgroundColor};
-  color: ${(props) => props.$setting.btnTextColor};
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 100%;
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: ${(props) => props.$setting?.btnBackgroundColor};
+  color: ${(props) => props.$setting?.btnTextColor};
+  border-radius: 8px;
+  font-weight: 500;
+  transform: translateY(10px);
+  transition: all 0.3s ease 0.2s;
 
   &:hover {
-    opacity: 0.9;
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+  }
+
+  ${ProductInfo}:hover & {
+    transform: translateY(0);
   }
 `;
 
@@ -180,8 +217,7 @@ export const Collection: React.FC<CollectionProps> = ({
           setFilteredProducts(formattedProducts);
         }
       } catch (error) {
-         console.log("Error fetching collections:", error);
-        
+        console.log("Error fetching collections:", error);
       }
     };
 
@@ -196,7 +232,7 @@ export const Collection: React.FC<CollectionProps> = ({
     );
     if (selectedCollectionData) {
       const formattedProducts = selectedCollectionData.products.map(
-        (product: CollectionData['products'][0]) => ({
+        (product: CollectionData["products"][0]) => ({
           _id: product._id,
           name: product.name,
           price: product.price,
@@ -215,7 +251,6 @@ export const Collection: React.FC<CollectionProps> = ({
   if (!sectionData?.setting) {
     return null; // or return a loading state/placeholder
   }
-
 
   return (
     <>
@@ -310,28 +345,25 @@ export const Collection: React.FC<CollectionProps> = ({
               key={product._id}
               $setting={sectionData.setting}
               $isLarge={index === 0}
-              style={
-                index === 0
-                  ? { height: "100%" }
-                  : { height: "calc(50% - 10px)" }
-              }
+              // style={
+              //   index === 0
+              //     ? { height: "100%" }
+              //     : { height: "calc(50% - 10px)" }
+              // }
             >
               <ProductImage
                 src={product.images?.imageSrc || "/assets/images/pro2.jpg"}
                 alt={product.images?.imageAlt}
                 $setting={sectionData.setting}
               />
-              <ProductInfo>
+              <ProductInfo className="mb-8 transition-all duration-300 ease-in-out">
                 <ProductName $setting={sectionData.setting}>
                   {product.name || "نام محصول"}
                 </ProductName>
                 <ProductPrice $setting={sectionData.setting}>
                   {product.price || "قیمت محصول"}
                 </ProductPrice>
-                <BuyButton
-                  href={`/detailpages/${product._id}`}
-                  $setting={sectionData.setting}
-                >
+                <BuyButton href="#" $setting={sectionData.setting}>
                   {product.btnText}
                 </BuyButton>
               </ProductInfo>

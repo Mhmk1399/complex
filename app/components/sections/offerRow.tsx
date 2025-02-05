@@ -81,7 +81,6 @@ export const OfferRow: React.FC<OfferRowProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
-  console.warn(previewWidth);
 
   useEffect(() => {
     if (window.innerWidth <= 424) {
@@ -96,7 +95,6 @@ export const OfferRow: React.FC<OfferRowProps> = ({
   ) as OfferRowSection;
 
   if (!sectionData) return null;
-  console.log("sectionData", sectionData);
 
   const offers = [
     {
@@ -124,7 +122,6 @@ export const OfferRow: React.FC<OfferRowProps> = ({
       discount: 15,
     },
   ];
-  console.log(selectedComponent);
   return (
     <OffersContainer
       $data={sectionData}

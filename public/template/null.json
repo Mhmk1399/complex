@@ -127,7 +127,11 @@
           "announcementTextColor": "#ffffff",
           "announcementFontSize": "14",
           "bgColor": "#ffffff",
-          "gap": "10"
+          "gap": "10",
+          "megaMenuBg": "#ffffff",
+          "categoryItemColor":"ffffff",
+          "categoryItemSize": "14",
+          "categoryItemHoverColor": "#000000"
         }
       },
       "setting": {
@@ -1065,7 +1069,8 @@
           "linkColor": "#0077b6",
           "logoWidth": "80",
           "logoHeight": "80",
-          "logoRadius": "10"
+          "logoRadius": "10",
+          "categoryBg": "#ffffff"
         },
         "text": "سربرگ قسمت پایین سایت",
         "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",

@@ -114,7 +114,6 @@ export const FooterForm: React.FC<FooterFormProps> = ({
   }, [userInputData?.setting]);
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent);
-    console.log(initialData);
     if (initialData) {
       // Ensure a default setting object exists
       setUserInputData({
@@ -542,6 +541,14 @@ export const FooterForm: React.FC<FooterFormProps> = ({
               label="تنظیمات لینک دسته بندی"
               name="categoryColor"
               value={userInputData?.blocks?.setting?.categoryColor ?? "#333"}
+              onChange={handleBlockSettingChange}
+            />
+          </div>
+          <div className="grid md:grid-cols-1 gap-4 p-4">
+            <ColorInput
+              label="تنظیمات پس زمینه لینک دسته بندی"
+              name="categoryBg"
+              value={userInputData?.blocks?.setting?.categoryBg ?? "#333"}
               onChange={handleBlockSettingChange}
             />
           </div>

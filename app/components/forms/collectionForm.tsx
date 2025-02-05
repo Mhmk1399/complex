@@ -253,12 +253,6 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
                   onChange={handleSettingChange}
                 />
                 <ColorInput
-                  label="رنگ پس زمینه کارت"
-                  name="cardBackground"
-                  value={userInputData?.setting?.cardBackground || "#ffffff"}
-                  onChange={handleSettingChange}
-                />
-                <ColorInput
                   label="رنگ نام محصول"
                   name="productNameColor"
                   value={userInputData?.setting?.productNameColor || "#000000"}
@@ -301,21 +295,7 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
             </div> */}
 
               {/* Border Radius Settings */}
-              <div className="mt-4 p-4">
-                <label className="block mb-1">گردی گوشه‌های کارت</label>
-                <input
-                  type="range"
-                  name="cardBorderRadius"
-                  min="0"
-                  max="30"
-                  value={parseInt(
-                    userInputData?.setting?.cardBorderRadius || "8"
-                  )}
-                  onChange={handleSettingChange}
-                  className="w-full"
-                />
-              </div>
-
+           
               <div className=" p-4">
                 <label className="block mb-1">گردی گوشه‌های تصویر</label>
                 <input

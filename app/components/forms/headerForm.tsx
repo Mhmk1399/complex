@@ -401,6 +401,45 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
               value={userInputData?.blocks?.setting?.bgColor?.toLocaleString()}
               onChange={handleBlockSettingChange}
             />
+            <ColorInput
+              label="رنگ پس زمینه دسته بندی"
+              name="megaMenuBg"
+              value={userInputData?.blocks?.setting?.megaMenuBg?.toLocaleString()}
+              onChange={handleBlockSettingChange}
+            />
+            <ColorInput
+              label="رنگ آیتم های دسته بندی"
+              name="categoryItemColor"
+              value={
+                userInputData?.blocks?.setting?.categoryItemColor || "#374151"
+              }
+              onChange={handleBlockSettingChange}
+            />
+
+            <ColorInput
+              label="رنگ هاور آیتم های دسته بندی"
+              name="categoryItemHoverColor"
+              value={
+                userInputData?.blocks?.setting?.categoryItemHoverColor ||
+                "#2563eb"
+              }
+              onChange={handleBlockSettingChange}
+            />
+            <div>
+              <label className="block mb-2">سایز متن آیتم های دسته بندی</label>
+              <input
+                type="range"
+                name="categoryItemSize"
+                min="12"
+                max="24"
+                value={userInputData?.blocks?.setting?.categoryItemSize || "14"}
+                onChange={handleBlockSettingChange}
+                className="w-full"
+              />
+              <span className="text-sm text-gray-500">
+                {userInputData?.blocks?.setting?.categoryItemSize || "14"}px
+              </span>
+            </div>
 
             <ColorInput
               label="رنک آیتم ها"
