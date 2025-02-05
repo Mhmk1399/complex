@@ -81,7 +81,6 @@ export const Main = () => {
   const handleAddRoute = async ({ name }: { name: string }) => {
     const urlParams = new URLSearchParams(window.location.search);
     const repoUrl = urlParams.get("repoUrl");
-    console.log(setData);
     if (routes.includes(name)) {
       toast.error("Route already exists!", { autoClose: 3000 });
       return;

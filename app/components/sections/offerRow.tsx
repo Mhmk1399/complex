@@ -1,6 +1,6 @@
 "use client";
 import styled from "styled-components";
-import { Layout, OfferRowSection } from "@/lib/types";
+import { Layout, OfferRowSection, SpecialOfferSection } from "@/lib/types";
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { Delete } from "../C-D";
@@ -81,6 +81,8 @@ export const OfferRow: React.FC<OfferRowProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
+  const [categories, setCategories] = useState([]);
+
   console.warn(previewWidth);
 
   useEffect(() => {
@@ -90,7 +92,58 @@ export const OfferRow: React.FC<OfferRowProps> = ({
       setPreview(previewWidth);
     }
   }, [previewWidth]);
+  
+  useEffect(() => {
+    const fetchSpecialOffers = async () => {
+      try {
+        const sectionData = layout?.sections?.children?.sections.find(
+          (section) => section.type === actualName
+        ) as SpecialOfferSection;
+        
+        const collectionId = sectionData?.blocks?.setting?.selectedCollection;
+        if (!collectionId) return;
 
+        const response = await fetch(`/api/collections/id`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'collectionId': collectionId
+          }
+        });
+        const data = await response.json();
+        setCategories(data.collections[0].products);
+      } catch (error) {
+        console.error("Error fetching special offers:", error);
+      }
+    };
+
+    fetchSpecialOffers();
+  }, [actualName, layout]);
+   
+  useEffect(() => {
+    const fetchSpecialOffers = async () => {
+      try {
+        const sectionData = layout?.sections?.children?.sections.find(
+          (section) => section.type === actualName
+        ) as SpecialOfferSection;
+        
+        const collectionId = sectionData?.blocks?.setting?.selectedCollection;
+        if (!collectionId) return;
+
+        const response = await fetch(`/api/collections/id`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'collectionId': collectionId
+          }
+        });
+        const data = await response.json();
+        setCategories(data.collections[0].products);
+      } catch (error) {
+        console.error("Error fetching special offers:", error);
+      }
+    };
+
+    fetchSpecialOffers();
+  }, []);
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
   ) as OfferRowSection;
@@ -98,44 +151,19 @@ export const OfferRow: React.FC<OfferRowProps> = ({
   if (!sectionData) return null;
   console.log("sectionData", sectionData);
 
-  const offers = [
-    {
-      id: 2,
-      title: "برنج طبیعت",
-      imageUrl: "/assets/images/pro1.jpg",
-      price: 450000,
-      originalPrice: 520000,
-      discount: 15,
-    },
-    {
-      id: 3,
-      title: "برنج طبیعت",
-      imageUrl: "/assets/images/pro1.jpg",
-      price: 450000,
-      originalPrice: 520000,
-      discount: 15,
-    },
-    {
-      id: 4,
-      title: "برنج طبیعت",
-      imageUrl: "/assets/images/pro1.jpg",
-      price: 450000,
-      originalPrice: 520000,
-      discount: 15,
-    },
-  ];
-  console.log(selectedComponent);
+ console.log(categories)
+
+  console.log(selectedComponent)
   return (
     <OffersContainer
       $data={sectionData}
       $preview={preview}
       $previewWidth={previewWidth}
       onClick={() => setSelectedComponent(actualName)}
-      className={`transition-all duration-150 ease-in-out relative  ${
-        selectedComponent === actualName
+      className={`transition-all duration-150 ease-in-out relative  ${selectedComponent === actualName
           ? "border-4 border-blue-500 rounded-2xl shadow-lg"
           : ""
-      }`}
+        }`}
     >
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center">
@@ -184,9 +212,8 @@ export const OfferRow: React.FC<OfferRowProps> = ({
         ref={containerRef}
         $data={sectionData}
         $previewWidth={previewWidth}
-        className={`flex gap-4 flex-col  ${
-          preview === "sm" ? "flex-col" : "flex-row lg:flex-row"
-        }`}
+        className={`flex gap-4 flex-col  ${preview === "sm" ? "flex-col" : "flex-row lg:flex-row"
+          }`}
       >
         <div className="flex items-center justify-start gap-4 flex-row">
           <Image
@@ -204,50 +231,30 @@ export const OfferRow: React.FC<OfferRowProps> = ({
             {sectionData.blocks.setting?.titleText}
           </h2>
         </div>
-        <div
-          className={`flex  mr-2 items-center justify-center gap-2 lg:gap-4`}
-        >
-          {offers.map((offer) => (
-            <OfferItem key={offer.id} className="relative">
-              <Image
-                src={offer.imageUrl}
-                alt={offer.title}
-                width={60}
-                height={60}
-                className="offer-image rounded-full"
-              />
-              <span className="discount-badge bottom-0 text-xs absolute">
-                {offer.discount}%
+        <div className={`flex mr-2 items-center justify-center gap-2 lg:gap-4`}>
+          {categories.length > 0 ? (
+            categories.map((category: { _id: string; images: {imageSrc:string;imageAlt:string}; title: string; discount?: number }) => (
+              <OfferItem key={category._id} className="relative">
+                <Image
+                  src={category.images.imageSrc}
+                  alt={category.images.imageAlt}
+                  width={60}
+                  height={60}
+                  className="offer-image rounded-full"
+                />
+                {category.discount && (
+                  <span className="discount-badge bottom-0 text-xs absolute">
+                    {category.discount}%
+                  </span>
+                )}
+              </OfferItem>
+            ))
+          ) : (
+            <div className="flex flex-row items-center justify-start lg:justify-end w-full">
+              <span className="text-gray-500 text-xl justify-center text-center w-full flex lg:gap-5">
+                لطفا یک دسته‌بندی را انتخاب کنید
               </span>
-            </OfferItem>
-          ))}
-          {
-            <button className=" bg-white lg:hidden rounded-full w-fit px-4 py-2 my-4 lg:mr-8 text-lg items-center">
-              {" "}
-              <svg
-                fill={sectionData.blocks.setting?.buttonTextColor || "#000000"}
-                xmlns="http://www3.org/2000/svg"
-                height="24px"
-                viewBox="0 -960 960 960"
-                width="24px"
-              >
-                <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
-              </svg>
-            </button>
-          }
-          {previewWidth === "sm" && (
-            <button className=" bg-white  rounded-full w-fit px-4 py-2 my-4 lg:mr-8 text-lg items-center">
-              {" "}
-              <svg
-                fill={sectionData.blocks.setting?.buttonTextColor || "#000000"}
-                xmlns="http://www3.org/2000/svg"
-                height="24px"
-                viewBox="0 -960 960 960"
-                width="24px"
-              >
-                <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
-              </svg>
-            </button>
+            </div>
           )}
         </div>
         {previewWidth == "default" && (

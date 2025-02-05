@@ -40,7 +40,6 @@ export async function GET(request: Request) {
         await connect();
         
         const products = await Products.find({ storeId: storeIdConfig}); // Filter products by storeId
-        console.log(products);
         
         return NextResponse.json({ products }, { status: 200 });
       } catch (error) {

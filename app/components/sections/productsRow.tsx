@@ -133,12 +133,33 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
         const data = await response.json();
         setCollectionProducts(data.collections[0].products);
       } catch (error) {
-        console.error("Error fetching collection products:", error);
+        console.log("Error fetching collection products:", error);
       }
     };
   
     fetchCollectionProducts();
-  }, [actualName, layout]);
+  }, [ layout]);
+  useEffect(() => {
+    const fetchCollectionProducts = async () => {
+      try {
+        const collectionId = sectionData?.blocks?.setting?.selectedCollection;
+        if (!collectionId) return;
+  
+        const response = await fetch(`/api/collections/id`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'collectionId': collectionId
+          }
+        });
+        const data = await response.json();
+        setCollectionProducts(data.collections[0].products);
+      } catch (error) {
+        console.log("Error fetching collection products:", error);
+      }
+    };
+  
+    fetchCollectionProducts();
+  }, [ ]);
   if (!layout || !layout.sections) {
     return null;
   }

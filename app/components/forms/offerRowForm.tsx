@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Compiler } from "../compiler";
 import { Layout, OfferRowSection } from "@/lib/types";
+import React from "react";
 import MarginPaddingEditor from "../sections/editor";
-// import debounce from "lodash/debounce"; // Add this import
+import { Compiler } from "../compiler";
 import { TabButtons } from "../tabButtons";
 
 interface OfferRowFormProps {
@@ -19,36 +19,16 @@ interface BoxValues {
   right: number;
 }
 
-const ColorInput = ({
-  label,
-  name,
-  value,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <div className="p-3  rounded-lg">
-    <label className="block mb-1">{label}</label>
-    <input
-      type="color"
-      id={name}
-      name={name}
-      value={value || "#000000"}
-      onChange={onChange}
-      className="border p-0.5 rounded-full"
-    />
-  </div>
-);
-
 export const OfferRowForm: React.FC<OfferRowFormProps> = ({
   setUserInputData,
   userInputData,
   layout,
   selectedComponent,
 }) => {
+  const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
+  const [isContentOpen, setIsContentOpen] = useState(false);
+  const [isSpacingOpen, setIsSpacingOpen] = useState(false);
+  const [collections, setCollections] = useState<Array<{name: string, _id: string}>>([]);
   const [margin, setMargin] = useState<BoxValues>({
     top: 0,
     bottom: 0,
@@ -61,17 +41,27 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
     left: 0,
     right: 0,
   });
-  const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
-  const [isContentOpen, setIsContentOpen] = useState(false);
-  const [isSpacingOpen, setIsSpacingOpen] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
-
-  console.log(isUpdating);
 
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
   }, []);
+
+  useEffect(() => {
+    setMargin({
+      top: Number(userInputData?.setting?.marginTop) || 0,
+      bottom: Number(userInputData?.setting?.marginBottom) || 0,
+      right: Number(userInputData?.setting?.marginRight) || 0,
+      left: Number(userInputData?.setting?.marginLeft) || 0,
+    });
+
+    setPadding({
+      top: Number(userInputData?.setting?.paddingTop) || 0,
+      bottom: Number(userInputData?.setting?.paddingBottom) || 0,
+      right: Number(userInputData?.setting?.paddingRight) || 0,
+      left: Number(userInputData?.setting?.paddingLeft) || 0,
+    });
+  }, [userInputData?.setting]);
 
   const handleUpdate = (
     type: "margin" | "padding",
@@ -85,6 +75,8 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
           ...prev.setting,
           marginTop: updatedValues.top.toString(),
           marginBottom: updatedValues.bottom.toString(),
+          marginLeft: updatedValues.left.toString(),
+          marginRight: updatedValues.right.toString(),
         },
       }));
     } else {
@@ -95,15 +87,48 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
           ...prev.setting,
           paddingTop: updatedValues.top.toString(),
           paddingBottom: updatedValues.bottom.toString(),
+          paddingLeft: updatedValues.left.toString(),
+          paddingRight: updatedValues.right.toString(),
         },
       }));
     }
   };
+
+  useEffect(() => {
+    const fetchCollections = async () => {
+      try {
+        const response = await fetch("/api/collections");
+        const data = await response.json();
+        setCollections(data.collections);
+      } catch (error) {
+        console.error("Error fetching collections:", error);
+      }
+    };
+    fetchCollections();
+  }, []);
+
+  const handleBlockSettingChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setUserInputData((prev) => ({
+      ...prev,
+      blocks: {
+        ...prev.blocks,
+        setting: {
+          ...prev.blocks.setting,
+          [name]: value,
+        },
+      },
+    }));
+  };
+
   const handleTabChange = (tab: "content" | "style" | "spacing") => {
     setIsContentOpen(tab === "content");
     setIsStyleSettingsOpen(tab === "style");
     setIsSpacingOpen(tab === "spacing");
   };
+
   useEffect(() => {
     setIsContentOpen(true);
   }, []);
@@ -111,175 +136,73 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
   return (
     <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-lg font-bold mb-4">تنظیمات پیشنهاد ویژه</h2>
-
-      {/* Tabs */}
-
       <TabButtons onTabChange={handleTabChange} />
 
-      {/* Content Section */}
-
       {isContentOpen && (
-        <div className="p-4 border-t border-gray-100 space-y-4 animate-slideDown">
-          <div className="p-3 bg-gray-50 rounded-lg space-y-3">
-            <input
-              type="text"
-              placeholder="عنوان اصلی"
-              value={userInputData?.blocks?.setting?.titleText || ""}
-              onChange={(e) => {
-                setUserInputData((prev) => ({
-                  ...prev,
-                  blocks: {
-                    ...prev.blocks,
-                    setting: {
-                      ...prev.blocks.setting,
-                      titleText: e.target.value,
-                    },
-                  },
-                }));
-              }}
-              className="w-full p-2 border rounded"
-            />
-            <input
-              type="text"
-              placeholder="متن دکمه"
-              value={userInputData?.blocks?.setting?.buttonText || ""}
-              onChange={(e) => {
-                setUserInputData((prev) => ({
-                  ...prev,
-                  blocks: {
-                    ...prev.blocks,
-                    setting: {
-                      ...prev.blocks.setting,
-                      buttonText: e.target.value,
-                    },
-                  },
-                }));
-              }}
-              className="w-full p-2 border rounded"
-            />
-
-            <input
-              type="text"
-              placeholder="لینک دکمه"
-              value={userInputData?.blocks?.setting?.buttonLink || ""}
-              onChange={(e) => {
-                setUserInputData((prev) => ({
-                  ...prev,
-                  blocks: {
-                    ...prev.blocks,
-                    setting: {
-                      ...prev.blocks.setting,
-                      buttonLink: e.target.value,
-                    },
-                  },
-                }));
-              }}
-              className="w-full p-2 border rounded"
-            />
+        <div className="p-4 border-t border-gray-100">
+          <div className="space-y-4">
+            <div>
+              <label className="block mb-2 text-sm font-bold text-gray-700">
+                عنوان بخش
+              </label>
+              <input
+                type="text"
+                name="titleText"
+                value={userInputData?.blocks?.setting?.titleText || ""}
+                onChange={handleBlockSettingChange}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+            
+            <div>
+              <label className="block mb-2 text-sm font-bold text-gray-700">
+                انتخاب کالکشن
+              </label>
+              <select
+                name="selectedCollection"
+                value={userInputData?.blocks?.setting?.selectedCollection || ""}
+                onChange={handleBlockSettingChange}
+                className="w-full p-2 border rounded"
+              >
+                <option value="">انتخاب کنید</option>
+                {collections.map((collection) => (
+                  <option key={collection._id} value={collection._id}>
+                    {collection.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
       )}
-
-      {/* Style Settings */}
 
       {isStyleSettingsOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
-          <div className="grid gap-4">
-            <ColorInput
-              label="رنگ عنوان"
-              name="titleColor"
-              value={userInputData?.blocks?.setting?.titleColor || "#000000"}
-              onChange={(e) => {
-                setUserInputData((prev) => ({
-                  ...prev,
-                  blocks: {
-                    ...prev.blocks,
-                    setting: {
-                      ...prev.blocks.setting,
-                      titleColor: e.target.value,
-                    },
-                  },
-                }));
-                setTimeout(() => setIsUpdating(false), 100);
-              }}
-            />
-
-            <ColorInput
-              label="رنگ دکمه"
-              name="buttonColor"
-              value={userInputData?.blocks?.setting?.buttonColor || "#000000"}
-              onChange={(e) => {
-                setUserInputData((prev) => ({
-                  ...prev,
-                  blocks: {
-                    ...prev.blocks,
-                    setting: {
-                      ...prev.blocks.setting,
-                      buttonColor: e.target.value,
-                    },
-                  },
-                }));
-                setTimeout(() => setIsUpdating(false), 100);
-              }}
-            />
-
-            <ColorInput
-              label="رنگ متن دکمه"
-              name="buttonTextColor"
-              value={
-                userInputData?.blocks?.setting?.buttonTextColor || "#000000"
-              }
-              onChange={(e) => {
-                setUserInputData((prev) => ({
-                  ...prev,
-                  blocks: {
-                    ...prev.blocks,
-                    setting: {
-                      ...prev.blocks.setting,
-                      buttonTextColor: e.target.value,
-                    },
-                  },
-                }));
-                setTimeout(() => setIsUpdating(false), 100);
-              }}
-            />
-
-            <ColorInput
-              label="رنگ شروع گرادیانت"
-              name="gradientFromColor"
-              value={userInputData?.setting?.gradientFromColor || "#000000"}
-              onChange={(e) => {
-                setUserInputData((prev) => ({
-                  ...prev,
-                  setting: {
-                    ...prev.setting,
-                    gradientFromColor: e.target.value,
-                  },
-                }));
-                setTimeout(() => setIsUpdating(false), 100);
-              }}
-            />
-
-            <ColorInput
-              label="رنگ پایان گرادیانت"
-              name="gradientToColor"
-              value={userInputData?.setting?.gradientToColor || "#000000"}
-              onChange={(e) => {
-                setUserInputData((prev) => ({
-                  ...prev,
-                  setting: {
-                    ...prev.setting,
-                    gradientToColor: e.target.value,
-                  },
-                }));
-                setTimeout(() => setIsUpdating(false), 100);
-              }}
-            />
+        <div className="p-4 border-t border-gray-100">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block mb-2">رنگ عنوان</label>
+              <input
+                type="color"
+                name="titleColor"
+                value={userInputData?.blocks?.setting?.titleColor || "#000000"}
+                onChange={handleBlockSettingChange}
+                className="w-full p-1 h-10"
+              />
+            </div>
+            <div>
+              <label className="block mb-2">رنگ دکمه</label>
+              <input
+                type="color"
+                name="buttonColor"
+                value={userInputData?.blocks?.setting?.buttonColor || "#ffffff"}
+                onChange={handleBlockSettingChange}
+                className="w-full p-1 h-10"
+              />
+            </div>
           </div>
         </div>
       )}
 
-      {/* Spacing Settings */}
       {isSpacingOpen && (
         <div className="p-4 border-t border-gray-100 animate-slideDown">
           <div className="bg-gray-50 rounded-lg flex items-center justify-center">

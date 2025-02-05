@@ -67,7 +67,6 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
   const [isImagesOpen, setIsImagesOpen] = useState(false);
 
-  console.log(setIsImagesOpen);
   
 
   const handleUpdate = (

@@ -97,7 +97,6 @@ export const SlideForm: React.FC<SlideFormProps> = ({
       }));
     }
   };
-  console.log(selectedComponent);
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     if (initialData) {

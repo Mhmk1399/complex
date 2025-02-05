@@ -1214,6 +1214,7 @@ export interface SlideBannerSection {
 }
 
 export interface OfferRowBlockSetting extends CommonSettings {
+  selectedCollection: string;
   titleColor: string;
   titleText: string;
   buttonColor: string;
@@ -1225,12 +1226,17 @@ export interface OfferRowBlockSetting extends CommonSettings {
 }
 
 export interface OfferItem {
+  _id: string;
   id: string;
   title: string;
   imageUrl: string;
   price: number;
   originalPrice: number;
   discount: number;
+  images:{
+    imageSrc:string
+    imageAly:string
+  }
 }
 
 export interface OfferRowBlock {

@@ -116,7 +116,6 @@ export const FooterForm: React.FC<FooterFormProps> = ({
   }, [userInputData?.setting]);
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent);
-    console.log(initialData);
     if (initialData) {
       // Ensure a default setting object exists
       setUserInputData({

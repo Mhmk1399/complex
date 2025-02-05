@@ -351,7 +351,6 @@ const Header: React.FC<HeaderProps> = ({
   const [preview, setPreview] = useState(previewWidth);
   const [hoverd, setHoverd] = useState(0);
 
-  console.log("preview", preview);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
     // Prevent body scroll when menu is open
