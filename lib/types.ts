@@ -129,6 +129,10 @@ export interface HeaderBlockSettings extends CommonSettings {
   announcementFontSize: string;
   bgColor: string;
   gap: string;
+  megaMenuBg: string;
+  categoryItemColor: string;
+  categoryItemSize: string;
+  categoryItemHoverColor:string;
 }
 export interface HeaderBlock {
   imageLogo: string;
@@ -410,6 +414,8 @@ export interface FooterSection {
     instagramLink: string;
     telegramLink: string;
     whatsappLink: string;
+    phoneNumber: string;
+    textNumber: string;
     logo: string;
     links?: { url: string; label: string }[];
     setting: FooterBlockSetting;
@@ -423,11 +429,19 @@ export interface FooterBlockSetting {
   descriptionColor: string;
   descriptionFontSize: string;
   descriptionFontWeight: string;
+  trustIconBackground: string;
+  trustIconColor: string;
+  trustItemSize: string;
+  trustItemColor: string;
+  scrollButtonBg: string;
+  scrollButtonColor: string;
+  categoryColor: string;
   linkColor: string;
   logoWidth: string;
   logoHeight: string;
   logoRadius: string;
   backgroundColor: string;
+  categoryBg: string;
 }
 
 export interface FooterLink {
@@ -807,6 +821,7 @@ export interface ProductCardData {
   updatedAt?: string;
   storeId?: string;
   _id?: string;
+  properties?: string | null;
 }
 export interface ProductCardSetting {
   cardBorderRadius?: string;
@@ -885,6 +900,11 @@ export interface DetailPageSettings extends CommonSettings {
   marginLeft: string;
   marginRight: string;
   backgroundColor: string;
+  boxRadius: string;
+  backgroundColorBox: string;
+  propertyKeyColor: string;
+  propertyValueColor: string;
+  propertyBg: string;
 }
 
 export interface DetailPageSection {
@@ -1039,6 +1059,8 @@ export interface BlogDetailBlockSetting extends CommonSettings {
   readTimeColor: string;
   readTimeFontSize: string;
   sectionSpacing: string;
+  metaColor: string;
+  metaFontSize: string;
 }
 
 export interface BlogDetailSection {
@@ -1094,7 +1116,6 @@ export interface SpecialOfferBlockSetting extends CommonSettings {
   cardBackground: string;
   cardBorderRadius: string;
   selectedCollection: string;
-
 }
 export interface GalleryImage {
   imageSrc: string;

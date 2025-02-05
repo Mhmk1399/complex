@@ -149,9 +149,6 @@ export const OfferRow: React.FC<OfferRowProps> = ({
   ) as OfferRowSection;
 
   if (!sectionData) return null;
-  console.log("sectionData", sectionData);
-
- console.log(categories)
 
   console.log(selectedComponent)
   return (

@@ -76,7 +76,7 @@
           "blocks": {
             "imageSrc": "/assets/images/banner3.jpg",
             "imageAlt": "",
-            "heading": "سربرگ محصول",
+            "heading": "سربرگufcjvjchxhx محصول",
             "description": "توضیحات درباره محصول",
             "btnLink": "/",
             "btnText": "دکمه",
@@ -91,18 +91,20 @@
               "btnBackgroundColor": "#FFFFFF",
               "backgroundColorBox": "",
               "backgroundBoxOpacity": 0.9,
-              "boxRadiuos": "20px",
+              "boxRadiuos": "20",
               "opacityImage": 1,
-              "imageWidth": "850px",
-              "imageHeight": "700px",
+              "imageWidth": "85",
+              "imageHeight": "50",
               "background": "#14213D"
             }
           },
           "setting": {
-            "paddingTop": "0px",
-            "paddingBottom": "0px",
-            "marginTop": "10000px",
-            "marginBottom": "0px"
+            "paddingTop": "30",
+            "paddingBottom": "30",
+            "marginTop": "20",
+            "marginBottom": "20",
+            "paddinRight": "0",
+            "paddinLeft": "0"
           }
         },
         {

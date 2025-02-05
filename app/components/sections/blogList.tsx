@@ -1,12 +1,9 @@
 "use client";
 import styled from "styled-components";
-import {
-  BlogListSection,
-  BlogListSetting,
-  Layout,
-} from "@/lib/types";
+import { BlogListSection, BlogListSetting, Layout } from "@/lib/types";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { Delete } from "../C-D";
 
 interface BlogListProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -26,6 +23,9 @@ interface BlogData {
   btnText: string;
   btnLink: string;
   storeId: string;
+  content: string;
+  createdAt: string;
+  id: number;
 }
 
 const SectionBlogList = styled.section<{
@@ -59,7 +59,7 @@ const BlogCard = styled.div<{
   background: ${(props) => props.$data?.cardBackgroundColor};
   border-radius: ${(props) => props.$data?.cardBorderRadius}px;
   margin: 0 8px;
-  height: 70%;
+  height: 100%;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease-in-out;
@@ -117,10 +117,14 @@ const BlogCard = styled.div<{
 `;
 
 const BlogList: React.FC<BlogListProps> = ({
+  setSelectedComponent,
   layout,
   actualName,
+  selectedComponent,
+  setLayout,
 }) => {
   const [blogData, setBlogData] = useState<BlogData[]>([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -132,7 +136,7 @@ const BlogList: React.FC<BlogListProps> = ({
 
         const data = await response.json();
         console.log("data", data);
-        
+
         const blogInfo = data.blogs.map((blog: BlogData) => ({
           ...blog,
           // btnText: "مطالعه بیشتر",
@@ -161,18 +165,62 @@ const BlogList: React.FC<BlogListProps> = ({
     <SectionBlogList
       dir="rtl"
       $data={sectionData}
+      onClick={() => setSelectedComponent(actualName)}
+      className={`transition-all duration-150 ease-in-out relative ${
+        selectedComponent === actualName
+          ? "border-4 border-blue-500 rounded-lg shadow-lg "
+          : ""
+      }`}
     >
+      {showDeleteModal && (
+        <div className="fixed inset-0  bg-black bg-opacity-70 z-50 flex items-center justify-center ">
+          <div className="bg-white p-8 rounded-lg">
+            <h3 className="text-lg font-bold mb-4">
+              آیا از حذف{" "}
+              <span className="text-blue-400 font-bold mx-1">{actualName}</span>{" "}
+              مطمئن هستید؟
+            </h3>
+            <div className="flex gap-4 justify-start">
+              <button
+                className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                انصراف
+              </button>
+              <button
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 "
+                onClick={() => {
+                  Delete(actualName, layout, setLayout);
+                  setShowDeleteModal(false);
+                }}
+              >
+                حذف
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {actualName === selectedComponent ? (
+        <div className="absolute w-fit -top-5 -left-1 z-10 flex">
+          <button
+            className="font-extrabold text-xl hover:bg-blue-500 bg-red-500 pb-1 rounded-r-lg px-3 text-white transform transition-all ease-in-out duration-300"
+            onClick={() => setShowDeleteModal(true)}
+          >
+            x
+          </button>
+          <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
+            {actualName}
+          </div>
+        </div>
+      ) : null}
 
       {blogData.map((blog, index) => (
-        // Inside BlogCard component:
-        <BlogCard
-          key={`blog-${blog.blogId}-${index}`}
-          $data={sectionData.setting}
-        >
+        <BlogCard key={`blog-${blog.id}-${index}`} $data={sectionData.setting}>
           {blog.imageSrc ? (
             <Image
               src={blog.imageSrc || "/assets/images/pro2.jpg"}
-              alt={blog.imageAlt || "Blog image"}
+              alt={blog.title || "Blog image"}
               width={1000}
               height={800}
             />
@@ -180,25 +228,24 @@ const BlogList: React.FC<BlogListProps> = ({
           <div className="content">
             <h2 className="title">{blog.title}</h2>
             <div className="meta">
-              {/* Display all available author info */}
-              <span>{blog.author}نویسنده : </span>
-              <span>{blog.date}</span>
+              <span>
+                {blog.createdAt &&
+                  new Intl.DateTimeFormat("fa-IR", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    calendar: "persian",
+                  }).format(new Date(blog.createdAt))}
+              </span>
             </div>
-            {/* Display any text content available */}
-            {Object.entries(blog)
-              .filter(
-                ([key, value]) =>
-                  typeof value === "string" && !["title"].includes(key)
-              )
-              .map(([key, value]) => (
-                <p key={key} className="description mb-2">
-                  <span className="font-bold">{key}: </span>
-                  {value}
-                  {blog.description}
-                </p>
-              ))}
-            <a href={blog.btnLink} className="read-more">
-              {blog.btnText || "مطالعه بیشتر"}
+            <div
+              className="description mb-2 text-right"
+              dangerouslySetInnerHTML={{
+                __html: blog.content.slice(0, 150) + "...",
+              }}
+            />
+            <a href={`/blog/${blog.id}`} className="read-more">
+              مطالعه بیشتر
             </a>
           </div>
         </BlogCard>

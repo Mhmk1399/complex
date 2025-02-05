@@ -16,6 +16,12 @@ interface HeaderProps {
   selectedComponent: string;
   previewWidth: "sm" | "default";
 }
+interface Category {
+  _id: string;
+  name: string;
+  children: string[];
+  storeId: string;
+}
 
 // Styled components
 const HeaderWrapper = styled.header<{
@@ -69,14 +75,6 @@ const HeaderWrapper = styled.header<{
       justify-content: space-between;
     }
   `}
-`;
-
-const ItemsContainer = styled.div<{ $data: HeaderSection }>`
-  display: flex;
-  align-items: start;
-  flex-wrap: wrap;
-  gap: 1rem;
-  padding: 1rem;
 `;
 
 const AnnouncementBar = styled.div<{
@@ -196,37 +194,53 @@ const NavItem = styled(Link)<{
       props.$data.blocks.setting?.itemHoverColor || "#FCA311"};
   }
 `;
-const MegaMenu = styled.div`
+const MegaMenu = styled.div<{ isVisible?: boolean; $data: HeaderSection }>`
   position: absolute;
-  direction: rtl;
   top: 100%;
   right: 0;
-  width: 50rem;
-  background: white;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  width: 800px;
+  background-color: ${(props) =>
+    props.$data.blocks?.setting?.megaMenuBg || "#f1b80c"};
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease;
   z-index: 50;
   display: flex;
-  flex-direction: row;
+  border-radius: 8px;
+  padding: 1rem;
+  direction: rtl;
 `;
 
-const NavItemWrapper = styled.li`
+const NavItemWrapper = styled.li<{ $data?: HeaderSection }>`
   position: relative;
-
   &:hover ${MegaMenu} {
     opacity: 1;
     visibility: visible;
+    transform: translateY(0);
+  }
+`;
+const CategoryItem = styled.span<{ $data: HeaderSection }>`
+  color: ${(props) =>
+    props.$data.blocks.setting?.categoryItemColor || "#374151"};
+  font-size: ${(props) =>
+    props.$data.blocks.setting?.categoryItemSize || "14"}px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: ${(props) =>
+      props.$data.blocks.setting?.categoryItemHoverColor || "#2563eb"};
   }
 `;
 
 const MegaMenuTitle = styled.h3`
-  font-weight: 400;
+  font-size: 0.95rem;
   color: #374151;
   text-wrap: nowrap;
-  font-size: 1rem;
+  text-align: right;
+  transition: all 0.2s ease;
 `;
+
 const CategoryIconWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -295,7 +309,7 @@ const MobileMenu = styled.div<{
     props.$previewWidth === "sm" && props.$isOpen ? "80%" : "0"};
   height: ${(props) =>
     props.$previewWidth === "sm" && props.$isOpen ? "100vh" : "0"};
-
+  transition: right 0.3s ease-in-out;
   @media (max-width: 768px) {
     display: inline;
     position: fixed;
@@ -350,12 +364,70 @@ const Header: React.FC<HeaderProps> = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
   const [hoverd, setHoverd] = useState(0);
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  console.log("preview", preview);
+  
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
     // Prevent body scroll when menu is open
     document.body.style.overflow = !isMenuOpen ? "hidden" : "unset";
   };
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("/api/category");
+        const data = await response.json();
+
+        setCategories(data);
+      } catch (error) {
+        console.log("Error fetching categories", error);
+
+        // Default categories if fetch fails
+        setCategories([
+          {
+            _id: "1",
+            name: "لپ تاپ",
+            children: [],
+            storeId: "",
+          },
+          {
+            _id: "2",
+            name: "موبایل",
+            children: [],
+            storeId: "",
+          },
+          {
+            _id: "3",
+            name: "تبلت",
+            children: [],
+            storeId: "",
+          },
+          {
+            _id: "4",
+            name: "ساعت هوشمند",
+            children: [],
+            storeId: "",
+          },
+          {
+            _id: "5",
+            name: "هدفون",
+            children: [],
+            storeId: "",
+          },
+          {
+            _id: "6",
+            name: "لوازم جانبی",
+            children: [],
+            storeId: "",
+          },
+        ]);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     if (window.innerWidth <= 424) {
@@ -378,7 +450,6 @@ const Header: React.FC<HeaderProps> = ({
     //  ("Section data is missing or invalid.");
     return null;
   }
-  console.log(hoverd);
 
   const { blocks } = sectionData;
 
@@ -492,88 +563,103 @@ const Header: React.FC<HeaderProps> = ({
         <NavList $previewWidth={previewWidth} $data={sectionData}>
           {sectionData.blocks.links?.map((link, index) => (
             <NavItemWrapper key={index}>
-              <NavItem href={link.url} $data={sectionData}>
-                {link.name === "دسته‌بندی کالاها" ? (
-                  <CategoryIconWrapper>
-                    {link.name}
-                    <svg
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                  </CategoryIconWrapper>
-                ) : (
-                  link.name
-                )}
-              </NavItem>
-              {link.megaMenu && (
-                <div className="flex items-center gap-4">
-                  <MegaMenu>
-                    <div className="flex flex-col">
-                      {link.megaMenu.map(
-                        (category: { title: string }, idx: number) => (
-                          <div
-                            className={`border-l ${
-                              idx === hoverd ? "bg-gray-100" : ""
-                            } group py-4 text-right px-6  hover:bg-gray-100 border-gray-200`}
-                            key={idx}
-                            onMouseEnter={() => {
-                              setHoverd(idx);
-                            }}
+              {link.name === "دسته‌بندی کالاها" ? (
+                <>
+                  <NavItem href="" $data={sectionData}>
+                    <CategoryIconWrapper>
+                      {link.name}
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M4 6h16M4 12h16M4 18h16" />
+                      </svg>
+                    </CategoryIconWrapper>
+                  </NavItem>
+                  <MegaMenu $data={sectionData}>
+                    <div className="flex flex-col w-1/4 border-l border-gray-200">
+                      {categories
+                        .filter((category) => category.children.length > 0)
+                        .map((category, idx) => (
+                          <Link
+                            href={`/category`}
+                            key={category._id}
+                            className="block"
                           >
-                            <MegaMenuTitle className="group-hover:font-bold text-right">
-                              {category.title}
-                            </MegaMenuTitle>
-                          </div>
-                        )
-                      )}
+                            <div
+                              className={`py-3 px-4 rounded-md ml-4 cursor-pointer transition-all duration-200 ${
+                                idx === hoverd ? "bg-gray-100 font-bold" : ""
+                              }`}
+                              onMouseEnter={() => setHoverd(idx)}
+                            >
+                              <MegaMenuTitle>{category.name}</MegaMenuTitle>
+                            </div>
+                          </Link>
+                        ))}
                     </div>
-                    <ItemsContainer $data={sectionData}>
-                      {sectionData.blocks.links[0].megaMenu[hoverd]?.items.map(
-                        (item: { name: string }, idx: number) => (
-                          <div
-                            key={idx}
-                            className=" group py-2 text-center px-2 hover:border-b border-red-500 "
-                          >
-                            {item.name}
-                          </div>
-                        )
-                      )}
-                    </ItemsContainer>
+                    <div className="flex-1 p-4">
+                      <div className="grid grid-cols-3 gap-4">
+                        {categories
+                          .filter((category) => category.children.length > 0)
+                          [hoverd]?.children.map((childId) => {
+                            const childCategory = categories.find(
+                              (cat) => cat._id === childId
+                            );
+                            return (
+                              childCategory && (
+                                <Link
+                                  href={`/category`}
+                                  key={childCategory._id}
+                                  className="p-1 hover:translate-x-[2px] rounded-md transition-all duration-200 text-right"
+                                >
+                                  <CategoryItem $data={sectionData}>
+                                    {childCategory.name}
+                                  </CategoryItem>
+                                </Link>
+                              )
+                            );
+                          })}
+                      </div>
+                    </div>
                   </MegaMenu>
-                </div>
+                </>
+              ) : (
+                <NavItem href={link.url} $data={sectionData}>
+                  {link.name}
+                </NavItem>
               )}
             </NavItemWrapper>
           ))}
         </NavList>
       </NavContainer>
 
-      <MobileMenu
-        className="z-[9999] transition-all duration-300 bg-white"
-        $previewWidth={previewWidth}
-        $isOpen={isMenuOpen}
-      >
-        <MobileNavList>
-          <LocationButton style={{ width: "100%", marginBottom: "20px" }}>
-            <MapPin size={16} /> شهر خود را انتخاب کنید
-          </LocationButton>
-          {sectionData.blocks.links?.map((link, index) => (
-            <MobileNavItem
-              key={index}
-              href={link.url}
-              $data={sectionData}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              {link.name}
-            </MobileNavItem>
-          ))}
-        </MobileNavList>
-      </MobileMenu>
+      <div>
+        <MobileMenu
+          className="z-[9999] transition-all duration-300 bg-white"
+          $previewWidth={previewWidth}
+          $isOpen={isMenuOpen}
+        >
+          <MobileNavList>
+            <LocationButton style={{ width: "100%", marginBottom: "20px" }}>
+              <MapPin size={16} /> شهر خود را انتخاب کنید
+            </LocationButton>
+            {sectionData.blocks.links?.map((link, index) => (
+              <MobileNavItem
+                key={index}
+                href={link.url}
+                $data={sectionData}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {link.name}
+              </MobileNavItem>
+            ))}
+          </MobileNavList>
+        </MobileMenu>
+      </div>
 
       <Overlay $isOpen={isMenuOpen} onClick={() => setIsMenuOpen(false)} />
     </HeaderWrapper>

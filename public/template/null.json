@@ -127,7 +127,11 @@
           "announcementTextColor": "#ffffff",
           "announcementFontSize": "14",
           "bgColor": "#ffffff",
-          "gap": "10"
+          "gap": "10",
+          "megaMenuBg": "#ffffff",
+          "categoryItemColor":"ffffff",
+          "categoryItemSize": "14",
+          "categoryItemHoverColor": "#000000"
         }
       },
       "setting": {
@@ -948,7 +952,7 @@
             "paddingBottom": "30",
             "marginTop": "20",
             "marginBottom": "20",
-            "backgroundColor": "#000000",
+            "backgroundColor": "#ffffff",
             "paddingLeft": "10",
             "paddingRight": "10"
           }
@@ -1027,6 +1031,15 @@
       ],
       "order": [
         "Story",
+        "MultiRow",
+        "MultiColumn",
+        "CollapseFaq",
+        "NewsLetter",
+        "Video",
+        "Collection",
+        "Banner",
+        "SlideShow",
+        "ImageText",
         "SlideBanner",
         "SpecialOffer",
         "OfferRow",
@@ -1047,16 +1060,26 @@
           "descriptionColor": "#000000",
           "descriptionFontSize": "18",
           "descriptionFontWeight": "normal",
+          "trustIconBackground": "#e4e4e4",
+          "trustIconColor": "#ffffff",
+          "trustItemSize": "15",
+          "trustItemColor": "bold",
+          "scrollButtonBg": "#e4e4e4",
+          "scrollButtonColor": "#000000",
+          "categoryColor": "#000000",
           "linkColor": "#0077b6",
           "logoWidth": "80",
           "logoHeight": "80",
-          "logoRadius": "10"
+          "logoRadius": "10",
+          "categoryBg": "#ffffff"
         },
         "text": "سربرگ قسمت پایین سایت",
         "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
         "instagramLink": "#",
         "telegramLink": "#",
         "whatsappLink": "#",
+        "textNumber": "با این شماره تماس بگیرید",
+        "phoneNumber": "09123456789",
         "logo": "/assets/images/logo.webp",
         "links": [
           {

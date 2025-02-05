@@ -17,10 +17,18 @@ interface DetailPageProps {
   actualName: string;
   selectedComponent: string;
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
+  previewWidth: "sm" | "default";
 }
-
+const defaultProperties = [
+  { key: "نوع اتصال", value: "بی‌سیم", tooltip: "بی‌سیم " },
+  { key: "نوع گوشی", value: "دو گوشی", tooltip: "دو گوشی" },
+  { key: "قابلیت‌های ویژه", value: "میکروفون", tooltip: "میکروفون" },
+  { key: "مناسب برای", value: "بازی، مکالمه", tooltip: "بازی، مکالمه" },
+  { key: "رابط", value: "بلوتوث", tooltip: "بلوتوث" },
+];
 const SectionDetailPage = styled.div<{
   $data: DetailPageSection;
+  $preview: "sm" | "default";
 }>`
   padding-top: ${(props) => props.$data?.setting?.paddingTop || 0}px;
   padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || 0}px;
@@ -28,12 +36,15 @@ const SectionDetailPage = styled.div<{
   padding-right: ${(props) => props.$data?.setting?.paddingRight || 20}px;
   margin-top: ${(props) => props.$data?.setting?.marginTop || 0}px;
   margin-bottom: ${(props) => props.$data?.setting?.marginBottom || 0}px;
-  background-color: ${(props) => props.$data?.setting?.backgroundColor ||"#ffffff"};
+  background-color: ${(props) =>
+    props.$data?.setting?.backgroundColor || "#ffffff"};
+  height: ${(props) => (props.$preview === "sm" ? "50rem" : "full")};
 
   .product-name {
     color: ${(props) => props.$data?.setting?.productNameColor || "#000000"};
     font-size: ${(props) => props.$data?.setting?.productNameFontSize || 20}px;
-    font-weight: ${(props) => props.$data?.setting?.productNameFontWeight || "bold"};;
+    font-weight: ${(props) =>
+      props.$data?.setting?.productNameFontWeight || "bold"};
   }
   .product-category {
     color: ${(props) => props.$data?.setting?.categoryColor || "#000000"};
@@ -41,7 +52,7 @@ const SectionDetailPage = styled.div<{
   }
 
   .product-price {
-    color: ${(props) => props.$data?.setting?.priceColor ||  "#000000"};;
+    color: ${(props) => props.$data?.setting?.priceColor || "#000000"};
     font-size: ${(props) => props.$data?.setting?.priceFontSize || 12}px;
     @media (max-width: 768px) {
       font-size: 30px;
@@ -66,13 +77,28 @@ const SectionDetailPage = styled.div<{
   .add-to-cart-button {
     background-color: ${(props) =>
       props.$data?.setting?.btnBackgroundColor || "#3498DB"};
-    color: ${(props) => props.$data?.setting?.btnTextColor || "#FFFFFF"};
+    color: ${(props) => props.$data?.setting?.btnTextColor || "#000000"};
     transition: transform 0.5s ease;
     &:hover {
       transform: translateY(-2px);
       opacity: 0.85;
       transition: transform 0.3s ease-in-out;
     }
+  }
+  .bg-box {
+    background-color: ${(props) =>
+      props.$data?.setting?.backgroundColorBox || "#ffffff"};
+    border-radius: ${(props) => props.$data?.setting?.boxRadius || 10}px;
+  }
+  .property-key {
+    color: ${(props) => props.$data?.setting?.propertyKeyColor || "#e4e4e4"};
+  }
+  .property-value {
+    color: ${(props) => props.$data?.setting?.propertyValueColor || "#000000"};
+  }
+  .property-bg {
+    background-color: ${(props) =>
+      props.$data?.setting?.propertyBg || "#ffffff"};
   }
 
   .product-image {
@@ -108,17 +134,27 @@ const DetailPage: React.FC<DetailPageProps> = ({
   actualName,
   selectedComponent,
   setLayout,
+  previewWidth,
 }) => {
+  const [preview, setPreview] = useState(previewWidth);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  useEffect(() => {
+    if (window.innerWidth <= 425) {
+      setPreview("sm");
+    } else {
+      setPreview(previewWidth);
+    }
+  }, [previewWidth]);
   const [product, setProduct] = useState<ProductCardData>({
     images: [],
     name: "",
     description: "",
-    price: "",
+    price: "80,000",
     id: "",
-    category: "",
-    discount: "",
-    status: "",
+    category: "headphone",
+    discount: "20",
+    status: "eded",
     inventory: "",
   });
   const [selectedImage, setSelectedImage] = useState<string>("");
@@ -136,7 +172,6 @@ const DetailPage: React.FC<DetailPageProps> = ({
 
         setSelectedImage(data.images[0]?.imageSrc || "");
         setLoading(false);
-
       } catch (error) {
         setLoading(false);
         console.log("Error fetching product details:", error);
@@ -147,8 +182,7 @@ const DetailPage: React.FC<DetailPageProps> = ({
       fetchProductDetails();
     }
   }, [productId]);
-  console.log(product);
-  
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -166,12 +200,11 @@ const DetailPage: React.FC<DetailPageProps> = ({
   }
   const sectionData = (layout?.sections?.children?.sections?.find((section) => {
     return section.type === actualName;
-}) as DetailPageSection) || {
+  }) as DetailPageSection) || {
     blocks: {},
     setting: {}, // Provide default empty settings
-    type: 'DetailPage'
-};
-
+    type: "DetailPage",
+  };
 
   if (!sectionData) {
     return null;
@@ -179,8 +212,9 @@ const DetailPage: React.FC<DetailPageProps> = ({
 
   return (
     <SectionDetailPage
+      $preview={preview}
       $data={sectionData}
-      className={` mx-2 rounded-lg px-4 py-8 transition-all duration-150 ease-in-out relative ${
+      className={` mx-2 rounded-lg px-4 min-h-fit py-8 transition-all duration-150 ease-in-out relative ${
         selectedComponent === actualName
           ? "border-4 border-blue-500 rounded-lg shadow-lg "
           : ""
@@ -230,84 +264,213 @@ const DetailPage: React.FC<DetailPageProps> = ({
           </button>
         </div>
       ) : null}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-48">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-2">
         {/* Product Images Section */}
-        <div className="space-y-4">
+        <div className="space-y-4 z-50">
           <div className="product-image">
             <Image
-              src={selectedImage || "/assets/images/pro1.jpg"}
+              src={selectedImage || "/assets/images/pro2.jpg"}
               alt={product.name}
               width={1000}
               height={1000}
+              className="transition-transform duration-300 ease-in-out hover:scale-150"
             />
           </div>
-          <div className="flex gap-4 overflow-x-auto">
-            {Array.isArray(product.images) &&
-              product.images.map((image: ProductImage, index: number) => (
-                <div
-                  key={index}
-                  className={`relative h-20 w-20 cursor-pointer rounded-md overflow-hidden ${
-                    selectedImage === image.imageSrc
-                      ? "border-2 border-blue-500"
-                      : ""
-                  }`}
-                  onClick={() => setSelectedImage(image.imageSrc)}
-                >
-                  <Image
-                    src={image.imageSrc || "/assets/images/pro3.jpg"}
-                    alt={image.imageAlt}
-                    fill
-                    className="object-cover "
-                  />
-                </div>
-              ))}
+
+          <div className="relative">
+            <div
+              className={`flex gap-3 py-2  ${
+                preview === "sm" ? "min-w-full" : " overflow-x-auto"
+              }`}
+            >
+              {Array.isArray(product.images) && product.images.length > 0
+                ? product.images.map((image: ProductImage, index: number) => (
+                    <div
+                      key={index}
+                      className={`relative min-w-[80px] h-[80px] cursor-pointer 
+              transition-all duration-300 ease-in-out hover:shadow-lg 
+              ${
+                selectedImage === image.imageSrc
+                  ? "border-2 border-blue-500 scale-105"
+                  : "border border-gray-200"
+              }
+              rounded-lg overflow-hidden`}
+                      onClick={() => setSelectedImage(image.imageSrc)}
+                    >
+                      <Image
+                        src={image.imageSrc}
+                        alt={image.imageAlt}
+                        fill
+                        className="object-cover hover:opacity-90"
+                      />
+                    </div>
+                  ))
+                : // Default static images
+                  [
+                    "/assets/images/pro1.jpg",
+                    "/assets/images/pro2.jpg",
+                    "/assets/images/pro3.jpg",
+                  ].map((defaultImage, index) => (
+                    <div
+                      key={index}
+                      className={`relative min-w-[120px] h-[80px] cursor-pointer 
+              transition-all duration-300 ease-in-out hover:shadow-lg
+              ${
+                selectedImage === defaultImage
+                  ? "border-2 border-blue-500 scale-105"
+                  : "border border-gray-200"
+              }
+              rounded-lg overflow-hidden`}
+                      onClick={() => setSelectedImage(defaultImage)}
+                    >
+                      <Image
+                        src={defaultImage}
+                        alt={`Default product image ${index + 1}`}
+                        fill
+                        className="object-cover hover:opacity-90"
+                      />
+                    </div>
+                  ))}
+            </div>
           </div>
         </div>
 
         {/* Product Info Section */}
-        <div className="space-y-6">
-          <h1 className="product-name">{product.name}</h1>
-          <p className="product-description">{product.description}</p>
-
-          <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <span className="product-price">{product.price} تومان</span>
-              {product.discount && (
-                <span className="bg-red-100 text-red-600 px-3 py-1 rounded-full">
-                  {product.discount}% تخفیف
-                </span>
-              )}
+        <div
+          className={`space-y-8 lg:-mr-64 ${
+            preview === "sm" ? "mt-96 pr-16" : ""
+          }`}
+        >
+          <h1 className="product-name">{product.name || "نام محصول"}</h1>
+          <p className="product-description text-wrap">
+            {product.description ||
+              "توضیحات محصول در ابن قسمت نمایش داده می شود."}
+          </p>
+          <div className="border border-gray-300 max-w-sm rounded-lg p-4 ">
+            <div className="text-sm font-bold mb-3">ویژگی‌های محصول</div>
+            <div className=" flex flex-wrap gap-2">
+              {(Array.isArray(product.properties) &&
+              product.properties.length > 0
+                ? product.properties
+                : defaultProperties
+              ).map((prop, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col p-2 rounded-lg group relative property-bg"
+                >
+                  <span className="text-gray-500 text-sm ml-2 property-key">
+                    {prop.key}:
+                  </span>
+                  <span className="text-sm property-value">{prop.value}</span>
+                  <div className="absolute hidden group-hover:block bg-gray-800 text-white text-xs rounded px-2 py-1 -top-8 right-0 whitespace-nowrap">
+                    {prop.tooltip}
+                  </div>
+                </div>
+              ))}
             </div>
+          </div>
 
-            <div className="space-y-2">
-              {product.status && (
+          <div
+            className={` ${
+              preview === "sm"
+                ? "   "
+                : "lg:absolute lg:left-8 lg:-top-2 lg:w-[300px]"
+            } `}
+          >
+            <div className="bg-white bg-box rounded-xl shadow-lg p-6 space-y-3">
+              {/* Price and Discount Section */}
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <span className="product-price text-xl font-bold">
+                    {product.price || "80,000"} تومان
+                  </span>
+                  {product.discount && (
+                    <span className="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm">
+                      {product.discount}% تخفیف
+                    </span>
+                  )}
+                </div>
+                {product.discount && (
+                  <span className="text-red-300 line-through text-sm">
+                    {(
+                      Number(product.price?.replace(/,/g, "")) /
+                      (1 - Number(product.discount) / 100)
+                    ).toLocaleString()}{" "}
+                    تومان
+                  </span>
+                )}
+              </div>
+
+              {/* Delivery Info */}
+              <div className="space-y-3 border-t border-b py-4">
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold product-status">وضعیت:</span>
-                  <span
-                    className={`${
-                      product.status === "available"
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }`}
+                  <svg
+                    className="w-5 h-5 text-green-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    {product.status === "available" ? "موجود" : "ناموجود"}
-                  </span>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  <span className="text-sm">ارسال سریع</span>
                 </div>
-              )}
-
-              {product.category && (
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold product-category">
-                    دسته‌بندی:
-                  </span>
-                  <span className="product-category">{product.category}</span>
+                  <svg
+                    className="w-5 h-5 text-blue-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <span className="text-sm">تحویل در سریع‌ترین زمان ممکن</span>
                 </div>
-              )}
-            </div>
-            <div className="flex  gap-2">
-              <button className="px-6 py-3 add-to-cart-button rounded-md">
-                افزودن به سبد خرید
-              </button>
+              </div>
+
+              {/* Inventory Status */}
+              <div className="flex items-center gap-2">
+                <div
+                  className={`w-3 h-3 rounded-full ${
+                    product.inventory && Number(product.inventory) > 0
+                      ? "bg-green-500"
+                      : "bg-red-500"
+                  }`}
+                ></div>
+                <span className="text-sm">
+                  {product.inventory && Number(product.inventory) > 0
+                    ? "موجود در انبار"
+                    : "ناموجود"}
+                </span>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="space-y-3">
+                <button className="w-full px-6 py-3 add-to-cart-button rounded-lg font-medium">
+                  افزودن به سبد خرید
+                </button>
+              </div>
+
+              {/* Additional Product Info */}
+              <div className="text-sm space-y-2 text-gray-600">
+                <div className="flex product-category justify-between">
+                  <span>کد محصول:</span>
+                  <span>{product.id || "N/A"}</span>
+                </div>
+                <div className="flex product-category justify-between">
+                  <span>دسته‌بندی:</span>
+                  <span>{product.category}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
