@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import connect from "@/lib/data";
 import Collections from "@/models/collections";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { GetStoreId } from "../test/route";
-interface CustomJwtPayload extends JwtPayload {
-  storeId?: string;
-}
+
 
 export async function POST(request: Request) {
   const collectionData = await request.json();
