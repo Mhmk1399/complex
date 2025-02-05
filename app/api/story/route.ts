@@ -47,7 +47,6 @@ export async function POST(req: NextRequest) {
     if (!storeId)
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     console.log(storeId);
-    req.body;
     const body = await req.json();
     const story = new Story({ storeId, ...body });
     await story.save();
