@@ -29,6 +29,7 @@ const SectionProductList = styled.section<{
     1fr
   );
   gap: 8px;
+  direction: rtl;
   padding-top: ${(props) => props.$data?.setting?.paddingTop}px;
   padding-bottom: ${(props) => props.$data?.setting?.paddingBottom}px;
   padding-left: ${(props) => props.$data?.setting?.paddingLeft}px;
@@ -53,6 +54,55 @@ const ProductList: React.FC<ProductListProps> = ({
 }) => {
   const [productData, setProductData] = useState<ProductCardData[]>([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [filteredProducts, setFilteredProducts] = useState<ProductCardData[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [colors, setColors] = useState<string[]>([]);
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 100000000 });
+  const [selectedFilters, setSelectedFilters] = useState({
+    category: '',
+    color: '',
+    priceMin: 0,
+    priceMax: 100000000
+  });
+  useEffect(() => {
+    if (productData.length > 0) {
+      // Extract unique categories
+      const uniqueCategories = [...new Set(productData.map(product => product.category))].filter((category): category is string => category !== undefined);
+      setCategories(uniqueCategories);
+
+      // Extract unique colors from all products
+      const uniqueColors = [...new Set(productData.flatMap(product =>
+        product.colors.map(color => color[0])
+      ))];
+      setColors(uniqueColors);
+
+      // Set initial filtered products
+      setFilteredProducts(productData);
+    }
+  }, [productData]);
+  const handleFilter = () => {
+    let filtered = productData;
+
+    // Category filter
+    if (selectedFilters.category) {
+      filtered = filtered.filter(product => product.category === selectedFilters.category);
+    }
+
+    // Color filter
+    if (selectedFilters.color) {
+      filtered = filtered.filter(product =>
+        product.colors.some(color => color[0] === selectedFilters.color)
+      );
+    }
+
+    // Price range filter
+    filtered = filtered.filter(product => {
+      const price = parseInt(product.price);
+      return price >= selectedFilters.priceMin && price <= selectedFilters.priceMax;
+    });
+
+    setFilteredProducts(filtered);
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -63,15 +113,15 @@ const ProductList: React.FC<ProductListProps> = ({
             "Content-Type": "application/json",
             "token": localStorage.getItem("token") || "",
           },
-          
+
         });
 
         const data = await response.json();
-        
+
         if (data?.products) {
           const productInfo = data.products.map((product: ProductCardData) => ({
             ...product,
-            images: product.images ,
+            images: product.images,
           }));
 
           setProductData(productInfo);
@@ -87,8 +137,8 @@ const ProductList: React.FC<ProductListProps> = ({
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
   ) as ProductSection;
- 
- 
+
+
   if (!sectionData) {
     return null;
   }
@@ -97,11 +147,10 @@ const ProductList: React.FC<ProductListProps> = ({
     <SectionProductList
       $data={sectionData}
       onClick={() => setSelectedComponent(actualName)}
-      className={`transition-all duration-150 ease-in-out relative ${
-        selectedComponent === actualName
+      className={`transition-all duration-150 ease-in-out relative ${selectedComponent === actualName
           ? "border-4 border-blue-500 rounded-lg shadow-lg "
           : ""
-      }`}
+        }`}
     >
       {showDeleteModal && (
         <div className="fixed inset-0  bg-black bg-opacity-70 z-50 flex items-center justify-center ">
@@ -147,7 +196,65 @@ const ProductList: React.FC<ProductListProps> = ({
           </button>
         </div>
       ) : null}
-      {productData.map((block, index) => (
+         <div className="filter-panel bg-white p-4 rounded-lg shadow mb-4 ">
+        <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
+          {/* Category Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">دسته‌بندی</label>
+            <select
+              className="w-full border rounded-md p-2"
+              onChange={(e) => setSelectedFilters(prev => ({ ...prev, category: e.target.value }))}
+            >
+              <option value="">همه</option>
+              {categories.map(category => (
+                <option key={category} value={category}>{category}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Color Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">رنگ</label>
+            <select
+              className="w-full border rounded-md p-2"
+              onChange={(e) => setSelectedFilters(prev => ({ ...prev, color: e.target.value }))}
+            >
+              <option value="">همه</option>
+              {colors.map(color => (
+                <option key={color} value={color}>{color}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Price Range Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">حداقل قیمت (تومان)</label>
+            <input
+              type="number"
+              className="w-full border rounded-md p-2"
+              value={selectedFilters.priceMin}
+              onChange={(e) => setSelectedFilters(prev => ({ ...prev, priceMin: parseInt(e.target.value) }))}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">حداکثر قیمت (تومان)</label>
+            <input
+              type="number"
+              className="w-full border rounded-md p-2"
+              value={selectedFilters.priceMax}
+              onChange={(e) => setSelectedFilters(prev => ({ ...prev, priceMax: parseInt(e.target.value) }))}
+            />
+          </div>
+        </div>
+        <button
+          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+          onClick={handleFilter}
+        >
+          اعمال فیلتر
+        </button>
+      </div>
+
+      {filteredProducts.map((block, index) => (
         <div className="p-0 m-0" key={`${block.id}-${index}`}>
           <ProductCard productData={block} />
         </div>

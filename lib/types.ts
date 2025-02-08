@@ -822,6 +822,7 @@ export interface ProductCardData {
   storeId?: string;
   _id?: string;
   properties?: string | null;
+  colors:[code:string,quantity:string][];
 }
 export interface ProductCardSetting {
   cardBorderRadius?: string;
