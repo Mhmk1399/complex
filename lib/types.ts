@@ -813,7 +813,10 @@ export interface ProductCardData {
   description: string;
   price: string;
   id: string;
-  category?: string;
+  category?: {
+    name: string;
+    _id: string;
+  };
   discount?: string;
   status?: string;
   inventory?: string;
@@ -822,7 +825,7 @@ export interface ProductCardData {
   storeId?: string;
   _id?: string;
   properties?: string | null;
-  colors:[code:string,quantity:string][];
+  colors:{code:string,quantity:string}[];
 }
 export interface ProductCardSetting {
   cardBorderRadius?: string;

@@ -20,7 +20,9 @@ export async function GET(req: NextRequest) {
         if (!storeId){
             return NextResponse.json({ error: "Invalid token" }, { status: 401 })
         }
-        const categories = await Category.find({ storeId: storeId });
+        const categories = await Category.find(        
+        ).populate("children");
+
         return NextResponse.json(categories);
     } catch (error) {
         console.log(error);
