@@ -129,6 +129,7 @@ export const ProductListForm: React.FC<ProductListProps> = ({
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     if (isUpdating) return;
+
     setIsUpdating(true);
 
     const { name, value } = e.target;
@@ -181,6 +182,47 @@ export const ProductListForm: React.FC<ProductListProps> = ({
               name="backgroundColor"
               value={
                 userInputData.setting.backgroundColor?.toString() ?? "#000000"
+              }
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ فیلتر"
+              name="filterRowBg"
+              value={
+                userInputData?.setting?.filterRowBg?.toString() || "#000000"
+              }
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ متن فیلتر"
+              name="filterNameColor"
+              value={
+                userInputData?.setting?.filterNameColor?.toString() || "#000000"
+              }
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label=" رنگ پس زمینه فیلتر کارت"
+              name="filterCardBg"
+              value={
+                userInputData?.setting?.filterCardBg?.toString() || "#000000"
+              }
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label=" رنگ پس زمینه دکمه"
+              name="filterButtonBg"
+              value={
+                userInputData?.setting?.filterButtonBg?.toString() || "#000000"
+              }
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label=" رنگ  متن دکمه"
+              name="filterButtonTextColor"
+              value={
+                userInputData?.setting?.filterButtonTextColor?.toString() ||
+                "#000000"
               }
               onChange={handleSettingChange}
             />

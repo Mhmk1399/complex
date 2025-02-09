@@ -2,7 +2,7 @@ import Story from "../../../models/story";
 import { NextRequest, NextResponse } from "next/server";
 import connect from "@/lib/data";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { GetStoreId } from "../test/route";
+import { GET as GetStoreId } from "../test/route";
 interface CustomJwtPayload extends JwtPayload {
   storeId: string;
 }
@@ -15,7 +15,15 @@ export async function GET(req: NextRequest) {
     }
     console.log(req);
 
-    const storeId = GetStoreId();
+    // Call GetStoreId as a normal async function.
+    const storeIdResult = await GetStoreId();
+
+    // If GetStoreId returns a Response (indicating an error) handle it:
+    if (storeIdResult instanceof Response) {
+      return storeIdResult;
+    }
+
+    const storeId = storeIdResult;
     if (!storeId) {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }

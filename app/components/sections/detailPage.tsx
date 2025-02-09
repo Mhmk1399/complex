@@ -152,11 +152,16 @@ const DetailPage: React.FC<DetailPageProps> = ({
     description: "",
     price: "80,000",
     id: "",
-    category: "headphone",
+    category: { name: "headphone", _id: "1" },
     discount: "20",
     status: "eded",
     inventory: "",
+    colors: [],
+    properties: "",
+    createdAt: "",
+    updatedAt: "",
   });
+  
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -468,7 +473,7 @@ const DetailPage: React.FC<DetailPageProps> = ({
                 </div>
                 <div className="flex product-category justify-between">
                   <span>دسته‌بندی:</span>
-                  <span>{product.category}</span>
+                  <span>{product.category?.name}</span>
                 </div>
               </div>
             </div>

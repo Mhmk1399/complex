@@ -742,6 +742,12 @@ export interface ProductBlockSetting extends CommonSettings {
   btnBackgroundColor: string;
   btnTextColor: string;
   gridColumns: number;
+  filterCardBg: string;
+  filterRowBg: string;
+  filterButtonTextColor: string;
+  filterButtonBg: string;
+  filterNameColor: string;
+
 }
 
 export interface ProductListSection {
@@ -824,7 +830,7 @@ export interface ProductCardData {
   updatedAt?: string;
   storeId?: string;
   _id?: string;
-  properties?: string | null;
+  properties?: string;
   colors:{code:string,quantity:string}[];
 }
 export interface ProductCardSetting {

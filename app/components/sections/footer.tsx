@@ -330,7 +330,8 @@ const Footer: React.FC<FooterProps> = ({
   previewWidth,
 }) => {
   const [preview, setPreview] = useState(previewWidth);
-
+  const [enamadExists, setEnamadExists] = useState(false);
+  const [enamad, setEnamad] = useState({});
   const [categories, setCategories] = useState<Category[]>([]);
 
   const scrollToTop = () => {
@@ -341,6 +342,29 @@ const Footer: React.FC<FooterProps> = ({
       });
     }
   };
+  useEffect(() => {
+    const fetchEnamad = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (token) {
+          const res = await fetch("/api/enamad", {
+            headers: { Authorization: token },
+          });
+          const data = await res.json();
+          setEnamad(data);
+          console.log("Enamad data:", data);
+
+          // If the API returns an array with data then show the enamad image.
+          if (data && Array.isArray(data) && data.length > 0) {
+            setEnamadExists(true);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching enamad data", error);
+      }
+    };
+    fetchEnamad();
+  }, []);
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -606,6 +630,18 @@ const Footer: React.FC<FooterProps> = ({
             </FooterLink>
           ))}
         </FooterLinks>
+      )}
+      {enamadExists && (
+        <div>
+          <Link href={enamad} target="_blank">
+            <Image
+              src="/assets/images/enamad.jpg"
+              alt="Enamad Certification"
+              width={100}
+              height={50}
+            />
+          </Link>
+        </div>
       )}
     </FooterContainer>
   );
