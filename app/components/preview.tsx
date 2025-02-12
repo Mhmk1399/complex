@@ -94,7 +94,7 @@ export const Preview: React.FC<PreviewProps> = ({
             previewWidth={previewWidth} // Pass the state to components
           />
 
-          <div className="grid grid-cols-1 mt-32">
+          <div className="grid grid-cols-1">
             {orders.map((componentName, index) => {
               const baseComponentName = componentName.split("-")[0];
               const Component =
