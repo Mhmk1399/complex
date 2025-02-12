@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import connect from "@/lib/data";
 import Collections from "@/models/collections";
-
+import { GET as GetStoreId } from "../test/route";
 
 export async function POST(request: Request) {
   const collectionData = await request.json();
@@ -28,12 +28,13 @@ export async function GET(request: NextRequest) {
     await connect();
     console.log(request);
 
-    const storeId = 'store_m64rnmos4hmgv5'
+    const storeId = await GetStoreId();
     if (!storeId) {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+
     }
 
-    const collections = await Collections.find({ storeId });
+    const collections = await Collections.find({storeId:"store_m71twdtscu7ctu"});
     return NextResponse.json({ collections }, { status: 200 });
   } catch (error) {
     console.log("Error fetching collections:", error);

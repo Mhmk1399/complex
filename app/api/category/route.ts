@@ -14,7 +14,8 @@ export async function GET(req: NextRequest) {
 
     // Call GetStoreId as a normal async function.
     const storeIdResult = await GetStoreId();
-
+ console.log(storeIdResult);
+ 
     // If GetStoreId returns a Response (indicating an error) handle it:
     if (storeIdResult instanceof Response) {
       return storeIdResult;

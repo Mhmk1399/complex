@@ -382,7 +382,7 @@ const ProductList: React.FC<ProductListProps> = ({
       {preview === "sm" && isMobileFilterOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
           <div
-            className="bg-white/60 backdrop-blur-sm border p-10 rounded-lg max-w-fit max-h-[80vh] overflow-y-auto"
+            className="bg-white/60 backdrop-blur-sm border lg:p-10 rounded-lg max-w-fit  overflow-x-hidden"
             dir="rtl"
           >
             <div className="flex justify-between items-center mb-4">

@@ -9,6 +9,7 @@ export async function GET(request: NextRequest ) {
         if (!collectionId) {
             return NextResponse.json({ message: "Collection ID is required" }, { status: 400 });
         }
+        
         const collections = await Collections.find({ _id: collectionId });
         return NextResponse.json({ collections }, { status: 200 });
     } catch (error) {
