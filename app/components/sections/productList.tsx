@@ -300,7 +300,7 @@ const ProductList: React.FC<ProductListProps> = ({
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("complexToken")}`,
           },
         });
         const data = await response.json();
@@ -326,12 +326,14 @@ const ProductList: React.FC<ProductListProps> = ({
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("complexToken");
+
         const response = await fetch("/api/products", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            ...(token ? { Authorization: token } : {}),
+            // Ensure the full "Bearer " prefix is included
+            Authorization: `Bearer ${token}`,
           },
         });
 

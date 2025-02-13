@@ -107,7 +107,7 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
           }
         );
         const data = await response.json();
-        setCollections(data.collections);
+        setCollections(data);
       } catch (error) {
         console.error("Error fetching collections:", error);
       }

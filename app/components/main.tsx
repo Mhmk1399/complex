@@ -5,6 +5,7 @@ import { Form } from "./form";
 import smData from "../../public/template/nullSm.json";
 import Image from "next/image";
 import nullJson from "../../public/template/null.json";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import {
   FaHome,
   FaInfoCircle,
@@ -29,7 +30,6 @@ import DetailPage from "@/public/template/detail.json";
 import Blog from "@/public/template/blog.json";
 import BlogDetail from "@/public/template/blogDetail.json";
 import { AnimatePresence, motion } from "framer-motion";
-import Link from "next/link";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TourGuide from "./sections/guideTour";
@@ -63,6 +63,29 @@ export const Main = () => {
     "DetailPage",
   ]);
 
+  const handleSiteView = () => {
+    try {
+      const token = localStorage.getItem("complexToken");
+      console.log("Token:", token);
+      if (!token) {
+        toast.error("توکن یافت نشد");
+        return;
+      }
+
+      // Decode the token without verification (client-side)
+      const decodedToken = jwt.decode(token) as JwtPayload;
+
+      if (!decodedToken?.user?.vercelUrl) {
+        toast.error("آدرس سایت یافت نشد");
+        return;
+      }
+
+      window.open(decodedToken.user.vercelUrl, "_blank", "noopener,noreferrer");
+    } catch (error) {
+      console.error("Error opening site:", error);
+      toast.error("مشکل در باز کردن سایت");
+    }
+  };
   const handleAddRoute = async ({ name }: { name: string }) => {
     const urlParams = new URLSearchParams(window.location.search);
     const repoUrl = urlParams.get("repoUrl");
@@ -88,7 +111,7 @@ export const Main = () => {
 
       const result = await response.json();
       console.log("Route added:", result);
-      
+
       fetchRoutes(); // Fetch updated routes
       toast.success("مسیر جدید ساخته شد", {
         autoClose: 3000,
@@ -229,7 +252,7 @@ export const Main = () => {
   const [newRouteName, setNewRouteName] = useState("");
   useEffect(() => {
     const currentLayoutData = activeMode === "sm" ? smData : Data;
-   
+
     const routeConfigs = {
       about: About.children as AboutChildren,
       contact: Contact.children as AboutChildren,
@@ -455,14 +478,15 @@ export const Main = () => {
               </motion.button>
               <motion.button
                 id="sitePreview"
-                className={` ${getHighlightClass(
+                onClick={handleSiteView}
+                className={`${getHighlightClass(
                   sitePreviewRef
                 )} lg:w-auto text-xs font-semibold border-r pr-2 border-gray-400 lg:-ml-12 px-3 md:mt-0 
-                    transition-all duration-300 transform`}
+    transition-all duration-300 transform`}
                 whileTap={{ scale: 0.95 }}
                 ref={sitePreviewRef}
               >
-                <Link href="/">نمایش سایت</Link>
+                نمایش سایت
               </motion.button>
 
               {/* Save Button with Animation */}

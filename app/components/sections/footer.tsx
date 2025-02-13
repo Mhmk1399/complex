@@ -367,12 +367,10 @@ const Footer: React.FC<FooterProps> = ({
   }, []);
   useEffect(() => {
     const fetchCategories = async () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const repoUrl = urlParams.get("repoUrl");
       
       try {
         const headers: HeadersInit = {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("complexToken")}`,
           "Content-Type": "application/json",
         }
         

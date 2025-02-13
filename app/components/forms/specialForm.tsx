@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Layout, SpecialOfferSection } from "@/lib/types";
+import { Layout, ProductCardData, SpecialOfferSection } from "@/lib/types";
 import React from "react";
 import MarginPaddingEditor from "../sections/editor";
 import { Compiler } from "../compiler";
@@ -63,6 +63,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
+    console.log(setCollections);
   }, []);
 
   const [margin, setMargin] = useState<BoxValues>({
@@ -335,7 +336,6 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
     </div>
   );
 };
-function setSpecialOfferProducts(arg0: any) {
+function setSpecialOfferProducts(_arg0: ProductCardData[]) {
   throw new Error("Function not implemented.");
 }
-

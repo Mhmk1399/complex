@@ -2,9 +2,6 @@ import Story from "../../../models/story";
 import { NextRequest, NextResponse } from "next/server";
 import connect from "@/lib/data";
 import jwt, { JwtPayload } from "jsonwebtoken";
-interface CustomJwtPayload extends JwtPayload {
-  storeId: string;
-}
 export async function GET(request: NextRequest) {
   try {
     await connect();
