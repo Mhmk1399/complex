@@ -1,7 +1,8 @@
 import { fetchGitHubFile } from "@/utilities/github";
+import { NextRequest } from "next/server";
 
-async function GetStoreId() {
-  const repoUrl = "https://github.com/Mhmk1399/userwebsite";
+export async function GetStoreId(request:NextRequest) {
+    const repoUrl = request.headers.get("repoUrl");
   if (!repoUrl) {
     return new Response("Repository URL not provided", { status: 400 });
   }
@@ -12,5 +13,3 @@ async function GetStoreId() {
   // Wrap fileContent in a Response so the type is Response.
   return new Response(fileContent, { status: 200 });
 }
-
-export const GET = GetStoreId;

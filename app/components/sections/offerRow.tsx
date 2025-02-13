@@ -13,6 +13,8 @@ interface OfferRowProps {
   selectedComponent: string;
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
   previewWidth: "sm" | "default";
+  setSelectedComponentAction: (componentName: string) => void;
+  setLayoutAction: (layout: Layout) => void;
 }
 
 const OffersContainer = styled.div<{
@@ -74,16 +76,15 @@ export const OfferRow: React.FC<OfferRowProps> = ({
   layout,
   actualName,
   selectedComponent,
-  setSelectedComponent,
-  setLayout,
+  setSelectedComponentAction,
+
+  setLayoutAction,
   previewWidth,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
-  const [categories, setCategories] = useState([]);
-
-  console.warn(previewWidth);
+  const [categories, setCategories] = useState<any[]>([]);
 
   useEffect(() => {
     if (window.innerWidth <= 424) {
@@ -92,75 +93,73 @@ export const OfferRow: React.FC<OfferRowProps> = ({
       setPreview(previewWidth);
     }
   }, [previewWidth]);
-  
+
   useEffect(() => {
     const fetchSpecialOffers = async () => {
       try {
-        const sectionData = layout?.sections?.children?.sections.find(
+        // Safely navigate through the nested objects
+        const sectionData = layout?.sections?.children?.sections?.find(
           (section) => section.type === actualName
-        ) as SpecialOfferSection;
-        
-        const collectionId = sectionData?.blocks?.setting?.selectedCollection;
-        if (!collectionId) return;
+        ) as SpecialOfferSection | undefined;
+
+        // Use optional chaining and provide a fallback
+        const collectionId =
+          sectionData?.blocks?.setting?.selectedCollection ?? null;
+
+        if (!collectionId) {
+          console.warn("No collection ID found");
+          return;
+        }
 
         const response = await fetch(`/api/collections/id`, {
           headers: {
-            'Content-Type': 'application/json',
-            'collectionId': collectionId
-          }
+            "Content-Type": "application/json",
+            collectionId: collectionId,
+          },
         });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
-        setCategories(data.collections[0].products);
+
+        // Add additional safety checks
+        if (data && data.collections && data.collections.length > 0) {
+          setCategories(data.collections[0].products || []);
+        } else {
+          console.warn("No products found in the collection");
+          setCategories([]);
+        }
       } catch (error) {
         console.error("Error fetching special offers:", error);
+        setCategories([]); // Ensure categories is an empty array on error
       }
     };
 
-    fetchSpecialOffers();
-  }, [actualName, layout]);
-   
-  useEffect(() => {
-    const fetchSpecialOffers = async () => {
-      try {
-        const sectionData = layout?.sections?.children?.sections.find(
-          (section) => section.type === actualName
-        ) as SpecialOfferSection;
-        
-        const collectionId = sectionData?.blocks?.setting?.selectedCollection;
-        if (!collectionId) return;
+    // Only fetch if layout and actualName are available
+    if (layout && actualName) {
+      fetchSpecialOffers();
+    }
+  }, [layout, actualName]);
 
-        const response = await fetch(`/api/collections/id`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'collectionId': collectionId
-          }
-        });
-        const data = await response.json();
-        setCategories(data.collections[0].products);
-      } catch (error) {
-        console.error("Error fetching special offers:", error);
-      }
-    };
-
-    fetchSpecialOffers();
-  }, []);
-  const sectionData = layout?.sections?.children?.sections.find(
+  const sectionData = layout?.sections?.children?.sections?.find(
     (section) => section.type === actualName
   ) as OfferRowSection;
 
   if (!sectionData) return null;
 
-  console.log(selectedComponent)
   return (
     <OffersContainer
       $data={sectionData}
       $preview={preview}
       $previewWidth={previewWidth}
-      onClick={() => setSelectedComponent(actualName)}
-      className={`transition-all duration-150 ease-in-out relative  ${selectedComponent === actualName
+      onClick={() => setSelectedComponentAction(actualName)}
+      className={`transition-all duration-150 ease-in-out relative ${
+        selectedComponent === actualName
           ? "border-4 border-blue-500 rounded-2xl shadow-lg"
           : ""
-        }`}
+      }`}
     >
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center">
@@ -180,7 +179,7 @@ export const OfferRow: React.FC<OfferRowProps> = ({
               <button
                 className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
                 onClick={() => {
-                  Delete(actualName, layout, setLayout);
+                  Delete(actualName, layout, setLayoutAction);
                   setShowDeleteModal(false);
                 }}
               >
@@ -209,8 +208,9 @@ export const OfferRow: React.FC<OfferRowProps> = ({
         ref={containerRef}
         $data={sectionData}
         $previewWidth={previewWidth}
-        className={`flex gap-4 flex-col  ${preview === "sm" ? "flex-col" : "flex-row lg:flex-row"
-          }`}
+        className={`flex gap-4 flex-col  ${
+          preview === "sm" ? "flex-col" : "flex-row lg:flex-row"
+        }`}
       >
         <div className="flex items-center justify-start gap-4 flex-row">
           <Image
@@ -230,22 +230,29 @@ export const OfferRow: React.FC<OfferRowProps> = ({
         </div>
         <div className={`flex mr-2 items-center justify-center gap-2 lg:gap-4`}>
           {categories.length > 0 ? (
-            categories.map((category: { _id: string; images: {imageSrc:string;imageAlt:string}; title: string; discount?: number }) => (
-              <OfferItem key={category._id} className="relative">
-                <Image
-                  src={category.images.imageSrc}
-                  alt={category.images.imageAlt}
-                  width={60}
-                  height={60}
-                  className="offer-image rounded-full"
-                />
-                {category.discount && (
-                  <span className="discount-badge bottom-0 text-xs absolute">
-                    {category.discount}%
-                  </span>
-                )}
-              </OfferItem>
-            ))
+            categories.map(
+              (category: {
+                _id: string;
+                images: { imageSrc: string; imageAlt: string };
+                title: string;
+                discount?: number;
+              }) => (
+                <OfferItem key={category._id} className="relative">
+                  <Image
+                    src={category.images.imageSrc}
+                    alt={category.images.imageAlt}
+                    width={60}
+                    height={60}
+                    className="offer-image rounded-full"
+                  />
+                  {category.discount && (
+                    <span className="discount-badge bottom-0 text-xs absolute">
+                      {category.discount}%
+                    </span>
+                  )}
+                </OfferItem>
+              )
+            )
           ) : (
             <div className="flex flex-row items-center justify-start lg:justify-end w-full">
               <span className="text-gray-500 text-xl justify-center text-center w-full flex lg:gap-5">

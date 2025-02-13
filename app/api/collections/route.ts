@@ -1,40 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import connect from "@/lib/data";
 import Collections from "@/models/collections";
-import { GET as GetStoreId } from "../test/route";
+import jwt ,{ JwtPayload } from "jsonwebtoken";
 
-export async function POST(request: Request) {
-  const collectionData = await request.json();
-
-  try {
-    await connect();
-    const newCollection = new Collections(collectionData);
-    await newCollection.save();
-    return NextResponse.json(
-      { message: "Collection created successfully", collection: newCollection },
-      { status: 201 }
-    );
-  } catch (error) {
-    console.error("Error creating collection:", error);
-    return NextResponse.json(
-      { message: "Error creating collection" },
-      { status: 500 }
-    );
-  }
-}
 
 export async function GET(request: NextRequest) {
   try {
     await connect();
-    console.log(request);
 
-    const storeId = await GetStoreId();
-    if (!storeId) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
-
+  
+const token = request.cookies.get("token")?.value || "";
+    if (!token) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
-
-    const collections = await Collections.find({storeId:"store_m71twdtscu7ctu"});
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+    const storeId = decodedToken.storeId;
+    const collections = await Collections.find({storeId:storeId});
+    console.log("collections data",collections);
     return NextResponse.json({ collections }, { status: 200 });
   } catch (error) {
     console.log("Error fetching collections:", error);

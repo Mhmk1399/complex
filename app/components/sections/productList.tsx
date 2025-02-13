@@ -204,9 +204,8 @@ const ProductList: React.FC<ProductListProps> = ({
       const uniqueCategories = [
         ...new Set(productData.map((product) => product.category?.name)),
       ].filter((category): category is string => category !== undefined);
-      
+
       console.log(uniqueCategories);
-      
 
       // Extract unique color codes from all products
       const uniqueColors = [
@@ -301,7 +300,7 @@ const ProductList: React.FC<ProductListProps> = ({
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            token: localStorage.getItem("token") || "",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
         const data = await response.json();
@@ -327,26 +326,41 @@ const ProductList: React.FC<ProductListProps> = ({
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        const token = localStorage.getItem("token");
         const response = await fetch("/api/products", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            token: localStorage.getItem("token") || "",
+            ...(token ? { Authorization: token } : {}),
           },
         });
 
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
 
-        if (data?.products) {
-          const productInfo = data.products.map((product: ProductCardData) => ({
-            ...product,
-            images: product.images,
-          }));
+        console.log("Raw product data:", data); // Add this for debugging
 
-          setProductData(productInfo);
+        // Add more robust error checking
+        if (!data || !Array.isArray(data.products)) {
+          console.error("Invalid product data structure:", data);
+          setProductData([]);
+          return;
         }
+
+        const productInfo = data.products.map((product: ProductCardData) => ({
+          ...product,
+          images: product.images || [], // Provide a default empty array
+          colors: product.colors || [], // Provide a default empty array
+          price: product.price || "0", // Provide a default price
+        }));
+
+        setProductData(productInfo);
       } catch (error) {
-        console.log("Error fetching products:", error);
+        console.error("Error fetching products:", error);
+        setProductData([]); // Set to empty array to prevent undefined errors
       }
     };
 

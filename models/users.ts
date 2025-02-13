@@ -2,17 +2,13 @@ import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
+    phoneNumber: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    role: { type: String, enum: ['superadmin', 'vendor', 'user'], required: true, default: 'user' },
-    vendorId: { 
-      type: mongoose.Schema.Types.ObjectId, 
-      ref: 'Vendor', 
-      required: function(this: { role: string }) { 
-        return this.role === 'user'; 
-      } 
-    },
+    title: { type: String, required: false },
+    repoUrl: { type: String, required: false },
+    vercelUrl: { type: String, required: false },
+    storeId: { type: String, required: true, unique: true },
+
   },
   { timestamps: true }
 );

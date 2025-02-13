@@ -376,13 +376,26 @@ const Header: React.FC<HeaderProps> = ({
   };
   useEffect(() => {
     const fetchCategories = async () => {
+     const fetchCategories = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const repoUrl = urlParams.get("repoUrl");
+      console.log("this is category repoUrl", repoUrl);
       try {
-        const response = await fetch("/api/category");
+        const headers: HeadersInit = {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        }
+
+        const response = await fetch("/api/category", {
+          method: "GET",
+          headers: headers,
+        });
         const data = await response.json();
 
         setCategories(data);
       } catch (error) {
         console.log("Error fetching categories", error);
+        }
 
         // Default categories if fetch fails
         setCategories([

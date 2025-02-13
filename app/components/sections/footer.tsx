@@ -367,11 +367,35 @@ const Footer: React.FC<FooterProps> = ({
   }, []);
   useEffect(() => {
     const fetchCategories = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const repoUrl = urlParams.get("repoUrl");
+      
       try {
-        const response = await fetch("/api/category");
-        const data = await response.json();
+        const headers: HeadersInit = {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        }
+        
 
-        setCategories(data);
+        const response = await fetch("/api/category", {
+          method: "GET",
+          headers: headers,
+        });
+        const data = await response.json();
+        const fetchedCategories = Array.isArray(data) 
+        ? data 
+        : [
+          {
+            _id: "1",
+            name: "لپ تاپ",
+            children: [],
+            storeId: "",
+            slug: "laptops",
+          },
+          // ... other default categories
+        ];
+
+        setCategories(fetchedCategories);
       } catch (error) {
         console.log("Error fetching categories", error);
 
@@ -422,7 +446,6 @@ const Footer: React.FC<FooterProps> = ({
         ]);
       }
     };
-
     fetchCategories();
   }, []);
 

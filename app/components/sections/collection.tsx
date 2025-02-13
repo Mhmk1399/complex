@@ -194,8 +194,15 @@ export const Collection: React.FC<CollectionProps> = ({
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("/api/collections");
-        const data = await response.json();
+        const response = await fetch("/api/collections",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );        const data = await response.json();
 
         const collectionData = data.collections || [];
         setCollections(collectionData);

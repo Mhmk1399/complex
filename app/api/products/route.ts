@@ -1,9 +1,8 @@
 import connect from "@/lib/data";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import Products from "@/models/products";
-import { GET as GetStoreId } from "../test/route";
-
-export async function GET() {
+import { GetStoreId } from "@/utilities/getStoreId";
+export async function GET(request: NextRequest) {
   await connect();
   if (!connect) {
     return NextResponse.json(
@@ -13,15 +12,8 @@ export async function GET() {
   }
 
   try {
-    // Call GetStoreId as a normal async function.
-    const storeIdResult = await GetStoreId();
-
-    // If GetStoreId returns a Response (indicating an error) handle it:
-    if (storeIdResult instanceof Response) {
-      return storeIdResult;
-    }
-
-    const storeId = storeIdResult;
+ 
+    const storeId = await GetStoreId(request);
     if (!storeId) {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }

@@ -72,7 +72,9 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
   }, []);
-  const [collections, setCollections] = useState<Array<{name: string, _id: string}>>([]);
+  const [collections, setCollections] = useState<
+    Array<{ name: string; _id: string }>
+  >([]);
 
   useEffect(() => {
     setMargin({
@@ -92,14 +94,20 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
   useEffect(() => {
     const fetchSpecialOffers = async () => {
       try {
-        const response = await fetch("/api/collections");
+        const response = await fetch("/api/collections", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
         const data = await response.json();
         setCollections(data.collections);
       } catch (error) {
         console.error("Error fetching special offers:", error);
       }
     };
-  
+
     fetchSpecialOffers();
   }, []);
   const handleUpdate = (
@@ -185,7 +193,10 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
   };
 
   return (
-    <div className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4" dir="rtl">
+    <div
+      className="p-3 max-w-4xl space-y-2 mx-4 bg-gray-100 rounded mt-4"
+      dir="rtl"
+    >
       <h2 className="text-xl font-bold my-4">تنظیمات محصولات</h2>
 
       {/* Content Section */}
@@ -242,24 +253,23 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
               />
             </div>
             <div className="mt-4">
-  <label className="block mb-2 text-sm font-bold text-gray-700">
-    انتخاب کالکشن
-  </label>
-  <select
-    name="selectedCollection"
-    value={userInputData?.blocks?.setting?.selectedCollection || ""}
-    onChange={handleBlockSettingChange}
-    className="w-full p-2 border rounded"
-  >
-    <option value="">انتخاب کنید</option>
-    {collections.map((collection) => (
-      <option key={collection._id} value={collection._id}>
-        {collection.name}
-      </option>
-    ))}
-  </select>
-</div>
-
+              <label className="block mb-2 text-sm font-bold text-gray-700">
+                انتخاب کالکشن
+              </label>
+              <select
+                name="selectedCollection"
+                value={userInputData?.blocks?.setting?.selectedCollection || ""}
+                onChange={handleBlockSettingChange}
+                className="w-full p-2 border rounded"
+              >
+                <option value="">انتخاب کنید</option>
+                {collections.map((collection) => (
+                  <option key={collection._id} value={collection._id}>
+                    {collection.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         )}
       </div>
@@ -307,11 +317,15 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
           <div className="p-4 border-t border-gray-100">
             <div className="grid md:grid-cols-1 gap-4">
               <div className="p-3 bg-gray-100 rounded-lg">
-                <h4 className="font-semibold text-sky-700 my-4">تنظیمات عنوان</h4>
+                <h4 className="font-semibold text-sky-700 my-4">
+                  تنظیمات عنوان
+                </h4>
                 <ColorInput
                   label="رنگ عنوان"
                   name="headingColor"
-                  value={userInputData?.blocks?.setting?.headingColor || "#000000"}
+                  value={
+                    userInputData?.blocks?.setting?.headingColor || "#000000"
+                  }
                   onChange={handleBlockSettingChange}
                 />
                 <label>سایز عنوان</label>
@@ -320,13 +334,18 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
                   name="headingFontSize"
                   min="16"
                   max="48"
-                  value={userInputData?.blocks?.setting?.headingFontSize || "32"}
+                  value={
+                    userInputData?.blocks?.setting?.headingFontSize || "32"
+                  }
                   onChange={handleBlockSettingChange}
                   className="w-full"
                 />
                 <select
                   name="headingFontWeight"
-                  value={userInputData?.blocks?.setting?.headingFontWeight || "normal"}
+                  value={
+                    userInputData?.blocks?.setting?.headingFontWeight ||
+                    "normal"
+                  }
                   onChange={handleBlockSettingChange}
                   className="w-full p-2 border rounded mt-2"
                 >
@@ -336,14 +355,15 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
               </div>
 
               <div className="p-3 bg-gray-100 rounded-lg">
-                <h4 className="font-semibold text-sky-700 my-4">تنظیمات کارت محصول</h4>
+                <h4 className="font-semibold text-sky-700 my-4">
+                  تنظیمات کارت محصول
+                </h4>
                 <ColorInput
                   label="رنگ پس زمینه کارت"
                   name="backgroundColor"
                   value={userInputData?.setting.backgroundColor || "#FFFFFF"}
                   onChange={handleSettingChange}
                 />
-                
               </div>
             </div>
           </div>

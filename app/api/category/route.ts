@@ -1,8 +1,7 @@
 import connect from "@/lib/data";
 import Category from "@/models/category";
 import { NextRequest, NextResponse } from "next/server";
-import { GET as GetStoreId } from "../test/route";
-
+import jwt, { JwtPayload } from "jsonwebtoken";
 export async function GET(req: NextRequest) {
   try {
     await connect();
@@ -12,20 +11,18 @@ export async function GET(req: NextRequest) {
     }
     console.log(req);
 
-    // Call GetStoreId as a normal async function.
-    const storeIdResult = await GetStoreId();
- console.log(storeIdResult);
- 
-    // If GetStoreId returns a Response (indicating an error) handle it:
-    if (storeIdResult instanceof Response) {
-      return storeIdResult;
+    const token = req.headers.get("Authorization");
+    if (!token) {
+      return NextResponse.json({ error: "Token not provided" }, { status: 401 });
     }
+    const secret = process.env.JWT_SECRET;
+    const decodedToken = jwt.verify(token, secret || "sdsdsdsd") as JwtPayload;
+    const storeId = decodedToken.storeId
 
-    const storeId = storeIdResult;
     if (!storeId) {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
-    const categories = await Category.find().populate("children");
+    const categories = await Category.find({ storeId: storeId }).populate("children");
 
     return NextResponse.json(categories);
   } catch (error) {
