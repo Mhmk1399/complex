@@ -138,7 +138,7 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
     };
   
     fetchCollectionProducts();
-  }, [ layout]);
+  });
   useEffect(() => {
     const fetchCollectionProducts = async () => {
       try {
@@ -159,7 +159,7 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
     };
   
     fetchCollectionProducts();
-  }, [ ]);
+  }, );
   if (!layout || !layout.sections) {
     return null;
   }

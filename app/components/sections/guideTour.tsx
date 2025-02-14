@@ -188,7 +188,7 @@ const TourGuide: React.FC<TourGuideProps> = ({
     if (!hasSeenTour) {
       setIsTourVisible(true);
     }
-  }, []);
+  });
 
   useEffect(() => {
     if (isTourVisible && steps[currentStep].ref.current) {
