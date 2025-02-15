@@ -84,7 +84,11 @@ export const OfferRow: React.FC<OfferRowProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
+<<<<<<< HEAD
   const [categories, setCategories] = useState([]);
+=======
+  const [categories, setCategories] = useState<categories[]>([]);
+>>>>>>> parent of 0f789d6 (w)
 
   useEffect(() => {
     if (window.innerWidth <= 424) {
@@ -95,53 +99,26 @@ export const OfferRow: React.FC<OfferRowProps> = ({
   }, [previewWidth]);
 
   useEffect(() => {
-    const fetchSpecialOffers = async () => {
-      try {
-        // Safely navigate through the nested objects
-        const sectionData = layout?.sections?.children?.sections?.find(
-          (section) => section.type === actualName
-        ) as SpecialOfferSection | undefined;
-
-        // Use optional chaining and provide a fallback
-        const collectionId =
-          sectionData?.blocks?.setting?.selectedCollection ?? null;
-
-        if (!collectionId) {
-          console.warn("No collection ID found");
-          return;
+    const fetchData = async () => {
+      const sectionData = layout?.sections?.children?.sections.find(
+        (section) => section.type === actualName
+      ) as SpecialOfferSection;
+      
+      const collectionId = sectionData?.blocks?.setting?.selectedCollection;
+      if (!collectionId) return;
+  
+      const response = await fetch(`/api/collections/id`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'collectionId': collectionId
         }
-
-        const response = await fetch(`/api/collections/id`, {
-          headers: {
-            "Content-Type": "application/json",
-            collectionId: collectionId,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        // Add additional safety checks
-        if (data && data.collections && data.collections.length > 0) {
-          setCategories(data.collections[0].products || []);
-        } else {
-          console.warn("No products found in the collection");
-          setCategories([]);
-        }
-      } catch (error) {
-        console.error("Error fetching special offers:", error);
-        setCategories([]); // Ensure categories is an empty array on error
-      }
+      });
+      const data = await response.json();
+      setCategories(data.collections[0].products);
     };
-
-    // Only fetch if layout and actualName are available
-    if (layout && actualName) {
-      fetchSpecialOffers();
-    }
-  }, [layout, actualName]);
+  
+    fetchData();
+  }, [layout]);
 
   const sectionData = layout?.sections?.children?.sections?.find(
     (section) => section.type === actualName

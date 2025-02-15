@@ -114,7 +114,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
-  }, [layout]);
+  });
 
   // useEffect(() => {
   //   const initialData = Compiler(layout, selectedComponent)[0];

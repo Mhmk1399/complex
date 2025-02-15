@@ -115,11 +115,11 @@ export const ProductListForm: React.FC<ProductListProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent);
     setUserInputData(initialData[0]);
-  }, [layout, selectedComponent , setUserInputData]);
+  }, );
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent);
     setUserInputData(initialData[0]);
-  }, [layout, selectedComponent , setUserInputData]);
+  }, [selectedComponent ]);
 
   // Add this state to control updates
   const [isUpdating, setIsUpdating] = useState(false);

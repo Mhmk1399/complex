@@ -119,7 +119,7 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
     if (initialData) {
       setUserInputData(initialData);
     }
-  }, [selectedComponent , layout]);
+  }, [selectedComponent ]);
 
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>

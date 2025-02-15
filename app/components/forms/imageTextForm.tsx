@@ -152,14 +152,14 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
       ...Compiler(layout, selectedComponent),
     };
     setUserInputData(initialData[0]);
-  }, [layout, selectedComponent, setUserInputData, defaultValues]);
+  },);
   useEffect(() => {
     const initialData = {
       ...defaultValues,
       ...Compiler(layout, selectedComponent),
     };
     setUserInputData(initialData[0]);
-  }, [layout, selectedComponent, setUserInputData, defaultValues]);
+  }, [ selectedComponent ]);
 
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

@@ -37,6 +37,8 @@ import TourGuide from "./sections/guideTour";
 export const Main = () => {
   const [Data, setData] = useState<Layout>(nullJson as unknown as Layout);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [routes, setRoutes] = useState<string[]>([]);
   // const [loading, setLoading] = useState(true);
   const [layout, setLayout] = useState<Layout>(Data);
   const [activeMode, setActiveMode] = useState<"sm" | "lg">("sm");
@@ -47,7 +49,7 @@ export const Main = () => {
     "save" | "delete" | "preview" | "sitePreview" | "addRoute" | "changeRoute"
   >("save");
   const [isFormOpen, setIsFormOpen] = useState(false); //  state for form visibility
-
+  const [newRouteName, setNewRouteName] = useState("");
   const [saveStatus, setSaveStatus] = useState<
     "idle" | "saving" | "saved" | "error"
   >("idle");
@@ -63,6 +65,7 @@ export const Main = () => {
     "DetailPage",
   ]);
 
+  // اینجا ادرس سایتی که ساخته میشه داده میشه به دکمه
   const handleSiteView = () => {
     try {
       const token = localStorage.getItem("complexToken");
@@ -86,6 +89,8 @@ export const Main = () => {
       toast.error("مشکل در باز کردن سایت");
     }
   };
+
+  // اینجا لیت فایل های داخل گیت هابو میبینیم
   const handleAddRoute = async ({ name }: { name: string }) => {
     const urlParams = new URLSearchParams(window.location.search);
     const repoUrl = urlParams.get("repoUrl");
@@ -245,11 +250,7 @@ export const Main = () => {
   useEffect(() => {
     sendTokenToServer();
   }, [activeMode, selectedRoute]);
-  useEffect(() => {
-    sendTokenToServer();
-  }, [activeMode, selectedRoute]);
 
-  const [newRouteName, setNewRouteName] = useState("");
   useEffect(() => {
     const currentLayoutData = activeMode === "sm" ? smData : Data;
 
@@ -317,8 +318,7 @@ export const Main = () => {
   const handleModeChange = (mode: "lg" | "sm") => {
     setActiveMode(mode);
   };
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [routes, setRoutes] = useState<string[]>([]);
+
   const fetchRoutes = async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const repoUrl = urlParams.get("repoUrl");

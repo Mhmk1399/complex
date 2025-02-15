@@ -111,7 +111,7 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent);
     setUserInputData(initialData[0]);
-  }, [selectedComponent , layout , setUserInputData]);
+  }, [selectedComponent ]);
 
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
