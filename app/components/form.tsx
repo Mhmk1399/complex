@@ -583,19 +583,20 @@ export const Form = ({
             selectedComponent={selectedComponent}
           />
         );
-      case "SpecialOffer":
-        return (
-          <SpecialForm
-            setUserInputData={
-              setUserInputData as React.Dispatch<
-                React.SetStateAction<SpecialOfferSection>
-              >
-            }
-            userInputData={userInputData as SpecialOfferSection}
-            layout={layout}
-            selectedComponent={selectedComponent}
-          />
-        );
+      // case "SpecialOffer":
+      //   return (
+      //     <SpecialForm
+      //       setUserInputData={
+      //         setUserInputData as React.Dispatch<
+      //           React.SetStateAction<SpecialOfferSection>
+      //         >
+      //       }
+      //       userInputData={userInputData as SpecialOfferSection}
+      //       layout={layout}
+      //       selectedComponent={selectedComponent}
+      //       actualName={actualName}
+      //     />
+      //   );
       case "OfferRow":
         return (
           <OfferRowForm
