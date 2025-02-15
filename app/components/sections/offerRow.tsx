@@ -13,7 +13,7 @@ interface OfferRowProps {
   selectedComponent: string;
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
   previewWidth: "sm" | "default";
-  setSelectedComponentAction: (componentName: string) => void;
+  // setSelectedComponentAction: (componentName: string) => void;
   setLayoutAction: (layout: Layout) => void;
 }
 
@@ -76,7 +76,7 @@ export const OfferRow: React.FC<OfferRowProps> = ({
   layout,
   actualName,
   selectedComponent,
-  setSelectedComponentAction,
+  // setSelectedComponentAction,
 
   setLayoutAction,
   previewWidth,
@@ -84,11 +84,7 @@ export const OfferRow: React.FC<OfferRowProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
-<<<<<<< HEAD
   const [categories, setCategories] = useState([]);
-=======
-  const [categories, setCategories] = useState<categories[]>([]);
->>>>>>> parent of 0f789d6 (w)
 
   useEffect(() => {
     if (window.innerWidth <= 424) {
@@ -131,7 +127,7 @@ export const OfferRow: React.FC<OfferRowProps> = ({
       $data={sectionData}
       $preview={preview}
       $previewWidth={previewWidth}
-      onClick={() => setSelectedComponentAction(actualName)}
+      // onClick={() => setSelectedComponentAction(actualName)}
       className={`transition-all duration-150 ease-in-out relative ${
         selectedComponent === actualName
           ? "border-4 border-blue-500 rounded-2xl shadow-lg"

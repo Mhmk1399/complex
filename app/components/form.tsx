@@ -597,7 +597,7 @@ export const Form = ({
       //       actualName={actualName}
       //     />
       //   );
-      case "OfferRow":
+      // case "OfferRow":
         return (
           <OfferRowForm
             setUserInputData={
@@ -623,7 +623,7 @@ export const Form = ({
             selectedComponent={selectedComponent}
           />
         );
-      case "ProductsRow":
+      // case "ProductsRow":
         return (
           <ProductRowForm
             setUserInputData={

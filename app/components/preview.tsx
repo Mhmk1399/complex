@@ -16,13 +16,13 @@ import DetailPage from "./sections/detailPage";
 import { Collection } from "./sections/collection";
 import BlogList from "./sections/blogList";
 import BlogDetail from "./sections/blogDetail";
-import { SpecialOffer } from "./sections/specialOffer";
+// import { SpecialOffer } from "./sections/specialOffer";
 import { Story } from "./sections/story";
 import Gallery from "./sections/gallery";
 import SlideBanner from "./sections/slideBanner";
-import { OfferRow } from "./sections/offerRow";
+// import { OfferRow } from "./sections/offerRow";
 import { Brands } from "./sections/brands";
-import { ProductsRow } from "./sections/productsRow";
+// import { ProductsRow } from "./sections/productsRow";
 
 // First update the PreviewProps interface
 interface PreviewProps {
@@ -63,15 +63,14 @@ export const Preview: React.FC<PreviewProps> = ({
     Collection,
     BlogList,
     BlogDetail,
-    SpecialOffer,
+    // SpecialOffer,
     Story,
     Gallery,
     SlideBanner,
-    OfferRow,
+    // OfferRow,
     Brands,
-    ProductsRow,
+    // ProductsRow,
   };
-
 
   return (
     <div>
@@ -115,11 +114,13 @@ export const Preview: React.FC<PreviewProps> = ({
                     productId={"674c044a7e265babdd061919"}
                     blogId={"674dc8d6cf4d515adfa1a31f"}
                     previewWidth={previewWidth} // Pass the state to components
-                    setSelectedComponentAction={function (): void {
-                      throw new Error("Function not implemented.");
-                    } } setLayoutAction={function (): void {
-                      throw new Error("Function not implemented.");
-                    } }                  />
+                    // setSelectedComponentAction={function (): void {
+                    //   throw new Error("Function not implemented.");
+                    // }}
+                    // setLayoutAction={function (): void {
+                    //   throw new Error("Function not implemented.");
+                    // }}
+                  />
                 </div>
               ) : null;
             })}
