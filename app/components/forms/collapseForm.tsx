@@ -124,7 +124,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
       setLoaded(true);
       setUserInputData(initialData);
     }
-  }, []);
+  }, [setUserInputData, layout, selectedComponent]);
   const handleAddBlock = () => {
     setUserInputData((prev: CollapseSection) => {
       const newBlockNumber = prev.blocks.length + 1;
@@ -155,7 +155,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
       setLoaded(true);
       setUserInputData(initialData);
     }
-  }, [selectedComponent]);
+  }, [selectedComponent , layout , setUserInputData]);
 
   const handleBlockChange = (index: number, field: string, value: string) => {
     setUserInputData((prev: CollapseSection) => ({

@@ -157,7 +157,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
-  }, []);
+  }, [layout, selectedComponent , setUserInputData]);
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     if (initialData) {
@@ -166,7 +166,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
         blocks: initialData.blocks || {}, // Ensure blocks is never undefined
       });
     }
-  }, [selectedComponent]);
+  }, [layout, selectedComponent , setUserInputData]);
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     columnNum: number

@@ -66,10 +66,8 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
- 
-  const [isUpdating, setIsUpdating] = useState(false);
 
- 
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleUpdate = (
     type: "margin" | "padding",
@@ -154,14 +152,14 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
       ...Compiler(layout, selectedComponent),
     };
     setUserInputData(initialData[0]);
-  }, []);
+  }, [layout, selectedComponent, setUserInputData, defaultValues]);
   useEffect(() => {
     const initialData = {
       ...defaultValues,
       ...Compiler(layout, selectedComponent),
     };
     setUserInputData(initialData[0]);
-  }, [selectedComponent]);
+  }, [layout, selectedComponent, setUserInputData, defaultValues]);
 
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

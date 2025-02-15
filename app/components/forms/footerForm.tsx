@@ -127,7 +127,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
         blocks: initialData.blocks || {},
       });
     }
-  }, [selectedComponent]);
+  }, [layout, selectedComponent , setUserInputData]);
 
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

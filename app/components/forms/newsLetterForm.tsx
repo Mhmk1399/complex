@@ -113,11 +113,11 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
-  }, []);
+  }, [layout, selectedComponent , setUserInputData]);
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
-  }, [selectedComponent]);
+  }, [layout, selectedComponent , setUserInputData]);
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {

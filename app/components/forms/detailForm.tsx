@@ -117,13 +117,13 @@ export const DetailForm: React.FC<DetailFormProps> = ({
     if (initialData) {
       setUserInputData(initialData);
     }
-  }, []);
+  }, [layout, selectedComponent , setUserInputData]);
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     if (initialData) {
       setUserInputData(initialData);
     }
-  }, [selectedComponent]);
+  }, [layout, selectedComponent , setUserInputData]);
 
   const [isUpdating, setIsUpdating] = useState(false);
 

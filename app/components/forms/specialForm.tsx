@@ -56,7 +56,9 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
-  const [collections, setCollections] = useState<Array<{name: string, _id: string}>>([]);
+  const [collections, setCollections] = useState<
+    Array<{ name: string; _id: string }>
+  >([]);
 
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
@@ -132,7 +134,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
         console.error("Error fetching special offers:", error);
       }
     };
-  
+
     fetchSpecialOffers();
   }, []);
 
@@ -180,7 +182,6 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
   //     console.error("Fetch error:", error);
   //   }
   // };
-
 
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -248,42 +249,42 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
       {/* Content Section */}
 
       {isContentOpen && (
-  <div className="p-4 border-t border-gray-100">
-    <div className="space-y-4">
-      <div>
-        <label className="block mb-2 text-sm font-bold text-gray-700">
-          عنوان بخش
-        </label>
-        <input
-          type="text"
-          name="textHeading"
-          value={userInputData?.blocks?.textHeading || ""}
-          onChange={handleBlockChange}
-          className="w-full p-2 border rounded"
-        />
-      </div>
-      
-      <div>
-        <label className="block mb-2 text-sm font-bold text-gray-700">
-          انتخاب کالکشن
-        </label>
-        <select
-          name="selectedCollection"
-          value={userInputData?.blocks?.setting?.selectedCollection || ""}
-          onChange={handleBlockSettingChange}
-          className="w-full p-2 border rounded"
-        >
-          <option value="">انتخاب کنید</option>
-          {collections.map((collection) => (
-            <option key={collection._id} value={collection._id}>
-              {collection.name}
-            </option>
-          ))}
-        </select>
-      </div>
-    </div>
-  </div>
-)}
+        <div className="p-4 border-t border-gray-100">
+          <div className="space-y-4">
+            <div>
+              <label className="block mb-2 text-sm font-bold text-gray-700">
+                عنوان بخش
+              </label>
+              <input
+                type="text"
+                name="textHeading"
+                value={userInputData?.blocks?.textHeading || ""}
+                onChange={handleBlockChange}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+
+            <div>
+              <label className="block mb-2 text-sm font-bold text-gray-700">
+                انتخاب کالکشن
+              </label>
+              <select
+                name="selectedCollection"
+                value={userInputData?.blocks?.setting?.selectedCollection || ""}
+                onChange={handleBlockSettingChange}
+                className="w-full p-2 border rounded"
+              >
+                <option value="">انتخاب کنید</option>
+                {collections.map((collection) => (
+                  <option key={collection._id} value={collection._id}>
+                    {collection.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Style Settings */}
 
@@ -335,8 +336,6 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
           </div>
         </div>
       )}
-
-      {/* Spacing Settings */}
 
       {isSpacingOpen && (
         <div className="p-4 border-t border-gray-100 animate-slideDown">

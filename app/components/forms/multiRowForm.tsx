@@ -142,14 +142,14 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
       setLoaded(true);
       setUserInputData(initialData);
     }
-  }, []);
+  }, [layout, selectedComponent , setUserInputData]);
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     if (initialData) {
       setLoaded(true);
       setUserInputData(initialData);
     }
-  }, [selectedComponent]);
+  }, [layout, selectedComponent , setUserInputData]);
 
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,

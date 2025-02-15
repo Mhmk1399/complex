@@ -71,7 +71,7 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
-  }, []);
+  }, [layout, selectedComponent , setUserInputData]);
   const [collections, setCollections] = useState<Array<{name: string, _id: string}>>([]);
 
   useEffect(() => {

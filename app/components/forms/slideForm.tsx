@@ -77,7 +77,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
     if (initialData) {
       setUserInputData(initialData);
     }
-  }, [selectedComponent]);
+  }, [layout, selectedComponent , setUserInputData]);
   useEffect(() => {
     setIsContentOpen(true);
   }, []);

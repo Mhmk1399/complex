@@ -101,7 +101,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent);
     setUserInputData(initialData[0]);
-  }, [selectedComponent]);
+  }, [layout, selectedComponent , setUserInputData]);
 
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

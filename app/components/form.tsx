@@ -108,6 +108,7 @@ import { OfferRowForm } from "./forms/offerRowForm";
 import { BrandsForm } from "./forms/brandsForm";
 import { ProductRowForm } from "./forms/productRowForm";
 import { styled } from "styled-components";
+import { set } from "lodash";
 type FormData =
   | HeaderSection
   | MultiRowSection
@@ -202,7 +203,7 @@ export const Form = ({
     if (selectedComponent) {
       setIsFormOpen(true);
     }
-  }, [selectedComponent]);
+  }, [selectedComponent , setIsFormOpen]);
 
   // Setup sensors for dnd-kit
   const sensors = useSensors(
@@ -262,7 +263,7 @@ export const Form = ({
       );
       setLayout(newLayout);
     }
-  }, [userInputData]);
+  }, [userInputData , layout , setLayout]);
 
   const SortableItem = ({ id }: { id: string }) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
@@ -289,7 +290,7 @@ export const Form = ({
 
   useEffect(() => {
     setOrders([...layout.sections.children.order]);
-  }, [layout.sections.children.order]);
+  }, [layout.sections.children.order , setOrders]);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;

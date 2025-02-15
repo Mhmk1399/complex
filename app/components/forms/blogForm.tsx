@@ -4,6 +4,7 @@ import { BlogSection, BlogListFormProps } from "@/lib/types";
 import React from "react";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
+import { set } from "lodash";
 
 interface BoxValues {
   top: number;
@@ -110,7 +111,7 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent);
     setUserInputData(initialData[0]);
-  }, [selectedComponent]);
+  }, [selectedComponent , layout , setUserInputData]);
 
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
