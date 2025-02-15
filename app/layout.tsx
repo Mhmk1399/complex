@@ -1,15 +1,7 @@
 import type { Metadata } from "next";
-import { Cairo } from "next/font/google";
-
 import StyledComponentsRegistry from "@/lib/registry";
 import "./globals.css";
-
-const cairoFont = Cairo({
-  weight: "400",
-  subsets: ["arabic"],
-  variable: "--font-cairo",
-});
-
+import { hezare } from "../next-persian-fonts/dohezar";
 
 export const metadata: Metadata = {
   title: "سایت ساز تومک",
@@ -18,14 +10,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: Readonly<{  
   children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${cairoFont.variable}  antialiased`}
-      >
+      <body className={`${hezare.variable}`}>
         <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
       </body>
     </html>
