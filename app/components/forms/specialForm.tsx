@@ -10,7 +10,7 @@ interface SpecialFormProps {
   userInputData: SpecialOfferSection;
   layout: Layout;
   selectedComponent: string;
-  actualName: string
+  actualName: string;
 }
 
 interface BoxValues {
@@ -53,7 +53,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
   userInputData,
   layout,
   selectedComponent,
-  actualName
+  actualName,
 }) => {
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState(false);
@@ -66,7 +66,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
     console.log(setCollections);
-  }, []);
+  }, [layout, selectedComponent, setUserInputData]);
 
   const [margin, setMargin] = useState<BoxValues>({
     top: 0,
@@ -133,22 +133,22 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
         const sectionData = layout?.sections?.children?.sections.find(
           (section) => section.type === actualName
         ) as SpecialOfferSection;
-        
+
         const collectionId = sectionData?.blocks?.setting?.selectedCollection;
         if (!collectionId) {
           console.log("No collection ID found");
           return;
         }
-  
+
         const response = await fetch(`/api/collections/id`, {
           headers: {
-            'Content-Type': 'application/json',
-            'collectionId': collectionId
-          }
+            "Content-Type": "application/json",
+            collectionId: collectionId,
+          },
         });
-        
+
         const data = await response.json();
-        
+
         // Add null checks before accessing nested properties
         if (data && data.collections && data.collections.length > 0) {
           setSpecialOfferProducts(data.collections[0].products || []);
@@ -164,8 +164,6 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
 
     fetchSpecialOffers();
   }, [actualName, layout]);
-  
-
 
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -335,6 +333,6 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
     </div>
   );
 };
-function setSpecialOfferProducts(_arg0: ProductCardData[]) {
-  throw new Error("Function not implemented.");
+function setSpecialOfferProducts(products: ProductCardData[]) {
+  console.log(products);
 }

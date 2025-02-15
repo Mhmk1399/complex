@@ -1,9 +1,9 @@
 "use client";
 import { Main } from "./components/main";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-export default function Home() {
+function HomeContent() {
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const searchParams = useSearchParams();
@@ -28,7 +28,6 @@ export default function Home() {
         const data = await response.json();
         
         if (data.token) {
-          // Store the token in localStorage or state management
           setToken(data.token);
           localStorage.setItem('complexToken', data.token);
         }
@@ -46,10 +45,13 @@ export default function Home() {
     return <div>Loading...</div>;
   }
 
-  // Only render Main if token is generated
+  return token ? <Main /> : <div>Token generation failed</div>;
+}
+
+export default function Home() {
   return (
-    <div>
-      {token ? <Main /> : <div>Token generation failed</div>}
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <HomeContent />
+    </Suspense>
   );
 }
