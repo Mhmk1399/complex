@@ -84,7 +84,11 @@ export const OfferRow: React.FC<OfferRowProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
+<<<<<<< HEAD
   const [categories, setCategories] = useState([]);
+=======
+  const [categories, setCategories] = useState<categories[]>([]);
+>>>>>>> parent of 0f789d6 (w)
 
   useEffect(() => {
     if (window.innerWidth <= 424) {
