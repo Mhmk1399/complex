@@ -127,7 +127,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
     };
     setUserInputData(initialData);
     setIsDataReady(true);
-  });
+  }, [selectedComponent]);
 
   if (!isDataReady) {
     return (

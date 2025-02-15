@@ -96,7 +96,7 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
-  });
+  },[selectedComponent]);
 
   const handleSlideChange = (index: number, field: string, value: string) => {
     setUserInputData((prev: SlideBannerSection) => ({

@@ -87,7 +87,8 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
-  }, );
+  }, [ selectedComponent]); // Add dependency array
+  
 
   const handleBrandChange = (index: number, field: string, value: string) => {
     if (isUpdating) return;
