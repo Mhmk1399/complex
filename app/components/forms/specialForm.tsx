@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Layout, SpecialOfferSection } from "@/lib/types";
+import { Layout, ProductCardData, SpecialOfferSection } from "@/lib/types";
 import React from "react";
 import MarginPaddingEditor from "../sections/editor";
 import { Compiler } from "../compiler";
@@ -10,6 +10,7 @@ interface SpecialFormProps {
   userInputData: SpecialOfferSection;
   layout: Layout;
   selectedComponent: string;
+  actualName: string
 }
 
 interface BoxValues {
@@ -52,6 +53,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
   userInputData,
   layout,
   selectedComponent,
+  actualName
 }) => {
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState(false);
@@ -63,6 +65,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
+    console.log(setCollections);
   }, []);
 
   const [margin, setMargin] = useState<BoxValues>({
@@ -127,61 +130,42 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
   useEffect(() => {
     const fetchSpecialOffers = async () => {
       try {
-        const response = await fetch("/api/collections");
+        const sectionData = layout?.sections?.children?.sections.find(
+          (section) => section.type === actualName
+        ) as SpecialOfferSection;
+        
+        const collectionId = sectionData?.blocks?.setting?.selectedCollection;
+        if (!collectionId) {
+          console.log("No collection ID found");
+          return;
+        }
+  
+        const response = await fetch(`/api/collections/id`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'collectionId': collectionId
+          }
+        });
+        
         const data = await response.json();
-        setCollections(data.collections);
+        
+        // Add null checks before accessing nested properties
+        if (data && data.collections && data.collections.length > 0) {
+          setSpecialOfferProducts(data.collections[0].products || []);
+        } else {
+          console.log("No products found in the collection");
+          setSpecialOfferProducts([]);
+        }
       } catch (error) {
         console.error("Error fetching special offers:", error);
+        setSpecialOfferProducts([]); // Set to empty array on error
       }
     };
 
     fetchSpecialOffers();
-  }, []);
+  }, [actualName, layout]);
+  
 
-  // const handleLiveInput = async (
-  //   event: React.MouseEvent<HTMLButtonElement>
-  // ) => {
-  //   event.preventDefault();
-  //   console.log("Sending input:", inputText);
-
-  //   if (!inputText?.trim()) {
-  //     console.log("Input is empty");
-  //     return;
-  //   }
-
-  //   try {
-  //     const requestBody = {
-  //       userInput: inputText,
-  //     };
-  //     console.log("Request body:", requestBody);
-
-  //     const response = await fetch("/api/handleInputs", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(requestBody),
-  //     });
-
-  //     const result = await response.json();
-  //     console.log("API response:", result);
-
-  //     if (result.success && result.data) {
-  //       setUserInputData((prevData) => ({
-  //         ...prevData,
-  //         blocks: {
-  //           ...prevData.blocks,
-  //           setting: {
-  //             ...prevData.blocks.setting,
-  //             ...result.data.blocks.setting,
-  //           },
-  //         },
-  //       }));
-  //     }
-  //   } catch (error) {
-  //     console.error("Fetch error:", error);
-  //   }
-  // };
 
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -351,3 +335,6 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
     </div>
   );
 };
+function setSpecialOfferProducts(_arg0: ProductCardData[]) {
+  throw new Error("Function not implemented.");
+}

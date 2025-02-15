@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Search, ShoppingCart, User, MapPin } from "lucide-react";
+import { NextResponse } from "next/server";
 
 interface HeaderProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -367,7 +368,6 @@ const Header: React.FC<HeaderProps> = ({
   const [categories, setCategories] = useState<Category[]>([]);
 
   console.log("preview", preview);
-  
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -376,54 +376,71 @@ const Header: React.FC<HeaderProps> = ({
   };
   useEffect(() => {
     const fetchCategories = async () => {
+      const token = localStorage.getItem("complexToken");
+      console.log("token", token);
+      if (!token) {
+        return NextResponse.json({ error: "Token not provided" }, { status: 401 });
+
+      
+      }
+     
+
       try {
-        const response = await fetch("/api/category");
+        const headers: HeadersInit = {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        };
+
+        const response = await fetch("/api/category", {
+          method: "GET",
+          headers: headers,
+        });
         const data = await response.json();
 
         setCategories(data);
       } catch (error) {
         console.log("Error fetching categories", error);
-
-        // Default categories if fetch fails
-        setCategories([
-          {
-            _id: "1",
-            name: "لپ تاپ",
-            children: [],
-            storeId: "",
-          },
-          {
-            _id: "2",
-            name: "موبایل",
-            children: [],
-            storeId: "",
-          },
-          {
-            _id: "3",
-            name: "تبلت",
-            children: [],
-            storeId: "",
-          },
-          {
-            _id: "4",
-            name: "ساعت هوشمند",
-            children: [],
-            storeId: "",
-          },
-          {
-            _id: "5",
-            name: "هدفون",
-            children: [],
-            storeId: "",
-          },
-          {
-            _id: "6",
-            name: "لوازم جانبی",
-            children: [],
-            storeId: "",
-          },
-        ]);
       }
+
+      // Default categories if fetch fails
+      setCategories([
+        {
+          _id: "1",
+          name: "لپ تاپ",
+          children: [],
+          storeId: "",
+        },
+        {
+          _id: "2",
+          name: "موبایل",
+          children: [],
+          storeId: "",
+        },
+        {
+          _id: "3",
+          name: "تبلت",
+          children: [],
+          storeId: "",
+        },
+        {
+          _id: "4",
+          name: "ساعت هوشمند",
+          children: [],
+          storeId: "",
+        },
+        {
+          _id: "5",
+          name: "هدفون",
+          children: [],
+          storeId: "",
+        },
+        {
+          _id: "6",
+          name: "لوازم جانبی",
+          children: [],
+          storeId: "",
+        },
+      ]);
     };
 
     fetchCategories();

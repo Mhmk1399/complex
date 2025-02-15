@@ -97,9 +97,17 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
   useEffect(() => {
     const fetchCollections = async () => {
       try {
-        const response = await fetch("/api/collections");
+        const response = await fetch("/api/collections",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         const data = await response.json();
-        setCollections(data.collections);
+        setCollections(data);
       } catch (error) {
         console.error("Error fetching collections:", error);
       }

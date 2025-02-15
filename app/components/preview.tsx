@@ -115,7 +115,11 @@ export const Preview: React.FC<PreviewProps> = ({
                     productId={"674c044a7e265babdd061919"}
                     blogId={"674dc8d6cf4d515adfa1a31f"}
                     previewWidth={previewWidth} // Pass the state to components
-                  />
+                    setSelectedComponentAction={function (): void {
+                      throw new Error("Function not implemented.");
+                    } } setLayoutAction={function (): void {
+                      throw new Error("Function not implemented.");
+                    } }                  />
                 </div>
               ) : null;
             })}

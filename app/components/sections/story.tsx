@@ -104,10 +104,16 @@ export const Story: React.FC<StoryProps> = ({
   useEffect(() => {
     const fetchAllStories = async () => {
       try {
+
+        
+        const headers: HeadersInit = {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        }
+  
         const response = await fetch("/api/story", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          method: "GET",
+          headers: headers,
         });
         const data = await response.json();
         setStories(data);
@@ -117,6 +123,7 @@ export const Story: React.FC<StoryProps> = ({
     };
     fetchAllStories();
   }, []);
+  
 
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName

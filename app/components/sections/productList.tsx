@@ -204,9 +204,8 @@ const ProductList: React.FC<ProductListProps> = ({
       const uniqueCategories = [
         ...new Set(productData.map((product) => product.category?.name)),
       ].filter((category): category is string => category !== undefined);
-      
+
       console.log(uniqueCategories);
-      
 
       // Extract unique color codes from all products
       const uniqueColors = [
@@ -301,7 +300,7 @@ const ProductList: React.FC<ProductListProps> = ({
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            token: localStorage.getItem("token") || "",
+            Authorization: `Bearer ${localStorage.getItem("complexToken")}`,
           },
         });
         const data = await response.json();
@@ -327,26 +326,43 @@ const ProductList: React.FC<ProductListProps> = ({
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        const token = localStorage.getItem("complexToken");
+
         const response = await fetch("/api/products", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            token: localStorage.getItem("token") || "",
+            // Ensure the full "Bearer " prefix is included
+            Authorization: `Bearer ${token}`,
           },
         });
 
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
 
-        if (data?.products) {
-          const productInfo = data.products.map((product: ProductCardData) => ({
-            ...product,
-            images: product.images,
-          }));
+        console.log("Raw product data:", data); // Add this for debugging
 
-          setProductData(productInfo);
+        // Add more robust error checking
+        if (!data || !Array.isArray(data.products)) {
+          console.error("Invalid product data structure:", data);
+          setProductData([]);
+          return;
         }
+
+        const productInfo = data.products.map((product: ProductCardData) => ({
+          ...product,
+          images: product.images || [], // Provide a default empty array
+          colors: product.colors || [], // Provide a default empty array
+          price: product.price || "0", // Provide a default price
+        }));
+
+        setProductData(productInfo);
       } catch (error) {
-        console.log("Error fetching products:", error);
+        console.error("Error fetching products:", error);
+        setProductData([]); // Set to empty array to prevent undefined errors
       }
     };
 
@@ -382,7 +398,7 @@ const ProductList: React.FC<ProductListProps> = ({
       {preview === "sm" && isMobileFilterOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
           <div
-            className="bg-white/60 backdrop-blur-sm border p-10 rounded-lg max-w-fit max-h-[80vh] overflow-y-auto"
+            className="bg-white/60 backdrop-blur-sm border lg:p-10 rounded-lg max-w-fit  overflow-x-hidden"
             dir="rtl"
           >
             <div className="flex justify-between items-center mb-4">

@@ -1,9 +1,8 @@
 import connect from "@/lib/data";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import Products from "@/models/products";
-import { GET as GetStoreId } from "../test/route";
-
-export async function GET() {
+import jwt, { JwtPayload } from "jsonwebtoken";
+export async function GET(request: NextRequest) {
   await connect();
   if (!connect) {
     return NextResponse.json(
@@ -13,22 +12,63 @@ export async function GET() {
   }
 
   try {
-    // Call GetStoreId as a normal async function.
-    const storeIdResult = await GetStoreId();
+    const token = request.headers.get("Authorization");
 
-    // If GetStoreId returns a Response (indicating an error) handle it:
-    if (storeIdResult instanceof Response) {
-      return storeIdResult;
+    if (!token) {
+      console.error("No token provided");
+      return NextResponse.json({ error: "Token not provided" }, { status: 401 });
     }
-
-    const storeId = storeIdResult;
-    if (!storeId) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+      console.error("JWT_SECRET is not defined");
+      return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
     }
+    let decodedToken;
+    try {
+      // More robust token extraction
+      const cleanToken = token.startsWith('Bearer ')
+        ? token.split(' ')[1]
+        : token;
 
-    const products = await Products.find().populate("category");
+      decodedToken = jwt.verify(cleanToken, secret) as JwtPayload;
 
-    return NextResponse.json({ products }, { status: 200 });
+      if (!decodedToken.storeId) {
+        console.error("Token missing storeId");
+        return NextResponse.json({ error: "Invalid token structure" }, { status: 401 });
+      }
+
+      const storeId = decodedToken.storeId;
+
+      const products = await Products.find({ storeId: storeId }).populate("category");
+      console.log("products data", products);
+
+      if (!products || products.length === 0) {
+        return NextResponse.json(
+          { message: "No products found" },
+          { status: 404 }
+        );
+      }
+      return NextResponse.json({ products }, { status: 200 });
+
+    } catch (verifyError) {
+      if (verifyError instanceof Error) {
+        console.error("Detailed Token Verification Error:", {
+          name: verifyError.name,
+          message: verifyError.message,
+          stack: verifyError.stack
+        });
+        return NextResponse.json({
+          error: "Invalid token",
+          details: verifyError.message
+        }, { status: 401 });
+      } else {
+        console.error("Unknown error during token verification");
+        return NextResponse.json({
+          error: "Invalid token",
+          details: "Unknown error"
+        }, { status: 401 });
+      }
+    }
   } catch (error) {
     console.error("Error fetching products:", error);
     return NextResponse.json(
