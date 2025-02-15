@@ -144,11 +144,11 @@ export const ContactForm: React.FC<ContactFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
-  }, [layout, selectedComponent , setUserInputData]);
+  });
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
-  }, [layout, selectedComponent , setUserInputData]);
+  }, [ selectedComponent ]);
   const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserInputData((prev: ContactFormDataSection) => ({

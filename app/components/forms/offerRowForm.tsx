@@ -45,7 +45,7 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
-  }, [layout, selectedComponent , setUserInputData]);
+  });
 
   useEffect(() => {
     setMargin({

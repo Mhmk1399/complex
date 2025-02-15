@@ -203,7 +203,7 @@ export const Form = ({
     if (selectedComponent) {
       setIsFormOpen(true);
     }
-  }, [selectedComponent , setIsFormOpen]);
+  },[selectedComponent]);
 
   // Setup sensors for dnd-kit
   const sensors = useSensors(
@@ -263,7 +263,7 @@ export const Form = ({
       );
       setLayout(newLayout);
     }
-  }, [userInputData , layout , setLayout]);
+  }, [userInputData]);
 
   const SortableItem = ({ id }: { id: string }) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
@@ -290,7 +290,7 @@ export const Form = ({
 
   useEffect(() => {
     setOrders([...layout.sections.children.order]);
-  }, [layout.sections.children.order , setOrders]);
+  }, [layout.sections.children.order]);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
