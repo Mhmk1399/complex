@@ -363,11 +363,11 @@ const Header: React.FC<HeaderProps> = ({
   previewWidth,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [preview, setPreview] = useState(previewWidth);
+  // const [preview, setPreview] = useState(previewWidth);
   const [hoverd, setHoverd] = useState(0);
   const [categories, setCategories] = useState<Category[]>([]);
 
-  console.log("preview", preview);
+  // console.log("preview", preview);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -446,13 +446,13 @@ const Header: React.FC<HeaderProps> = ({
     fetchCategories();
   }, []);
 
-  useEffect(() => {
-    if (window.innerWidth <= 424) {
-      setPreview("sm");
-    } else {
-      setPreview(previewWidth);
-    }
-  }, [previewWidth]);
+  // useEffect(() => {
+  //   if (window.innerWidth <= 424) {
+  //     setPreview("sm");
+  //   } else {
+  //     setPreview(previewWidth);
+  //   }
+  // }, [previewWidth]);
   useEffect(() => {
     if (layout?.sections?.sectionHeader) {
     }
