@@ -117,7 +117,7 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
     if (initialData) {
       setUserInputData(initialData);
     }
-  }, [layout, selectedComponent , setUserInputData]);
+  },);
 
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
@@ -125,7 +125,7 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
       setLoaded(true);
       setUserInputData(initialData);
     }
-  }, [layout, selectedComponent , setUserInputData]);
+  }, [ selectedComponent ]);
 
   // const handleProductChange = (
   //   e: React.ChangeEvent<HTMLInputElement>,
