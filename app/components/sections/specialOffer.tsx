@@ -116,31 +116,53 @@ const ScrollContainer = styled.div<{
       window.addEventListener('resize', handleResize);
       return () => window.removeEventListener('resize', handleResize);
     }, [previewWidth]);
+    const fetchSpecialOffers = async () => {
+      try {
+        const sectionData = layout?.sections?.children?.sections.find(
+          (section) => section.type === actualName
+        ) as SpecialOfferSection;
+        
+        const collectionId = sectionData?.blocks?.setting?.selectedCollection;
+        if (!collectionId) return;
+
+        const response = await fetch(`/api/collections/id`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'collectionId': collectionId
+          }
+        });
+        const data = await response.json();
+        setSpecialOfferProducts(data.collections[0].products);
+      } catch (error) {
+        console.error("Error fetching special offers:", error);
+      }
+    };
     useEffect(() => {
-      const fetchSpecialOffers = async () => {
-        try {
-          const sectionData = layout?.sections?.children?.sections.find(
-            (section) => section.type === actualName
-          ) as SpecialOfferSection;
-          
-          const collectionId = sectionData?.blocks?.setting?.selectedCollection;
-          if (!collectionId) return;
-  
-          const response = await fetch(`/api/collections/id`, {
-            headers: {
-              'Content-Type': 'application/json',
-              'collectionId': collectionId
-            }
-          });
-          const data = await response.json();
-          setSpecialOfferProducts(data.collections[0].products);
-        } catch (error) {
-          console.error("Error fetching special offers:", error);
-        }
+      const fetchData = async () => {
+        const sectionData = layout?.sections?.children?.sections.find(
+          (section) => section.type === actualName
+        ) as SpecialOfferSection;
+        
+        const collectionId = sectionData?.blocks?.setting?.selectedCollection;
+        if (!collectionId) return;
+    
+        const response = await fetch(`/api/collections/id`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'collectionId': collectionId
+          }
+        });
+        const data = await response.json();
+        setSpecialOfferProducts(data.collections[0].products);
       };
-  
-      fetchSpecialOffers();
-    }, [actualName, layout]);
+    
+      fetchData();
+    }, []);
+    
+    
+    // useEffect(() => {
+    //   fetchSpecialOffers();
+    // }, []);
     const sectionData = layout?.sections?.children?.sections.find(
       (section) => section.type === actualName
     ) as SpecialOfferSection;

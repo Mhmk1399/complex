@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
   try {
     decodedToken = jwt.verify(token, secret) as JwtPayload;
   } catch (verificationError) {
-    console.error("Token Verification Failed:", {
+    console.log("Token Verification Failed:", {
       name: (verificationError as Error).name,
       message: (verificationError as Error).message
     });
