@@ -45,7 +45,7 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
-  });
+  },[]);
 
   useEffect(() => {
     setMargin({
@@ -95,25 +95,25 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
   };
 
   useEffect(() => {
-    const fetchCollections = async () => {
+    const fetchSpecialOffers = async () => {
       try {
-        const response = await fetch("/api/collections",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
+        const response = await fetch("/api/collections", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `${localStorage.getItem("complexToken")}`,
+          },
+        });
         const data = await response.json();
-        setCollections(data);
+        setCollections(data.products);
+        console.log(data.products);
       } catch (error) {
-        console.error("Error fetching collections:", error);
+        console.error("Error fetching special offers:", error);
       }
     };
-    fetchCollections();
-  }, []);
+
+    fetchSpecialOffers();
+  },[]);
 
   const handleBlockSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>

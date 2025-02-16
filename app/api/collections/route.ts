@@ -33,8 +33,8 @@ export async function GET(request: NextRequest) {
   }
 
   // Extract token and validate
-  const token = authHeader.startsWith('Bearer ') 
-    ? authHeader.split(' ')[1] 
+  const token = authHeader.startsWith('Bearer') 
+    ? authHeader.split('')[1] 
     : authHeader;
 
   // Validate JWT secret

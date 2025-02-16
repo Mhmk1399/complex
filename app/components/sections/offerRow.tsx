@@ -5,6 +5,7 @@ import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { Delete } from "../C-D";
 import Link from "next/link";
+import { set } from "lodash";
 
 interface OfferRowProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -13,8 +14,6 @@ interface OfferRowProps {
   selectedComponent: string;
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
   previewWidth: "sm" | "default";
-  // setSelectedComponentAction: (componentName: string) => void;
-  setLayoutAction: (layout: Layout) => void;
 }
 
 const OffersContainer = styled.div<{
@@ -76,16 +75,18 @@ export const OfferRow: React.FC<OfferRowProps> = ({
   layout,
   actualName,
   selectedComponent,
-  // setSelectedComponentAction,
-
-  setLayoutAction,
+  setSelectedComponent,
+  setLayout,
   previewWidth,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
   const [categories, setCategories] = useState([]);
-
+  const sectionData = layout?.sections?.children?.sections?.find(
+    (section) => section.type === actualName
+  ) as OfferRowSection;
+  if (!sectionData) return null;
   useEffect(() => {
     if (window.innerWidth <= 424) {
       setPreview("sm");
@@ -99,10 +100,10 @@ export const OfferRow: React.FC<OfferRowProps> = ({
       const sectionData = layout?.sections?.children?.sections.find(
         (section) => section.type === actualName
       ) as SpecialOfferSection;
-      
+
       const collectionId = sectionData?.blocks?.setting?.selectedCollection;
       if (!collectionId) return;
-  
+
       const response = await fetch(`/api/collections/id`, {
         headers: {
           'Content-Type': 'application/json',
@@ -110,24 +111,22 @@ export const OfferRow: React.FC<OfferRowProps> = ({
         }
       });
       const data = await response.json();
-      setCategories(data.collections[0].products);
+      data.collections.length>0 && setCategories(data.collections[0].products);
     };
-  
+
     fetchData();
-  }, [layout]);
+    console.log('SpecialOffer');
 
-  const sectionData = layout?.sections?.children?.sections?.find(
-    (section) => section.type === actualName
-  ) as OfferRowSection;
+  }, [sectionData.blocks?.setting?.selectedCollection]);
 
-  if (!sectionData) return null;
+  
 
   return (
     <OffersContainer
       $data={sectionData}
       $preview={preview}
       $previewWidth={previewWidth}
-      // onClick={() => setSelectedComponentAction(actualName)}
+      onClick={() => setSelectedComponent(actualName)}
       className={`transition-all duration-150 ease-in-out relative ${
         selectedComponent === actualName
           ? "border-4 border-blue-500 rounded-2xl shadow-lg"
@@ -152,7 +151,7 @@ export const OfferRow: React.FC<OfferRowProps> = ({
               <button
                 className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
                 onClick={() => {
-                  Delete(actualName, layout, setLayoutAction);
+                  Delete(actualName, layout, setLayout);
                   setShowDeleteModal(false);
                 }}
               >

@@ -108,6 +108,7 @@ import { OfferRowForm } from "./forms/offerRowForm";
 import { BrandsForm } from "./forms/brandsForm";
 import { ProductRowForm } from "./forms/productRowForm";
 import { styled } from "styled-components";
+import { SpecialForm } from "./forms/specialForm";
 // import { set } from "lodash";
 type FormData =
   | HeaderSection
@@ -320,7 +321,8 @@ export const Form = ({
     selectedComponent: string
   ) => {
     const baseComponentName = selectedComponent.split("-")[0];
-
+    console.log(  baseComponentName);
+    
     switch (baseComponentName) {
       case "RichText":
         return (
@@ -583,21 +585,20 @@ export const Form = ({
             selectedComponent={selectedComponent}
           />
         );
-      // case "SpecialOffer":
-      //   return (
-      //     <SpecialForm
-      //       setUserInputData={
-      //         setUserInputData as React.Dispatch<
-      //           React.SetStateAction<SpecialOfferSection>
-      //         >
-      //       }
-      //       userInputData={userInputData as SpecialOfferSection}
-      //       layout={layout}
-      //       selectedComponent={selectedComponent}
-      //       actualName={actualName}
-      //     />
-      //   );
-      // case "OfferRow":
+      case "SpecialOffer":
+        return (
+          <SpecialForm
+            setUserInputData={
+              setUserInputData as React.Dispatch<
+                React.SetStateAction<SpecialOfferSection>
+              >
+            }
+            userInputData={userInputData as SpecialOfferSection}
+            layout={layout}
+            selectedComponent={selectedComponent}
+          />
+        );
+      case "OfferRow":
         return (
           <OfferRowForm
             setUserInputData={
@@ -623,7 +624,7 @@ export const Form = ({
             selectedComponent={selectedComponent}
           />
         );
-      // case "ProductsRow":
+      case "ProductsRow":
         return (
           <ProductRowForm
             setUserInputData={

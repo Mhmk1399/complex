@@ -36,7 +36,6 @@ function HomeContent() {
         }
 
         const data = await response.json();
-        console.log(token)
 
         if (data.token) {
           setToken(data.token);

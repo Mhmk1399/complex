@@ -107,7 +107,7 @@ export const Story: React.FC<StoryProps> = ({
 
         
         const headers: HeadersInit = {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Authorization": `${localStorage.getItem("complexToken")}`,
           "Content-Type": "application/json",
         }
   

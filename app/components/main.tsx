@@ -69,7 +69,6 @@ export const Main = () => {
   const handleSiteView = () => {
     try {
       const token = localStorage.getItem("complexToken");
-      console.log("Token:", token);
       if (!token) {
         toast.error("توکن یافت نشد");
         return;
@@ -115,7 +114,6 @@ export const Main = () => {
       }
 
       const result = await response.json();
-      console.log("Route added:", result);
 
       fetchRoutes(); // Fetch updated routes
       toast.success("مسیر جدید ساخته شد", {
@@ -129,9 +127,7 @@ export const Main = () => {
         },
       });
     } catch (error) {
-      console.log("Error adding route:", error);
       toast.error("Failed to add route!", { autoClose: 3000 });
-      console.error("Error adding route:", error);
       toast.error("مشکل در ساخت مسیر", {
         autoClose: 3000,
         style: {
@@ -153,7 +149,6 @@ export const Main = () => {
     })
       .then((response) => {
         if (!response.ok) {
-          console.log("Server responded with an error:", response.statusText);
           return null;
         }
 
@@ -165,7 +160,6 @@ export const Main = () => {
         }
       })
       .catch((error) => {
-        console.log("Error sending token to server:", error);
       });
     fetchRoutes();
   };
@@ -195,7 +189,6 @@ export const Main = () => {
     })
       .then((response) => {
         if (!response.ok) {
-          console.log("Server responded with an error:", response.statusText);
           return null;
         }
 
@@ -204,7 +197,6 @@ export const Main = () => {
       .then((data) => {
         if (data) {
           setActiveRoutes(data);
-          console.log("Route data:", data);
         }
       })
       .catch((error) => {
@@ -336,7 +328,6 @@ export const Main = () => {
       }
 
       const result = await response.json();
-      console.log("Fetched routes:", result);
       setRoutes(result);
       setActiveRoutes(result);
     } catch (error) {

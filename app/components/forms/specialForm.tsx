@@ -10,7 +10,6 @@ interface SpecialFormProps {
   userInputData: SpecialOfferSection;
   layout: Layout;
   selectedComponent: string;
-  actualName: string;
 }
 
 interface BoxValues {
@@ -53,7 +52,6 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
   userInputData,
   layout,
   selectedComponent,
-  actualName,
 }) => {
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState(false);
@@ -65,8 +63,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
-    console.log(setCollections);
-  }, [layout, selectedComponent, setUserInputData]);
+  }, [selectedComponent]);
 
   const [margin, setMargin] = useState<BoxValues>({
     top: 0,
@@ -130,40 +127,23 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
   useEffect(() => {
     const fetchSpecialOffers = async () => {
       try {
-        const sectionData = layout?.sections?.children?.sections.find(
-          (section) => section.type === actualName
-        ) as SpecialOfferSection;
-
-        const collectionId = sectionData?.blocks?.setting?.selectedCollection;
-        if (!collectionId) {
-          console.log("No collection ID found");
-          return;
-        }
-
-        const response = await fetch(`/api/collections/id`, {
+        const response = await fetch("/api/collections", {
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
-            collectionId: collectionId,
+            "Authorization": `${localStorage.getItem("complexToken")}`,
           },
         });
-
         const data = await response.json();
-
-        // Add null checks before accessing nested properties
-        if (data && data.collections && data.collections.length > 0) {
-          setSpecialOfferProducts(data.collections[0].products || []);
-        } else {
-          console.log("No products found in the collection");
-          setSpecialOfferProducts([]);
-        }
+        setCollections(data.products);
+        console.log(data.products);
       } catch (error) {
         console.error("Error fetching special offers:", error);
-        setSpecialOfferProducts([]); // Set to empty array on error
       }
     };
 
     fetchSpecialOffers();
-  }, [actualName, layout]);
+  },[]);
 
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -220,9 +200,9 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
     setIsStyleSettingsOpen(tab === "style");
     setIsSpacingOpen(tab === "spacing");
   };
-  useEffect(() => {
-    setIsContentOpen(true);
-  }, []);
+  // useEffect(() => {
+  //   setIsContentOpen(true);
+  // }, []);
 
   return (
     <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
@@ -333,6 +313,4 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
     </div>
   );
 };
-function setSpecialOfferProducts(products: ProductCardData[]) {
-  console.log(products);
-}
+

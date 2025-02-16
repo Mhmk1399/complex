@@ -71,7 +71,7 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
-  });
+  }, [selectedComponent]);
   const [collections, setCollections] = useState<Array<{name: string, _id: string}>>([]);
 
   useEffect(() => {
@@ -96,18 +96,19 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Authorization": `${localStorage.getItem("complexToken")}`,
           },
         });
         const data = await response.json();
-        setCollections(data.collections);
+        setCollections(data.products);
+        console.log(data.products);
       } catch (error) {
         console.error("Error fetching special offers:", error);
       }
     };
 
     fetchSpecialOffers();
-  }, []);
+  },[]);
   const handleUpdate = (
     type: "margin" | "padding",
     updatedValues: BoxValues
