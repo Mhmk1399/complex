@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Layout, ProductCardData, SpecialOfferSection } from "@/lib/types";
+import { Layout, SpecialOfferSection } from "@/lib/types";
 import React from "react";
 import MarginPaddingEditor from "../sections/editor";
 import { Compiler } from "../compiler";

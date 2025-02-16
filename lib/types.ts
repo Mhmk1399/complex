@@ -520,6 +520,7 @@ export interface Layout {
   settings: {
     fontFamily: string;
     colorSchema: ColorSchema;
+    
   };
   sections: {
     find(arg0: (section: Section) => boolean): Section | undefined;
@@ -534,6 +535,7 @@ export interface Layout {
       | DetailPageChildren
       | BlogChildren
       | BlogDetailChildren;
+      
     sectionFooter: FooterSection;
     Collection: CollectionSection;
     banner: BannerSection;

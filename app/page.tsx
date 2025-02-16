@@ -4,7 +4,6 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
 function HomeContent() {
-  const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
@@ -16,7 +15,6 @@ function HomeContent() {
         const existingToken = localStorage.getItem("complexToken");
 
         if (existingToken) {
-          setToken(existingToken);
           setIsLoading(false);
           return;
         }
@@ -38,7 +36,6 @@ function HomeContent() {
         const data = await response.json();
 
         if (data.token) {
-          setToken(data.token);
           localStorage.setItem("complexToken", data.token);
         }
       } catch (error) {

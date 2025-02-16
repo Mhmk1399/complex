@@ -114,7 +114,8 @@ export const Main = () => {
       }
 
       const result = await response.json();
-
+      console.log("Route added:", result);
+      
       fetchRoutes(); // Fetch updated routes
       toast.success("مسیر جدید ساخته شد", {
         autoClose: 3000,
@@ -127,6 +128,8 @@ export const Main = () => {
         },
       });
     } catch (error) {
+      console.log("Error adding route:", error);
+      
       toast.error("Failed to add route!", { autoClose: 3000 });
       toast.error("مشکل در ساخت مسیر", {
         autoClose: 3000,
@@ -160,6 +163,7 @@ export const Main = () => {
         }
       })
       .catch((error) => {
+        console.error("Error fetching routes:", error);
       });
     fetchRoutes();
   };

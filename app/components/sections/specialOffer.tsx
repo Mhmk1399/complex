@@ -103,10 +103,11 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
   const containerRef = useRef<HTMLDivElement>(null);
+
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
   ) as SpecialOfferSection;
-  if (!sectionData) return null;
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 425) {
@@ -137,18 +138,16 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
         }
       });
       const data = await response.json();
-      data.collections.length>0 && setSpecialOfferProducts(data.collections[0].products);
+      if (data.collections.length > 0) {
+        setSpecialOfferProducts(data.collections[0].products);
+      }
     };
 
     fetchData();
-    console.log('SpecialOffer');
+  }, [actualName, layout?.sections?.children?.sections, sectionData.blocks?.setting?.selectedCollection]);
 
-  }, [sectionData.blocks?.setting?.selectedCollection]);
-
-  if (!layout || !layout.sections) {
-    return null;
-  }
-
+  if (!sectionData) return null;
+  if (!layout || !layout.sections) return null;
   const handleScroll = (direction: 'left' | 'right') => {
     if (containerRef.current) {
       const scrollAmount = 400;

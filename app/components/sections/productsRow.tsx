@@ -104,9 +104,12 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
   const [preview, setPreview] = useState(previewWidth);
   const containerRef = useRef<HTMLDivElement>(null);
   const [collectionProducts, setCollectionProducts] = useState([]);
+  
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
   ) as ProductRowSection;
+
+  // Move both useEffect hooks here, before any returns
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 425) {
@@ -120,7 +123,6 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, [previewWidth]);
-  if (!layout || !layout.sections || !sectionData) return null;
 
   useEffect(() => {
     const fetchCollectionProducts = async () => {
@@ -142,37 +144,11 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
     };
   
     fetchCollectionProducts();
-  }, [ sectionData?.blocks?.setting?.selectedCollection ]);
-useEffect(() => {
-    const fetchData = async () => {
-      const sectionData = layout?.sections?.children?.sections.find(
-        (section) => section.type === actualName
-      ) as ProductRowSection;
+  }, [sectionData?.blocks?.setting?.selectedCollection]);
 
-      const collectionId = sectionData?.blocks?.setting?.selectedCollection;
-      if (!collectionId) return;
-
-      const response = await fetch(`/api/collections/id`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'collectionId': collectionId
-        }
-      });
-      const data = await response.json();
-      data.collections.length>0 && setCollectionProducts(data.collections[0].products);
-    };
-
-    fetchData();
-    console.log('SpecialOffer');
-
-  }, [sectionData.blocks?.setting?.selectedCollection]);
-
-  if (!layout || !layout.sections) {
-    return null;
-  }
-  
-
+  // Now place your conditional returns
   if (!layout || !layout.sections || !sectionData) return null;
+
 
   const handleScroll = (direction: 'left' | 'right') => {
     if (containerRef.current) {
@@ -185,7 +161,6 @@ useEffect(() => {
     }
   };
  
-  if (!layout || !layout.sections || !sectionData) return null;
 
   return (
     <div className="px-2">

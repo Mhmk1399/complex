@@ -5,7 +5,6 @@ import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { Delete } from "../C-D";
 import Link from "next/link";
-import { set } from "lodash";
 
 interface OfferRowProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -83,17 +82,10 @@ export const OfferRow: React.FC<OfferRowProps> = ({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
   const [categories, setCategories] = useState([]);
+  
   const sectionData = layout?.sections?.children?.sections?.find(
     (section) => section.type === actualName
   ) as OfferRowSection;
-  if (!sectionData) return null;
-  useEffect(() => {
-    if (window.innerWidth <= 424) {
-      setPreview("sm");
-    } else {
-      setPreview(previewWidth);
-    }
-  }, [previewWidth]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -111,14 +103,23 @@ export const OfferRow: React.FC<OfferRowProps> = ({
         }
       });
       const data = await response.json();
-      data.collections.length>0 && setCategories(data.collections[0].products);
+      if(data.collections.length>0){
+        setCategories(data.collections[0].products);
+      }
     };
 
     fetchData();
-    console.log('SpecialOffer');
+  }, [layout?.sections?.children?.sections, actualName, sectionData?.blocks?.setting?.selectedCollection]);
 
-  }, [sectionData.blocks?.setting?.selectedCollection]);
+  useEffect(() => {
+    if (window.innerWidth <= 424) {
+      setPreview("sm");
+    } else {
+      setPreview(previewWidth);
+    }
+  }, [previewWidth]);
 
+  if (!sectionData) return null;
   
 
   return (
