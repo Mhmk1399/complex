@@ -105,7 +105,8 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
           },
         });
         const data = await response.json();
-        setCollections(data.products);
+        if(data.products.length > 0){
+        setCollections(data.products);}
         console.log(data.products);
       } catch (error) {
         console.error("Error fetching special offers:", error);
