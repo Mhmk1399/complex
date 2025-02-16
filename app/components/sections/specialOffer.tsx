@@ -144,7 +144,7 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
     };
 
     fetchData();
-  }, [actualName, layout?.sections?.children?.sections, sectionData.blocks?.setting?.selectedCollection]);
+  }, [layout?.sections?.children?.sections, actualName, sectionData?.blocks?.setting?.selectedCollection]);
 
   if (!sectionData) return null;
   if (!layout || !layout.sections) return null;

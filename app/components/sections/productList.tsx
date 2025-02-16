@@ -557,14 +557,7 @@ const ProductList: React.FC<ProductListProps> = ({
               </div>
             </div>
             <div className="mt-4 flex justify-start gap-2">
-              {/* <button
-                onClick={() => {
-                  setSelectedColors([]);
-                }}
-                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded"
-              >
-                پاک کردن
-              </button> */}
+           
               <button
                 onClick={() => {
                   handleFilter();
