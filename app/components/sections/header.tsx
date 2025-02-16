@@ -20,7 +20,7 @@ interface HeaderProps {
 interface Category {
   _id: string;
   name: string;
-  children: string[];
+  children: { _id: string; name: string }[];
   storeId: string;
 }
 
@@ -379,68 +379,67 @@ const Header: React.FC<HeaderProps> = ({
       const token = localStorage.getItem("complexToken");
       console.log("token", token);
       if (!token) {
-        return NextResponse.json({ error: "Token not provided" }, { status: 401 });
-
-      
+        return NextResponse.json(
+          { error: "Token not provided" },
+          { status: 401 }
+        );
       }
-     
 
       try {
-        const headers: HeadersInit = {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        };
-
         const response = await fetch("/api/category", {
           method: "GET",
-          headers: headers,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         });
         const data = await response.json();
+        console.log("ccccccdddd", data);
 
         setCategories(data);
       } catch (error) {
         console.log("Error fetching categories", error);
+        setCategories([
+          {
+            _id: "1",
+            name: "لپ تاپ",
+            children: [],
+            storeId: "",
+          },
+          {
+            _id: "2",
+            name: "موبایل",
+            children: [],
+            storeId: "",
+          },
+          {
+            _id: "3",
+            name: "تبلت",
+            children: [],
+            storeId: "",
+          },
+          {
+            _id: "4",
+            name: "ساعت هوشمند",
+            children: [],
+            storeId: "",
+          },
+          {
+            _id: "5",
+            name: "هدفون",
+            children: [],
+            storeId: "",
+          },
+          {
+            _id: "6",
+            name: "لوازم جانبی",
+            children: [],
+            storeId: "",
+          },
+        ]);
       }
 
       // Default categories if fetch fails
-      setCategories([
-        {
-          _id: "1",
-          name: "لپ تاپ",
-          children: [],
-          storeId: "",
-        },
-        {
-          _id: "2",
-          name: "موبایل",
-          children: [],
-          storeId: "",
-        },
-        {
-          _id: "3",
-          name: "تبلت",
-          children: [],
-          storeId: "",
-        },
-        {
-          _id: "4",
-          name: "ساعت هوشمند",
-          children: [],
-          storeId: "",
-        },
-        {
-          _id: "5",
-          name: "هدفون",
-          children: [],
-          storeId: "",
-        },
-        {
-          _id: "6",
-          name: "لوازم جانبی",
-          children: [],
-          storeId: "",
-        },
-      ]);
     };
 
     fetchCategories();
@@ -618,26 +617,23 @@ const Header: React.FC<HeaderProps> = ({
                           </Link>
                         ))}
                     </div>
+
                     <div className="flex-1 p-4">
                       <div className="grid grid-cols-3 gap-4">
                         {categories
                           .filter((category) => category.children.length > 0)
-                          [hoverd]?.children.map((childId) => {
-                            const childCategory = categories.find(
-                              (cat) => cat._id === childId
-                            );
+                          [hoverd]?.children.map((child) => {
+                            // Since child is now the full object, we can use it directly
                             return (
-                              childCategory && (
-                                <Link
-                                  href={`/category`}
-                                  key={childCategory._id}
-                                  className="p-1 hover:translate-x-[2px] rounded-md transition-all duration-200 text-right"
-                                >
-                                  <CategoryItem $data={sectionData}>
-                                    {childCategory.name}
-                                  </CategoryItem>
-                                </Link>
-                              )
+                              <Link
+                                href={`/category`}
+                                key={child._id}
+                                className="p-1 hover:translate-x-[2px] rounded-md transition-all duration-200 text-right"
+                              >
+                                <CategoryItem $data={sectionData}>
+                                  {child.name}
+                                </CategoryItem>
+                              </Link>
                             );
                           })}
                       </div>
