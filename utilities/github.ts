@@ -216,7 +216,6 @@ type AllSections =
   MultiColumnSection &
   SlideSection &
   MultiRowSection &
-  ProductListSection &
   CollectionSection &
   StorySection &
   OfferRowSection &
@@ -247,7 +246,6 @@ type AllSections =
       Gallery,
       SlideBanner,
       ProductsRow,
-
     };
   
      useEffect(() => {
