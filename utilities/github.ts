@@ -247,7 +247,6 @@ type AllSections =
       Gallery,
       SlideBanner,
       ProductsRow,
-      ProductList,
 
     };
   
