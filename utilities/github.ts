@@ -182,7 +182,6 @@ import { Collection } from "@/components/collection";
 import RichText from "@/components/richText";
 import ProductList from "@/components/productList";
 import { Story } from "@/components/story";
-import { SpecialOffer } from "@/components/specialOffer";
 import Gallery from "@/components/gallery";
 import { OfferRow } from "@/components/offerRow";
 import { ProductsRow } from "@/components/productsRow";
@@ -202,7 +201,6 @@ import {
   RichTextSection,
   SlideBannerSection,
   SlideSection,
-  SpecialOfferSection,
   StorySection,
   VideoSection,
 } from "@/lib/types";
@@ -220,7 +218,6 @@ type AllSections =
   MultiRowSection &
   ProductListSection &
   CollectionSection &
-  SpecialOfferSection &
   StorySection &
   OfferRowSection &
   GallerySection &
@@ -245,7 +242,6 @@ type AllSections =
       MultiRow,
       ProductList,
       Collection,
-      SpecialOffer,
       Story,
       OfferRow,
       Gallery,
