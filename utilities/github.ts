@@ -181,9 +181,33 @@ import Video from "@/components/video";
 import { Collection } from "@/components/collection";
 import RichText from "@/components/richText";
 import ProductList from "@/components/productList";
-import { fetchGitHubFile } from "@/utilities/github";
+import { Story } from "@/components/story";
+import { SpecialOffer } from "@/components/specialOffer";
+import Gallery from "@/components/gallery";
+import { OfferRow } from "@/components/offerRow";
+import { ProductsRow } from "@/components/productsRow";
+import SlideBanner from "@/components/slideBanner";
+import {
+  BannerSection,
+  CollapseSection,
+  CollectionSection,
+  ContactFormDataSection,
+  GallerySection,
+  ImageTextSection,
+  MultiColumnSection,
+  MultiRowSection,
+  NewsLetterSection,
+  OfferRowSection,
+  ProductListSection,
+  RichTextSection,
+  SlideBannerSection,
+  SlideSection,
+  SpecialOfferSection,
+  StorySection,
+  VideoSection,
+} from "@/lib/types";
 
-type AllSections = Section &
+type AllSections = 
   RichTextSection &
   BannerSection &
   ImageTextSection &
@@ -202,77 +226,82 @@ type AllSections = Section &
   GallerySection &
   SlideBannerSection &
   ProductListSection;
+  
+  export default function Page() {
+    const [data, setData] = useState<AllSections[]>([]);
+    const [isMobile, setIsMobile] = useState(false);
+    const [orders, setOrders] = useState<string[]>([]);
+  
+   const componentMap = {
+      RichText,
+      Banner,
+      ImageText,
+      Video,
+      ContactForm,
+      NewsLetter,
+      CollapseFaq,
+      MultiColumn,
+      SlideShow,
+      MultiRow,
+      ProductList,
+      Collection,
+      SpecialOffer,
+      Story,
+      OfferRow,
+      Gallery,
+      SlideBanner,
+      ProductsRow,
+      ProductList,
 
-export default function Page() {
-  const [data, setData] = useState<AllSections[]>([]);
-  const [isMobile, setIsMobile] = useState(false);
-  const [orders, setOrders] = useState<string[]>([]);
-
- const componentMap = {
-    RichText,
-    Banner,
-    ImageText,
-    Video,
-    ContactForm,
-    NewsLetter,
-    CollapseFaq,
-    MultiColumn,
-    SlideShow,
-    MultiRow,
-    ProductList,
-    Collection,
-    SpecialOffer,
-    Story,
-    OfferRow,
-    Gallery,
-    SlideBanner,
-    ProductsRow,
-  };
-
-  useEffect(() => {
-    const handleResize = async () => {
-      const isMobileView = window.innerWidth < 430;
-      setIsMobile(isMobileView);
-
-      const templateSuffix = isMobileView ? 'sm' : 'lg';
-      const templatePath = \`\${routeName}\${templateSuffix}\`;
-      
-      const template = await fetchGitHubFile(\`public/template/\${templatePath}.json\`, repoUrl);
-
-      const testData = template.children.sections as AllSections[];
-      setData(testData);
-      setOrders(template.children.order);
     };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-
-  if (!data) {
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <div className="grid grid-cols-1 pt-4 px-1">
-      {orders.map((componentName, index) => {
-        const baseComponentName = componentName.split("-")[0];
-        const Component =
-          componentMap[baseComponentName as keyof typeof componentMap];
-
-        return Component ? (
-          <div key={componentName} style={{ order: index }} className="w-full">
-            <Component
-              sections={data}
-              isMobile={isMobile}
-              componentName={componentName}
-            />
-          </div>
-        ) : null;
-      })}
-    </div>
-  );
+  
+     useEffect(() => {
+      const handleResize = async () => {
+        const isMobileView = window.innerWidth < 430;
+        setIsMobile(isMobileView);
+  
+        const currentRouteName = window.location.pathname.split("/")[1];
+  
+        const templateSuffix = isMobileView ? "sm" : "lg";
+        const templatePath = \`\${currentRouteName}\${templateSuffix}\`;
+  
+        const template = await import(
+          \`../../public/template/\${templatePath}.json\`
+        );
+  
+        const testData = template.default.children.sections;
+  
+        setData(testData);
+        setOrders(template.default.children.order);
+      };
+         handleResize();
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+  
+    
+      if (!data) {
+      return <div>Loading...</div>;
+    }
+      return (
+      <div className="grid grid-cols-1 pt-4 px-1">
+        {orders.map((componentName, index) => {
+          const baseComponentName = componentName.split("-")[0];
+          const Component =
+            componentMap[baseComponentName as keyof typeof componentMap];
+  
+          return Component ? (
+            <div key={componentName} style={{ order: index }} className="w-full">
+              <Component
+                sections={data}
+                isMobile={isMobile}
+                componentName={componentName}
+              />
+            </div>
+          ) : null;
+        })}
+      </div>
+    );
 }`;
 
   const filePath = `app/${routeName}/page.tsx`;
