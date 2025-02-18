@@ -379,10 +379,8 @@ const Header: React.FC<HeaderProps> = ({
       const token = localStorage.getItem("complexToken");
       console.log("token", token);
       if (!token) {
-        return NextResponse.json(
-          { error: "Token not provided" },
-          { status: 401 }
-        );
+        return NextResponse.json({ error: "Token not provided" }, { status: 401 });
+
       }
 
       try {
@@ -397,6 +395,8 @@ const Header: React.FC<HeaderProps> = ({
         console.log("ccccccdddd", data);
 
         setCategories(data);
+        console.log("categories", data);
+        
       } catch (error) {
         console.log("Error fetching categories", error);
         setCategories([

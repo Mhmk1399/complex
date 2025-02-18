@@ -122,14 +122,14 @@
           "buttonBorderRadius": "8",
           "locationButtonBgColor": "#FFF7ED",
           "locationButtonTextColor": "#EA580C",
-          "announcementText": "ارسال رایگان برای خرید‌های بالای ۵۰۰ هزار تومان!",
+          "announcementText": "ارسال رایگان برای خرید‌ بالای ۵۰۰ هزار تومان!",
           "announcementBgColor": "#f1b80c",
           "announcementTextColor": "#ffffff",
           "announcementFontSize": "14",
           "bgColor": "#ffffff",
           "gap": "10",
           "megaMenuBg": "#ffffff",
-          "categoryItemColor":"ffffff",
+          "categoryItemColor": "ffffff",
           "categoryItemSize": "14",
           "categoryItemHoverColor": "#000000"
         }
@@ -139,15 +139,18 @@
         "paddingBottom": "0",
         "paddingLeft": "0",
         "paddingRight": "0",
-        "marginTop": "20",
+        "marginTop": "",
         "marginBottom": "0",
         "navbarPosition": "fixed",
-        "bgColor": "#ffffff"
+        "bgColor": "#d7163c"
       },
       "type": "header"
     },
-
     "children": {
+       "metaData":{
+      "title":"juju",
+      "description":"juju page"
+    },
       "sections": [
         {
           "type": "SlideBanner",
@@ -196,7 +199,6 @@
             }
           }
         },
-       
         {
           "type": "SpecialOffer",
           "blocks": {
@@ -213,7 +215,8 @@
               "cardBackground": "#EF394E",
               "cardBorderRadius": "8",
               "imageRadius": "8",
-              "gridColumns": "4"
+              "gridColumns": "4",
+              "selectedCollection": "67b341e8193d4de634d00fec"
             }
           },
           "setting": {
@@ -256,10 +259,10 @@
               }
             ],
             "setting": {
-              "storyRingColor": "#ef394e",
+              "storyRingColor": "#1447e1",
               "viewedRingColor": "#e0e0e0",
               "titleColor": "#666666",
-              "titleFontSize": "12",
+              "titleFontSize": "19",
               "titleFontWeight": "normal",
               "imageWidth": "70px",
               "imageHeight": "70px",
@@ -287,7 +290,7 @@
               "gradientToColor": "#e5e7eb",
               "buttonText": "مشاهده همه",
               "buttonLink": "/special-offers",
-              "selectedCollection":"679e070c216fde7c1cdc1d94"
+              "selectedCollection": "67b341e8193d4de634d00fec"
             }
           },
           "setting": {
@@ -362,9 +365,8 @@
           "type": "ProductsRow",
           "blocks": {
             "textHeading": " محصولات جدید ",
-
             "setting": {
-              "selectedCollection": "",
+              "selectedCollection": "67b341e8193d4de634d00fec",
               "headingColor": "#000000",
               "headingFontSize": "22",
               "headingFontWeight": "bold",
@@ -391,7 +393,7 @@
           "blocks": {
             "textHeading": " محصولات پرفروش ",
             "setting": {
-              "selectedCollection": "",
+              "selectedCollection": "67b341e8193d4de634d00fec",
               "headingColor": "#000000",
               "headingFontSize": "22",
               "headingFontWeight": "bold",
@@ -480,7 +482,7 @@
           "descriptionColor": "#000000",
           "descriptionFontSize": "18",
           "descriptionFontWeight": "normal",
-          "trustIconBackground": "#e4e4e4",
+          "trustIconBackground": "#1a54db",
           "trustIconColor": "#ffffff",
           "trustItemSize": "15",
           "trustItemColor": "bold",
@@ -519,9 +521,13 @@
         "marginBottom": "20",
         "paddinRight": "0",
         "paddinLeft": "0",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#ffad8a"
       }
     }
   },
-  "order": ["section-header", "children", "section-footer"]
+  "order": [
+    "section-header",
+    "children",
+    "section-footer"
+  ]
 }

@@ -1,6 +1,6 @@
 import { Compiler } from "./compiler";
 import { Layout } from "@/lib/types";
-import data from "@/public/template/null.json";
+import data from "@/public/template/homelg.json";
 import { v4 as uuidv4 } from "uuid";
 
 export const Create = (
