@@ -94,7 +94,7 @@ export const Main = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const repoUrl = urlParams.get("repoUrl");
     if (routes.includes(name)) {
-      toast.error("Route already exists!", { autoClose: 3000 });
+      toast.error("این مسیر در حال حاظر موجود است", { autoClose: 3000 });
       return;
     }
 
@@ -119,27 +119,14 @@ export const Main = () => {
       fetchRoutes(); // Fetch updated routes
       toast.success("مسیر جدید ساخته شد", {
         autoClose: 3000,
-        style: {
-          background: "#00ff00",
-          color: "#fff",
-          fontSize: "16px",
-          textAlign: "center",
-          direction: "rtl",
-        },
+      
       });
     } catch (error) {
       console.log("Error adding route:", error);
       
-      toast.error("Failed to add route!", { autoClose: 3000 });
       toast.error("مشکل در ساخت مسیر", {
         autoClose: 3000,
-        style: {
-          background: "#ff0000",
-          color: "#fff",
-          fontSize: "16px",
-          textAlign: "center",
-          direction: "rtl",
-        },
+       
       });
     }
 
@@ -329,6 +316,7 @@ export const Main = () => {
 
       if (!response.ok) {
         throw new Error("Failed to fetch routes");
+        
       }
 
       const result = await response.json();
@@ -371,29 +359,13 @@ export const Main = () => {
       setSelectedRoute("home");
       toast.success(" حذف مسیر انجام شد! ", {
         autoClose: 3000,
-        style: {
-          backgroundColor: "#007bff",
-          color: "#fff",
-          fontSize: "16px",
-          fontWeight: "bold",
-          borderRadius: "5px",
-          padding: "10px",
-          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-        },
+        
       });
     } catch (error) {
       console.log("Error deleting route:", error);
       toast.error("مشکل در حذف مسیر", {
         autoClose: 3000,
-        style: {
-          background: "#ff0000",
-          color: "#fff",
-          fontSize: "16px",
-          fontWeight: "bold",
-          borderRadius: "5px",
-          padding: "10px",
-          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-        },
+       
       });
     }
     fetchRoutes();
@@ -601,7 +573,7 @@ export const Main = () => {
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="absolute mt-2 w-20 bg-white/90 backdrop-blur-xl rounded-xl shadow-xl border border-white/80 z-50"
+                        className="absolute mt-2 w-20 bg-white/90 flex flex-col backdrop-blur-xl rounded-xl shadow-xl border border-white/80 z-50"
                         dir="rtl"
                       >
                         {activeRoutes.map((route) => (
@@ -611,7 +583,7 @@ export const Main = () => {
                               setSelectedRoute(route);
                               setIsDropdownOpen(false);
                             }}
-                            className=" px-2 py-2 text-left rounded-lg text-sm transition-colors "
+                            className=" px-2 py-2 text-right rounded-lg text-sm transition-colors hover:text-red-500"
                           >
                             {route}
                           </motion.button>

@@ -381,7 +381,6 @@ const Header: React.FC<HeaderProps> = ({
       if (!token) {
         return NextResponse.json({ error: "Token not provided" }, { status: 401 });
 
-      
       }
      
 
@@ -398,6 +397,8 @@ const Header: React.FC<HeaderProps> = ({
         const data = await response.json();
 
         setCategories(data);
+        console.log("categories", data);
+        
       } catch (error) {
         console.log("Error fetching categories", error);
       }
