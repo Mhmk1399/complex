@@ -2,9 +2,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Preview } from "./preview";
 import { Form } from "./form";
-import smData from "../../public/template/nullSm.json";
+import smData from "../../public/template/homesm.json";
 import Image from "next/image";
-import nullJson from "../../public/template/null.json";
+import nullJson from "../../public/template/homelg.json";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import {
   FaHome,
@@ -23,12 +23,12 @@ import {
   Layout,
   StoreChildren,
 } from "../../lib/types";
-import About from "@/public/template/about.json";
-import Contact from "@/public/template/contact.json";
-import Store from "@/public/template/product.json";
-import DetailPage from "@/public/template/detail.json";
-import Blog from "@/public/template/blog.json";
-import BlogDetail from "@/public/template/blogDetail.json";
+import About from "@/public/template/aboutlg.json";
+import Contact from "@/public/template/contactlg.json";
+import Store from "@/public/template/storelg.json";
+import DetailPage from "@/public/template/detaillg.json";
+import Blog from "@/public/template/bloglg.json";
+import BlogDetail from "@/public/template/blogdetaillg.json";
 import { AnimatePresence, motion } from "framer-motion";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -50,6 +50,12 @@ export const Main = () => {
   >("save");
   const [isFormOpen, setIsFormOpen] = useState(false); //  state for form visibility
   const [newRouteName, setNewRouteName] = useState("");
+  const [isMetaDataModalOpen, setIsMetaDataModalOpen] = useState(false);
+  const [metaData, setMetaData] = useState({
+    title: "",
+    description: ""
+  });
+
   const [saveStatus, setSaveStatus] = useState<
     "idle" | "saving" | "saved" | "error"
   >("idle");
@@ -115,18 +121,18 @@ export const Main = () => {
 
       const result = await response.json();
       console.log("Route added:", result);
-      
+
       fetchRoutes(); // Fetch updated routes
       toast.success("مسیر جدید ساخته شد", {
         autoClose: 3000,
-      
+
       });
     } catch (error) {
       console.log("Error adding route:", error);
-      
+
       toast.error("مشکل در ساخت مسیر", {
         autoClose: 3000,
-       
+
       });
     }
 
@@ -316,7 +322,7 @@ export const Main = () => {
 
       if (!response.ok) {
         throw new Error("Failed to fetch routes");
-        
+
       }
 
       const result = await response.json();
@@ -359,13 +365,13 @@ export const Main = () => {
       setSelectedRoute("home");
       toast.success(" حذف مسیر انجام شد! ", {
         autoClose: 3000,
-        
+
       });
     } catch (error) {
       console.log("Error deleting route:", error);
       toast.error("مشکل در حذف مسیر", {
         autoClose: 3000,
-       
+
       });
     }
     fetchRoutes();
@@ -373,7 +379,25 @@ export const Main = () => {
     sendTokenToServer();
   };
   // Add this useEffect to control the guide flow
-
+  const handleMetaDataSave = () => {
+    const updatedLayout = {
+      ...layout,
+      sections: {
+        ...layout.sections,
+        children: {
+          ...layout.sections.children,
+          metaData: metaData
+        }
+      }
+    };
+    console.log("Updated Layout:", updatedLayout);
+    
+    setLayout(updatedLayout);
+    setIsMetaDataModalOpen(false);
+    handleSave(); // This will save to the server
+  };
+  
+  
   const saveButtonRef = useRef<HTMLButtonElement>(null);
   const addRouteButtonRef = useRef<HTMLButtonElement>(null);
   const deleteRouteButtonRef = useRef<HTMLButtonElement>(null);
@@ -410,6 +434,46 @@ export const Main = () => {
         </div>
       ) : ( */}
       <div className="min-h-screen ">
+      {isMetaDataModalOpen && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white/20 p-6 border border-gray-300 backdrop-blur-sm rounded-xl shadow-lg w-96">
+      <h3 className="text-lg font-bold text-white mb-4 text-right">
+        ویرایش متا دیتا
+      </h3>
+      <div className="space-y-4">
+        <input
+          type="text"
+          placeholder="عنوان"
+          value={metaData.title}
+          onChange={(e) => setMetaData({...metaData, title: e.target.value})}
+          className="w-full p-2 border rounded-lg"
+          dir="rtl"
+        />
+        <textarea
+          placeholder="توضیحات"
+          value={metaData.description}
+          onChange={(e) => setMetaData({...metaData, description: e.target.value})}
+          className="w-full p-2 border rounded-lg"
+          dir="rtl"
+        />
+        <div className="flex justify-end space-x-2 space-x-reverse">
+          <button
+            onClick={handleMetaDataSave}
+            className="px-4 py-2 mx-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          >
+            ذخیره
+          </button>
+          <button
+            onClick={() => setIsMetaDataModalOpen(false)}
+            className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+          >
+            انصراف
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -430,8 +494,8 @@ export const Main = () => {
         >
           <div className=" mx-auto px-4 sm:px-6 lg:px-8 ">
             <div className="flex lg:flex-row flex-wrap items-center  md:mt-0 justify-center gap-x-0 md:py-2 md:gap-x-1 lg:py-0  sm:space-y-0">
-              <motion.button
-                whileHover={{ scale: 1.02 }}
+              <motion.div
+
                 className="md:flex hidden  items-center border-r pr-2 border-gray-300 absolute left-2 gap-2 px-3 py-0.5"
               >
                 <span className="text-sm font-medium">{selectedRoute}</span>
@@ -442,7 +506,16 @@ export const Main = () => {
                       className: "w-4 h-4",
                     }
                   )}
-              </motion.button>
+                <button
+                  className="hover:bg-gray-200 rounded-full p-1"
+                  onClick={() => setIsMetaDataModalOpen(true)}
+                >
+                  افزودن متا دیتا
+                </button>
+
+
+              </motion.div>
+
               <motion.button
                 id="sitePreview"
                 onClick={handleSiteView}
@@ -466,24 +539,23 @@ export const Main = () => {
                 className={`w-fulllg:-ml-12 ${getHighlightClass(
                   saveButtonRef
                 )} px-1  text-xs font-semibold border-r pr-2 border-gray-800 transition-all duration-300 transform
-                  ${
-                    saveStatus === "saving"
-                      ? "bg-blue-400 px-2 pl-2 py-1 rounded-xl text-white border-none"
-                      : saveStatus === "saved"
+                  ${saveStatus === "saving"
+                    ? "bg-blue-400 px-2 pl-2 py-1 rounded-xl text-white border-none"
+                    : saveStatus === "saved"
                       ? "bg-green-400 px-2 pl-2 py-1 rounded-xl text-white border-none"
                       : saveStatus === "error"
-                      ? "bg-red-400 pl-2 py-1 rounded-xl text-white border-none"
-                      : ""
+                        ? "bg-red-400 pl-2 py-1 rounded-xl text-white border-none"
+                        : ""
                   }
                   text-black`}
               >
                 {saveStatus === "saving"
                   ? "در حال ذخیره"
                   : saveStatus === "saved"
-                  ? "ذخیره شد"
-                  : saveStatus === "error"
-                  ? "ناموفق"
-                  : "ذخیره تنظیمات"}
+                    ? "ذخیره شد"
+                    : saveStatus === "error"
+                      ? "ناموفق"
+                      : "ذخیره تنظیمات"}
               </motion.button>
 
               {/* View Mode Toggles */}
