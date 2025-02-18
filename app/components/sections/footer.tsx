@@ -15,7 +15,7 @@ import {
 interface Category {
   _id: string;
   name: string;
-  children: string[];
+  children: { _id: string; name: string }[];
   storeId: string;
   slug: string;
 }
@@ -367,31 +367,29 @@ const Footer: React.FC<FooterProps> = ({
   }, []);
   useEffect(() => {
     const fetchCategories = async () => {
-      
       try {
         const headers: HeadersInit = {
           Authorization: `Bearer ${localStorage.getItem("complexToken")}`,
           "Content-Type": "application/json",
-        }
-        
+        };
 
         const response = await fetch("/api/category", {
           method: "GET",
           headers: headers,
         });
         const data = await response.json();
-        const fetchedCategories = Array.isArray(data) 
-        ? data 
-        : [
-          {
-            _id: "1",
-            name: "لپ تاپ",
-            children: [],
-            storeId: "",
-            slug: "laptops",
-          },
-          // ... other default categories
-        ];
+        const fetchedCategories = Array.isArray(data)
+          ? data
+          : [
+              {
+                _id: "1",
+                name: "لپ تاپ",
+                children: [],
+                storeId: "",
+                slug: "laptops",
+              },
+              // ... other default categories
+            ];
 
         setCategories(fetchedCategories);
       } catch (error) {
@@ -617,20 +615,15 @@ const Footer: React.FC<FooterProps> = ({
                 </ParentCategoryLink>
 
                 <div className="flex flex-col gap-2 pr-4 border-r-2 border-gray-200">
-                  {category.children.map((childId, index) => {
-                    const childCategory = categories.find(
-                      (cat) => cat._id === childId
-                    );
-                    return childCategory ? (
-                      <ChildCategoryLink
-                        key={`${category._id}-${childId}-${index}`}
-                        href={`/category/${childCategory.name}`}
-                        $data={sectionData}
-                      >
-                        {childCategory.name}
-                      </ChildCategoryLink>
-                    ) : null;
-                  })}
+                  {category.children.map((child, index) => (
+                    <ChildCategoryLink
+                      key={`${category._id}-${child._id}-${index}`}
+                      href={`/category/${child.name}`}
+                      $data={sectionData}
+                    >
+                      {child.name}
+                    </ChildCategoryLink>
+                  ))}
                 </div>
               </div>
             ))}

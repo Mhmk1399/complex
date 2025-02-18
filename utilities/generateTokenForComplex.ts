@@ -4,12 +4,8 @@ import connect from '@/lib/data';
 import users from '@/models/users';
 export async function generateTokenForComplex(repoUrl: string): Promise<string> {
   try {
-    const storeIdFilePath = `storeId.txt`;
-    const storeId = await fetchGitHubFile(storeIdFilePath, repoUrl);
-    
-    console.log('Raw storeId:', storeId);
-    console.log('Trimmed storeId:', storeId.trim());
-    console.log('StoreId length:', storeId.trim().length);
+     const repoUrlParts = repoUrl.split('/');
+     const storeId = repoUrlParts[repoUrlParts.length - 1];
 
     await connect();
     console.log('MongoDB connected successfully');
