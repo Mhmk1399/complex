@@ -4,12 +4,22 @@ import { Layout, SlideBannerSection } from "@/lib/types";
 import React from "react";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
+import ImageSelectorModal from "../sections/ImageSelectorModal";
 
 interface SlideBannerFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<SlideBannerSection>>;
   userInputData: SlideBannerSection;
   layout: Layout;
   selectedComponent: string;
+}
+
+interface ImageFile {
+  _id: string;
+  fileName: string;
+  fileUrl: string;
+  fileType: string;
+  fileSize: number;
+  storeId: string;
 }
 
 interface BoxValues {
@@ -30,17 +40,19 @@ const ColorInput = ({
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => (
-  <div className="flex flex-col gap-3">
+  <>
     <label className="block mb-1">{label}</label>
-    <input
-      type="color"
-      id={name}
-      name={name}
-      value={value || "#000000"}
-      onChange={onChange}
-      className="border p-0.5 rounded-full"
-    />
-  </div>
+    <div className="flex flex-col rounded-md gap-3 items-center">
+      <input
+        type="color"
+        id={name}
+        name={name}
+        value={value || "#000000"}
+        onChange={onChange}
+        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
+      />
+    </div>
+  </>
 );
 
 export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
@@ -52,6 +64,10 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
+  const [isImageSelectorOpen, setIsImageSelectorOpen] = useState(false);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(0);
+  const [isUpdating, setIsUpdating] = useState(false);
+
   const [margin, setMargin] = useState<BoxValues>({
     top: 0,
     bottom: 0,
@@ -96,7 +112,7 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
-  },[selectedComponent]);
+  }, [selectedComponent]);
 
   const handleSlideChange = (index: number, field: string, value: string) => {
     setUserInputData((prev: SlideBannerSection) => ({
@@ -110,7 +126,6 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
     }));
   };
 
-  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -141,6 +156,12 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
     setIsContentOpen(true);
   }, []);
 
+  const handleImageSelect = (image: ImageFile) => {
+    handleSlideChange(currentSlideIndex, "imageSrc", image.fileUrl);
+    handleSlideChange(currentSlideIndex, "imageAlt", image.fileName);
+    setIsImageSelectorOpen(false);
+  };
+
   return (
     <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-lg font-bold mb-4">تنظیمات اسلایدر</h2>
@@ -148,26 +169,32 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
       {/* Content Section */}
 
       {isContentOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
+        <div className="p-4 animate-slideDown">
           {userInputData?.blocks?.slides?.map((slide, index) => (
-            <div key={index} className="mb-4 p-4 bg-gray-50 rounded-lg">
+            <div key={index} className="mb-4 p-4 border-b border-gray-300">
               <h4 className="font-semibold mb-2">اسلاید {index + 1}</h4>
               <div className="space-y-2">
-                <label
-                  htmlFor="
-                    "
-                >
-                  تصویر
-                </label>
-                <input
-                  type="text"
-                  placeholder="آدرس تصویر"
-                  value={slide.imageSrc}
-                  onChange={(e) =>
-                    handleSlideChange(index, "imageSrc", e.target.value)
-                  }
-                  className="w-full mb-2 p-2 border rounded"
-                />
+                <label>تصویر</label>
+                <div className="flex gap-2 items-center">
+                  <input
+                    type="text"
+                    placeholder="آدرس تصویر"
+                    value={slide.imageSrc}
+                    onChange={(e) =>
+                      handleSlideChange(index, "imageSrc", e.target.value)
+                    }
+                    className="w-full hidden mb-2 p-2 border rounded"
+                  />
+                  <button
+                    onClick={() => {
+                      setCurrentSlideIndex(index);
+                      setIsImageSelectorOpen(true);
+                    }}
+                    className="px-4 py-2 mb-4 mt-1 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  >
+                    انتخاب تصویر
+                  </button>
+                </div>
                 <label className="mt-2">متن جایگزین تصویر</label>
                 <input
                   type="text"
@@ -187,26 +214,28 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
       {/* Style Settings */}
 
       {isStyleSettingsOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
+        <div className="p-4   border-gray-100 animate-slideDown">
           <div className="space-y-4">
             <div className=" rounded-lg">
               <label className="block mb-2">ارتفاع اسلایدر</label>
-              <input
-                type="range"
-                name="height"
-                min="150"
-                max="1000"
-                value={userInputData?.blocks?.setting?.height || "200"}
-                onChange={handleSettingChange}
-                className="w-full"
-              />
-              <span className="text-sm text-gray-500">
-                {userInputData?.blocks?.setting?.height}px
-              </span>
+
+              <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
+                <input
+                  type="range"
+                  min="0"
+                  max="1000"
+                  name="height"
+                  value={userInputData?.blocks?.setting?.height || "250"}
+                  onChange={handleSettingChange}
+                />
+                <p className="text-sm text-gray-600 text-nowrap">
+                  {userInputData?.blocks.setting.height}px
+                </p>
+              </div>
             </div>
-            <div>
+            <div className="rounded-lg flex items-center justify-between ">
               <ColorInput
-                label="رنگ فلش ها"
+                label="رنگ فلش"
                 name="bgArrow"
                 value={
                   userInputData?.blocks?.setting?.bgArrow?.toString() ??
@@ -215,9 +244,9 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
                 onChange={handleSettingChange}
               />
             </div>
-            <div>
+            <div className="rounded-lg flex items-center justify-between gap-2">
               <ColorInput
-                label="رنگ نقطه‌های غیرفعال (در صورت نیاز)"
+                label="رنگ نقطه‌های غیرفعال"
                 name="inactiveDotColor"
                 value={
                   userInputData?.blocks?.setting?.inactiveDotColor?.toString() ??
@@ -226,9 +255,9 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
                 onChange={handleSettingChange}
               />
             </div>
-            <div>
+            <div className="rounded-lg flex items-center justify-between gap-2">
               <ColorInput
-                label="رنگ نقطه‌ی فعال (در صورت نیاز)"
+                label="رنگ نقطه‌ی فعال"
                 name="activeDotColor"
                 value={
                   userInputData?.blocks?.setting?.activeDotColor?.toString() ??
@@ -244,8 +273,8 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
       {/* Spacing Settings */}
 
       {isSpacingOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
-          <div className="bg-gray-50 rounded-lg p-2 flex items-center justify-center">
+        <div className="p-4 animate-slideDown">
+          <div className=" rounded-lg p-2 flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}
               padding={padding}
@@ -254,6 +283,11 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
           </div>
         </div>
       )}
+      <ImageSelectorModal
+        isOpen={isImageSelectorOpen}
+        onClose={() => setIsImageSelectorOpen(false)}
+        onSelectImage={handleImageSelect}
+      />
     </div>
   );
 };

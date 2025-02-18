@@ -18,6 +18,31 @@ interface BoxValues {
   left: number;
   right: number;
 }
+const ColorInput = ({
+  label,
+  name,
+  value,
+  onChange,
+}: {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) => (
+  <>
+    <label className="block mb-1">{label}</label>
+    <div className="flex flex-col rounded-md gap-3 items-center">
+      <input
+        type="color"
+        id={name}
+        name={name}
+        value={value || "#000000"}
+        onChange={onChange}
+        className=" p-0.5 border  rounded-md border-gray-200 w-8 h-8 bg-transparent "
+      />
+    </div>
+  </>
+);
 
 export const OfferRowForm: React.FC<OfferRowFormProps> = ({
   setUserInputData,
@@ -28,7 +53,11 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
-  const [collections, setCollections] = useState<Array<{name: string, _id: string}>>([]);
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  const [collections, setCollections] = useState<
+    Array<{ name: string; _id: string }>
+  >([]);
   const [margin, setMargin] = useState<BoxValues>({
     top: 0,
     bottom: 0,
@@ -45,7 +74,7 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
-  },[]);
+  }, []);
 
   useEffect(() => {
     setMargin({
@@ -101,12 +130,13 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `${localStorage.getItem("complexToken")}`,
+            Authorization: `${localStorage.getItem("complexToken")}`,
           },
         });
         const data = await response.json();
-        if(data.products.length > 0){
-        setCollections(data.products);}
+        if (data.products.length > 0) {
+          setCollections(data.products);
+        }
         console.log(data.products);
       } catch (error) {
         console.error("Error fetching special offers:", error);
@@ -114,11 +144,14 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
     };
 
     fetchSpecialOffers();
-  },[]);
+  }, []);
 
   const handleBlockSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
+
     const { name, value } = e.target;
     setUserInputData((prev) => ({
       ...prev,
@@ -130,6 +163,7 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
         },
       },
     }));
+    setTimeout(() => setIsUpdating(false), 100);
   };
 
   const handleTabChange = (tab: "content" | "style" | "spacing") => {
@@ -148,7 +182,7 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
       <TabButtons onTabChange={handleTabChange} />
 
       {isContentOpen && (
-        <div className="p-4 border-t border-gray-100">
+        <div className="p-4 ">
           <div className="space-y-4">
             <div>
               <label className="block mb-2 text-sm font-bold text-gray-700">
@@ -162,7 +196,7 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
                 className="w-full p-2 border rounded"
               />
             </div>
-            
+
             <div>
               <label className="block mb-2 text-sm font-bold text-gray-700">
                 انتخاب کالکشن
@@ -186,26 +220,22 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
       )}
 
       {isStyleSettingsOpen && (
-        <div className="p-4 border-t border-gray-100">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block mb-2">رنگ عنوان</label>
-              <input
-                type="color"
+        <div className="p-4">
+          <div className="grid grid-cols-1 gap-4">
+            <div className="rounded-lg pr-3 inline-flex items-center justify-between gap-24">
+              <ColorInput
+                label="رنگ عنوان "
                 name="titleColor"
-                value={userInputData?.blocks?.setting?.titleColor || "#000000"}
+                value={userInputData?.setting?.titleColor || "#ef394e"}
                 onChange={handleBlockSettingChange}
-                className="w-full p-1 h-10"
               />
             </div>
-            <div>
-              <label className="block mb-2">رنگ دکمه</label>
-              <input
-                type="color"
+            <div className="rounded-lg pr-3 inline-flex items-center justify-between gap-24">
+              <ColorInput
+                label="رنگ دکمه "
                 name="buttonColor"
-                value={userInputData?.blocks?.setting?.buttonColor || "#ffffff"}
+                value={userInputData?.blocks?.setting?.buttonColor || "#ef394e"}
                 onChange={handleBlockSettingChange}
-                className="w-full p-1 h-10"
               />
             </div>
           </div>
@@ -213,8 +243,8 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
       )}
 
       {isSpacingOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
-          <div className="bg-gray-50 rounded-lg flex items-center justify-center">
+        <div className="p-4 animate-slideDown">
+          <div className=" rounded-lg flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}
               padding={padding}
@@ -226,3 +256,4 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
     </div>
   );
 };
+

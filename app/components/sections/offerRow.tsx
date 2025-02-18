@@ -109,7 +109,7 @@ export const OfferRow: React.FC<OfferRowProps> = ({
     };
 
     fetchData();
-  }, [layout?.sections?.children?.sections, actualName, sectionData?.blocks?.setting?.selectedCollection]);
+  }, [actualName, sectionData?.blocks?.setting?.selectedCollection]);
 
   useEffect(() => {
     if (window.innerWidth <= 424) {

@@ -575,7 +575,7 @@ const Footer: React.FC<FooterProps> = ({
             />
           </Link>
           <Link
-            href={telegramLink ? telegramLink : "/"}
+            href={whatsappLink ? whatsappLink : "/"}
             target="_blank"
             rel="noopener noreferrer"
             className="hover:scale-105 transition-all duration-300 ease-in-out"
@@ -588,7 +588,7 @@ const Footer: React.FC<FooterProps> = ({
             />
           </Link>
           <Link
-            href={whatsappLink ? whatsappLink : "/"}
+            href={telegramLink ? telegramLink : "/"}
             target="_blank"
             rel="noopener noreferrer"
             className="hover:scale-105 transition-all duration-300 ease-in-out"

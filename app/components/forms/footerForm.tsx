@@ -30,17 +30,15 @@ const ColorInput = ({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => (
   <>
-    <label className="block mb-1" htmlFor={name}>
-      {label}
-    </label>
-    <div className="flex flex-col gap-3 items-center">
+    <label className="block mb-1">{label}</label>
+    <div className="flex flex-col rounded-md gap-3 items-center">
       <input
         type="color"
         id={name}
         name={name}
-        value={value}
+        value={value || "#000000"}
         onChange={onChange}
-        className="border p-0.5 rounded-full"
+        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
       />
     </div>
   </>
@@ -67,6 +65,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleUpdate = (
     type: "margin" | "padding",
@@ -127,7 +126,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
         blocks: initialData.blocks || {},
       });
     }
-  }, [selectedComponent ]);
+  }, [selectedComponent]);
 
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -145,6 +144,8 @@ export const FooterForm: React.FC<FooterFormProps> = ({
   const handleBlockSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
     const { name, value } = e.target;
     setUserInputData((prev: FooterSection) => ({
       ...prev,
@@ -156,11 +157,15 @@ export const FooterForm: React.FC<FooterFormProps> = ({
         },
       },
     }));
+    setTimeout(() => setIsUpdating(false), 100);
   };
 
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
+
     const { name, value } = e.target;
     setUserInputData((prev: FooterSection) => ({
       ...prev,
@@ -169,6 +174,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
         [name]: value,
       },
     }));
+    setTimeout(() => setIsUpdating(false), 100);
   };
 
   const handleTabChange = (tab: "content" | "style" | "spacing") => {
@@ -192,10 +198,9 @@ export const FooterForm: React.FC<FooterFormProps> = ({
 
       {isContentOpen && (
         <>
-          <h3 className="font-semibold mb-2 p-4 animate-slideDown">محتوا</h3>
           <div className="space-y-4 p-4 animate-slideDown">
             <div>
-              <label className="block mb-1">متن</label>
+              <label className="block mb-1">متن سربرگ</label>
               <input
                 type="text"
                 name="text"
@@ -216,17 +221,6 @@ export const FooterForm: React.FC<FooterFormProps> = ({
                 onChange={handleBlockChange}
                 className="w-full p-2 border rounded"
                 rows={3}
-              />
-            </div>
-
-            <div>
-              <label className="block mb-1">لینک لوگو</label>
-              <input
-                type="text"
-                name="logo"
-                value={userInputData?.blocks?.logo ?? "لینک لوگو"}
-                onChange={handleBlockChange}
-                className="w-full p-2 border rounded"
               />
             </div>
 
@@ -274,26 +268,28 @@ export const FooterForm: React.FC<FooterFormProps> = ({
         <>
           <div className="grid md:grid-cols-1 gap-4  p-4 animate-slideDown">
             <h4 className="font-semibold mb-2">تنظیمات سربرگ</h4>
-            <ColorInput
-              label="رنگ سربرگ"
-              name="textColor"
-              value={userInputData?.blocks?.setting?.textColor ?? "#ffffff"}
-              onChange={handleBlockSettingChange}
-            />
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ سربرگ"
+                name="textColor"
+                value={userInputData?.blocks?.setting?.textColor ?? "#ffffff"}
+                onChange={handleBlockSettingChange}
+              />
+            </div>
 
             <label>سایز متن سربرگ</label>
-
-            <input
-              type="range"
-              name="textFontSize"
-              min="12"
-              max="48"
-              step="1"
-              value={userInputData?.blocks?.setting?.textFontSize ?? "16"}
-              onChange={handleBlockSettingChange}
-            />
-            <div className="text-gray-500 text-sm">
-              {userInputData?.blocks?.setting?.textFontSize}px
+            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
+              <input
+                type="range"
+                min="0"
+                max="100"
+                name="textFontSize"
+                value={userInputData?.blocks?.setting?.textFontSize || "250"}
+                onChange={handleBlockSettingChange}
+              />
+              <p className="text-sm text-gray-600 text-nowrap">
+                {userInputData?.blocks.setting.textFontSize}px
+              </p>
             </div>
             <div>
               <label className="block mb-1">وزن متن سربرگ</label>
@@ -308,21 +304,31 @@ export const FooterForm: React.FC<FooterFormProps> = ({
               </select>
             </div>
             <h4 className="font-semibold mb-2">تنظیمات متن</h4>
-
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ توضیحات"
+                name="descriptionColor"
+                value={
+                  userInputData?.blocks?.setting?.descriptionColor ?? "#ffffff"
+                }
+                onChange={handleBlockSettingChange}
+              />
+            </div>
             <label>سایز توضیحات</label>
-            <input
-              type="range"
-              name="descriptionFontSize"
-              min="12"
-              max="48"
-              step="1"
-              value={
-                userInputData?.blocks?.setting?.descriptionFontSize ?? "16"
-              }
-              onChange={handleBlockSettingChange}
-            />
-            <div className="text-gray-500 text-sm">
-              {userInputData?.blocks?.setting?.descriptionFontSize}px
+            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
+              <input
+                type="range"
+                min="0"
+                max="100"
+                name="descriptionFontSize"
+                value={
+                  userInputData?.blocks?.setting?.descriptionFontSize || "250"
+                }
+                onChange={handleBlockSettingChange}
+              />
+              <p className="text-sm text-gray-600 text-nowrap">
+                {userInputData?.blocks.setting.descriptionFontSize}px
+              </p>
             </div>
 
             <div>
@@ -340,14 +346,6 @@ export const FooterForm: React.FC<FooterFormProps> = ({
               </select>
             </div>
 
-            <ColorInput
-              label="رنگ توضیحات"
-              name="descriptionColor"
-              value={
-                userInputData?.blocks?.setting?.descriptionColor ?? "#ffffff"
-              }
-              onChange={handleBlockSettingChange}
-            />
             <h4 className="font-semibold">تنظیمات لوگو</h4>
           </div>
 
@@ -379,13 +377,14 @@ export const FooterForm: React.FC<FooterFormProps> = ({
               </div>
             </div>
             <h4 className="font-semibold mb-2">تنظیمات پس زمینه</h4>
-
-            <ColorInput
-              label="رنگ پس زمینه"
-              name="backgroundColor"
-              value={userInputData?.setting?.backgroundColor ?? "#fffffff"}
-              onChange={handleSettingChange}
-            />
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ پس زمینه"
+                name="backgroundColor"
+                value={userInputData?.setting?.backgroundColor ?? "#fffffff"}
+                onChange={handleSettingChange}
+              />
+            </div>
           </div>
 
           {/* Spacing Settings */}
@@ -393,12 +392,15 @@ export const FooterForm: React.FC<FooterFormProps> = ({
           {/* Footer Links Section */}
           <h3 className="font-semibold p-4">لینک‌های فوتر</h3>
           <div className="space-y-1 flex flex-col gap-2 p-4">
-            <ColorInput
-              label="رنگ لینک‌ها"
-              name="linkColor"
-              value={userInputData?.blocks?.setting?.linkColor ?? "#ffffff"}
-              onChange={handleBlockSettingChange}
-            />
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ لینک‌ها"
+                name="linkColor"
+                value={userInputData?.blocks?.setting?.linkColor ?? "#ffffff"}
+                onChange={handleBlockSettingChange}
+              />
+            </div>
+
             {userInputData?.blocks?.links?.map((link, index) => (
               <div key={index} className="flex gap-4">
                 <div className="flex-1">
@@ -476,77 +478,81 @@ export const FooterForm: React.FC<FooterFormProps> = ({
           {/* Trust Icons Settings */}
           <h4 className="font-semibold mb-2 ">تنظیمات آیکون‌های اعتماد</h4>
           <div className="grid md:grid-cols-1 gap-4 p-4">
-            <ColorInput
-              label="رنگ پس زمینه آیکون"
-              name="trustIconBackground"
-              value={
-                userInputData?.blocks?.setting?.trustIconBackground ?? "#f8f9fa"
-              }
-              onChange={handleBlockSettingChange}
-            />
-
-            <ColorInput
-              label="رنگ آیکون"
-              name="trustIconColor"
-              value={userInputData?.blocks?.setting?.trustIconColor ?? "red"}
-              onChange={handleBlockSettingChange}
-            />
-
-            <div>
-              <label className="block mb-1">سایز متن آیتم‌ها</label>
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ پس زمینه آیکون"
+                name="trustIconBackground"
+                value={
+                  userInputData?.blocks?.setting?.trustIconBackground ??
+                  "#f8f9fa"
+                }
+                onChange={handleBlockSettingChange}
+              />
+            </div>
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ آیکون"
+                name="trustIconColor"
+                value={userInputData?.blocks?.setting?.trustIconColor ?? "red"}
+                onChange={handleBlockSettingChange}
+              />
+            </div>
+            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
               <input
                 type="range"
+                min="0"
+                max="100"
                 name="trustItemSize"
-                min="12"
-                max="24"
-                step="1"
-                value={userInputData?.blocks?.setting?.trustItemSize ?? "14"}
+                value={userInputData?.blocks?.setting?.trustItemSize || "16"}
                 onChange={handleBlockSettingChange}
-                className="w-full"
               />
-              <div className="text-gray-500 text-sm">
-                {userInputData?.blocks?.setting?.trustItemSize ?? "14px"}
-              </div>
+              <p className="text-sm text-gray-600 text-nowrap">
+                {userInputData?.blocks.setting.trustItemSize}px
+              </p>
             </div>
-
-            <ColorInput
-              label="رنگ متن آیتم‌ها"
-              name="trustItemColor"
-              value={userInputData?.blocks?.setting?.trustItemColor ?? "#333"}
-              onChange={handleBlockSettingChange}
-            />
-
-            <ColorInput
-              label="رنگ دکمه اسکرول"
-              name="scrollButtonColor"
-              value={
-                userInputData?.blocks?.setting?.scrollButtonColor ?? "#000"
-              }
-              onChange={handleBlockSettingChange}
-            />
-
-            <ColorInput
-              label="پس زمینه دکمه اسکرول"
-              name="scrollButtonBg"
-              value={
-                userInputData?.blocks?.setting?.scrollButtonBg ?? "transparent"
-              }
-              onChange={handleBlockSettingChange}
-            />
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ متن آیتم‌ها"
+                name="trustItemColor"
+                value={userInputData?.blocks?.setting?.trustItemColor ?? "#333"}
+                onChange={handleBlockSettingChange}
+              />
+            </div>
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ دکمه اسکرول"
+                name="scrollButtonColor"
+                value={
+                  userInputData?.blocks?.setting?.scrollButtonColor ?? "#000"
+                }
+                onChange={handleBlockSettingChange}
+              />
+            </div>
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="پس زمینه دکمه اسکرول"
+                name="scrollButtonBg"
+                value={
+                  userInputData?.blocks?.setting?.scrollButtonBg ??
+                  "transparent"
+                }
+                onChange={handleBlockSettingChange}
+              />
+            </div>
           </div>
           {/* End of Trust Icons Settings */}
           <h4 className="font-semibold mb-2 ">تنظیمات لینک دسته بندی</h4>
-          <div className="grid md:grid-cols-1 gap-4 p-4">
+          <div className="rounded-lg flex px-4 items-center justify-between ">
             <ColorInput
-              label="تنظیمات لینک دسته بندی"
+              label="رنگ لینک  "
               name="categoryColor"
               value={userInputData?.blocks?.setting?.categoryColor ?? "#333"}
               onChange={handleBlockSettingChange}
             />
           </div>
-          <div className="grid md:grid-cols-1 gap-4 p-4">
+          <div className="rounded-lg px-4 flex items-center justify-between ">
             <ColorInput
-              label="تنظیمات پس زمینه لینک دسته بندی"
+              label="رنگ پس زمینه   "
               name="categoryBg"
               value={userInputData?.blocks?.setting?.categoryBg ?? "#333"}
               onChange={handleBlockSettingChange}
@@ -559,8 +565,8 @@ export const FooterForm: React.FC<FooterFormProps> = ({
 
       {/* Dropdown Content */}
       {isSpacingOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
-          <div className="bg-gray-50 rounded-lg flex items-center justify-center">
+        <div className="p-4 animate-slideDown">
+          <div className=" rounded-lg flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}
               padding={padding}

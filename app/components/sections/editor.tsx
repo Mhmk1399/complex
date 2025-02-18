@@ -19,14 +19,9 @@ const EditorWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: transparent;
-  // color: #333;
   width: 340px;
   height: 220px;
-  border-radius: 12px;
   position: relative;
-  padding: 20px 10px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
 `;
 
 const Label = styled.span`
@@ -39,7 +34,6 @@ const Label = styled.span`
 const InputBox = styled.input`
   width: 48px;
   height: 28px;
-  background: #f7f9fc;
   border: 1px solid #ddd;
   text-align: center;
   font-size: 14px;
@@ -61,7 +55,6 @@ const PaddingMarginBox = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #f7f9fc;
   border: 1px solid #ddd;
   width: 140px;
   height: 140px;
@@ -69,7 +62,6 @@ const PaddingMarginBox = styled.div`
   position: relative;
   margin: 20px 0;
   padding: 10px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
 `;
 
 const MarginPaddingEditor: React.FC<MarginPaddingEditorProps> = ({
@@ -90,14 +82,21 @@ const MarginPaddingEditor: React.FC<MarginPaddingEditorProps> = ({
   };
 
   return (
-    <EditorWrapper>
-      <Label style={{ top: "-1px", color: "#000" }}>فاصله خارجی</Label>
-      <PaddingMarginBox>
+    <EditorWrapper className="bg-white rounded-lg">
+      <Label style={{ top: "5px", color: "#000", right: "9px" }}>
+        فاصله خارجی
+      </Label>
+      <PaddingMarginBox className="bg-white">
         <InputBox
           type="number"
           value={margin.top || 0}
           onChange={(e) => handleChange("margin", "top", e.target.value)}
-          style={{ position: "absolute", top: "-30px", left: "33%" }}
+          style={{
+            position: "absolute",
+            top: "-30px",
+            left: "33%",
+            color: "#000",
+          }}
         />
         <div style={{ position: "relative", width: "100%", height: "100%" }}>
           <InputBox
@@ -109,6 +108,7 @@ const MarginPaddingEditor: React.FC<MarginPaddingEditorProps> = ({
               top: "10px",
               left: "50%",
               transform: "translateX(-50%)",
+              backgroundColor: "#fff ",
             }}
           />
           <InputBox
@@ -149,10 +149,15 @@ const MarginPaddingEditor: React.FC<MarginPaddingEditorProps> = ({
           type="number"
           value={margin.bottom || 0}
           onChange={(e) => handleChange("margin", "bottom", e.target.value)}
-          style={{ position: "absolute", bottom: "-30px", left: "33%" }}
+          style={{
+            position: "absolute",
+            bottom: "-30px",
+            left: "33%",
+            color: "#000",
+          }}
         />
       </PaddingMarginBox>
-      <Label style={{ bottom: "101px", color: "#000" }}>فاصله داخلی</Label>
+      <Label style={{ bottom: "100px", color: "#000" }}>فاصله داخلی</Label>
     </EditorWrapper>
   );
 };

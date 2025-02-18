@@ -4,6 +4,7 @@ import { Layout, StorySection } from "@/lib/types";
 import React from "react";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
+import Link from "next/link";
 
 interface StoryFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<StorySection>>;
@@ -32,14 +33,14 @@ const ColorInput = ({
 }) => (
   <>
     <label className="block mb-1">{label}</label>
-    <div className="flex flex-col gap-3 items-center">
+    <div className="flex flex-col rounded-md gap-3 items-center">
       <input
         type="color"
         id={name}
         name={name}
         value={value || "#000000"}
         onChange={onChange}
-        className="border p-0.5 rounded-full"
+        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
       />
     </div>
   </>
@@ -164,57 +165,21 @@ export const StoryForm: React.FC<StoryFormProps> = ({
       {/* Style Settings */}
       {isContentOpen && (
         <div className=" rounded-lg p-4 animate-slideDown gap-2 flex flex-col">
-          {userInputData?.blocks.stories.map((story, index) => (
-            <div
-              key={story.id}
-              className=" rounded-lg p-2  bg-gray-50 space-y-3"
-            >
-              <h4 className="font-semibold">استوری {index + 1}</h4>
-              <label htmlFor="" className="block mb-1">
-                آدرس تصویر:
-              </label>
-              <input
-                type="text"
-                placeholder="آدرس تصویر"
-                value={story.imageUrl}
-                onChange={(e) =>
-                  handleStoryChange(index, "imageUrl", e.target.value)
-                }
-                className="w-full p-2 border rounded"
-              />
-              <label htmlFor="" className="block mb-1">
-                عنوان:
-              </label>
-              <input
-                type="text"
-                placeholder="عنوان"
-                value={story.title}
-                onChange={(e) =>
-                  handleStoryChange(index, "title", e.target.value)
-                }
-                className="w-full p-2 border rounded"
-              />
-              <label htmlFor="" className="block mb-1">
-                لینک:
-              </label>
-              <input
-                type="text"
-                placeholder="لینک"
-                value={story.link}
-                onChange={(e) =>
-                  handleStoryChange(index, "link", e.target.value)
-                }
-                className="w-full p-2 border rounded"
-              />
-            </div>
-          ))}
+          <p className="text-sm text-gray-500">
+            محتوای این بخش از طریق پنل مدیریت سایت تعریف میشود.
+          </p>
+          <button className="bg-blue-500 mt-4 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-xl">
+            <Link target="_blank" href="https://complex-dashboard.vercel.app/">
+              ورود به پنل مدیریت
+            </Link>
+          </button>
         </div>
       )}
       {/* Style Tab */}
       {isStyleSettingsOpen && (
         <div className=" rounded-lg p-4 animate-slideDown">
           <div className="flex flex-col gap-4">
-            <div className="  rounded-lg">
+            <div className="rounded-lg inline-flex items-center justify-between gap-2">
               <ColorInput
                 label="رنگ حلقه استوری"
                 name="storyRingColor"
@@ -222,52 +187,57 @@ export const StoryForm: React.FC<StoryFormProps> = ({
                 onChange={handleSettingChange}
               />
             </div>
-            <div className="  rounded-lg">
+            <div className="rounded-lg inline-flex items-center justify-between gap-2">
               <ColorInput
                 label="رنگ عنوان"
                 name="titleColor"
                 value={userInputData?.blocks.setting.titleColor}
                 onChange={handleSettingChange}
               />
-              <label className="block mt-3">سایز عنوان</label>
+            </div>
+
+            <label className="block mt-3">سایز عنوان</label>
+            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
               <input
                 type="range"
+                min="0"
+                max="100"
                 name="titleFontSize"
                 value={userInputData?.blocks.setting.titleFontSize}
                 onChange={handleSettingChange}
-                className="w-full"
-                min="12"
-                max="24"
               />
-              <label htmlFor="" className="block mt-3">
-                وزن فونت عنوان
-              </label>
-              <select
-                name="titleFontWeight"
-                value={userInputData?.blocks.setting.titleFontWeight}
-                onChange={handleSettingChange}
-                className="w-full p-2 border rounded mt-2"
-              >
-                <option value="normal">معمولی</option>
-                <option value="bold">ضخیم</option>
-              </select>
+              <p className="text-sm text-gray-600 text-nowrap">
+                {userInputData?.blocks.setting.titleFontSize}px
+              </p>
             </div>
+            <label htmlFor="" className="block mt-3">
+              وزن فونت عنوان
+            </label>
+            <select
+              name="titleFontWeight"
+              value={userInputData?.blocks.setting.titleFontWeight}
+              onChange={handleSettingChange}
+              className="w-full p-2 border rounded mt-2"
+            >
+              <option value="normal">معمولی</option>
+              <option value="bold">ضخیم</option>
+            </select>
           </div>
         </div>
       )}
 
       {/* Spacing Settings */}
-        {isSpacingOpen && (
-          <div className="p-4 border-t border-gray-100 animate-slideDown">
-            <div className="bg-gray-50 rounded-lg flex items-center justify-center">
-              <MarginPaddingEditor
-                margin={margin}
-                padding={padding}
-                onChange={handleUpdate}
-              />
-            </div>
+      {isSpacingOpen && (
+        <div className="p-4 border-t border-gray-100 animate-slideDown">
+          <div className="bg-gray-50 rounded-lg flex items-center justify-center">
+            <MarginPaddingEditor
+              margin={margin}
+              padding={padding}
+              onChange={handleUpdate}
+            />
           </div>
-        )}
+        </div>
+      )}
     </div>
   );
 };

@@ -31,17 +31,15 @@ const ColorInput = ({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => (
   <>
-    <label className="block mb-1" htmlFor={name}>
-      {label}
-    </label>
-    <div className="flex flex-col gap-3 items-center">
+    <label className="block mb-1">{label}</label>
+    <div className="flex flex-col rounded-md gap-3 items-center">
       <input
         type="color"
         id={name}
         name={name}
         value={value || "#000000"}
         onChange={onChange}
-        className="border p-0.5 rounded-full"
+        className=" p-0.5 border  rounded-md border-gray-200 w-8 h-8 bg-transparent "
       />
     </div>
   </>
@@ -131,7 +129,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `${localStorage.getItem("complexToken")}`,
+            Authorization: `${localStorage.getItem("complexToken")}`,
           },
         });
         const data = await response.json();
@@ -143,7 +141,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
     };
 
     fetchSpecialOffers();
-  },[]);
+  }, []);
 
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -200,9 +198,9 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
     setIsStyleSettingsOpen(tab === "style");
     setIsSpacingOpen(tab === "spacing");
   };
-  // useEffect(() => {
-  //   setIsContentOpen(true);
-  // }, []);
+  useEffect(() => {
+    setIsContentOpen(true);
+  }, []);
 
   return (
     <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
@@ -255,39 +253,54 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
           <div className="grid md:grid-cols-1 gap-4">
             <div className="rounded-lg">
               <h4 className="font-semibold text-sky-700 my-4">تنظیمات عنوان</h4>
-              <ColorInput
-                label="رنگ عنوان"
-                name="headingColor"
-                value={
-                  userInputData?.blocks?.setting?.headingColor || "#FFFFFF"
-                }
-                onChange={handleBlockSettingChange}
-              />
+              <div className="rounded-lg flex items-center justify-between">
+                <ColorInput
+                  label="رنگ عنوان"
+                  name="headingColor"
+                  value={
+                    userInputData?.blocks?.setting?.headingColor || "#FFFFFF"
+                  }
+                  onChange={handleBlockSettingChange}
+                />
+              </div>
+              <br />
               <label>سایز عنوان</label>
-              <input
-                type="range"
-                name="headingFontSize"
-                value={userInputData?.blocks?.setting?.headingFontSize || "32"}
-                onChange={handleBlockSettingChange}
-                className="w-full"
-              />
+
+              <div className="flex items-center justify-center my-4 gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
+                <input
+                  type="range"
+                  min="0"
+                  max="1000"
+                  name="headingFontSize"
+                  value={
+                    userInputData?.blocks?.setting?.headingFontSize || "250"
+                  }
+                  onChange={handleBlockSettingChange}
+                />
+                <p className="text-sm text-gray-600 text-nowrap">
+                  {userInputData?.blocks.setting.headingFontSize}px
+                </p>
+              </div>
+              <label htmlFor="">وزن عنوان</label>
               <select
                 name="headingFontWeight"
                 value={
                   userInputData?.blocks?.setting?.headingFontWeight || "normal"
                 }
                 onChange={handleBlockSettingChange}
-                className="w-full p-2 border rounded"
+                className="w-full mt-4 p-2 border rounded"
               >
                 <option value="bold">ضخیم</option>
                 <option value="normal">معمولی</option>
               </select>
             </div>
 
-            <div className="p-3 rounded-lg">
+            <div className="p-3 -mb-5 rounded-lg">
               <h4 className="font-semibold text-sky-700 my-4">
                 تنظیمات پس زمینه
               </h4>
+            </div>
+            <div className="rounded-lg pr-3 inline-flex items-center justify-between gap-24">
               <ColorInput
                 label="رنگ پس زمینه"
                 name="backgroundColor"
@@ -313,4 +326,3 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
     </div>
   );
 };
-
