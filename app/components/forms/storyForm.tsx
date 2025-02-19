@@ -88,20 +88,20 @@ export const StoryForm: React.FC<StoryFormProps> = ({
     setUserInputData(initialData);
   }, []);
 
-  const handleStoryChange = (index: number, field: string, value: string) => {
-    if (isUpdating) return;
-    setIsUpdating(true);
-    setUserInputData((prev) => ({
-      ...prev,
-      blocks: {
-        ...prev.blocks,
-        stories: prev.blocks.stories.map((story, i) =>
-          i === index ? { ...story, [field]: value } : story
-        ),
-      },
-    }));
-    setTimeout(() => setIsUpdating(false), 100);
-  };
+  // const handleStoryChange = (index: number, field: string, value: string) => {
+  //   if (isUpdating) return;
+  //   setIsUpdating(true);
+  //   setUserInputData((prev) => ({
+  //     ...prev,
+  //     blocks: {
+  //       ...prev.blocks,
+  //       stories: prev.blocks.stories.map((story, i) =>
+  //         i === index ? { ...story, [field]: value } : story
+  //       ),
+  //     },
+  //   }));
+  //   setTimeout(() => setIsUpdating(false), 100);
+  // };
   const handleUpdate = (
     type: "margin" | "padding",
     updatedValues: BoxValues

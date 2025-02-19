@@ -4,6 +4,7 @@ import { Layout, MultiRowSection } from "@/lib/types";
 import React from "react";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
+import ImageSelectorModal from "../sections/ImageSelectorModal";
 
 interface MultiRowFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<MultiRowSection>>;
@@ -29,19 +30,19 @@ const ColorInput = ({
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => (
-  <div className="flex flex-col gap-2">
-    <label className="block mb-1" htmlFor={name}>
-      {label}
-    </label>
-    <input
-      type="color"
-      id={name}
-      name={name}
-      value={value || "#000000"}
-      onChange={onChange}
-      className="border p-0.5 rounded-full"
-    />
-  </div>
+  <>
+    <label className="block mb-1">{label}</label>
+    <div className="flex flex-col rounded-md gap-3 items-center">
+      <input
+        type="color"
+        id={name}
+        name={name}
+        value={value || "#000000"}
+        onChange={onChange}
+        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
+      />
+    </div>
+  </>
 );
 
 export const MultiRowForm: React.FC<MultiRowFormProps> = ({
@@ -68,6 +69,9 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isImageSelectorOpen, setIsImageSelectorOpen] = useState(false);
+  const [currentEditingIndex, setCurrentEditingIndex] = useState<number>(0);
+
   const handleAddRow = () => {
     setUserInputData((prev: MultiRowSection) => ({
       ...prev,
@@ -136,25 +140,27 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
     });
   }, [userInputData?.setting]);
 
+  // useEffect(() => {
+  //   const initialData = Compiler(layout, selectedComponent)[0];
+  //   if (initialData) {
+  //     setLoaded(true);
+  //     setUserInputData(initialData);
+  //   }
+  // });
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     if (initialData) {
       setLoaded(true);
       setUserInputData(initialData);
     }
-  });
-  useEffect(() => {
-    const initialData = Compiler(layout, selectedComponent)[0];
-    if (initialData) {
-      setLoaded(true);
-      setUserInputData(initialData);
-    }
-  }, [selectedComponent ]);
+  }, [selectedComponent]);
 
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     index: number
   ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
     const { name, value } = e.target;
     setUserInputData((prev: MultiRowSection) => ({
       ...prev,
@@ -162,6 +168,7 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
         i === index ? { ...block, [name]: value } : block
       ),
     }));
+    setTimeout(() => setIsUpdating(false), 100);
   };
 
   const handleSettingChange = (
@@ -299,10 +306,10 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
 
                   {/* Row Content */}
                   {openRows[index] && (
-                    <div className="p-4 border-t border-gray-100 animate-slideDown">
+                    <div className="p-4  animate-slideDown">
                       <div className="space-y-4">
                         {/* Title Input */}
-                        <div className="p-3 bg-gray-50 rounded-lg">
+                        <div className="p-3  rounded-lg">
                           <label className="block mb-2 text-sm font-bold text-gray-700">
                             عنوان
                           </label>
@@ -316,7 +323,7 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                         </div>
 
                         {/* Description Textarea */}
-                        <div className="p-3 bg-gray-50 rounded-lg">
+                        <div className="p-3  rounded-lg">
                           <label className="block mb-2 text-sm font-bold text-gray-700">
                             توضیحات
                           </label>
@@ -330,21 +337,33 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                         </div>
 
                         {/* Image Input */}
-                        <div className="p-3 bg-gray-50 rounded-lg">
+                        <div className="p-3  rounded-lg">
                           <label className="block mb-2 text-sm font-bold text-gray-700">
                             تصویر
                           </label>
-                          <input
-                            type="text"
-                            name="imageSrc"
-                            value={block.imageSrc || ""}
-                            onChange={(e) => handleBlockChange(e, index)}
-                            className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                          />
+                          <div className="flex gap-2 items-center">
+                            <input
+                              type="text"
+                              name="imageSrc"
+                              value={block.imageSrc || ""}
+                              onChange={(e) => handleBlockChange(e, index)}
+                              className="w-full p-2 border hidden border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                            />
+                            <button
+                              onClick={() => {
+                                setCurrentEditingIndex(index);
+                                setIsImageSelectorOpen(true);
+                              }}
+                              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all"
+                              type="button"
+                            >
+                              انتخاب تصویر
+                            </button>
+                          </div>
                         </div>
 
                         {/* Image Alt Input */}
-                        <div className="p-3 bg-gray-50 rounded-lg">
+                        <div className="p-3  rounded-lg">
                           <label className="block mb-2 text-sm font-bold text-gray-700">
                             متن جایگزین تصویر
                           </label>
@@ -358,7 +377,7 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                         </div>
 
                         {/* Button Label Input */}
-                        <div className="p-3 bg-gray-50 rounded-lg">
+                        <div className="p-3  rounded-lg">
                           <label className="block mb-2 text-sm font-bold text-gray-700">
                             متن دکمه
                           </label>
@@ -372,7 +391,7 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                         </div>
 
                         {/* Button Link Input */}
-                        <div className="p-3 bg-gray-50 rounded-lg">
+                        <div className="p-3  rounded-lg">
                           <label className="block mb-2 text-sm font-bold text-gray-700">
                             لینک دکمه
                           </label>
@@ -399,36 +418,34 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
             </div>
           )}
 
-          {/* Row Content */}
-
           {/* Style Settings */}
 
           {isStyleSettingsOpen && (
             <>
               <div className="grid md:grid-cols-1 gap-4 animate-slideDown">
                 <h4 className="font-semibold my-2">تنظیمات سربرگ</h4>
-                <ColorInput
-                  label="رنگ سربرگ"
-                  name="titleColor"
-                  value={userInputData?.setting?.titleColor ?? "#000000"}
-                  onChange={handleSettingChange}
-                />
-                <div>
-                  <label className="block mb-1">سایز سربرگ</label>
+                <div className="rounded-lg flex items-center justify-between ">
+                  <ColorInput
+                    label="رنگ سربرگ"
+                    name="titleColor"
+                    value={userInputData?.setting?.titleColor ?? "#000000"}
+                    onChange={handleSettingChange}
+                  />
+                </div>
+                <label className="block mb-1">سایز سربرگ</label>
+
+                <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
                   <input
                     type="range"
+                    min="0"
+                    max="1000"
                     name="titleFontSize"
-                    min="10"
-                    max="50"
-                    value={parseInt(
-                      userInputData?.setting?.titleFontSize ?? "35"
-                    )}
+                    value={userInputData?.setting?.titleFontSize || "250"}
                     onChange={handleSettingChange}
-                    className="w-full"
                   />
-                  <div className="text-gray-500 text-sm">
+                  <p className="text-sm text-gray-600 text-nowrap">
                     {userInputData?.setting?.titleFontSize}px
-                  </div>
+                  </p>
                 </div>
                 <div>
                   <label className="block mb-1">وزن سربرگ</label>
@@ -443,28 +460,27 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                   </select>
                 </div>
                 <h4 className="font-semibold my-2">تنظیمات عنوان</h4>
-                <ColorInput
-                  label="رنگ عنوان"
-                  name="headingColor"
-                  value={userInputData?.setting?.headingColor ?? "#fcbf49"}
-                  onChange={handleSettingChange}
-                />
-                <div>
-                  <label className="block mb-1">سایز عنوان</label>
+                <div className="rounded-lg flex items-center justify-between ">
+                  <ColorInput
+                    label="رنگ عنوان"
+                    name="headingColor"
+                    value={userInputData?.setting?.headingColor ?? "#fcbf49"}
+                    onChange={handleSettingChange}
+                  />
+                </div>
+                <label className="block mb-1">سایز عنوان</label>
+                <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
                   <input
                     type="range"
+                    min="0"
+                    max="1000"
                     name="headingFontSize"
-                    min="10"
-                    max="50"
-                    value={parseInt(
-                      userInputData?.setting?.headingFontSize ?? "35"
-                    )}
+                    value={userInputData?.setting?.headingFontSize || "250"}
                     onChange={handleSettingChange}
-                    className="w-full"
                   />
-                  <div className="text-gray-500 text-sm">
+                  <p className="text-sm text-gray-600 text-nowrap">
                     {userInputData?.setting?.headingFontSize}px
-                  </div>
+                  </p>
                 </div>
                 <div>
                   <label className="block mb-1">وزن عنوان</label>
@@ -479,28 +495,29 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                   </select>
                 </div>
                 <h4 className="font-semibold my-2">تنظیمات توضیحات</h4>
-                <ColorInput
-                  label="رنگ توضیحات"
-                  name="descriptionColor"
-                  value={userInputData?.setting?.descriptionColor ?? "#e4e4e4"}
-                  onChange={handleSettingChange}
-                />
-                <div>
-                  <label className="block mb-1">سایز توضیحات</label>
+                <div className="rounded-lg flex items-center justify-between ">
+                  <ColorInput
+                    label="رنگ توضیحات"
+                    name="descriptionColor"
+                    value={
+                      userInputData?.setting?.descriptionColor ?? "#e4e4e4"
+                    }
+                    onChange={handleSettingChange}
+                  />
+                </div>
+                <label className="block mb-1">سایز توضیحات</label>
+                <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
                   <input
                     type="range"
+                    min="0"
+                    max="1000"
                     name="descriptionFontSize"
-                    min="10"
-                    max="50"
-                    value={parseInt(
-                      userInputData?.setting?.descriptionFontSize ?? "35"
-                    )}
+                    value={userInputData?.setting?.descriptionFontSize || "250"}
                     onChange={handleSettingChange}
-                    className="w-full"
                   />
-                  <div className="text-gray-500 text-sm">
+                  <p className="text-sm text-gray-600 text-nowrap">
                     {userInputData?.setting?.descriptionFontSize}px
-                  </div>
+                  </p>
                 </div>
                 <div>
                   <label className="block mb-1">وزن توضیحات</label>
@@ -517,89 +534,95 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                   </select>
                 </div>
                 <h4 className="font-semibold my-2">تنظیمات پس زمینه</h4>
-                <ColorInput
-                  label="رنگ پس زمینه"
-                  name="backgroundColorMultiRow"
-                  value={
-                    userInputData?.setting?.backgroundColorMultiRow ?? "#8d99ae"
-                  }
-                  onChange={handleSettingChange}
-                />
-                <ColorInput
-                  label="رنگ پس زمینه ردیف ها"
-                  name="backgroundColorBox"
-                  value={
-                    userInputData?.setting?.backgroundColorBox ?? "#2b2d42"
-                  }
-                  onChange={handleSettingChange}
-                />
+                <div className="rounded-lg flex items-center justify-between ">
+                  <ColorInput
+                    label="رنگ پس زمینه"
+                    name="backgroundColorMultiRow"
+                    value={
+                      userInputData?.setting?.backgroundColorMultiRow ??
+                      "#8d99ae"
+                    }
+                    onChange={handleSettingChange}
+                  />
+                </div>
+                <div className="rounded-lg flex items-center justify-between ">
+                  <ColorInput
+                    label="رنگ پس زمینه ردیف ها"
+                    name="backgroundColorBox"
+                    value={
+                      userInputData?.setting?.backgroundColorBox ?? "#2b2d42"
+                    }
+                    onChange={handleSettingChange}
+                  />
+                </div>
                 <h4 className="font-semibold my-2">تنظیمات دکمه </h4>
-                <ColorInput
-                  label="رنگ متن دکمه"
-                  name="btnColor"
-                  value={userInputData?.setting?.btnColor ?? "#ffffff"}
-                  onChange={handleSettingChange}
-                />
-                <ColorInput
-                  label="رنگ پس زمینه دکمه"
-                  name="btnBackgroundColor"
-                  value={
-                    userInputData?.setting?.btnBackgroundColor ?? "#bc4749"
-                  }
-                  onChange={handleSettingChange}
-                />
+                <div className="rounded-lg flex items-center justify-between ">
+                  <ColorInput
+                    label="رنگ متن دکمه"
+                    name="btnColor"
+                    value={userInputData?.setting?.btnColor ?? "#ffffff"}
+                    onChange={handleSettingChange}
+                  />
+                </div>
+                <div className="rounded-lg flex items-center justify-between ">
+                  <ColorInput
+                    label="رنگ پس زمینه دکمه"
+                    name="btnBackgroundColor"
+                    value={
+                      userInputData?.setting?.btnBackgroundColor ?? "#bc4749"
+                    }
+                    onChange={handleSettingChange}
+                  />
+                </div>
                 <div className="grid md:grid-cols-1 gap-4 mt-4">
                   <h4 className="font-semibold mb-2">تنظیمات تصویر</h4>
-                  <div>
-                    <label className="block mb-1">عرض تصویر</label>
+                  <label className="block ">عرض تصویر</label>
+                  <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
                     <input
                       type="range"
-                      name="imageWidth"
-                      min="200"
+                      min="0"
                       max="1000"
+                      name="imageWidth"
                       value={parseInt(
                         userInputData?.setting?.imageWidth ?? "700"
                       )}
                       onChange={handleSettingChange}
-                      className="w-full"
                     />
-                    <div className="text-gray-500 text-sm">
+                    <p className="text-sm text-gray-600 text-nowrap">
                       {userInputData?.setting?.imageWidth}px
-                    </div>
+                    </p>
                   </div>
-                  <div>
-                    <label className="block mb-1">ارتفاع تصویر</label>
+                  <label className="block">ارتفاع تصویر</label>
+                  <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
                     <input
                       type="range"
+                      min="0"
+                      max="1000"
                       name="imageHeight"
-                      min="100"
-                      max="500"
                       value={parseInt(
                         userInputData?.setting?.imageHeight ?? "300"
                       )}
                       onChange={handleSettingChange}
-                      className="w-full"
                     />
-                    <div className="text-gray-500 text-sm">
+                    <p className="text-sm text-gray-600 text-nowrap">
                       {userInputData?.setting?.imageHeight}px
-                    </div>
+                    </p>
                   </div>
-                  <div>
-                    <label className="block mb-1">انحنا زوایای تصویر</label>
+                  <label className="block">انحنا زوایای تصویر</label>
+                  <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
                     <input
                       type="range"
-                      name="imageRadius"
                       min="0"
-                      max="50"
+                      max="200"
+                      name="imageRadius"
                       value={parseInt(
                         userInputData?.setting?.imageRadius ?? "45"
                       )}
                       onChange={handleSettingChange}
-                      className="w-full"
                     />
-                    <div className="text-gray-500 text-sm">
+                    <p className="text-sm text-gray-600 text-nowrap">
                       {userInputData?.setting?.imageRadius}px
-                    </div>
+                    </p>
                   </div>
                 </div>
 
@@ -625,8 +648,8 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
 
           {/* Dropdown Content */}
           {isSpacingOpen && (
-            <div className="p-4 border-t border-gray-100 animate-slideDown">
-              <div className="bg-gray-50 rounded-lg flex items-center justify-center">
+            <div className="p-4  animate-slideDown">
+              <div className="rounded-lg flex items-center justify-center">
                 <MarginPaddingEditor
                   margin={margin}
                   padding={padding}
@@ -635,6 +658,21 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
               </div>
             </div>
           )}
+          <ImageSelectorModal
+            isOpen={isImageSelectorOpen}
+            onClose={() => setIsImageSelectorOpen(false)}
+            onSelectImage={(image) => {
+              setUserInputData((prev: MultiRowSection) => ({
+                ...prev,
+                blocks: prev.blocks.map((block, i) =>
+                  i === currentEditingIndex
+                    ? { ...block, imageSrc: image.fileUrl }
+                    : block
+                ),
+              }));
+              setIsImageSelectorOpen(false);
+            }}
+          />
         </div>
       )}
     </>
