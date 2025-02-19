@@ -132,7 +132,7 @@ export interface HeaderBlockSettings extends CommonSettings {
   megaMenuBg: string;
   categoryItemColor: string;
   categoryItemSize: string;
-  categoryItemHoverColor:string;
+  categoryItemHoverColor: string;
 }
 export interface HeaderBlock {
   imageLogo: string;
@@ -353,61 +353,21 @@ export interface StoreSection {
   };
 }
 export interface Section {
+  setting: CommonSettings;
+  blocks:
+    | HeaderBlock
+    | CollapseBlock
+    | ImageTextBlock
+    | MultiColumnBlock
+    | NewsLetterBlock
+    | RichTextBlock
+    | GalleryBlock
+    | StoreSection["blocks"] // Add store blocks
+    | BlogSection["blocks"] // Add blog blocks
+    | BlogDetailSection["blocks"] // Add blog detail blocks
+    | DetailPageSection["blocks"]; // Add detail page blocks
   type: string;
-  blocks: {
-    heading?: string;
-    description?: string;
-    btnText?: string;
-    imageSrc?: string;
-    imageAlt?: string;
-    btnLink?: string;
-    text1?: string;
-    text2?: string;
-    text3?: string;
-    text4?: string;
-    content1?: string;
-    content2?: string;
-    content3?: string;
-    content4?: string;
-    setting: {
-      
-      
-      headingColor?: string;
-      headingFontSize?: string;
-      headingFontWeight?: string;
-      descriptionColor?: string;
-      descriptionFontSize?: string;
-      descriptionFontWeight?: string;
-      btnTextColor?: string;
-      btnBackgroundColor?: string;
-      formBackground?: string;
-      textColor1?: string;
-      textColor2?: string;
-      textColor3?: string;
-      textColor4?: string;
-      contentColor1?: string;
-      contentColor2?: string;
-      contentColor3?: string;
-      contentColor4?: string;
-      [key: string]: string | undefined;
-      
-    };
-  };
-  setting: {
-    paddingTop: string;
-    paddingBottom: string;
-    marginTop: string;
-    marginBottom: string;
-    paddingRight?: string;
-    paddingLeft?: string;
-    backgroundColor?: string;
-    headingFontSize?: string;
-    formBackground?: string;
-    border?: string;
-    [key: string]: string | undefined;
-  };
 }
-
 
 export interface ImageTextBlockSetting extends CommonSettings {
   headingColor: string;
@@ -544,10 +504,10 @@ export interface ImageTextSection {
 
 export interface Children {
   type: string;
-  metaData: {
-    title: string;
-    description: string;
-  }
+  metaData?: {
+    title?: string;
+    description?: string;
+  };
   sections: Section[];
   order: string[];
 }
@@ -563,7 +523,6 @@ export interface Layout {
   settings: {
     fontFamily: string;
     colorSchema: ColorSchema;
-    
   };
   sections: {
     find(arg0: (section: Section) => boolean): Section | undefined;
@@ -578,7 +537,7 @@ export interface Layout {
       | DetailPageChildren
       | BlogChildren
       | BlogDetailChildren;
-      
+
     sectionFooter: FooterSection;
     Collection: CollectionSection;
     banner: BannerSection;
@@ -753,11 +712,70 @@ export interface FooterFormProps {
 
 export interface AboutChildren {
   type: string;
-  metaData: {
+  metaData?: {
     title: string;
     description: string;
   };
-  sections: Section[];
+  sections: Array<{
+    type: string;
+    blocks: 
+      | {
+          heading?: string;
+          description?: string;
+          btnText?: string;
+          text1?: string;
+          text2?: string;
+          text3?: string;
+          text4?: string;
+          content1?: string;
+          content2?: string;
+          content3?: string;
+          content4?: string;
+          title1?: string;
+          title2?: string;
+          title3?: string;
+          description1?: string;
+          description2?: string;
+          description3?: string;
+          imageSrc1?: string;
+          imageSrc2?: string;
+          imageSrc3?: string;
+          btnLable1?: string;
+          btnLable2?: string;
+          btnLable3?: string;
+          btnLink1?: string;
+          btnLink2?: string;
+          btnLink3?: string;
+          setting: Partial<CommonSettings> & {
+            headingColor?: string;
+            headingFontSize?: string;
+            headingFontWeight?: string;
+            descriptionColor?: string;
+            descriptionFontSize?: string;
+            descriptionFontWeight?: string;
+            btnTextColor?: string;
+            btnBackgroundColor?: string;
+            formBackground?: string;
+            textColor1?: string;
+            textColor2?: string;
+            textColor3?: string;
+            textColor4?: string;
+            contentColor1?: string;
+            contentColor2?: string;
+            contentColor3?: string;
+            contentColor4?: string;
+          };
+        }
+      | Array<{
+          heading?: string;
+          description?: string;
+          btnLable?: string;
+          btnLink?: string;
+          imageSrc?: string;
+          imageAlt?: string;
+        }>;
+    setting: CommonSettings;
+  }>;
   order: string[];
 }
 
@@ -766,6 +784,7 @@ export interface SectionsState {
   slideshow?: SlideSection;
   richtext?: RichTextSection;
   sectionHeader?: HeaderSection;
+
   children?:
     | Children
     | AboutChildren
@@ -881,7 +900,7 @@ export interface ProductCardData {
   storeId?: string;
   _id?: string;
   properties?: string;
-  colors:{code:string,quantity:string}[];
+  colors: { code: string; quantity: string }[];
 }
 export interface ProductCardSetting {
   cardBorderRadius?: string;
@@ -1077,7 +1096,7 @@ export interface BlogSection {
   metaData?: {
     title: string;
     description: string;
-  }
+  };
   blocks: BlogBlock[];
   setting: BlogListSetting;
 }
@@ -1151,7 +1170,7 @@ export interface DetailPageChildren {
   metaData: {
     title: string;
     description: string;
-  }
+  };
   sections: DetailPageSection[];
   order: string[];
 }
@@ -1179,13 +1198,12 @@ export interface StoreChildren {
   order: string[];
 }
 
-
 export interface BlogDetailChildren {
   type: string;
   metaData: {
     title: string;
     description: string;
-  }
+  };
   sections: BlogDetailSection[];
   order: string[];
 }
@@ -1357,10 +1375,10 @@ export interface OfferItem {
   price: number;
   originalPrice: number;
   discount: number;
-  images:{
-    imageSrc:string
-    imageAly:string
-  }
+  images: {
+    imageSrc: string;
+    imageAly: string;
+  };
 }
 
 export interface OfferRowBlock {

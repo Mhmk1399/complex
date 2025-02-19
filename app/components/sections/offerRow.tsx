@@ -82,7 +82,7 @@ export const OfferRow: React.FC<OfferRowProps> = ({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
   const [categories, setCategories] = useState([]);
-  
+
   const sectionData = layout?.sections?.children?.sections?.find(
     (section) => section.type === actualName
   ) as OfferRowSection;
@@ -98,12 +98,12 @@ export const OfferRow: React.FC<OfferRowProps> = ({
 
       const response = await fetch(`/api/collections/id`, {
         headers: {
-          'Content-Type': 'application/json',
-          'collectionId': collectionId
-        }
+          "Content-Type": "application/json",
+          collectionId: collectionId,
+        },
       });
       const data = await response.json();
-      if(data.collections.length>0){
+      if (data.collections.length > 0) {
         setCategories(data.collections[0].products);
       }
     };
@@ -120,7 +120,6 @@ export const OfferRow: React.FC<OfferRowProps> = ({
   }, [previewWidth]);
 
   if (!sectionData) return null;
-  
 
   return (
     <OffersContainer

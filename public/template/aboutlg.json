@@ -1,9 +1,9 @@
 {
   "children": {
     "type": "about",
-     "metaData":{
-      "title":"juju",
-      "description":"juju page"
+    "metaData": {
+      "title": "juju",
+      "description": "juju page"
     },
     "sections": [
       {
