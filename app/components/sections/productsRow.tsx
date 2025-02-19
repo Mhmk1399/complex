@@ -150,7 +150,7 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
     };
 
     fetchCollectionProducts();
-  }, [sectionData?.blocks?.setting?.selectedCollection]);
+  }, [sectionData?.blocks?.setting?.selectedCollection,actualName]);
 
   // Now place your conditional returns
   if (!layout || !layout.sections || !sectionData) return null;
