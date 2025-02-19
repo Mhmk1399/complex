@@ -126,7 +126,6 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
     }));
   };
 
-
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {

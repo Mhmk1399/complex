@@ -57,17 +57,15 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   }) => (
     <>
-      <label className="block mb-1" htmlFor={name}>
-        {label}
-      </label>
-      <div className="flex flex-col gap-3 items-center">
+      <label className="block mb-1">{label}</label>
+      <div className="flex flex-col rounded-md gap-3 items-center">
         <input
           type="color"
           id={name}
           name={name}
           value={value || "#000000"}
           onChange={onChange}
-          className="border  p-0.5 rounded-full"
+          className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
         />
       </div>
     </>
@@ -91,6 +89,8 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+
   useEffect(() => {
     setIsContentOpen(true);
   }, []);
@@ -231,6 +231,8 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
     });
   };
   const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
     const { name, value } = e.target;
     setUserInputData((prev: HeaderSection) => ({
       ...prev,
@@ -239,9 +241,12 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
         [name]: value,
       },
     }));
+    setTimeout(() => setIsUpdating(false), 100);
   };
 
   const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
     const { name, value } = e.target;
     setUserInputData((prev: HeaderSection) => ({
       ...prev,
@@ -253,10 +258,13 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
         },
       },
     }));
+    setTimeout(() => setIsUpdating(false), 100);
   };
   const handleAnnouncementChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
     const { name, value } = e.target;
     setUserInputData((prev) => ({
       ...prev,
@@ -268,6 +276,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
         },
       },
     }));
+    setTimeout(() => setIsUpdating(false), 100);
   };
   const handleTabChange = (tab: "content" | "style" | "spacing") => {
     setIsContentOpen(tab === "content");
@@ -315,14 +324,14 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
             عرض لوگو
           </label>
           <input
-            type="range"
+            type="number"
             id="imageWidth"
             name="imageWidth"
             value={userInputData?.blocks?.setting?.imageWidth?.toLocaleString()}
             onChange={handleBlockSettingChange}
             className="p-2 w-full border rounded"
           />
-          <div className="text-gray-500 text-sm">
+          <div className="text-gray-500 mb-4 text-sm">
             {userInputData?.blocks?.setting?.imageWidth}px
           </div>
 
@@ -330,14 +339,14 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
             ارتفاع لوگو
           </label>
           <input
-            type="range"
+            type="number"
             id="imageHeight"
             name="imageHeight"
             value={userInputData?.blocks?.setting.imageHeight?.toLocaleString()}
             onChange={handleBlockSettingChange}
             className="p-2 w-full border rounded"
           />
-          <div className="text-gray-500 text-sm">
+          <div className="text-gray-500 mb-4 text-sm">
             {userInputData?.blocks?.setting?.imageHeight}px
           </div>
           <div>
@@ -395,98 +404,112 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
       {isStyleSettingsOpen && (
         <div className="bg-white rounded-lg p-4 animate-slideDown">
           <div className="grid md:grid-cols-1 grid-cols-1 gap-2">
-            <ColorInput
-              label="رنگ پس زمینه"
-              name="bgColor"
-              value={userInputData?.blocks?.setting?.bgColor?.toLocaleString()}
-              onChange={handleBlockSettingChange}
-            />
-            <ColorInput
-              label="رنگ پس زمینه دسته بندی"
-              name="megaMenuBg"
-              value={userInputData?.blocks?.setting?.megaMenuBg?.toLocaleString()}
-              onChange={handleBlockSettingChange}
-            />
-            <ColorInput
-              label="رنگ آیتم های دسته بندی"
-              name="categoryItemColor"
-              value={
-                userInputData?.blocks?.setting?.categoryItemColor || "#374151"
-              }
-              onChange={handleBlockSettingChange}
-            />
-
-            <ColorInput
-              label="رنگ هاور آیتم های دسته بندی"
-              name="categoryItemHoverColor"
-              value={
-                userInputData?.blocks?.setting?.categoryItemHoverColor ||
-                "#2563eb"
-              }
-              onChange={handleBlockSettingChange}
-            />
-            <div>
-              <label className="block mb-2">سایز متن آیتم های دسته بندی</label>
-              <input
-                type="range"
-                name="categoryItemSize"
-                min="12"
-                max="24"
-                value={userInputData?.blocks?.setting?.categoryItemSize || "14"}
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ پس زمینه"
+                name="bgColor"
+                value={userInputData?.blocks?.setting?.bgColor?.toLocaleString()}
                 onChange={handleBlockSettingChange}
-                className="w-full"
               />
-              <span className="text-sm text-gray-500">
-                {userInputData?.blocks?.setting?.categoryItemSize || "14"}px
-              </span>
+            </div>
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ پس زمینه دسته بندی"
+                name="megaMenuBg"
+                value={userInputData?.blocks?.setting?.megaMenuBg?.toLocaleString()}
+                onChange={handleBlockSettingChange}
+              />
+            </div>
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ آیتم های دسته بندی"
+                name="categoryItemColor"
+                value={
+                  userInputData?.blocks?.setting?.categoryItemColor || "#374151"
+                }
+                onChange={handleBlockSettingChange}
+              />
             </div>
 
-            <ColorInput
-              label="رنک آیتم ها"
-              name="itemColor"
-              value={userInputData?.blocks?.setting.itemColor?.toLocaleString()}
-              onChange={handleBlockSettingChange}
-            />
-
-            <ColorInput
-              label="رنگ آیتم ها در صورت رفتن موس بر روی آنها"
-              name="itemHoverColor"
-              value={userInputData?.blocks?.setting.itemHoverColor?.toLocaleString()}
-              onChange={handleBlockSettingChange}
-            />
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ هاور آیتم های دسته بندی"
+                name="categoryItemHoverColor"
+                value={
+                  userInputData?.blocks?.setting?.categoryItemHoverColor ||
+                  "#2563eb"
+                }
+                onChange={handleBlockSettingChange}
+              />
+            </div>
+            <label htmlFor="">سایز آیتم ها</label>
+            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
+              <input
+                type="range"
+                min="0"
+                max="1000"
+                name="categoryItemSize"
+                value={
+                  userInputData?.blocks?.setting?.categoryItemSize || "250"
+                }
+                onChange={handleBlockSettingChange}
+              />
+              <p className="text-sm text-gray-600 text-nowrap">
+                {userInputData?.blocks.setting.categoryItemSize}px
+              </p>
+            </div>
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنک آیتم ها"
+                name="itemColor"
+                value={userInputData?.blocks?.setting.itemColor?.toLocaleString()}
+                onChange={handleBlockSettingChange}
+              />
+            </div>
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ آیتم های فعال"
+                name="itemHoverColor"
+                value={userInputData?.blocks?.setting.itemHoverColor?.toLocaleString()}
+                onChange={handleBlockSettingChange}
+              />
+            </div>
 
             <label className="block mb-1" htmlFor="titleFontSize">
               سایز عنوان
             </label>
-            <input
-              type="range"
-              id="itemFontSize"
-              name="itemFontSize"
-              value={userInputData?.blocks?.setting?.itemFontSize?.toLocaleString()}
-              onChange={handleBlockSettingChange}
-              className="p-2 border rounded"
-            />
-            <div className="text-gray-500 text-sm -mt-5">
-              {userInputData?.blocks?.setting?.itemFontSize}px
+            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
+              <input
+                type="range"
+                min="0"
+                max="100"
+                name="itemFontSize"
+                value={userInputData?.blocks?.setting?.itemFontSize || "250"}
+                onChange={handleBlockSettingChange}
+              />
+              <p className="text-sm text-gray-600 text-nowrap">
+                {userInputData?.blocks.setting.itemFontSize}px
+              </p>
             </div>
-            <br />
+
             <label className="block mb-1" htmlFor="titleFontSize">
               فاصله بین عنوان ها
             </label>
-            <input
-              type="range"
-              id="gap"
-              name="gap"
-              value={userInputData?.blocks?.setting?.gap?.toLocaleString()}
-              onChange={handleBlockSettingChange}
-              className="p-2 border rounded"
-            />
-            <div className="text-gray-500 text-sm -mt-5">
-              {userInputData?.blocks?.setting?.gap}px
+            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
+              <input
+                type="range"
+                min="0"
+                max="100"
+                name="gap"
+                value={userInputData?.blocks?.setting?.gap || "250"}
+                onChange={handleBlockSettingChange}
+              />
+              <p className="text-sm text-gray-600 text-nowrap">
+                {userInputData?.blocks.setting.gap}px
+              </p>
             </div>
-            <br />
             <div className="flex flex-col  gap-2">
-              <div>
+              <div className="rounded-lg flex items-center justify-between ">
                 <ColorInput
                   label="رنگ پس زمینه اطلاع رسانی"
                   name="announcementBgColor"
@@ -495,7 +518,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
                 />
               </div>
 
-              <div>
+              <div className="rounded-lg flex items-center justify-between ">
                 <ColorInput
                   label="رنک متن اطلاع رسانی"
                   name="announcementTextColor"
@@ -503,22 +526,22 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
                   onChange={handleBlockSettingChange}
                 />
               </div>
-              <div>
-                <label className="block mb-2">اندازه فونت اطلاع رسانی</label>
+              <label htmlFor="">سایز متن اطلاع رسانی</label>
+              <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
                 <input
                   type="range"
+                  min="0"
+                  max="1000"
                   name="announcementFontSize"
-                  min="12"
-                  max="80"
                   value={
-                    userInputData.blocks.setting?.announcementFontSize || "14"
+                    userInputData?.blocks?.setting?.announcementFontSize ||
+                    "250"
                   }
                   onChange={handleBlockSettingChange}
-                  className="w-full"
                 />
-                <span className="text-sm text-gray-500">
-                  {userInputData.blocks.setting?.announcementFontSize || "14"}px
-                </span>
+                <p className="text-sm text-gray-600 text-nowrap">
+                  {userInputData?.blocks.setting.announcementFontSize}px
+                </p>
               </div>
             </div>
           </div>
@@ -527,8 +550,8 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
 
       {/* Space Tab */}
       {isSpacingOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
-          <div className="bg-gray-50 rounded-lg flex items-center justify-center">
+        <div className="p-4 animate-slideDown">
+          <div className=" rounded-lg flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}
               padding={padding}
