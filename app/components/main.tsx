@@ -242,10 +242,10 @@ export const Main = () => {
 
   useEffect(() => {
     const currentLayoutData = activeMode === "sm" ? smData : Data;
-
+  
     const routeConfigs = {
-      about: About.children as AboutChildren,
-      contact: Contact.children as AboutChildren,
+      about: About.children as unknown as AboutChildren,
+      contact: Contact.children as unknown as AboutChildren,
       DetailPage: DetailPage.children as DetailPageChildren,
       store: Store.children as StoreChildren,
       BlogList: Blog.children as BlogChildren,
@@ -253,11 +253,11 @@ export const Main = () => {
       // Add default case for custom routes
       default: currentLayoutData.sections.children,
     };
-
+  
     const children =
       routeConfigs[selectedRoute as keyof typeof routeConfigs] ||
       routeConfigs.default;
-
+  
     if (children) {
       setLayout((prevLayout: Layout) => ({
         ...prevLayout,

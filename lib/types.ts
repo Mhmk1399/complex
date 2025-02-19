@@ -106,6 +106,15 @@ export interface CommonSettings {
   marginLeft?: string;
   borderRadius?: string;
   border: string;
+  textColor1?: string;
+  textColor2?: string;
+  textColor3?: string;
+  textColor4?: string;
+  contentColor1?: string;
+  contentColor2?: string;
+  contentColor3?: string;
+  contentColor4?: string;
+  
 }
 
 export interface HeaderBlockSettings extends CommonSettings {
@@ -230,6 +239,25 @@ export interface MultiColumnBlock {
   btnLink1?: string;
   btnLink2?: string;
   btnLink3?: string;
+}
+export interface AboutBlock {
+
+    heading?: string;
+    description?: string;
+    btnText?: string;
+    imageSrc?: string;
+    imageAlt?: string;
+    btnLink?: string;
+    text1?: string;
+    text2?: string;
+    text3?: string;
+    text4?: string;
+    content1?: string;
+    content2?: string;
+    content3?: string;
+    content4?: string;
+   
+
 }
 export interface MultiColumnSection {
   blocks: {
@@ -362,6 +390,7 @@ export interface Section {
     | NewsLetterBlock
     | RichTextBlock
     | GalleryBlock
+    | AboutBlock
     | StoreSection["blocks"] // Add store blocks
     | BlogSection["blocks"] // Add blog blocks
     | BlogDetailSection["blocks"] // Add blog detail blocks
@@ -663,13 +692,13 @@ export interface ContactFormDataSection {
 //   };
 // }
 export interface MultiRowBlockSetting extends CommonSettings {
-  titleColor: string;
-  titleFontWeight: string;
+  titleColor?: string;
+  titleFontWeight?: string;
   titleFontSize?: string;
-  backgroundColorMultiRow: string;
-  backgroundColorBox: string;
-  imageRadius: string;
-  imageWidth: string;
+  backgroundColorMultiRow?: string;
+  backgroundColorBox?: string;
+  imageRadius?: string;
+  imageWidth?: string;
   imageHeight: string;
   headingColor: string;
   headingFontSize: string;
@@ -691,6 +720,7 @@ export interface MultiRowBlock {
   imageAlt: string;
 }
 
+
 export interface MultiRowSection {
   type: "multiRow";
   title: string;
@@ -711,18 +741,24 @@ export interface FooterFormProps {
 }
 
 export interface AboutChildren {
-  type: string;
   metaData?: {
     title: string;
     description: string;
   };
-  sections: Array<{
-    type: string;
-    blocks: 
-      | {
+  sections: Array<
+    | {
+        type: "NewsLetter";
+        blocks: {
+          heading: string;
+          btnText: string;
+          setting: NewsLetterBlockSetting;
+        };
+        setting: CommonSettings;
+      }
+    | {
+        type: "CollapseFaq";
+        blocks: Array<{
           heading?: string;
-          description?: string;
-          btnText?: string;
           text1?: string;
           text2?: string;
           text3?: string;
@@ -731,6 +767,13 @@ export interface AboutChildren {
           content2?: string;
           content3?: string;
           content4?: string;
+          setting: CollapseBlockSetting;
+        }>;
+        setting: CommonSettings;
+      }
+    | {
+        type: "MultiColumn";
+        blocks: Array<{
           title1?: string;
           title2?: string;
           title3?: string;
@@ -746,27 +789,13 @@ export interface AboutChildren {
           btnLink1?: string;
           btnLink2?: string;
           btnLink3?: string;
-          setting: Partial<CommonSettings> & {
-            headingColor?: string;
-            headingFontSize?: string;
-            headingFontWeight?: string;
-            descriptionColor?: string;
-            descriptionFontSize?: string;
-            descriptionFontWeight?: string;
-            btnTextColor?: string;
-            btnBackgroundColor?: string;
-            formBackground?: string;
-            textColor1?: string;
-            textColor2?: string;
-            textColor3?: string;
-            textColor4?: string;
-            contentColor1?: string;
-            contentColor2?: string;
-            contentColor3?: string;
-            contentColor4?: string;
-          };
-        }
-      | Array<{
+        }>;
+        setting: MultiColumnBlockSetting;
+      }
+    | {
+        type?: "MultiRow";
+        title?: string;
+        blocks?: Array<{
           heading?: string;
           description?: string;
           btnLable?: string;
@@ -774,11 +803,11 @@ export interface AboutChildren {
           imageSrc?: string;
           imageAlt?: string;
         }>;
-    setting: CommonSettings;
-  }>;
+        setting: MultiRowBlockSetting;
+      }
+  >;
   order: string[];
 }
-
 
 export interface SectionsState {
   slideshow?: SlideSection;
@@ -1057,6 +1086,10 @@ export interface BlogListSetting {
   cardBorderRadius: number;
   btnBackgroundColor: string;
   buttonColor: string;
+  paddingLeft: string;
+  paddingRight: string;
+  marginRight: string;
+  marginLeft: string;
 }
 export interface BlogListFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<BlogSection>>;
