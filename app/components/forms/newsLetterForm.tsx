@@ -29,17 +29,15 @@ const ColorInput = ({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => (
   <>
-    <label className="block mb-1" htmlFor={name}>
-      {label}
-    </label>
-    <div className="flex flex-col gap-3 items-center">
+    <label className="block mb-1">{label}</label>
+    <div className="flex flex-col rounded-md gap-3 items-center">
       <input
         type="color"
         id={name}
         name={name}
         value={value || "#000000"}
         onChange={onChange}
-        className="border p-0.5 rounded-full"
+        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
       />
     </div>
   </>
@@ -66,6 +64,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleUpdate = (
     type: "margin" | "padding",
@@ -110,17 +109,19 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
       left: Number(userInputData?.setting?.paddingLeft) || 0,
     });
   }, [userInputData?.setting]);
+  // useEffect(() => {
+  //   const initialData = Compiler(layout, selectedComponent)[0];
+  //   setUserInputData(initialData);
+  // });
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
-  }, );
-  useEffect(() => {
-    const initialData = Compiler(layout, selectedComponent)[0];
-    setUserInputData(initialData);
-  }, [ selectedComponent ]);
+  }, [selectedComponent]);
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
     const { name, value } = e.target;
     setUserInputData((prev: NewsLetterSection) => ({
       ...prev,
@@ -129,9 +130,8 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
         [name]: value,
       },
     }));
+    setTimeout(() => setIsUpdating(false), 100);
   };
-
-  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleBlockSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -179,7 +179,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
             <input
               type="text"
               name="heading"
-              value={userInputData?.blocks?.heading ?? ""}
+              value={userInputData?.blocks?.heading || ""}
               onChange={handleBlockChange}
               className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
             />
@@ -216,12 +216,12 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
       {/* Style Settings */}
 
       {isStyleSettingsOpen && (
-        <div className="p-4 border-t border-gray-100 space-y-6 animate-slideDown">
+        <div className="p-4  space-y-6 animate-slideDown">
           {/* Heading Settings */}
           <div className="space-y-4">
             <div className="rounded-lg flex flex-col gap-3">
               <h4 className="font-semibold text-sky-700">تنظیمات سربرگ</h4>
-              <div>
+              <div className="rounded-lg flex items-center justify-between ">
                 <ColorInput
                   label="رنگ سربرگ"
                   name="headingColor"
@@ -232,24 +232,21 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
                   onChange={handleBlockSettingChange}
                 />
               </div>
-
-              <div>
-                <label className="block mb-2 text-sm font-medium">
-                  سایز سربرگ
-                </label>
+              <label htmlFor="">سایز سربرگ</label>
+              <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
                 <input
                   type="range"
+                  min="0"
+                  max="100"
                   name="headingFontSize"
                   value={
-                    userInputData?.blocks?.setting?.headingFontSize?.toLocaleString() ??
-                    "27px"
+                    userInputData?.blocks?.setting?.headingFontSize || "250"
                   }
                   onChange={handleBlockSettingChange}
-                  className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
                 />
-                <span className="text-sm text-gray-600 mt-1 block">
-                  {userInputData?.blocks?.setting?.headingFontSize}px
-                </span>
+                <p className="text-sm text-gray-600 text-nowrap">
+                  {userInputData?.blocks.setting.headingFontSize}px
+                </p>
               </div>
 
               <div>
@@ -276,7 +273,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
           <div className="space-y-4">
             <div className="rounded-lg flex flex-col gap-3">
               <h4 className="font-semibold text-sky-700">تنظیمات توضیحات</h4>
-              <div>
+              <div className="rounded-lg flex items-center justify-between ">
                 <ColorInput
                   label="رنگ توضیحات"
                   name="descriptionColor"
@@ -288,23 +285,25 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
                 />
               </div>
 
-              <div>
-                <label className="block mb-2 text-sm font-medium">
-                  سایز توضیحات
-                </label>
+              <label className="block mb-2 text-sm font-medium">
+                سایز توضیحات
+              </label>
+
+              <label htmlFor="">سایز سربرگ</label>
+              <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
                 <input
                   type="range"
+                  min="0"
+                  max="100"
                   name="descriptionFontSize"
                   value={
-                    userInputData?.blocks?.setting?.descriptionFontSize?.toLocaleString() ??
-                    "18px"
+                    userInputData?.blocks?.setting?.descriptionFontSize || "250"
                   }
                   onChange={handleBlockSettingChange}
-                  className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
                 />
-                <span className="text-sm text-gray-600 mt-1 block">
-                  {userInputData?.blocks?.setting?.descriptionFontSize}px
-                </span>
+                <p className="text-sm text-gray-600 text-nowrap">
+                  {userInputData?.blocks.setting.descriptionFontSize}px
+                </p>
               </div>
 
               <div>
@@ -331,7 +330,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
           <div className="space-y-4">
             <div className=" rounded-lg flex flex-col gap-3">
               <h4 className="font-semibold text-sky-700">تنظیمات دکمه</h4>
-              <div>
+              <div className="rounded-lg flex items-center justify-between ">
                 <ColorInput
                   label="رنگ پس زمینه دکمه"
                   name="btnBackgroundColor"
@@ -343,7 +342,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
                 />
               </div>
 
-              <div>
+              <div className="rounded-lg flex items-center justify-between ">
                 <ColorInput
                   label="رنگ متن دکمه"
                   name="btnTextColor"
@@ -363,15 +362,17 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
               <h4 className="font-semibold text-sky-700">
                 تنظیمات رنگ پس زمینه
               </h4>
-              <ColorInput
-                label="رنگ پس زمینه"
-                name="formBackground"
-                value={
-                  userInputData?.blocks?.setting?.formBackground?.toLocaleString() ??
-                  "#005002"
-                }
-                onChange={handleBlockSettingChange}
-              />
+              <div className="rounded-lg flex items-center justify-between ">
+                <ColorInput
+                  label="رنگ پس زمینه"
+                  name="formBackground"
+                  value={
+                    userInputData?.blocks?.setting?.formBackground?.toLocaleString() ??
+                    "#005002"
+                  }
+                  onChange={handleBlockSettingChange}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -380,7 +381,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
       {/* Spacing Settings Dropdown */}
 
       {isSpacingOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
+        <div className="p-4  animate-slideDown">
           <div className="rounded-lg flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

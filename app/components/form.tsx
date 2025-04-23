@@ -321,7 +321,7 @@ export const Form = ({
     selectedComponent: string
   ) => {
     const baseComponentName = selectedComponent.split("-")[0];
-    console.log(  baseComponentName);
+    // console.log(  baseComponentName);
     
     switch (baseComponentName) {
       case "RichText":

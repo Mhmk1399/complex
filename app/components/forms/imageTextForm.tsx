@@ -4,6 +4,7 @@ import { Layout, ImageTextSection } from "@/lib/types";
 import MarginPaddingEditor from "../sections/editor";
 import React from "react";
 import { TabButtons } from "../tabButtons";
+import ImageSelectorModal from "../sections/ImageSelectorModal";
 interface ImageTextFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<ImageTextSection>>;
   userInputData: ImageTextSection;
@@ -29,17 +30,15 @@ const ColorInput = ({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => (
   <>
-    <label className="block mb-1" htmlFor={name}>
-      {label}
-    </label>
-    <div className="flex flex-col gap-3 items-center">
+    <label className="block mb-1">{label}</label>
+    <div className="flex flex-col rounded-md gap-3 items-center">
       <input
         type="color"
         id={name}
         name={name}
         value={value || "#000000"}
         onChange={onChange}
-        className="border p-0.5 rounded-full"
+        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
       />
     </div>
   </>
@@ -66,7 +65,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
-
+  const [isImageSelectorOpen, setIsImageSelectorOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
   const handleUpdate = (
@@ -146,24 +145,26 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
     },
   };
 
+  // useEffect(() => {
+  //   const initialData = {
+  //     ...defaultValues,
+  //     ...Compiler(layout, selectedComponent),
+  //   };
+  //   setUserInputData(initialData[0]);
+  // },);
   useEffect(() => {
     const initialData = {
       ...defaultValues,
       ...Compiler(layout, selectedComponent),
     };
     setUserInputData(initialData[0]);
-  },);
-  useEffect(() => {
-    const initialData = {
-      ...defaultValues,
-      ...Compiler(layout, selectedComponent),
-    };
-    setUserInputData(initialData[0]);
-  }, [ selectedComponent ]);
+  }, [selectedComponent]);
 
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
     const { name, value } = e.target;
     setUserInputData((prev: ImageTextSection) => ({
       ...prev,
@@ -172,6 +173,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
         [name]: value,
       },
     }));
+    setTimeout(() => setIsUpdating(false), 100);
   };
 
   const handleBlockSettingChange = (
@@ -211,18 +213,27 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
 
       {/* Content Section */}
       {isContentOpen && (
-        <div className="p-4space-y-4 animate-slideDown">
-          <div className=" rounded-lg">
+        <div className="p-4 space-y-4 animate-slideDown">
+          <div className="rounded-lg">
             <label className="block mb-2 text-sm font-bold text-gray-700">
               تصویر
             </label>
-            <input
-              type="text"
-              name="imageSrc"
-              value={userInputData?.blocks?.imageSrc ?? ""}
-              onChange={handleBlockChange}
-              className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-            />
+            <div className="flex gap-2 items-center">
+              <input
+                type="text"
+                name="imageSrc"
+                value={userInputData?.blocks?.imageSrc ?? ""}
+                onChange={handleBlockChange}
+                className="w-full p-2 border hidden border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              />
+              <button
+                onClick={() => setIsImageSelectorOpen(true)}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all"
+                type="button"
+              >
+                انتخاب تصویر
+              </button>
+            </div>
           </div>
 
           <div className=" rounded-lg">
@@ -295,12 +306,12 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
       {/* Style Settings */}
 
       {isStyleSettingsOpen && (
-        <div className="p-4 border-t border-gray-100 space-y-6 animate-slideDown">
+        <div className="p-4  space-y-6 animate-slideDown">
           {/* Heading Settings */}
           <div className="space-y-4">
             <div className="rounded-lg flex flex-col gap-3">
               <h4 className="font-bold text-sky-700">تنظیمات سربرگ</h4>
-              <div>
+              <div className="rounded-lg flex items-center justify-between ">
                 <ColorInput
                   label="رنگ سربرگ"
                   name="headingColor"
@@ -311,24 +322,23 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
                   onChange={handleBlockSettingChange}
                 />
               </div>
-
-              <div>
-                <label className="block mb-2 text-sm font-bold text-gray-700">
-                  سایز سربرگ
-                </label>
+              <label className="block mb-2 text-sm font-bold text-gray-700">
+                سایز سربرگ
+              </label>
+              <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
                 <input
                   type="range"
+                  min="0"
+                  max="100"
                   name="headingFontSize"
                   value={
-                    userInputData?.blocks?.setting?.headingFontSize?.toLocaleString() ??
-                    "50"
+                    userInputData?.blocks?.setting?.headingFontSize || "250"
                   }
                   onChange={handleBlockSettingChange}
-                  className="w-full p-2 border rounded"
                 />
-                <span className="text-sm text-gray-500">
-                  {userInputData?.blocks?.setting?.headingFontSize}px
-                </span>
+                <p className="text-sm text-gray-600 text-nowrap">
+                  {userInputData?.blocks.setting.headingFontSize}px
+                </p>
               </div>
 
               <div>
@@ -354,7 +364,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
           <div className="space-y-4">
             <div className="rounded-lg flex flex-col gap-3">
               <h4 className="font-bold text-sky-700">تنظیمات توضیحات</h4>
-              <div>
+              <div className="rounded-lg flex items-center justify-between ">
                 <ColorInput
                   label="رنگ توضیحات"
                   name="descriptionColor"
@@ -408,7 +418,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
           <div className="space-y-4">
             <div className="rounded-lg flex flex-col gap-3">
               <h4 className="font-bold text-sky-700">تنظیمات دکمه</h4>
-              <div>
+              <div className="rounded-lg flex items-center justify-between ">
                 <ColorInput
                   label="رنگ دکمه"
                   name="btnTextColor"
@@ -420,7 +430,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
                 />
               </div>
 
-              <div>
+              <div className="rounded-lg flex items-center justify-between ">
                 <ColorInput
                   label="رنگ پس زمینه دکمه"
                   name="btnBackgroundColor"
@@ -436,15 +446,17 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
           {/* Background Settings */}
           <div className="rounded-lg flex flex-col gap-3">
             <h4 className="font-bold text-sky-700">تنظیمات رنگ پس زمینه</h4>
-            <ColorInput
-              label="رنگ پس زمینه"
-              name="background"
-              value={
-                userInputData?.blocks?.setting?.background?.toString() ??
-                "#333333"
-              }
-              onChange={handleBlockSettingChange}
-            />
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ پس زمینه"
+                name="background"
+                value={
+                  userInputData?.blocks?.setting?.background?.toString() ??
+                  "#333333"
+                }
+                onChange={handleBlockSettingChange}
+              />
+            </div>
           </div>
 
           <div className="rounded-lg flex flex-col gap-3">
@@ -518,7 +530,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
       )}
 
       {isSpacingOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
+        <div className="p-4 animate-slideDown">
           <div className=" rounded-lg p-2 flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}
@@ -528,6 +540,20 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
           </div>
         </div>
       )}
+      <ImageSelectorModal
+        isOpen={isImageSelectorOpen}
+        onClose={() => setIsImageSelectorOpen(false)}
+        onSelectImage={(image) => {
+          setUserInputData((prev: ImageTextSection) => ({
+            ...prev,
+            blocks: {
+              ...prev.blocks,
+              imageSrc: image.fileUrl,
+            },
+          }));
+          setIsImageSelectorOpen(false);
+        }}
+      />
     </div>
   );
 };

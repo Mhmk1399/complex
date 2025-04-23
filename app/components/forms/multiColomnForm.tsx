@@ -29,19 +29,19 @@ const ColorInput = ({
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => (
-  <div className="flex flex-col gap-2">
-    <label className="block mb-1" htmlFor={name}>
-      {label}
-    </label>
-    <input
-      type="color"
-      id={name}
-      name={name}
-      value={value || "#000000"}
-      onChange={onChange}
-      className="border p-0.5 rounded-full"
-    />
-  </div>
+  <>
+    <label className="block mb-1">{label}</label>
+    <div className="flex flex-col rounded-md gap-3 items-center">
+      <input
+        type="color"
+        id={name}
+        name={name}
+        value={value || "#000000"}
+        onChange={onChange}
+        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
+      />
+    </div>
+  </>
 );
 
 export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
@@ -66,6 +66,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
   const [openColumns, setOpenColumns] = useState<Record<number, boolean>>({});
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleAddColumn = () => {
     setUserInputData((prev: MultiColumnSection) => {
@@ -154,10 +155,10 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
       left: Number(userInputData?.setting?.paddingLeft) || 0,
     });
   }, [userInputData?.setting]);
-  useEffect(() => {
-    const initialData = Compiler(layout, selectedComponent)[0];
-    setUserInputData(initialData);
-  });
+  // useEffect(() => {
+  //   const initialData = Compiler(layout, selectedComponent)[0];
+  //   setUserInputData(initialData);
+  // });
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     if (initialData) {
@@ -171,6 +172,8 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     columnNum: number
   ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
     const { name, value } = e.target;
     const fieldName = `${name}${columnNum}` as keyof MultiColumnBlock;
 
@@ -184,9 +187,8 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
         },
       },
     }));
+    setTimeout(() => setIsUpdating(false), 100);
   };
-
-  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -318,7 +320,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
                   {openColumns[columnNum as number] && (
                     <div className="p-4 border-t border-gray-100 space-y-4 animate-slideDown">
                       {/* Column Content */}
-                      <label> title</label>
+                      <label>عنوان ستون</label>
                       <input
                         type="text"
                         name="title"
@@ -329,9 +331,11 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
                         }
                         onChange={(e) => handleBlockChange(e, columnNum)}
                         className="w-full p-2 border border-gray-200 rounded-lg"
-                        placeholder="Title"
+                        placeholder="عنوان"
                       />
-                      <label> Description </label>
+                      <br />
+                      <br />
+                      <label className="">توضیحات ستون</label>
                       <input
                         type="text"
                         name="description"
@@ -341,10 +345,12 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
                           ] || ""
                         }
                         onChange={(e) => handleBlockChange(e, columnNum)}
-                        className="w-full p-2 border border-gray-200 rounded-lg"
-                        placeholder="Description"
+                        className="w-full  p-2 border border-gray-200 rounded-lg"
+                        placeholder="توضیحات"
                       />
-                      <label> btn Lable </label>
+                      <br />
+                      <br />
+                      <label>متن دکمه</label>
                       <input
                         type="text"
                         name="btnLable"
@@ -355,9 +361,12 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
                         }
                         onChange={(e) => handleBlockChange(e, columnNum)}
                         className="w-full p-2 border border-gray-200 rounded-lg"
-                        placeholder=" btn Lable"
+                        placeholder="متن دکمه"
                       />
-                      <label> btn Link </label>
+                      <br />
+                      <br />
+                      <label>لینک دکمه</label>
+
                       <input
                         type="text"
                         name="btnLink"
@@ -368,7 +377,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
                         }
                         onChange={(e) => handleBlockChange(e, columnNum)}
                         className="w-full p-2 border border-gray-200 rounded-lg"
-                        placeholder="btn Link"
+                        placeholder="لینک دکمه"
                       />
                     </div>
                   )}
@@ -391,32 +400,28 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
         <>
           <div className="grid md:grid-cols-1 rounded-xl gap-4 p-2 animate-slideDown">
             <h4 className="font-semibold mb-2 text-sky-700">تنظیمات سربرگ</h4>
-            <ColorInput
-              label="رنگ سربرگ"
-              name="headingColor"
-              value={userInputData?.setting?.headingColor ?? "#ffffff"}
-              onChange={handleSettingChange}
-            />
-            <div className="text-sm text-gray-600">
-              {userInputData?.setting?.headingColor?.toLocaleString() ??
-                "#ffa62b"}
-            </div>
-            <div className="p-3 bg-gray-50 rounded-lg">
-              <label>سایز سربرگ</label>
-              <input
-                type="range"
-                name="headingFontSize"
-                value={
-                  userInputData?.setting?.headingFontSize?.toString() ?? "18"
-                }
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ سربرگ"
+                name="headingColor"
+                value={userInputData?.setting?.headingColor ?? "#ffffff"}
                 onChange={handleSettingChange}
               />
-              <div className="text-sm text-gray-600">
-                {userInputData?.setting?.headingFontSize?.toString() ?? "18px"}
-                px
-              </div>
             </div>
-            <div className="p-3 bg-gray-50 rounded-lg">
+            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
+              <input
+                type="range"
+                min="0"
+                max="1000"
+                name="headingFontSize"
+                value={userInputData?.setting?.headingFontSize || "250"}
+                onChange={handleSettingChange}
+              />
+              <p className="text-sm text-gray-600 text-nowrap">
+                {userInputData?.setting?.headingFontSize}px
+              </p>
+            </div>
+            <div className="p-3 rounded-lg">
               <label className="block mb-1">وزن سربرگ</label>
               <select
                 name="headingFontWeight"
@@ -431,35 +436,32 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
               </select>
             </div>
             <h4 className="font-semibold mb-2"> تنظیمات عنوان</h4>
-            <ColorInput
-              label="رنگ عنوان"
-              name="titleColor"
-              value={
-                userInputData?.setting?.titleColor?.toLocaleString() ??
-                "#ffa62b"
-              }
-              onChange={handleSettingChange}
-            />
-            <div className="text-sm text-gray-600">
-              {userInputData?.setting?.titleColor?.toLocaleString() ??
-                "#ffa62b"}
-            </div>
-            <div className="p-3 bg-gray-50 rounded-lg">
-              <label>سایز سربرگ</label>
-              <input
-                type="range"
-                name="titleFontSize"
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ عنوان"
+                name="titleColor"
                 value={
-                  userInputData?.setting?.titleFontSize?.toString() ?? "18"
+                  userInputData?.setting?.titleColor?.toLocaleString() ??
+                  "#ffa62b"
                 }
                 onChange={handleSettingChange}
               />
-              <div className="text-sm text-gray-600 ">
-                {userInputData?.setting?.titleFontSize?.toString() ?? "18px"}
-                px
-              </div>
             </div>
-            <div className="p-3 bg-gray-50 rounded-lg">
+
+            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
+              <input
+                type="range"
+                min="0"
+                max="100"
+                name="titleFontSize"
+                value={userInputData?.setting?.titleFontSize || "250"}
+                onChange={handleSettingChange}
+              />
+              <p className="text-sm text-gray-600 text-nowrap">
+                {userInputData?.setting?.titleFontSize}px
+              </p>
+            </div>
+            <div className="p-3 rounded-lg">
               <label className="block mb-1">وزن سربرگ</label>
               <select
                 name="titleFontWeight"
@@ -474,37 +476,31 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
               </select>
             </div>
             <h4 className="font-semibold mb-2"> تنظیمات محتوا</h4>
-            <ColorInput
-              label="رنگ محتوا"
-              name="descriptionColor"
-              value={
-                userInputData?.setting?.descriptionColor?.toLocaleString() ??
-                "#ffa62b"
-              }
-              onChange={handleSettingChange}
-            />
-            <div className="text-sm text-gray-600">
-              {userInputData?.setting?.descriptionColor?.toLocaleString() ??
-                "#ffa62b"}
-            </div>
-            <div className="p-3 bg-gray-50 rounded-lg">
-              <label>سایز محتوا</label>
-              <input
-                type="range"
-                name="descriptionFontSize"
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ محتوا"
+                name="descriptionColor"
                 value={
-                  userInputData?.setting?.descriptionFontSize?.toString() ??
-                  "18"
+                  userInputData?.setting?.descriptionColor?.toLocaleString() ??
+                  "#ffa62b"
                 }
                 onChange={handleSettingChange}
               />
-              <div className="text-sm text-gray-600 ">
-                {userInputData?.setting?.descriptionFontSize?.toString() ??
-                  "18px"}
-                px
-              </div>
             </div>
-            <div className="p-3 bg-gray-50 rounded-lg">
+            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
+              <input
+                type="range"
+                min="0"
+                max="100"
+                name="descriptionFontSize"
+                value={userInputData?.setting?.descriptionFontSize || "250"}
+                onChange={handleSettingChange}
+              />
+              <p className="text-sm text-gray-600 text-nowrap">
+                {userInputData?.setting?.descriptionFontSize}px
+              </p>
+            </div>
+            <div className="p-3 rounded-lg">
               <label className="block mb-1">وزن محتوا</label>
               <select
                 name="descriptionFontWeight"
@@ -520,48 +516,55 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
               </select>
             </div>
             <h4 className="font-semibold mb-2"> تنظیمات دکمه</h4>
-
-            <ColorInput
-              label="رنگ متن دکمه"
-              name="btnColor"
-              value={
-                userInputData?.setting?.btnColor?.toLocaleString() ?? "#ffffff"
-              }
-              onChange={handleSettingChange}
-            />
-            <ColorInput
-              label="رنگ پس زمینه دکمه"
-              name="btnBackgroundColor"
-              value={
-                userInputData?.setting?.btnBackgroundColor?.toLocaleString() ??
-                "#16697a"
-              }
-              onChange={handleSettingChange}
-            />
-            <h4 className="font-semibold mb-2">تنظیمات پس زمینه</h4>
-            <ColorInput
-              label="رنگ پس زمینه"
-              name="backgroundColorBox"
-              value={
-                userInputData?.setting?.backgroundColorBox?.toLocaleString() ??
-                "#82c0cc"
-              }
-              onChange={handleSettingChange}
-            />
-
-            <h4 className="font-semibold my-6">تنظیمات تصویر</h4>
-            <div className="cols-span-1">
-              <label className="block mb-1">انحنای زوایا تصویر</label>
-              <input
-                type="range"
-                name="imageRadious"
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ متن دکمه"
+                name="btnColor"
                 value={
-                  userInputData?.setting?.imageRadious?.replace("px", "") ??
-                  "10"
+                  userInputData?.setting?.btnColor?.toLocaleString() ??
+                  "#ffffff"
                 }
                 onChange={handleSettingChange}
-                className="w-full p-2 border rounded"
               />
+            </div>
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ پس زمینه دکمه"
+                name="btnBackgroundColor"
+                value={
+                  userInputData?.setting?.btnBackgroundColor?.toLocaleString() ??
+                  "#16697a"
+                }
+                onChange={handleSettingChange}
+              />
+            </div>
+            <h4 className="font-semibold mb-2">تنظیمات پس زمینه</h4>
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ پس زمینه"
+                name="backgroundColorBox"
+                value={
+                  userInputData?.setting?.backgroundColorBox?.toLocaleString() ??
+                  "#82c0cc"
+                }
+                onChange={handleSettingChange}
+              />
+            </div>
+
+            <h4 className="font-semibold my-6">تنظیمات تصویر</h4>
+            <label htmlFor="">انحنای تصویر</label>
+            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
+              <input
+                type="range"
+                min="0"
+                max="100"
+                name="imageRadious"
+                value={userInputData?.setting?.imageRadious || "250"}
+                onChange={handleSettingChange}
+              />
+              <p className="text-sm text-gray-600 text-nowrap">
+                {userInputData?.setting?.imageRadious}px
+              </p>
             </div>
           </div>
         </>
@@ -570,8 +573,8 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
       {/* Spacing Settings Dropdown */}
 
       {isSpacingOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
-          <div className=" rounded-lg flex items-center justify-center">
+        <div className="p-4 animate-slideDown">
+          <div className="rounded-lg flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}
               padding={padding}
