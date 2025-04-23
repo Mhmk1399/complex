@@ -144,6 +144,10 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
         });
         const data = await response.json();
         setCollectionProducts(data.collections[0].products);
+        console.log(
+          "Collection Products:",
+          data.collections[0].products
+        )
       } catch (error) {
         console.log("Error fetching collection products:", error);
       }
