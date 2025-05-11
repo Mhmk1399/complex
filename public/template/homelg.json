@@ -418,7 +418,7 @@
             "paddingRight": "10"
           }
         },
-        {
+{
   "type": "CanvasEditor",
   "setting": {
     "paddingTop": "20",
@@ -468,25 +468,6 @@
           "textAlign": "right",
           "zIndex": 1
         }
-      },
-      {
-        "id": "default-button",
-        "type": "button",
-        "content": "دکمه",
-        "style": {
-          "x": 50,
-          "y": 250,
-          "width": 120,
-          "height": 40,
-          "fontSize": 16,
-          "fontWeight": "bold",
-          "color": "#ffffff",
-          "backgroundColor": "#3b82f6",
-          "borderRadius": 4,
-          "padding": 8,
-          "textAlign": "center",
-          "zIndex": 1
-        }
       }
     ],
     "setting": {
@@ -498,6 +479,7 @@
     }
   }
 },
+
         {
           "type": "Gallery-2",
           "blocks": {

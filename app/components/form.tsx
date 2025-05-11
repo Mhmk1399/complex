@@ -34,8 +34,9 @@ import newproduct from "@/public/assets/images/newproduct.png";
 import offer from "@/public/assets/images/offer.png";
 import slidebanner from "@/public/assets/images/slidebanner.png";
 import story from "@/public/assets/images/story.png";
-import { CanvasEditorForm } from "./forms/canvasEditorForm";
+import CanvasEditorForm from "./forms/canvasEditorForm";
 import { CanvasEditorSection } from "./sections/canvasEditor";
+import canvasEditorImage from "@/public/assets/images/canvasEditorImage.png";
 
 import {
   DndContext,
@@ -142,7 +143,7 @@ type FormData =
 
 interface FormProps {
   selectedComponent: string;
-  setLayout: (data: Layout) => void;
+  setLayout: React.Dispatch<React.SetStateAction<Layout>>;
   layout: Layout;
   orders: string[];
   setOrders: React.Dispatch<React.SetStateAction<string[]>>;
@@ -418,19 +419,22 @@ export const Form = ({
             selectedComponent={selectedComponent}
           />
         );
-        case "CanvasEditor":
+       case "CanvasEditor":
       return (
-        <CanvasEditorForm
-          setUserInputData={
-            setUserInputData as React.Dispatch<
-              React.SetStateAction<CanvasEditorSection>
-            >
-          }
-          userInputData={userInputData as CanvasEditorSection}
-          layout={layout}
-          selectedComponent={selectedComponent}
-        />
+       <CanvasEditorForm
+  setUserInputData={
+    setUserInputData as React.Dispatch<
+      React.SetStateAction<CanvasEditorSection>
+    >
+  }
+  userInputData={userInputData as CanvasEditorSection}
+  layout={layout}
+  selectedComponent={selectedComponent}
+  setLayout={setLayout} // Add this
+/>
+
       );
+      
       case "ProductList":
         return (
           <ProductListForm
@@ -1039,6 +1043,22 @@ export const Form = ({
                       </span>
                     </div>
                     <div
+  onClick={() => addSection("CanvasEditor")}
+  className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+  style={{
+    ...imageContainerStyle,
+    backgroundImage: `url(${canvasEditorImage.src})`, // You'll need to add this image
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+  }}
+>
+  <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+  <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+    {"ویرایشگر کانوا"}
+  </span>
+</div>
+                    <div
                       onClick={() => addSection("Collection")}
                       className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
                       style={{
@@ -1439,6 +1459,24 @@ export const Form = ({
                               {"کالکشن"}
                             </span>
                           </div>
+                          // Add this to the modal content in form.tsx where other components are listed
+<div
+  onClick={() => addSection("CanvasEditor")}
+  className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+  style={{
+    ...imageContainerStyle,
+    backgroundImage: `url(${richtextImage.src})`, // You can replace this with a canvas editor image
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+  }}
+>
+  <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+  <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+    {"ویرایشگر کانوا"}
+  </span>
+</div>
+
                         </motion.div>
                       </motion.div>
                     </motion.div>
