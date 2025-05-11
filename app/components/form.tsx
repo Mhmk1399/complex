@@ -34,6 +34,8 @@ import newproduct from "@/public/assets/images/newproduct.png";
 import offer from "@/public/assets/images/offer.png";
 import slidebanner from "@/public/assets/images/slidebanner.png";
 import story from "@/public/assets/images/story.png";
+import { CanvasEditorForm } from "./forms/canvasEditorForm";
+import { CanvasEditorSection } from "./sections/canvasEditor";
 
 import {
   DndContext,
@@ -135,7 +137,8 @@ type FormData =
   | BrandsSection
   | CollectionSection
   | ProductRowSection
-  | BlogSection;
+  | BlogSection
+  | CanvasEditorSection; 
 
 interface FormProps {
   selectedComponent: string;
@@ -315,15 +318,14 @@ export const Form = ({
     }
   };
 
-  const renderFormContent = (
-    setUserInputData: React.Dispatch<React.SetStateAction<FormData>>,
-    userInputData: FormData,
-    selectedComponent: string
-  ) => {
-    const baseComponentName = selectedComponent.split("-")[0];
-    // console.log(  baseComponentName);
-    
-    switch (baseComponentName) {
+ const renderFormContent = (
+  setUserInputData: React.Dispatch<React.SetStateAction<FormData>>,
+  userInputData: FormData,
+  selectedComponent: string
+) => {
+  const baseComponentName = selectedComponent.split("-")[0].split(":")[0];
+  
+  switch (baseComponentName) {
       case "RichText":
         return (
           <RichText
@@ -416,6 +418,19 @@ export const Form = ({
             selectedComponent={selectedComponent}
           />
         );
+        case "CanvasEditor":
+      return (
+        <CanvasEditorForm
+          setUserInputData={
+            setUserInputData as React.Dispatch<
+              React.SetStateAction<CanvasEditorSection>
+            >
+          }
+          userInputData={userInputData as CanvasEditorSection}
+          layout={layout}
+          selectedComponent={selectedComponent}
+        />
+      );
       case "ProductList":
         return (
           <ProductListForm

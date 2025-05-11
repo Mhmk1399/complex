@@ -23,7 +23,7 @@ import SlideBanner from "./sections/slideBanner";
 import { OfferRow } from "./sections/offerRow";
 import { Brands } from "./sections/brands";
 import { ProductsRow } from "./sections/productsRow";
-
+import CanvasEditor from "./sections/canvasEditor";
 // First update the PreviewProps interface
 interface PreviewProps {
   layout: Layout;
@@ -47,30 +47,31 @@ export const Preview: React.FC<PreviewProps> = ({
   isFormOpen,
 }) => {
   const componentMap = {
-    Header,
-    RichText,
-    Banner,
-    ImageText,
-    Video,
-    ContactForm,
-    NewsLetter,
-    CollapseFaq,
-    MultiColumn,
-    SlideShow,
-    MultiRow,
-    ProductList,
-    DetailPage,
-    Collection,
-    BlogList,
-    BlogDetail,
-    SpecialOffer,
-    Story,
-    Gallery,
-    SlideBanner,
-    OfferRow,
-    Brands,
-    ProductsRow,
-  };
+  Header,
+  RichText,
+  Banner,
+  ImageText,
+  Video,
+  ContactForm,
+  NewsLetter,
+  CollapseFaq,
+  MultiColumn,
+  SlideShow,
+  MultiRow,
+  ProductList,
+  DetailPage,
+  Collection,
+  BlogList,
+  BlogDetail,
+  SpecialOffer,
+  Story,
+  Gallery,
+  SlideBanner,
+  OfferRow,
+  Brands,
+  ProductsRow,
+  CanvasEditor,  // Add this line
+};
 
   return (
     <div>

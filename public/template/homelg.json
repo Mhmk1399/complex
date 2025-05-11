@@ -419,6 +419,86 @@
           }
         },
         {
+  "type": "CanvasEditor",
+  "setting": {
+    "paddingTop": "20",
+    "paddingBottom": "20",
+    "paddingLeft": "20",
+    "paddingRight": "20",
+    "marginTop": "30",
+    "marginBottom": "30",
+    "backgroundColor": "#ffffff"
+  },
+  "blocks": {
+    "elements": [
+      {
+        "id": "default-heading",
+        "type": "heading",
+        "content": "عنوان جدید",
+        "style": {
+          "x": 50,
+          "y": 50,
+          "width": 300,
+          "height": 60,
+          "fontSize": 24,
+          "fontWeight": "bold",
+          "color": "#000000",
+          "backgroundColor": "transparent",
+          "borderRadius": 0,
+          "padding": 0,
+          "textAlign": "right",
+          "zIndex": 1
+        }
+      },
+      {
+        "id": "default-paragraph",
+        "type": "paragraph",
+        "content": "این یک متن نمونه است. شما می‌توانید این متن را ویرایش کنید یا المان‌های جدید به صفحه اضافه کنید.",
+        "style": {
+          "x": 50,
+          "y": 130,
+          "width": 400,
+          "height": 100,
+          "fontSize": 16,
+          "fontWeight": "normal",
+          "color": "#333333",
+          "backgroundColor": "transparent",
+          "borderRadius": 0,
+          "padding": 0,
+          "textAlign": "right",
+          "zIndex": 1
+        }
+      },
+      {
+        "id": "default-button",
+        "type": "button",
+        "content": "دکمه",
+        "style": {
+          "x": 50,
+          "y": 250,
+          "width": 120,
+          "height": 40,
+          "fontSize": 16,
+          "fontWeight": "bold",
+          "color": "#ffffff",
+          "backgroundColor": "#3b82f6",
+          "borderRadius": 4,
+          "padding": 8,
+          "textAlign": "center",
+          "zIndex": 1
+        }
+      }
+    ],
+    "setting": {
+      "canvasWidth": "100%",
+      "canvasHeight": "500px",
+      "backgroundColor": "#f9fafb",
+      "gridSize": 10,
+      "showGrid": true
+    }
+  }
+},
+        {
           "type": "Gallery-2",
           "blocks": {
             "title": " ",
@@ -468,6 +548,7 @@
         "ProductsRow-2",
         "Gallery",
         "Brands",
+        "CanvasEditor",
         "ProductsRow",
         "Gallery-2"
       ]
