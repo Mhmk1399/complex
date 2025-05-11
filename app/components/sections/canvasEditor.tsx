@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Layout } from "@/lib/types";
 import { Delete } from "../C-D";
 import { Rnd } from "react-rnd";
+import { useCanvas } from "@/app/context/CanvasContext";
 
 // Define types for the Canvas Editor
 export interface CanvasElementStyle {
@@ -118,7 +119,7 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
   previewWidth,
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
+  const { selectedElementId, setSelectedElementId } = useCanvas();
   const [isEditing, setIsEditing] = useState(false);
   const editableRef = useRef<HTMLDivElement>(null);
 
@@ -238,6 +239,7 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
     // Update the layout
     setLayout(updatedLayout);
   };
+  
 
   // Render a canvas element based on its type
   const renderElement = (element: CanvasElement) => {
@@ -269,7 +271,7 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
             onDoubleClick={handleEditStart}
             contentEditable={isEditing}
             suppressContentEditableWarning={true}
-            ref={isSelected && isEditing ? editableRef : null}
+            ref={isSelected && isEditing ? editableRef as React.RefObject<HTMLHeadingElement> : null}
             onBlur={(e) => {
               setIsEditing(false);
               handleContentChange(e.currentTarget.textContent || "");
@@ -285,7 +287,7 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
             onDoubleClick={handleEditStart}
             contentEditable={isEditing}
             suppressContentEditableWarning={true}
-            ref={isSelected && isEditing ? editableRef : null}
+            ref={isSelected && isEditing ? editableRef as React.RefObject<HTMLParagraphElement> : null}
             onBlur={(e) => {
               setIsEditing(false);
               handleContentChange(e.currentTarget.textContent || "");
@@ -305,39 +307,59 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
             }}
           />
         );
-      case "button":
-        return (
-          <button
-            style={{
-              ...commonStyles,
-              cursor: "pointer",
-              border: "none",
-            }}
-            onDoubleClick={handleEditStart}
-            contentEditable={isEditing}
-            suppressContentEditableWarning={true}
-            ref={isSelected && isEditing ? editableRef : null}
-            onBlur={(e) => {
-              setIsEditing(false);
-              handleContentChange(e.currentTarget.textContent || "");
-            }}
-          >
-            {element.content}
-          </button>
-        );
+     case "button":
+  return (
+    <a
+      href={element.href || "#"}
+      style={{
+        ...commonStyles,
+        textDecoration: "none",
+        display: "block",
+        width: "100%",
+        height: "100%",
+      }}
+      onClick={(e) => {
+        // Prevent navigation when in edit mode
+        if (isSelected) {
+          e.preventDefault();
+        }
+      }}
+    >
+      <button
+        style={{
+          ...commonStyles,
+          cursor: "pointer",
+          border: "none",
+          width: "100%",
+          height: "100%",
+        }}
+        onDoubleClick={handleEditStart}
+        contentEditable={isEditing}
+        suppressContentEditableWarning={true}
+        ref={isSelected && isEditing ? editableRef as unknown as React.RefObject<HTMLButtonElement> : null}
+        onBlur={(e) => {
+          setIsEditing(false);
+          handleContentChange(e.currentTarget.textContent || "");
+        }}
+      >
+        {element.content}
+      </button>
+    </a>
+  );
+
       case "link":
         return (
           <a
             href={element.href || "#"}
             style={{
               ...commonStyles,
-              textDecoration: "underline",
+             
               cursor: "pointer",
             }}
             onDoubleClick={handleEditStart}
             contentEditable={isEditing}
             suppressContentEditableWarning={true}
-            ref={isSelected && isEditing ? editableRef : null}
+            ref={isSelected && isEditing ? editableRef as unknown as React.RefObject<HTMLAnchorElement> : null}
             onBlur={(e) => {
               setIsEditing(false);
               handleContentChange(e.currentTarget.textContent || "");
@@ -357,7 +379,6 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
         return null;
     }
   };
-
   return (
     <div
       onClick={() => setSelectedComponent(actualName)}

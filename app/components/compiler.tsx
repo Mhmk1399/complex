@@ -5,6 +5,7 @@ import {
   ContactFormProps,
   RichTextSection,
   Section,
+  CanvasEditorSection,
 } from "@/lib/types";
 type FormData =
   | HeaderSection

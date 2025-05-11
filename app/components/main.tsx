@@ -14,7 +14,7 @@ import {
   FaBlog,
   FaNewspaper,
 } from "react-icons/fa";
-
+import { CanvasProvider } from "@/app/context/CanvasContext";
 import {
   AboutChildren,
   BlogChildren,
@@ -416,6 +416,7 @@ export const Main = () => {
   };
 
   return (
+    <CanvasProvider> 
     <div>
       {/* {loading ? (
         <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-white bg-opacity-90 z-50">
@@ -687,6 +688,7 @@ export const Main = () => {
           setOrders={setOrders}
           isFormOpen={isFormOpen}
           setIsFormOpen={setIsFormOpen}
+          setSelectedComponent={setSelectedComponent} 
         />
       </div>
       {isModalOpen && (
@@ -794,5 +796,6 @@ export const Main = () => {
         setActiveElement={setActiveElement}
       />
     </div>
+     </CanvasProvider>
   );
 };

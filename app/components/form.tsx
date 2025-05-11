@@ -143,12 +143,14 @@ type FormData =
 
 interface FormProps {
   selectedComponent: string;
+  setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
   layout: Layout;
   orders: string[];
   setOrders: React.Dispatch<React.SetStateAction<string[]>>;
   isFormOpen: boolean;
   setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  
 }
 
 // Start scrollbar styles for webkit browsers
@@ -197,6 +199,7 @@ export const Form = ({
   setOrders,
   isFormOpen,
   setIsFormOpen,
+  setSelectedComponent,
 }: FormProps) => {
   const [userInputData, setUserInputData] = useState<FormData>({} as FormData);
   const [isOpen, setIsOpen] = useState(false);
@@ -419,21 +422,25 @@ export const Form = ({
             selectedComponent={selectedComponent}
           />
         );
-       case "CanvasEditor":
-      return (
-       <CanvasEditorForm
-  setUserInputData={
-    setUserInputData as React.Dispatch<
-      React.SetStateAction<CanvasEditorSection>
-    >
-  }
-  userInputData={userInputData as CanvasEditorSection}
-  layout={layout}
-  selectedComponent={selectedComponent}
-  setLayout={setLayout} // Add this
-/>
+     //  renderFormContent function for "CanvasEditor" component
+case "CanvasEditor":
+  return (
+    <CanvasEditorForm
+      setUserInputData={
+        setUserInputData as React.Dispatch<
+          React.SetStateAction<CanvasEditorSection>
+        >
+      }
+      userInputData={userInputData as CanvasEditorSection}
+      layout={layout}
+      selectedComponent={selectedComponent}
+      setLayout={setLayout}
+      setSelectedComponent={setSelectedComponent} // Pass this prop
+    />
+  );
 
-      );
+
+    
       
       case "ProductList":
         return (

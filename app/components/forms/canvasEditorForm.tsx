@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { CanvasEditorSection, CanvasElement } from "../sections/canvasEditor";
 import { Layout } from "@/lib/types";
+import { useCanvas } from "@/app/context/CanvasContext"; // Import the context
 
 interface CanvasEditorFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<CanvasEditorSection>>;
@@ -10,6 +11,7 @@ interface CanvasEditorFormProps {
   layout: Layout;
   selectedComponent: string;
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
+  setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const CanvasEditorForm: React.FC<CanvasEditorFormProps> = ({
@@ -18,9 +20,13 @@ const CanvasEditorForm: React.FC<CanvasEditorFormProps> = ({
   layout,
   selectedComponent,
   setLayout,
+  setSelectedComponent,
+
 }) => {
   const [activeTab, setActiveTab] = useState<"canvas" | "element">("canvas");
-  const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
+
+  // Replace the local state with the context
+  const { selectedElementId, setSelectedElementId } = useCanvas();
   const [elementType, setElementType] = useState<CanvasElement["type"]>("heading");
   const initialDataLoadedRef = useRef(false);
   const prevComponentRef = useRef(selectedComponent);
@@ -157,7 +163,6 @@ const CanvasEditorForm: React.FC<CanvasEditorFormProps> = ({
   };
 
   // Handle element changes
-// Handle element changes
 const handleElementChange = (
   e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
 ) => {
@@ -212,85 +217,102 @@ const handleElementChange = (
 
 
   // Add a new element
-  const handleAddElement = () => {
-    const newElement: CanvasElement = {
-      id: uuidv4(),
-      type: elementType,
-      content: getDefaultContent(elementType),
-      style: {
-        x: 50,
-        y: 50,
-        width: getDefaultWidth(elementType),
-        height: getDefaultHeight(elementType),
-        fontSize: 16,
-        fontWeight: "normal",
-        color: "#000000",
-        backgroundColor: elementType === "div" ? "#f3f4f6" : "transparent",
-        borderRadius: 0,
-        padding: 0,
-        textAlign: "right",
-        zIndex: 1,
-      },
-      href: elementType === "link" ? "#" : undefined,
-      src: elementType === "image" ? "/assets/images/placeholder.jpg" : undefined,
-      alt: elementType === "image" ? "Canvas image" : undefined,
-    };
-
-    // Update userInputData
-    setUserInputData((prev) => {
-      if (!prev) return prev;
-      
-      // Create a deep copy to avoid mutation
-      const newData = JSON.parse(JSON.stringify(prev));
-      
-      if (!newData.blocks) {
-        newData.blocks = {
-          elements: [],
-          setting: {
-            canvasWidth: "100%",
-            canvasHeight: "500px",
-            backgroundColor: "#f9fafb",
-            gridSize: 10,
-            showGrid: true
-          }
-        };
-      }
-      
-      if (!newData.blocks.elements) {
-        newData.blocks.elements = [];
-      }
-      
-      newData.blocks.elements.push(newElement);
-      
-      return newData;
-    });
-
-    // Select the new element
-    setSelectedElementId(newElement.id);
-    setActiveTab("element");
+const handleAddElement = () => {
+  const newElement: CanvasElement = {
+    id: uuidv4(),
+    type: elementType,
+    content: getDefaultContent(elementType),
+    style: {
+      x: 50,
+      y: 50,
+      width: getDefaultWidth(elementType),
+      height: getDefaultHeight(elementType),
+      fontSize: 16,
+      fontWeight: "normal",
+      color: "#000000",
+      backgroundColor: elementType === "div" ? "#f3f4f6" : "transparent",
+      borderRadius: 0,
+      padding: 0,
+      textAlign: "right",
+      zIndex: 1,
+    },
+    href: elementType === "link" ? "#" : undefined,
+    src: elementType === "image" ? "/assets/images/placeholder.jpg" : undefined,
+    alt: elementType === "image" ? "Canvas image" : undefined,
   };
 
-  // Delete the selected element
-  const handleDeleteElement = () => {
-    if (!selectedElementId) return;
+  // Update userInputData
+  setUserInputData((prev) => {
+    if (!prev) return prev;
+    
+    // Create a deep copy to avoid mutation
+    const newData = JSON.parse(JSON.stringify(prev));
+    
+    if (!newData.blocks) {
+      newData.blocks = {
+        elements: [],
+        setting: {
+          canvasWidth: "100%",
+          canvasHeight: "500px",
+          backgroundColor: "#f9fafb",
+          gridSize: 10,
+          showGrid: true
+        }
+      };
+    }
+    
+    if (!newData.blocks.elements) {
+      newData.blocks.elements = [];
+    }
+    
+    newData.blocks.elements.push(newElement);
+    
+    return newData;
+  });
 
-    // Update userInputData
-    setUserInputData((prev) => {
-      if (!prev || !prev.blocks.elements) return prev;
-      
-      // Create a deep copy to avoid mutation
-      const newData = JSON.parse(JSON.stringify(prev));
-      
-      newData.blocks.elements = newData.blocks.elements.filter(
+  // Select the new element
+  setSelectedElementId(newElement.id);
+  setActiveTab("element");
+};
+
+
+// Delete the selected element
+const handleDeleteElement = () => {
+  if (!selectedElementId) return;
+
+  // Update userInputData
+  const updatedUserData = JSON.parse(JSON.stringify(userInputData));
+  if (updatedUserData.blocks && updatedUserData.blocks.elements) {
+    updatedUserData.blocks.elements = updatedUserData.blocks.elements.filter(
+      (el: CanvasElement) => el.id !== selectedElementId
+    );
+    setUserInputData(updatedUserData);
+  }
+
+  // Also update the layout
+  const updatedLayout = JSON.parse(JSON.stringify(layout));
+  const sectionIndex = updatedLayout.sections.children.sections.findIndex(
+    (section: any) => section.type === baseComponentName
+  );
+  
+  if (sectionIndex !== -1 && 
+      updatedLayout.sections.children.sections[sectionIndex].blocks && 
+      updatedLayout.sections.children.sections[sectionIndex].blocks.elements) {
+    updatedLayout.sections.children.sections[sectionIndex].blocks.elements = 
+      updatedLayout.sections.children.sections[sectionIndex].blocks.elements.filter(
         (el: CanvasElement) => el.id !== selectedElementId
       );
-      
-      return newData;
-    });
+    setLayout(updatedLayout);
+  }
 
-    setSelectedElementId(null);
-    setActiveTab("canvas");
-  };
+  // Reset selection using the context
+  setSelectedElementId(null);
+  setActiveTab("canvas");
+  setSelectedComponent(baseComponentName);
+};
+
+
+
 
   // Helper functions for default values
   const getDefaultContent = (type: CanvasElement["type"]): string => {
@@ -650,7 +672,21 @@ const handleElementChange = (
               />
             </div>
           </div>
-          
+       
+{selectedElement.type === "button" && (
+  <div className="mb-4">
+    <label className="block mb-2">آدرس لینک</label>
+    <input
+      type="text"
+      name="href"
+      value={selectedElement.href || "#"}
+      onChange={handleElementChange}
+      className="w-full p-2 border rounded"
+      placeholder="https://example.com"
+    />
+  </div>
+)}
+
           {selectedElement.type !== "image" && selectedElement.type !== "div" && (
             <div className="grid grid-cols-2 gap-4">
               <div className="mb-4">
@@ -752,13 +788,14 @@ const handleElementChange = (
           </div>
           
           <div className="mt-6">
-            <button
-              onClick={handleDeleteElement}
-              className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-            >
-              حذف المان
-            </button>
-          </div>
+  <button
+    onClick={handleDeleteElement}
+    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+  >
+    حذف المان
+  </button>
+</div>
+
         </div>
       )}
     </div>
