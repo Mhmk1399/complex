@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { DragEndEvent } from "@dnd-kit/core";
 import toast from "react-hot-toast";
@@ -220,6 +220,8 @@ export const Form = ({
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+  const isUpdatingLayoutRef = useRef(false);
+
   const addSection = (componentName: string) => {
     Create(componentName, layout, setLayout);
     setIsModalOpen(false);
@@ -262,16 +264,28 @@ export const Form = ({
     }
   }, [selectedComponent]);
 
-  useEffect(() => {
-    if (Object.keys(userInputData).length > 0) {
+ useEffect(() => {
+  // Skip if we're already in the process of updating
+  if (isUpdatingLayoutRef.current) return;
+  
+  if (Object.keys(userInputData).length > 0) {
+    // Set flag to prevent re-entry
+    isUpdatingLayoutRef.current = true;
+    
+    // Use setTimeout to break the potential update cycle
+    setTimeout(() => {
       const newLayout = JasonChanger(
         layout,
         selectedComponent,
         userInputData as Section
       );
       setLayout(newLayout);
-    }
-  }, [userInputData]);
+      
+      // Reset flag after update
+      isUpdatingLayoutRef.current = false;
+    }, 0);
+  }
+}, [userInputData, selectedComponent]);
 
   const SortableItem = ({ id }: { id: string }) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
@@ -296,10 +310,13 @@ export const Form = ({
     );
   };
 
-  useEffect(() => {
-    setOrders([...layout.sections.children.order]);
-  }, [layout.sections.children.order]);
-
+ useEffect(() => {
+  // Use a simple equality check to prevent unnecessary updates
+  const newOrders = [...layout.sections.children.order];
+  if (JSON.stringify(newOrders) !== JSON.stringify(orders)) {
+    setOrders(newOrders);
+  }
+}, [layout.sections.children.order]);
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 

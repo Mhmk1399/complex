@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 interface CanvasContextType {
   selectedElementId: string | null;
@@ -8,8 +8,15 @@ interface CanvasContextType {
 
 const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
 
-export const CanvasProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const CanvasProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
+
+  // Clear selected element on unmount
+  useEffect(() => {
+    return () => {
+      setSelectedElementId(null);
+    };
+  }, []);
 
   return (
     <CanvasContext.Provider value={{ selectedElementId, setSelectedElementId }}>

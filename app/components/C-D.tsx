@@ -138,28 +138,39 @@ export const Create = (
 };
 
 
-export const Delete = (
-  sectionName: string,
-  layout: Layout,
-  setLayout: (layout: Layout) => void
-) => {
-  const updatedLayout = {
-    ...layout,
-    sections: {
-      ...layout.sections,
-      children: {
-        sections: layout.sections?.children?.sections.filter(
-          (section) => section.type !== sectionName
-        ),
-        order: layout.sections?.children?.order.filter(
-          (orderItem) => orderItem !== sectionName
-        ),
-      },
-    },
-  };
-
-  setLayout(updatedLayout as Layout);
+// In C-D.tsx or wherever your Delete function is defined
+// In C-D.tsx or wherever your Delete function is defined
+export const Delete = (actualName: string, layout: Layout, setLayout: React.Dispatch<React.SetStateAction<Layout>>) => {
+  try {
+    // Create a deep copy of the layout
+    const updatedLayout = JSON.parse(JSON.stringify(layout));
+    
+    // Find the index of the section to delete
+    const sectionIndex = updatedLayout.sections.children.sections.findIndex(
+      (section: any) => section.type === actualName
+    );
+    
+    if (sectionIndex !== -1) {
+      // Remove the section
+      updatedLayout.sections.children.sections.splice(sectionIndex, 1);
+      
+      // Update the order array if it exists
+      if (updatedLayout.sections.children.order) {
+        const orderIndex = updatedLayout.sections.children.order.indexOf(actualName);
+        if (orderIndex !== -1) {
+          updatedLayout.sections.children.order.splice(orderIndex, 1);
+        }
+      }
+      
+      // Update the layout state
+      setLayout(updatedLayout);
+    }
+  } catch (error) {
+    console.error("Error deleting component:", error);
+  }
 };
+
+
 
 // Add this to the Compiler function in compiler.tsx to handle the new component type
 // This is just a reference for what should be in the template data

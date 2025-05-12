@@ -14,12 +14,23 @@ export interface CanvasElementStyle {
   height: number;
   fontSize?: number;
   fontWeight?: string;
-  color?: string;
-  backgroundColor?: string;
+  color?: string; // Can be hex or rgba
+  backgroundColor?: string; // Can be hex or rgba
   borderRadius?: number;
   padding?: number;
   textAlign?: string;
   zIndex?: number;
+  // Animation properties
+  hoverEffect?: "none" | "scale" | "rotate" | "shadow" | "glow" | "color-shift" | "shake";
+  hoverColor?: string;
+  hoverBackgroundColor?: string;
+  hoverScale?: number;
+  hoverRotate?: number;
+  transitionDuration?: number; // in ms
+  animationName?: "none" | "bounce" | "pulse" | "fade" | "slide" | "flip";
+  animationDuration?: number; // in ms
+  animationDelay?: number; // in ms
+  animationIterationCount?: number | "infinite";
 }
 
 export interface CanvasElement {
@@ -68,10 +79,14 @@ const CanvasContainer = styled.div<{
   $data: CanvasEditorSection;
   $showGrid: boolean;
   $gridSize: number;
+  $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   position: relative;
   width: ${(props) => props.$data.blocks.setting.canvasWidth};
-  height: ${(props) => props.$data.blocks.setting.canvasHeight};
+  height: ${(props) => props.$preview === "sm" ? 
+    `${parseInt(props.$data.blocks.setting.canvasHeight) * 0.6}px` : 
+    props.$data.blocks.setting.canvasHeight};
   background-color: ${(props) => props.$data.blocks.setting.backgroundColor};
   overflow: hidden;
   ${(props) =>
@@ -91,6 +106,8 @@ const CanvasContainer = styled.div<{
 const ElementWrapper = styled.div<{
   $isSelected: boolean;
   $isEditing: boolean;
+  $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   position: absolute;
   width: 100%;
@@ -118,35 +135,34 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
   setLayout,
   previewWidth,
 }) => {
+  // IMPORTANT: All state hooks must be called unconditionally at the top
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { selectedElementId, setSelectedElementId } = useCanvas();
   const [isEditing, setIsEditing] = useState(false);
   const editableRef = useRef<HTMLDivElement>(null);
+  const [preview, setPreview] = useState(previewWidth);
 
   // Get the section data from the layout
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
   ) as CanvasEditorSection | undefined;
 
-  // If section data doesn't exist, return null
-  if (!sectionData) {
-    return null;
-  }
+  // Handle responsive preview
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 425) {
+        setPreview("sm");
+      } else {
+        setPreview(previewWidth);
+      }
+    };
 
-  // Initialize blocks.elements if it doesn't exist
-  if (!sectionData.blocks.elements) {
-    const updatedLayout = JSON.parse(JSON.stringify(layout));
-    const sectionIndex = updatedLayout.sections.children.sections.findIndex(
-      (section: any) => section.type === actualName
-    );
-    
-    if (sectionIndex !== -1) {
-      updatedLayout.sections.children.sections[sectionIndex].blocks.elements = [];
-      setLayout(updatedLayout);
-    }
-  }
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [previewWidth]);
 
-  // Check if the selected component includes an element ID
+  // IMPORTANT: All useEffect hooks must be called unconditionally at the top
   useEffect(() => {
     if (selectedComponent.includes(":element:")) {
       const elementId = selectedComponent.split(":element:")[1];
@@ -154,7 +170,51 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
     } else if (selectedComponent === actualName) {
       setSelectedElementId(null);
     }
-  }, [selectedComponent, actualName]);
+  }, [selectedComponent, actualName, setSelectedElementId]);
+
+  // Initialize blocks.elements if it doesn't exist
+  useEffect(() => {
+    if (sectionData && !sectionData.blocks?.elements) {
+      const updatedLayout = JSON.parse(JSON.stringify(layout));
+      const sectionIndex = updatedLayout.sections.children.sections.findIndex(
+        (section: any) => section.type === actualName
+      );
+      
+      if (sectionIndex !== -1) {
+        if (!updatedLayout.sections.children.sections[sectionIndex].blocks) {
+          updatedLayout.sections.children.sections[sectionIndex].blocks = {
+            elements: [],
+            setting: {
+              canvasWidth: "100%",
+              canvasHeight: "500px",
+              backgroundColor: "#f9fafb",
+              gridSize: 10,
+              showGrid: true
+            }
+          };
+        } else if (!updatedLayout.sections.children.sections[sectionIndex].blocks.elements) {
+          updatedLayout.sections.children.sections[sectionIndex].blocks.elements = [];
+        }
+        
+        setLayout(updatedLayout);
+      }
+    }
+  }, [sectionData, layout, actualName, setLayout]);
+
+  // Now you can have conditional returns
+  if (!sectionData) {
+    return null;
+  }
+
+  // Ensure blocks and elements exist
+  const elements = sectionData.blocks?.elements || [];
+  const blockSettings = sectionData.blocks?.setting || {
+    canvasWidth: "100%",
+    canvasHeight: "500px",
+    backgroundColor: "#f9fafb",
+    gridSize: 10,
+    showGrid: false
+  };
 
   // Handle element selection
   const handleElementSelect = (elementId: string, e: React.MouseEvent) => {
@@ -178,10 +238,10 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
 
   // Handle element content change
   const handleContentChange = (content: string) => {
-    if (!selectedElementId || !sectionData.blocks.elements) return;
+    if (!selectedElementId || !elements) return;
 
     // Find the element to update
-    const elementIndex = sectionData.blocks.elements.findIndex(
+    const elementIndex = elements.findIndex(
       (el) => el.id === selectedElementId
     );
 
@@ -209,10 +269,10 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
     elementId: string,
     update: { x?: number; y?: number; width?: number; height?: number }
   ) => {
-    if (!sectionData.blocks.elements) return;
+    if (!elements) return;
 
     // Find the element to update
-    const elementIndex = sectionData.blocks.elements.findIndex(
+    const elementIndex = elements.findIndex(
       (el) => el.id === elementId
     );
 
@@ -239,35 +299,66 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
     // Update the layout
     setLayout(updatedLayout);
   };
-  
+
+  // Adjust element styles based on preview mode
+  const getAdjustedStyle = (style: CanvasElementStyle) => {
+    if (preview === "sm") {
+      return {
+        ...style,
+        fontSize: style.fontSize ? Math.max(Math.floor(style.fontSize * 0.7), 10) : undefined,
+        borderRadius: style.borderRadius ? Math.floor(style.borderRadius * 0.7) : undefined,
+        padding: style.padding ? Math.floor(style.padding * 0.7) : undefined,
+      };
+    }
+    return style;
+  };
 
   // Render a canvas element based on its type
   const renderElement = (element: CanvasElement) => {
     const isSelected = element.id === selectedElementId;
-
-    const commonStyles = {
-      fontSize: element.style.fontSize ? `${element.style.fontSize}px` : undefined,
-      fontWeight: element.style.fontWeight || undefined,
-      color: element.style.color || undefined,
-      backgroundColor: element.style.backgroundColor || undefined,
-      borderRadius: element.style.borderRadius ? `${element.style.borderRadius}px` : undefined,
-      padding: element.style.padding ? `${element.style.padding}px` : undefined,
-      textAlign: element.style.textAlign as any || undefined,
-      zIndex: element.style.zIndex || 1,
+    const adjustedStyle = getAdjustedStyle(element.style);
+    
+    // Base styles
+    const commonStyles: React.CSSProperties = {
+      fontSize: adjustedStyle.fontSize ? `${adjustedStyle.fontSize}px` : undefined,
+      fontWeight: adjustedStyle.fontWeight || undefined,
+      color: adjustedStyle.color || undefined,
+      backgroundColor: adjustedStyle.backgroundColor || undefined,
+      borderRadius: adjustedStyle.borderRadius ? `${adjustedStyle.borderRadius}px` : undefined,
+      padding: adjustedStyle.padding ? `${adjustedStyle.padding}px` : undefined,
+      textAlign: adjustedStyle.textAlign as any || undefined,
+      zIndex: adjustedStyle.zIndex || 1,
       width: "100%",
       height: "100%",
       display: "flex",
       alignItems: "center",
-      justifyContent: element.style.textAlign === "center" ? "center" : 
-                     element.style.textAlign === "left" ? "flex-start" : "flex-end",
+      justifyContent: adjustedStyle.textAlign === "center" ? "center" : 
+                     adjustedStyle.textAlign === "left" ? "flex-start" : "flex-end",
       overflow: "hidden",
+      transition: adjustedStyle.transitionDuration ? 
+        `all ${adjustedStyle.transitionDuration}ms ease-in-out` : 
+        'all 300ms ease-in-out',
+    };
+
+    // Animation styles
+    const animationStyles: React.CSSProperties = {};
+    if (adjustedStyle.animationName && adjustedStyle.animationName !== "none") {
+      animationStyles.animation = `${adjustedStyle.animationName} ${adjustedStyle.animationDuration || 1000}ms ${adjustedStyle.animationDelay || 0}ms ${adjustedStyle.animationIterationCount || 1} ease-in-out`;
+    }
+
+    // Combine styles
+    const styles = {
+      ...commonStyles,
+      ...animationStyles,
     };
 
     switch (element.type) {
       case "heading":
         return (
           <h2
-            style={commonStyles}
+            style={styles}
+            className="canvas-element"
+            data-hover-effect={adjustedStyle.hoverEffect || "none"}
             onDoubleClick={handleEditStart}
             contentEditable={isEditing}
             suppressContentEditableWarning={true}
@@ -283,7 +374,9 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
       case "paragraph":
         return (
           <p
-            style={commonStyles}
+            style={styles}
+            className="canvas-element"
+            data-hover-effect={adjustedStyle.hoverEffect || "none"}
             onDoubleClick={handleEditStart}
             contentEditable={isEditing}
             suppressContentEditableWarning={true}
@@ -302,60 +395,54 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
             src={element.src || "/assets/images/placeholder.jpg"}
             alt={element.alt || "Canvas image"}
             style={{
-              ...commonStyles,
+              ...styles,
               objectFit: "cover",
             }}
+            className="canvas-element"
+            data-hover-effect={adjustedStyle.hoverEffect || "none"}
           />
         );
-     case "button":
-  return (
-    <a
-      href={element.href || "#"}
-      style={{
-        ...commonStyles,
-        textDecoration: "none",
-        display: "block",
-        width: "100%",
-        height: "100%",
-      }}
-      onClick={(e) => {
-        // Prevent navigation when in edit mode
-        if (isSelected) {
-          e.preventDefault();
-        }
-      }}
-    >
-      <button
-        style={{
-          ...commonStyles,
-          cursor: "pointer",
-          border: "none",
-          width: "100%",
-          height: "100%",
-        }}
-        onDoubleClick={handleEditStart}
-        contentEditable={isEditing}
-        suppressContentEditableWarning={true}
-        ref={isSelected && isEditing ? editableRef as unknown as React.RefObject<HTMLButtonElement> : null}
-        onBlur={(e) => {
-          setIsEditing(false);
-          handleContentChange(e.currentTarget.textContent || "");
-        }}
-      >
-        {element.content}
-      </button>
-    </a>
-  );
-
+      case "button":
+        return (
+          <a
+            href={ "#"}
+            style={{
+              textDecoration: "none",
+              display: "block",
+              width: "100%",
+              height: "100%",
+            }}
+            onClick={(e) => {
+              // Prevent navigation when in edit mode
+              if (isSelected) {
+                e.preventDefault();
+              }
+            }}
+          >
+            <button
+              style={styles}
+              className="canvas-element"
+              data-hover-effect={adjustedStyle.hoverEffect || "none"}
+              onDoubleClick={handleEditStart}
+                          contentEditable={isEditing}
+              suppressContentEditableWarning={true}
+              ref={isSelected && isEditing ? editableRef as unknown as React.RefObject<HTMLButtonElement> : null}
+              onBlur={(e) => {
+                setIsEditing(false);
+                handleContentChange(e.currentTarget.textContent || "");
+              }}
+            >
+              {element.content}
+            </button>
+          </a>
+        );
       case "link":
         return (
           <a
             href={element.href || "#"}
-            style={{
-              ...commonStyles,
-             
-              cursor: "pointer",
-            }}
+            style={styles}
+            className="canvas-element"
+            data-hover-effect={adjustedStyle.hoverEffect || "none"}
             onDoubleClick={handleEditStart}
             contentEditable={isEditing}
             suppressContentEditableWarning={true}
@@ -372,13 +459,21 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
       case "div":
         return (
           <div
-            style={commonStyles}
+            style={styles}
+            className="canvas-element"
+            data-hover-effect={adjustedStyle.hoverEffect || "none"}
           />
         );
       default:
         return null;
     }
   };
+
+  // Calculate scale factor for responsive elements
+  const getScaleFactor = () => {
+    return preview === "sm" ? 0.6 : 1;
+  };
+
   return (
     <div
       onClick={() => setSelectedComponent(actualName)}
@@ -442,44 +537,71 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
 
       <CanvasContainer
         $data={sectionData}
-        $showGrid={sectionData.blocks.setting.showGrid || false}
-        $gridSize={sectionData.blocks.setting.gridSize || 10}
+        $showGrid={blockSettings.showGrid || false}
+        $gridSize={blockSettings.gridSize || 10}
+        $previewWidth={previewWidth}
+        $preview={preview}
         onClick={handleCanvasClick}
         className="mx-auto"
       >
-        {sectionData.blocks.elements?.map((element) => (
-          <Rnd
-            key={element.id}
-            size={{ width: element.style.width, height: element.style.height }}
-            position={{ x: element.style.x, y: element.style.y }}
-            onDragStop={(e, d) => {
-              handleElementUpdate(element.id, { x: d.x, y: d.y });
-            }}
-            onResizeStop={(e, direction, ref, delta, position) => {
-              handleElementUpdate(element.id, {
-                width: parseInt(ref.style.width),
-                height: parseInt(ref.style.height),
-                x: position.x,
-                            y: position.y,
-              });
-            }}
-            bounds="parent"
-            dragHandleClassName={isEditing ? "non-existent-class" : undefined}
-            enableResizing={!isEditing}
-            disableDragging={isEditing}
-            style={{
-              zIndex: element.style.zIndex || 1,
-            }}
-          >
-            <ElementWrapper
-              $isSelected={element.id === selectedElementId}
-              $isEditing={isEditing && element.id === selectedElementId}
-              onClick={(e) => handleElementSelect(element.id, e)}
+        {elements.map((element) => {
+          const scaleFactor = getScaleFactor();
+          // Adjust position and size for small screens
+          const adjustedPosition = preview === "sm" 
+            ? { x: element.style.x * scaleFactor, y: element.style.y * scaleFactor }
+            : { x: element.style.x, y: element.style.y };
+            
+          const adjustedSize = preview === "sm"
+            ? { width: element.style.width * scaleFactor, height: element.style.height * scaleFactor }
+            : { width: element.style.width, height: element.style.height };
+            
+          return (
+            <Rnd
+              key={element.id}
+              size={adjustedSize}
+              position={adjustedPosition}
+              onDragStop={(e, d) => {
+                // Convert back to original scale when saving
+                const originalX = preview === "sm" ? d.x / scaleFactor : d.x;
+                const originalY = preview === "sm" ? d.y / scaleFactor : d.y;
+                handleElementUpdate(element.id, { x: originalX, y: originalY });
+              }}
+              onResizeStop={(e, direction, ref, delta, position) => {
+                // Convert back to original scale when saving
+                const width = parseInt(ref.style.width);
+                const height = parseInt(ref.style.height);
+                const originalWidth = preview === "sm" ? width / scaleFactor : width;
+                const originalHeight = preview === "sm" ? height / scaleFactor : height;
+                const originalX = preview === "sm" ? position.x / scaleFactor : position.x;
+                const originalY = preview === "sm" ? position.y / scaleFactor : position.y;
+                
+                handleElementUpdate(element.id, {
+                  width: originalWidth,
+                  height: originalHeight,
+                  x: originalX,
+                  y: originalY,
+                });
+              }}
+              bounds="parent"
+              dragHandleClassName={isEditing ? "non-existent-class" : undefined}
+              enableResizing={!isEditing}
+              disableDragging={isEditing}
+              style={{
+                zIndex: element.style.zIndex || 1,
+              }}
             >
-              {renderElement(element)}
-            </ElementWrapper>
-          </Rnd>
-        ))}
+              <ElementWrapper
+                $isSelected={element.id === selectedElementId}
+                $isEditing={isEditing && element.id === selectedElementId}
+                $previewWidth={previewWidth}
+                $preview={preview}
+                onClick={(e) => handleElementSelect(element.id, e)}
+              >
+                {renderElement(element)}
+              </ElementWrapper>
+            </Rnd>
+          );
+        })}
       </CanvasContainer>
     </div>
   );
