@@ -264,28 +264,16 @@ export const Form = ({
     }
   }, [selectedComponent]);
 
- useEffect(() => {
-  // Skip if we're already in the process of updating
-  if (isUpdatingLayoutRef.current) return;
-  
-  if (Object.keys(userInputData).length > 0) {
-    // Set flag to prevent re-entry
-    isUpdatingLayoutRef.current = true;
-    
-    // Use setTimeout to break the potential update cycle
-    setTimeout(() => {
+  useEffect(() => {
+    if (Object.keys(userInputData).length > 0) {
       const newLayout = JasonChanger(
         layout,
         selectedComponent,
         userInputData as Section
       );
       setLayout(newLayout);
-      
-      // Reset flag after update
-      isUpdatingLayoutRef.current = false;
-    }, 0);
-  }
-}, [userInputData, selectedComponent]);
+    }
+  }, [userInputData]);
 
   const SortableItem = ({ id }: { id: string }) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
