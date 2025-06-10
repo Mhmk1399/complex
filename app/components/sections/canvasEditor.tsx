@@ -404,8 +404,7 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
         );
       case "button":
         return (
-          <a
-            href={ "#"}
+          <div
             style={{
               textDecoration: "none",
               display: "block",
@@ -434,19 +433,18 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
             >
               {element.content}
             </button>
-          </a>
+          </div>
         );
       case "link":
         return (
-          <a
-            href={element.href || "#"}
+          <div
             style={styles}
             className="canvas-element"
             data-hover-effect={adjustedStyle.hoverEffect || "none"}
             onDoubleClick={handleEditStart}
             contentEditable={isEditing}
             suppressContentEditableWarning={true}
-            ref={isSelected && isEditing ? editableRef as unknown as React.RefObject<HTMLAnchorElement> : null}
+            ref={isSelected && isEditing ? editableRef as unknown as React.RefObject<HTMLDivElement> : null}
             onBlur={(e) => {
               setIsEditing(false);
               handleContentChange(e.currentTarget.textContent || "");
@@ -454,7 +452,7 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
             onClick={(e) => e.preventDefault()}
           >
             {element.content}
-          </a>
+          </div>
         );
       case "div":
         return (
@@ -468,7 +466,6 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
         return null;
     }
   };
-
   // Calculate scale factor for responsive elements
   const getScaleFactor = () => {
     return preview === "sm" ? 0.6 : 1;

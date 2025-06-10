@@ -51,16 +51,76 @@ const CanvasEditorForm: React.FC<CanvasEditorFormProps> = ({
   setSelectedComponent,
 }) => {
   const [activeTab, setActiveTab] = useState<"canvas" | "element">("canvas");
-
-  // Replace the local state with the context
-  const { selectedElementId, setSelectedElementId } = useCanvas();
+const [canvasBackgroundColor, setCanvasBackgroundColor] = useState(
+  userInputData?.blocks?.setting?.backgroundColor || "#f9fafb"
+);
+const [sectionBackgroundColor, setSectionBackgroundColor] = useState(
+  userInputData?.setting?.backgroundColor || "#ffffff"
+);  const { selectedElementId, setSelectedElementId } = useCanvas();
   const [elementType, setElementType] = useState<CanvasElement["type"]>("heading");
   const initialDataLoadedRef = useRef(false);
   const prevComponentRef = useRef(selectedComponent);
 
   // Get the base component name without element ID
   const baseComponentName = selectedComponent.split(":element:")[0];
+const handleCanvasBackgroundColorChange = (name: string, value: string) => {
+  setCanvasBackgroundColor(value);
+  
+  // Use setTimeout to debounce the update
+  setTimeout(() => {
+    // Update userInputData
+    setUserInputData((prev) => {
+      if (!prev) return prev;
 
+      // Create a deep copy to avoid mutation
+      const newData = JSON.parse(JSON.stringify(prev));
+
+      if (!newData.blocks.setting) {
+        newData.blocks.setting = {
+          canvasWidth: "100%",
+          canvasHeight: "500px",
+          backgroundColor: "#f9fafb",
+          gridSize: 10,
+          showGrid: true
+        };
+      }
+
+      newData.blocks.setting.backgroundColor = value;
+
+      return newData;
+    });
+  }, 100);
+};
+const handleSectionBackgroundColorChange = (name: string, value: string) => {
+  setSectionBackgroundColor(value);
+  
+  // Use setTimeout to debounce the update
+  setTimeout(() => {
+    // Update userInputData
+    setUserInputData((prev) => {
+      if (!prev) return prev;
+
+      // Create a deep copy to avoid mutation
+      const newData = JSON.parse(JSON.stringify(prev));
+
+      if (!newData.setting) {
+        newData.setting = {
+          paddingTop: "20",
+          paddingBottom: "20",
+          paddingLeft: "20",
+          paddingRight: "20",
+          marginTop: "30",
+          marginBottom: "30",
+          backgroundColor: "#ffffff"
+        };
+      }
+
+      newData.setting.backgroundColor = value;
+
+      return newData;
+    });
+  }, 100);
+};
   // Get the section data from the layout
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === baseComponentName
@@ -387,7 +447,7 @@ const CanvasEditorForm: React.FC<CanvasEditorFormProps> = ({
           setLayout(updatedLayout);
         }
       }
-    }, 0);
+    }, 200);
   };
 
   const handleBgColorOpacityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -438,7 +498,7 @@ const CanvasEditorForm: React.FC<CanvasEditorFormProps> = ({
           setLayout(updatedLayout);
         }
       }
-    }, 0);
+    }, 200);
   };
 
   // Add a new element
@@ -498,6 +558,28 @@ const CanvasEditorForm: React.FC<CanvasEditorFormProps> = ({
     setSelectedElementId(newElement.id);
     setActiveTab("element");
   };
+// In the useEffect for initializing userInputData
+useEffect(() => {
+  if (sectionData && (prevComponentRef.current !== selectedComponent || !initialDataLoadedRef.current)) {
+    // Important: Make a deep copy to avoid reference issues
+    const sectionDataCopy = JSON.parse(JSON.stringify(sectionData));
+
+    // Ensure the elements array exists
+    if (!sectionDataCopy.blocks.elements) {
+      sectionDataCopy.blocks.elements = [];
+    }
+
+    // Set the user input data with the copied section data
+    setUserInputData(sectionDataCopy);
+    
+    // Set the color state values
+    setCanvasBackgroundColor(sectionDataCopy.blocks.setting?.backgroundColor || "#f9fafb");
+    setSectionBackgroundColor(sectionDataCopy.setting?.backgroundColor || "#ffffff");
+    
+    initialDataLoadedRef.current = true;
+    prevComponentRef.current = selectedComponent;
+  }
+}, [selectedComponent, sectionData, setUserInputData]);
 
   // Add this to handle tab switching
   const handleTabSwitch = (tab: "canvas" | "element") => {
@@ -635,15 +717,14 @@ const CanvasEditorForm: React.FC<CanvasEditorFormProps> = ({
           <h3 className="text-lg font-bold mb-4">تنظیمات کانوا</h3>
 
           <div className="mb-4">
-            <label className="block mb-2">پس‌زمینه کانوا</label>
-            <input
-              type="color"
-              name="backgroundColor"
-              value={userInputData.blocks.setting.backgroundColor || "#f9fafb"}
-              onChange={handleCanvasSettingChange}
-              className="w-full p-1 border rounded"
-            />
-          </div>
+  <ColorInput
+    label="پس‌زمینه کانوا"
+    name="backgroundColor"
+    value={canvasBackgroundColor}
+    onChange={handleCanvasBackgroundColorChange}
+  />
+</div>
+
 
           <div className="mb-4">
             <label className="block mb-2">ارتفاع کانوا</label>
@@ -683,15 +764,14 @@ const CanvasEditorForm: React.FC<CanvasEditorFormProps> = ({
           <h3 className="text-lg font-bold mb-4 mt-8">تنظیمات بخش</h3>
 
           <div className="mb-4">
-            <label className="block mb-2">پس‌زمینه بخش</label>
-            <input
-              type="color"
-              name="backgroundColor"
-              value={userInputData.setting.backgroundColor || "#ffffff"}
-              onChange={handleSectionSettingChange}
-              className="w-full p-1 border rounded"
-            />
-          </div>
+  <ColorInput
+    label="پس‌زمینه بخش"
+    name="backgroundColor"
+    value={sectionBackgroundColor}
+    onChange={handleSectionBackgroundColorChange}
+  />
+</div>
+
 
           <div className="grid grid-cols-2 gap-4">
             <div className="mb-4">
