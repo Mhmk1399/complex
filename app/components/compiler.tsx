@@ -5,6 +5,7 @@ import {
   ContactFormProps,
   RichTextSection,
   Section,
+  CanvasEditorSection,
 } from "@/lib/types";
 type FormData =
   | HeaderSection
@@ -12,8 +13,8 @@ type FormData =
   | Section
   | CollapseSection
   | RichTextSection
-  | ContactFormProps;
-
+  | ContactFormProps
+  | CanvasEditorSection;
 export const Compiler = (data: string | object, name: string) => {
   // Create deep copy of the data using structuredClone
   const processedData =
