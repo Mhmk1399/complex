@@ -33,7 +33,7 @@ import market from "@/public/assets/images/market.png";
 import newproduct from "@/public/assets/images/newproduct.png";
 import offer from "@/public/assets/images/offer.png";
 import slidebanner from "@/public/assets/images/slidebanner.png";
-import story from "@/public/assets/images/story.png";
+import story from "@/public/assets/images/story-1.png";
 
 import {
   DndContext,
