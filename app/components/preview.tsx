@@ -75,11 +75,10 @@ export const Preview: React.FC<PreviewProps> = ({
   return (
     <div>
       <div
-        className={`flex relative justify-center ${
+        className={`flex relative justify-center pt-5 ${
           previewWidth === "default" ? "flex-col" : ""
         }`}
       >
-        {/* Add this wrapper */}
         <div
           data-preview-container="true"
           className={`h-[85vh] relative border border-gray-200 rounded-lg overflow-y-auto mx-2 scrollbar-hide  ${

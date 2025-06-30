@@ -103,7 +103,7 @@ export const OfferRow: React.FC<OfferRowProps> = ({
         },
       });
       const data = await response.json();
-      if (data.collections.length > 0) {
+      if (data?.collections?.length > 0) {
         setCategories(data.collections[0].products);
       }
     };
