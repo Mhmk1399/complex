@@ -35,12 +35,11 @@ import "react-toastify/dist/ReactToastify.css";
 import TourGuide from "./sections/guideTour";
 
 export const Main = () => {
-  const [Data, setData] = useState<Layout>(nullJson as unknown as Layout);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [routes, setRoutes] = useState<string[]>([]);
   // const [loading, setLoading] = useState(true);
-  const [layout, setLayout] = useState<Layout>(Data);
+  const [layout, setLayout] = useState<Layout>(nullJson as unknown as Layout);
   const [activeMode, setActiveMode] = useState<"sm" | "lg">("sm");
   const [previewWidth, setPreviewWidth] = useState<"sm" | "default">("sm");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -228,7 +227,6 @@ export const Main = () => {
       }
 
       const data = await response.json();
-      setData(data);
       setLayout(data);
       return data;
     } catch (error) {
@@ -241,7 +239,7 @@ export const Main = () => {
   }, [activeMode, selectedRoute]);
 
   useEffect(() => {
-    const currentLayoutData = activeMode === "sm" ? smData : Data;
+    const currentLayoutData = activeMode === "sm" ? smData : layout;
   
     const routeConfigs = {
       about: About.children as unknown as AboutChildren,
