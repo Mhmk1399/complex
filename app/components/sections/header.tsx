@@ -599,7 +599,7 @@ const Header: React.FC<HeaderProps> = ({
                   <MegaMenu $data={sectionData}>
                     <div className="flex flex-col w-1/4 border-l border-gray-200">
                       {categories
-                        .filter((category) => category.children.length > 0)
+                        ?.filter((category) => category.children.length > 0)
                         .map((category, idx) => (
                           <Link
                             href={`/category`}

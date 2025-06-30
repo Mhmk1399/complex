@@ -670,6 +670,7 @@ export const Main = () => {
           </div>
         </motion.div>
         <Preview
+        
           layout={layout}
           setSelectedComponent={setSelectedComponent}
           orders={orders}
