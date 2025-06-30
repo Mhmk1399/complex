@@ -109,9 +109,9 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
   }, [userInputData?.setting]);
 
   useEffect(() => {
-    const initialData = Compiler(layout, selectedComponent);
-    setUserInputData(initialData[0]);
-  }, [selectedComponent ]);
+    const initialData = Compiler(layout, selectedComponent)[0];
+    setUserInputData(initialData);
+  }, []);
 
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -130,7 +130,6 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
     setIsStyleSettingsOpen(tab === "style");
     setIsSpacingOpen(tab === "spacing");
   };
- 
 
   return (
     <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">

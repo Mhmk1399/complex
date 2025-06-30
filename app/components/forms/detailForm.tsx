@@ -112,18 +112,11 @@ export const DetailForm: React.FC<DetailFormProps> = ({
       left: Number(userInputData?.setting?.paddingLeft) || 0,
     });
   }, [userInputData?.setting]);
+
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
-    if (initialData) {
-      setUserInputData(initialData);
-    }
-  }, );
-  useEffect(() => {
-    const initialData = Compiler(layout, selectedComponent)[0];
-    if (initialData) {
-      setUserInputData(initialData);
-    }
-  }, [ selectedComponent ]);
+    setUserInputData(initialData);
+  }, []);
 
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -445,7 +438,6 @@ export const DetailForm: React.FC<DetailFormProps> = ({
                 value={userInputData?.setting?.propertyValueColor || "#FCA311"}
                 onChange={handleSettingChange}
               />
-             
             </div>
             <div>
               <ColorInput
@@ -454,7 +446,6 @@ export const DetailForm: React.FC<DetailFormProps> = ({
                 value={userInputData?.setting?.propertyBg || "#FCA311"}
                 onChange={handleSettingChange}
               />
-             
             </div>
           </div>
         </>

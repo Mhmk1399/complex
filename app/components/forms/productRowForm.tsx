@@ -267,8 +267,8 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
                 <div className="flex items-center justify-center mt-2 gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
                   <input
                     type="range"
-                    min="0"
-                    max="1000"
+                    min="10"
+                    max="100"
                     name="headingFontSize"
                     value={
                       userInputData?.blocks?.setting?.headingFontSize || "250"

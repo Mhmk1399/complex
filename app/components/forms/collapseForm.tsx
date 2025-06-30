@@ -54,7 +54,6 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
   layout,
   selectedComponent,
 }) => {
-  const [loaded, setLoaded] = useState(false);
   const [margin, setMargin] = React.useState<BoxValues>({
     top: 0,
     bottom: 0,
@@ -119,13 +118,6 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
     });
   }, [userInputData?.setting]);
 
-  // useEffect(() => {
-  //   const initialData = Compiler(layout, selectedComponent)[0];
-  //   if (initialData) {
-  //     setLoaded(true);
-  //     setUserInputData(initialData);
-  //   }
-  // });
   const handleAddBlock = () => {
     setUserInputData((prev: CollapseSection) => {
       const newBlockNumber = prev.blocks.length + 1;
@@ -152,21 +144,20 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
 
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
-    if (initialData) {
-      setLoaded(true);
-      setUserInputData(initialData);
-      console.log("Initial Data:", initialData.blocks);  
-    }
-  }, [selectedComponent]);
+    setUserInputData(initialData);
+  }, []);
 
   const handleBlockChange = (index: number, field: string, value: string) => {
     if (isUpdating) return;
     setIsUpdating(true);
     setUserInputData((prev: CollapseSection) => ({
       ...prev,
-      blocks: prev.blocks.map((block: CollapseBlock, i: number) =>
-        i === index ? { ...block, [field]: value } : block
-      ),
+      blocks:
+        prev.blocks.length > 0
+          ? prev.blocks.map((block: CollapseBlock, i: number) =>
+              i === index ? { ...block, [field]: value } : block
+            )
+          : [],
     }));
     setTimeout(() => setIsUpdating(false), 100);
   };
@@ -220,32 +211,31 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
 
   return (
     <>
-      {!loaded ? (
-        <p>Loading...</p>
-      ) : (
-        <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
-          <h2 className="text-lg font-bold mb-4">تنظیمات آکاردئون</h2>
+    
+      <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+        <h2 className="text-lg font-bold mb-4">تنظیمات آکاردئون</h2>
 
-          {/* Tabs */}
-          <TabButtons onTabChange={handleTabChange} />
+        {/* Tabs */}
+        <TabButtons onTabChange={handleTabChange} />
 
-          {isContentOpen && (
-            <div className="p-4 ">
-              <div className=" rounded-lg">
-                <label htmlFor="" className="block mb-2 font-bold">
-                  متن سربرگ
-                </label>
-                <input
-                  type="text"
-                  value={userInputData?.blocks?.[0]?.heading ?? ""}
-                  onChange={(e) =>
-                    handleBlockChange(0, "heading", e.target.value)
-                  }
-                  className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                />
-              </div>
-              <br />
-              {userInputData.blocks.length > 0 && userInputData?.blocks?.map((block, index) => (
+        {isContentOpen && (
+          <div className="p-4 ">
+            <div className=" rounded-lg">
+              <label htmlFor="" className="block mb-2 font-bold">
+                متن سربرگ
+              </label>
+              <input
+                type="text"
+                value={userInputData?.blocks?.[0]?.heading ?? ""}
+                onChange={(e) =>
+                  handleBlockChange(0, "heading", e.target.value)
+                }
+                className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              />
+            </div>
+            <br />
+            {userInputData.blocks.length > 0 &&
+              userInputData.blocks.map((block, index) => (
                 <div
                   key={index}
                   className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100"
@@ -550,96 +540,94 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                   )}
                 </div>
               ))}
-              {/* Add Block Button */}
-              <button
-                onClick={handleAddBlock}
-                className="px-1 rounded-lg mb-3 w-full text-3xl group hover:font-extrabold transition-all"
+            {/* Add Block Button */}
+            <button
+              onClick={handleAddBlock}
+              className="px-1 rounded-lg mb-3 w-full text-3xl group hover:font-extrabold transition-all"
+            >
+              +
+              <div className="bg-blue-500 w-full pb-0.5 group-hover:bg-blue-600 group-hover:pb-1 transition-all"></div>
+            </button>
+          </div>
+        )}
+
+        {/* Collapse Items */}
+
+        {isStyleSettingsOpen && (
+          <div className="p-4 border-t border-gray-100 animate-slideDown">
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ سربرگ"
+                name="headingColor"
+                value={
+                  userInputData?.setting?.headingColor?.toString() ?? "#333333"
+                }
+                onChange={handleSettingChange}
+              />
+            </div>
+            <br />
+            <label htmlFor="">سایز سربرگ</label>
+            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
+              <input
+                type="range"
+                min="0"
+                max="1000"
+                name="headingFontSize"
+                value={userInputData?.setting?.headingFontSize || "250"}
+                onChange={handleSettingChange}
+              />
+              <p className="text-sm text-gray-600 text-nowrap">
+                {userInputData?.setting?.headingFontSize}px
+              </p>
+            </div>
+            <br />
+            <div>
+              <label className="block mb-1">وزن سربرگ</label>
+              <select
+                name="headingFontWeight"
+                value={
+                  userInputData?.setting?.headingFontWeight?.toString() ??
+                  "normal"
+                }
+                onChange={(e) =>
+                  handleSettingChange(
+                    e as unknown as React.ChangeEvent<HTMLInputElement>
+                  )
+                }
+                className="w-full p-2 border rounded"
               >
-                +
-                <div className="bg-blue-500 w-full pb-0.5 group-hover:bg-blue-600 group-hover:pb-1 transition-all"></div>
-              </button>
+                <option value="bold">ضخیم</option>
+                <option value="lighter">نازک</option>
+              </select>
             </div>
-          )}
-
-          {/* Collapse Items */}
-
-          {isStyleSettingsOpen && (
-            <div className="p-4 border-t border-gray-100 animate-slideDown">
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنگ سربرگ"
-                  name="headingColor"
-                  value={
-                    userInputData?.setting?.headingColor?.toString() ??
-                    "#333333"
-                  }
-                  onChange={handleSettingChange}
-                />
-              </div>
-              <br />
-              <label htmlFor="">سایز سربرگ</label>
-              <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-                <input
-                  type="range"
-                  min="0"
-                  max="1000"
-                  name="headingFontSize"
-                  value={userInputData?.setting?.headingFontSize || "250"}
-                  onChange={handleSettingChange}
-                />
-                <p className="text-sm text-gray-600 text-nowrap">
-                  {userInputData?.setting?.headingFontSize}px
-                </p>
-              </div>
-              <br />
-              <div>
-                <label className="block mb-1">وزن سربرگ</label>
-                <select
-                  name="headingFontWeight"
-                  value={
-                    userInputData?.setting?.headingFontWeight?.toString() ??
-                    "normal"
-                  }
-                  onChange={(e) =>
-                    handleSettingChange(
-                      e as unknown as React.ChangeEvent<HTMLInputElement>
-                    )
-                  }
-                  className="w-full p-2 border rounded"
-                >
-                  <option value="bold">ضخیم</option>
-                  <option value="lighter">نازک</option>
-                </select>
-              </div>
-              <br />
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنگ پس زمینه"
-                  name="background"
-                  value={
-                    userInputData?.setting?.background?.toString() ?? "#333333"
-                  }
-                  onChange={handleSettingChange}
-                />
-              </div>
+            <br />
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ پس زمینه"
+                name="background"
+                value={
+                  userInputData?.setting?.background?.toString() ?? "#333333"
+                }
+                onChange={handleSettingChange}
+              />
             </div>
-          )}
+          </div>
+        )}
 
-          {/* Spacing Settings Dropdown */}
+        {/* Spacing Settings Dropdown */}
 
-          {isSpacingOpen && (
-            <div className="p-4 border-t border-gray-100 animate-slideDown">
-              <div className="bg-gray-50 rounded-lg flex items-center justify-center">
-                <MarginPaddingEditor
-                  margin={margin}
-                  padding={padding}
-                  onChange={handleUpdate}
-                />
-              </div>
+        {isSpacingOpen && (
+          <div className="p-4 border-t border-gray-100 animate-slideDown">
+            <div className="bg-gray-50 rounded-lg flex items-center justify-center">
+              <MarginPaddingEditor
+                margin={margin}
+                padding={padding}
+                onChange={handleUpdate}
+              />
             </div>
-          )}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </>
   );
 };

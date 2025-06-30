@@ -253,7 +253,7 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
             <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
               <input
                 type="range"
-                min="0"
+                min="10"
                 max="100"
                 name="headingFontSize"
                 value={userInputData?.blocks?.setting?.headingFontSize || "250"}
@@ -276,7 +276,7 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
             <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
               <input
                 type="range"
-                min="0"
+                min="10"
                 max="100"
                 name="brandNameFontSize"
                 value={

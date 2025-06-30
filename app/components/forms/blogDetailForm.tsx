@@ -165,8 +165,8 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
                 <label className="block mb-1">اندازه فونت عنوان</label>
                 <input
                   type="range"
-                  min="24"
-                  max="72"
+                  min="10"
+                  max="100"
                   name="titleFontSize"
                   value={userInputData?.setting?.titleFontSize || "36"}
                   onChange={handleSettingChange}
@@ -195,7 +195,7 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
                 <input
                   type="range"
                   min="14"
-                  max="24"
+                  max="100"
                   name="contentFontSize"
                   value={userInputData?.setting?.contentFontSize || "18"}
                   onChange={handleSettingChange}
@@ -274,8 +274,8 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
                 <label className="block mb-1">اندازه فونت</label>
                 <input
                   type="range"
-                  min="12"
-                  max="80"
+                  min="10"
+                  max="100"
                   name="metaFontSize"
                   value={userInputData?.setting?.metaFontSize || "14"}
                   onChange={handleSettingChange}
