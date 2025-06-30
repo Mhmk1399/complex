@@ -155,6 +155,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
     if (initialData) {
       setLoaded(true);
       setUserInputData(initialData);
+      console.log("Initial Data:", initialData.blocks);  
     }
   }, [selectedComponent]);
 
@@ -244,7 +245,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                 />
               </div>
               <br />
-              {userInputData.blocks.map((block, index) => (
+              {userInputData.blocks.length > 0 && userInputData?.blocks?.map((block, index) => (
                 <div
                   key={index}
                   className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100"

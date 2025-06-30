@@ -8,7 +8,6 @@ export const Create = (
   layout: Layout,
   setLayout: (layout: Layout) => void
 ) => {
-  console.log(data,sectionName,"adding section");
   const templateData = Compiler(data, sectionName)[0];
 
   if (templateData) {
