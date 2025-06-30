@@ -151,7 +151,7 @@ const SlideShow: React.FC<SlideShowProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
-  
+
   useEffect(() => {
     if (window.innerWidth <= 425) {
       setPreview("sm");
@@ -181,7 +181,6 @@ const SlideShow: React.FC<SlideShowProps> = ({
     setCurrentIndex(blocks.length - 1);
     return null;
   }
-  
 
   return (
     <SectionSlideShow
@@ -242,7 +241,7 @@ const SlideShow: React.FC<SlideShowProps> = ({
 
       <SlideContainer $previewWidth={previewWidth} $preview={preview}>
         <SlidesWrapper $currentIndex={currentIndex}>
-          {blocks.map((slide, index) => (
+          { blocks.map((slide, index) => (
             <Slide key={index}>
               <SlideImage
                 src={slide.imageSrc}
@@ -265,10 +264,7 @@ const SlideShow: React.FC<SlideShowProps> = ({
                   {slide.description}
                 </SlideDescription>
                 <Button $data={sectionData}>
-                  <Link
-                    href={slide.btnLink ? slide.btnLink : "#"}
-                    target="_blank"
-                  >
+                  <Link href={"#"} target="_blank">
                     {slide.btnText ? slide.btnText : "بیشتر بخوانید"}
                   </Link>
                 </Button>

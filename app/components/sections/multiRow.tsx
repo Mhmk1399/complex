@@ -294,7 +294,7 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
                 </Description>
                 <Button
                   $preview={preview}
-                  href={typedBlock.btnLink || "#"}
+                  href={"#"}
                   $data={sectionData}
                   $previewWidth={previewWidth}
                 >

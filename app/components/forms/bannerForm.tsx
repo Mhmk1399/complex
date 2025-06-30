@@ -114,12 +114,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
-  });
-
-  // useEffect(() => {
-  //   const initialData = Compiler(layout, selectedComponent)[0];
-  //   setUserInputData(initialData);
-  // }, [selectedComponent]);
+  }, []);
 
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -180,11 +175,10 @@ export const BannerForm: React.FC<BannerFormProps> = ({
     <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-lg font-bold mb-4">تنظیمات بنر</h2>
 
-      {/* Content Section */}
-
       {/* Tabs */}
       <TabButtons onTabChange={handleTabChange} />
 
+      {/* Content Section */}
       {isContentOpen && (
         <div className="p-4 space-y-4 animate-slideDown">
           {/* Image Input */}

@@ -114,7 +114,6 @@ export interface CommonSettings {
   contentColor2?: string;
   contentColor3?: string;
   contentColor4?: string;
-  
 }
 
 export interface HeaderBlockSettings extends CommonSettings {
@@ -241,23 +240,20 @@ export interface MultiColumnBlock {
   btnLink3?: string;
 }
 export interface AboutBlock {
-
-    heading?: string;
-    description?: string;
-    btnText?: string;
-    imageSrc?: string;
-    imageAlt?: string;
-    btnLink?: string;
-    text1?: string;
-    text2?: string;
-    text3?: string;
-    text4?: string;
-    content1?: string;
-    content2?: string;
-    content3?: string;
-    content4?: string;
-   
-
+  heading?: string;
+  description?: string;
+  btnText?: string;
+  imageSrc?: string;
+  imageAlt?: string;
+  btnLink?: string;
+  text1?: string;
+  text2?: string;
+  text3?: string;
+  text4?: string;
+  content1?: string;
+  content2?: string;
+  content3?: string;
+  content4?: string;
 }
 export interface MultiColumnSection {
   blocks: {
@@ -719,7 +715,6 @@ export interface MultiRowBlock {
   imageSrc: string;
   imageAlt: string;
 }
-
 
 export interface MultiRowSection {
   type: "multiRow";

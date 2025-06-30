@@ -244,7 +244,7 @@ const BlogList: React.FC<BlogListProps> = ({
                 __html: blog.content.slice(0, 150) + "...",
               }}
             />
-            <a href={`/blog/${blog.id}`} className="read-more">
+            <a href="#" className="read-more">
               مطالعه بیشتر
             </a>
           </div>

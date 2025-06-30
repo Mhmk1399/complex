@@ -196,7 +196,7 @@ const Banner: React.FC<props> = ({
       ) : null}
 
       <Link
-        href={sectionData.blocks.imageLink || "#"}
+        href={"#"}
         style={{
           position: "relative",
           display: "block",

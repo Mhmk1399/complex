@@ -33,7 +33,7 @@ const HeaderWrapper = styled.header<{
   border-bottom: 1px solid #e5e7eb;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   position: relative;
-  margin-top: ${(props) => props.$data.setting?.marginTop || "0"}px;
+  margin-top: ${(props) => props.$data.setting?.marginTop || "20"}px;
   margin-bottom: ${(props) => props.$data?.setting?.marginBottom}px;
   padding-top: ${(props) => props.$data?.setting?.paddingTop}px;
   padding-bottom: ${(props) => props.$data?.setting?.paddingBottom}px;
@@ -581,7 +581,7 @@ const Header: React.FC<HeaderProps> = ({
             <NavItemWrapper key={index}>
               {link.name === "دسته‌بندی کالاها" ? (
                 <>
-                  <NavItem href="" $data={sectionData}>
+                  <NavItem href="#" $data={sectionData}>
                     <CategoryIconWrapper>
                       {link.name}
                       <svg
@@ -602,7 +602,7 @@ const Header: React.FC<HeaderProps> = ({
                         .filter((category) => category.children.length > 0)
                         .map((category, idx) => (
                           <Link
-                            href={`/category`}
+                            href={`#`}
                             key={category._id}
                             className="block"
                           >
@@ -626,7 +626,7 @@ const Header: React.FC<HeaderProps> = ({
                             // Since child is now the full object, we can use it directly
                             return (
                               <Link
-                                href={`/category`}
+                                href={`#`}
                                 key={child._id}
                                 className="p-1 hover:translate-x-[2px] rounded-md transition-all duration-200 text-right"
                               >
@@ -641,7 +641,7 @@ const Header: React.FC<HeaderProps> = ({
                   </MegaMenu>
                 </>
               ) : (
-                <NavItem href={link.url} $data={sectionData}>
+                <NavItem href="#" $data={sectionData}>
                   {link.name}
                 </NavItem>
               )}
@@ -663,7 +663,7 @@ const Header: React.FC<HeaderProps> = ({
             {sectionData.blocks.links?.map((link, index) => (
               <MobileNavItem
                 key={index}
-                href={link.url}
+                href="#"
                 $data={sectionData}
                 onClick={() => setIsMenuOpen(false)}
               >

@@ -154,7 +154,7 @@ const SlideBanner: React.FC<props> = ({
       $data={sectionData}
       $previewWidth={preview}
       onClick={() => setSelectedComponent(actualName)}
-      className={`transition-all duration-150 ease-in-out relative ${
+      className={`transition-all z-10 duration-150 ease-in-out relative ${
         selectedComponent === actualName ? "border-4 border-blue-500" : ""
       }`}
       dir="rtl"
@@ -189,7 +189,7 @@ const SlideBanner: React.FC<props> = ({
       )}
 
       {actualName === selectedComponent ? (
-        <div className="absolute w-fit -top-5 -left-1 z-50 flex flex-row-reverse">
+        <div className="absolute w-fit -top-5 -left-1 z-[2000] flex flex-row-reverse">
           <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
             {actualName}
           </div>

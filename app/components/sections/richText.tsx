@@ -197,7 +197,7 @@ const RichText: React.FC<RichTextProps> = ({
         </P>
       )}
       {btnLink && (
-        <Link href={btnLink} passHref legacyBehavior>
+        <Link href={"#"} passHref legacyBehavior>
           <Btn $data={blocks} $previewWidth={previewWidth} $preview={preview}>
             {btnText}
           </Btn>

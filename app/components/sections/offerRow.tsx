@@ -250,7 +250,7 @@ export const OfferRow: React.FC<OfferRowProps> = ({
             >
               <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
             </svg>
-            <Link href={sectionData.blocks.setting?.buttonLink || "/"}>
+            <Link href={ "/"}>
               {sectionData.blocks?.setting?.buttonText || "مشاهده همه"}
             </Link>
           </button>

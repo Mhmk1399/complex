@@ -147,10 +147,10 @@
       "type": "header"
     },
     "children": {
-       "metaData":{
-      "title":"juju",
-      "description":"juju page"
-    },
+      "metaData": {
+        "title": "juju",
+        "description": "juju page"
+      },
       "sections": [
         {
           "type": "SlideBanner",
@@ -197,6 +197,251 @@
               "activeDotColor": "#ffffff",
               "inactiveDotColor": "#000000"
             }
+          }
+        },
+        {
+          "type": "NewsLetter",
+          "blocks": {
+            "heading": "عضویت در خبرنامه",
+            "description": "توضیحات درباره خبرنامه",
+            "btnText": "ثبت نام",
+
+            "setting": {
+              "headingColor": "#ffffff",
+              "headingFontSize": "27",
+              "headingFontWeight": "bold",
+              "descriptionColor": "#e4e4e4",
+              "descriptionFontSize": "18",
+              "descriptionFontWeight": "normal",
+              "btnBackgroundColor": "#ffffff",
+              "btnTextColor": "#000000",
+              "formBackground": "#1d6bdf"
+            }
+          },
+          "setting": {
+            "paddingTop": "30",
+            "paddingBottom": "30",
+            "marginTop": "20",
+            "marginBottom": "20",
+            "paddinRight": "0",
+            "paddinLeft": "0"
+          }
+        },
+        {
+          "type": "CollapseFaq",
+          "blocks": [
+            {
+              "heading": "سوالات متداول",
+              "text1": "سوال متداول 1",
+              "content1": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد ",
+              "setting": {
+                "textColor1": "#000000",
+                "textFontSize1": "20px",
+                "textFontWeight1": "bold",
+                "contentColor1": "#1d6bdf",
+                "contentFontSize1": "16px",
+                "contentFontWeight1": "normal"
+              }
+            },
+            {
+              "text2": "سوال متداول 2",
+              "content2": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد ",
+              "setting": {
+                "textColor2": "#000000",
+                "textFontSize2": "20px",
+                "textFontWeight2": "bold",
+                "contentColor2": "#1d6bdf",
+                "contentFontSize2": "16px",
+                "contentFontWeight2": "normal"
+              }
+            },
+            {
+              "text3": "سوال متداول سوم",
+              "content3": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
+              "setting": {
+                "textColor3": "#000000",
+                "textFontSize3": "20px",
+                "textFontWeight3": "bold",
+                "contentColor3": "#1d6bdf",
+                "contentFontSize3": "16px",
+                "contentFontWeight3": "normal"
+              }
+            },
+            {
+              "text4": "سوال متداول چهارم",
+              "content4": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
+              "setting": {
+                "textColor4": "#000000",
+                "textFontSize4": "20px",
+                "textFontWeight4": "bold",
+                "contentColor4": "#1d6bdf",
+                "contentFontSize4": "16px",
+                "contentFontWeight4": "normal"
+              }
+            }
+          ],
+          "setting": {
+            "paddingTop": "30",
+            "paddingBottom": "30",
+            "marginTop": "20",
+            "marginBottom": "20",
+            "paddinRight": "0",
+            "paddinLeft": "0",
+            "headingColor": "#1d6bdf",
+            "headingFontSize": "30",
+            "headingFontWeight": "bold",
+            "background": "#ffffff",
+            "borderRadious": "20"
+          }
+        },
+        {
+          "type": "SlideShow",
+          "blocks": [
+            {
+              "imageSrc": "/assets/images/banner3.jpg",
+              "imageAlt": "",
+              "text": "اسلاید اول",
+              "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
+              "btnLink": "",
+              "btnText": "دکمه"
+            },
+            {
+              "imageSrc": "/assets/images/banner1.jpg",
+              "imageAlt": "",
+              "text": "اسلاید دوم",
+              "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
+              "link": "",
+              "btnText": "دکمه"
+            }
+          ],
+          "setting": {
+            "paddingTop": "20",
+            "paddingBottom": "20",
+            "marginTop": "10",
+            "marginBottom": "10",
+            "descriptionColor": "#E5E5E5",
+            "descriptionFontSize": "16px",
+            "descriptionFontWeight": "normal",
+            "textColor": "#FFFFFF",
+            "textFontSize": "24",
+            "textFontWeight": "bold",
+            "btnTextColor": "#000000",
+            "btnBackgroundColor": "#FCA311",
+            "backgroundColorBox": "#14213D",
+            "backgroundBoxRadius": "40px",
+            "opacityImage": 1,
+            "imageWidth": "700",
+            "imageHeight": "500",
+            "imageRadious": "40px"
+          }
+        },
+        {
+          "type": "MultiColumn",
+          "blocks": [
+            {
+              "title1": "ستون یکم",
+              "description1": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
+              "imageSrc1": "/assets/images/banner1.jpg",
+              "imageAlt1": "",
+              "btnLable1": "",
+              "btnLink1": ""
+            },
+            {
+              "title2": "ستون دو",
+              "description2": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
+              "imageSrc2": "/assets/images/banner3.jpg",
+              "imageAlt2": "",
+              "btnLable2": "",
+              "btnLink2": ""
+            },
+            {
+              "title3": "ستون سوم",
+              "description3": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
+              "imageSrc3": "/assets/images/banner.jpg",
+              "imageAlt3": "",
+              "btnLable3": "",
+              "btnLink3": ""
+            }
+          ],
+          "setting": {
+            "heading": "سربرگ ستون ها",
+            "paddingTop": "30",
+            "paddingBottom": "30",
+            "marginTop": "20",
+            "marginBottom": "20",
+            "paddinRight": "0",
+            "paddinLeft": "0",
+            "backgroundColorBox": "#E5E5E5",
+            "headingFontSize": "40",
+            "headingFontWeight": "bold",
+            "headingColor": "#1d6bdf",
+            "imageRadious": "10",
+            "imageWidth": "400",
+            "imageHeight": "300",
+            "titleColor": "#ffffff",
+            "titleFontSize": "25",
+            "titleFontWeight": "bold",
+            "descriptionColor": "#000000",
+            "descriptionFontSize": "18",
+            "descriptionFontWeight": "normal",
+            "btnColor": "#ffffff",
+            "btnBackgroundColor": "#1d6bdf"
+          }
+        },
+        {
+          "type": "MultiRow",
+          "title": "سربرگ ردیف ها",
+
+          "blocks": [
+            {
+              "heading": "ردیف اول",
+              "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
+              "btnLable": "دکمه اول",
+              "btnLink": "",
+              "imageSrc": "/assets/images/banner1.jpg",
+              "imageAlt": ""
+            },
+            {
+              "heading": "ردیف دوم",
+              "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
+              "btnLable": "دکمه دوم",
+              "btnLink": "",
+              "imageSrc": "/assets/images/banner3.jpg",
+              "imageAlt": ""
+            },
+            {
+              "heading": "ردیف سوم",
+              "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
+              "btnLable": "دکمه سوم",
+              "btnLink": "",
+              "imageSrc": "/assets/images/banner.jpg",
+              "imageAlt": ""
+            }
+          ],
+          "setting": {
+            "titleColor": "#1d6bdf",
+            "titleFontWeight": "bold",
+            "titleFontSize": "35",
+            "paddingTop": "30",
+            "paddingBottom": "30",
+            "marginTop": "20",
+            "marginBottom": "20",
+            "paddinRight": "0",
+            "paddinLeft": "0",
+            "backgroundColorMultiRow": "#ffffff",
+            "backgroundColorBox": "#e4e4e4",
+            "imageWidth": "500",
+            "imageHeight": "300",
+            "imageRadius": "45",
+            "headingColor": "#000000",
+            "headingFontSize": "30",
+            "headingFontWeight": "bold",
+            "descriptionColor": "#000000",
+            "descriptionFontSize": "15",
+            "descriptionFontWeight": "normal",
+            "btnColor": "#ffffff",
+            "btnBackgroundColor": "#1d6bdf",
+            "imageAlign": "row"
           }
         },
         {
@@ -419,7 +664,7 @@
           }
         },
         {
-          "type": "Gallery-2",
+          "type": "Gallery",
           "blocks": {
             "title": " ",
             "description": " ",
@@ -458,18 +703,212 @@
             "paddingRight": "0",
             "paddingLeft": "0"
           }
+        },
+        {
+          "type": "ImageText",
+          "blocks": {
+            "imageSrc": "/assets/images/banner3.jpg",
+            "imageAlt": "",
+            "heading": "سربرگ محصول",
+            "description": "توضیحات درباره محصول",
+            "btnLink": "/",
+            "btnText": "دکمه",
+            "setting": {
+              "headingColor": "#ffffff",
+              "headingFontSize": "24",
+              "headingFontWeight": "bold",
+              "descriptionColor": "#000000",
+              "descriptionFontSize": "16",
+              "descriptionFontWeight": "normal",
+              "btnTextColor": "#000000",
+              "btnBackgroundColor": "#ffffff",
+              "backgroundColorBox": "#1d6bdf",
+              "backgroundBoxOpacity": 0.9,
+              "boxRadiuos": "20",
+              "opacityImage": 1,
+              "imageWidth": "85",
+              "imageHeight": "50",
+              "background": "#ffffff"
+            }
+          },
+          "setting": {
+            "paddingTop": "30",
+            "paddingBottom": "30",
+            "marginTop": "20",
+            "marginBottom": "20",
+            "paddinRight": "0",
+            "paddinLeft": "0"
+          }
+        },
+        {
+          "type": "Banner",
+          "blocks": {
+            "imageSrc": "/assets/images/ban.jpg",
+            "imageAlt": "",
+            "text": "سربرگ بنر",
+            "description": " توضیحات بنر",
+            "setting": {
+              "descriptionColor": "#000000",
+              "descriptionFontSize": "15",
+              "descriptionFontWeight": "normal",
+              "textColor": "#1d6bdf",
+              "textFontSize": "30",
+              "textFontWeight": "bold",
+              "backgroundColorBox": "#ffffff",
+              "backgroundBoxRadious": "10",
+              "opacityImage": 1,
+              "opacityTextBox": 0.8,
+              "imageRadious": "14",
+              "imageBehavior": "cover"
+            }
+          },
+          "setting": {
+            "paddingTop": "0",
+            "paddingBottom": "0",
+            "marginTop": "20",
+            "marginBottom": "20"
+          }
+        },
+        {
+          "type": "RichText",
+          "blocks": {
+            "textHeading": "سربرل",
+            "description": "توضیحات درباره محصول",
+            "btnText": "دکمه",
+            "btnLink": "/",
+            "setting": {
+              "textHeadingColor": "#FCA311",
+              "textHeadingFontSize": "40",
+              "textHeadingFontWeight": "bold",
+              "descriptionColor": "#E5E5E5",
+              "descriptionFontSize": "18",
+              "descriptionFontWeight": "normal",
+              "background": "#14213D",
+              "btnTextColor": "#ffffff",
+              "btnBackgroundColor": "#FCA311"
+            }
+          },
+          "setting": {
+            "paddingTop": "30",
+            "paddingBottom": "30",
+            "marginTop": "20",
+            "marginBottom": "20",
+            "paddinRight": "0",
+            "paddinLeft": "0"
+          }
+        },
+        {
+          "type": "Video",
+          "blocks": {
+            "heading": "سربرگ ویدیو",
+            "videoUrl": "/assets/video/video.mp4",
+            "videoAlt": "",
+            "setting": {
+              "headingColor": "#FCA311",
+              "headingFontSize": "40",
+              "headingFontWeight": "bold",
+              "videoWidth": "1000px",
+              "videoHeight": "700px",
+              "videoRadious": "30",
+              "videoLoop": true,
+              "videoMute": false,
+              "videoAutoplay": true,
+              "videoPoster": "/assets/images/banner2.webp",
+              "backgroundVideoSection": "#FFFFFF"
+            }
+          },
+          "setting": {
+            "paddingTop": "30",
+            "paddingBottom": "30",
+            "marginTop": "20",
+            "marginBottom": "20",
+            "paddinRight": "0",
+            "paddinLeft": "0"
+          }
+        },
+        {
+          "type": "Collection",
+          "blocks": {
+            "heading": "محصولات ما",
+            "products": [
+              {
+                "id": "1",
+                "imageSrc": "/assets/images/product1.jpg",
+                "imageAlt": "Product 1",
+                "name": "محصول اول",
+                "description": "توضیحات محصول اول",
+                "price": "۱۰۰,۰۰۰ تومان",
+                "btnText": "افزودن به سبد خرید",
+                "btnLink": "/product/1"
+              }
+            ],
+            "setting": {
+              "headingColor": "#14213D",
+              "headingFontSize": "32px",
+              "headingFontWeight": "bold",
+              "productNameColor": "#000000",
+              "priceColor": "#FCA311",
+              "descriptionColor": "#666666",
+              "btnBackgroundColor": "#14213D",
+              "btnTextColor": "#FFFFFF",
+              "cardBackground": "#FFFFFF",
+              "cardBorderRadius": "8px",
+              "imageRadius": "8px",
+              "gridColumns": 3
+            }
+          },
+          "setting": {
+            "paddingTop": "40px",
+            "paddingBottom": "40px",
+            "marginTop": "20px",
+            "marginBottom": "20px",
+            "backgroundColor": "#F5F5F5"
+          }
+        },
+
+        {
+          "type": "ContactForm",
+          "blocks": {
+            "heading": "فرم ارتباط با ما",
+            "setting": {
+              "headingColor": "#1d6bdf",
+              "headingFontSize": "35",
+              "headingFontWeight": "bold",
+              "btnBackgroundColor": "#1d6bdf",
+              "btnTextColor": "#ffffff",
+              "formBackground": "#ffffff"
+            }
+          },
+          "setting": {
+            "paddingTop": "30",
+            "paddingBottom": "30",
+            "marginTop": "20",
+            "marginBottom": "20",
+            "paddinRight": "0",
+            "paddinLeft": "0"
+          }
         }
       ],
       "order": [
+        "Collection",
+        "Video",
+        "SlideShow",
         "Story",
         "SlideBanner",
         "SpecialOffer",
         "OfferRow",
         "ProductsRow-2",
-        "Gallery",
         "Brands",
         "ProductsRow",
-        "Gallery-2"
+        "Gallery",
+        "NewsLetter",
+        "MultiRow",
+        "MultiColumn",
+        "CollapseFaq",
+        "ImageText",
+        "ContactForm",
+        "Banner",
+        "RichText"
       ]
     },
     "sectionFooter": {
@@ -525,9 +964,5 @@
       }
     }
   },
-  "order": [
-    "section-header",
-    "children",
-    "section-footer"
-  ]
+  "order": ["section-header", "children", "section-footer"]
 }

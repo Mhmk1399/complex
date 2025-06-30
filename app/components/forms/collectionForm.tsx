@@ -50,7 +50,6 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
   layout,
   selectedComponent,
 }) => {
-  const [loaded, setLoaded] = useState(false);
   const [margin, setMargin] = React.useState<BoxValues>({
     top: 0,
     bottom: 0,
@@ -114,34 +113,9 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
 
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
-    if (initialData) {
-      setUserInputData(initialData);
-    }
-  },);
+    setUserInputData(initialData);
+  }, []);
 
-  useEffect(() => {
-    const initialData = Compiler(layout, selectedComponent)[0];
-    if (initialData) {
-      setLoaded(true);
-      setUserInputData(initialData);
-    }
-  }, [ selectedComponent ]);
-
-  // const handleProductChange = (
-  //   e: React.ChangeEvent<HTMLInputElement>,
-  //   index: number
-  // ) => {
-  //   const { name, value } = e.target;
-  //   setUserInputData((prev: CollectionSection) => ({
-  //     ...prev,
-  //     blocks: {
-  //       ...prev.blocks,
-  //       products: prev.blocks.products.map((product, i) =>
-  //         i === index ? { ...product, [name]: value } : product
-  //       ),
-  //     },
-  //   }));
-  // };
 
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -183,9 +157,7 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
 
   return (
     <>
-      {!loaded ? (
-        <p>Loading...</p>
-      ) : (
+      
         <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
           <h2 className="text-lg font-bold mb-4">تنظیمات کالکشن</h2>
 
@@ -295,7 +267,7 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
             </div> */}
 
               {/* Border Radius Settings */}
-           
+
               <div className=" p-4">
                 <label className="block mb-1">گردی گوشه‌های تصویر</label>
                 <input
@@ -325,7 +297,6 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
             </div>
           )}
         </div>
-      )}
     </>
   );
 };
