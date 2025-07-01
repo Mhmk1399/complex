@@ -68,6 +68,7 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
   });
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleUpdate = (
     type: "margin" | "padding",
@@ -119,11 +120,13 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
     if (initialData) {
       setUserInputData(initialData);
     }
-  }, [selectedComponent ]);
+  }, [selectedComponent]);
 
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
     const { name, value } = e.target;
     setUserInputData((prev) => ({
       ...prev,
@@ -132,6 +135,7 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
         [name]: value,
       },
     }));
+    setTimeout(() => setIsUpdating(false), 100);
   };
 
   const handleTabChange = (tab: "content" | "style" | "spacing") => {
@@ -170,7 +174,7 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
                   name="titleFontSize"
                   value={userInputData?.setting?.titleFontSize || "36"}
                   onChange={handleSettingChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 <div className="text-sm text-gray-500">
                   {userInputData?.setting?.titleFontSize}px
@@ -199,7 +203,7 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
                   name="contentFontSize"
                   value={userInputData?.setting?.contentFontSize || "18"}
                   onChange={handleSettingChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 <div className="text-sm text-gray-500">
                   {userInputData?.setting?.contentFontSize}px
@@ -220,7 +224,7 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
                   name="coverImageHeight"
                   value={userInputData?.setting?.coverImageHeight || "400"}
                   onChange={handleSettingChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 <div className="text-sm text-gray-500">
                   {userInputData?.setting?.coverImageHeight}px
@@ -235,7 +239,7 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
                   name="coverImageWidth"
                   value={userInputData?.setting?.coverImageWidth || "400"}
                   onChange={handleSettingChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 <div className="text-sm text-gray-500">
                   {userInputData?.setting?.coverImageWidth}px
@@ -250,7 +254,7 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
                   name="imageRadius"
                   value={userInputData?.setting?.imageRadius || "10"}
                   onChange={handleSettingChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 <div className="text-sm text-gray-500">
                   {userInputData?.setting?.imageRadius}px
@@ -279,7 +283,7 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
                   name="metaFontSize"
                   value={userInputData?.setting?.metaFontSize || "14"}
                   onChange={handleSettingChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 <div className="text-sm text-gray-500">
                   {userInputData?.setting?.dateFontSize}px

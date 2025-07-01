@@ -8,8 +8,8 @@ export const Create = (
   layout: Layout,
   setLayout: (layout: Layout) => void
 ) => {
-  console.log(data,sectionName,"adding section");
   const templateData = Compiler(data, sectionName)[0];
+  console.log(templateData, "ttttttt");
 
   if (templateData) {
     const uniqueComponentName = `${sectionName}-${uuidv4().slice(0, 8)}`;
@@ -25,6 +25,7 @@ export const Create = (
         ...templateData.blocks,
       },
     };
+    console.log(newSection, "nnnnnn");
 
     const updatedLayout = {
       ...layout,

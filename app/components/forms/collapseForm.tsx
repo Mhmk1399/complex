@@ -120,47 +120,151 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
 
   const handleAddBlock = () => {
     setUserInputData((prev: CollapseSection) => {
-      const newBlockNumber = prev.blocks.length + 1;
+      const newBlockNumber = (prev.blocks || []).length + 1;
 
       const newBlock: CollapseBlock = {
-        [`text${newBlockNumber}`]: `عنوان ${newBlockNumber}`,
-        [`content${newBlockNumber}`]: `محتوای ${newBlockNumber}`,
-        setting: prev.setting,
+        [`text${newBlockNumber}`]: `سوال متداول ${newBlockNumber}`,
+        [`content${newBlockNumber}`]: `لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد ${newBlockNumber}`,
+        setting: {
+          // Copy default settings from existing block or provide defaults
+          ...prev.blocks[0]?.setting, // Copy settings from first block as template
+
+          // Override with block-specific properties
+          [`textColor${newBlockNumber}`]: "#ffffff",
+          [`textFontSize${newBlockNumber}`]: "20",
+          [`textFontWeight${newBlockNumber}`]: "bold",
+          [`contentColor${newBlockNumber}`]: "#FCA311",
+          [`contentFontSize${newBlockNumber}`]: "16",
+          [`contentFontWeight${newBlockNumber}`]: "normal",
+        },
         links: [],
       };
 
       return {
         ...prev,
-        blocks: [...prev.blocks, newBlock],
+        blocks: [...(prev.blocks || []), newBlock],
       };
     });
   };
+
   const handleDeleteBlock = (index: number) => {
-    setUserInputData((prev: CollapseSection) => ({
-      ...prev,
-      blocks: prev.blocks.filter((_, i) => i !== index),
-    }));
+    setUserInputData((prev: CollapseSection) => {
+      // Remove the block at the specified index
+      const updatedBlocks = (prev.blocks || []).filter((_, i) => i !== index);
+
+      // Reindex the remaining blocks to maintain consistent numbering
+      const reindexedBlocks = updatedBlocks.map((block, newIndex) => {
+        const newBlockNumber = newIndex + 1;
+        const oldBlockNumber = prev.blocks.findIndex((b) => b === block) + 1;
+
+        const reindexedBlock: CollapseBlock = {
+          setting: { ...block.setting }, // Create a copy of the individual block's settings
+          links: block.links || [],
+        };
+
+        // Find the original text and content values from the block
+        const originalTextKey = Object.keys(block).find((key) =>
+          key.startsWith("text")
+        ) as keyof CollapseBlock | undefined;
+
+        const originalContentKey = Object.keys(block).find((key) =>
+          key.startsWith("content")
+        ) as keyof CollapseBlock | undefined;
+
+        // Preserve the original values but with new keys - with proper type checking
+        if (originalTextKey && block[originalTextKey]) {
+          const textValue = block[originalTextKey];
+          if (typeof textValue === "string") {
+            const textKey = `text${newBlockNumber}` as keyof Pick<
+              CollapseBlock,
+              "text1" | "text2" | "text3" | "text4"
+            >;
+            (reindexedBlock as any)[textKey] = textValue;
+          }
+        }
+
+        if (originalContentKey && block[originalContentKey]) {
+          const contentValue = block[originalContentKey];
+          if (typeof contentValue === "string") {
+            const contentKey = `content${newBlockNumber}` as keyof Pick<
+              CollapseBlock,
+              "content1" | "content2" | "content3" | "content4"
+            >;
+            (reindexedBlock as any)[contentKey] = contentValue;
+          }
+        }
+
+        // Handle heading if it exists
+        if (block.heading) {
+          reindexedBlock.heading = block.heading;
+        }
+
+        // Reindex the setting keys while preserving values
+        if (block.setting) {
+          const newSetting = { ...block.setting };
+
+          // Update setting keys that contain the old block number
+          Object.keys(block.setting).forEach((key) => {
+            if (key.includes(`${oldBlockNumber}`)) {
+              const newKey = key.replace(
+                `${oldBlockNumber}`,
+                `${newBlockNumber}`
+              );
+              const settingValue =
+                block.setting[key as keyof CollapseBlockSetting];
+              if (settingValue !== undefined) {
+                (newSetting as any)[newKey] = settingValue;
+              }
+            }
+          });
+
+          // Clean up old numbered keys that don't match the new block number
+          Object.keys(newSetting).forEach((key) => {
+            const match = key.match(/(\d+)$/);
+            if (
+              match &&
+              parseInt(match[1]) !== newBlockNumber &&
+              parseInt(match[1]) === oldBlockNumber
+            ) {
+              delete (newSetting as any)[key];
+            }
+          });
+
+          reindexedBlock.setting = newSetting;
+        }
+
+        return reindexedBlock;
+      });
+
+      return {
+        ...prev,
+        blocks: reindexedBlocks,
+      };
+    });
+
+    // Close any open accordions that might be out of range
+    setOpenAccordions((prev) => {
+      const updated = { ...prev };
+      // Remove accordion states for indices that no longer exist
+      Object.keys(updated).forEach((key) => {
+        const idx = parseInt(key);
+        if (idx >= userInputData.blocks.length - 1) {
+          delete updated[idx];
+        }
+      });
+      return updated;
+    });
   };
 
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
-    setUserInputData(initialData);
-  }, []);
-
-  const handleBlockChange = (index: number, field: string, value: string) => {
-    if (isUpdating) return;
-    setIsUpdating(true);
-    setUserInputData((prev: CollapseSection) => ({
-      ...prev,
-      blocks:
-        prev.blocks.length > 0
-          ? prev.blocks.map((block: CollapseBlock, i: number) =>
-              i === index ? { ...block, [field]: value } : block
-            )
-          : [],
-    }));
-    setTimeout(() => setIsUpdating(false), 100);
-  };
+    if (initialData) {
+      setUserInputData({
+        ...initialData,
+        blocks: initialData.blocks || [], // Ensure blocks is never undefined
+      });
+    }
+  }, [selectedComponent]);
 
   const handleSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (isUpdating) return;
@@ -177,6 +281,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
 
     setTimeout(() => setIsUpdating(false), 100);
   };
+
   const handleBlockSettingChange = (
     index: number,
     field: string,
@@ -187,14 +292,31 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
 
     setUserInputData((prev: CollapseSection) => ({
       ...prev,
-      blocks: prev.blocks.map((block: CollapseBlock, i: number) =>
-        i === index
-          ? {
-              ...block,
-              setting: { ...block.setting, [field]: value },
-            }
-          : block
-      ),
+      blocks: (prev?.blocks || []).map((block: CollapseBlock, i: number) => {
+        if (i === index) {
+          return {
+            ...block,
+            setting: { ...block.setting, [field]: value },
+          };
+        }
+        return block;
+      }),
+    }));
+
+    setTimeout(() => setIsUpdating(false), 100);
+  };
+  const handleBlockChange = (index: number, field: string, value: string) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
+
+    setUserInputData((prev: CollapseSection) => ({
+      ...prev,
+      blocks: (prev?.blocks || []).map((block: CollapseBlock, i: number) => {
+        if (i === index) {
+          return { ...block, [field]: value };
+        }
+        return block;
+      }),
     }));
 
     setTimeout(() => setIsUpdating(false), 100);
@@ -205,13 +327,13 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
     setIsStyleSettingsOpen(tab === "style");
     setIsSpacingOpen(tab === "spacing");
   };
+
   useEffect(() => {
     setIsContentOpen(true);
   }, []);
 
   return (
     <>
-    
       <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
         <h2 className="text-lg font-bold mb-4">تنظیمات آکاردئون</h2>
 
@@ -234,312 +356,311 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
               />
             </div>
             <br />
-            {userInputData.blocks.length > 0 &&
-              userInputData.blocks.map((block, index) => (
-                <div
-                  key={index}
-                  className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100"
-                >
-                  {/* Accordion Header Button */}
-                  <button
-                    onClick={() =>
-                      setOpenAccordions((prev) => ({
-                        ...prev,
-                        [index]: !prev[index],
-                      }))
-                    }
-                    className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
-                  >
-                    <div className="flex items-center gap-2">
-                      <svg
-                        className="w-5 h-5 text-blue-500"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                      <h3 className="font-semibold text-gray-700">
-                        آکاردئون {index + 1}
-                      </h3>
-                    </div>
-                    <svg
-                      className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-                        openAccordions[index] ? "rotate-180" : ""
-                      }`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+            {userInputData?.blocks &&
+              Object.keys(userInputData.blocks)
+                .filter((key) => !isNaN(Number(key))) // Only get numeric keys
+                .map((key, index) => {
+                  const block = userInputData.blocks[Number(key)];
+                  if (!block || typeof block !== "object") return null;
+
+                  return (
+                    <div
+                      key={index}
+                      className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </button>
-
-                  {/* Accordion Content */}
-                  {openAccordions[index] && (
-                    <div className=" border-b border-gray-100 space-y-4">
-                      {/* Title Input */}
-                      <div className="  rounded-lg">
-                        <label className="block mb-2 text-sm font-bold text-gray-700">
-                          عنوان
-                        </label>
-                        <input
-                          type="text"
-                          value={String(
-                            block[`text${index + 1}` as keyof typeof block] ||
-                              ""
-                          )}
-                          onChange={(e) =>
-                            handleBlockChange(
-                              index,
-                              `text${index + 1}`,
-                              e.target.value
-                            )
-                          }
-                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                        />
-                      </div>
-
-                      {/* Content Textarea */}
-                      <div className="p-3  rounded-lg">
-                        <label className="block mb-2 text-sm font-bold text-gray-700">
-                          محتوا
-                        </label>
-                        <textarea
-                          value={String(
-                            block[
-                              `content${index + 1}` as keyof typeof block
-                            ] || ""
-                          )}
-                          onChange={(e) =>
-                            handleBlockChange(
-                              index,
-                              `content${index + 1}`,
-                              e.target.value
-                            )
-                          }
-                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                          rows={3}
-                        />
-                      </div>
-
-                      {/* Color Settings */}
-                      <div className=" rounded-lg space-y-4">
-                        <div className="rounded-lg flex items-center justify-between ">
-                          <ColorInput
-                            label={`رنگ عنوان ${index + 1}`}
-                            name={`textColor${index + 1}`}
-                            value={String(
-                              userInputData?.blocks?.[index]?.setting?.[
-                                `textColor${
-                                  index + 1
-                                }` as keyof CollapseBlockSetting
-                              ] ?? "#000000"
-                            )}
-                            onChange={(e) =>
-                              handleBlockSettingChange(
-                                index,
-                                `textColor${index + 1}`,
-                                e.target.value
-                              )
-                            }
-                          />
+                      {/* Accordion Header Button */}
+                      <button
+                        onClick={() =>
+                          setOpenAccordions((prev) => ({
+                            ...prev,
+                            [index]: !prev[index],
+                          }))
+                        }
+                        className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
+                      >
+                        <div className="flex items-center justify-center gap-2">
+                          <h3 className="font-semibold text-gray-700">
+                            آکاردئون {index + 1}
+                          </h3>
+                          <div className="flex items-center gap-2 mr-12">
+                            <span
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteBlock(index);
+                              }}
+                              className="p-1 hover:bg-red-100 rounded-full cursor-pointer"
+                            >
+                              <svg
+                                className="w-5 h-5 text-red-500"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                />
+                              </svg>
+                            </span>
+                          </div>
                         </div>
-                        <br />
-                        <label>سایز عنوان {index + 1}</label>
-                        {/* <input
-                          type="range"
-                          name={`textFontSize${index + 1}`}
-                          min="1"
-                          max="100"
-                          value={String(
-                            userInputData?.blocks?.[index]?.setting?.[
-                              `textFontSize${
-                                index + 1
-                              }` as keyof CollapseBlockSetting
-                            ] ?? "16"
-                          )}
-                          onChange={(e) =>
-                            handleBlockSettingChange(
-                              index,
-                              `textFontSize${index + 1}`,
-                              e.target.value
-                            )
-                          }
-                        /> */}
-                        <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-                          <input
-                            type="range"
-                            min="0"
-                            max="100"
-                            name={`textFontSize${index + 1}`}
-                            value={String(
-                              userInputData?.blocks?.[index]?.setting?.[
-                                `textFontSize${
-                                  index + 1
-                                }` as keyof CollapseBlockSetting
-                              ] ?? "16"
-                            )}
-                            onChange={(e) =>
-                              handleBlockSettingChange(
-                                index,
-                                `textFontSize${index + 1}`,
-                                e.target.value
-                              )
-                            }
-                          />
-                          <p className="text-sm text-gray-600 text-nowrap">
-                            {String(
-                              userInputData?.blocks?.[index]?.setting?.[
-                                `textFontSize${
-                                  index + 1
-                                }` as keyof CollapseBlockSetting
-                              ] ?? "16"
-                            )}
-                            px
-                          </p>
-                        </div>
-                        <br />
-                        <label>وزن عنوان {index + 1}</label>
-                        <select
-                          name={`textFontWeight${index + 1}`}
-                          value={
-                            userInputData?.blocks?.[index]?.setting?.[
-                              `textFontWeight${
-                                index + 1
-                              }` as keyof CollapseBlockSetting
-                            ]?.toString() ?? "normal"
-                          }
-                          onChange={(e) =>
-                            handleBlockSettingChange(
-                              index,
-                              `textFontWeight${index + 1}`,
-                              e.target.value
-                            )
-                          }
-                          className="w-full p-2 border rounded"
+                        <svg
+                          className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                            openAccordions[index] ? "rotate-180" : ""
+                          }`}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
                         >
-                          <option value="light">نازک</option>
-                          <option value="bold">ضخیم</option>
-                        </select>
-                        <div className="rounded-lg flex items-center justify-between ">
-                          <ColorInput
-                            label={`رنگ محتوا ${index + 1}`}
-                            name={`contentColor${index + 1}`}
-                            value={String(
-                              userInputData?.blocks?.[index]?.setting?.[
-                                `contentColor${
-                                  index + 1
-                                }` as keyof CollapseBlockSetting
-                              ] ?? "#000000"
-                            )}
-                            onChange={(e) =>
-                              handleBlockSettingChange(
-                                index,
-                                `contentColor${index + 1}`,
-                                e.target.value
-                              )
-                            }
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
                           />
-                        </div>
-                        <br />
-                        <label>سایز محتوا {index + 1}</label>
-                        <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-                          <input
-                            type="range"
-                            min="0"
-                            max="100"
-                            name={`contentFontSize${index + 1}`}
-                            value={String(
-                              userInputData?.blocks?.[index]?.setting?.[
-                                `contentFontSize${
-                                  index + 1
-                                }` as keyof CollapseBlockSetting
-                              ] ?? "14"
-                            )}
-                            onChange={(e) =>
-                              handleBlockSettingChange(
-                                index,
-                                `contentFontSize${index + 1}`,
-                                e.target.value
-                              )
-                            }
-                          />
-                          <p className="text-sm text-gray-600 text-nowrap">
-                            {String(
-                              userInputData?.blocks?.[index]?.setting?.[
-                                `contentFontSize${
-                                  index + 1
-                                }` as keyof CollapseBlockSetting
-                              ] ?? "14"
-                            )}
-                            px
-                          </p>
-                        </div>
+                        </svg>
+                      </button>
 
-                        <br />
-                        <label>وزن محتوا {index + 1}</label>
-                        <select
-                          name={`contentFontWeight${index + 1}`}
-                          value={
-                            userInputData?.blocks?.[index]?.setting?.[
-                              `contentFontWeight${
-                                index + 1
-                              }` as keyof CollapseBlockSetting
-                            ]?.toString() ?? "normal"
-                          }
-                          onChange={(e) =>
-                            handleBlockSettingChange(
-                              index,
-                              `contentFontWeight${index + 1}`,
-                              e.target.value
-                            )
-                          }
-                          className="w-full p-2 border rounded"
-                        >
-                          <option value="light">نازک</option>
-                          <option value="bold">ضخیم</option>
-                        </select>
-                      </div>
-
-                      {/* Delete Button */}
-                      <div className="flex items-center gap-2">
-                        <span
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteBlock(index);
-                          }}
-                          className="p-1 hover:bg-red-100 rounded-full cursor-pointer"
-                        >
-                          <svg
-                            className="w-5 h-5 text-red-500"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      {/* Accordion Content */}
+                      {openAccordions[index] && (
+                        <div className=" border-b border-gray-100 space-y-4">
+                          {/* Title Input */}
+                          <div className="  rounded-lg">
+                            <label className="block mb-2 text-sm font-bold text-gray-700">
+                              عنوان
+                            </label>
+                            <input
+                              type="text"
+                              value={String(
+                                block[
+                                  `text${index + 1}` as keyof typeof block
+                                ] || ""
+                              )}
+                              onChange={(e) =>
+                                handleBlockChange(
+                                  index,
+                                  `text${index + 1}`,
+                                  e.target.value
+                                )
+                              }
+                              className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                             />
-                          </svg>
-                        </span>
-                      </div>
+                          </div>
+
+                          {/* Content Textarea */}
+                          <div className="p-3  rounded-lg">
+                            <label className="block mb-2 text-sm font-bold text-gray-700">
+                              محتوا
+                            </label>
+                            <textarea
+                              value={String(
+                                block[
+                                  `content${index + 1}` as keyof typeof block
+                                ] || ""
+                              )}
+                              onChange={(e) =>
+                                handleBlockChange(
+                                  index,
+                                  `content${index + 1}`,
+                                  e.target.value
+                                )
+                              }
+                              className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                              rows={3}
+                            />
+                          </div>
+
+                          {/* Color Settings */}
+                          <div className=" rounded-lg space-y-4">
+                            <div className="rounded-lg flex items-center justify-between ">
+                              <ColorInput
+                                label={`رنگ عنوان ${index + 1}`}
+                                name={`textColor${index + 1}`}
+                                value={String(
+                                  userInputData?.blocks?.[index]?.setting?.[
+                                    `textColor${
+                                      index + 1
+                                    }` as keyof CollapseBlockSetting
+                                  ] ?? "#000000"
+                                )}
+                                onChange={(e) =>
+                                  handleBlockSettingChange(
+                                    index,
+                                    `textColor${index + 1}`,
+                                    e.target.value
+                                  )
+                                }
+                              />
+                            </div>
+                            <br />
+                            <label>سایز عنوان {index + 1}</label>
+
+                            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
+                              <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                name={`textFontSize${index + 1}`}
+                                value={String(
+                                  userInputData?.blocks?.[index]?.setting?.[
+                                    `textFontSize${
+                                      index + 1
+                                    }` as keyof CollapseBlockSetting
+                                  ] ?? "16"
+                                )}
+                                onChange={(e) =>
+                                  handleBlockSettingChange(
+                                    index,
+                                    `textFontSize${index + 1}`,
+                                    e.target.value
+                                  )
+                                }
+                              />
+                              <p className="text-sm text-gray-600 text-nowrap">
+                                {String(
+                                  userInputData?.blocks?.[index]?.setting?.[
+                                    `textFontSize${
+                                      index + 1
+                                    }` as keyof CollapseBlockSetting
+                                  ] ?? "16"
+                                )}
+                                px
+                              </p>
+                            </div>
+                            <br />
+                            <label>وزن عنوان {index + 1}</label>
+                            <select
+                              name={`textFontWeight${index + 1}`}
+                              value={
+                                userInputData?.blocks?.[index]?.setting?.[
+                                  `textFontWeight${
+                                    index + 1
+                                  }` as keyof CollapseBlockSetting
+                                ]?.toString() ?? "normal"
+                              }
+                              onChange={(e) =>
+                                handleBlockSettingChange(
+                                  index,
+                                  `textFontWeight${index + 1}`,
+                                  e.target.value
+                                )
+                              }
+                              className="w-full p-2 border rounded"
+                            >
+                              <option value="light">نازک</option>
+                              <option value="bold">ضخیم</option>
+                            </select>
+                            <div className="rounded-lg flex items-center justify-between ">
+                              <ColorInput
+                                label={`رنگ محتوا ${index + 1}`}
+                                name={`contentColor${index + 1}`}
+                                value={String(
+                                  userInputData?.blocks?.[index]?.setting?.[
+                                    `contentColor${
+                                      index + 1
+                                    }` as keyof CollapseBlockSetting
+                                  ] ?? "#000000"
+                                )}
+                                onChange={(e) =>
+                                  handleBlockSettingChange(
+                                    index,
+                                    `contentColor${index + 1}`,
+                                    e.target.value
+                                  )
+                                }
+                              />
+                            </div>
+                            <br />
+                            <label>سایز محتوا {index + 1}</label>
+                            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
+                              <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                name={`contentFontSize${index + 1}`}
+                                value={String(
+                                  userInputData?.blocks?.[index]?.setting?.[
+                                    `contentFontSize${
+                                      index + 1
+                                    }` as keyof CollapseBlockSetting
+                                  ] ?? "14"
+                                )}
+                                onChange={(e) =>
+                                  handleBlockSettingChange(
+                                    index,
+                                    `contentFontSize${index + 1}`,
+                                    e.target.value
+                                  )
+                                }
+                              />
+                              <p className="text-sm text-gray-600 text-nowrap">
+                                {String(
+                                  userInputData?.blocks?.[index]?.setting?.[
+                                    `contentFontSize${
+                                      index + 1
+                                    }` as keyof CollapseBlockSetting
+                                  ] ?? "14"
+                                )}
+                                px
+                              </p>
+                            </div>
+
+                            <br />
+                            <label>وزن محتوا {index + 1}</label>
+                            <select
+                              name={`contentFontWeight${index + 1}`}
+                              value={
+                                userInputData?.blocks?.[index]?.setting?.[
+                                  `contentFontWeight${
+                                    index + 1
+                                  }` as keyof CollapseBlockSetting
+                                ]?.toString() ?? "normal"
+                              }
+                              onChange={(e) =>
+                                handleBlockSettingChange(
+                                  index,
+                                  `contentFontWeight${index + 1}`,
+                                  e.target.value
+                                )
+                              }
+                              className="w-full p-2 border rounded"
+                            >
+                              <option value="light">نازک</option>
+                              <option value="bold">ضخیم</option>
+                            </select>
+                          </div>
+
+                          {/* Delete Button */}
+                          <div className="flex items-center gap-2">
+                            <span
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteBlock(index);
+                              }}
+                              className="p-1 hover:bg-red-100 rounded-full cursor-pointer"
+                            >
+                              <svg
+                                className="w-5 h-5 text-red-500"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                />
+                              </svg>
+                            </span>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              ))}
+                  );
+                })}
             {/* Add Block Button */}
             <button
               onClick={handleAddBlock}
@@ -571,7 +692,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
               <input
                 type="range"
                 min="0"
-                max="1000"
+                max="100"
                 name="headingFontSize"
                 value={userInputData?.setting?.headingFontSize || "250"}
                 onChange={handleSettingChange}
@@ -631,3 +752,4 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
     </>
   );
 };
+

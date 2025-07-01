@@ -71,24 +71,33 @@ export const SlideForm: React.FC<SlideFormProps> = ({
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState({});
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     if (initialData) {
       setUserInputData(initialData);
     }
-  }, [selectedComponent ]);
+  }, [selectedComponent]);
+
   useEffect(() => {
     setIsContentOpen(true);
   }, []);
 
   const handelAddBlock = () => {
     setUserInputData((prev: SlideSection) => {
-      // Get the last block from the array
-      const lastBlock = prev.blocks[prev.blocks.length - 1];
+      // Get the current number of blocks to create the next index
+      const nextIndex = prev.blocks.length;
 
-      // Create a deep copy of the last block
-      const newBlock = JSON.parse(JSON.stringify(lastBlock));
+      // Create a new block with default values
+      const newBlock = {
+        imageSrc: "/assets/images/banner1.jpg",
+        text: ` اسلاید ${nextIndex + 1}`,
+        description: `لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد`,
+        btnText: `دکمه ${nextIndex + 1}`,
+        btnLink: "#",
+        imageAlt: "",
+      };
 
       // Return updated state with the new block added
       return {
@@ -111,7 +120,6 @@ export const SlideForm: React.FC<SlideFormProps> = ({
       ),
     }));
   };
-  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleSettingChange = (
     e: React.ChangeEvent<
@@ -186,12 +194,14 @@ export const SlideForm: React.FC<SlideFormProps> = ({
       left: Number(userInputData?.setting?.paddingLeft) || 0,
     });
   }, [userInputData?.setting]);
+
   const handleDeleteBlock = (index: number) => {
     setUserInputData((prev: SlideSection) => ({
       ...prev,
       blocks: prev.blocks.filter((_, i) => i !== index),
     }));
   };
+
   if (!userInputData?.blocks) {
     return null;
   }
@@ -210,23 +220,67 @@ export const SlideForm: React.FC<SlideFormProps> = ({
         {/* Tabs */}
         <TabButtons onTabChange={handleTabChange} />
 
-        {isContentOpen &&
-          Array.isArray(userInputData?.blocks) &&
-          userInputData.blocks.map((block, index) => (
-            <React.Fragment key={index}>
-              <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100 mt-4">
-                <button
-                  onClick={() =>
-                    setIsContentOpen((prev) => ({
-                      ...prev,
-                      [index]: !prev[index as keyof typeof prev],
-                    }))
-                  }
-                  className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
-                >
-                  <div className="flex items-center gap-2">
+        {isContentOpen && Array.isArray(userInputData?.blocks) && (
+          <>
+            {userInputData.blocks.map((block, index) => (
+              <React.Fragment key={index}>
+                <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100 mt-4">
+                  <button
+                    onClick={() =>
+                      setIsContentOpen((prev) => ({
+                        ...prev,
+                        [index]: !prev[index as keyof typeof prev],
+                      }))
+                    }
+                    className="w-full flex justify-between items-center p-4 hover: rounded-xl transition-all duration-200"
+                  >
+                    <div className="flex items-center gap-2">
+                      <svg
+                        className="w-5 h-5 text-blue-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                        />
+                      </svg>
+                      <h3 className="font-semibold text-gray-700">
+                        اسلاید {index + 1}
+                      </h3>
+                      <div className="flex items-center gap-2">
+                        <span
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteBlock(index);
+                          }}
+                          className="p-1 hover:bg-red-100 rounded-full mr-16 cursor-pointer"
+                        >
+                          <svg
+                            className="w-5 h-5 text-red-500"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            />
+                          </svg>
+                        </span>
+                      </div>
+                    </div>
                     <svg
-                      className="w-5 h-5 text-blue-500"
+                      className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                        isContentOpen[index as keyof typeof isContentOpen]
+                          ? "rotate-180"
+                          : ""
+                      }`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -235,132 +289,96 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                        d="M19 9l-7 7-7-7"
                       />
                     </svg>
-                    <h3 className="font-semibold text-gray-700">
-                      اسلاید {index + 1}
-                    </h3>
-                    <div className="flex items-center gap-2">
-                      <span
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteBlock(index);
-                        }}
-                        className="p-1 hover:bg-red-100 rounded-full cursor-pointer"
-                      >
-                        <svg
-                          className="w-5 h-5 text-red-500"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
-                      </span>
-                    </div>
-                  </div>
-                  <svg
-                    className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-                      isContentOpen[index as keyof typeof isContentOpen]
-                        ? "rotate-180"
-                        : ""
-                    }`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </button>
+                  </button>
 
-                {isContentOpen[index as keyof typeof isContentOpen] && (
-                  <div className="p-4 border-t border-gray-100 space-y-4 animate-slideDown">
-                    <div className="p-3 bg-gray-50 rounded-lg">
-                      <label className="block mb-2 text-sm font-bold text-gray-700">
-                        تصویر
-                      </label>
-                      <input
-                        type="text"
-                        value={block.imageSrc || ""}
-                        onChange={(e) =>
-                          handleBlockChange(e, index, "imageSrc")
-                        }
-                        className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                      />
-                    </div>
+                  {isContentOpen[index as keyof typeof isContentOpen] && (
+                    <div className="p-4 border-t border-gray-100 space-y-4 animate-slideDown">
+                      <div className="p-3  rounded-lg">
+                        <label className="block mb-2 text-sm font-bold text-gray-700">
+                          تصویر
+                        </label>
+                        <input
+                          type="text"
+                          value={block.imageSrc || ""}
+                          onChange={(e) =>
+                            handleBlockChange(e, index, "imageSrc")
+                          }
+                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        />
+                      </div>
 
-                    <div className="p-3 bg-gray-50 rounded-lg">
-                      <label className="block mb-2 text-sm font-bold text-gray-700">
-                        عنوان
-                      </label>
-                      <input
-                        type="text"
-                        value={block.text || ""}
-                        onChange={(e) => handleBlockChange(e, index, "text")}
-                        className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                      />
-                    </div>
+                      <div className="p-3  rounded-lg">
+                        <label className="block mb-2 text-sm font-bold text-gray-700">
+                          عنوان
+                        </label>
+                        <input
+                          type="text"
+                          value={block.text || ""}
+                          onChange={(e) => handleBlockChange(e, index, "text")}
+                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        />
+                      </div>
 
-                    <div className="p-3 bg-gray-50 rounded-lg">
-                      <label className="block mb-2 text-sm font-bold text-gray-700">
-                        توضیحات
-                      </label>
-                      <textarea
-                        value={block.description || ""}
-                        onChange={(e) =>
-                          handleBlockChange(e, index, "description")
-                        }
-                        className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                        rows={3}
-                      />
-                    </div>
+                      <div className="p-3  rounded-lg">
+                        <label className="block mb-2 text-sm font-bold text-gray-700">
+                          توضیحات
+                        </label>
+                        <textarea
+                          value={block.description || ""}
+                          onChange={(e) =>
+                            handleBlockChange(e, index, "description")
+                          }
+                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                          rows={3}
+                        />
+                      </div>
 
-                    <div className="p-3 bg-gray-50 rounded-lg">
-                      <label className="block mb-2 text-sm font-bold text-gray-700">
-                        متن دکمه
-                      </label>
-                      <input
-                        type="text"
-                        value={block.btnText || ""}
-                        onChange={(e) => handleBlockChange(e, index, "btnText")}
-                        className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                      />
-                    </div>
+                      <div className="p-3  rounded-lg">
+                        <label className="block mb-2 text-sm font-bold text-gray-700">
+                          متن دکمه
+                        </label>
+                        <input
+                          type="text"
+                          value={block.btnText || ""}
+                          onChange={(e) =>
+                            handleBlockChange(e, index, "btnText")
+                          }
+                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        />
+                      </div>
 
-                    <div className="p-3 bg-gray-50 rounded-lg">
-                      <label className="block mb-2 text-sm font-bold text-gray-700">
-                        لینک دکمه
-                      </label>
-                      <input
-                        type="text"
-                        value={block.btnLink || ""}
-                        onChange={(e) => handleBlockChange(e, index, "btnLink")}
-                        className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                      />
+                      <div className="p-3  rounded-lg">
+                        <label className="block mb-2 text-sm font-bold text-gray-700">
+                          لینک دکمه
+                        </label>
+                        <input
+                          type="text"
+                          value={block.btnLink || ""}
+                          onChange={(e) =>
+                            handleBlockChange(e, index, "btnLink")
+                          }
+                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        />
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-              <button
-                onClick={handelAddBlock}
-                className="px-1 rounded-lg mb-3 w-full text-3xl group hover:font-extrabold transition-all"
-              >
-                +
-                <div className="bg-blue-500 w-full pb-0.5 group-hover:bg-blue-600 group-hover:pb-1 transition-all"></div>
-              </button>
-            </React.Fragment>
-          ))}
+                  )}
+                </div>
+              </React.Fragment>
+            ))}
+
+            {/* Add Block Button - Outside of the map */}
+            <button
+              onClick={handelAddBlock}
+              className="px-1 rounded-lg mb-3 w-full text-3xl group hover:font-extrabold transition-all"
+            >
+              +
+              <div className="bg-blue-500 w-full pb-0.5 group-hover:bg-blue-600 group-hover:pb-1 transition-all"></div>
+            </button>
+          </>
+        )}
 
         {isStyleSettingsOpen && (
           <div className="p-4 border-t border-gray-100 animate-slideDown">
@@ -580,10 +598,9 @@ export const SlideForm: React.FC<SlideFormProps> = ({
           </div>
         )}
 
-        {/* Dropdown Content */}
         {isSpacingOpen && (
           <div className="p-4 border-t border-gray-100 animate-slideDown">
-            <div className="bg-gray-50 rounded-lg p-2 flex items-center justify-center">
+            <div className=" rounded-lg p-2 flex items-center justify-center">
               <MarginPaddingEditor
                 margin={margin}
                 padding={padding}

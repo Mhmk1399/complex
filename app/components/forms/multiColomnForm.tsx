@@ -73,8 +73,8 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
       const newColumnNum = Object.keys(prev.blocks).length + 1;
 
       const newBlock: MultiColumnBlock = {
-        [`title${newColumnNum}`]: `عنوان ${newColumnNum}`,
-        [`description${newColumnNum}`]: `محتوای ${newColumnNum}`,
+        [`title${newColumnNum}`]: `ستون  ${newColumnNum}`,
+        [`description${newColumnNum}`]: `لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد`,
         [`imageSrc${newColumnNum}`]: "",
         [`btnLable${newColumnNum}`]: `دکمه ${newColumnNum}`,
         [`btnLink${newColumnNum}`]: "#",
@@ -95,10 +95,37 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
       const newBlocks = { ...prev.blocks };
       delete newBlocks[columnIndex];
 
-      // Reindex remaining blocks
+      // Reindex remaining blocks AND update their field names
       const reindexedBlocks = Object.values(newBlocks).reduce(
         (acc, block, idx) => {
-          acc[idx] = block;
+          const newColumnNum = idx + 1;
+
+          // Find the original column number from the block's field names
+          const originalColumnNum =
+            Object.keys(block)
+              .find((key) => key.startsWith("title"))
+              ?.replace("title", "") || "1";
+
+          // Create new block with updated field names
+          const newBlock: MultiColumnBlock = {
+            [`title${newColumnNum}`]: block[
+              `title${originalColumnNum}` as keyof MultiColumnBlock
+            ] as string,
+            [`description${newColumnNum}`]: block[
+              `description${originalColumnNum}` as keyof MultiColumnBlock
+            ] as string,
+            [`imageSrc${newColumnNum}`]: block[
+              `imageSrc${originalColumnNum}` as keyof MultiColumnBlock
+            ] as string,
+            [`btnLable${newColumnNum}`]: block[
+              `btnLable${originalColumnNum}` as keyof MultiColumnBlock
+            ] as string,
+            [`btnLink${newColumnNum}`]: block[
+              `btnLink${originalColumnNum}` as keyof MultiColumnBlock
+            ] as string,
+          };
+
+          acc[idx] = newBlock;
           return acc;
         },
         {} as typeof prev.blocks
@@ -109,6 +136,46 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
         blocks: reindexedBlocks,
       };
     });
+  };
+
+  const handleBlockChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    columnNum: number
+  ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
+    const { name, value } = e.target;
+    const fieldName = `${name}${columnNum}` as keyof MultiColumnBlock;
+
+    setUserInputData((prev: MultiColumnSection) => ({
+      ...prev,
+      blocks: {
+        ...prev.blocks,
+        [columnNum - 1]: {
+          ...prev.blocks[columnNum - 1],
+          [fieldName]: value,
+        },
+      },
+    }));
+    setTimeout(() => setIsUpdating(false), 100);
+  };
+
+  const handleSettingChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
+
+    const { name, value } = e.target;
+    setUserInputData((prev: MultiColumnSection) => ({
+      ...prev,
+      setting: {
+        ...prev.setting,
+        [name]: value,
+      },
+    }));
+
+    setTimeout(() => setIsUpdating(false), 100);
   };
 
   const handleUpdate = (
@@ -155,10 +222,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
       left: Number(userInputData?.setting?.paddingLeft) || 0,
     });
   }, [userInputData?.setting]);
-  // useEffect(() => {
-  //   const initialData = Compiler(layout, selectedComponent)[0];
-  //   setUserInputData(initialData);
-  // });
+
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     if (initialData) {
@@ -168,45 +232,6 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
       });
     }
   }, [selectedComponent]);
-  const handleBlockChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    columnNum: number
-  ) => {
-    if (isUpdating) return;
-    setIsUpdating(true);
-    const { name, value } = e.target;
-    const fieldName = `${name}${columnNum}` as keyof MultiColumnBlock;
-
-    setUserInputData((prev: MultiColumnSection) => ({
-      ...prev,
-      blocks: {
-        ...prev.blocks,
-        [columnNum - 1]: {
-          ...prev.blocks[columnNum - 1],
-          [fieldName]: value,
-        },
-      },
-    }));
-    setTimeout(() => setIsUpdating(false), 100);
-  };
-
-  const handleSettingChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    if (isUpdating) return;
-    setIsUpdating(true);
-
-    const { name, value } = e.target;
-    setUserInputData((prev: MultiColumnSection) => ({
-      ...prev,
-      setting: {
-        ...prev.setting,
-        [name]: value,
-      },
-    }));
-
-    setTimeout(() => setIsUpdating(false), 100);
-  };
 
   const handleTabChange = (tab: "content" | "style" | "spacing") => {
     setIsContentOpen(tab === "content");

@@ -250,19 +250,17 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
               />
             </div>
             <label htmlFor="">سایز عنوان کلی</label>
-            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-              <input
-                type="range"
-                min="10"
-                max="100"
-                name="headingFontSize"
-                value={userInputData?.blocks?.setting?.headingFontSize || "250"}
-                onChange={handleSettingChange}
-              />
-              <p className="text-sm text-gray-600 text-nowrap">
-                {userInputData?.blocks.setting.headingFontSize}px
-              </p>
-            </div>
+            <input
+              type="range"
+              min="10"
+              max="100"
+              name="headingFontSize"
+              value={userInputData?.blocks?.setting?.headingFontSize || "250"}
+              onChange={handleSettingChange}
+            />
+            <p className="text-sm text-gray-600 text-nowrap">
+              {userInputData?.blocks.setting.headingFontSize}px
+            </p>
 
             <div className="rounded-lg flex items-center justify-between ">
               <ColorInput
@@ -273,21 +271,17 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
               />
             </div>
             <label htmlFor="">سایز عنوان برند</label>
-            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-              <input
-                type="range"
-                min="10"
-                max="100"
-                name="brandNameFontSize"
-                value={
-                  userInputData?.blocks?.setting?.brandNameFontSize || "250"
-                }
-                onChange={handleSettingChange}
-              />
-              <p className="text-sm text-gray-600 text-nowrap">
-                {userInputData?.blocks.setting.brandNameFontSize}px
-              </p>
-            </div>
+            <input
+              type="range"
+              min="10"
+              max="100"
+              name="brandNameFontSize"
+              value={userInputData?.blocks?.setting?.brandNameFontSize || "250"}
+              onChange={handleSettingChange}
+            />
+            <p className="text-sm text-gray-600 text-nowrap">
+              {userInputData?.blocks.setting.brandNameFontSize}px
+            </p>
 
             <div className="rounded-lg">
               <label className="block mb-2">اندازه لوگو</label>

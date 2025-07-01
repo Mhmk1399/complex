@@ -227,80 +227,14 @@
             "paddinLeft": "0"
           }
         },
-        {
-          "type": "CollapseFaq",
-          "blocks": [
-            {
-              "heading": "سوالات متداول",
-              "text1": "سوال متداول 1",
-              "content1": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد ",
-              "setting": {
-                "textColor1": "#000000",
-                "textFontSize1": "20px",
-                "textFontWeight1": "bold",
-                "contentColor1": "#1d6bdf",
-                "contentFontSize1": "16px",
-                "contentFontWeight1": "normal"
-              }
-            },
-            {
-              "text2": "سوال متداول 2",
-              "content2": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد ",
-              "setting": {
-                "textColor2": "#000000",
-                "textFontSize2": "20px",
-                "textFontWeight2": "bold",
-                "contentColor2": "#1d6bdf",
-                "contentFontSize2": "16px",
-                "contentFontWeight2": "normal"
-              }
-            },
-            {
-              "text3": "سوال متداول سوم",
-              "content3": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
-              "setting": {
-                "textColor3": "#000000",
-                "textFontSize3": "20px",
-                "textFontWeight3": "bold",
-                "contentColor3": "#1d6bdf",
-                "contentFontSize3": "16px",
-                "contentFontWeight3": "normal"
-              }
-            },
-            {
-              "text4": "سوال متداول چهارم",
-              "content4": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
-              "setting": {
-                "textColor4": "#000000",
-                "textFontSize4": "20px",
-                "textFontWeight4": "bold",
-                "contentColor4": "#1d6bdf",
-                "contentFontSize4": "16px",
-                "contentFontWeight4": "normal"
-              }
-            }
-          ],
-          "setting": {
-            "paddingTop": "30",
-            "paddingBottom": "30",
-            "marginTop": "20",
-            "marginBottom": "20",
-            "paddinRight": "0",
-            "paddinLeft": "0",
-            "headingColor": "#1d6bdf",
-            "headingFontSize": "30",
-            "headingFontWeight": "bold",
-            "background": "#ffffff",
-            "borderRadious": "20"
-          }
-        },
+
         {
           "type": "SlideShow",
           "blocks": [
             {
               "imageSrc": "/assets/images/banner3.jpg",
               "imageAlt": "",
-              "text": "اسلاید اول",
+              "text": "اسلاید 1",
               "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
               "btnLink": "",
               "btnText": "دکمه"
@@ -308,7 +242,7 @@
             {
               "imageSrc": "/assets/images/banner1.jpg",
               "imageAlt": "",
-              "text": "اسلاید دوم",
+              "text": "اسلاید 2",
               "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد",
               "link": "",
               "btnText": "دکمه"
@@ -473,7 +407,8 @@
             "paddingLeft": "10",
             "paddingRight": "10"
           }
-        },{
+        },
+        {
           "type": "Collection",
           "blocks": {
             "heading": "محصولات ما",
@@ -510,7 +445,8 @@
             "marginBottom": "20px",
             "backgroundColor": "#FCA311"
           }
-        },{
+        },
+        {
           "type": "NewsLetter-1",
           "blocks": {
             "heading": "عضویت در خبرنامه",
@@ -534,7 +470,8 @@
             "marginTop": "20",
             "marginBottom": "20"
           }
-        },{
+        },
+        {
           "type": "MultiRow",
           "title": "سربرگ ردیف ها",
           "blocks": [
@@ -588,7 +525,8 @@
             "btnBackgroundColor": "#E5E5E5",
             "imageAlign": "row"
           }
-        },{
+        },
+        {
           "type": "Gallery",
           "blocks": {
             "title": " ",
@@ -638,7 +576,8 @@
             "paddingRight": "0",
             "paddingLeft": "0"
           }
-        }, {
+        },
+        {
           "type": "MultiColumn",
           "blocks": [
             {
@@ -690,7 +629,8 @@
             "btnColor": "#ffffff",
             "btnBackgroundColor": "#FCA311"
           }
-        },        {
+        },
+        {
           "type": "CollapseFaq",
           "blocks": [
             {
@@ -756,7 +696,8 @@
             "background": "#14213D",
             "borderRadious": "20"
           }
-        },  {
+        },
+        {
           "type": "ContactForm",
           "blocks": {
             "heading": "فرم ارتباط با ما",
@@ -777,7 +718,8 @@
             "paddinRight": "0",
             "paddinLeft": "0"
           }
-        }, {
+        },
+        {
           "type": "Video",
           "blocks": {
             "heading": "سربرگ ویدیو",
@@ -805,7 +747,8 @@
             "paddinRight": "0",
             "paddinLeft": "0"
           }
-        },  {
+        },
+        {
           "type": "ImageText",
           "blocks": {
             "imageSrc": "/assets/images/banner3.jpg",
@@ -840,7 +783,8 @@
             "paddinRight": "0",
             "paddinLeft": "0"
           }
-        }, {
+        },
+        {
           "type": "RichText",
           "blocks": {
             "textHeading": "سربرل",
@@ -867,7 +811,8 @@
             "paddinRight": "0",
             "paddinLeft": "0"
           }
-        }, {
+        },
+        {
           "type": "Banner",
           "blocks": {
             "imageSrc": "/assets/images/ban.jpg",
