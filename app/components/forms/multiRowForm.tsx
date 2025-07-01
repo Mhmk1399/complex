@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
 import { Layout, MultiRowSection } from "@/lib/types";
+import { useSharedContext } from "@/app/contexts/SharedContext";
 import React from "react";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
@@ -52,6 +53,8 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
   layout,
   selectedComponent,
 }) => {
+  const { activeRoutes } = useSharedContext();
+  const [useRouteSelectBtns, setUseRouteSelectBtns] = useState<Record<number, boolean>>({});
   const [margin, setMargin] = React.useState<BoxValues>({
     top: 0,
     bottom: 0,
@@ -419,15 +422,56 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                               <label className="block mb-2 text-sm font-bold text-gray-700">
                                 لینک دکمه
                               </label>
-                              <input
-                                type="text"
-                                name="btnLink"
-                                value={block.btnLink || ""}
-                                onChange={(e) =>
-                                  handleBlockChange(e, Number(key))
-                                }
-                                className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                              />
+                              <div className="mb-2">
+                                <label className="flex items-center gap-2">
+                                  <input
+                                    type="checkbox"
+                                    checked={useRouteSelectBtns[Number(key)] || false}
+                                    onChange={(e) =>
+                                      setUseRouteSelectBtns(prev => ({
+                                        ...prev,
+                                        [Number(key)]: e.target.checked
+                                      }))
+                                    }
+                                    className="rounded"
+                                  />
+                                  <span className="text-sm">انتخاب از مسیرهای موجود</span>
+                                </label>
+                              </div>
+                              {useRouteSelectBtns[Number(key)] ? (
+                                <select
+                                  value={block.btnLink || ""}
+                                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                                    setUserInputData(prev => ({
+                                      ...prev,
+                                      blocks: {
+                                        ...prev.blocks,
+                                        [Number(key)]: {
+                                          ...prev.blocks[Number(key)],
+                                          btnLink: e.target.value
+                                        }
+                                      }
+                                    }));
+                                  }}
+                                  className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                >
+                                  <option value="">انتخاب مسیر</option>
+                                  {activeRoutes.map((route: string) => (
+                                    <option key={route} value={route}>
+                                      {route}
+                                    </option>
+                                  ))}
+                                </select>
+                              ) : (
+                                <input
+                                  type="text"
+                                  name="btnLink"
+                                  value={block.btnLink || ""}
+                                  onChange={(e) => handleBlockChange(e, Number(key))}
+                                  className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                  placeholder="آدرس لینک یا مسیر سفارشی"
+                                />
+                              )}
                             </div>
                           </div>
                         </div>
