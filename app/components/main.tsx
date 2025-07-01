@@ -4,7 +4,6 @@ import { Preview } from "./preview";
 import { Form } from "./form";
 import smData from "../../public/template/homesm.json";
 import Image from "next/image";
-import nullJson from "../../public/template/homelg.json";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import {
   FaHome,
@@ -33,21 +32,29 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TourGuide from "./sections/guideTour";
+import { useSharedContext } from "@/app/contexts/SharedContext";
 
 export const Main = () => {
+  // Get shared state from context
+  const {
+    layout,
+    setLayout,
+    previewWidth,
+    setPreviewWidth,
+    activeRoutes,
+    setActiveRoutes,
+  } = useSharedContext();
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [routes, setRoutes] = useState<string[]>([]);
-  // const [loading, setLoading] = useState(true);
-  const [layout, setLayout] = useState<Layout>(nullJson as unknown as Layout);
+
   const [activeMode, setActiveMode] = useState<"sm" | "lg">("sm");
-  const [previewWidth, setPreviewWidth] = useState<"sm" | "default">("sm");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedComponent, setSelectedComponent] = useState<string>("");
   const [activeElement, setActiveElement] = useState<
     "save" | "delete" | "preview" | "sitePreview" | "addRoute" | "changeRoute"
   >("save");
-  const [isFormOpen, setIsFormOpen] = useState(false); //  state for form visibility
+  // Removed isFormOpen state - now using context
   const [newRouteName, setNewRouteName] = useState("");
   const [isMetaDataModalOpen, setIsMetaDataModalOpen] = useState(false);
   const [metaData, setMetaData] = useState({
@@ -58,17 +65,8 @@ export const Main = () => {
   const [saveStatus, setSaveStatus] = useState<
     "idle" | "saving" | "saved" | "error"
   >("idle");
-  const [orders, setOrders] = useState<string[]>([]);
+  // Removed orders state - now using context
   const [selectedRoute, setSelectedRoute] = useState<string>("home");
-  const [activeRoutes, setActiveRoutes] = useState([
-    "home",
-    "about",
-    "contact",
-    "store",
-    "BlogList",
-    "BlogDetail",
-    "DetailPage",
-  ]);
 
   // اینجا ادرس سایتی که ساخته میشه داده میشه به دکمه
   const handleSiteView = () => {
@@ -151,7 +149,7 @@ export const Main = () => {
       })
       .then((data) => {
         if (data) {
-          setActiveRoutes(data);
+          setActiveRoutes(data); // Now updates context state
         }
       })
       .catch((error) => {
@@ -240,7 +238,7 @@ export const Main = () => {
 
   useEffect(() => {
     const currentLayoutData = activeMode === "sm" ? smData : layout;
-  
+
     const routeConfigs = {
       about: About.children as unknown as AboutChildren,
       contact: Contact.children as unknown as AboutChildren,
@@ -251,11 +249,11 @@ export const Main = () => {
       // Add default case for custom routes
       default: currentLayoutData.sections.children,
     };
-  
+
     const children =
       routeConfigs[selectedRoute as keyof typeof routeConfigs] ||
       routeConfigs.default;
-  
+
     if (children) {
       setLayout((prevLayout: Layout) => ({
         ...prevLayout,
@@ -325,7 +323,8 @@ export const Main = () => {
 
       const result = await response.json();
       setRoutes(result);
-      setActiveRoutes(result);
+      setActiveRoutes(result); // Now updates context state
+      
     } catch (error) {
       console.log("Error fetching routes:", error);
     }
@@ -389,13 +388,13 @@ export const Main = () => {
       }
     };
     console.log("Updated Layout:", updatedLayout);
-    
+
     setLayout(updatedLayout);
     setIsMetaDataModalOpen(false);
     handleSave(); // This will save to the server
   };
-  
-  
+
+
   const saveButtonRef = useRef<HTMLButtonElement>(null);
   const addRouteButtonRef = useRef<HTMLButtonElement>(null);
   const deleteRouteButtonRef = useRef<HTMLButtonElement>(null);
@@ -432,46 +431,46 @@ export const Main = () => {
         </div>
       ) : ( */}
       <div className="min-h-screen ">
-      {isMetaDataModalOpen && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white/20 p-6 border border-gray-300 backdrop-blur-sm rounded-xl shadow-lg w-96">
-      <h3 className="text-lg font-bold text-white mb-4 text-right">
-        ویرایش متا دیتا
-      </h3>
-      <div className="space-y-4">
-        <input
-          type="text"
-          placeholder="عنوان"
-          value={metaData.title}
-          onChange={(e) => setMetaData({...metaData, title: e.target.value})}
-          className="w-full p-2 border rounded-lg"
-          dir="rtl"
-        />
-        <textarea
-          placeholder="توضیحات"
-          value={metaData.description}
-          onChange={(e) => setMetaData({...metaData, description: e.target.value})}
-          className="w-full p-2 border rounded-lg"
-          dir="rtl"
-        />
-        <div className="flex justify-end space-x-2 space-x-reverse">
-          <button
-            onClick={handleMetaDataSave}
-            className="px-4 py-2 mx-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-          >
-            ذخیره
-          </button>
-          <button
-            onClick={() => setIsMetaDataModalOpen(false)}
-            className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
-          >
-            انصراف
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
+        {isMetaDataModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white/20 p-6 border border-gray-300 backdrop-blur-sm rounded-xl shadow-lg w-96">
+              <h3 className="text-lg font-bold text-white mb-4 text-right">
+                ویرایش متا دیتا
+              </h3>
+              <div className="space-y-4">
+                <input
+                  type="text"
+                  placeholder="عنوان"
+                  value={metaData.title}
+                  onChange={(e) => setMetaData({ ...metaData, title: e.target.value })}
+                  className="w-full p-2 border rounded-lg"
+                  dir="rtl"
+                />
+                <textarea
+                  placeholder="توضیحات"
+                  value={metaData.description}
+                  onChange={(e) => setMetaData({ ...metaData, description: e.target.value })}
+                  className="w-full p-2 border rounded-lg"
+                  dir="rtl"
+                />
+                <div className="flex justify-end space-x-2 space-x-reverse">
+                  <button
+                    onClick={handleMetaDataSave}
+                    className="px-4 py-2 mx-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                  >
+                    ذخیره
+                  </button>
+                  <button
+                    onClick={() => setIsMetaDataModalOpen(false)}
+                    className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+                  >
+                    انصراف
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -491,7 +490,7 @@ export const Main = () => {
              shadow-sm cursor-pointer"
         >
           <div className=" mx-auto px-4 sm:px-6 lg:px-8 ">
-            <div className="flex lg:flex-row flex-wrap items-center  md:mt-0 justify-center gap-x-0 md:py-2 md:gap-x-1 lg:py-0  sm:space-y-0">
+            <div className="flex lg:flex-row flex-wrap items-center  md:mt-0 justify-center gap-x-0 md:gap-x-1 lg:py-0  sm:space-y-0">
               <motion.div
 
                 className="md:flex hidden  items-center border-r pr-2 border-gray-300 absolute left-2 gap-2 px-3 py-0.5"
@@ -667,26 +666,8 @@ export const Main = () => {
             </div>
           </div>
         </motion.div>
-        <Preview
-        
-          layout={layout}
-          setSelectedComponent={setSelectedComponent}
-          orders={orders}
-          selectedComponent={selectedComponent}
-          setLayout={setLayout}
-          previewWidth={previewWidth}
-          setPreviewWidth={setPreviewWidth}
-          isFormOpen={isFormOpen}
-        />
-        <Form
-          selectedComponent={selectedComponent}
-          setLayout={setLayout}
-          layout={layout}
-          orders={orders}
-          setOrders={setOrders}
-          isFormOpen={isFormOpen}
-          setIsFormOpen={setIsFormOpen}
-        />
+        <Preview />
+        <Form />
       </div>
       {/* )} */}
       {isModalOpen && (

@@ -76,7 +76,6 @@ import {
   CollapseSection,
   HeaderSection,
   ImageTextSection,
-  Layout,
   MultiColumnSection,
   NewsLetterSection,
   RichTextSection,
@@ -109,6 +108,7 @@ import { BrandsForm } from "./forms/brandsForm";
 import { ProductRowForm } from "./forms/productRowForm";
 import { styled } from "styled-components";
 import { SpecialForm } from "./forms/specialForm";
+import { useSharedContext } from "@/app/contexts/SharedContext";
 // import { set } from "lodash";
 type FormData =
   | HeaderSection
@@ -136,16 +136,6 @@ type FormData =
   | CollectionSection
   | ProductRowSection
   | BlogSection;
-
-interface FormProps {
-  selectedComponent: string;
-  setLayout: (data: Layout) => void;
-  layout: Layout;
-  orders: string[];
-  setOrders: React.Dispatch<React.SetStateAction<string[]>>;
-  isFormOpen: boolean;
-  setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
 
 // Start scrollbar styles for webkit browsers
 const scrollbarStyles = `
@@ -185,15 +175,17 @@ const FormContainer = styled.div`
 
 // End scrollbar styles for webkit browsers
 
-export const Form = ({
-  selectedComponent,
-  setLayout,
-  layout,
-  orders,
-  setOrders,
-  isFormOpen,
-  setIsFormOpen,
-}: FormProps) => {
+export const Form = () => {
+  // Get shared state from context
+  const {
+    selectedComponent,
+    setLayout,
+    layout,
+    orders,
+    setOrders,
+    isFormOpen,
+    setIsFormOpen,
+  } = useSharedContext();
   const [userInputData, setUserInputData] = useState<FormData>({} as FormData);
   const [isOpen, setIsOpen] = useState(false);
   const [showOrdersMenu, setShowOrdersMenu] = useState(false);

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import StyledComponentsRegistry from "@/lib/registry";
 import "./globals.css";
 import { hezare } from "../next-persian-fonts/dohezar";
+import { SharedProvider } from "./contexts/SharedContext";
 
 export const metadata: Metadata = {
   title: "سایت ساز تومک",
@@ -10,13 +11,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{  
+}: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
       <body className={`${hezare.variable}`}>
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        <SharedProvider>
+          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        </SharedProvider>
       </body>
     </html>
   );

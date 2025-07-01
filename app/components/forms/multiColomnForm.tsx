@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
 import { Layout, MultiColumnBlock, MultiColumnSection } from "@/lib/types";
 import MarginPaddingEditor from "../sections/editor";
+import { useSharedContext } from "@/app/contexts/SharedContext";
 import React from "react";
 import { TabButtons } from "../tabButtons";
 
@@ -50,6 +51,8 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
   layout,
   selectedComponent,
 }) => {
+  const { activeRoutes } = useSharedContext();
+  const [useRouteSelectBtns, setUseRouteSelectBtns] = useState<Record<number, boolean>>({});
   const [margin, setMargin] = React.useState<BoxValues>({
     top: 0,
     bottom: 0,
@@ -366,19 +369,64 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
                       <br />
                       <br />
                       <label>لینک دکمه</label>
-
-                      <input
-                        type="text"
-                        name="btnLink"
-                        value={
-                          userInputData?.blocks[columnNum - 1]?.[
-                            `btnLink${columnNum}` as keyof MultiColumnBlock
-                          ] || ""
-                        }
-                        onChange={(e) => handleBlockChange(e, columnNum)}
-                        className="w-full p-2 border border-gray-200 rounded-lg"
-                        placeholder="لینک دکمه"
-                      />
+                      <div className="mb-2">
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={useRouteSelectBtns[columnNum] || false}
+                            onChange={(e) =>
+                              setUseRouteSelectBtns(prev => ({
+                                ...prev,
+                                [columnNum]: e.target.checked
+                              }))
+                            }
+                            className="rounded"
+                          />
+                          <span className="text-sm">انتخاب از مسیرهای موجود</span>
+                        </label>
+                      </div>
+                      {useRouteSelectBtns[columnNum] ? (
+                        <select
+                          value={
+                            userInputData?.blocks[columnNum - 1]?.[
+                              `btnLink${columnNum}` as keyof MultiColumnBlock
+                            ] || ""
+                          }
+                          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                            setUserInputData(prev => ({
+                              ...prev,
+                              blocks: {
+                                ...prev.blocks,
+                                [columnNum - 1]: {
+                                  ...prev.blocks[columnNum - 1],
+                                  [`btnLink${columnNum}`]: e.target.value
+                                }
+                              }
+                            }));
+                          }}
+                          className="w-full p-2 border border-gray-200 rounded-lg"
+                        >
+                          <option value="">انتخاب مسیر</option>
+                          {activeRoutes.map((route: string) => (
+                            <option key={route} value={route}>
+                              {route}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <input
+                          type="text"
+                          name="btnLink"
+                          value={
+                            userInputData?.blocks[columnNum - 1]?.[
+                              `btnLink${columnNum}` as keyof MultiColumnBlock
+                            ] || ""
+                          }
+                          onChange={(e) => handleBlockChange(e, columnNum)}
+                          className="w-full p-2 border border-gray-200 rounded-lg"
+                          placeholder="آدرس لینک یا مسیر سفارشی"
+                        />
+                      )}
                     </div>
                   )}
                 </div>
