@@ -49,6 +49,7 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
 }) => {
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const [margin, setMargin] = React.useState<BoxValues>({
     top: 0,
@@ -116,6 +117,8 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
     const { name, value } = e.target;
     setUserInputData((prev: BlogSection) => ({
       ...prev,
@@ -124,6 +127,7 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
         [name]: value,
       },
     }));
+    setTimeout(() => setIsUpdating(false), 100);
   };
 
   const handleTabChange = (tab: "content" | "style" | "spacing") => {

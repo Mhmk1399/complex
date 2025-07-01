@@ -107,6 +107,7 @@ const Title = styled.h2<{
     props.$preview === "sm"
       ? "24"
       : props.$data.setting?.titleFontSize || "24"}px;
+  font-weight: ${(props) => props.$data.setting?.titleFontWeight || "bold"};
   color: ${(props) => props.$data?.setting?.titleColor || "#ffffff"};
   text-align: center;
   margin-bottom: ${(props) => (props.$preview === "sm" ? "10px" : "20px")};
@@ -232,7 +233,6 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
           </div>
         </div>
       )}
-
       {actualName === selectedComponent ? (
         <div className="absolute w-fit -top-5 -left-1 z-10 flex">
           <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
@@ -253,13 +253,27 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
       >
         {sectionData.title}
       </Title>
-
       <RowContainer $previewWidth={previewWidth} $preview={preview}>
-        {Object.entries(sectionData.blocks).map(([key, block], idx) => {
-          if (key === "setting") return null;
-          const typedBlock = block as MultiRowBlock;
+        {(() => {
+          // Handle both array and object structures
+          let blocksToRender: MultiRowBlock[] = [];
 
-          return (
+          if (Array.isArray(sectionData.blocks)) {
+            blocksToRender = sectionData.blocks;
+          } else if (
+            sectionData.blocks &&
+            typeof sectionData.blocks === "object"
+          ) {
+            // Convert object to array, filtering out settings
+            blocksToRender = Object.entries(sectionData.blocks)
+              .filter(
+                ([key, block]) =>
+                  key !== "setting" && block && typeof block === "object"
+              )
+              .map(([key, block]) => block as MultiRowBlock);
+          }
+
+          return blocksToRender.map((block, idx) => (
             <Row
               key={idx}
               $data={sectionData}
@@ -268,8 +282,8 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
             >
               <Image
                 $preview={preview}
-                src={typedBlock.imageSrc || "/default-image.jpg"}
-                alt={typedBlock.imageAlt || ""}
+                src={block.imageSrc || "/default-image.jpg"}
+                alt={block.imageAlt || ""}
                 $data={sectionData}
                 $previewWidth={previewWidth}
               />
@@ -283,27 +297,27 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
                   $data={sectionData}
                   $preview={preview}
                 >
-                  {typedBlock.heading}
+                  {block.heading}
                 </Heading>
                 <Description
                   $preview={preview}
                   $data={sectionData}
                   $previewWidth={previewWidth}
                 >
-                  {typedBlock.description}
+                  {block.description}
                 </Description>
                 <Button
                   $preview={preview}
-                  href={"#"}
+                  href={block.btnLink || "#"}
                   $data={sectionData}
                   $previewWidth={previewWidth}
                 >
-                  {typedBlock.btnLable || "Learn More"}
+                  {block.btnLable || "Learn More"}
                 </Button>
               </ContentWrapper>
             </Row>
-          );
-        })}
+          ));
+        })()}
       </RowContainer>
     </Section>
   );
