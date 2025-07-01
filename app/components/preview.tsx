@@ -9,7 +9,6 @@ import CollapseFaq from "./sections/collapseFaq";
 import MultiColumn from "./sections/multiColumn";
 import SlideShow from "./sections/slideShow";
 import MultiRow from "./sections/multiRow";
-import { Layout } from "@/lib/types";
 import Footer from "./sections/footer";
 import ProductList from "./sections/productList";
 import DetailPage from "./sections/detailPage";
@@ -23,29 +22,19 @@ import SlideBanner from "./sections/slideBanner";
 import { OfferRow } from "./sections/offerRow";
 import { Brands } from "./sections/brands";
 import { ProductsRow } from "./sections/productsRow";
+import { useSharedContext } from "@/app/contexts/SharedContext";
 
-// First update the PreviewProps interface
-interface PreviewProps {
-  layout: Layout;
-  setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
-  orders: string[];
-  selectedComponent: string;
-  setLayout: React.Dispatch<React.SetStateAction<Layout>>;
-  previewWidth: "sm" | "default";
-  setPreviewWidth: (mode: "sm" | "default") => void;
-  isFormOpen: boolean;
-}
+export const Preview: React.FC = () => {
+  const {
+    layout,
+    setLayout,
+    selectedComponent,
+    setSelectedComponent,
+    orders,
+    previewWidth,
+    isFormOpen
+  } = useSharedContext();
 
-// Then use it in the component
-export const Preview: React.FC<PreviewProps> = ({
-  layout,
-  setSelectedComponent,
-  orders,
-  selectedComponent,
-  setLayout,
-  previewWidth,
-  isFormOpen,
-}) => {
   const componentMap = {
     Header,
     RichText,
@@ -89,7 +78,7 @@ export const Preview: React.FC<PreviewProps> = ({
             setSelectedComponent={setSelectedComponent}
             layout={layout}
             selectedComponent={selectedComponent}
-            previewWidth={previewWidth} // Pass the state to components
+            previewWidth={previewWidth}
           />
 
           <div className="grid grid-cols-1">
@@ -100,7 +89,7 @@ export const Preview: React.FC<PreviewProps> = ({
 
               return Component ? (
                 <div
-                  key={componentName} // Using the full componentName which includes the UUID
+                  key={componentName}
                   style={{ order: index }}
                   className="w-full"
                 >
@@ -122,7 +111,7 @@ export const Preview: React.FC<PreviewProps> = ({
             setSelectedComponent={setSelectedComponent}
             layout={layout}
             selectedComponent={selectedComponent}
-            previewWidth={previewWidth} // Pass the state to components
+            previewWidth={previewWidth}
           />
         </div>
       </div>

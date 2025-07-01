@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
 import { Layout, RichTextSection } from "@/lib/types";
 import MarginPaddingEditor from "../sections/editor";
+import { useSharedContext } from "@/app/contexts/SharedContext";
 import React from "react";
 import { TabButtons } from "../tabButtons";
 
@@ -11,6 +12,16 @@ interface RichTextFormProps {
   layout: Layout;
   selectedComponent: string;
 }
+
+interface ImageFile {
+  _id: string;
+  fileName: string;
+  fileUrl: string;
+  fileType: string;
+  fileSize: number;
+  storeId: string;
+}
+
 interface BoxValues {
   top: number;
   bottom: number;
@@ -52,6 +63,8 @@ export const RichText: React.FC<RichTextFormProps> = ({
   layout,
   selectedComponent,
 }) => {
+  const { activeRoutes } = useSharedContext();
+  const [useRouteSelectBtn, setUseRouteSelectBtn] = useState(false);
   const [margin, setMargin] = React.useState<BoxValues>({
     top: 0,
     bottom: 0,
@@ -213,13 +226,49 @@ export const RichText: React.FC<RichTextFormProps> = ({
             <label className="block mb-2 text-sm font-bold text-gray-700">
               لینک دکمه
             </label>
-            <input
-              type="text"
-              name="btnLink"
-              value={userInputData?.blocks?.btnLink ?? ""}
-              onChange={handleBlockChange}
-              className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-            />
+            <div className="mb-2">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={useRouteSelectBtn}
+                  onChange={(e) => setUseRouteSelectBtn(e.target.checked)}
+                  className="rounded"
+                />
+                <span className="text-sm">انتخاب از مسیرهای موجود</span>
+              </label>
+            </div>
+            {useRouteSelectBtn ? (
+              <select
+                value={userInputData?.blocks?.btnLink ?? ""}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                  setUserInputData(prev => ({
+                    ...prev,
+                    blocks: {
+                      ...prev.blocks,
+                      btnLink: e.target.value
+                    }
+                  }))
+                }}
+                name="btnLink"
+                className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              >
+                <option value="">انتخاب مسیر</option>
+                {activeRoutes.map((route: string) => (
+                  <option key={route} value={route}>
+                    {route}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type="text"
+                name="btnLink"
+                value={userInputData?.blocks?.btnLink ?? ""}
+                onChange={handleBlockChange}
+                className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                placeholder="آدرس لینک یا مسیر سفارشی"
+              />
+            )}
           </div>
         </div>
       )}

@@ -5,6 +5,7 @@ import { Compiler } from "../compiler";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
 import ImageSelectorModal from "../sections/ImageSelectorModal";
+import { useSharedContext } from "@/app/contexts/SharedContext";
 
 interface GalleryFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<GallerySection>>;
@@ -61,6 +62,8 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
   layout,
   selectedComponent,
 }) => {
+  // Get activeRoutes from context
+  const { activeRoutes } = useSharedContext();
   const [margin, setMargin] = useState<BoxValues>({
     top: 0,
     bottom: 0,
@@ -79,6 +82,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
   const [isImagesOpen] = useState(false);
   const [isImageSelectorOpen, setIsImageSelectorOpen] = useState(false);
   const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(0);
+  const [useRouteSelect, setUseRouteSelect] = useState<boolean[]>([]);
 
   const handleUpdate = (
     type: "margin" | "padding",
@@ -112,6 +116,10 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent);
     setUserInputData(initialData[0]);
+    // Initialize useRouteSelect array based on existing images
+    if (initialData[0]?.blocks?.images) {
+      setUseRouteSelect(new Array(initialData[0].blocks.images.length).fill(false));
+    }
   }, [selectedComponent]);
 
   const handleBlockChange = (
@@ -173,6 +181,8 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
         ],
       },
     }));
+    // Add a new false value to useRouteSelect array
+    setUseRouteSelect(prev => [...prev, false]);
   };
 
   const removeImage = (index: number) => {
@@ -183,6 +193,8 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
         images: prev.blocks.images.filter((_, i) => i !== index),
       },
     }));
+    // Remove the corresponding useRouteSelect item
+    setUseRouteSelect(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleTabChange = (tab: "content" | "style" | "spacing") => {
@@ -198,6 +210,18 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
     handleImageChange(currentSlideIndex, "imageSrc", image.fileUrl);
     handleImageChange(currentSlideIndex, "imageAlt", image.fileName);
     setIsImageSelectorOpen(false);
+  };
+
+  const handleRouteSelectToggle = (index: number, checked: boolean) => {
+    setUseRouteSelect(prev => {
+      const newArray = [...prev];
+      newArray[index] = checked;
+      return newArray;
+    });
+  };
+
+  const handleRouteChange = (index: number, route: string) => {
+    handleImageChange(index, "imageLink", route);
   };
 
   return (
@@ -286,14 +310,41 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
                     </div>
                     <div>
                       <label className="block mb-2">لینک (اختیاری)</label>
-                      <input
-                        type="text"
-                        value={image.imageLink || ""}
-                        onChange={(e) =>
-                          handleImageChange(index, "imageLink", e.target.value)
-                        }
-                        className="w-full p-2 border rounded"
-                      />
+                      <div className="mb-2">
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={useRouteSelect[index] || false}
+                            onChange={(e) => handleRouteSelectToggle(index, e.target.checked)}
+                            className="rounded"
+                          />
+                          <span className="text-sm">انتخاب از مسیرهای موجود</span>
+                        </label>
+                      </div>
+                      {useRouteSelect[index] ? (
+                        <select
+                          value={image.imageLink || ""}
+                          onChange={(e) => handleRouteChange(index, e.target.value)}
+                          className="w-full p-2 border rounded"
+                        >
+                          <option value="">انتخاب مسیر</option>
+                          {activeRoutes.map((route) => (
+                            <option key={route} value={route}>
+                              {route}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <input
+                          type="text"
+                          value={image.imageLink || ""}
+                          onChange={(e) =>
+                            handleImageChange(index, "imageLink", e.target.value)
+                          }
+                          className="w-full p-2 border rounded"
+                          placeholder="آدرس لینک یا مسیر سفارشی"
+                        />
+                      )}
                     </div>
                   </div>
                 </div>
@@ -350,14 +401,41 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
                 </div>
                 <div>
                   <label className="block mb-2">لینک (اختیاری)</label>
-                  <input
-                    type="text"
-                    value={image.imageLink || ""}
-                    onChange={(e) =>
-                      handleImageChange(index, "imageLink", e.target.value)
-                    }
-                    className="w-full p-2 border rounded"
-                  />
+                  <div className="mb-2">
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={useRouteSelect[index] || false}
+                        onChange={(e) => handleRouteSelectToggle(index, e.target.checked)}
+                        className="rounded"
+                      />
+                      <span className="text-sm">انتخاب از مسیرهای موجود</span>
+                    </label>
+                  </div>
+                  {useRouteSelect[index] ? (
+                    <select
+                      value={image.imageLink || ""}
+                      onChange={(e) => handleRouteChange(index, e.target.value)}
+                      className="w-full p-2 border rounded"
+                    >
+                      <option value="">انتخاب مسیر</option>
+                      {activeRoutes.map((route) => (
+                        <option key={route} value={route}>
+                          {route}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      type="text"
+                      value={image.imageLink || ""}
+                      onChange={(e) =>
+                        handleImageChange(index, "imageLink", e.target.value)
+                      }
+                      className="w-full p-2 border rounded"
+                      placeholder="آدرس لینک یا مسیر سفارشی"
+                    />
+                  )}
                 </div>
               </div>
             </div>
