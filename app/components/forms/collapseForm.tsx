@@ -261,26 +261,26 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     if (initialData) {
-      const defaultBlock = {
-        text1: "سوال متداول ۱",
-        content1: "پاسخ سوال متداول ۱",
+      const defaultBlocks = [1, 2, 3, 4].map((num) => ({
+        [`text${num}`]: `سوال متداول ${num}`,
+        [`content${num}`]: `پاسخ سوال متداول ${num}`,
         setting: {
-          textColor1: "#ffffff",
-          textFontSize1: "20",
-          textFontWeight1: "bold",
-          contentColor1: "#FCA311",
-          contentFontSize1: "16",
-          contentFontWeight1: "normal",
+          [`textColor${num}`]: "#ffffff",
+          [`textFontSize${num}`]: "20",
+          [`textFontWeight${num}`]: "bold",
+          [`contentColor${num}`]: "#FCA311",
+          [`contentFontSize${num}`]: "16",
+          [`contentFontWeight${num}`]: "normal",
         },
         links: [],
-      };
+      }));
       
       setUserInputData({
         ...initialData,
         heading: "آکاردئون های متداول",
         blocks: Array.isArray(initialData?.blocks) && initialData.blocks.length > 0
           ? initialData.blocks
-          : [defaultBlock],
+          : defaultBlocks,
       });
     }
   }, [selectedComponent]);
