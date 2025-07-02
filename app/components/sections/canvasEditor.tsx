@@ -398,6 +398,7 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
               ...styles,
               objectFit: "cover",
             }}
+            draggable={false}
             className="canvas-element"
             data-hover-effect={adjustedStyle.hoverEffect || "none"}
           />
