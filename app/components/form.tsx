@@ -89,6 +89,7 @@ import {
   BrandsSection,
   ProductRowSection,
   Layout,
+  CanvasEditorSection,
 } from "@/lib/types";
 import { MultiColumnForm } from "./forms/multiColomnForm";
 import { SlideForm } from "./forms/slideForm";
@@ -345,10 +346,10 @@ export const Form = () => {
           case "CanvasEditor":
       return (
         <CanvasEditorForm
-          setUserInputData={setUserInputData as React.Dispatch<
+          setUserInputData={setUserInputData as unknown as React.Dispatch<
             React.SetStateAction<CanvasEditorSection>
           >}
-          userInputData={userInputData as CanvasEditorSection}
+          userInputData={userInputData as unknown as CanvasEditorSection}
           layout={layout}
           selectedComponent={selectedComponent} setLayout={function (value: React.SetStateAction<Layout>): void {
             throw new Error("Function not implemented.");

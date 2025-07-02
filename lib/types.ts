@@ -1484,3 +1484,49 @@ export interface ProductRowSection {
   blocks: ProductRowBlock;
   setting: ProductRowBlockSetting;
 }
+export interface CanvasElement {
+  id: string;
+  type: "heading" | "paragraph" | "image" | "button" | "link" | "div";
+  content: string;
+  style: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    fontSize?: number;
+    fontWeight?: string;
+    color?: string;
+    backgroundColor?: string;
+    borderRadius?: number;
+    padding?: number;
+    textAlign?: "left" | "center" | "right";
+    zIndex?: number;
+  };
+  href?: string;
+  src?: string;
+  alt?: string;
+}
+
+export interface CanvasEditorSection {
+  type: string;
+  setting: {
+    paddingTop: string;
+    paddingBottom: string;
+    paddingLeft: string;
+    paddingRight: string;
+    marginTop: string;
+    marginBottom: string;
+    backgroundColor?: string;
+    height?: string;
+  };
+  blocks: {
+    elements: CanvasElement[];
+    setting: {
+      canvasWidth: string;
+      canvasHeight: string;
+      backgroundColor: string;
+      gridSize?: number;
+      showGrid?: boolean;
+    };
+  };
+}
