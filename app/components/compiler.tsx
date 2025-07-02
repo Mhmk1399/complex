@@ -12,6 +12,7 @@ type FormData =
   | Section
   | CollapseSection
   | RichTextSection
+  |ContactFormProps
   | ContactFormProps;
 
 export const Compiler = (data: string | object, name: string) => {
