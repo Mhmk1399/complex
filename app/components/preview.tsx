@@ -23,6 +23,7 @@ import { OfferRow } from "./sections/offerRow";
 import { Brands } from "./sections/brands";
 import { ProductsRow } from "./sections/productsRow";
 import { useSharedContext } from "@/app/contexts/SharedContext";
+import CanvasEditor from "./sections/canvasEditor";
 
 export const Preview: React.FC = () => {
   const {
@@ -61,6 +62,8 @@ export const Preview: React.FC = () => {
     OfferRow,
     Brands,
     ProductsRow,
+      CanvasEditor,  // Add this line
+
   };
 
   return (
