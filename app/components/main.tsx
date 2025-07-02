@@ -604,7 +604,7 @@ export const Main = () => {
                 ref={addRouteButtonRef}
                 className={`px-3 ${getHighlightClass(
                   addRouteButtonRef
-                )}  text-xs font-semibold border-x pr-2 border-gray-400 hover:bg-transparent`}
+                )}  text-xs font-semibold border-x pr-2 border-gray-400 hover:bg-transparent `}
               >
                 افزودن مسیر
               </motion.button>
