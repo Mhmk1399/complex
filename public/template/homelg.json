@@ -447,6 +447,30 @@
           }
         },
         {
+  "type": "CanvasEditor",
+  "setting": {
+    "paddingTop": "20",
+    "paddingBottom": "20",
+    "paddingLeft": "20",
+    "paddingRight": "20",
+    "marginTop": "30",
+    "marginBottom": "30",
+    "backgroundColor": "#ffffff"
+  },
+  "blocks": {
+    "elements": [
+      
+    ],
+    "setting": {
+      "canvasWidth": "100%",
+      "canvasHeight": "500px",
+      "backgroundColor": "#f9fafb",
+      "gridSize": 10,
+      "showGrid": false
+    }
+  }
+},
+        {
           "type": "NewsLetter-1",
           "blocks": {
             "heading": "عضویت در خبرنامه",
