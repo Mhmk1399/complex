@@ -21,8 +21,8 @@ export const TabButtons: React.FC<TabButtonsProps> = ({ onTabChange }) => {
         onClick={() => handleTabClick("content")}
         className={`px-1 py-2 text-sm rounded-t-lg transition-all duration-200 relative flex items-center gap-2 ${
           activeTab === "content"
-            ? "text-gray-600 font-bold border-gray-200"
-            : "text-gray-500 hover:text-blue-600 bg-transparent"
+            ? "text-gray-900 font-bold border-gray-200"
+            : "text-gray-900 hover:text-blue-600 bg-transparent"
         }`}
       >
         محتوا
