@@ -17,7 +17,7 @@ interface BoxValues {
 
 interface CollapseFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<CollapseSection>>;
-  userInputData: CollapseSection & { blocks?: any[] };
+  userInputData: CollapseSection & { blocks?: CollapseBlock[] };
   layout: Layout;
   selectedComponent: string;
 }
@@ -181,7 +181,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
               CollapseBlock,
               "text1" | "text2" | "text3" | "text4"
             >;
-            (reindexedBlock as any)[textKey] = textValue;
+            (reindexedBlock as unknown as Record<string, string>)[textKey] = textValue;
           }
         }
 
@@ -192,7 +192,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
               CollapseBlock,
               "content1" | "content2" | "content3" | "content4"
             >;
-            (reindexedBlock as any)[contentKey] = contentValue;
+            (reindexedBlock as unknown as Record<string, string>)[contentKey] = contentValue;
           }
         }
 
@@ -215,7 +215,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
               const settingValue =
                 block.setting[key as keyof CollapseBlockSetting];
               if (settingValue !== undefined) {
-                (newSetting as any)[newKey] = settingValue;
+                (newSetting as unknown as Record<string, unknown>)[newKey] = settingValue;
               }
             }
           });
@@ -228,7 +228,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
               parseInt(match[1]) !== newBlockNumber &&
               parseInt(match[1]) === oldBlockNumber
             ) {
-              delete (newSetting as any)[key];
+              delete (newSetting as unknown as Record<string, unknown>)[key];
             }
           });
 

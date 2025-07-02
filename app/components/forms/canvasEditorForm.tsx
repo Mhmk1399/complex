@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { CanvasEditorSection, CanvasElement } from "../sections/canvasEditor";
 import { Layout } from "@/lib/types";
-import { useCanvas } from "@/app/contexts/CanvasContext";
+import { useCanvas } from "@/app/contexts/CanvasContext"; // Import the context
 
 // Add a ColorInput component similar to richTextForm
 const ColorInput = ({
@@ -165,7 +165,7 @@ const handleSectionBackgroundColorChange = (name: string, value: string) => {
   const handleCanvasSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value, type } = e.target as HTMLInputElement;
+    const { name, value } = e.target as HTMLInputElement;
 
     // Update userInputData
     setUserInputData((prev) => {
@@ -277,14 +277,14 @@ const handleSectionBackgroundColorChange = (name: string, value: string) => {
     if (selectedElement) {
       // Extract opacity values from colors if they're rgba
       if (selectedElement.style.color) {
-        const { hex, opacity } = rgbaToHexAndOpacity(selectedElement.style.color);
+        const {  opacity } = rgbaToHexAndOpacity(selectedElement.style.color);
         setTextColorOpacity(opacity);
       } else {
         setTextColorOpacity(1);
       }
 
       if (selectedElement.style.backgroundColor) {
-        const { hex, opacity } = rgbaToHexAndOpacity(selectedElement.style.backgroundColor);
+        const {  opacity } = rgbaToHexAndOpacity(selectedElement.style.backgroundColor);
         setBgColorOpacity(opacity);
       } else {
         setBgColorOpacity(1);
@@ -334,7 +334,7 @@ const handleSectionBackgroundColorChange = (name: string, value: string) => {
     if (sectionData) {
       const updatedLayout = JSON.parse(JSON.stringify(layout));
       const sectionIndex = updatedLayout.sections.children.sections.findIndex(
-        (section: any) => section.type === baseComponentName
+        (section: { type: string }) => section.type === baseComponentName
       );
 
       if (sectionIndex !== -1) {
@@ -386,7 +386,7 @@ const handleSectionBackgroundColorChange = (name: string, value: string) => {
       if (sectionData) {
         const updatedLayout = JSON.parse(JSON.stringify(layout));
         const sectionIndex = updatedLayout.sections.children.sections.findIndex(
-          (section: any) => section.type === baseComponentName
+          (section: { type: string }) => section.type === baseComponentName
         );
 
         if (sectionIndex !== -1) {
@@ -438,7 +438,7 @@ const handleSectionBackgroundColorChange = (name: string, value: string) => {
       if (sectionData) {
         const updatedLayout = JSON.parse(JSON.stringify(layout));
         const sectionIndex = updatedLayout.sections.children.sections.findIndex(
-          (section: any) => section.type === baseComponentName
+          (section: { type: string }) => section.type === baseComponentName
         );
 
         if (sectionIndex !== -1) {
@@ -489,7 +489,7 @@ const handleSectionBackgroundColorChange = (name: string, value: string) => {
       if (sectionData) {
         const updatedLayout = JSON.parse(JSON.stringify(layout));
         const sectionIndex = updatedLayout.sections.children.sections.findIndex(
-          (section: any) => section.type === baseComponentName
+          (section: { type: string }) => section.type === baseComponentName
         );
 
         if (sectionIndex !== -1) {
@@ -609,7 +609,7 @@ useEffect(() => {
     // Also update the layout
     const updatedLayout = JSON.parse(JSON.stringify(layout));
     const sectionIndex = updatedLayout.sections.children.sections.findIndex(
-      (section: any) => section.type === baseComponentName
+      (section: { type: string }) => section.type === baseComponentName
     );
 
     if (sectionIndex !== -1 &&

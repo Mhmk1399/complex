@@ -18,7 +18,7 @@ export interface CanvasElementStyle {
   backgroundColor?: string; // Can be hex or rgba
   borderRadius?: number;
   padding?: number;
-  textAlign?: string;
+  textAlign?: "left" | "right" | "center" | "justify" | "start" | "end";
   zIndex?: number;
   // Animation properties
   hoverEffect?: "none" | "scale" | "rotate" | "shadow" | "glow" | "color-shift" | "shake";
@@ -177,7 +177,7 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
     if (sectionData && !sectionData.blocks?.elements) {
       const updatedLayout = JSON.parse(JSON.stringify(layout));
       const sectionIndex = updatedLayout.sections.children.sections.findIndex(
-        (section: any) => section.type === actualName
+        (section: { type: string }) => section.type === actualName
       );
       
       if (sectionIndex !== -1) {
@@ -252,7 +252,7 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
     
     // Find the section in the updated layout
     const sectionIndex = updatedLayout.sections.children.sections.findIndex(
-      (section: any) => section.type === actualName
+      (section: { type: string }) => section.type === actualName
     );
 
     if (sectionIndex === -1) return;
@@ -283,7 +283,7 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
     
     // Find the section in the updated layout
     const sectionIndex = updatedLayout.sections.children.sections.findIndex(
-      (section: any) => section.type === actualName
+      (section: { type: string }) => section.type === actualName
     );
 
     if (sectionIndex === -1) return;
@@ -326,7 +326,7 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
       backgroundColor: adjustedStyle.backgroundColor || undefined,
       borderRadius: adjustedStyle.borderRadius ? `${adjustedStyle.borderRadius}px` : undefined,
       padding: adjustedStyle.padding ? `${adjustedStyle.padding}px` : undefined,
-      textAlign: adjustedStyle.textAlign as any || undefined,
+      textAlign: adjustedStyle.textAlign,
       zIndex: adjustedStyle.zIndex || 1,
       width: "100%",
       height: "100%",
@@ -398,6 +398,7 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
               ...styles,
               objectFit: "cover",
             }}
+            draggable={false}
             className="canvas-element"
             data-hover-effect={adjustedStyle.hoverEffect || "none"}
           />

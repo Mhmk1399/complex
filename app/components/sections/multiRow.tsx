@@ -270,7 +270,7 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
                 ([key, block]) =>
                   key !== "setting" && block && typeof block === "object"
               )
-              .map(([key, block]) => block as MultiRowBlock);
+              .map((entry) => entry[1] as MultiRowBlock);
           }
 
           return blocksToRender.map((block, idx) => (

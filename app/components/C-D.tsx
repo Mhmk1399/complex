@@ -147,7 +147,7 @@ export const Delete = (actualName: string, layout: Layout, setLayout: React.Disp
     
     // Find the index of the section to delete
     const sectionIndex = updatedLayout.sections.children.sections.findIndex(
-      (section: any) => section.type === actualName
+      (section: { type: string }) => section.type === actualName
     );
     
     if (sectionIndex !== -1) {
