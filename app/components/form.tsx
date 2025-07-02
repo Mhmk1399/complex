@@ -34,7 +34,6 @@ import newproduct from "@/public/assets/images/newproduct.png";
 import offer from "@/public/assets/images/offer.png";
 import slidebanner from "@/public/assets/images/slidebanner.png";
 import story from "@/public/assets/images/story-1.png";
-
 import canvasEditorImage from "@/public/assets/images/canvasEditorImage.png";
 import {
   DndContext,
@@ -89,8 +88,6 @@ import {
   OfferRowSection,
   BrandsSection,
   ProductRowSection,
-  Layout,
-  CanvasEditorSection,
 } from "@/lib/types";
 import { MultiColumnForm } from "./forms/multiColomnForm";
 import { SlideForm } from "./forms/slideForm";
@@ -349,9 +346,9 @@ export const Form = () => {
         return (
           <CanvasEditorForm
             setUserInputData={setUserInputData as unknown as React.Dispatch<
-              React.SetStateAction<CanvasEditorSection>
+              React.SetStateAction<import("@/app/components/sections/canvasEditor").CanvasEditorSection>
             >}
-            userInputData={userInputData as unknown as CanvasEditorSection}
+            userInputData={userInputData as unknown as import("@/app/components/sections/canvasEditor").CanvasEditorSection}
             layout={layout}
             selectedComponent={selectedComponent}
             setLayout={setLayout}

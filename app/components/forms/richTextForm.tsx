@@ -13,14 +13,7 @@ interface RichTextFormProps {
   selectedComponent: string;
 }
 
-interface ImageFile {
-  _id: string;
-  fileName: string;
-  fileUrl: string;
-  fileType: string;
-  fileSize: number;
-  storeId: string;
-}
+
 
 interface BoxValues {
   top: number;
