@@ -88,6 +88,7 @@ import {
   OfferRowSection,
   BrandsSection,
   ProductRowSection,
+  Layout,
 } from "@/lib/types";
 import { MultiColumnForm } from "./forms/multiColomnForm";
 import { SlideForm } from "./forms/slideForm";
@@ -341,6 +342,20 @@ export const Form = () => {
             selectedComponent={selectedComponent}
           />
         );
+          case "CanvasEditor":
+      return (
+        <CanvasEditorForm
+          setUserInputData={setUserInputData as React.Dispatch<
+            React.SetStateAction<CanvasEditorSection>
+          >}
+          userInputData={userInputData as CanvasEditorSection}
+          layout={layout}
+          selectedComponent={selectedComponent} setLayout={function (value: React.SetStateAction<Layout>): void {
+            throw new Error("Function not implemented.");
+          } } setSelectedComponent={function (value: React.SetStateAction<string>): void {
+            throw new Error("Function not implemented.");
+          } }        />
+      );
       case "sectionHeader":
         return (
           <HeaderForm
