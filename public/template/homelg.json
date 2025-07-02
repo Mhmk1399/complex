@@ -787,7 +787,7 @@
         {
           "type": "RichText",
           "blocks": {
-            "textHeading": "سربرل",
+            "textHeading": "سربرگ",
             "description": "توضیحات درباره محصول",
             "btnText": "دکمه",
             "btnLink": "/",
@@ -1172,7 +1172,7 @@
         {
           "type": "RichText",
           "blocks": {
-            "textHeading": "سربرل",
+            "textHeading": "سربرگ",
             "description": "توضیحات درباره محصول",
             "btnText": "دکمه",
             "btnLink": "/",
@@ -1265,7 +1265,6 @@
             "backgroundColor": "#F5F5F5"
           }
         },
-
         {
           "type": "ContactForm",
           "blocks": {

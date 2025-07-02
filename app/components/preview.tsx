@@ -34,6 +34,8 @@ export const Preview: React.FC = () => {
     previewWidth,
     isFormOpen
   } = useSharedContext();
+  
+  console.log(layout , "llllllllllll")
 
   const componentMap = {
     Header,
