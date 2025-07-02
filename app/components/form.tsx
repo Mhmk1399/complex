@@ -35,6 +35,7 @@ import offer from "@/public/assets/images/offer.png";
 import slidebanner from "@/public/assets/images/slidebanner.png";
 import story from "@/public/assets/images/story-1.png";
 
+import canvasEditorImage from "@/public/assets/images/canvasEditorImage.png";
 import {
   DndContext,
   closestCenter,
@@ -180,6 +181,7 @@ export const Form = () => {
   // Get shared state from context
   const {
     selectedComponent,
+    setSelectedComponent,
     setLayout,
     layout,
     orders,
@@ -343,20 +345,19 @@ export const Form = () => {
             selectedComponent={selectedComponent}
           />
         );
-          case "CanvasEditor":
-      return (
-        <CanvasEditorForm
-          setUserInputData={setUserInputData as unknown as React.Dispatch<
-            React.SetStateAction<CanvasEditorSection>
-          >}
-          userInputData={userInputData as unknown as CanvasEditorSection}
-          layout={layout}
-          selectedComponent={selectedComponent} setLayout={function (value: React.SetStateAction<Layout>): void {
-            throw new Error("Function not implemented.");
-          } } setSelectedComponent={function (value: React.SetStateAction<string>): void {
-            throw new Error("Function not implemented.");
-          } }        />
-      );
+      case "CanvasEditor":
+        return (
+          <CanvasEditorForm
+            setUserInputData={setUserInputData as unknown as React.Dispatch<
+              React.SetStateAction<CanvasEditorSection>
+            >}
+            userInputData={userInputData as unknown as CanvasEditorSection}
+            layout={layout}
+            selectedComponent={selectedComponent}
+            setLayout={setLayout}
+            setSelectedComponent={setSelectedComponent}
+          />
+        );
       case "sectionHeader":
         return (
           <HeaderForm
@@ -1031,6 +1032,22 @@ export const Form = () => {
                       </span>
                     </div>
                     <div
+                      onClick={() => addSection("CanvasEditor")}
+                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                      style={{
+                        ...imageContainerStyle,
+                        backgroundImage: `url(${canvasEditorImage?.src})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {"ویرایشگر کانوا"}
+                      </span>
+                    </div>
+                    <div
                       onClick={() => addSection("Collection")}
                       className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
                       style={{
@@ -1411,6 +1428,22 @@ export const Form = () => {
                             <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
                             <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                               ویدیو
+                            </span>
+                          </div>
+                          <div
+                            onClick={() => addSection("CanvasEditor")}
+                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                            style={{
+                              ...imageContainerStyle,
+                              backgroundImage: `url(${canvasEditorImage?.src})`,
+                              backgroundSize: "cover",
+                              backgroundPosition: "center",
+                              backgroundRepeat: "no-repeat",
+                            }}
+                          >
+                            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                            <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              {"ویرایشگر کانوا"}
                             </span>
                           </div>
                           <div
