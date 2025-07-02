@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { CanvasEditorSection, CanvasElement } from "../sections/canvasEditor";
 import { Layout } from "@/lib/types";
-import { useCanvas } from "@/app/contexts/CanvasContext";
+import { useCanvas } from "@/app/contexts/CanvasContext"; // Import the context
 
 // Add a ColorInput component similar to richTextForm
 const ColorInput = ({
