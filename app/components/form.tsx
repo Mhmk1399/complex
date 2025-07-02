@@ -109,7 +109,7 @@ import { ProductRowForm } from "./forms/productRowForm";
 import { styled } from "styled-components";
 import { SpecialForm } from "./forms/specialForm";
 import { useSharedContext } from "@/app/contexts/SharedContext";
-// import { set } from "lodash";
+import  CanvasEditorForm  from "./forms/canvasEditorForm";
 type FormData =
   | HeaderSection
   | MultiRowSection
@@ -394,7 +394,7 @@ export const Form = () => {
             selectedComponent={selectedComponent}
           />
         );
-
+        
       case "ImageText":
         return (
           <ImageTextForm
