@@ -327,6 +327,11 @@ export interface RichTextBlock {
     marginTop?: string;
     marginBottom?: string;
     background?: string;
+    lineHeight: string;
+    lineTop: string;
+    lineBottom: string;
+    lineWidth: string;
+    lineColor: string;
   };
 }
 

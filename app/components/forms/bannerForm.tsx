@@ -438,7 +438,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
       {/* Spacing Settings Dropdown */}
 
       {isSpacingOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
+        <div className="p-4  animate-slideDown">
           <div className="rounded-lg p-2 flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

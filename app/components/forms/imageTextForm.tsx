@@ -297,13 +297,13 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
               <select
                 value={userInputData?.blocks?.btnLink ?? ""}
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                  setUserInputData(prev => ({
+                  setUserInputData((prev) => ({
                     ...prev,
                     blocks: {
                       ...prev.blocks,
-                      btnLink: e.target.value
-                    }
-                  }))
+                      btnLink: e.target.value,
+                    },
+                  }));
                 }}
                 className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
               >
@@ -363,7 +363,6 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
               <label className="block mb-2 text-sm font-bold text-gray-700">
                 سایز سربرگ
               </label>
-              <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
                 <input
                   type="range"
                   min="0"
@@ -374,10 +373,9 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
                   }
                   onChange={handleBlockSettingChange}
                 />
-                <p className="text-sm text-gray-600 text-nowrap">
-                  {userInputData?.blocks.setting.headingFontSize}px
-                </p>
-              </div>
+              <p className="text-sm  text-gray-600 text-nowrap">
+                {userInputData?.blocks.setting.headingFontSize}px
+              </p>
 
               <div>
                 <label className="block mb-2 text-sm font-bold text-gray-700">
@@ -426,7 +424,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
                     "20"
                   }
                   onChange={handleBlockSettingChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 <span className="text-sm text-gray-500">
                   {userInputData?.blocks?.setting?.descriptionFontSize}px
@@ -539,7 +537,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
                 "300"
               }
               onChange={handleBlockSettingChange}
-              className="w-full p-2 border rounded"
+              className="w-full p-1 border rounded"
             />{" "}
             <span className="text-sm">
               {" "}

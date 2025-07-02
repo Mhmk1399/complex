@@ -234,13 +234,13 @@ export const RichText: React.FC<RichTextFormProps> = ({
               <select
                 value={userInputData?.blocks?.btnLink ?? ""}
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                  setUserInputData(prev => ({
+                  setUserInputData((prev) => ({
                     ...prev,
                     blocks: {
                       ...prev.blocks,
-                      btnLink: e.target.value
-                    }
-                  }))
+                      btnLink: e.target.value,
+                    },
+                  }));
                 }}
                 name="btnLink"
                 className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
@@ -398,16 +398,95 @@ export const RichText: React.FC<RichTextFormProps> = ({
                 onChange={handleBlockSettingChange}
               />
             </div>
+            {/* Line Colors */}
+            <div className="p-3 -gray-100 rounded-lg flex flex-col gap-3">
+              <h4 className="font-bold text-sky-700"> تنظیمات خط</h4>
+              <ColorInput
+                label="رنگ خط"
+                name="lineColor"
+                value={
+                  userInputData?.blocks?.setting?.lineColor?.toString() ??
+                  "#000000"
+                }
+                onChange={handleBlockSettingChange}
+              />
+              <label className="block mb-2 text-sm font-bold text-gray-700">
+                عرض خط
+              </label>
+              <input
+                type="range"
+                min={0}
+                max={2000}
+                name="lineWidth"
+                value={
+                  userInputData?.blocks?.setting?.lineWidth?.toString() ?? "500"
+                }
+                onChange={handleBlockSettingChange}
+                className="w-full"
+              />
+              <span className="text-sm">
+                {userInputData?.blocks?.setting?.lineWidth}px
+              </span>
+              <label className="block mb-2 text-sm font-bold text-gray-700">
+                قطر خط
+              </label>
+              <input
+                type="range"
+                min={0}
+                max={200}
+                name="lineHeight"
+                value={
+                  userInputData?.blocks?.setting?.lineHeight?.toString() ?? "0"
+                }
+                onChange={handleBlockSettingChange}
+                className="w-full"
+              />
+              <span className="text-sm">
+                {userInputData?.blocks?.setting?.lineHeight}px
+              </span>
+              <label className="block mb-2 text-sm font-bold text-gray-700">
+                فاصله از بالا
+              </label>
+              <input
+                type="range"
+                min={-100}
+                max={100}
+                name="lineTop"
+                value={
+                  userInputData?.blocks?.setting?.lineTop?.toString() ?? "0"
+                }
+                onChange={handleBlockSettingChange}
+                className="w-full"
+              />
+              <span className="text-sm">
+                {userInputData?.blocks?.setting?.lineTop}px
+              </span>
+              <label className="block mb-2 text-sm font-bold text-gray-700">
+                فاصله از پایین
+              </label>
+              <input
+                type="range"
+                min={-100}
+                max={100}
+                name="lineBottom"
+                value={
+                  userInputData?.blocks?.setting?.lineBottom?.toString() ?? "0"
+                }
+                onChange={handleBlockSettingChange}
+                className="w-full"
+              />
+              <span className="text-sm">
+                {userInputData?.blocks?.setting?.lineBottom}px
+              </span>
+            </div>
           </div>
         </div>
       )}
 
       {/* Spacing Settings */}
-      {/* Dropdown Header */}
 
-      {/* Dropdown Content */}
       {isSpacingOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
+        <div className="p-4  animate-slideDown">
           <div className=" rounded-lg p-2 flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

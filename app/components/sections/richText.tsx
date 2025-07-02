@@ -62,6 +62,8 @@ const P = styled.p<{
   $preview: "sm" | "default";
 }>`
   color: ${(props) => props.$data?.setting?.descriptionColor || "#666"};
+  text-align: center;
+  padding: 0px 70px;
   font-size: ${(props) =>
     props.$preview === "sm"
       ? "14"
@@ -71,6 +73,18 @@ const P = styled.p<{
   @media (max-width: 768px) {
     font-size: 16px;
   }
+`;
+const HR = styled.hr<{
+  $data: RichTextBlock;
+  $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
+}>`
+  background-color: ${(props) => props.$data?.setting?.lineColor || "#000"};
+  width: ${(props) => props.$data?.setting?.lineWidth || "500"}px;
+  height: ${(props) => props.$data?.setting?.lineHeight || "0"}px;
+  margin-bottom: ${(props) => props.$data?.setting?.lineBottom || "1"}px;
+  margin-top: ${(props) => props.$data?.setting?.lineTop || "1"}px;
+
 `;
 
 const Btn = styled.button<{
@@ -189,7 +203,12 @@ const RichText: React.FC<RichTextProps> = ({
         </H1>
       )}
 
-      <hr className="w-[70%] h-[4px] bg-white mb-4" />
+      <HR
+        $previewWidth={previewWidth}
+        $data={blocks}
+        $preview={preview}
+        className=" mx-auto"
+      />
 
       {description && (
         <P $previewWidth={previewWidth} $data={blocks} $preview={preview}>

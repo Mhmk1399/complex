@@ -485,7 +485,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
               <input
                 type="range"
                 min="0"
-                max="1000"
+                max="100"
                 name="headingFontSize"
                 value={userInputData?.setting?.headingFontSize || "250"}
                 onChange={handleSettingChange}

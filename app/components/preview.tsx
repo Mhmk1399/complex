@@ -33,10 +33,10 @@ export const Preview: React.FC = () => {
     setSelectedComponent,
     orders,
     previewWidth,
-    isFormOpen
+    isFormOpen,
   } = useSharedContext();
-  
-  console.log(layout , "llllllllllll")
+
+  console.log(layout, "llllllllllll");
 
   const componentMap = {
     Header,
@@ -62,8 +62,7 @@ export const Preview: React.FC = () => {
     OfferRow,
     Brands,
     ProductsRow,
-      CanvasEditor,  // Add this line
-
+    CanvasEditor, // Add this line
   };
 
   return (
@@ -106,7 +105,7 @@ export const Preview: React.FC = () => {
                     setLayout={setLayout}
                     productId={"674c044a7e265babdd061919"}
                     blogId={"674dc8d6cf4d515adfa1a31f"}
-                    previewWidth={previewWidth} 
+                    previewWidth={previewWidth}
                   />
                 </div>
               ) : null;
