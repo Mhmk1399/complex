@@ -670,7 +670,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
         {/* Collapse Items */}
 
         {isStyleSettingsOpen && (
-          <div className="p-4 border-t border-gray-100 animate-slideDown">
+          <div className="p-4  animate-slideDown">
             <div className="rounded-lg flex items-center justify-between ">
               <ColorInput
                 label="رنگ سربرگ"
@@ -733,7 +733,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
         {/* Spacing Settings Dropdown */}
 
         {isSpacingOpen && (
-          <div className="p-4 border-t border-gray-100 animate-slideDown">
+          <div className="p-4  animate-slideDown">
             <div className="bg-gray-50 rounded-lg flex items-center justify-center">
               <MarginPaddingEditor
                 margin={margin}

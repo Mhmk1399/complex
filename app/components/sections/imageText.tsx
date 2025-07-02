@@ -58,8 +58,8 @@ const TextContainer = styled.div<{
 }>`
   display: flex;
   flex-direction: column;
-  align-items: ${(props) => (props.$preview === "sm" ? "center" : "flex-end")};
-  text-align: ${(props) => (props.$preview === "sm" ? "center" : "right")};
+  align-items: ${(props) => (props.$preview === "sm" ? "center" : "center")};
+  text-align: ${(props) => (props.$preview === "sm" ? "center" : "center")};
   padding: 20px;
   width: 100%;
   background-color: ${(props) =>

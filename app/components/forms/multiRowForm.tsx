@@ -544,7 +544,7 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                 <input
                   type="range"
                   min="0"
-                  max="1000"
+                  max="100"
                   name="headingFontSize"
                   value={userInputData?.setting?.headingFontSize || "250"}
                   onChange={handleSettingChange}
@@ -579,7 +579,7 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                 <input
                   type="range"
                   min="0"
-                  max="1000"
+                  max="100"
                   name="descriptionFontSize"
                   value={userInputData?.setting?.descriptionFontSize || "250"}
                   onChange={handleSettingChange}
