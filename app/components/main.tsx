@@ -33,6 +33,7 @@ import { ToastContainer, toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TourGuide from "./sections/guideTour";
 import { useSharedContext } from "@/app/contexts/SharedContext";
+import { CanvasProvider } from "../contexts/CanvasContext";
 
 export const Main = () => {
   // Get shared state from context
@@ -430,6 +431,8 @@ export const Main = () => {
           </div>
         </div>
       ) : ( */}
+          <CanvasProvider> 
+
       <div className="min-h-screen ">
         {isMetaDataModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -774,6 +777,7 @@ export const Main = () => {
         changeRouteRef={changeRouteRef}
         setActiveElement={setActiveElement}
       />
+      </CanvasProvider>
     </div>
   );
 };
