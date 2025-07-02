@@ -162,7 +162,6 @@ const SearchInput = styled.input`
 
 const NavContainer = styled.nav`
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 0.5rem 1.5rem;
   @media (max-width: 768px) {
@@ -572,10 +571,10 @@ const Header: React.FC<HeaderProps> = ({
         </ActionButtons>
       </MainSection>
 
-      <NavContainer>
-        <LocationButton>
+      <NavContainer className="justify-end">
+        {/* <LocationButton>
           <MapPin size={16} /> شهر خود را انتخاب کنید
-        </LocationButton>
+        </LocationButton> */}
         <NavList $previewWidth={previewWidth} $data={sectionData}>
           {sectionData.blocks.links?.map((link, index) => (
             <NavItemWrapper key={index}>
@@ -657,9 +656,9 @@ const Header: React.FC<HeaderProps> = ({
           $isOpen={isMenuOpen}
         >
           <MobileNavList>
-            <LocationButton style={{ width: "100%", marginBottom: "20px" }}>
+            {/* <LocationButton style={{ width: "100%", marginBottom: "20px" }}>
               <MapPin size={16} /> شهر خود را انتخاب کنید
-            </LocationButton>
+            </LocationButton> */}
             {sectionData.blocks.links?.map((link, index) => (
               <MobileNavItem
                 key={index}

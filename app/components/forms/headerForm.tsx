@@ -16,6 +16,31 @@ interface BoxValues {
   left: number;
   right: number;
 }
+const ColorInput = ({
+  label,
+  name,
+  value,
+  onChange,
+}: {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) => (
+  <>
+    <label className="block mb-1">{label}</label>
+    <div className="flex flex-col rounded-md gap-3 items-center">
+      <input
+        type="color"
+        id={name}
+        name={name}
+        value={value || "#000000"}
+        onChange={onChange}
+        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
+      />
+    </div>
+  </>
+);
 
 export const HeaderForm: React.FC<HeaderFormProps> = ({
   setUserInputData,
@@ -45,31 +70,6 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
       marginBottom: "0",
     },
   };
-  const ColorInput = ({
-    label,
-    name,
-    value,
-    onChange,
-  }: {
-    label: string;
-    name: string;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  }) => (
-    <>
-      <label className="block mb-1">{label}</label>
-      <div className="flex flex-col rounded-md gap-3 items-center">
-        <input
-          type="color"
-          id={name}
-          name={name}
-          value={value || "#000000"}
-          onChange={onChange}
-          className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
-        />
-      </div>
-    </>
-  );
 
   // Modify the useEffect to include default values to
 
@@ -447,7 +447,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
               <input
                 type="range"
                 min="0"
-                max="1000"
+                max="100"
                 name="categoryItemSize"
                 value={
                   userInputData?.blocks?.setting?.categoryItemSize || "250"
@@ -531,7 +531,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
                 <input
                   type="range"
                   min="0"
-                  max="1000"
+                  max="100"
                   name="announcementFontSize"
                   value={
                     userInputData?.blocks?.setting?.announcementFontSize ||

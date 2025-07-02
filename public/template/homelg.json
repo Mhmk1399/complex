@@ -447,29 +447,27 @@
           }
         },
         {
-  "type": "CanvasEditor",
-  "setting": {
-    "paddingTop": "20",
-    "paddingBottom": "20",
-    "paddingLeft": "20",
-    "paddingRight": "20",
-    "marginTop": "30",
-    "marginBottom": "30",
-    "backgroundColor": "#ffffff"
-  },
-  "blocks": {
-    "elements": [
-      
-    ],
-    "setting": {
-      "canvasWidth": "100%",
-      "canvasHeight": "500px",
-      "backgroundColor": "#f9fafb",
-      "gridSize": 10,
-      "showGrid": false
-    }
-  }
-},
+          "type": "CanvasEditor",
+          "setting": {
+            "paddingTop": "20",
+            "paddingBottom": "20",
+            "paddingLeft": "20",
+            "paddingRight": "20",
+            "marginTop": "30",
+            "marginBottom": "30",
+            "backgroundColor": "#ffffff"
+          },
+          "blocks": {
+            "elements": [],
+            "setting": {
+              "canvasWidth": "100%",
+              "canvasHeight": "500px",
+              "backgroundColor": "#f9fafb",
+              "gridSize": 10,
+              "showGrid": false
+            }
+          }
+        },
         {
           "type": "NewsLetter-1",
           "blocks": {
@@ -808,34 +806,7 @@
             "paddinLeft": "0"
           }
         },
-        {
-          "type": "RichText",
-          "blocks": {
-            "textHeading": "سربرگ",
-            "description": "توضیحات درباره محصول",
-            "btnText": "دکمه",
-            "btnLink": "/",
-            "setting": {
-              "textHeadingColor": "#FCA311",
-              "textHeadingFontSize": "40",
-              "textHeadingFontWeight": "bold",
-              "descriptionColor": "#E5E5E5",
-              "descriptionFontSize": "18",
-              "descriptionFontWeight": "normal",
-              "background": "#14213D",
-              "btnTextColor": "#ffffff",
-              "btnBackgroundColor": "#FCA311"
-            }
-          },
-          "setting": {
-            "paddingTop": "30",
-            "paddingBottom": "30",
-            "marginTop": "20",
-            "marginBottom": "20",
-            "paddinRight": "0",
-            "paddinLeft": "0"
-          }
-        },
+
         {
           "type": "Banner",
           "blocks": {
@@ -1209,7 +1180,12 @@
               "descriptionFontWeight": "normal",
               "background": "#14213D",
               "btnTextColor": "#ffffff",
-              "btnBackgroundColor": "#FCA311"
+              "btnBackgroundColor": "#FCA311",
+              "lineWidth": "500",
+              "lineColor": "#fff",
+              "lineHeight": "2",
+              "lineBottom": "10",
+              "lineTop": "10"
             }
           },
           "setting": {

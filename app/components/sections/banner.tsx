@@ -22,7 +22,7 @@ const SectionBanner = styled.section<{
 }>`
   position: relative;
   height: ${(props) => (props.$preview === "sm" ? "300px" : "600px")};
-  margin: 0px 10px;
+  // margin: 0px 10px;
   margin-top: ${(props) => props.$data.setting.marginTop || "30"}px;
   margin-bottom: ${(props) => props.$data.setting.marginBottom}px;
   padding-top: ${(props) => props.$data.setting.paddingTop}px;
@@ -63,7 +63,7 @@ const BannerTextBox = styled.div<{
   opacity: ${(props) => props.$data.blocks.setting.opacityTextBox || "1"};
   background-color: ${(props) =>
     props.$data.blocks.setting.backgroundColorBox || "rgba(0, 0, 0, 0.5)"};
-  padding: ${(props) => (props.$preview === "sm" ? "20px 30px" : "70px 200px")};
+  padding: ${(props) => (props.$preview === "sm" ? "20px 30px" : "70px 20px")};
   border-radius: ${(props) =>
     props.$data.blocks.setting.backgroundBoxRadious || "10"}px;
 `;

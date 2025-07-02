@@ -209,7 +209,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
       {/* Content Section */}
 
       {isContentOpen && (
-        <div className="p-4 border-t border-gray-100">
+        <div className="p-4 ">
           <div className="space-y-4">
             <div>
               <label className="block mb-2 text-sm font-bold text-gray-700">
@@ -249,7 +249,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
       {/* Style Settings */}
 
       {isStyleSettingsOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
+        <div className="p-4  animate-slideDown">
           <div className="grid md:grid-cols-1 gap-4">
             <div className="rounded-lg">
               <h4 className="font-semibold text-sky-700 my-4">تنظیمات عنوان</h4>
@@ -313,7 +313,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
       )}
 
       {isSpacingOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
+        <div className="p-4  animate-slideDown">
           <div className="bg-gray-50 rounded-lg flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

@@ -41,7 +41,6 @@ const Title = styled.h2<{ $data: GallerySection }>`
     props.$data?.blocks?.setting?.titleFontSize || "24"}px;
   font-weight: ${(props) =>
     props.$data?.blocks?.setting?.titleFontWeight || "bold"};
-  margin-bottom: 20px;
 `;
 
 const Description = styled.p<{ $data: GallerySection }>`
@@ -52,6 +51,7 @@ const Description = styled.p<{ $data: GallerySection }>`
   font-weight: ${(props) =>
     props.$data?.blocks?.setting?.descriptionFontWeight || "normal"};
   margin-bottom: 30px;
+  padding:10px 90px;
   text-align: center;
 `;
 
