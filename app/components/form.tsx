@@ -311,7 +311,7 @@ export const Form = () => {
     userInputData: FormData,
     selectedComponent: string
   ) => {
-    const baseComponentName = selectedComponent.split("-")[0];
+  const baseComponentName = selectedComponent.split("-")[0].split(":")[0];
     // console.log(  baseComponentName);
     
     switch (baseComponentName) {
