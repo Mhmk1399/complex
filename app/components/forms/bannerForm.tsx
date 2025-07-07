@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
-import { Layout, BannerSection } from "@/lib/types";
+import { Layout, BannerSection, AnimationEffect } from "@/lib/types";
 import React from "react";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
+import { effectService } from "@/services/effectService";
+import { AnimationPreview } from "../animationPreview";
+
 interface BannerFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<BannerSection>>;
   userInputData: BannerSection;
   layout: Layout;
   selectedComponent: string;
 }
+
 interface BoxValues {
   top: number;
   bottom: number;
@@ -95,6 +99,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
       }));
     }
   };
+
   useEffect(() => {
     setMargin({
       top: Number(userInputData?.setting?.marginTop) || 0,
@@ -128,6 +133,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
       },
     }));
   };
+
   const [isUpdating, setIsUpdating] = useState(false);
 
   const handleBlockSettingChange = (
@@ -162,14 +168,79 @@ export const BannerForm: React.FC<BannerFormProps> = ({
     }));
   };
 
+  // Single Animation handlers
+  const handleAnimationToggle = (enabled: boolean) => {
+    if (enabled) {
+      const defaultEffect = effectService.getDefaultEffectConfig('hover', 'pulse');
+      setUserInputData((prev: BannerSection) => ({
+        ...prev,
+        blocks: {
+          ...prev.blocks,
+          setting: {
+            ...prev.blocks.setting,
+            animation: defaultEffect as AnimationEffect
+          }
+        }
+      }));
+    } else {
+      setUserInputData((prev: BannerSection) => ({
+        ...prev,
+        blocks: {
+          ...prev.blocks,
+          setting: {
+            ...prev.blocks.setting,
+            animation: undefined
+          }
+        }
+      }));
+    }
+  };
+
+  const handleAnimationChange = (field: string, value: string | number) => {
+    setUserInputData((prev: BannerSection) => {
+      const currentAnimation = prev.blocks.setting.animation;
+      if (!currentAnimation) return prev;
+
+      let updatedAnimation = { ...currentAnimation };
+
+      if (field === 'type') {
+        updatedAnimation.type = value as 'hover' | 'click';
+      } else if (field.startsWith('animation.')) {
+        const animationField = field.split('.')[1];
+        updatedAnimation.animation = {
+          ...updatedAnimation.animation,
+          [animationField]: animationField === 'duration' || animationField === 'delay' 
+            ? `${value}s` 
+            : value
+        };
+      }
+
+      return {
+        ...prev,
+        blocks: {
+          ...prev.blocks,
+          setting: {
+            ...prev.blocks.setting,
+            animation: updatedAnimation
+          }
+        }
+      };
+    });
+  };
+
   const handleTabChange = (tab: "content" | "style" | "spacing") => {
     setIsContentOpen(tab === "content");
     setIsStyleSettingsOpen(tab === "style");
     setIsSpacingOpen(tab === "spacing");
   };
+
   useEffect(() => {
     setIsContentOpen(true);
   }, []);
+
+  // Get current animation values for inputs
+  const currentAnimation = userInputData?.blocks?.setting?.animation;
+  const hasAnimation = !!currentAnimation;
 
   return (
     <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
@@ -189,7 +260,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
             <input
               type="text"
               name="imageSrc"
-              value={userInputData?.blocks?.imageSrc ?? "vg"}
+              value={userInputData?.blocks?.imageSrc ?? ""}
               onChange={handleBlockChange}
               className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
             />
@@ -201,7 +272,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
             <input
               type="text"
               name="imageLink"
-              value={userInputData?.blocks?.imageLink ?? "vg"}
+              value={userInputData?.blocks?.imageLink ?? ""}
               onChange={handleBlockChange}
               className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
             />
@@ -238,13 +309,12 @@ export const BannerForm: React.FC<BannerFormProps> = ({
       )}
 
       {/* Style Settings */}
-
       {isStyleSettingsOpen && (
         <>
-          <div className="transition-all animate-slideDown  duration-300">
+          <div className="transition-all animate-slideDown duration-300">
             <div className="">
               <div className="grid md:grid-cols-1 gap-4">
-                {/* Color inputs with updated styling */}
+                {/* Existing style settings... */}
                 <div className="rounded-lg flex flex-col gap-3">
                   <h4 className="font-semibold text-sky-700 my-4">
                     تنظیمات سربرگ
@@ -270,15 +340,14 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                     onChange={handleBlockSettingChange}
                   />
                   <div className="text-gray-500 text-sm">
-                    {userInputData?.blocks?.setting?.textFontSize}
-                    px
+                    {userInputData?.blocks?.setting?.textFontSize}px
                   </div>
                   <label className="block mb-1">وزن سربرگ</label>
                   <select
                     name="textFontWeight"
                     value={
                       userInputData?.blocks?.setting?.textFontWeight?.toString() ??
-                      "0"
+                      "bold"
                     }
                     onChange={handleBlockSettingChange}
                     className="w-full p-2 border rounded"
@@ -287,6 +356,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                     <option value="normal">نرمال</option>
                   </select>
                 </div>
+
                 <div className="rounded-lg flex flex-col gap-3">
                   <h4 className="font-semibold text-sky-700 my-4">
                     تنظیمات توضیحات
@@ -312,15 +382,14 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                     onChange={handleBlockSettingChange}
                   />
                   <div className="text-gray-500 text-sm">
-                    {userInputData?.blocks?.setting?.descriptionFontSize}
-                    px
+                    {userInputData?.blocks?.setting?.descriptionFontSize}px
                   </div>
                   <label className="block mb-1">وزن توضیحات</label>
                   <select
                     name="descriptionFontWeight"
                     value={
                       userInputData?.blocks?.setting?.descriptionFontWeight?.toString() ??
-                      "0"
+                      "normal"
                     }
                     onChange={handleBlockSettingChange}
                     className="w-full p-2 border rounded"
@@ -329,9 +398,8 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                     <option value="normal">نرمال</option>
                   </select>
                 </div>
-                {/* Repeat for other color inputs */}
 
-                {/* Opacity select with new styling */}
+                {/* Image Settings */}
                 <div className="rounded-lg flex flex-col gap-3">
                   <h4 className="font-semibold text-sky-700 my-4">
                     تنظیمات تصویر
@@ -342,7 +410,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                   <select
                     name="opacityImage"
                     value={
-                      userInputData?.blocks?.setting?.opacityImage?.toLocaleString() ??
+                      userInputData?.blocks?.setting?.opacityImage?.toString() ??
                       "1"
                     }
                     onChange={handleBlockSettingChange}
@@ -363,10 +431,10 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                     <select
                       name="imageBehavior"
                       value={
-                        userInputData?.setting?.imageBehavior?.toLocaleString() ??
+                        userInputData?.blocks?.setting?.imageBehavior?.toString() ??
                         "cover"
                       }
-                      onChange={handleSettingChange}
+                      onChange={handleBlockSettingChange}
                       className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                     >
                       <option value="cover">پوشش</option>
@@ -375,6 +443,8 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                     </select>
                   </div>
                 </div>
+
+                {/* Box Settings */}
                 <div className="rounded-lg flex flex-col gap-3">
                   <h4 className="font-semibold text-sky-700 my-4">
                     تنظیمات کادر
@@ -385,7 +455,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                   <select
                     name="opacityTextBox"
                     value={
-                      userInputData?.blocks?.setting?.opacityTextBox?.toLocaleString() ??
+                      userInputData?.blocks?.setting?.opacityTextBox?.toString() ??
                       "1"
                     }
                     onChange={handleBlockSettingChange}
@@ -410,7 +480,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                     onChange={handleBlockSettingChange}
                   />
 
-                  <label> انحنای زاویه کادر</label>
+                  <label>انحنای زاویه کادر</label>
                   <input
                     className="w-full"
                     type="range"
@@ -427,18 +497,162 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                     px
                   </div>
                 </div>
-              </div>
 
-              {/* Image behavior select */}
+                {/* Single Animation Settings - In Style Tab */}
+                <div className="rounded-lg flex flex-col gap-3 border-t pt-4 mt-6">
+                  <div className="flex justify-between items-center">
+                    <h4 className="font-semibold text-sky-700">تنظیمات انیمیشن</h4>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={hasAnimation}
+                        onChange={(e) => handleAnimationToggle(e.target.checked)}
+                        className="rounded"
+                      />
+                      <span className="text-sm">فعال کردن انیمیشن</span>
+                    </label>
+                  </div>
+
+                  {hasAnimation && currentAnimation && (
+                    <div className="border border-gray-200 rounded-lg p-4 space-y-3">
+                      <h5 className="font-medium text-gray-700">تنظیمات انیمیشن</h5>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        {/* Effect Type */}
+                        <div>
+                          <label className="block mb-1 text-sm font-medium text-gray-700">
+                            نوع افکت
+                          </label>
+                          <select
+                            value={currentAnimation.type}
+                            onChange={(e) => handleAnimationChange('type', e.target.value)}
+                            className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          >
+                            {effectService.getEffectTypes().map(type => (
+                              <option key={type} value={type}>
+                                {type === 'hover' ? 'هاور' : 'کلیک'}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        {/* Animation Type */}
+                        <div>
+                          <label className="block mb-1 text-sm font-medium text-gray-700">
+                            نوع انیمیشن
+                          </label>
+                          <select
+                            value={currentAnimation.animation.type}
+                            onChange={(e) => handleAnimationChange('animation.type', e.target.value)}
+                            className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          >
+                            {effectService.getAnimationTypes().map(type => (
+                              <option key={type} value={type}>
+                                {type === 'pulse' && 'پالس'}
+                                {type === 'ping' && 'پینگ'}
+                                {type === 'bgOpacity' && 'شفافیت پس‌زمینه'}
+                                {type === 'scaleup' && 'بزرگ‌نمایی'}
+                                {type === 'scaledown' && 'کوچک‌نمایی'}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        {/* Duration - Number Input */}
+                        <div>
+                          <label className="block mb-1 text-sm font-medium text-gray-700">
+                            مدت زمان (ثانیه)
+                          </label>
+                          <input
+                            type="number"
+                            min="0.1"
+                            max="10"
+                            step="0.1"
+                            value={parseFloat(currentAnimation.animation.duration.replace('s', '')) || 1}
+                            onChange={(e) => handleAnimationChange('animation.duration', e.target.value)}
+                            className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          />
+                          <div className="text-gray-500 text-xs mt-1">
+                            نمایش: {currentAnimation.animation.duration}
+                          </div>
+                        </div>
+
+                        {/* Timing Function */}
+                        <div>
+                          <label className="block mb-1 text-sm font-medium text-gray-700">
+                            تابع زمان‌بندی
+                          </label>
+                          <select
+                            value={currentAnimation.animation.timing}
+                            onChange={(e) => handleAnimationChange('animation.timing', e.target.value)}
+                            className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          >
+                            <option value="ease">ease</option>
+                            <option value="ease-in">ease-in</option>
+                            <option value="ease-out">ease-out</option>
+                            <option value="ease-in-out">ease-in-out</option>
+                            <option value="linear">linear</option>
+                            <option value="cubic-bezier(0, 0, 0.2, 1)">cubic-bezier</option>
+                          </select>
+                        </div>
+
+                        {/* Delay - Number Input */}
+                        <div>
+                          <label className="block mb-1 text-sm font-medium text-gray-700">
+                            تاخیر (ثانیه)
+                          </label>
+                          <input
+                            type="number"
+                            min="0"
+                            max="5"
+                            step="0.1"
+                            value={parseFloat((currentAnimation.animation.delay || '0s').replace('s', '')) || 0}
+                            onChange={(e) => handleAnimationChange('animation.delay', e.target.value)}
+                            className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          />
+                          <div className="text-gray-500 text-xs mt-1">
+                            نمایش: {currentAnimation.animation?.delay || '0s'}
+                          </div>
+                        </div>
+
+                        {/* Iteration Count */}
+                        <div>
+                          <label className="block mb-1 text-sm font-medium text-gray-700">
+                            تعداد تکرار
+                          </label>
+                          <select
+                            value={currentAnimation.animation.iterationCount || '1'}
+                            onChange={(e) => handleAnimationChange('animation.iterationCount', e.target.value)}
+                            className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          >
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="infinite">بی‌نهایت</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      {/* Animation Preview */}
+                      <AnimationPreview effects={[currentAnimation]} />
+                    </div>
+                  )}
+
+                  {!hasAnimation && (
+                    <div className="text-center text-gray-500 py-8 border border-gray-200 rounded-lg">
+                      انیمیشن غیرفعال است. برای فعال کردن چک‌باکس بالا را انتخاب کنید.
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </>
       )}
 
       {/* Spacing Settings Dropdown */}
-
       {isSpacingOpen && (
-        <div className="p-4  animate-slideDown">
+        <div className="p-4 animate-slideDown">
           <div className="rounded-lg p-2 flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

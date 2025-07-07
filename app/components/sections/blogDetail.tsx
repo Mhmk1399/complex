@@ -12,6 +12,7 @@ interface BlogDetailProps {
   actualName: string;
   selectedComponent: string;
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
+  previewWidth: "sm" | "default";
 }
 
 interface BlogData {
@@ -24,6 +25,8 @@ interface BlogData {
 
 const SectionBlogDetail = styled.div<{
   $data: BlogDetailSection;
+  $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
 }>`
   padding-top: ${(props) => props.$data?.setting?.paddingTop || 0}px;
   padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || 0}px;
@@ -36,28 +39,139 @@ const SectionBlogDetail = styled.div<{
 
   .blog-title {
     color: ${(props) => props.$data?.setting?.titleColor || "#1A1A1A"};
-    font-size: ${(props) => props.$data?.setting?.titleFontSize || 36}px;
+    font-size: ${(props) => 
+      props.$preview === "sm" 
+        ? Math.max(18, (parseInt(props.$data?.setting?.titleFontSize || "36") * 0.6)) 
+        : props.$data?.setting?.titleFontSize || 36}px;
     font-weight: bold;
+    margin-bottom: 16px;
+    
+    @media (max-width: 768px) {
+      font-size: ${(props) => 
+        Math.max(16, (parseInt(props.$data?.setting?.titleFontSize || "36") * 0.5))}px;
+    }
   }
 
   .blog-content {
     color: ${(props) => props.$data?.setting?.contentColor || "#2C2C2C"};
-    font-size: ${(props) => props.$data?.setting?.contentFontSize || 18}px;
+    font-size: ${(props) => 
+      props.$preview === "sm" 
+        ? Math.max(14, (parseInt(props.$data?.setting?.contentFontSize || "18") * 0.8)) 
+        : props.$data?.setting?.contentFontSize || 18}px;
     line-height: 1.8;
+    margin-top: 24px;
+    
+    @media (max-width: 768px) {
+      font-size: ${(props) => 
+        Math.max(12, (parseInt(props.$data?.setting?.contentFontSize || "18") * 0.7))}px;
+    }
   }
 
-  .cover-image {
-    width: ${(props) => props.$data?.setting?.coverImageWidth || 600}px;
-    height: ${(props) => props.$data?.setting?.coverImageHeight || 400}px;
-    position: relative;
-    border-radius: ${(props) => props.$data?.setting?.imageRadius || 0}px;
-    overflow: hidden;
-    margin-bottom: 24px;
-  }
   .blog-meta {
-    color: ${(props) => props.$data?.setting?.metaColor || "#2C2C2C"};
-    font-size: ${(props) => props.$data?.setting?.metaFontSize || 16}px;
-    margin-bottom: 12px;
+    color: ${(props) => props.$data?.setting?.metaColor || "#666666"};
+    font-size: ${(props) => 
+      props.$preview === "sm" 
+        ? Math.max(12, (parseInt(props.$data?.setting?.metaFontSize || "14") * 0.9)) 
+        : props.$data?.setting?.metaFontSize || 14}px;
+    margin-bottom: 20px;
+    
+    @media (max-width: 768px) {
+      font-size: ${(props) => 
+        Math.max(10, (parseInt(props.$data?.setting?.metaFontSize || "14") * 0.8))}px;
+    }
+  }
+`;
+
+const CoverImageContainer = styled.div<{
+  $data: BlogDetailSection;
+  $previewWidth: "sm" | "default";
+  $preview: "sm" | "default";
+}>`
+  width: ${(props) => 
+    props.$preview === "sm" 
+      ? Math.min(300, parseInt(props.$data?.setting?.coverImageWidth || "600")) 
+      : props.$data?.setting?.coverImageWidth || 600}px;
+  height: ${(props) => 
+    props.$preview === "sm" 
+      ? Math.min(200, parseInt(props.$data?.setting?.coverImageHeight || "400")) 
+      : props.$data?.setting?.coverImageHeight || 400}px;
+  position: relative;
+  border-radius: ${(props) => props.$data?.setting?.imageRadius || 10}px;
+  overflow: hidden;
+  margin: 0 auto 24px auto;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  /* Apply single animation if exists */
+  ${(props) => {
+    const animation = props.$data.setting.animation;
+    if (!animation) return '';
+    
+    const { type, animation: animConfig } = animation;
+    const selector = type === 'hover' ? '&:hover' : '&:active';
+    
+    return `
+      ${selector} {
+        animation: ${animConfig.type} ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+      }
+    `;
+  }}
+
+  @media (max-width: 768px) {
+    width: ${(props) => 
+      Math.min(280, parseInt(props.$data?.setting?.coverImageWidth || "600"))}px;
+    height: ${(props) => 
+      Math.min(180, parseInt(props.$data?.setting?.coverImageHeight || "400"))}px;
+  }
+
+  /* Animation keyframes */
+  @keyframes pulse {
+    0%, 100% { 
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% { 
+      transform: scale(1.05);
+      opacity: 0.8;
+    }
+  }
+  
+  @keyframes ping {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    75%, 100% {
+      transform: scale(1.1);
+      opacity: 0;
+    }
+  }
+  
+  @keyframes bgOpacity {
+    0%, 100% { 
+      opacity: 1;
+    }
+    50% { 
+      opacity: 0.7;
+    }
+  }
+  
+  @keyframes scaleup {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(1.1);
+    }
+  }
+  
+  @keyframes scaledown {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(0.95);
+    }
   }
 `;
 
@@ -67,6 +181,7 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
   actualName,
   selectedComponent,
   setLayout,
+  previewWidth,
 }) => {
   const [blog, setBlog] = useState<BlogData>({
     title: "",
@@ -77,11 +192,26 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
   });
   const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [preview, setPreview] = useState(previewWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 425) {
+        setPreview("sm");
+      } else {
+        setPreview(previewWidth);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [previewWidth]);
 
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const response = await fetch(`/api/blogs`); // Fetching blog with ID 1
+        const response = await fetch(`/api/blogs`);
         const data = await response.json();
         setBlog(data.blogs[0]);
       } catch (error) {
@@ -102,12 +232,14 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
     return null;
   }
 
-  if (loading) return <div>Loading...</div>;
-  if (!blog) return <div>Blog not found</div>;
+  if (loading) return <div className="text-center py-8">در حال بارگذاری...</div>;
+  if (!blog) return <div className="text-center py-8">بلاگ یافت نشد</div>;
 
   return (
     <SectionBlogDetail
       $data={sectionData}
+      $previewWidth={previewWidth}
+      $preview={preview}
       onClick={() => setSelectedComponent(actualName)}
       className={`transition-all duration-150 ease-in-out relative ${
         selectedComponent === actualName
@@ -159,19 +291,25 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
           </button>
         </div>
       ) : null}
-      <div className="cover-image flex mx-auto items-center">
+
+      <CoverImageContainer
+        $data={sectionData}
+        $previewWidth={previewWidth}
+        $preview={preview}
+      >
         <Image
-          src={blog.coverImage ? blog.coverImage : "/assets/images/pro3.jpg"}
+          src={sectionData.setting.coverImage || blog.coverImage || "/assets/images/pro3.jpg"}
           alt={blog.title}
           fill
           className="object-cover"
+          priority
         />
-      </div>
+      </CoverImageContainer>
 
-      <h1 className="blog-title text-right">{blog.title}</h1>
+      <h1 className="blog-title text-right">{blog.title || "عنوان بلاگ"}</h1>
 
       <div className="blog-meta text-right">
-        <span>{blog.author} : نویسنده </span>
+        <span>{blog.author || "نویسنده"} : نویسنده </span>
         <br />
         <span>
           تاریخ :
@@ -187,7 +325,9 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
 
       <div
         className="blog-content text-right"
-        dangerouslySetInnerHTML={{ __html: blog.content }}
+        dangerouslySetInnerHTML={{ 
+          __html: blog.content || "محتوای بلاگ در اینجا نمایش داده می‌شود..." 
+        }}
       />
     </SectionBlogDetail>
   );

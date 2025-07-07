@@ -22,17 +22,16 @@ const SectionBanner = styled.section<{
 }>`
   position: relative;
   height: ${(props) => (props.$preview === "sm" ? "300px" : "600px")};
-  // margin: 0px 10px;
   margin-top: ${(props) => props.$data.setting.marginTop || "30"}px;
   margin-bottom: ${(props) => props.$data.setting.marginBottom}px;
   padding-top: ${(props) => props.$data.setting.paddingTop}px;
   padding-bottom: ${(props) => props.$data.setting.paddingBottom}px;
   padding-left: ${(props) => props.$data.setting.paddingLeft}px;
   padding-right: ${(props) => props.$data.setting.paddingRight}px;
+  
   @media (max-width: 768px) {
     height: ${(props) => (props.$preview === "sm" ? "200px" : "300px")};
   }
-
 `;
 
 const BannerImage = styled(Image)<{
@@ -44,7 +43,6 @@ const BannerImage = styled(Image)<{
   border-radius: ${(props) =>
     props.$data.blocks.setting.imageRadious || "10px"};
   object-fit: ${(props) => props.$data.blocks.setting.imageBehavior || "cover"};
-  
 `;
 
 const BannerTextBox = styled.div<{
@@ -66,6 +64,122 @@ const BannerTextBox = styled.div<{
   padding: ${(props) => (props.$preview === "sm" ? "20px 30px" : "70px 20px")};
   border-radius: ${(props) =>
     props.$data.blocks.setting.backgroundBoxRadious || "10"}px;
+
+  /* Create a pseudo-element for animations that doesn't affect positioning */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* Apply animations to the pseudo-element or specific properties that don't affect transform */
+  ${(props) => {
+    const animation = props.$data.blocks.setting.animation;
+    if (!animation) return '';
+    
+    const { type, animation: animConfig } = animation;
+    const selector = type === 'hover' ? '&:hover' : '&:active';
+    
+    // Handle different animation types
+    if (animConfig.type === 'pulse') {
+      return `
+        ${selector} {
+          animation: bannerPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+      `;
+    } else if (animConfig.type === 'ping') {
+      return `
+        ${selector}::before {
+          animation: bannerPing ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+      `;
+    } else if (animConfig.type === 'bgOpacity') {
+      return `
+        ${selector} {
+          animation: bannerBgOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+      `;
+    } else if (animConfig.type === 'scaleup') {
+      return `
+        ${selector} {
+          animation: bannerScaleup ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+      `;
+    } else if (animConfig.type === 'scaledown') {
+      return `
+        ${selector} {
+          animation: bannerScaledown ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+      `;
+    }
+    
+    return '';
+  }}
+
+  /* Animation keyframes that don't affect positioning */
+  @keyframes bannerPulse {
+    0%, 100% { 
+      opacity: 1;
+      filter: brightness(1);
+    }
+    50% { 
+      opacity: 0.7;
+      filter: brightness(1.2);
+    }
+  }
+  
+  @keyframes bannerPing {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    75%, 100% {
+      transform: scale(1.2);
+      opacity: 0;
+    }
+  }
+  
+  @keyframes bannerBgOpacity {
+    0%, 100% { 
+      background-color: ${(props) => props.$data.blocks.setting.backgroundColorBox || "rgba(0, 0, 0, 0.5)"};
+    }
+    50% { 
+      background-color: ${(props) => {
+        const bgColor = props.$data.blocks.setting.backgroundColorBox || "rgba(0, 0, 0, 0.5)";
+        if (bgColor.startsWith('#')) {
+          const r = parseInt(bgColor.slice(1, 3), 16);
+          const g = parseInt(bgColor.slice(3, 5), 16);
+          const b = parseInt(bgColor.slice(5, 7), 16);
+          return `rgba(${r}, ${g}, ${b}, 0.3)`;
+        }
+        return bgColor;
+      }};
+    }
+  }
+  
+  @keyframes bannerScaleup {
+    0% {
+      filter: brightness(1);
+    }
+    100% {
+      filter: brightness(1.1) contrast(1.1);
+    }
+  }
+  
+  @keyframes bannerScaledown {
+    0% {
+      filter: brightness(1);
+    }
+    100% {
+      filter: brightness(0.9) contrast(0.9);
+    }
+  }
 `;
 
 const HeadingText = styled.h2<{
@@ -131,12 +245,8 @@ const Banner: React.FC<props> = ({
   if (!sectionData) {
     return null;
   }
-  if (!sectionData) {
-    return <div>No data available</div>; // or handle this case appropriately
-  }
 
   const { description, imageAlt, imageSrc, text } = sectionData?.blocks;
-
 
   return (
     <SectionBanner

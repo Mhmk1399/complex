@@ -7,6 +7,19 @@ export interface Link {
   name: string;
   url: string;
 }
+export interface BrandsBlockSettings extends CommonSettings {
+  headingColor: string;
+  headingFontSize: string;
+  headingFontWeight: string;
+  brandNameColor: string;
+  brandNameFontSize: string;
+  brandNameFontWeight: string;
+  logoWidth: number;
+  logoHeight: number;
+  cardBackground: string;
+  brandAnimation?: AnimationConfig;
+  navAnimation?: AnimationConfig;
+}
 
 export interface ColorSchema {
   primary: string;
@@ -114,6 +127,7 @@ export interface CommonSettings {
   contentColor2?: string;
   contentColor3?: string;
   contentColor4?: string;
+  animation?: AnimationEffect;
 }
 
 export interface HeaderBlockSettings extends CommonSettings {
@@ -178,6 +192,28 @@ interface MegaMenuItem {
 //   url: string;
 //   megaMenu?: MegaMenuItem[];
 // }
+export interface AnimationSettings {
+  animationType?: 'fade' | 'slide' | 'zoom' | 'none';
+  animationDuration?: number;
+  animationTiming?: 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'linear';
+  animationDelay?: number;
+}
+
+// Updated Animation interfaces for single animation
+export interface AnimationConfig {
+  type: string;
+  duration: string;
+  timing: string;
+  delay?: string;
+  iterationCount?: string;
+}
+
+export interface AnimationEffect {
+  type: 'hover' | 'click';
+  animation: AnimationConfig;
+}
+
+// Updated BannerBlockSettings with single animation
 export interface BannerBlockSettings extends CommonSettings {
   descriptionColor: string;
   descriptionFontSize: string;
@@ -191,15 +227,18 @@ export interface BannerBlockSettings extends CommonSettings {
   opacityTextBox: string;
   imageRadious: string;
   imageBehavior: string;
+  animation?: AnimationEffect;
 }
+
 export interface BannerBlock {
   imageSrc: string;
   imageAlt: string;
   text: string;
   description: string;
   imageLink?: string;
-  setting: CommonSettings;
+  setting: BannerBlockSettings;
 }
+
 export interface BannerSection {
   type: "banner";
   blocks: BannerBlock;
@@ -1194,7 +1233,10 @@ export interface BlogDetailBlockSetting extends CommonSettings {
 
 export interface BlogDetailSection {
   blocks: BlogDetailBlock[];
-  setting: BlogDetailBlockSetting;
+  setting: BlogDetailBlockSetting & {
+    animation?: AnimationEffect;
+    coverImage?: string;
+  };
   type: "BlogDetail";
 }
 
@@ -1534,4 +1576,47 @@ export interface CanvasEditorSection {
       showGrid?: boolean;
     };
   };
+}
+
+// Update the animation interfaces
+export interface AnimationConfig {
+  type: string;
+  duration: string;
+  timing: string;
+  delay?: string;
+  iterationCount?: string;
+}
+
+export interface AnimationEffect {
+  type: 'hover' | 'click';
+
+
+
+
+
+
+
+  animation: AnimationConfig;
+}
+
+export interface AnimationSettings {
+
+  effect?: AnimationEffect; // Changed from effects array to single effect
+}
+
+// Update BannerBlockSetting interface
+export interface BannerBlockSetting extends CommonSettings {
+  textColor?: string;
+  textFontSize?: string;
+  textFontWeight?: string;
+  descriptionColor?: string;
+  descriptionFontSize?: string;
+  descriptionFontWeight?: string;
+  backgroundColorBox?: string;
+  backgroundBoxRadious?: string;
+  opacityImage?: string;
+  opacityTextBox?: string;
+  imageRadious?: string;
+  imageBehavior?: string;
+  animations?: AnimationSettings; // Single animation
 }
