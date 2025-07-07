@@ -108,7 +108,7 @@ import { ProductRowForm } from "./forms/productRowForm";
 import { styled } from "styled-components";
 import { SpecialForm } from "./forms/specialForm";
 import { useSharedContext } from "@/app/contexts/SharedContext";
-import  CanvasEditorForm  from "./forms/canvasEditorForm";
+import CanvasEditorForm from "./forms/canvasEditorForm";
 type FormData =
   | HeaderSection
   | MultiRowSection
@@ -196,7 +196,7 @@ export const Form = () => {
     if (selectedComponent) {
       setIsFormOpen(true);
     }
-  },[selectedComponent]);
+  }, [selectedComponent]);
 
   // Setup sensors for dnd-kit
   const sensors = useSensors(
@@ -312,9 +312,9 @@ export const Form = () => {
     userInputData: FormData,
     selectedComponent: string
   ) => {
-  const baseComponentName = selectedComponent.split("-")[0].split(":")[0];
+    const baseComponentName = selectedComponent.split("-")[0].split(":")[0];
     // console.log(  baseComponentName);
-    
+
     switch (baseComponentName) {
       case "RichText":
         return (
@@ -345,10 +345,16 @@ export const Form = () => {
       case "CanvasEditor":
         return (
           <CanvasEditorForm
-            setUserInputData={setUserInputData as unknown as React.Dispatch<
-              React.SetStateAction<import("@/app/components/sections/canvasEditor").CanvasEditorSection>
-            >}
-            userInputData={userInputData as unknown as import("@/app/components/sections/canvasEditor").CanvasEditorSection}
+            setUserInputData={
+              setUserInputData as unknown as React.Dispatch<
+                React.SetStateAction<
+                  import("@/app/components/sections/canvasEditor").CanvasEditorSection
+                >
+              >
+            }
+            userInputData={
+              userInputData as unknown as import("@/app/components/sections/canvasEditor").CanvasEditorSection
+            }
             layout={layout}
             selectedComponent={selectedComponent}
             setLayout={setLayout}
@@ -407,7 +413,7 @@ export const Form = () => {
             selectedComponent={selectedComponent}
           />
         );
-        
+
       case "ImageText":
         return (
           <ImageTextForm
@@ -1070,61 +1076,78 @@ export const Form = () => {
                 <motion.div
                   initial={{ x: "100%", opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
-                  exit={{ x: "100%", opacity: 0 }}
                   transition={{
                     type: "tween",
-                    stiffness: 100,
+                    stiffness: 150,
                     damping: 20,
-                    duration: 0.5,
+                    duration: 0.3,
                     ease: "easeInOut",
                   }}
-                  className="fixed right-0 hidden lg:block top-0 h-screen w-[270px] ease-in-out bg-white/60 border-l-2  border-white/40 rounded backdrop-blur-lg overflow-y-auto"
+                  className="fixed right-0 hidden lg:block top-0 h-screen w-[270px] ease-in-out border-l-2  border-white/40 rounded overflow-y-auto"
                   style={{ zIndex: 1000 }}
                 >
-                  {ordersButton}
+                  <motion.div
+                    className="absolute inset-0 min-h-[2000px] bg-white/60 backdrop-blur-sm"
+                    animate={{
+                      backgroundColor: [
+                        "rgba(255,255,255,0.9)",
+                        "rgba(255,255,255,0.7)",
+                        "rgba(255,255,255,0.9)",
+                      ],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      repeatType: "loop",
+                      ease: "linear",
+                    }}
+                  />
+                  <div className="relative">
+                    {ordersButton}
 
-                  <div className="p-2 ">
-                    <h2
-                      className="text-xl mb-2 border-b-2 text-right pb-2 w-fit border-blue-500 font-bold text-[#343a40] ml-auto"
-                      dir="rtl"
-                    >
-                      {showOrdersMenu ? "ترتیب سکشن" : "تنظیمات سکشن"}
-                    </h2>
-                    {showOrdersMenu ? (
-                      <div
-                        className=" p-4 bg-white rounded-lg shadow-lg"
+                    <div className="p-2 ">
+                      <h2
+                        className="text-xl mb-2 border-b-2 text-right pb-2 w-fit border-blue-500 font-bold text-[#343a40] ml-auto"
                         dir="rtl"
                       >
-                        {/* <h3 className="text-xl text-[#343a40] font-semibold mb-4">
+                        {showOrdersMenu ? "ترتیب سکشن" : "تنظیمات سکشن"}
+                      </h2>
+                      {showOrdersMenu ? (
+                        <div
+                          className=" p-4 bg-white rounded-lg shadow-lg"
+                          dir="rtl"
+                        >
+                          {/* <h3 className="text-xl text-[#343a40] font-semibold mb-4">
                           جابجایی سکشن
                         </h3> */}
 
-                        {/* Add Modal Trigger Button */}
+                          {/* Add Modal Trigger Button */}
 
-                        {/* Modal Component */}
+                          {/* Modal Component */}
 
-                        <DndContext
-                          sensors={sensors}
-                          collisionDetection={closestCenter}
-                          onDragEnd={handleDragEnd}
-                        >
-                          <SortableContext
-                            items={orders}
-                            strategy={verticalListSortingStrategy}
+                          <DndContext
+                            sensors={sensors}
+                            collisionDetection={closestCenter}
+                            onDragEnd={handleDragEnd}
                           >
-                            {orders.map((id: string) => (
-                              <SortableItem key={id} id={id} />
-                            ))}
-                          </SortableContext>
-                        </DndContext>
-                      </div>
-                    ) : (
-                      renderFormContent(
-                        setUserInputData,
-                        userInputData as Section,
-                        selectedComponent
-                      )
-                    )}
+                            <SortableContext
+                              items={orders}
+                              strategy={verticalListSortingStrategy}
+                            >
+                              {orders.map((id: string) => (
+                                <SortableItem key={id} id={id} />
+                              ))}
+                            </SortableContext>
+                          </DndContext>
+                        </div>
+                      ) : (
+                        renderFormContent(
+                          setUserInputData,
+                          userInputData as Section,
+                          selectedComponent
+                        )
+                      )}
+                    </div>
                   </div>
                 </motion.div>
               </AnimatePresence>

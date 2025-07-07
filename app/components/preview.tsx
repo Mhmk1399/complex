@@ -76,7 +76,7 @@ export const Preview: React.FC = () => {
           data-preview-container="true"
           className={`h-[85vh] relative border border-gray-200 rounded-lg overflow-y-auto mx-2 scrollbar-hide  ${
             previewWidth === "sm" && "w-[425px]"
-          } ${previewWidth === "default" && isFormOpen && "w-[80%]"} `}
+          } ${previewWidth === "default" && isFormOpen && ""} `}
         >
           <Header
             setSelectedComponent={setSelectedComponent}
