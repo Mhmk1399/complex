@@ -58,6 +58,7 @@ const BrandsGrid = styled.div<{
   -ms-overflow-style: none;
   scrollbar-width: none;
 `;
+
 const ScrollButton = styled.button<{
   $data: BrandsSection;
 }>`
@@ -83,7 +84,146 @@ const ScrollButton = styled.button<{
   &.right {
     right: 10px;
   }
+
+  /* Apply navigation button animations */
+  ${(props) => {
+    const navAnimation = props.$data.blocks?.setting?.navAnimation;
+    if (!navAnimation) return '';
+    
+    const { type, animation: animConfig } = navAnimation;
+    const selector = type === 'hover' ? '&:hover' : '&:active';
+    
+    // Generate animation CSS based on type
+    if (animConfig.type === 'pulse') {
+      return `
+        ${selector} {
+          animation: brandNavPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes brandNavPulse {
+          0%, 100% { 
+            opacity: 1;
+            filter: brightness(1);
+          }
+          50% { 
+            opacity: 0.7;
+            filter: brightness(1.3);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'glow') {
+      return `
+        ${selector} {
+          animation: brandNavGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes brandNavGlow {
+          0%, 100% { 
+            filter: brightness(1) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+          }
+          50% { 
+            filter: brightness(1.2) drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+          }
+        }
+      `;
+    } else if (animConfig.type === 'brightness') {
+      return `
+        ${selector} {
+          animation: brandNavBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes brandNavBrightness {
+          0%, 100% { 
+            filter: brightness(1);
+          }
+          50% { 
+            filter: brightness(1.4);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'blur') {
+      return `
+        ${selector} {
+          animation: brandNavBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes brandNavBlur {
+          0%, 100% { 
+            filter: blur(0px);
+          }
+          50% { 
+            filter: blur(2px);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'saturate') {
+      return `
+        ${selector} {
+          animation: brandNavSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes brandNavSaturate {
+          0%, 100% { 
+            filter: saturate(1);
+          }
+          50% { 
+            filter: saturate(1.8);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'contrast') {
+      return `
+        ${selector} {
+          animation: brandNavContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes brandNavContrast {
+          0%, 100% { 
+            filter: contrast(1)          }
+          50% { 
+            filter: contrast(1.5);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'opacity') {
+      return `
+        ${selector} {
+          animation: brandNavOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes brandNavOpacity {
+          0% { 
+            opacity: 1;
+          }
+          50% { 
+            opacity: 0.4;
+          }
+          100% { 
+            opacity: 1;
+          }
+        }
+      `;
+    } else if (animConfig.type === 'shadow') {
+      return `
+        ${selector} {
+          animation: brandNavShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes brandNavShadow {
+          0%, 100% { 
+            filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0));
+          }
+          50% { 
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+          }
+        }
+      `;
+    }
+    
+    return '';
+  }}
 `;
+
 const BrandCard = styled.a<{
   $data: BrandsSection;
 }>`
@@ -91,7 +231,6 @@ const BrandCard = styled.a<{
   flex-direction: column;
   align-items: center;
   padding: 1rem;
-
   background-color: ${(props) =>
     props.$data.blocks?.setting?.cardBackground || "#FFFFFF"};
   transition: all 0.3s ease;
@@ -129,6 +268,7 @@ export const Brands: React.FC<BrandsProps> = ({
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [previewWidth]);
+
   const handleScroll = (direction: "left" | "right") => {
     if (containerRef.current) {
       const scrollAmount = 400;
@@ -214,6 +354,8 @@ export const Brands: React.FC<BrandsProps> = ({
             </BrandCard>
           ))}
         </BrandsGrid>
+
+        {/* Left Scroll Button with Animation */}
         <ScrollButton
           className="left bg-white"
           onClick={() => handleScroll("left")}
@@ -223,6 +365,8 @@ export const Brands: React.FC<BrandsProps> = ({
             <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
           </svg>
         </ScrollButton>
+
+        {/* Right Scroll Button with Animation */}
         <ScrollButton
           className="right bg-white"
           onClick={() => handleScroll("right")}
@@ -232,6 +376,7 @@ export const Brands: React.FC<BrandsProps> = ({
             <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
           </svg>
         </ScrollButton>
+
         {showDeleteModal && (
           <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center">
             <div className="bg-white p-8 rounded-lg">
@@ -266,3 +411,4 @@ export const Brands: React.FC<BrandsProps> = ({
     </div>
   );
 };
+

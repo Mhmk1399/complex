@@ -5,9 +5,13 @@ import {
   CollapseSection,
   CollapseBlock,
   CollapseBlockSetting,
+  AnimationEffect,
 } from "@/lib/types";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
+import { animationService } from "@/services/animationService";
+import { AnimationPreview } from "../animationPreview";
+
 interface BoxValues {
   top: number;
   bottom: number;
@@ -75,7 +79,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
   const [isUpdating, setIsUpdating] = useState(false);
 
   const handleUpdate = (
-    type: "margin" | "padding", // Add padding type here
+    type: "margin" | "padding",
     updatedValues: BoxValues
   ) => {
     if (type === "margin") {
@@ -102,6 +106,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
       }));
     }
   };
+
   useEffect(() => {
     setMargin({
       top: Number(userInputData?.setting?.marginTop) || 0,
@@ -128,7 +133,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
         [`content${newBlockNumber}`]: `لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد ${newBlockNumber}`,
         setting: {
           // Copy default settings from existing block or provide defaults
-          ...prev.blocks[0]?.setting, // Copy settings from first block as template
+          ...prev.blocks[0]?.setting,
 
           // Override with block-specific properties
           [`textColor${newBlockNumber}`]: "#ffffff",
@@ -160,7 +165,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
         const oldBlockNumber = prev.blocks.findIndex((b) => b === block) + 1;
 
         const reindexedBlock: CollapseBlock = {
-          setting: { ...block.setting }, // Create a copy of the individual block's settings
+          setting: { ...block.setting },
           links: block.links || [],
         };
 
@@ -327,6 +332,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
 
     setTimeout(() => setIsUpdating(false), 100);
   };
+
   const handleBlockChange = (index: number, field: string, value: string) => {
     if (isUpdating) return;
     setIsUpdating(true);
@@ -346,6 +352,76 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
     setTimeout(() => setIsUpdating(false), 100);
   };
 
+  // Global animation handlers for all accordion headers
+  const handleAnimationToggle = (enabled: boolean) => {
+    if (enabled) {
+      const defaultConfig = animationService.getDefaultConfig('pulse');
+      const defaultEffect: AnimationEffect = {
+        type: 'hover',
+        animation: defaultConfig
+      };
+      
+      setUserInputData((prev: CollapseSection) => ({
+        ...prev,
+        setting: {
+          ...prev.setting,
+          headerAnimation: defaultEffect
+        }
+      }));
+    } else {
+      setUserInputData((prev: CollapseSection) => ({
+        ...prev,
+        setting: {
+          ...prev.setting,
+          headerAnimation: undefined
+        }
+      }));
+    }
+  };
+
+  const handleAnimationChange = (field: string, value: string | number) => {
+    setUserInputData((prev: CollapseSection) => {
+      const currentAnimation = prev.setting?.headerAnimation;
+      if (!currentAnimation) return prev;
+
+      let updatedAnimation = { ...currentAnimation };
+
+      if (field === 'type') {
+        updatedAnimation.type = value as 'hover' | 'click';
+      } else if (field.startsWith('animation.')) {
+        const animationField = field.split('.')[1];
+        let processedValue = value;
+        
+        // Process duration and delay to ensure proper format
+        if (animationField === 'duration' || animationField === 'delay') {
+          const numValue = typeof value === 'string' ? parseFloat(value) : value;
+          processedValue = `${numValue}s`;
+        }
+        
+        // Validate the animation config
+        const newAnimationConfig = {
+          ...updatedAnimation.animation,
+          [animationField]: processedValue
+        };
+        
+        if (animationService.validateConfig(newAnimationConfig)) {
+          updatedAnimation.animation = newAnimationConfig;
+        } else {
+          // If validation fails, revert to default
+          updatedAnimation.animation = animationService.getDefaultConfig(updatedAnimation.animation.type);
+        }
+      }
+
+      return {
+        ...prev,
+        setting: {
+          ...prev.setting,
+          headerAnimation: updatedAnimation
+        }
+      };
+    });
+  };
+
   const handleTabChange = (tab: "content" | "style" | "spacing") => {
     setIsContentOpen(tab === "content");
     setIsStyleSettingsOpen(tab === "style");
@@ -355,6 +431,10 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
   useEffect(() => {
     setIsContentOpen(true);
   }, []);
+
+  // Get current animation values for inputs
+  const currentAnimation = userInputData?.setting?.headerAnimation;
+  const hasAnimation = !!currentAnimation;
 
   return (
     <>
@@ -649,8 +729,6 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                             <option value="bold">ضخیم</option>
                           </select>
                         </div>
-
-                      
                       </div>
                     )}
                   </div>
@@ -667,8 +745,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
           </div>
         )}
 
-        {/* Collapse Items */}
-
+        {/* Style Settings */}
         {isStyleSettingsOpen && (
           <div className="p-4  animate-slideDown">
             <div className="rounded-lg flex items-center justify-between ">
@@ -727,11 +804,188 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                 onChange={handleSettingChange}
               />
             </div>
+
+            {/* Global Animation Settings for All Headers */}
+            <div className="rounded-lg flex flex-col gap-3 border-t pt-4 mt-6">
+              <div className="flex justify-between items-center">
+                <h4 className="font-semibold text-sky-700">تنظیمات انیمیشن سربرگ‌ها</h4>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={hasAnimation}
+                    onChange={(e) => handleAnimationToggle(e.target.checked)}
+                    className="rounded"
+                  />
+                  <span className="text-sm">فعال کردن انیمیشن برای همه سربرگ‌ها</span>
+                </label>
+              </div>
+
+              {hasAnimation && currentAnimation && (
+                <div className="border border-gray-200 rounded-lg p-4 space-y-4">
+                  <h5 className="font-medium text-gray-700">تنظیمات انیمیشن سربرگ‌ها</h5>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Effect Type */}
+                    <div>
+                      <label className="block mb-1 text-sm font-medium text-gray-700">
+                        نوع تریگر
+                      </label>
+                      <select
+                        value={currentAnimation.type}
+                        onChange={(e) => handleAnimationChange('type', e.target.value)}
+                        className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      >
+                        <option value="hover">هاور (Hover)</option>
+                        <option value="click">کلیک (Click)</option>
+                      </select>
+                    </div>
+
+                    {/* Animation Type */}
+                    <div>
+                      <label className="block mb-1 text-sm font-medium text-gray-700">
+                        نوع انیمیشن
+                      </label>
+                      <select
+                        value={currentAnimation.animation.type}
+                        onChange={(e) => handleAnimationChange('animation.type', e.target.value)}
+                        className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      >
+                        {animationService.getAnimationTypes().map(type => (
+                          <option key={type} value={type}>
+                            {type === 'pulse' && 'پالس'}
+                            {type === 'glow' && 'درخشش'}
+                            {type === 'brightness' && 'روشنایی'}
+                            {type === 'blur' && 'تاری'}
+                            {type === 'saturate' && 'اشباع رنگ'}
+                            {type === 'contrast' && 'کنتراست'}
+                            {type === 'opacity' && 'شفافیت'}
+                            {type === 'shadow' && 'سایه'}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {animationService.getAnimationPreview(currentAnimation.animation.type)}
+                      </div>
+                    </div>
+
+                    {/* Duration - Number Input */}
+                    <div>
+                      <label className="block mb-1 text-sm font-medium text-gray-700">
+                        مدت زمان (ثانیه)
+                      </label>
+                      <input
+                        type="number"
+                        min="0.1"
+                        max="10"
+                        step="0.1"
+                        value={parseFloat(currentAnimation.animation.duration.replace('s', '')) || 1}
+                        onChange={(e) => handleAnimationChange('animation.duration', e.target.value)}
+                        className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      />
+                      <div className="text-gray-500 text-xs mt-1">
+                        فعلی: {currentAnimation.animation.duration}
+                      </div>
+                    </div>
+
+                    {/* Timing Function */}
+                    <div>
+                      <label className="block mb-1 text-sm font-medium text-gray-700">
+                        تابع زمان‌بندی
+                      </label>
+                      <select
+                        value={currentAnimation.animation.timing}
+                        onChange={(e) => handleAnimationChange('animation.timing', e.target.value)}
+                        className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      >
+                        <option value="ease">ease - طبیعی</option>
+                        <option value="ease-in">ease-in - شروع آهسته</option>
+                        <option value="ease-out">ease-out - پایان آهسته</option>
+                        <option value="ease-in-out">ease-in-out - شروع و پایان آهسته</option>
+                        <option value="linear">linear - خطی</option>
+                        <option value="cubic-bezier(0, 0, 0.2, 1)">cubic-bezier - سفارشی</option>
+                      </select>
+                    </div>
+
+                    {/* Delay - Number Input */}
+                    <div>
+                      <label className="block mb-1 text-sm font-medium text-gray-700">
+                        تاخیر (ثانیه)
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="5"
+                        step="0.1"
+                        value={parseFloat((currentAnimation.animation.delay || '0s').replace('s', '')) || 0}
+                        onChange={(e) => handleAnimationChange('animation.delay', e.target.value)}
+                        className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      />
+                      <div className="text-gray-500 text-xs mt-1">
+                        فعلی: {currentAnimation.animation?.delay || '0s'}
+                      </div>
+                    </div>
+
+                    {/* Iteration Count */}
+                    <div>
+                      <label className="block mb-1 text-sm font-medium text-gray-700">
+                        تعداد تکرار
+                      </label>
+                      <select
+                        value={currentAnimation.animation.iterationCount || '1'}
+                        onChange={(e) => handleAnimationChange('animation.iterationCount', e.target.value)}
+                        className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      >
+                        <option value="1">1 بار</option>
+                        <option value="2">2 بار</option>
+                        <option value="3">3 بار</option>
+                        <option value="5">5 بار</option>
+                        <option value="infinite">بی‌نهایت</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Animation Preview */}
+                  <div className="mt-4">
+                    <AnimationPreview effects={[currentAnimation]} />
+                  </div>
+
+                  {/* Animation Info */}
+                  <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+                    <h6 className="font-medium text-blue-800 mb-2">اطلاعات انیمیشن</h6>
+                    <div className="text-sm text-blue-700 space-y-1">
+                      <div>
+                        <strong>CSS تولید شده:</strong>
+                        <code className="block mt-1 p-2 bg-white rounded text-xs overflow-x-auto">
+                          {animationService.generateCSS(currentAnimation.animation)}
+                        </code>
+                      </div>
+                      <div className="mt-2">
+                        <strong>وضعیت اعتبار:</strong>
+                        <span className={`ml-2 px-2 py-1 rounded text-xs ${
+                          animationService.validateConfig(currentAnimation.animation)
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'
+                        }`}>
+                          {animationService.validateConfig(currentAnimation.animation) ? 'معتبر' : 'نامعتبر'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {!hasAnimation && (
+                <div className="text-center text-gray-500 py-8 border border-gray-200 rounded-lg bg-gray-50">
+                  <div className="mb-2">⚡</div>
+                  <div>انیمیشن غیرفعال است</div>
+                  <div className="text-sm mt-1">برای فعال کردن چک‌باکس بالا را انتخاب کنید</div>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
         {/* Spacing Settings Dropdown */}
-
         {isSpacingOpen && (
           <div className="p-4  animate-slideDown">
             <div className="bg-gray-50 rounded-lg flex items-center justify-center">

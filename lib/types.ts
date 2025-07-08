@@ -18,8 +18,9 @@ export interface BrandsBlockSettings extends CommonSettings {
   logoHeight: number;
   cardBackground: string;
   brandAnimation?: AnimationConfig;
-  navAnimation?: AnimationConfig;
+  navAnimation?: AnimationEffect; // Add this line for navigation button animations
 }
+
 
 export interface ColorSchema {
   primary: string;
@@ -27,6 +28,7 @@ export interface ColorSchema {
   text: string;
 }
 export interface CollapseBlockSetting extends CommonSettings {
+  headerAnimation: any;
   titleFontSize: string;
   titleFontWeight: string;
   imageAlign: string;
@@ -229,7 +231,22 @@ export interface BannerBlockSettings extends CommonSettings {
   imageBehavior: string;
   animation?: AnimationEffect;
 }
+export interface AnimationState {
+  isPlaying: boolean;
+  currentEffect?: AnimationEffect;
+  startTime?: number;
+  duration?: number;
+  progress?: number;
+}
 
+// Animation hook return type
+export interface UseAnimationReturn {
+  isAnimating: boolean;
+  trigger: (type?: 'hover' | 'click') => void;
+  stop: () => void;
+  reset: () => void;
+  state: AnimationState;
+}
 export interface BannerBlock {
   imageSrc: string;
   imageAlt: string;
@@ -371,6 +388,7 @@ export interface RichTextBlock {
     lineBottom: string;
     lineWidth: string;
     lineColor: string;
+    btnAnimation?: AnimationEffect; // Add button animation support
   };
 }
 
@@ -535,6 +553,7 @@ export interface ContactFormBlockSetting extends Partial<CommonSettings> {
   btnTextColor?: string;
   btnBackgroundColor?: string;
   formBackground?: string;
+  btnAnimation?: AnimationEffect; // Add button animation support
 }
 
 export interface ContactFormBlock {
@@ -1072,13 +1091,14 @@ export interface CollectionBlockSetting extends CommonSettings {
   cardBackground: string;
   cardBorderRadius: string;
   imageRadius: string;
-  // gridColumns: number;
   paddingTop: string;
   paddingBottom: string;
   marginTop: string;
   marginBottom: string;
   backgroundColor: string;
+  navAnimation?: AnimationEffect; // Add this line for navigation button animations
 }
+
 
 export interface CollectionProduct {
   id: string;
@@ -1312,7 +1332,12 @@ export interface SpecialOfferBlockSetting extends CommonSettings {
   cardBackground: string;
   cardBorderRadius: string;
   selectedCollection: string;
+  headingColor: string;
+  headingFontSize: string;
+  headingFontWeight: string;
+  navAnimation?: AnimationEffect; // Add this line for navigation button animations
 }
+
 export interface GalleryImage {
   imageSrc: string;
   imageAlt: string;
@@ -1320,6 +1345,7 @@ export interface GalleryImage {
 }
 
 export interface GalleryBlockSetting {
+  imageAnimation: any;
   titleColor: string;
   titleFontSize: string;
   titleFontWeight: string;
@@ -1370,6 +1396,7 @@ export interface StoryBlockSetting extends CommonSettings {
   imageWidth: string;
   imageHeight: string;
   imageRadius: string;
+  imageAnimation?: AnimationEffect; // Add this line for story image animations
 }
 
 export interface StoryBlock {
@@ -1479,6 +1506,7 @@ export interface BrandItem {
 }
 
 export interface BrandsBlockSetting extends CommonSettings {
+  navAnimation: any;
   headingColor: string;
   headingFontSize: string;
   headingFontWeight: string;
@@ -1518,7 +1546,9 @@ export interface ProductRowBlockSetting extends CommonSettings {
   headingFontSize: string;
   headingFontWeight: string;
   selectedCollection: string;
+  navAnimation?: AnimationEffect; // Add this line for navigation button animations
 }
+
 
 export interface ProductRowBlock {
   textHeading: string;

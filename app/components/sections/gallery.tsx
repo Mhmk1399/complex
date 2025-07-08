@@ -15,8 +15,6 @@ interface GalleryProps {
   previewWidth: "sm" | "default";
 }
 
-// Replace the useEffect and states with this default images array
-
 const Section = styled.section<{
   $data: GallerySection;
   $previewWidth: "sm" | "default";
@@ -80,9 +78,146 @@ const ImageWrapper = styled.div<{ $data: GallerySection }>`
   overflow: hidden;
   transition: transform 0.3s ease;
   object-fit: fill;
-  &:hover {
-    transform: scale(1.05);
-  }
+  
+  /* Apply image animations */
+  ${(props) => {
+    const imageAnimation = props.$data.blocks?.setting?.imageAnimation;
+    if (!imageAnimation) return '&:hover { transform: scale(1.05); }';
+    
+    const { type, animation: animConfig } = imageAnimation;
+    const selector = type === 'hover' ? '&:hover' : '&:active';
+    
+    // Generate animation CSS based on type
+    if (animConfig.type === 'pulse') {
+      return `
+        ${selector} {
+          animation: galleryImagePulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes galleryImagePulse {
+          0%, 100% { 
+            opacity: 1;
+            filter: brightness(1);
+          }
+          50% { 
+            opacity: 0.7;
+            filter: brightness(1.3);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'glow') {
+      return `
+        ${selector} {
+          animation: galleryImageGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes galleryImageGlow {
+          0%, 100% { 
+            filter: brightness(1) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+          }
+          50% { 
+            filter: brightness(1.2) drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+          }
+        }
+      `;
+    } else if (animConfig.type === 'brightness') {
+      return `
+        ${selector} {
+          animation: galleryImageBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes galleryImageBrightness {
+          0%, 100% { 
+            filter: brightness(1);
+          }
+          50% { 
+            filter: brightness(1.4);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'blur') {
+      return `
+        ${selector} {
+          animation: galleryImageBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes galleryImageBlur {
+          0%, 100% { 
+            filter: blur(0px);
+          }
+          50% { 
+            filter: blur(2px);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'saturate') {
+      return `
+        ${selector} {
+          animation: galleryImageSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes galleryImageSaturate {
+          0%, 100% { 
+            filter: saturate(1);
+          }
+          50% { 
+            filter: saturate(1.8);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'contrast') {
+      return `
+        ${selector} {
+          animation: galleryImageContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes galleryImageContrast {
+          0%, 100% { 
+            filter: contrast(1);
+          }
+          50% { 
+            filter: contrast(1.5);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'opacity') {
+      return `
+        ${selector} {
+          animation: galleryImageOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes galleryImageOpacity {
+          0% { 
+            opacity: 1;
+          }
+          50% { 
+            opacity: 0.4;
+          }
+          100% { 
+            opacity: 1;
+          }
+        }
+      `;
+    } else if (animConfig.type === 'shadow') {
+      return `
+        ${selector} {
+          animation: galleryImageShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes galleryImageShadow {
+          0%, 100% { 
+            filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0));
+          }
+          50% { 
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+          }
+        }
+      `;
+    }
+    
+    // Default hover effect if no animation is configured
+    return '&:hover { transform: scale(1.05); }';
+  }}
 `;
 
 const Gallery: React.FC<GalleryProps> = ({
@@ -171,8 +306,18 @@ const Gallery: React.FC<GalleryProps> = ({
 
       <ImageGrid $data={sectionData} $preview={preview}>
         {images.map((image, index) => (
-          <ImageWrapper key={index} $data={sectionData} >
-            <Link href={"#"}>
+          <ImageWrapper key={index} $data={sectionData}>
+            {image.imageLink ? (
+              <Link href={image.imageLink}>
+                <Image
+                  src={image.imageSrc}
+                  alt={image.imageAlt}
+                  width={3000}
+                  height={3000}
+                  className="w-full h-full object-cover"
+                />
+              </Link>
+            ) : (
               <Image
                 src={image.imageSrc}
                 alt={image.imageAlt}
@@ -180,7 +325,7 @@ const Gallery: React.FC<GalleryProps> = ({
                 height={3000}
                 className="w-full h-full object-cover"
               />
-            </Link>
+            )}
           </ImageWrapper>
         ))}
       </ImageGrid>

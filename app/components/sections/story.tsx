@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { Delete } from "../C-D";
+
 interface StoryProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
@@ -13,6 +14,7 @@ interface StoryProps {
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
   previewWidth: "sm" | "default";
 }
+
 interface Story {
   _id: string;
   title: string;
@@ -21,6 +23,7 @@ interface Story {
   createdAt: string;
   updatedAt: string;
 }
+
 const StoryContainer = styled.div<{
   $data: StorySection;
   $previewWidth: "sm" | "default";
@@ -37,7 +40,7 @@ const StoryContainer = styled.div<{
 const StoriesWrapper = styled.section`
   display: flex;
   direction: rtl;
-  justify-content: flex-start; // Changed from center
+  justify-content: flex-start;
   overflow-x: auto;
   gap: 12px;
   padding: 10px;
@@ -58,8 +61,8 @@ const StoryItem = styled.div<{
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  flex-shrink: 0; // Add this line
-  width: 104px; // Add fixed width (100px + 4px padding)
+  flex-shrink: 0;
+  width: 104px;
 
   .story-ring {
     padding: 2px;
@@ -70,6 +73,145 @@ const StoryItem = styled.div<{
   .story-image {
     border-radius: ${(props) => props.$data.blocks.setting.imageRadius}%;
     object-fit: cover;
+    
+    /* Apply story image animations */
+    ${(props) => {
+      const imageAnimation = props.$data.blocks?.setting?.imageAnimation;
+      if (!imageAnimation) return '';
+      
+      const { type, animation: animConfig } = imageAnimation;
+      const selector = type === 'hover' ? '&:hover' : '&:active';
+      
+      // Generate animation CSS based on type
+      if (animConfig.type === 'pulse') {
+        return `
+          ${selector} {
+            animation: storyImagePulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          }
+          
+          @keyframes storyImagePulse {
+            0%, 100% { 
+              opacity: 1;
+              filter: brightness(1);
+            }
+            50% { 
+              opacity: 0.7;
+              filter: brightness(1.3);
+            }
+          }
+        `;
+      } else if (animConfig.type === 'glow') {
+        return `
+          ${selector} {
+            animation: storyImageGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          }
+          
+          @keyframes storyImageGlow {
+            0%, 100% { 
+              filter: brightness(1) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+            }
+            50% { 
+              filter: brightness(1.2) drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+            }
+          }
+        `;
+      } else if (animConfig.type === 'brightness') {
+        return `
+          ${selector} {
+            animation: storyImageBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          }
+          
+          @keyframes storyImageBrightness {
+            0%, 100% { 
+              filter: brightness(1);
+            }
+            50% { 
+              filter: brightness(1.4);
+            }
+          }
+        `;
+      } else if (animConfig.type === 'blur') {
+        return `
+          ${selector} {
+            animation: storyImageBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          }
+          
+          @keyframes storyImageBlur {
+            0%, 100% { 
+              filter: blur(0px);
+            }
+            50% { 
+              filter: blur(2px);
+            }
+          }
+        `;
+      } else if (animConfig.type === 'saturate') {
+        return `
+          ${selector} {
+            animation: storyImageSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          }
+          
+          @keyframes storyImageSaturate {
+            0%, 100% { 
+              filter: saturate(1);
+            }
+            50% { 
+              filter: saturate(1.8);
+            }
+          }
+        `;
+      } else if (animConfig.type === 'contrast') {
+        return `
+          ${selector} {
+            animation: storyImageContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          }
+          
+          @keyframes storyImageContrast {
+            0%, 100% { 
+              filter: contrast(1);
+            }
+            50% { 
+              filter: contrast(1.5);
+            }
+          }
+        `;
+      } else if (animConfig.type === 'opacity') {
+        return `
+          ${selector} {
+            animation: storyImageOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          }
+          
+          @keyframes storyImageOpacity {
+            0% { 
+              opacity: 1;
+            }
+            50% { 
+              opacity: 0.4;
+            }
+            100% { 
+              opacity: 1;
+            }
+          }
+        `;
+      } else if (animConfig.type === 'shadow') {
+        return `
+          ${selector} {
+            animation: storyImageShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          }
+          
+          @keyframes storyImageShadow {
+            0%, 100% { 
+              filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0));
+            }
+            50% { 
+              filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+            }
+          }
+        `;
+      }
+      
+      return '';
+    }}
   }
 
   .story-title {
@@ -94,6 +236,7 @@ export const Story: React.FC<StoryProps> = ({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
   const [stories, setStories] = useState<Story[]>([]);
+
   useEffect(() => {
     if (window.innerWidth <= 425) {
       setPreview("sm");
@@ -101,11 +244,10 @@ export const Story: React.FC<StoryProps> = ({
       setPreview(previewWidth);
     }
   }, [previewWidth]);
+
   useEffect(() => {
     const fetchAllStories = async () => {
       try {
-
-        
         const headers: HeadersInit = {
           "Authorization": `${localStorage.getItem("complexToken")}`,
           "Content-Type": "application/json",
@@ -124,7 +266,6 @@ export const Story: React.FC<StoryProps> = ({
     fetchAllStories();
   }, []);
   
-
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
   ) as StorySection;
@@ -208,7 +349,7 @@ export const Story: React.FC<StoryProps> = ({
                   <Image
                     src={"image" in story ? story.image : story.imageUrl}
                     alt={story.title}
-                    className="story-image w-[100px] h-[100px] object-"
+                    className="story-image w-[100px] h-[100px] object-cover"
                     width={100}
                     height={100}
                   />

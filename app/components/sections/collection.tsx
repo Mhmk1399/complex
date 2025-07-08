@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Delete } from "../C-D";
 import Link from "next/link";
+
 interface CollectionData {
   _id: string;
   name: string;
@@ -26,6 +27,7 @@ interface CollectionProps {
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
   previewWidth: "sm" | "default";
 }
+
 interface ProductData {
   _id: string;
   name: string;
@@ -49,7 +51,9 @@ const CollectionWrapper = styled.div<{
   backdrop-filter: blur(8px);
   margin: 20px;
   transition: all 0.4s ease-in-out;
+  position: relative;
 `;
+
 const Heading = styled.h2<{ $setting: CollectionBlockSetting }>`
   color: ${(props) => props.$setting?.headingColor};
   font-size: ${(props) => props.$setting?.headingFontSize}px;
@@ -69,6 +73,171 @@ const ProductGrid = styled.div<{
   );
   gap: 10px;
   padding: 10px;
+`;
+
+const NavigationButton = styled.button<{
+  $setting: CollectionBlockSetting;
+  $position: 'left' | 'right';
+}>`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  ${(props) => props.$position}: 10px;
+  background: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Apply navigation button animations */
+  ${(props) => {
+    const navAnimation = props.$setting?.navAnimation;
+    if (!navAnimation) return '';
+    
+    const { type, animation: animConfig } = navAnimation;
+    const selector = type === 'hover' ? '&:hover' : '&:active';
+    
+    // Generate animation CSS based on type
+    if (animConfig.type === 'pulse') {
+      return `
+        ${selector} {
+          animation: collectionNavPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes collectionNavPulse {
+          0%, 100% { 
+            opacity: 1;
+            filter: brightness(1);
+          }
+          50% { 
+            opacity: 0.7;
+            filter: brightness(1.3);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'glow') {
+      return `
+        ${selector} {
+          animation: collectionNavGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes collectionNavGlow {
+          0%, 100% { 
+            filter: brightness(1) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+          }
+          50% { 
+            filter: brightness(1.2) drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+          }
+        }
+      `;
+    } else if (animConfig.type === 'brightness') {
+      return `
+        ${selector} {
+          animation: collectionNavBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes collectionNavBrightness {
+          0%, 100% { 
+            filter: brightness(1);
+          }
+          50% { 
+            filter: brightness(1.4);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'blur') {
+      return `
+        ${selector} {
+          animation: collectionNavBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes collectionNavBlur {
+          0%, 100% { 
+            filter: blur(0px);
+          }
+          50% { 
+            filter: blur(2px);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'saturate') {
+      return `
+        ${selector} {
+          animation: collectionNavSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes collectionNavSaturate {
+          0%, 100% { 
+            filter: saturate(1);
+          }
+          50% { 
+            filter: saturate(1.8);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'contrast') {
+      return `
+        ${selector} {
+          animation: collectionNavContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes collectionNavContrast {
+          0%, 100% { 
+            filter: contrast(1);
+          }
+          50% { 
+            filter: contrast(1.5);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'opacity') {
+      return `
+        ${selector} {
+          animation: collectionNavOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes collectionNavOpacity {
+          0% { 
+            opacity: 1;
+          }
+          50% { 
+            opacity: 0.4;
+          }
+          100% { 
+            opacity: 1;
+          }
+        }
+      `;
+    } else if (animConfig.type === 'shadow') {
+      return `
+        ${selector} {
+          animation: collectionNavShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes collectionNavShadow {
+          0%, 100% { 
+            filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0));
+          }
+          50% { 
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+          }
+        }
+      `;
+    }
+    
+    return '';
+  }}
 `;
 
 const ProductCard = styled.div<{
@@ -177,6 +346,7 @@ export const Collection: React.FC<CollectionProps> = ({
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
+  const [currentProductIndex, setCurrentProductIndex] = useState(0);
 
   useEffect(() => {
     if (window.innerWidth <= 425) {
@@ -194,15 +364,14 @@ export const Collection: React.FC<CollectionProps> = ({
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("/api/collections",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
+        const response = await fetch("/api/collections", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
             authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );        const data = await response.json();
+          },
+        });
+        const data = await response.json();
 
         const collectionData = data.collections || [];
         setCollections(collectionData);
@@ -230,6 +399,7 @@ export const Collection: React.FC<CollectionProps> = ({
 
     fetchProducts();
   }, []);
+
   const handleCollectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const collectionName = e.target.value;
     setSelectedCollection(collectionName);
@@ -249,15 +419,37 @@ export const Collection: React.FC<CollectionProps> = ({
         })
       );
       setFilteredProducts(formattedProducts);
+      setCurrentProductIndex(0); // Reset to first product when collection changes
+    }
+  };
+
+  // Navigation functions for product carousel
+  const handlePrevious = () => {
+    if (filteredProducts.length > 3) {
+      setCurrentProductIndex((prev) => 
+        prev === 0 ? Math.max(0, filteredProducts.length - 3) : Math.max(0, prev - 1)
+      );
+    }
+  };
+
+  const handleNext = () => {
+    if (filteredProducts.length > 3) {
+      setCurrentProductIndex((prev) => 
+        prev >= filteredProducts.length - 3 ? 0 : prev + 1
+      );
     }
   };
 
   const sectionData = layout?.sections?.children?.sections?.find(
     (section) => section.type === actualName
   ) as CollectionSection;
+
   if (!sectionData?.setting) {
     return null; // or return a loading state/placeholder
   }
+
+  // Get products to display based on current index
+  const displayedProducts = filteredProducts.slice(currentProductIndex, currentProductIndex + 3);
 
   return (
     <>
@@ -340,23 +532,53 @@ export const Collection: React.FC<CollectionProps> = ({
           </div>
         ) : null}
 
+        {/* Navigation Buttons with Animation */}
+        {filteredProducts.length > 3 && (
+          <>
+            <NavigationButton
+              $setting={sectionData.setting}
+              $position="left"
+              onClick={handlePrevious}
+              disabled={currentProductIndex === 0}
+              style={{
+                opacity: currentProductIndex === 0 ? 0.5 : 1,
+                cursor: currentProductIndex === 0 ? 'not-allowed' : 'pointer'
+              }}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
+              </svg>
+            </NavigationButton>
+
+            <NavigationButton
+              $setting={sectionData.setting}
+              $position="right"
+              onClick={handleNext}
+              disabled={currentProductIndex >= filteredProducts.length - 3}
+              style={{
+                opacity: currentProductIndex >= filteredProducts.length - 3 ? 0.5 : 1,
+                cursor: currentProductIndex >= filteredProducts.length - 3 ? 'not-allowed' : 'pointer'
+              }}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+              </svg>
+            </NavigationButton>
+          </>
+        )}
+
         <ProductGrid
           $preview={preview}
           $setting={sectionData.setting}
           $previewWidth={previewWidth}
         >
-          {filteredProducts.slice(0, 3).map((product, index) => (
+          {displayedProducts.map((product, index) => (
             <ProductCard
               $preview={preview}
               $previewWidth={previewWidth}
               key={product._id}
               $setting={sectionData.setting}
               $isLarge={index === 0}
-              // style={
-              //   index === 0
-              //     ? { height: "100%" }
-              //     : { height: "calc(50% - 10px)" }
-              // }
             >
               <ProductImage
                 src={product.images?.imageSrc || "/assets/images/pro2.jpg"}
@@ -377,6 +599,23 @@ export const Collection: React.FC<CollectionProps> = ({
             </ProductCard>
           ))}
         </ProductGrid>
+
+        {/* Product indicators */}
+        {filteredProducts.length > 3 && (
+          <div className="flex justify-center mt-4 space-x-2">
+            {Array.from({ length: Math.max(0, filteredProducts.length - 2) }).map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentProductIndex(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  index === currentProductIndex
+                    ? 'bg-blue-500 w-4'
+                    : 'bg-gray-300 hover:bg-gray-400'
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </CollectionWrapper>
     </>
   );

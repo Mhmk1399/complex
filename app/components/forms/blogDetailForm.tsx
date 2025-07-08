@@ -141,15 +141,25 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
     setTimeout(() => setIsUpdating(false), 100);
   };
 
-  // Animation handlers
+  // Animation handlers - same as banner form
   const handleAnimationToggle = (enabled: boolean) => {
     if (enabled) {
-      const defaultEffect = effectService.getDefaultEffectConfig('hover', 'pulse');
+      const defaultEffect: AnimationEffect = {
+        type: 'hover',
+        animation: {
+          type: 'pulse',
+          duration: '1s',
+          timing: 'ease-in-out',
+          delay: '0s',
+          iterationCount: '1'
+        }
+      };
+      
       setUserInputData((prev: BlogDetailSection) => ({
         ...prev,
         setting: {
           ...prev.setting,
-          animation: defaultEffect as AnimationEffect
+          animation: defaultEffect
         }
       }));
     } else {
@@ -174,11 +184,17 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
         updatedAnimation.type = value as 'hover' | 'click';
       } else if (field.startsWith('animation.')) {
         const animationField = field.split('.')[1];
+        let processedValue = value;
+        
+        // Process duration and delay to ensure proper format
+        if (animationField === 'duration' || animationField === 'delay') {
+          const numValue = typeof value === 'string' ? parseFloat(value) : value;
+          processedValue = `${numValue}s`;
+        }
+        
         updatedAnimation.animation = {
           ...updatedAnimation.animation,
-          [animationField]: animationField === 'duration' || animationField === 'delay' 
-            ? `${value}s` 
-            : value
+          [animationField]: processedValue
         };
       }
 
@@ -205,6 +221,10 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
   // Get current animation values for inputs
   const currentAnimation = userInputData?.setting?.animation;
   const hasAnimation = !!currentAnimation;
+
+  // Animation types - same as banner
+  const animationTypes = ['pulse', 'ping', 'bgOpacity', 'scaleup', 'scaledown'];
+  const effectTypes = ['hover', 'click'];
 
   return (
     <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
@@ -385,7 +405,7 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
             </div>
           </div>
 
-          {/* Animation Settings */}
+          {/* Animation Settings - same as banner */}
           <div className="rounded-lg flex flex-col gap-3 border-t pt-4 mt-6">
             <div className="flex justify-between items-center">
               <h4 className="font-semibold text-sky-700">تنظیمات انیمیشن تصویر</h4>
@@ -401,23 +421,23 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
             </div>
 
             {hasAnimation && currentAnimation && (
-              <div className="border border-gray-200 rounded-lg p-4 space-y-3">
+              <div className="border border-gray-200 rounded-lg p-4 space-y-4">
                 <h5 className="font-medium text-gray-700">تنظیمات انیمیشن</h5>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Effect Type */}
                   <div>
                     <label className="block mb-1 text-sm font-medium text-gray-700">
-                      نوع افکت
+                      نوع تریگر
                     </label>
                     <select
                       value={currentAnimation.type}
                       onChange={(e) => handleAnimationChange('type', e.target.value)}
                       className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
-                      {effectService.getEffectTypes().map(type => (
+                      {effectTypes.map(type => (
                         <option key={type} value={type}>
-                          {type === 'hover' ? 'هاور' : 'کلیک'}
+                          {type === 'hover' ? 'هاور (Hover)' : 'کلیک (Click)'}
                         </option>
                       ))}
                     </select>
@@ -433,7 +453,7 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
                       onChange={(e) => handleAnimationChange('animation.type', e.target.value)}
                       className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
-                      {effectService.getAnimationTypes().map(type => (
+                      {animationTypes.map(type => (
                         <option key={type} value={type}>
                           {type === 'pulse' && 'پالس'}
                           {type === 'ping' && 'پینگ'}
@@ -460,7 +480,7 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
                       className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                     <div className="text-gray-500 text-xs mt-1">
-                      نمایش: {currentAnimation.animation.duration}
+                      فعلی: {currentAnimation.animation.duration}
                     </div>
                   </div>
 
@@ -474,12 +494,12 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
                       onChange={(e) => handleAnimationChange('animation.timing', e.target.value)}
                       className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
-                      <option value="ease">ease</option>
-                      <option value="ease-in">ease-in</option>
-                      <option value="ease-out">ease-out</option>
-                      <option value="ease-in-out">ease-in-out</option>
-                      <option value="linear">linear</option>
-                      <option value="cubic-bezier(0, 0, 0.2, 1)">cubic-bezier</option>
+                      <option value="ease">ease - طبیعی</option>
+                      <option value="ease-in">ease-in - شروع آهسته</option>
+                      <option value="ease-out">ease-out - پایان آهسته</option>
+                      <option value="ease-in-out">ease-in-out - شروع و پایان آهسته</option>
+                      <option value="linear">linear - خطی</option>
+                      <option value="cubic-bezier(0, 0, 0.2, 1)">cubic-bezier - سفارشی</option>
                     </select>
                   </div>
 
@@ -498,7 +518,7 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
                       className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                     <div className="text-gray-500 text-xs mt-1">
-                      نمایش: {currentAnimation.animation?.delay || '0s'}
+                      فعلی: {currentAnimation.animation?.delay || '0s'}
                     </div>
                   </div>
 
@@ -512,22 +532,27 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
                       onChange={(e) => handleAnimationChange('animation.iterationCount', e.target.value)}
                       className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
+                      <option value="1">1 بار</option>
+                      <option value="2">2 بار</option>
+                      <option value="3">3 بار</option>
+                      <option value="5">5 بار</option>
                       <option value="infinite">بی‌نهایت</option>
                     </select>
                   </div>
                 </div>
 
                 {/* Animation Preview */}
-                <AnimationPreview effects={[currentAnimation]} />
+                <div className="mt-4">
+                  <AnimationPreview effects={[currentAnimation]} />
+                </div>
               </div>
             )}
 
             {!hasAnimation && (
-              <div className="text-center text-gray-500 py-8 border border-gray-200 rounded-lg">
-                انیمیشن غیرفعال است. برای فعال کردن چک‌باکس بالا را انتخاب کنید.
+              <div className="text-center text-gray-500 py-8 border border-gray-200 rounded-lg bg-gray-50">
+                <div className="mb-2">⚡</div>
+                <div>انیمیشن غیرفعال است</div>
+                <div className="text-sm mt-1">برای فعال کردن چک‌باکس بالا را انتخاب کنید</div>
               </div>
             )}
           </div>

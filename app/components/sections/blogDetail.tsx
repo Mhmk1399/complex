@@ -102,7 +102,7 @@ const CoverImageContainer = styled.div<{
   cursor: pointer;
   transition: transform 0.3s ease;
 
-  /* Apply single animation if exists */
+  /* Apply animations using CSS filters and properties that don't affect positioning */
   ${(props) => {
     const animation = props.$data.setting.animation;
     if (!animation) return '';
@@ -110,11 +110,89 @@ const CoverImageContainer = styled.div<{
     const { type, animation: animConfig } = animation;
     const selector = type === 'hover' ? '&:hover' : '&:active';
     
-    return `
-      ${selector} {
-        animation: ${animConfig.type} ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
-      }
-    `;
+    // Generate animation CSS based on type
+    if (animConfig.type === 'pulse') {
+      return `
+        ${selector} {
+          animation: blogImagePulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes blogImagePulse {
+          0%, 100% { 
+            transform: scale(1);
+            opacity: 1;
+          }
+          50% { 
+            transform: scale(1.05);
+            opacity: 0.8;
+          }
+        }
+      `;
+    } else if (animConfig.type === 'ping') {
+      return `
+        ${selector} {
+          animation: blogImagePing ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes blogImagePing {
+          0% {
+            transform: scale(1);
+            opacity: 1;
+          }
+          75%, 100% {
+            transform: scale(1.1);
+            opacity: 0;
+          }
+        }
+      `;
+    } else if (animConfig.type === 'bgOpacity') {
+      return `
+        ${selector} {
+          animation: blogImageBgOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes blogImageBgOpacity {
+          0%, 100% { 
+            opacity: 1;
+          }
+          50% { 
+            opacity: 0.7;
+          }
+        }
+      `;
+    } else if (animConfig.type === 'scaleup') {
+      return `
+        ${selector} {
+          animation: blogImageScaleup ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes blogImageScaleup {
+          0% {
+            transform: scale(1);
+          }
+          100% {
+            transform: scale(1.1);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'scaledown') {
+      return `
+        ${selector} {
+          animation: blogImageScaledown ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes blogImageScaledown {
+          0% {
+            transform: scale(1);
+          }
+          100% {
+            transform: scale(0.95);
+          }
+        }
+      `;
+    }
+    
+    return '';
   }}
 
   @media (max-width: 768px) {
@@ -122,56 +200,6 @@ const CoverImageContainer = styled.div<{
       Math.min(280, parseInt(props.$data?.setting?.coverImageWidth || "600"))}px;
     height: ${(props) => 
       Math.min(180, parseInt(props.$data?.setting?.coverImageHeight || "400"))}px;
-  }
-
-  /* Animation keyframes */
-  @keyframes pulse {
-    0%, 100% { 
-      transform: scale(1);
-      opacity: 1;
-    }
-    50% { 
-      transform: scale(1.05);
-      opacity: 0.8;
-    }
-  }
-  
-  @keyframes ping {
-    0% {
-      transform: scale(1);
-      opacity: 1;
-    }
-    75%, 100% {
-      transform: scale(1.1);
-      opacity: 0;
-    }
-  }
-  
-  @keyframes bgOpacity {
-    0%, 100% { 
-      opacity: 1;
-    }
-    50% { 
-      opacity: 0.7;
-    }
-  }
-  
-  @keyframes scaleup {
-    0% {
-      transform: scale(1);
-    }
-    100% {
-      transform: scale(1.1);
-    }
-  }
-  
-  @keyframes scaledown {
-    0% {
-      transform: scale(1);
-    }
-    100% {
-      transform: scale(0.95);
-    }
   }
 `;
 

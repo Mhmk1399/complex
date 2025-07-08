@@ -69,7 +69,7 @@ const ScrollButton = styled.button<{
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background:  "#FFFFFF";
+    background: "#FFFFFF";
     color: ${props => props.$data.blocks?.setting?.btnTextColor || "#000000"};
     border: none;
     border-radius: 50%;
@@ -89,6 +89,145 @@ const ScrollButton = styled.button<{
     &.right {
       right: 10px;
     }
+
+    /* Apply navigation button animations */
+    ${(props) => {
+      const navAnimation = props.$data.blocks?.setting?.navAnimation;
+      if (!navAnimation) return '';
+      
+      const { type, animation: animConfig } = navAnimation;
+      const selector = type === 'hover' ? '&:hover' : '&:active';
+      
+      // Generate animation CSS based on type
+      if (animConfig.type === 'pulse') {
+        return `
+          ${selector} {
+            animation: specialOfferNavPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          }
+          
+          @keyframes specialOfferNavPulse {
+            0%, 100% { 
+              opacity: 1;
+              filter: brightness(1);
+            }
+            50% { 
+              opacity: 0.7;
+              filter: brightness(1.3);
+            }
+          }
+        `;
+      } else if (animConfig.type === 'glow') {
+        return `
+          ${selector} {
+            animation: specialOfferNavGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          }
+          
+          @keyframes specialOfferNavGlow {
+            0%, 100% { 
+              filter: brightness(1) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+            }
+            50% { 
+              filter: brightness(1.2) drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+            }
+          }
+        `;
+      } else if (animConfig.type === 'brightness') {
+        return `
+          ${selector} {
+            animation: specialOfferNavBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          }
+          
+          @keyframes specialOfferNavBrightness {
+            0%, 100% { 
+              filter: brightness(1);
+            }
+            50% { 
+              filter: brightness(1.4);
+            }
+          }
+        `;
+      } else if (animConfig.type === 'blur') {
+        return `
+          ${selector} {
+            animation: specialOfferNavBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          }
+          
+          @keyframes specialOfferNavBlur {
+            0%, 100% { 
+              filter: blur(0px);
+            }
+            50% { 
+              filter: blur(2px);
+            }
+          }
+        `;
+      } else if (animConfig.type === 'saturate') {
+        return `
+          ${selector} {
+            animation: specialOfferNavSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          }
+          
+          @keyframes specialOfferNavSaturate {
+            0%, 100% { 
+              filter: saturate(1);
+            }
+            50% { 
+              filter: saturate(1.8);
+            }
+          }
+        `;
+      } else if (animConfig.type === 'contrast') {
+        return `
+          ${selector} {
+            animation: specialOfferNavContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          }
+          
+          @keyframes specialOfferNavContrast {
+            0%, 100% { 
+              filter: contrast(1);
+            }
+            50% { 
+              filter: contrast(1.5);
+            }
+          }
+        `;
+      } else if (animConfig.type === 'opacity') {
+        return `
+          ${selector} {
+            animation: specialOfferNavOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          }
+          
+          @keyframes specialOfferNavOpacity {
+            0% { 
+              opacity: 1;
+            }
+            50% { 
+              opacity: 0.4;
+            }
+            100% { 
+              opacity: 1;
+            }
+          }
+        `;
+      } else if (animConfig.type === 'shadow') {
+        return `
+          ${selector} {
+            animation: specialOfferNavShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          }
+          
+          @keyframes specialOfferNavShadow {
+            0%, 100% { 
+              filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0));
+            }
+            50% { 
+              filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+            }
+          }
+        `;
+      }
+      
+      return '';
+    }}
   `;
 
 export const SpecialOffer: React.FC<SpecialOfferProps> = ({
@@ -148,6 +287,7 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
 
   if (!sectionData) return null;
   if (!layout || !layout.sections) return null;
+  
   const handleScroll = (direction: 'left' | 'right') => {
     if (containerRef.current) {
       const scrollAmount = 400;
@@ -232,24 +372,33 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
         {specialOfferProducts.length === 0 && (
           <div className="flex flex-row items-center justify-start  lg:justify-end  w-full ">
 
-            <span className="text-white text-3xl justify-center text-center w-full flex lg:gap-5">لطفا یک مجموعه را انتخاب کنید
-              <svg className={`${previewWidth == "sm" && 'hidden'} sm:hidden`} xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#ffffff"><path d="M479.99-280q15.01 0 25.18-10.15 10.16-10.16 10.16-25.17 0-15.01-10.15-25.18-10.16-10.17-25.17-10.17-15.01 0-25.18 10.16-10.16 10.15-10.16 25.17 0 15.01 10.15 25.17Q464.98-280 479.99-280Zm-31.32-155.33h66.66V-684h-66.66v248.67ZM480.18-80q-82.83 0-155.67-31.5-72.84-31.5-127.18-85.83Q143-251.67 111.5-324.56T80-480.33q0-82.88 31.5-155.78Q143-709 197.33-763q54.34-54 127.23-85.5T480.33-880q82.88 0 155.78 31.5Q709-817 763-763t85.5 127Q880-563 880-480.18q0 82.83-31.5 155.67Q817-251.67 763-197.46q-54 54.21-127 85.84Q563-80 480.18-80Zm.15-66.67q139 0 236-97.33t97-236.33q0-139-96.87-236-96.88-97-236.46-97-138.67 0-236 96.87-97.33 96.88-97.33 236.46 0 138.67 97.33 236 97.33 97.33 236.33 97.33ZM480-480Z" /></svg>
+            <span className="text-white text-3xl justify-center text-center w-full flex lg:gap-5">
+              لطفا یک مجموعه را انتخاب کنید
             </span>
           </div>
         )}
       </SpecialOfferSection>
 
-      <ScrollButton className="left bg-white" onClick={() => handleScroll('left')} $data={sectionData}>
-        <svg width="24" height="24" viewBox="0 0 24 24">
+      {/* Navigation Buttons with Animation */}
+      <ScrollButton
+        className="left bg-white"
+        onClick={() => handleScroll("left")}
+        $data={sectionData}
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="#000000">
           <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
         </svg>
       </ScrollButton>
 
-      <ScrollButton className="right bg-white" onClick={() => handleScroll('right')} $data={sectionData}>
-        <svg width="24" height="24" viewBox="0 0 24 24">
+      <ScrollButton
+        className="right bg-white"
+        onClick={() => handleScroll("right")}
+        $data={sectionData}
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="#000000">
           <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
         </svg>
       </ScrollButton>
     </ScrollContainer>
   );
-};  
+};

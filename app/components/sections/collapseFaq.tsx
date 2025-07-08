@@ -35,8 +35,6 @@ const Section = styled.section<{
   align-items: center;
   gap: 10px;
   border-radius: 10px;
-  // width: ${(props) => (props.$previewWidth === "sm" ? "425px" : "100%")};
-  // max-width: ${(props) => (props.$previewWidth === "sm" ? "425px" : "100%")};
 `;
 
 const Heading = styled.h2<{ $data: CollapseSection; $previewWidth: string }>`
@@ -62,6 +60,7 @@ const Question = styled.div<{
   $block: CollapseBlock;
   $index: number;
   $previewWidth: string;
+  $globalAnimation?: any;
 }>`
   font-size: ${(props) => {
     const baseFontSize =
@@ -86,6 +85,145 @@ const Question = styled.div<{
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  /* Apply global animation to all accordion headers */
+  ${(props) => {
+    const animation = props.$globalAnimation;
+    if (!animation) return '';
+    
+    const { type, animation: animConfig } = animation;
+    const selector = type === 'hover' ? '&:hover' : '&:active';
+    
+    // Generate animation CSS based on type
+    if (animConfig.type === 'pulse') {
+      return `
+        ${selector} {
+          animation: accordionHeaderPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes accordionHeaderPulse {
+          0%, 100% { 
+            opacity: 1;
+            filter: brightness(1);
+          }
+          50% { 
+            opacity: 0.7;
+            filter: brightness(1.3);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'glow') {
+      return `
+        ${selector} {
+          animation: accordionHeaderGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes accordionHeaderGlow {
+          0%, 100% { 
+            filter: brightness(1) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+          }
+          50% { 
+            filter: brightness(1.2) drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+          }
+        }
+      `;
+    } else if (animConfig.type === 'brightness') {
+      return `
+        ${selector} {
+          animation: accordionHeaderBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes accordionHeaderBrightness {
+          0%, 100% { 
+            filter: brightness(1);
+          }
+          50% { 
+            filter: brightness(1.4);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'blur') {
+      return `
+        ${selector} {
+          animation: accordionHeaderBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes accordionHeaderBlur {
+          0%, 100% { 
+            filter: blur(0px);
+          }
+          50% { 
+            filter: blur(2px);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'saturate') {
+      return `
+        ${selector} {
+          animation: accordionHeaderSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes accordionHeaderSaturate {
+          0%, 100% { 
+            filter: saturate(1);
+          }
+          50% { 
+            filter: saturate(1.8);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'contrast') {
+      return `
+        ${selector} {
+          animation: accordionHeaderContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes accordionHeaderContrast {
+          0%, 100% { 
+            filter: contrast(1);
+          }
+          50% { 
+            filter: contrast(1.5);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'opacity') {
+      return `
+        ${selector} {
+          animation: accordionHeaderOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes accordionHeaderOpacity {
+          0% { 
+            opacity: 1;
+          }
+          50% { 
+            opacity: 0.4;
+          }
+          100% { 
+            opacity: 1;
+          }
+        }
+      `;
+    } else if (animConfig.type === 'shadow') {
+      return `
+        ${selector} {
+          animation: accordionHeaderShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes accordionHeaderShadow {
+          0%, 100% { 
+            filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0));
+          }
+          50% { 
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+          }
+        }
+      `;
+    }
+    
+    return '';
+  }}
 `;
 
 const Answer = styled.div<{
@@ -154,16 +292,33 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
   if (!sectionData) {
     return null;
   }
- 
-
-
-
-  // Ensure blocks is an array
 
   const toggleOpen = (index: number) => {
     setOpenIndexes((prev) =>
       prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
     );
+  };
+
+  // Handle click animations for global animation
+  const handleQuestionClick = (e: React.MouseEvent, index: number) => {
+    e.stopPropagation();
+    
+    const globalAnimation = sectionData.setting?.headerAnimation;
+    
+    if (globalAnimation && globalAnimation.type === 'click') {
+      // Add clicked class for click animations
+      const element = e.currentTarget as HTMLElement;
+      element.classList.add('clicked');
+      
+      const duration = parseFloat(globalAnimation.animation.duration.replace('s', '')) * 1000;
+      const delay = parseFloat((globalAnimation.animation.delay || '0s').replace('s', '')) * 1000;
+      
+      setTimeout(() => {
+        element.classList.remove('clicked');
+      }, duration + delay);
+    }
+    
+    toggleOpen(index);
   };
 
   return (
@@ -187,10 +342,8 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
               $block={block}
               $index={idx}
               $previewWidth={previewWidth}
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleOpen(idx);
-              }}
+              $globalAnimation={sectionData.setting?.headerAnimation}
+              onClick={(e) => handleQuestionClick(e, idx)}
             >
               {
                 block[
@@ -216,6 +369,7 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
       ) : (
         <div>Loading...</div>
       )}
+      
       {showDeleteModal && (
         <div className="fixed inset-0  bg-black bg-opacity-70 z-50 flex items-center justify-center ">
           <div className="bg-white p-8 rounded-lg">
