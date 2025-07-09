@@ -1534,7 +1534,7 @@ export interface BrandItem {
 }
 
 export interface BrandsBlockSetting extends CommonSettings {
-  navAnimation: AnimationEffect;
+  navAnimation?: AnimationEffect;
   headingColor: string;
   headingFontSize: string;
   headingFontWeight: string;
