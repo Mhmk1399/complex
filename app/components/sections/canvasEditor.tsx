@@ -5,6 +5,8 @@ import { Layout } from "@/lib/types";
 import { Delete } from "../C-D";
 import { Rnd } from "react-rnd";
 import { useCanvas } from "@/app/contexts/CanvasContext";
+import { effectService, AnimationEffect } from "@/services/effectService";
+import { animationService } from "@/services/animationService";
 
 // Define types for the Canvas Editor
 export interface CanvasElementStyle {
@@ -20,17 +22,6 @@ export interface CanvasElementStyle {
   padding?: number;
   textAlign?: "left" | "right" | "center" | "justify" | "start" | "end";
   zIndex?: number;
-  // Animation properties
-  hoverEffect?: "none" | "scale" | "rotate" | "shadow" | "glow" | "color-shift" | "shake";
-  hoverColor?: string;
-  hoverBackgroundColor?: string;
-  hoverScale?: number;
-  hoverRotate?: number;
-  transitionDuration?: number; // in ms
-  animationName?: "none" | "bounce" | "pulse" | "fade" | "slide" | "flip";
-  animationDuration?: number; // in ms
-  animationDelay?: number; // in ms
-  animationIterationCount?: number | "infinite";
 }
 
 export interface CanvasElement {
@@ -41,6 +32,7 @@ export interface CanvasElement {
   href?: string;
   src?: string;
   alt?: string;
+  animation?: AnimationEffect; // Add animation support
 }
 
 export interface CanvasEditorSection {
@@ -108,6 +100,7 @@ const ElementWrapper = styled.div<{
   $isEditing: boolean;
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
+  $animation?: AnimationEffect;
 }>`
   position: absolute;
   width: 100%;
@@ -125,6 +118,165 @@ const ElementWrapper = styled.div<{
     cursor: text;
   `
       : ""}
+
+  /* Apply animations using CSS filters and properties */
+  ${(props) => {
+    if (!props.$animation) return '';
+    
+    const { type, animation } = props.$animation;
+    const selector = type === 'hover' ? '&:hover' : type === 'click' ? '&:active' : '';
+    
+    if (!selector && type !== 'load') return '';
+    
+    // Generate animation CSS based on type
+    const generateAnimationCSS = (animType: string, config: any) => {
+      const intensityMultiplier = {
+        light: 0.5,
+        normal: 1,
+        strong: 1.5
+      }[config.intensity || 'normal'];
+
+      switch (animType) {
+        case 'pulse':
+          return `
+            ${selector} {
+              animation: canvasPulse ${config.duration} ${config.timing} ${config.delay || '0s'} ${config.iterationCount || '1'};
+            }
+            
+            @keyframes canvasPulse {
+              0%, 100% { 
+                opacity: 1;
+                filter: brightness(1);
+              }
+              50% { 
+                opacity: ${Math.max(0.3, 1 - (0.4 * intensityMultiplier))};
+                filter: brightness(${1 + (0.3 * intensityMultiplier)});
+              }
+            }
+          `;
+        case 'glow':
+          return `
+            ${selector} {
+              animation: canvasGlow ${config.duration} ${config.timing} ${config.delay || '0s'} ${config.iterationCount || '1'};
+            }
+            
+            @keyframes canvasGlow {
+              0%, 100% { 
+                filter: brightness(1) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+              }
+              50% { 
+                filter: brightness(${1 + (0.2 * intensityMultiplier)}) drop-shadow(0 0 ${8 * intensityMultiplier}px rgba(255, 255, 255, ${0.6 * intensityMultiplier}));
+              }
+            }
+          `;
+        case 'brightness':
+          return `
+            ${selector} {
+              animation: canvasBrightness ${config.duration} ${config.timing} ${config.delay || '0s'} ${config.iterationCount || '1'};
+            }
+            
+            @keyframes canvasBrightness {
+              0%, 100% { 
+                filter: brightness(1);
+              }
+              50% { 
+                filter: brightness(${1 + (0.4 * intensityMultiplier)});
+              }
+            }
+          `;
+        case 'blur':
+          return `
+            ${selector} {
+              animation: canvasBlur ${config.duration} ${config.timing} ${config.delay || '0s'} ${config.iterationCount || '1'};
+            }
+            
+            @keyframes canvasBlur {
+              0%, 100% { 
+                filter: blur(0px);
+              }
+              50% { 
+                filter: blur(${2 * intensityMultiplier}px);
+              }
+            }
+          `;
+        case 'saturate':
+          return `
+            ${selector} {
+              animation: canvasSaturate ${config.duration} ${config.timing} ${config.delay || '0s'} ${config.iterationCount || '1'};
+            }
+            
+            @keyframes canvasSaturate {
+              0%, 100% { 
+                filter: saturate(1);
+              }
+              50% { 
+                filter: saturate(${1 + (0.8 * intensityMultiplier)});
+              }
+            }
+          `;
+        case 'contrast':
+          return `
+            ${selector} {
+              animation: canvasContrast ${config.duration} ${config.timing} ${config.delay || '0s'} ${config.iterationCount || '1'};
+            }
+            
+            @keyframes canvasContrast {
+              0%, 100% { 
+                filter: contrast(1);
+              }
+              50% { 
+                filter: contrast(${1 + (0.5 * intensityMultiplier)});
+              }
+            }
+          `;
+        case 'opacity':
+          return `
+            ${selector} {
+              animation: canvasOpacity ${config.duration} ${config.timing} ${config.delay || '0s'} ${config.iterationCount || '1'};
+            }
+            
+            @keyframes canvasOpacity {
+              0% { 
+                opacity: 1;
+              }
+              50% { 
+                opacity: ${Math.max(0.2, 1 - (0.6 * intensityMultiplier))};
+              }
+              100% { 
+                opacity: 1;
+              }
+            }
+          `;
+        case 'shadow':
+          return `
+            ${selector} {
+              animation: canvasShadow ${config.duration} ${config.timing} ${config.delay || '0s'} ${config.iterationCount || '1'};
+            }
+            
+            @keyframes canvasShadow {
+              0%, 100% { 
+                filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0));
+              }
+              50% { 
+                filter: drop-shadow(0 ${4 * intensityMultiplier}px ${8 * intensityMultiplier}px rgba(0, 0, 0, ${0.3 * intensityMultiplier}));
+              }
+            }
+          `;
+        default:
+          return '';
+      }
+    };
+
+    // Handle load animation differently
+    if (type === 'load') {
+      return `
+        animation: canvas${animation.type.charAt(0).toUpperCase() + animation.type.slice(1)} ${animation.duration} ${animation.timing} ${animation.delay || '0s'} ${animation.iterationCount || '1'};
+        ${generateAnimationCSS(animation.type, animation).replace(/&:hover|&:active/g, '')}
+      `;
+    }
+
+    return generateAnimationCSS(animation.type, animation);
+  }}
 `;
 
 const CanvasEditor: React.FC<CanvasEditorProps> = ({
@@ -141,6 +293,7 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const editableRef = useRef<HTMLDivElement>(null);
   const [preview, setPreview] = useState(previewWidth);
+  const [clickedElements, setClickedElements] = useState<Set<string>>(new Set());
 
   // Get the section data from the layout
   const sectionData = layout?.sections?.children?.sections.find(
@@ -200,6 +353,42 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
       }
     }
   }, [sectionData, layout, actualName, setLayout]);
+
+  // Setup scroll observers for scroll-triggered animations
+  useEffect(() => {
+    if (!sectionData?.blocks?.elements) return;
+
+    const observers: IntersectionObserver[] = [];
+
+    sectionData.blocks.elements.forEach((element) => {
+      if (element.animation?.type === 'scroll') {
+        const elementDOM = document.getElementById(`canvas-element-${element.id}`);
+        if (elementDOM) {
+          const observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  const threshold = element.animation?.trigger?.threshold || 0.5;
+                  if (entry.intersectionRatio >= threshold) {
+                    elementDOM.classList.add('in-view');
+                  }
+                } else {
+                  elementDOM.classList.remove('in-view');
+                }
+              });
+            },
+            { threshold: element.animation.trigger?.threshold || 0.5 }
+          );
+          observer.observe(elementDOM);
+          observers.push(observer);
+        }
+      }
+    });
+
+    return () => {
+      observers.forEach(observer => observer.disconnect());
+    };
+  }, [sectionData?.blocks?.elements]);
 
   // Now you can have conditional returns
   if (!sectionData) {
@@ -300,6 +489,31 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
     setLayout(updatedLayout);
   };
 
+  // Handle click animations
+  const handleElementClick = (elementId: string, e: React.MouseEvent) => {
+    const element = elements.find(el => el.id === elementId);
+    if (element?.animation?.type === 'click') {
+      e.stopPropagation();
+      // Add to clicked elements set
+      setClickedElements(prev => new Set(prev).add(elementId));
+      
+      // Remove from clicked elements after animation duration
+      const duration = parseFloat(element.animation.animation.duration.replace('s', '')) * 1000;
+      const delay = parseFloat((element.animation.animation.delay || '0s').replace('s', '')) * 1000;
+      
+      setTimeout(() => {
+        setClickedElements(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(elementId);
+          return newSet;
+        });
+      }, duration + delay);
+    }
+    
+    // Also handle element selection
+    handleElementSelect(elementId, e);
+  };
+
   // Adjust element styles based on preview mode
   const getAdjustedStyle = (style: CanvasElementStyle) => {
     if (preview === "sm") {
@@ -317,6 +531,7 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
   const renderElement = (element: CanvasElement) => {
     const isSelected = element.id === selectedElementId;
     const adjustedStyle = getAdjustedStyle(element.style);
+    const isClicked = clickedElements.has(element.id);
     
     // Base styles
     const commonStyles: React.CSSProperties = {
@@ -335,30 +550,39 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
       justifyContent: adjustedStyle.textAlign === "center" ? "center" : 
                      adjustedStyle.textAlign === "left" ? "flex-start" : "flex-end",
       overflow: "hidden",
-      transition: adjustedStyle.transitionDuration ? 
-        `all ${adjustedStyle.transitionDuration}ms ease-in-out` : 
-        'all 300ms ease-in-out',
+      transition: 'all 300ms ease-in-out',
     };
 
-    // Animation styles
-    const animationStyles: React.CSSProperties = {};
-    if (adjustedStyle.animationName && adjustedStyle.animationName !== "none") {
-      animationStyles.animation = `${adjustedStyle.animationName} ${adjustedStyle.animationDuration || 1000}ms ${adjustedStyle.animationDelay || 0}ms ${adjustedStyle.animationIterationCount || 1} ease-in-out`;
-    }
-
-    // Combine styles
-    const styles = {
-      ...commonStyles,
-      ...animationStyles,
+    // Add animation classes based on animation type
+    const getAnimationClasses = () => {
+      let classes = "canvas-element";
+      
+      if (element.animation) {
+        const { type } = element.animation;
+        
+        if (type === 'click' && isClicked) {
+          classes += " clicked";
+        }
+        
+        if (type === 'scroll') {
+          classes += " scroll-trigger";
+        }
+        
+        if (type === 'load') {
+          classes += " load-trigger";
+        }
+      }
+      
+      return classes;
     };
 
     switch (element.type) {
       case "heading":
         return (
           <h2
-            style={styles}
-            className="canvas-element"
-            data-hover-effect={adjustedStyle.hoverEffect || "none"}
+            id={`canvas-element-${element.id}`}
+            style={commonStyles}
+            className={getAnimationClasses()}
             onDoubleClick={handleEditStart}
             contentEditable={isEditing}
             suppressContentEditableWarning={true}
@@ -374,9 +598,9 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
       case "paragraph":
         return (
           <p
-            style={styles}
-            className="canvas-element"
-            data-hover-effect={adjustedStyle.hoverEffect || "none"}
+            id={`canvas-element-${element.id}`}
+            style={commonStyles}
+            className={getAnimationClasses()}
             onDoubleClick={handleEditStart}
             contentEditable={isEditing}
             suppressContentEditableWarning={true}
@@ -392,15 +616,15 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
       case "image":
         return (
           <img
+            id={`canvas-element-${element.id}`}
             src={element.src || "/assets/images/placeholder.jpg"}
             alt={element.alt || "Canvas image"}
             style={{
-              ...styles,
+              ...commonStyles,
               objectFit: "cover",
             }}
             draggable={false}
-            className="canvas-element"
-            data-hover-effect={adjustedStyle.hoverEffect || "none"}
+            className={getAnimationClasses()}
           />
         );
       case "button":
@@ -420,11 +644,11 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
             }}
           >
             <button
-              style={styles}
-              className="canvas-element"
-              data-hover-effect={adjustedStyle.hoverEffect || "none"}
+              id={`canvas-element-${element.id}`}
+              style={commonStyles}
+              className={getAnimationClasses()}
               onDoubleClick={handleEditStart}
-                          contentEditable={isEditing}
+              contentEditable={isEditing}
               suppressContentEditableWarning={true}
               ref={isSelected && isEditing ? editableRef as unknown as React.RefObject<HTMLButtonElement> : null}
               onBlur={(e) => {
@@ -439,9 +663,9 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
       case "link":
         return (
           <div
-            style={styles}
-            className="canvas-element"
-            data-hover-effect={adjustedStyle.hoverEffect || "none"}
+            id={`canvas-element-${element.id}`}
+            style={commonStyles}
+            className={getAnimationClasses()}
             onDoubleClick={handleEditStart}
             contentEditable={isEditing}
             suppressContentEditableWarning={true}
@@ -458,15 +682,16 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
       case "div":
         return (
           <div
-            style={styles}
-            className="canvas-element"
-            data-hover-effect={adjustedStyle.hoverEffect || "none"}
+            id={`canvas-element-${element.id}`}
+            style={commonStyles}
+            className={getAnimationClasses()}
           />
         );
       default:
         return null;
     }
   };
+
   // Calculate scale factor for responsive elements
   const getScaleFactor = () => {
     return preview === "sm" ? 0.6 : 1;
@@ -593,7 +818,8 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
                 $isEditing={isEditing && element.id === selectedElementId}
                 $previewWidth={previewWidth}
                 $preview={preview}
-                onClick={(e) => handleElementSelect(element.id, e)}
+                $animation={element.animation}
+                onClick={(e) => handleElementClick(element.id, e)}
               >
                 {renderElement(element)}
               </ElementWrapper>

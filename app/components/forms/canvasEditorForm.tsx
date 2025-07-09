@@ -3,7 +3,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { CanvasEditorSection, CanvasElement } from "../sections/canvasEditor";
 import { Layout } from "@/lib/types";
-import { useCanvas } from "@/app/contexts/CanvasContext"; // Import the context
+import { useCanvas } from "@/app/contexts/CanvasContext";
+import { effectService, AnimationEffect } from "@/services/effectService";
+import { animationService } from "@/services/animationService";
 
 // Add a ColorInput component similar to richTextForm
 const ColorInput = ({
@@ -51,76 +53,89 @@ const CanvasEditorForm: React.FC<CanvasEditorFormProps> = ({
   setSelectedComponent,
 }) => {
   const [activeTab, setActiveTab] = useState<"canvas" | "element">("canvas");
-const [canvasBackgroundColor, setCanvasBackgroundColor] = useState(
-  userInputData?.blocks?.setting?.backgroundColor || "#f9fafb"
-);
-const [sectionBackgroundColor, setSectionBackgroundColor] = useState(
-  userInputData?.setting?.backgroundColor || "#ffffff"
-);  const { selectedElementId, setSelectedElementId } = useCanvas();
+  const [canvasBackgroundColor, setCanvasBackgroundColor] = useState(
+    userInputData?.blocks?.setting?.backgroundColor || "#f9fafb"
+  );
+  const [sectionBackgroundColor, setSectionBackgroundColor] = useState(
+    userInputData?.setting?.backgroundColor || "#ffffff"
+  );
+  const { selectedElementId, setSelectedElementId } = useCanvas();
   const [elementType, setElementType] = useState<CanvasElement["type"]>("heading");
   const initialDataLoadedRef = useRef(false);
   const prevComponentRef = useRef(selectedComponent);
 
+  // Animation states
+  const [animationType, setAnimationType] = useState<'hover' | 'click' | 'scroll' | 'load'>('hover');
+  const [animationEffect, setAnimationEffect] = useState<string>('pulse');
+  const [animationDuration, setAnimationDuration] = useState<string>('1s');
+  const [animationTiming, setAnimationTiming] = useState<string>('ease-in-out');
+  const [animationDelay, setAnimationDelay] = useState<string>('0s');
+  const [animationIterationCount, setAnimationIterationCount] = useState<string>('1');
+  const [animationIntensity, setAnimationIntensity] = useState<'light' | 'normal' | 'strong'>('normal');
+
   // Get the base component name without element ID
   const baseComponentName = selectedComponent.split(":element:")[0];
-const handleCanvasBackgroundColorChange = (name: string, value: string) => {
-  setCanvasBackgroundColor(value);
-  
-  // Use setTimeout to debounce the update
-  setTimeout(() => {
-    // Update userInputData
-    setUserInputData((prev) => {
-      if (!prev) return prev;
 
-      // Create a deep copy to avoid mutation
-      const newData = JSON.parse(JSON.stringify(prev));
+  const handleCanvasBackgroundColorChange = (name: string, value: string) => {
+    setCanvasBackgroundColor(value);
+    
+    // Use setTimeout to debounce the update
+    setTimeout(() => {
+      // Update userInputData
+      setUserInputData((prev) => {
+        if (!prev) return prev;
 
-      if (!newData.blocks.setting) {
-        newData.blocks.setting = {
-          canvasWidth: "100%",
-          canvasHeight: "500px",
-          backgroundColor: "#f9fafb",
-          gridSize: 10,
-          showGrid: true
-        };
-      }
+        // Create a deep copy to avoid mutation
+        const newData = JSON.parse(JSON.stringify(prev));
 
-      newData.blocks.setting.backgroundColor = value;
+        if (!newData.blocks.setting) {
+          newData.blocks.setting = {
+            canvasWidth: "100%",
+            canvasHeight: "500px",
+            backgroundColor: "#f9fafb",
+            gridSize: 10,
+            showGrid: true
+          };
+        }
 
-      return newData;
-    });
-  }, 100);
-};
-const handleSectionBackgroundColorChange = (name: string, value: string) => {
-  setSectionBackgroundColor(value);
-  
-  // Use setTimeout to debounce the update
-  setTimeout(() => {
-    // Update userInputData
-    setUserInputData((prev) => {
-      if (!prev) return prev;
+        newData.blocks.setting.backgroundColor = value;
 
-      // Create a deep copy to avoid mutation
-      const newData = JSON.parse(JSON.stringify(prev));
+        return newData;
+      });
+    }, 100);
+  };
 
-      if (!newData.setting) {
-        newData.setting = {
-          paddingTop: "20",
-          paddingBottom: "20",
-          paddingLeft: "20",
-          paddingRight: "20",
-          marginTop: "30",
-          marginBottom: "30",
-          backgroundColor: "#ffffff"
-        };
-      }
+  const handleSectionBackgroundColorChange = (name: string, value: string) => {
+    setSectionBackgroundColor(value);
+    
+    // Use setTimeout to debounce the update
+    setTimeout(() => {
+      // Update userInputData
+      setUserInputData((prev) => {
+        if (!prev) return prev;
 
-      newData.setting.backgroundColor = value;
+        // Create a deep copy to avoid mutation
+        const newData = JSON.parse(JSON.stringify(prev));
 
-      return newData;
-    });
-  }, 100);
-};
+        if (!newData.setting) {
+          newData.setting = {
+            paddingTop: "20",
+            paddingBottom: "20",
+            paddingLeft: "20",
+            paddingRight: "20",
+            marginTop: "30",
+            marginBottom: "30",
+            backgroundColor: "#ffffff"
+          };
+        }
+
+        newData.setting.backgroundColor = value;
+
+        return newData;
+      });
+    }, 100);
+  };
+
   // Get the section data from the layout
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === baseComponentName
@@ -139,6 +154,11 @@ const handleSectionBackgroundColorChange = (name: string, value: string) => {
 
       // Set the user input data with the copied section data
       setUserInputData(sectionDataCopy);
+      
+      // Set the color state values
+      setCanvasBackgroundColor(sectionDataCopy.blocks.setting?.backgroundColor || "#f9fafb");
+      setSectionBackgroundColor(sectionDataCopy.setting?.backgroundColor || "#ffffff");
+      
       initialDataLoadedRef.current = true;
       prevComponentRef.current = selectedComponent;
     }
@@ -160,6 +180,29 @@ const handleSectionBackgroundColorChange = (name: string, value: string) => {
   const selectedElement = selectedElementId && sectionData?.blocks?.elements
     ? sectionData.blocks.elements.find((el) => el.id === selectedElementId)
     : null;
+
+  // Initialize animation states when element is selected
+  useEffect(() => {
+    if (selectedElement && selectedElement.animation) {
+      const animation = selectedElement.animation;
+      setAnimationType(animation.type);
+      setAnimationEffect(animation.animation.type);
+      setAnimationDuration(animation.animation.duration);
+      setAnimationTiming(animation.animation.timing);
+      setAnimationDelay(animation.animation.delay || '0s');
+      setAnimationIterationCount(animation.animation.iterationCount || '1');
+      setAnimationIntensity(animation.animation.intensity || 'normal');
+    } else {
+      // Reset to defaults
+      setAnimationType('hover');
+      setAnimationEffect('pulse');
+      setAnimationDuration('1s');
+      setAnimationTiming('ease-in-out');
+      setAnimationDelay('0s');
+      setAnimationIterationCount('1');
+      setAnimationIntensity('normal');
+    }
+  }, [selectedElement]);
 
   // Handle canvas settings changes
   const handleCanvasSettingChange = (
@@ -225,6 +268,91 @@ const handleSectionBackgroundColorChange = (name: string, value: string) => {
 
       return newData;
     });
+  };
+
+  // Handle animation changes
+  const handleAnimationChange = (property: string, value: string) => {
+    if (!selectedElementId) return;
+
+    // Create animation effect object
+    const animationEffect: AnimationEffect = {
+      type: animationType,
+      animation: {
+        type: property === 'effect' ? value : animationEffect,
+        duration: property === 'duration' ? value : animationDuration,
+        timing: property === 'timing' ? value : animationTiming,
+        delay: property === 'delay' ? value : animationDelay,
+        iterationCount: property === 'iterationCount' ? value : animationIterationCount,
+        intensity: property === 'intensity' ? value as 'light' | 'normal' | 'strong' : animationIntensity,
+      }
+    };
+
+    // Update local state
+    switch (property) {
+      case 'type':
+        setAnimationType(value as 'hover' | 'click' | 'scroll' | 'load');
+        animationEffect.type = value as 'hover' | 'click' | 'scroll' | 'load';
+        break;
+      case 'effect':
+        setAnimationEffect(value);
+        animationEffect.animation.type = value;
+        break;
+      case 'duration':
+        setAnimationDuration(value);
+        animationEffect.animation.duration = value;
+        break;
+      case 'timing':
+        setAnimationTiming(value);
+        animationEffect.animation.timing = value;
+        break;
+      case 'delay':
+        setAnimationDelay(value);
+        animationEffect.animation.delay = value;
+        break;
+      case 'iterationCount':
+        setAnimationIterationCount(value);
+        animationEffect.animation.iterationCount = value;
+        break;
+      case 'intensity':
+        setAnimationIntensity(value as 'light' | 'normal' | 'strong');
+        animationEffect.animation.intensity = value as 'light' | 'normal' | 'strong';
+        break;
+    }
+
+    // Update userInputData
+    setUserInputData((prev) => {
+      if (!prev) return prev;
+
+      const newData = JSON.parse(JSON.stringify(prev));
+      const elementIndex = newData.blocks.elements.findIndex(
+        (el: CanvasElement) => el.id === selectedElementId
+      );
+
+      if (elementIndex === -1) return prev;
+
+      newData.blocks.elements[elementIndex].animation = animationEffect;
+
+      return newData;
+    });
+
+    // Also update the layout directly
+    if (sectionData) {
+      const updatedLayout = JSON.parse(JSON.stringify(layout));
+      const sectionIndex = updatedLayout.sections.children.sections.findIndex(
+        (section: { type: string }) => section.type === baseComponentName
+      );
+
+      if (sectionIndex !== -1) {
+        const elementIndex = updatedLayout.sections.children.sections[sectionIndex].blocks.elements.findIndex(
+          (el: CanvasElement) => el.id === selectedElementId
+        );
+
+        if (elementIndex !== -1) {
+          updatedLayout.sections.children.sections[sectionIndex].blocks.elements[elementIndex].animation = animationEffect;
+          setLayout(updatedLayout);
+        }
+      }
+    }
   };
 
   // Function to convert hex to rgba
@@ -524,7 +652,20 @@ const handleSectionBackgroundColorChange = (name: string, value: string) => {
       href: elementType === "link" ? "#" : undefined,
       src: elementType === "image" ? "/assets/images/placeholder.jpg" : undefined,
       alt: elementType === "image" ? "Canvas image" : undefined,
+      // Add default animation
+      animation: {
+        type: 'hover',
+        animation: {
+          type: 'pulse',
+          duration: '1s',
+          timing: 'ease-in-out',
+          delay: '0s',
+          iterationCount: '1',
+          intensity: 'normal'
+        }
+      }
     };
+
     // Update userInputData
     setUserInputData((prev) => {
       if (!prev) return prev;
@@ -558,28 +699,6 @@ const handleSectionBackgroundColorChange = (name: string, value: string) => {
     setSelectedElementId(newElement.id);
     setActiveTab("element");
   };
-// In the useEffect for initializing userInputData
-useEffect(() => {
-  if (sectionData && (prevComponentRef.current !== selectedComponent || !initialDataLoadedRef.current)) {
-    // Important: Make a deep copy to avoid reference issues
-    const sectionDataCopy = JSON.parse(JSON.stringify(sectionData));
-
-    // Ensure the elements array exists
-    if (!sectionDataCopy.blocks.elements) {
-      sectionDataCopy.blocks.elements = [];
-    }
-
-    // Set the user input data with the copied section data
-    setUserInputData(sectionDataCopy);
-    
-    // Set the color state values
-    setCanvasBackgroundColor(sectionDataCopy.blocks.setting?.backgroundColor || "#f9fafb");
-    setSectionBackgroundColor(sectionDataCopy.setting?.backgroundColor || "#ffffff");
-    
-    initialDataLoadedRef.current = true;
-    prevComponentRef.current = selectedComponent;
-  }
-}, [selectedComponent, sectionData, setUserInputData]);
 
   // Add this to handle tab switching
   const handleTabSwitch = (tab: "canvas" | "element") => {
@@ -717,14 +836,13 @@ useEffect(() => {
           <h3 className="text-lg font-bold mb-4">تنظیمات کانوا</h3>
 
           <div className="mb-4">
-  <ColorInput
-    label="پس‌زمینه کانوا"
-    name="backgroundColor"
-    value={canvasBackgroundColor}
-    onChange={handleCanvasBackgroundColorChange}
-  />
-</div>
-
+            <ColorInput
+              label="پس‌زمینه کانوا"
+              name="backgroundColor"
+              value={canvasBackgroundColor}
+              onChange={handleCanvasBackgroundColorChange}
+            />
+          </div>
 
           <div className="mb-4">
             <label className="block mb-2">ارتفاع کانوا</label>
@@ -764,14 +882,13 @@ useEffect(() => {
           <h3 className="text-lg font-bold mb-4 mt-8">تنظیمات بخش</h3>
 
           <div className="mb-4">
-  <ColorInput
-    label="پس‌زمینه بخش"
-    name="backgroundColor"
-    value={sectionBackgroundColor}
-    onChange={handleSectionBackgroundColorChange}
-  />
-</div>
-
+            <ColorInput
+              label="پس‌زمینه بخش"
+              name="backgroundColor"
+              value={sectionBackgroundColor}
+              onChange={handleSectionBackgroundColorChange}
+            />
+          </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="mb-4">
@@ -1114,6 +1231,131 @@ useEffect(() => {
                 <option value="center">وسط</option>
                 <option value="left">چپ</option>
               </select>
+            </div>
+          </div>
+
+          {/* Animation Settings Section */}
+          <h4 className="font-bold mt-6 mb-4">تنظیمات انیمیشن</h4>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div className="mb-4">
+              <label className="block mb-2">نوع تریگر</label>
+              <select
+                value={animationType}
+                onChange={(e) => handleAnimationChange('type', e.target.value)}
+                className="w-full p-2 border rounded"
+              >
+                <option value="hover">هاور</option>
+                <option value="click">کلیک</option>
+                <option value="scroll">اسکرول</option>
+                <option value="load">بارگذاری</option>
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label className="block mb-2">نوع انیمیشن</label>
+              <select
+                value={animationEffect}
+                onChange={(e) => handleAnimationChange('effect', e.target.value)}
+                className="w-full p-2 border rounded"
+              >
+                {animationService.getAnimationTypes().map((type) => (
+                  <option key={type} value={type}>
+                    {animationService.getAnimationPreview(type)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label className="block mb-2">مدت زمان</label>
+              <select
+                value={animationDuration}
+                onChange={(e) => handleAnimationChange('duration', e.target.value)}
+                className="w-full p-2 border rounded"
+              >
+                <option value="0.3s">سریع (0.3s)</option>
+                <option value="0.5s">نرمال (0.5s)</option>
+                <option value="0.8s">متوسط (0.8s)</option>
+                <option value="1s">آهسته (1s)</option>
+                <option value="1.5s">خیلی آهسته (1.5s)</option>
+                <option value="2s">بسیار آهسته (2s)</option>
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label className="block mb-2">نوع حرکت</label>
+              <select
+                value={animationTiming}
+                onChange={(e) => handleAnimationChange('timing', e.target.value)}
+                className="w-full p-2 border rounded"
+              >
+                {animationService.getTimingFunctions().map((timing) => (
+                  <option key={timing} value={timing}>
+                    {timing === 'ease' && 'آسان'}
+                    {timing === 'ease-in' && 'آسان ورودی'}
+                    {timing === 'ease-out' && 'آسان خروجی'}
+                    {timing === 'ease-in-out' && 'آسان دوطرفه'}
+                    {timing === 'linear' && 'خطی'}
+                    {timing === 'cubic-bezier(0, 0, 0.2, 1)' && 'سفارشی'}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label className="block mb-2">تاخیر</label>
+              <select
+                value={animationDelay}
+                onChange={(e) => handleAnimationChange('delay', e.target.value)}
+                className="w-full p-2 border rounded"
+              >
+                <option value="0s">بدون تاخیر</option>
+                <option value="0.1s">0.1 ثانیه</option>
+                <option value="0.2s">0.2 ثانیه</option>
+                <option value="0.3s">0.3 ثانیه</option>
+                <option value="0.5s">0.5 ثانیه</option>
+                <option value="1s">1 ثانیه</option>
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label className="block mb-2">تعداد تکرار</label>
+              <select
+                value={animationIterationCount}
+                onChange={(e) => handleAnimationChange('iterationCount', e.target.value)}
+                className="w-full p-2 border rounded"
+              >
+                <option value="1">یک بار</option>
+                <option value="2">دو بار</option>
+                <option value="3">سه بار</option>
+                <option value="5">پنج بار</option>
+                <option value="infinite">بی‌نهایت</option>
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label className="block mb-2">شدت انیمیشن</label>
+              <select
+                value={animationIntensity}
+                onChange={(e) => handleAnimationChange('intensity', e.target.value)}
+                className="w-full p-2 border rounded"
+              >
+                <option value="light">ملایم</option>
+                <option value="normal">معمولی</option>
+                <option value="strong">قوی</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Animation Preview */}
+          <div className="mb-4 p-4 bg-gray-50 rounded-lg">
+            <h5 className="font-semibold mb-2">پیش‌نمایش انیمیشن:</h5>
+            <div className="text-sm text-gray-600">
+              <p><strong>تریگر:</strong> {animationType === 'hover' ? 'هاور' : animationType === 'click' ? 'کلیک' : animationType === 'scroll' ? 'اسکرول' : 'بارگذاری'}</p>
+              <p><strong>انیمیشن:</strong> {animationService.getAnimationPreview(animationEffect)}</p>
+              <p><strong>مدت:</strong> {animationDuration}</p>
+              <p><strong>شدت:</strong> {animationIntensity === 'light' ? 'ملایم' : animationIntensity === 'normal' ? 'معمولی' : 'قوی'}</p>
             </div>
           </div>
 
