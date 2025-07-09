@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
-import { Layout, MultiColumnBlock, MultiColumnSection } from "@/lib/types";
+import { Layout, MultiColumnSection } from "@/lib/types";
+
+// Add index signature to allow string and number keys
+export interface MultiColumnBlock {
+  [key: string]: string | undefined;
+}
 import MarginPaddingEditor from "../sections/editor";
 import { useSharedContext } from "@/app/contexts/SharedContext";
 import React from "react";
@@ -73,12 +78,45 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
+  useEffect(() => {
+    setMargin({
+      top: Number(userInputData?.setting?.marginTop) || 0,
+      bottom: Number(userInputData?.setting?.marginBottom) || 0,
+      right: Number(userInputData?.setting?.marginRight) || 0,
+      left: Number(userInputData?.setting?.marginLeft) || 0,
+    });
+
+    setPadding({
+      top: Number(userInputData?.setting?.paddingTop) || 0,
+      bottom: Number(userInputData?.setting?.paddingBottom) || 0,
+      right: Number(userInputData?.setting?.paddingRight) || 0,
+      left: Number(userInputData?.setting?.paddingLeft) || 0,
+    });
+  }, [userInputData?.setting]);
+
+  useEffect(() => {
+    const initialData = Compiler(layout, selectedComponent)[0];
+    console.log(initialData);
+    if (initialData) {
+      setUserInputData(initialData);
+    }
+  }, [selectedComponent]);
+  useEffect(() => {
+    setIsContentOpen(true);
+  }, []);
+
   const handleAddColumn = () => {
     setUserInputData((prev: MultiColumnSection) => {
-      const newColumnNum = Object.keys(prev.blocks).length + 1;
+      // استخراج کلیدهای عددی معتبر از بلاک‌ها
+      const blockKeys = Object.keys(prev.blocks)
+        .map((key) => Number(key))
+        .filter((n) => !isNaN(n));
+
+      const newIndex = blockKeys.length === 0 ? 0 : Math.max(...blockKeys) + 1;
+      const newColumnNum = newIndex + 1;
 
       const newBlock: MultiColumnBlock = {
-        [`title${newColumnNum}`]: `ستون  ${newColumnNum}`,
+        [`title${newColumnNum}`]: `ستون ${newColumnNum}`,
         [`description${newColumnNum}`]: `لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد`,
         [`imageSrc${newColumnNum}`]: "",
         [`btnLable${newColumnNum}`]: `دکمه ${newColumnNum}`,
@@ -89,7 +127,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
         ...prev,
         blocks: {
           ...prev.blocks,
-          [newColumnNum - 1]: newBlock,
+          [newIndex]: newBlock, // 👈 این کلید عددی هست و در UI نمایش داده می‌شه
         },
       };
     });
@@ -100,45 +138,9 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
       const newBlocks = { ...prev.blocks };
       delete newBlocks[columnIndex];
 
-      // Reindex remaining blocks AND update their field names
-      const reindexedBlocks = Object.values(newBlocks).reduce(
-        (acc, block, idx) => {
-          const newColumnNum = idx + 1;
-
-          // Find the original column number from the block's field names
-          const originalColumnNum =
-            Object.keys(block)
-              .find((key) => key.startsWith("title"))
-              ?.replace("title", "") || "1";
-
-          // Create new block with updated field names
-          const newBlock: MultiColumnBlock = {
-            [`title${newColumnNum}`]: block[
-              `title${originalColumnNum}` as keyof MultiColumnBlock
-            ] as string,
-            [`description${newColumnNum}`]: block[
-              `description${originalColumnNum}` as keyof MultiColumnBlock
-            ] as string,
-            [`imageSrc${newColumnNum}`]: block[
-              `imageSrc${originalColumnNum}` as keyof MultiColumnBlock
-            ] as string,
-            [`btnLable${newColumnNum}`]: block[
-              `btnLable${originalColumnNum}` as keyof MultiColumnBlock
-            ] as string,
-            [`btnLink${newColumnNum}`]: block[
-              `btnLink${originalColumnNum}` as keyof MultiColumnBlock
-            ] as string,
-          };
-
-          acc[idx] = newBlock;
-          return acc;
-        },
-        {} as typeof prev.blocks
-      );
-
       return {
         ...prev,
-        blocks: reindexedBlocks,
+        blocks: newBlocks,
       };
     });
   };
@@ -147,27 +149,31 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     index: number
   ) => {
-    if (isUpdating) return;
-    setIsUpdating(true);
     const { name, value } = e.target;
-    setUserInputData((prev: MultiColumnSection) => ({
-      ...prev,
-      blocks: {
-        ...prev.blocks,
-        [index]: {
-          ...prev.blocks[index],
-          [name]: value,
-        },
-      },
-    }));
-    setTimeout(() => setIsUpdating(false), 100);
+
+    setUserInputData((prev: MultiColumnSection) => {
+      const updatedBlocks = { ...prev.blocks };
+      const block = updatedBlocks[index];
+
+      if (!block) return prev;
+
+      const updatedBlock: MultiColumnBlock = {
+        ...block,
+        [name + (index + 1)]: value, // کلید باید درست ساخته بشه
+      };
+
+      updatedBlocks[index] = updatedBlock;
+
+      return {
+        ...prev,
+        blocks: updatedBlocks,
+      };
+    });
   };
 
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    if (isUpdating) return;
-    setIsUpdating(true);
     const { name, value } = e.target;
     setUserInputData((prev: MultiColumnSection) => ({
       ...prev,
@@ -176,7 +182,6 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
         [name]: value,
       },
     }));
-    setTimeout(() => setIsUpdating(false), 100);
   };
 
   const handleUpdate = (
@@ -209,39 +214,11 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
     }
   };
 
-  useEffect(() => {
-    setMargin({
-      top: Number(userInputData?.setting?.marginTop) || 0,
-      bottom: Number(userInputData?.setting?.marginBottom) || 0,
-      right: Number(userInputData?.setting?.marginRight) || 0,
-      left: Number(userInputData?.setting?.marginLeft) || 0,
-    });
-
-    setPadding({
-      top: Number(userInputData?.setting?.paddingTop) || 0,
-      bottom: Number(userInputData?.setting?.paddingBottom) || 0,
-      right: Number(userInputData?.setting?.paddingRight) || 0,
-      left: Number(userInputData?.setting?.paddingLeft) || 0,
-    });
-  }, [userInputData?.setting]);
-    
-
-  useEffect(() => {
-    const initialData = Compiler(layout, selectedComponent)[0];
-    console.log(initialData);
-    if (initialData) {
-      setUserInputData(initialData);
-    }
-  }, [selectedComponent]);
-
   const handleTabChange = (tab: "content" | "style" | "spacing") => {
     setIsContentOpen(tab === "content");
     setIsStyleSettingsOpen(tab === "style");
     setIsSpacingOpen(tab === "spacing");
   };
-  useEffect(() => {
-    setIsContentOpen(true);
-  }, []);
 
   return (
     <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
@@ -270,205 +247,193 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
           <br />
           {userInputData?.blocks &&
             typeof userInputData.blocks === "object" &&
-            Object.keys(userInputData.blocks)
-              .filter((key) => !isNaN(Number(key))) // Only get numeric keys
-              .map((key) => {
-                const block = userInputData.blocks[Number(key)];
-                if (!block || typeof block !== "object") return null;
-                return (
-                  <div
-                    key={key}
-                    className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100"
-                  >
-                    <button
-                      onClick={() =>
-                        setOpenColumns((prev) => ({
-                          ...prev,
-                          [Number(key)]: !prev[Number(key)],
-                        }))
-                      }
-                      className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
-                    >
-                      <div className="flex items-center gap-2">
-                        <svg
-                          className="w-5 h-5 text-blue-500"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M4 6h16M4 12h16M4 18h16"
-                          />
-                        </svg>
-                        <h3 className="font-semibold text-gray-700">
-                          ستون {Number(key) + 1}
-                        </h3>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteColumn(Number(key));
-                          }}
-                          className="p-1 hover:bg-red-100 rounded-full cursor-pointer"
-                        >
-                          <svg
-                            className="w-5 h-5 text-red-500"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                            />
-                          </svg>
-                        </span>
-                        <svg
-                          className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-                            openColumns[Number(key)] ? "rotate-180" : ""
-                          }`}
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 9l-7 7-7-7"
-                          />
-                        </svg>
-                      </div>
-                    </button>
+            Object.entries(userInputData.blocks).map(([key, block], idx) => {
+              const index = Number(key);
+              const titleKey = `title${index + 1}`;
+              const descKey = `description${index + 1}`;
+              const btnLabelKey = `btnLable${index + 1}`;
+              const btnLinkKey = `btnLink${index + 1}`;
 
-                    {openColumns[Number(key) as number] && (
-                      <div className="p-4 border-t border-gray-100 space-y-4 animate-slideDown">
-                        {/* Column Content */}
-                        <label>عنوان ستون</label>
-                        <input
-                          type="text"
-                          name="title"
-                          value={
-                            userInputData?.blocks[Number(key) - 1]?.[
-                              `title${Number(key)}` as keyof MultiColumnBlock
-                            ] || ""
-                          }
-                          onChange={(e) => handleBlockChange(e, Number(key))}
-                          className="w-full p-2 border border-gray-200 rounded-lg"
-                          placeholder="عنوان"
+              if (!block) return null;
+              return (
+                <div
+                  key={key}
+                  className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100"
+                >
+                  <button
+                    onClick={() =>
+                      setOpenColumns((prev) => ({
+                        ...prev,
+                        [Number(key)]: !prev[Number(key)],
+                      }))
+                    }
+                    className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
+                  >
+                    <div className="flex items-center gap-2">
+                      <svg
+                        className="w-5 h-5 text-blue-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 6h16M4 12h16M4 18h16"
                         />
-                        <br />
-                        <br />
-                        <label className="">توضیحات ستون</label>
-                        <input
-                          type="text"
-                          name="description"
-                          value={
-                            userInputData?.blocks[Number(key) - 1]?.[
-                              `description${Number(
-                                key
-                              )}` as keyof MultiColumnBlock
-                            ] || ""
-                          }
-                          onChange={(e) => handleBlockChange(e, Number(key))}
-                          className="w-full  p-2 border border-gray-200 rounded-lg"
-                          placeholder="توضیحات"
-                        />
-                        <br />
-                        <br />
-                        <label>متن دکمه</label>
-                        <input
-                          type="text"
-                          name="btnLable"
-                          value={
-                            userInputData?.blocks[Number(key) - 1]?.[
-                              `btnLable${Number(key)}` as keyof MultiColumnBlock
-                            ] || ""
-                          }
-                          onChange={(e) => handleBlockChange(e, Number(key))}
-                          className="w-full p-2 border border-gray-200 rounded-lg"
-                          placeholder="متن دکمه"
-                        />
-                        <br />
-                        <br />
-                        <label>لینک دکمه</label>
-                        <div className="mb-2">
-                          <label className="flex items-center gap-2">
-                            <input
-                              type="checkbox"
-                              checked={useRouteSelectBtns[Number(key)] || false}
-                              onChange={(e) =>
-                                setUseRouteSelectBtns((prev) => ({
-                                  ...prev,
-                                  [Number(key)]: e.target.checked,
-                                }))
-                              }
-                              className="rounded"
-                            />
-                            <span className="text-sm">
-                              انتخاب از مسیرهای موجود
-                            </span>
-                          </label>
-                        </div>
-                        {useRouteSelectBtns[Number(key)] ? (
-                          <select
-                            value={
-                              userInputData?.blocks[Number(key) - 1]?.[
-                                `btnLink${Number(
-                                  key
-                                )}` as keyof MultiColumnBlock
-                              ] || ""
-                            }
-                            onChange={(
-                              e: React.ChangeEvent<HTMLSelectElement>
-                            ) => {
-                              setUserInputData((prev) => ({
-                                ...prev,
-                                blocks: {
-                                  ...prev.blocks,
-                                  [Number(key) - 1]: {
-                                    ...prev.blocks[Number(key) - 1],
-                                    [`btnLink${Number(key)}`]: e.target.value,
-                                  },
-                                },
-                              }));
-                            }}
-                            className="w-full p-2 border border-gray-200 rounded-lg"
-                          >
-                            <option value="">انتخاب مسیر</option>
-                            {activeRoutes.map((route: string) => (
-                              <option key={route} value={route}>
-                                {route}
-                              </option>
-                            ))}
-                          </select>
-                        ) : (
-                          <input
-                            type="text"
-                            name="btnLink"
-                            value={
-                              userInputData?.blocks[Number(key) - 1]?.[
-                                `btnLink${Number(
-                                  key
-                                )}` as keyof MultiColumnBlock
-                              ] || ""
-                            }
-                            onChange={(e) => handleBlockChange(e, Number(key))}
-                            className="w-full p-2 border border-gray-200 rounded-lg"
-                            placeholder="آدرس لینک یا مسیر سفارشی"
+                      </svg>
+                      <h3 className="font-semibold text-gray-700">
+                        ستون {Number(key) + 1}
+                      </h3>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteColumn(Number(key));
+                        }}
+                        className="p-1 hover:bg-red-100 rounded-full cursor-pointer"
+                      >
+                        <svg
+                          className="w-5 h-5 text-red-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                           />
-                        )}
+                        </svg>
+                      </span>
+                      <svg
+                        className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                          openColumns[Number(key)] ? "rotate-180" : ""
+                        }`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </div>
+                  </button>
+
+                  {openColumns[Number(key) as number] && (
+                    <div className="p-4 border-t border-gray-100 space-y-4 animate-slideDown">
+                      {/* Column Content */}
+                      <label>عنوان ستون</label>
+                      <input
+                        type="text"
+                        name="title"
+                        value={(block as MultiColumnBlock)[titleKey]}
+                        onChange={(e) => handleBlockChange(e, index)}
+                      />
+
+                      <br />
+                      <br />
+                      <label className="">توضیحات ستون</label>
+                      <input
+                        type="text"
+                        name="description"
+                        value={(block as MultiColumnBlock)[descKey]}
+                        onChange={(e) => handleBlockChange(e, index)}
+                      />
+                      <br />
+                      <br />
+                      <label>متن دکمه</label>
+
+                      <input
+                        type="text"
+                        className="w-full p-2 border border-gray-200 rounded-lg"
+                        placeholder="متن دکمه"
+                        name="btnLable"
+                        value={(block as MultiColumnBlock)[btnLabelKey]}
+                        onChange={(e) => handleBlockChange(e, index)}
+                      />
+                      <br />
+                      <br />
+                      <label>لینک دکمه</label>
+                      <div className="mb-2">
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={useRouteSelectBtns[Number(key)] || false}
+                            onChange={(e) =>
+                              setUseRouteSelectBtns((prev) => ({
+                                ...prev,
+                                [Number(key)]: e.target.checked,
+                              }))
+                            }
+                            className="rounded"
+                          />
+
+                          <span className="text-sm">
+                            انتخاب از مسیرهای موجود
+                          </span>
+                        </label>
                       </div>
-                    )}
-                  </div>
-                );
-              })}
+                      {useRouteSelectBtns[Number(key)] ? (
+                        <select
+                          value={
+                            (userInputData.blocks as MultiColumnBlock[])[
+                              Number(key) - 1
+                            ]?.[
+                              `btnLink${Number(key)}` as keyof MultiColumnBlock
+                            ] || ""
+                          }
+                          onChange={(
+                            e: React.ChangeEvent<HTMLSelectElement>
+                          ) => {
+                            setUserInputData((prev) => ({
+                              ...prev,
+                              blocks: {
+                                ...prev.blocks,
+                                [Number(key) - 1]: {
+                                  ...prev.blocks[Number(key) - 1],
+                                  [`btnLink${Number(key)}`]: e.target.value,
+                                },
+                              },
+                            }));
+                          }}
+                          className="w-full p-2 border border-gray-200 rounded-lg"
+                        >
+                          <option value="">انتخاب مسیر</option>
+                          {activeRoutes.map((route: string) => (
+                            <option key={route} value={route}>
+                              {route}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <input
+                          type="text"
+                          name="btnLink"
+                          value={
+                            (userInputData?.blocks as MultiColumnBlock[])[
+                              Number(key) - 1
+                            ]?.[
+                              `btnLink${Number(key)}` as keyof MultiColumnBlock
+                            ] || ""
+                          }
+                          onChange={(e) => handleBlockChange(e, Number(key))}
+                          className="w-full p-2 border border-gray-200 rounded-lg"
+                          placeholder="آدرس لینک یا مسیر سفارشی"
+                        />
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           <button
             onClick={handleAddColumn}
             className="px-1 rounded-lg mb-3 w-full text-3xl group hover:font-extrabold transition-all"
