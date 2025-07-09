@@ -305,6 +305,8 @@ const Banner: React.FC<props> = ({
                 onClick={() => {
                   Delete(actualName, layout, setLayout);
                   setShowDeleteModal(false);
+                  setSelectedComponent("");
+                  
                 }}
               >
                 حذف

@@ -768,7 +768,10 @@ export interface MultiRowBlockSetting extends CommonSettings {
   btnColor: string;
   btnBackgroundColor: string;
   imageAlign: string;
+   buttonAnimation?: AnimationEffect;
+  imageAnimation?: AnimationEffect; 
 }
+
 
 export interface MultiRowBlock {
   heading: string;
@@ -782,7 +785,7 @@ export interface MultiRowBlock {
 export interface MultiRowSection {
   type: "multiRow";
   title: string;
-  blocks: MultiRowBlock[];
+  blocks: MultiRowBlock[] | { [key: number]: MultiRowBlock };
   setting: MultiRowBlockSetting;
 }
 
@@ -790,6 +793,7 @@ export interface MultiRowFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<MultiRowSection>>;
   userInputData: MultiRowSection;
   layout: Layout;
+  selectedComponent: string;
 }
 export interface FooterFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<FooterSection>>;
