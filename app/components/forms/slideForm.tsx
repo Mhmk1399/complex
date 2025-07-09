@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
-import { Layout, SlideSection, SlideBlock } from "@/lib/types";
+import { Layout, SlideSection, SlideBlock, AnimationEffect } from "@/lib/types";
 import React from "react";
 import MarginPaddingEditor from "../sections/editor";
 import { useCallback } from "react";
 import debounce from "lodash/debounce";
 import { TabButtons } from "../tabButtons";
+import { animationService } from "@/services/animationService";
+import { AnimationPreview } from "../animationPreview";
 
 interface SlideFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<SlideSection>>;
@@ -86,6 +88,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
     left: 0,
     right: 0,
   });
+
   const normalizeBlocks = (data: SlideSection) => {
     if (Array.isArray(data.blocks)) {
       return data;
@@ -98,6 +101,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
       blocks: blocksArray,
     };
   };
+
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     console.log(initialData);
@@ -227,6 +231,207 @@ export const SlideForm: React.FC<SlideFormProps> = ({
     }));
   };
 
+  // Animation handlers for navigation buttons
+  const handleNavAnimationToggle = (enabled: boolean) => {
+    if (enabled) {
+      const defaultConfig = animationService.getDefaultConfig('pulse');
+      const defaultEffect: AnimationEffect = {
+        type: 'hover',
+        animation: defaultConfig
+      };
+      
+      setUserInputData((prev) => ({
+        ...prev,
+        setting: {
+          ...prev.setting,
+          navAnimation: defaultEffect
+        }
+      }));
+    } else {
+      setUserInputData((prev) => ({
+        ...prev,
+        setting: {
+          ...prev.setting,
+          navAnimation: undefined
+        }
+      }));
+    }
+  };
+
+  const handleNavAnimationChange = (field: string, value: string | number) => {
+    setUserInputData((prev) => {
+      const currentAnimation = prev.setting?.navAnimation;
+      if (!currentAnimation) return prev;
+
+      let updatedAnimation = { ...currentAnimation };
+
+      if (field === 'type') {
+        updatedAnimation.type = value as 'hover' | 'click';
+      } else if (field.startsWith('animation.')) {
+        const animationField = field.split('.')[1];
+        let processedValue = value;
+        
+        if (animationField === 'duration' || animationField === 'delay') {
+          const numValue = typeof value === 'string' ? parseFloat(value) : value;
+          processedValue = `${numValue}s`;
+        }
+        
+        const newAnimationConfig = {
+          ...updatedAnimation.animation,
+          [animationField]: processedValue
+        };
+        
+        if (animationService.validateConfig(newAnimationConfig)) {
+          updatedAnimation.animation = newAnimationConfig;
+        } else {
+          updatedAnimation.animation = animationService.getDefaultConfig(updatedAnimation.animation.type);
+        }
+      }
+
+      return {
+        ...prev,
+        setting: {
+          ...prev.setting,
+          navAnimation: updatedAnimation
+        }
+      };
+    });
+  };
+
+  // Animation handlers for slide images
+  const handleImageAnimationToggle = (enabled: boolean) => {
+    if (enabled) {
+      const defaultConfig = animationService.getDefaultConfig('glow');
+      const defaultEffect: AnimationEffect = {
+        type: 'hover',
+        animation: defaultConfig
+      };
+      
+      setUserInputData((prev) => ({
+        ...prev,
+        setting: {
+          ...prev.setting,
+          imageAnimation: defaultEffect
+        }
+      }));
+    } else {
+      setUserInputData((prev) => ({
+        ...prev,
+        setting: {
+          ...prev.setting,
+          imageAnimation: undefined
+        }
+      }));
+    }
+  };
+
+  const handleImageAnimationChange = (field: string, value: string | number) => {
+    setUserInputData((prev) => {
+      const currentAnimation = prev.setting?.imageAnimation;
+      if (!currentAnimation) return prev;
+
+      let updatedAnimation = { ...currentAnimation };
+
+      if (field === 'type') {
+        updatedAnimation.type = value as 'hover' | 'click';
+      } else if (field.startsWith('animation.')) {
+        const animationField = field.split('.')[1];
+        let processedValue = value;
+        
+        if (animationField === 'duration' || animationField === 'delay') {
+          const numValue = typeof value === 'string' ? parseFloat(value) : value;
+          processedValue = `${numValue}s`;
+        }
+        
+        const newAnimationConfig = {
+          ...updatedAnimation.animation,
+          [animationField]: processedValue
+        };
+        
+        if (animationService.validateConfig(newAnimationConfig)) {
+          updatedAnimation.animation = newAnimationConfig;
+        } else {
+          updatedAnimation.animation = animationService.getDefaultConfig(updatedAnimation.animation.type);
+        }
+      }
+
+      return {
+        ...prev,
+        setting: {
+          ...prev.setting,
+          imageAnimation: updatedAnimation
+        }
+      };
+    });
+  };
+
+  // Animation handlers for slide buttons
+  const handleBtnAnimationToggle = (enabled: boolean) => {
+    if (enabled) {
+      const defaultConfig = animationService.getDefaultConfig('brightness');
+      const defaultEffect: AnimationEffect = {
+        type: 'hover',
+        animation: defaultConfig
+      };
+      
+      setUserInputData((prev) => ({
+        ...prev,
+        setting: {
+          ...prev.setting,
+          btnAnimation: defaultEffect
+        }
+      }));
+    } else {
+      setUserInputData((prev) => ({
+        ...prev,
+        setting: {
+          ...prev.setting,
+          btnAnimation: undefined
+        }
+      }));
+    }
+  };
+
+  const handleBtnAnimationChange = (field: string, value: string | number) => {
+    setUserInputData((prev) => {
+      const currentAnimation = prev.setting?.btnAnimation;
+      if (!currentAnimation) return prev;
+
+      let updatedAnimation = { ...currentAnimation };
+
+      if (field === 'type') {
+        updatedAnimation.type = value as 'hover' | 'click';
+      } else if (field.startsWith('animation.')) {
+        const animationField = field.split('.')[1];
+        let processedValue = value;
+        
+        if (animationField === 'duration' || animationField === 'delay') {
+          const numValue = typeof value === 'string' ? parseFloat(value) : value;
+          processedValue = `${numValue}s`;
+        }
+        
+        const newAnimationConfig = {
+          ...updatedAnimation.animation,
+          [animationField]: processedValue
+        };
+        
+        if (animationService.validateConfig(newAnimationConfig)) {
+          updatedAnimation.animation = newAnimationConfig;
+        } else {
+          updatedAnimation.animation = animationService.getDefaultConfig(updatedAnimation.animation.type);
+        }
+      }
+
+      return {
+        ...prev,
+        setting: {
+          ...prev.setting,
+          btnAnimation: updatedAnimation
+        }
+      };
+    });
+  };
+
   if (!userInputData?.blocks) {
     return null;
   }
@@ -236,6 +441,11 @@ export const SlideForm: React.FC<SlideFormProps> = ({
     setIsStyleSettingsOpen(tab === "style");
     setIsSpacingOpen(tab === "spacing");
   };
+
+  // Get current animation values
+  const navAnimation = userInputData?.setting?.navAnimation;
+  const imageAnimation = userInputData?.setting?.imageAnimation;
+  const btnAnimation = userInputData?.setting?.btnAnimation;
 
   return (
     <>
@@ -509,6 +719,8 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                   </div>
                 </div>
               </div>
+
+              {/* Image Settings */}
               <div className="space-y-4 rounded-lg">
                 <h4 className="font-bold text-sky-700 mb-3">تنظیمات تصویر</h4>
                 <div className="space-y-3">
@@ -571,8 +783,114 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                       </select>
                     </div>
                   </div>
+
+                  {/* Image Animation Settings */}
+                  <div className="border-t pt-4 mt-4">
+                    <div className="flex justify-between items-center mb-3">
+                      <h5 className="font-medium text-gray-700">انیمیشن تصاویر</h5>
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          checked={!!imageAnimation}
+                          onChange={(e) => handleImageAnimationToggle(e.target.checked)}
+                          className="rounded"
+                        />
+                        <span className="text-sm">فعال کردن انیمیشن</span>
+                      </label>
+                    </div>
+
+                    {imageAnimation && (
+                      <div className="border border-gray-200 rounded-lg p-4 space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Effect Type */}
+                          <div>
+                            <label className="block mb-1 text-sm font-medium text-gray-700">
+                              نوع تریگر
+                            </label>
+                            <select
+                              value={imageAnimation.type}
+                              onChange={(e) => handleImageAnimationChange('type', e.target.value)}
+                              className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            >
+                              <option value="hover">هاور (Hover)</option>
+                              <option value="click">کلیک (Click)</option>
+                            </select>
+                          </div>
+
+                          {/* Animation Type */}
+                          <div>
+                            <label className="block mb-1 text-sm font-medium text-gray-700">
+                              نوع انیمیشن
+                            </label>
+                            <select
+                              value={imageAnimation.animation.type}
+                              onChange={(e) => handleImageAnimationChange('animation.type', e.target.value)}
+                              className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            >
+                              {animationService.getAnimationTypes().map(type => (
+                                <option key={type} value={type}>
+                                  {type === 'pulse' && 'پالس'}
+                                  {type === 'glow' && 'درخشش'}
+                                  {type === 'brightness' && 'روشنایی'}
+                                  {type === 'blur' && 'تاری'}
+                                  {type === 'saturate' && 'اشباع رنگ'}
+                                  {type === 'contrast' && 'کنتراست'}
+                                  {type === 'opacity' && 'شفافیت'}
+                                  {type === 'shadow' && 'سایه'}
+                                </option>
+                              ))}
+                            </select>
+                            <div className="text-xs text-gray-500 mt-1">
+                              {animationService.getAnimationPreview(imageAnimation.animation.type)}
+                            </div>
+                          </div>
+
+                          {/* Duration */}
+                          <div>
+                            <label className="block mb-1 text-sm font-medium text-gray-700">
+                              مدت زمان (ثانیه)
+                            </label>
+                            <input
+                              type="number"
+                              min="0.1"
+                              max="10"
+                              step="0.1"
+                              value={parseFloat(imageAnimation.animation.duration.replace('s', '')) || 1}
+                              onChange={(e) => handleImageAnimationChange('animation.duration', e.target.value)}
+                              className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            />
+                          </div>
+
+                          {/* Timing Function */}
+                          <div>
+                            <label className="block mb-1 text-sm font-medium text-gray-700">
+                              تابع زمان‌بندی
+                            </label>
+                            <select
+                              value={imageAnimation.animation.timing}
+                              onChange={(e) => handleImageAnimationChange('animation.timing', e.target.value)}
+                              className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            >
+                              <option value="ease">ease - طبیعی</option>
+                              <option value="ease-in">ease-in - شروع آهسته</option>
+                              <option value="ease-out">ease-out - پایان آهسته</option>
+                              <option value="ease-in-out">ease-in-out - شروع و پایان آهسته</option>
+                              <option value="linear">linear - خطی</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        {/* Animation Preview */}
+                        <div className="mt-4">
+                          <AnimationPreview effects={[imageAnimation]} />
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
+
+              {/* Button Settings */}
               <div className="space-y-4 rounded-lg">
                 <h4 className="font-bold text-sky-700 mb-3">تنظیمات دکمه</h4>
                 <div className="space-y-3">
@@ -599,8 +917,292 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                       onChange={handleSettingChange}
                     />
                   </div>
+
+                  {/* Button Animation Settings */}
+                  <div className="border-t pt-4 mt-4">
+                    <div className="flex justify-between items-center mb-3">
+                      <h5 className="font-medium text-gray-700">انیمیشن دکمه‌ها</h5>
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          checked={!!btnAnimation}
+                          onChange={(e) => handleBtnAnimationToggle(e.target.checked)}
+                          className="rounded"
+                        />
+                        <span className="text-sm">فعال کردن انیمیشن</span>
+                      </label>
+                    </div>
+
+                    {btnAnimation && (
+                      <div className="border border-gray-200 rounded-lg p-4 space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Effect Type */}
+                          <div>
+                            <label className="block mb-1 text-sm font-medium text-gray-700">
+                              نوع تریگر
+                            </label>
+                            <select
+                              value={btnAnimation.type}
+                              onChange={(e) => handleBtnAnimationChange('type', e.target.value)}
+                              className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            >
+                              <option value="hover">هاور (Hover)</option>
+                              <option value="click">کلیک (Click)</option>
+                            </select>
+                          </div>
+
+                          {/* Animation Type */}
+                          <div>
+                            <label className="block mb-1 text-sm font-medium text-gray-700">
+                              نوع انیمیشن
+                            </label>
+                            <select
+                              value={btnAnimation.animation.type}
+                              onChange={(e) => handleBtnAnimationChange('animation.type', e.target.value)}
+                              className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            >
+                              {animationService.getAnimationTypes().map(type => (
+                                <option key={type} value={type}>
+                                  {type === 'pulse' && 'پالس'}
+                                  {type === 'glow' && 'درخشش'}
+                                  {type === 'brightness' && 'روشنایی'}
+                                  {type === 'blur' && 'تاری'}
+                                  {type === 'saturate' && 'اشباع رنگ'}
+                                  {type === 'contrast' && 'کنتراست'}
+                                  {type === 'opacity' && 'شفافیت'}
+                                  {type === 'shadow' && 'سایه'}
+                                </option>
+                              ))}
+                            </select>
+                            <div className="text-xs text-gray-500 mt-1">
+                              {animationService.getAnimationPreview(btnAnimation.animation.type)}
+                            </div>
+                          </div>
+
+                          {/* Duration */}
+                          <div>
+                            <label className="block mb-1 text-sm font-medium text-gray-700">
+                              مدت زمان (ثانیه)
+                            </label>
+                            <input
+                              type="number"
+                              min="0.1"
+                              max="10"
+                              step="0.1"
+                              value={parseFloat(btnAnimation.animation.duration.replace('s', '')) || 1}
+                              onChange={(e) => handleBtnAnimationChange('animation.duration', e.target.value)}
+                              className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            />
+                          </div>
+
+                          {/* Timing Function */}
+                          <div>
+                            <label className="block mb-1 text-sm font-medium text-gray-700">
+                              تابع زمان‌بندی
+                            </label>
+                            <select
+                              value={btnAnimation.animation.timing}
+                              onChange={(e) => handleBtnAnimationChange('animation.timing', e.target.value)}
+                              className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            >
+                              <option value="ease">ease - طبیعی</option>
+                              <option value="ease-in">ease-in - شروع آهسته</option>
+                              <option value="ease-out">ease-out - پایان آهسته</option>
+                              <option value="ease-in-out">ease-in-out - شروع و پایان آهسته</option>
+                              <option value="linear">linear - خطی</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        {/* Animation Preview */}
+                        <div className="mt-4">
+                          <AnimationPreview effects={[btnAnimation]} />
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
+
+              {/* Navigation Animation Settings */}
+              <div className="space-y-4 rounded-lg border-t pt-6 mt-6">
+                <div className="flex justify-between items-center">
+                  <h4 className="font-bold text-sky-700">انیمیشن دکمه‌های ناوبری</h4>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={!!navAnimation}
+                      onChange={(e) => handleNavAnimationToggle(e.target.checked)}
+                      className="rounded"
+                    />
+                    <span className="text-sm">فعال کردن انیمیشن</span>
+                  </label>
+                </div>
+
+                {navAnimation && (
+                  <div className="border border-gray-200 rounded-lg p-4 space-y-4">
+                    <h5 className="font-medium text-gray-700">تنظیمات انیمیشن دکمه‌های قبل/بعد</h5>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Effect Type */}
+                      <div>
+                        <label className="block mb-1 text-sm font-medium text-gray-700">
+                          نوع تریگر
+                        </label>
+                        <select
+                          value={navAnimation.type}
+                          onChange={(e) => handleNavAnimationChange('type', e.target.value)}
+                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        >
+                          <option value="hover">هاور (Hover)</option>
+                          <option value="click">کلیک (Click)</option>
+                        </select>
+                      </div>
+
+                      {/* Animation Type */}
+                      <div>
+                        <label className="block mb-1 text-sm font-medium text-gray-700">
+                          نوع انیمیشن
+                        </label>
+                        <select
+                          value={navAnimation.animation.type}
+                          onChange={(e) => handleNavAnimationChange('animation.type', e.target.value)}
+                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        >
+                          {animationService.getAnimationTypes().map(type => (
+                            <option key={type} value={type}>
+                              {type === 'pulse' && 'پالس'}
+                              {type === 'glow' && 'درخشش'}
+                              {type === 'brightness' && 'روشنایی'}
+                              {type === 'blur' && 'تاری'}
+                              {type === 'saturate' && 'اشباع رنگ'}
+                              {type === 'contrast' && 'کنتراست'}
+                              {type === 'opacity' && 'شفافیت'}
+                              {type === 'shadow' && 'سایه'}
+                            </option>
+                          ))}
+                        </select>
+                        <div className="text-xs text-gray-500 mt-1">
+                          {animationService.getAnimationPreview(navAnimation.animation.type)}
+                        </div>
+                      </div>
+
+                      {/* Duration */}
+                      <div>
+                        <label className="block mb-1 text-sm font-medium text-gray-700">
+                          مدت زمان (ثانیه)
+                        </label>
+                        <input
+                          type="number"
+                          min="0.1"
+                          max="10"
+                          step="0.1"
+                          value={parseFloat(navAnimation.animation.duration.replace('s', '')) || 1}
+                          onChange={(e) => handleNavAnimationChange('animation.duration', e.target.value)}
+                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        />
+                        <div className="text-gray-500 text-xs mt-1">
+                          فعلی: {navAnimation.animation.duration}
+                        </div>
+                      </div>
+
+                      {/* Timing Function */}
+                      <div>
+                                                <label className="block mb-1 text-sm font-medium text-gray-700">
+                          تابع زمان‌بندی
+                        </label>
+                        <select
+                          value={navAnimation.animation.timing}
+                          onChange={(e) => handleNavAnimationChange('animation.timing', e.target.value)}
+                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        >
+                          <option value="ease">ease - طبیعی</option>
+                          <option value="ease-in">ease-in - شروع آهسته</option>
+                          <option value="ease-out">ease-out - پایان آهسته</option>
+                          <option value="ease-in-out">ease-in-out - شروع و پایان آهسته</option>
+                          <option value="linear">linear - خطی</option>
+                          <option value="cubic-bezier(0, 0, 0.2, 1)">cubic-bezier - سفارشی</option>
+                        </select>
+                      </div>
+
+                      {/* Delay */}
+                      <div>
+                        <label className="block mb-1 text-sm font-medium text-gray-700">
+                          تاخیر (ثانیه)
+                        </label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="5"
+                          step="0.1"
+                          value={parseFloat((navAnimation.animation.delay || '0s').replace('s', '')) || 0}
+                          onChange={(e) => handleNavAnimationChange('animation.delay', e.target.value)}
+                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        />
+                        <div className="text-gray-500 text-xs mt-1">
+                          فعلی: {navAnimation.animation?.delay || '0s'}
+                        </div>
+                      </div>
+
+                      {/* Iteration Count */}
+                      <div>
+                        <label className="block mb-1 text-sm font-medium text-gray-700">
+                          تعداد تکرار
+                        </label>
+                        <select
+                          value={navAnimation.animation.iterationCount || '1'}
+                          onChange={(e) => handleNavAnimationChange('animation.iterationCount', e.target.value)}
+                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        >
+                          <option value="1">1 بار</option>
+                          <option value="2">2 بار</option>
+                          <option value="3">3 بار</option>
+                          <option value="5">5 بار</option>
+                          <option value="infinite">بی‌نهایت</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* Animation Preview */}
+                    <div className="mt-4">
+                      <AnimationPreview effects={[navAnimation]} />
+                    </div>
+
+                    {/* Animation Info */}
+                    <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+                      <h6 className="font-medium text-blue-800 mb-2">اطلاعات انیمیشن</h6>
+                      <div className="text-sm text-blue-700 space-y-1">
+                        <div>
+                          <strong>CSS تولید شده:</strong>
+                          <code className="block mt-1 p-2 bg-white rounded text-xs overflow-x-auto">
+                            {animationService.generateCSS(navAnimation.animation)}
+                          </code>
+                        </div>
+                        <div className="mt-2">
+                          <strong>وضعیت اعتبار:</strong>
+                          <span className={`ml-2 px-2 py-1 rounded text-xs ${
+                            animationService.validateConfig(navAnimation.animation)
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-red-100 text-red-800'
+                          }`}>
+                            {animationService.validateConfig(navAnimation.animation) ? 'معتبر' : 'نامعتبر'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {!navAnimation && (
+                  <div className="text-center text-gray-500 py-8 border border-gray-200 rounded-lg bg-gray-50">
+                    <div className="mb-2">⚡</div>
+                    <div>انیمیشن دکمه‌های ناوبری غیرفعال است</div>
+                    <div className="text-sm mt-1">برای فعال کردن چک‌باکس بالا را انتخاب کنید</div>
+                  </div>
+                )}
+              </div>
+
+              {/* Background Settings */}
               <div className="space-y-4 rounded-lg">
                 <h4 className="font-bold text-sky-700 mb-3">
                   تنظیمات پس زمینه
@@ -638,3 +1240,4 @@ export const SlideForm: React.FC<SlideFormProps> = ({
     </>
   );
 };
+

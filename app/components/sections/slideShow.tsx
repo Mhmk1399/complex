@@ -58,11 +58,155 @@ const Slide = styled.div`
   align-items: center;
 `;
 
-const SlideImage = styled.img<{ $data: SlideSection["setting"] }>`
+const SlideImage = styled.img<{ 
+  $data: SlideSection["setting"];
+  $imageAnimation?: SlideSection["setting"]["imageAnimation"];
+}>`
   width: 100%;
   border-radius: ${(props) => props.$data?.imageRadious || "10"}px;
   opacity: ${(props) => props.$data?.opacityImage || 1};
   object-fit: ${(props) => props.$data?.imageBehavior || "cover"};
+  
+  /* Apply image animations */
+  ${(props) => {
+    const imageAnimation = props.$imageAnimation;
+    if (!imageAnimation) return '';
+    
+    const { type, animation: animConfig } = imageAnimation;
+    const selector = type === 'hover' ? '&:hover' : '&:active';
+    
+    // Generate animation CSS based on type
+    if (animConfig.type === 'pulse') {
+      const baseOpacity = Number(props.$data?.opacityImage || 1);
+      return `
+        ${selector} {
+          animation: slideImagePulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideImagePulse {
+          0%, 100% { 
+            opacity: ${baseOpacity};
+            filter: brightness(1);
+          }
+          50% { 
+            opacity: ${Math.max(0.3, baseOpacity - 0.4)};
+            filter: brightness(1.3);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'glow') {
+      return `
+        ${selector} {
+          animation: slideImageGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideImageGlow {
+          0%, 100% { 
+            filter: brightness(1) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+          }
+          50% { 
+            filter: brightness(1.2) drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+          }
+        }
+      `;
+    } else if (animConfig.type === 'brightness') {
+      return `
+        ${selector} {
+          animation: slideImageBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideImageBrightness {
+          0%, 100% { 
+            filter: brightness(1);
+          }
+          50% { 
+            filter: brightness(1.4);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'blur') {
+      return `
+        ${selector} {
+          animation: slideImageBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideImageBlur {
+          0%, 100% { 
+            filter: blur(0px);
+          }
+          50% { 
+            filter: blur(2px);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'saturate') {
+      return `
+        ${selector} {
+          animation: slideImageSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideImageSaturate {
+          0%, 100% { 
+            filter: saturate(1);
+          }
+          50% { 
+            filter: saturate(1.8);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'contrast') {
+      return `
+        ${selector} {
+          animation: slideImageContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideImageContrast {
+          0%, 100% { 
+            filter: contrast(1);
+          }
+          50% { 
+            filter: contrast(1.5);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'opacity') {
+      const baseOpacity = Number(props.$data?.opacityImage || 1);
+      return `
+        ${selector} {
+          animation: slideImageOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideImageOpacity {
+          0% { 
+            opacity: ${baseOpacity};
+          }
+          50% { 
+            opacity: ${Math.max(0.2, baseOpacity - 0.6)};
+          }
+          100% { 
+            opacity: ${baseOpacity};
+          }
+        }
+      `;
+    } else if (animConfig.type === 'shadow') {
+      return `
+        ${selector} {
+          animation: slideImageShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideImageShadow {
+          0%, 100% { 
+            filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0));
+          }
+          50% { 
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+          }
+        }
+      `;
+    }
+    
+    return '';
+  }}
 `;
 
 const SlideTextBox = styled.div`
@@ -101,7 +245,10 @@ const SlideDescription = styled.p<{
   margin-top: 5px;
 `;
 
-const NavButton = styled.button`
+const NavButton = styled.button<{
+  $data: SlideSection;
+  $navAnimation?: SlideSection["setting"]["navAnimation"];
+}>`
   position: absolute;
   top: 50%;
   transform: translateY(-250%);
@@ -112,6 +259,7 @@ const NavButton = styled.button`
   border-radius: 20%;
   cursor: pointer;
   z-index: 10;
+  
   @media (max-width: 425px) {
     transform: translateY(-390%);
     padding: 7px;
@@ -120,6 +268,145 @@ const NavButton = styled.button`
     transform: translateY(-290%);
     padding: 7px;
   }
+
+  /* Apply navigation button animations */
+  ${(props) => {
+    const navAnimation = props.$navAnimation;
+    if (!navAnimation) return '';
+    
+    const { type, animation: animConfig } = navAnimation;
+    const selector = type === 'hover' ? '&:hover' : '&:active';
+    
+    // Generate animation CSS based on type
+    if (animConfig.type === 'pulse') {
+      return `
+        ${selector} {
+          animation: slideNavPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideNavPulse {
+          0%, 100% { 
+            opacity: 1;
+            filter: brightness(1);
+          }
+          50% { 
+            opacity: 0.7;
+            filter: brightness(1.3);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'glow') {
+      return `
+        ${selector} {
+          animation: slideNavGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideNavGlow {
+          0%, 100% { 
+            filter: brightness(1) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+          }
+          50% { 
+            filter: brightness(1.2) drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+          }
+        }
+      `;
+    } else if (animConfig.type === 'brightness') {
+      return `
+        ${selector} {
+          animation: slideNavBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideNavBrightness {
+          0%, 100% { 
+            filter: brightness(1);
+          }
+          50% { 
+            filter: brightness(1.4);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'blur') {
+      return `
+        ${selector} {
+          animation: slideNavBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideNavBlur {
+          0%, 100% { 
+            filter: blur(0px);
+          }
+          50% { 
+            filter: blur(2px);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'saturate') {
+      return `
+        ${selector} {
+          animation: slideNavSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideNavSaturate {
+          0%, 100% { 
+            filter: saturate(1);
+          }
+          50% { 
+            filter: saturate(1.8);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'contrast') {
+      return `
+        ${selector} {
+          animation: slideNavContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideNavContrast {
+          0%, 100% { 
+            filter: contrast(1);
+          }
+          50% { 
+            filter: contrast(1.5);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'opacity') {
+      return `
+        ${selector} {
+          animation: slideNavOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideNavOpacity {
+          0% { 
+            opacity: 1;
+          }
+          50% { 
+            opacity: 0.4;
+          }
+          100% { 
+            opacity: 1;
+          }
+        }
+      `;
+    } else if (animConfig.type === 'shadow') {
+      return `
+        ${selector} {
+          animation: slideNavShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideNavShadow {
+          0%, 100% { 
+            filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0));
+          }
+          50% { 
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+          }
+        }
+      `;
+    }
+    
+    return '';
+  }}
 `;
 
 const PrevButton = styled(NavButton)`
@@ -132,12 +419,156 @@ const NextButton = styled(NavButton)`
 
 const Button = styled.button<{
   $data: SlideSection;
+  $btnAnimation?: SlideSection["setting"]["btnAnimation"];
 }>`
   text-align: center;
   background-color: ${(props) =>
     props.$data?.setting?.btnBackgroundColor || ""};
   color: ${(props) => props.$data?.setting?.btnTextColor || ""};
   padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  /* Apply button animations */
+  ${(props) => {
+    const btnAnimation = props.$btnAnimation;
+    if (!btnAnimation) return '';
+    
+    const { type, animation: animConfig } = btnAnimation;
+    const selector = type === 'hover' ? '&:hover' : '&:active';
+    
+    // Generate animation CSS based on type
+    if (animConfig.type === 'pulse') {
+      return `
+        ${selector} {
+          animation: slideBtnPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideBtnPulse {
+          0%, 100% { 
+            opacity: 1;
+            filter: brightness(1);
+          }
+          50% { 
+            opacity: 0.7;
+            filter: brightness(1.3);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'glow') {
+      return `
+        ${selector} {
+          animation: slideBtnGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideBtnGlow {
+          0%, 100% { 
+            filter: brightness(1) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+          }
+          50% { 
+            filter: brightness(1.2) drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+          }
+        }
+      `;
+    } else if (animConfig.type === 'brightness') {
+      return `
+        ${selector} {
+          animation: slideBtnBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideBtnBrightness {
+          0%, 100% { 
+            filter: brightness(1);
+          }
+          50% { 
+            filter: brightness(1.4);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'blur') {
+      return `
+        ${selector} {
+          animation: slideBtnBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideBtnBlur {
+          0%, 100% { 
+            filter: blur(0px);
+          }
+          50% { 
+            filter: blur(2px);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'saturate') {
+      return `
+        ${selector} {
+          animation: slideBtnSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideBtnSaturate {
+          0%, 100% { 
+            filter: saturate(1);
+          }
+          50% { 
+            filter: saturate(1.8);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'contrast') {
+      return `
+        ${selector} {
+          animation: slideBtnContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideBtnContrast {
+          0%, 100% { 
+            filter: contrast(1);
+          }
+          50% { 
+            filter: contrast(1.5);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'opacity') {
+      return `
+        ${selector} {
+          animation: slideBtnOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideBtnOpacity {
+          0% { 
+            opacity: 1;
+          }
+          50% { 
+            opacity: 0.4;
+          }
+          100% { 
+            opacity: 1;
+          }
+        }
+      `;
+    } else if (animConfig.type === 'shadow') {
+      return `
+        ${selector} {
+          animation: slideBtnShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes slideBtnShadow {
+          0%, 100% { 
+            filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0));
+          }
+          50% { 
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+          }
+        }
+      `;
+    }
+    
+    return '';
+  }}
 `;
 
 const SlideShow: React.FC<SlideShowProps> = ({
@@ -177,6 +608,7 @@ const SlideShow: React.FC<SlideShowProps> = ({
     setCurrentIndex((prev) => (prev + 1) % (blocks.length || 1));
   const handlePrev = () =>
     setCurrentIndex((prev) => (prev - 1 + (blocks.length || 1)) % (blocks.length || 1));
+  
   if (currentIndex >= (blocks.length || 0)) {
     setCurrentIndex(blocks.length - 1);
     return null;
@@ -247,6 +679,7 @@ const SlideShow: React.FC<SlideShowProps> = ({
                 src={slide.imageSrc}
                 alt={slide.imageAlt || "Slide"}
                 $data={sectionData.setting}
+                $imageAnimation={sectionData.setting?.imageAnimation}
               />
               <SlideTextBox>
                 <SlideHeading
@@ -263,17 +696,34 @@ const SlideShow: React.FC<SlideShowProps> = ({
                 >
                   {slide.description}
                 </SlideDescription>
-                <Button $data={sectionData}>
-                  <Link href={"#"} target="_blank">
+                <Button 
+                  $data={sectionData}
+                  $btnAnimation={sectionData.setting?.btnAnimation}
+                >
+                  <Link href={slide.btnLink || "#"} target="_blank">
                     {slide.btnText ? slide.btnText : "بیشتر بخوانید"}
                   </Link>
                 </Button>
               </SlideTextBox>
             </Slide>
-          ))}{" "}
+          ))}
         </SlidesWrapper>
-        <PrevButton onClick={handlePrev}>{"<"}</PrevButton>
-        <NextButton onClick={handleNext}>{">"}</NextButton>
+        
+        <PrevButton 
+          onClick={handlePrev}
+          $data={sectionData}
+          $navAnimation={sectionData.setting?.navAnimation}
+        >
+          {"<"}
+        </PrevButton>
+        
+        <NextButton 
+          onClick={handleNext}
+          $data={sectionData}
+          $navAnimation={sectionData.setting?.navAnimation}
+        >
+          {">"}
+        </NextButton>
       </SlideContainer>
     </SectionSlideShow>
   );

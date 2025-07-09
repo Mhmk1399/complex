@@ -650,7 +650,12 @@ export interface SlideBlockSetting {
   opacityImage?: string;
   imageRadious?: string;
   imageBehavior?: string;
+  // Add these animation properties:
+  imageAnimation?: AnimationEffect;
+  btnAnimation?: AnimationEffect;
+  navAnimation?: AnimationEffect;
 }
+
 export interface SlideBlock {
   imageSrc: string;
   imageAlt: string;
@@ -679,9 +684,14 @@ export interface SlideSection {
     backgroundBoxRadius: string;
     btnBackgroundColor: string;
     btnTextColor: string;
+    // Add these animation properties:
+    imageAnimation?: AnimationEffect;
+    btnAnimation?: AnimationEffect;
+    navAnimation?: AnimationEffect;
   };
   type: "slideshow";
 }
+
 // Add these new interfaces for Video component
 export interface VideoBlockSetting extends Partial<CommonSettings> {
   headingColor?: string;
