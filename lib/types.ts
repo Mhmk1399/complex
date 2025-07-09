@@ -321,7 +321,8 @@ export interface MultiColumnSection {
 
 // Add these new interfaces for Newsletter component
 export interface NewsLetterBlockSetting extends CommonSettings {
-  textHeadingColor: Interpolation<
+  btnAnimation?: AnimationEffect; // Add this line for button animation support
+  textHeadingColor?: Interpolation<
     Substitute<
       DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>,
       { $data: RichTextBlockSetting }
@@ -456,6 +457,7 @@ export interface Section {
   type: string;
 }
 
+// Update the ImageTextBlockSetting interface to include animations
 export interface ImageTextBlockSetting extends CommonSettings {
   headingColor: string;
   headingFontSize: string;
@@ -472,7 +474,10 @@ export interface ImageTextBlockSetting extends CommonSettings {
   imageWidth: string;
   imageHeight: string;
   background: string;
+  imageAnimation?: AnimationEffect; // Add image animation support
+  buttonAnimation?: AnimationEffect; // Add button animation support
 }
+
 
 // Add this new interface for ImageText blocks
 export interface ImageTextBlock {
@@ -1427,6 +1432,7 @@ export interface GallerySection {
   blocks: GalleryBlock;
   setting: GallerySectionSetting;
 }
+// Update the SlideBannerBlockSetting interface to include navAnimation
 export interface SlideBannerBlockSetting extends CommonSettings {
   autoplay: boolean;
   autoplaySpeed: number;
@@ -1440,7 +1446,9 @@ export interface SlideBannerBlockSetting extends CommonSettings {
   bgArrow: string;
   activeDotColor: string;
   inactiveDotColor: string;
+  navAnimation?: AnimationEffect; // Add this line for navigation button animations
 }
+
 
 export interface SlideItem {
   imageSrc: string;
@@ -1471,6 +1479,8 @@ export interface OfferRowBlockSetting extends CommonSettings {
   gradientToColor: string;
   buttonText: string;
   buttonLink: string;
+  imageAnimation?: AnimationEffect; // Add image animation support
+  buttonAnimation?: AnimationEffect; // Add button animation support
 }
 
 export interface OfferItem {
@@ -1486,6 +1496,7 @@ export interface OfferItem {
     imageAly: string;
   };
 }
+
 
 export interface OfferRowBlock {
   offers: OfferItem[];

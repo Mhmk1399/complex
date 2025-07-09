@@ -87,6 +87,145 @@ const Button = styled.button<{ $data: NewsLetterSection; $previewWidth: "sm" | "
   &:hover {
     opacity: 0.7;
   }
+
+  /* Apply button animations */
+  ${(props) => {
+    const btnAnimation = props.$data.blocks?.setting?.btnAnimation;
+    if (!btnAnimation) return '';
+    
+    const { type, animation: animConfig } = btnAnimation;
+    const selector = type === 'hover' ? '&:hover' : '&:active';
+    
+    // Generate animation CSS based on type
+    if (animConfig.type === 'pulse') {
+      return `
+        ${selector} {
+          animation: newsletterBtnPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes newsletterBtnPulse {
+          0%, 100% { 
+            opacity: 1;
+            filter: brightness(1);
+          }
+          50% { 
+            opacity: 0.7;
+            filter: brightness(1.3);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'glow') {
+      return `
+        ${selector} {
+          animation: newsletterBtnGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes newsletterBtnGlow {
+          0%, 100% { 
+            filter: brightness(1) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+          }
+          50% { 
+            filter: brightness(1.2) drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+          }
+        }
+      `;
+    } else if (animConfig.type === 'brightness') {
+      return `
+        ${selector} {
+          animation: newsletterBtnBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes newsletterBtnBrightness {
+          0%, 100% { 
+            filter: brightness(1);
+          }
+          50% { 
+            filter: brightness(1.4);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'blur') {
+      return `
+        ${selector} {
+          animation: newsletterBtnBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes newsletterBtnBlur {
+          0%, 100% { 
+            filter: blur(0px);
+          }
+          50% { 
+            filter: blur(2px);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'saturate') {
+      return `
+        ${selector} {
+          animation: newsletterBtnSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes newsletterBtnSaturate {
+          0%, 100% { 
+            filter: saturate(1);
+          }
+          50% { 
+            filter: saturate(1.8);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'contrast') {
+      return `
+        ${selector} {
+          animation: newsletterBtnContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes newsletterBtnContrast {
+          0%, 100% { 
+            filter: contrast(1);
+          }
+          50% { 
+            filter: contrast(1.5);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'opacity') {
+      return `
+        ${selector} {
+          animation: newsletterBtnOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes newsletterBtnOpacity {
+          0% { 
+            opacity: 1;
+          }
+          50% { 
+            opacity: 0.4;
+          }
+          100% { 
+            opacity: 1;
+          }
+        }
+      `;
+    } else if (animConfig.type === 'shadow') {
+      return `
+        ${selector} {
+          animation: newsletterBtnShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes newsletterBtnShadow {
+          0%, 100% { 
+            filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0));
+          }
+          50% { 
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+          }
+        }
+      `;
+    }
+    
+    return '';
+  }}
 `;
 
 const NewsLetter: React.FC<NewsLetterProps> = ({
@@ -104,6 +243,26 @@ const NewsLetter: React.FC<NewsLetterProps> = ({
 
   
   if (!sectionData) return null;
+
+  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    // Handle click animation trigger
+    const btnAnimation = sectionData.blocks?.setting?.btnAnimation;
+    if (btnAnimation && btnAnimation.type === 'click') {
+      const button = e.currentTarget;
+      button.classList.add('clicked');
+      
+      // Remove the class after animation completes
+      const duration = parseFloat(btnAnimation.animation.duration.replace('s', '')) * 1000;
+      const delay = parseFloat((btnAnimation.animation.delay || '0s').replace('s', '')) * 1000;
+      
+      setTimeout(() => {
+        button.classList.remove('clicked');
+      }, duration + delay);
+    }
+    
+    // Prevent form submission for demo purposes
+    e.preventDefault();
+  };
 
   return (
     <Section
@@ -159,7 +318,6 @@ const NewsLetter: React.FC<NewsLetterProps> = ({
           </button>
         </div>
       )}
-      {/* Delete Modal and Component Header remain the same */}
       
       <Heading $data={sectionData} $previewWidth={previewWidth}>
         {sectionData.blocks.heading || "خبرنامه ما"}
@@ -169,9 +327,14 @@ const NewsLetter: React.FC<NewsLetterProps> = ({
         {sectionData.blocks.description || "برای دریافت آخرین اخبار ایمیل خود را وارد کنید"}
       </Description>
       
-      <Form $previewWidth={previewWidth}>
+      <Form $previewWidth={previewWidth} onSubmit={(e) => e.preventDefault()}>
         <Input $previewWidth={previewWidth} type="email" placeholder="ایمیل خود را وارد کنید" required />
-        <Button $data={sectionData} $previewWidth={previewWidth} type="submit">
+        <Button 
+          $data={sectionData} 
+          $previewWidth={previewWidth} 
+          type="submit"
+          onClick={handleButtonClick}
+        >
           {sectionData.blocks.btnText || "عضویت"}
         </Button>
       </Form>
