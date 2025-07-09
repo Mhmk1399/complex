@@ -1579,24 +1579,12 @@ export interface ProductRowSection {
 export interface CanvasElement {
   id: string;
   type: "heading" | "paragraph" | "image" | "button" | "link" | "div";
-  content: string;
-  style: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-    fontSize?: number;
-    fontWeight?: string;
-    color?: string;
-    backgroundColor?: string;
-    borderRadius?: number;
-    padding?: number;
-    textAlign?: "left" | "center" | "right";
-    zIndex?: number;
-  };
+  content?: string;
+  style: CanvasElementStyle;
   href?: string;
   src?: string;
   alt?: string;
+  animation?: AnimationEffect; // Add animation support
 }
 
 export interface CanvasEditorSection {
@@ -1608,8 +1596,7 @@ export interface CanvasEditorSection {
     paddingRight: string;
     marginTop: string;
     marginBottom: string;
-    backgroundColor?: string;
-    height?: string;
+    backgroundColor: string;
   };
   blocks: {
     elements: CanvasElement[];
@@ -1617,31 +1604,28 @@ export interface CanvasEditorSection {
       canvasWidth: string;
       canvasHeight: string;
       backgroundColor: string;
-      gridSize?: number;
-      showGrid?: boolean;
+      gridSize: number;
+      showGrid: boolean;
     };
   };
 }
-
-// Update the animation interfaces
+// UPDATE this existing interface
 export interface AnimationConfig {
   type: string;
   duration: string;
   timing: string;
   delay?: string;
   iterationCount?: string;
+  intensity?: 'light' | 'normal' | 'strong'; // ADD this line
 }
 
+
 export interface AnimationEffect {
-  type: 'hover' | 'click';
-
-
-
-
-
-
-
+  type: 'hover' | 'click' ; // ADD 'scroll' and 'load'
   animation: AnimationConfig;
+  trigger?: {
+    threshold?: number; // ADD this for scroll animations
+  };
 }
 
 export interface AnimationSettings {
@@ -1664,4 +1648,18 @@ export interface BannerBlockSetting extends CommonSettings {
   imageRadious?: string;
   imageBehavior?: string;
   animations?: AnimationSettings; // Single animation
+}
+export interface CanvasElementStyle {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  fontSize?: number;
+  fontWeight?: string;
+  color?: string; // Can be hex or rgba
+  backgroundColor?: string; // Can be hex or rgba
+  borderRadius?: number;
+  padding?: number;
+  textAlign?: "left" | "right" | "center" | "justify" | "start" | "end";
+  zIndex?: number;
 }

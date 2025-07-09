@@ -1,12 +1,14 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { Layout } from "@/lib/types";
+import { Layout, AnimationEffect } from "@/lib/types"; // Import from types
 import { Delete } from "../C-D";
 import { Rnd } from "react-rnd";
 import { useCanvas } from "@/app/contexts/CanvasContext";
-import { effectService, AnimationEffect } from "@/services/effectService";
+import { effectService } from "@/services/effectService"; // Remove AnimationEffect from here
 import { animationService } from "@/services/animationService";
+
+
 
 // Define types for the Canvas Editor
 export interface CanvasElementStyle {
@@ -126,16 +128,10 @@ const ElementWrapper = styled.div<{
     const { type, animation } = props.$animation;
     const selector = type === 'hover' ? '&:hover' : type === 'click' ? '&:active' : '';
     
-    if (!selector && type !== 'load') return '';
     
     // Generate animation CSS based on type
     const generateAnimationCSS = (animType: string, config: any) => {
-      const intensityMultiplier = {
-        light: 0.5,
-        normal: 1,
-        strong: 1.5
-      }[config.intensity || 'normal'];
-
+     
       switch (animType) {
         case 'pulse':
           return `
@@ -149,8 +145,8 @@ const ElementWrapper = styled.div<{
                 filter: brightness(1);
               }
               50% { 
-                opacity: ${Math.max(0.3, 1 - (0.4 * intensityMultiplier))};
-                filter: brightness(${1 + (0.3 * intensityMultiplier)});
+                opacity: ${Math.max(0.3, 1 - (0.4 ))};
+                filter: brightness(${1 + (0.3)});
               }
             }
           `;
@@ -165,7 +161,7 @@ const ElementWrapper = styled.div<{
                 filter: brightness(1) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
               }
               50% { 
-                filter: brightness(${1 + (0.2 * intensityMultiplier)}) drop-shadow(0 0 ${8 * intensityMultiplier}px rgba(255, 255, 255, ${0.6 * intensityMultiplier}));
+                filter: brightness(${1 + (0.2 )}) drop-shadow(0 0 ${8 }px rgba(255, 255, 255, ${0.6 }));
               }
             }
           `;
@@ -180,7 +176,7 @@ const ElementWrapper = styled.div<{
                 filter: brightness(1);
               }
               50% { 
-                filter: brightness(${1 + (0.4 * intensityMultiplier)});
+                filter: brightness(${1 + (0.4 )});
               }
             }
           `;
@@ -195,7 +191,7 @@ const ElementWrapper = styled.div<{
                 filter: blur(0px);
               }
               50% { 
-                filter: blur(${2 * intensityMultiplier}px);
+                filter: blur(${2 }px);
               }
             }
           `;
@@ -210,7 +206,7 @@ const ElementWrapper = styled.div<{
                 filter: saturate(1);
               }
               50% { 
-                filter: saturate(${1 + (0.8 * intensityMultiplier)});
+                filter: saturate(${1 + (0.8 )});
               }
             }
           `;
@@ -225,7 +221,7 @@ const ElementWrapper = styled.div<{
                 filter: contrast(1);
               }
               50% { 
-                filter: contrast(${1 + (0.5 * intensityMultiplier)});
+                filter: contrast(${1 + (0.5 )});
               }
             }
           `;
@@ -240,7 +236,7 @@ const ElementWrapper = styled.div<{
                 opacity: 1;
               }
               50% { 
-                opacity: ${Math.max(0.2, 1 - (0.6 * intensityMultiplier))};
+                opacity: ${Math.max(0.2, 1 - (0.6 ))};
               }
               100% { 
                 opacity: 1;
@@ -258,7 +254,7 @@ const ElementWrapper = styled.div<{
                 filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0));
               }
               50% { 
-                filter: drop-shadow(0 ${4 * intensityMultiplier}px ${8 * intensityMultiplier}px rgba(0, 0, 0, ${0.3 * intensityMultiplier}));
+                filter: drop-shadow(0 ${4 }px ${8 }px rgba(0, 0, 0, ${0.3}));
               }
             }
           `;
@@ -268,12 +264,7 @@ const ElementWrapper = styled.div<{
     };
 
     // Handle load animation differently
-    if (type === 'load') {
-      return `
-        animation: canvas${animation.type.charAt(0).toUpperCase() + animation.type.slice(1)} ${animation.duration} ${animation.timing} ${animation.delay || '0s'} ${animation.iterationCount || '1'};
-        ${generateAnimationCSS(animation.type, animation).replace(/&:hover|&:active/g, '')}
-      `;
-    }
+   
 
     return generateAnimationCSS(animation.type, animation);
   }}
@@ -360,30 +351,7 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
 
     const observers: IntersectionObserver[] = [];
 
-    sectionData.blocks.elements.forEach((element) => {
-      if (element.animation?.type === 'scroll') {
-        const elementDOM = document.getElementById(`canvas-element-${element.id}`);
-        if (elementDOM) {
-          const observer = new IntersectionObserver(
-            (entries) => {
-              entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                  const threshold = element.animation?.trigger?.threshold || 0.5;
-                  if (entry.intersectionRatio >= threshold) {
-                    elementDOM.classList.add('in-view');
-                  }
-                } else {
-                  elementDOM.classList.remove('in-view');
-                }
-              });
-            },
-            { threshold: element.animation.trigger?.threshold || 0.5 }
-          );
-          observer.observe(elementDOM);
-          observers.push(observer);
-        }
-      }
-    });
+    
 
     return () => {
       observers.forEach(observer => observer.disconnect());
@@ -564,13 +532,7 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({
           classes += " clicked";
         }
         
-        if (type === 'scroll') {
-          classes += " scroll-trigger";
-        }
-        
-        if (type === 'load') {
-          classes += " load-trigger";
-        }
+       
       }
       
       return classes;
