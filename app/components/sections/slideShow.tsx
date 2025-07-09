@@ -1,7 +1,7 @@
 "use client";
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
-import { SlideSection, Layout } from "@/lib/types";
+import { SlideSection, Layout, SlideBlock } from "@/lib/types";
 import { Delete } from "../C-D";
 import Link from "next/link";
 
@@ -20,7 +20,7 @@ const SectionSlideShow = styled.section<{
   $preview: "sm" | "default";
 }>`
   position: relative;
-  margin: 0px 10px;
+  margin: 0px;
   margin-top: ${(props) => props.$data.setting.marginTop}px;
   margin-bottom: ${(props) => props.$data.setting.marginBottom}px;
   padding-top: ${(props) => props.$data.setting.paddingTop}px;
@@ -171,13 +171,13 @@ const SlideShow: React.FC<SlideShowProps> = ({
 
   if (!sectionData) return null;
 
-  const { blocks } = sectionData;
+  const blocks = Object.values(sectionData.blocks || {}) as SlideBlock[];
 
   const handleNext = () =>
-    setCurrentIndex((prev) => (prev + 1) % blocks.length);
+    setCurrentIndex((prev) => (prev + 1) % (blocks.length || 1));
   const handlePrev = () =>
-    setCurrentIndex((prev) => (prev - 1 + blocks.length) % blocks.length);
-  if (currentIndex >= blocks.length) {
+    setCurrentIndex((prev) => (prev - 1 + (blocks.length || 1)) % (blocks.length || 1));
+  if (currentIndex >= (blocks.length || 0)) {
     setCurrentIndex(blocks.length - 1);
     return null;
   }
@@ -241,7 +241,7 @@ const SlideShow: React.FC<SlideShowProps> = ({
 
       <SlideContainer $previewWidth={previewWidth} $preview={preview}>
         <SlidesWrapper $currentIndex={currentIndex}>
-          { blocks.map((slide, index) => (
+          {blocks.map((slide, index) => (
             <Slide key={index}>
               <SlideImage
                 src={slide.imageSrc}
