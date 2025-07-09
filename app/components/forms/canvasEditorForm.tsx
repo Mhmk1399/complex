@@ -179,7 +179,7 @@ const CanvasEditorForm: React.FC<CanvasEditorFormProps> = ({
     }
   }, [selectedComponent, setSelectedElementId]);
 
-  // Get the selected element if any
+  // Get the selected element if it exists
   const selectedElement = selectedElementId && sectionData?.blocks?.elements
     ? sectionData.blocks.elements.find((el) => el.id === selectedElementId)
     : null;

@@ -252,7 +252,7 @@ const ProductList: React.FC<ProductListProps> = ({
         // Get all child category names including the parent
         const relevantCategories = getAllChildCategories(selectedCategory);
 
-        // Filter products that match any of the relevant categories
+        // Filter products that match  of the relevant categories
         filtered = filtered.filter(
           (product) =>
             product.category &&

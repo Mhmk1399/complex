@@ -253,7 +253,7 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
     (section) => section.type === actualName
   ) as ProductRowSection;
 
-  // Move both useEffect hooks here, before any returns
+  // Move both useEffect hooks here, before  returns
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 425) {

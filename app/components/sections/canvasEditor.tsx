@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { Layout, AnimationEffect } from "@/lib/types"; // Import from types
+import { Layout, AnimationEffect, AnimationConfig } from "@/lib/types"; // Import from types
 import { Delete } from "../C-D";
 import { Rnd } from "react-rnd";
 import { useCanvas } from "@/app/contexts/CanvasContext";
@@ -130,7 +130,7 @@ const ElementWrapper = styled.div<{
     
     
     // Generate animation CSS based on type
-    const generateAnimationCSS = (animType: string, config: any) => {
+    const generateAnimationCSS = (animType: string, config: AnimationConfig) => {
      
       switch (animType) {
         case 'pulse':

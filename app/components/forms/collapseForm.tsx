@@ -249,7 +249,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
       };
     });
 
-    // Close any open accordions that might be out of range
+    // Close  open accordions that might be out of range
     setOpenAccordions((prev) => {
       const updated = { ...prev };
       // Remove accordion states for indices that no longer exist

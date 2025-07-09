@@ -1,3 +1,4 @@
+import { AnimationEffect, AnimationConfig } from '../lib/types';
 export class AnimationUtils {
   static getAnimationPreview(animationType: string): string {
     const previews: Record<string, string> = {
@@ -23,8 +24,8 @@ export class AnimationUtils {
     return count === 'infinite' || !isNaN(Number(count));
   }
 
-  static generateAnimationCSS(effects: any[]): string {
-    return effects.map(effect => {
+static generateAnimationCSS(effects: AnimationEffect[]): string {
+      return effects.map(effect => {
       const { type, animation } = effect;
       const selector = type === 'hover' ? ':hover' : ':active';
       
@@ -119,14 +120,14 @@ export class AnimationUtils {
     return keyframes[animationType] || keyframes.pulse;
   }
 
-  static createAnimationCSS(config: {
-    type: string;
-    duration: string;
-    timing: string;
-    delay?: string;
-    iterationCount?: string;
-    intensity?: 'light' | 'normal' | 'strong';
-  }): string {
+static createAnimationCSS(config: {
+  type: string;
+  duration: string;
+  timing: string;
+  delay?: string;
+  iterationCount?: string;
+  intensity?: 'light' | 'normal' | 'strong';
+}): string {
     const intensityMultiplier = {
       light: 0.5,
       normal: 1,
@@ -223,8 +224,7 @@ export class AnimationUtils {
     return keyframes[type] ? keyframes[type](intensity) : keyframes.pulse(intensity);
   }
 
-  static optimizeAnimations(animations: any[]): any[] {
-    // Remove duplicate animations
+static optimizeAnimations(animations: AnimationEffect[]): AnimationEffect[] {    // Remove duplicate animations
     const uniqueAnimations = animations.filter((animation, index, self) => 
       index === self.findIndex(a => 
         a.type === animation.type && 
@@ -247,8 +247,10 @@ export class AnimationUtils {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
-  static createResponsiveAnimation(config: any, breakpoints: Record<string, any>): string {
-    let css = this.createAnimationCSS(config);
+static createResponsiveAnimation(
+  config: AnimationConfig & { intensity?: 'light' | 'normal' | 'strong' }, 
+  breakpoints: Record<string, Partial<AnimationConfig>>
+): string {    let css = this.createAnimationCSS(config);
     
     Object.entries(breakpoints).forEach(([breakpoint, breakpointConfig]) => {
       const mediaQuery = this.getMediaQuery(breakpoint);
@@ -279,8 +281,7 @@ export class AnimationUtils {
     return queries[breakpoint] || queries.md;
   }
 
-  static validateAnimationConfig(config: any): { isValid: boolean; errors: string[] } {
-    const errors: string[] = [];
+static validateAnimationConfig(config: AnimationEffect): { isValid: boolean; errors: string[] } {    const errors: string[] = [];
     
     if (!config.type) {
       errors.push('Animation type is required');

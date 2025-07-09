@@ -29,7 +29,7 @@ export interface ColorSchema {
 }
 
 export interface CollapseBlockSetting extends CommonSettings {
-  headerAnimation: any;
+  headerAnimation?: AnimationEffect;
   titleFontSize: string;
   titleFontWeight: string;
   imageAlign: string;
@@ -655,10 +655,9 @@ export interface SlideBlockSetting {
   opacityImage?: string;
   imageRadious?: string;
   imageBehavior?: string;
-  // Add these animation properties:
-  imageAnimation?: AnimationEffect;
-  btnAnimation?: AnimationEffect;
-  navAnimation?: AnimationEffect;
+imageAnimation?: AnimationEffect;
+btnAnimation?: AnimationEffect;
+navAnimation?: AnimationEffect;
 }
 
 export interface SlideBlock {
@@ -1368,7 +1367,7 @@ export interface GalleryImage {
 }
 
 export interface GalleryBlockSetting {
-  imageAnimation: any;
+  imageAnimation: AnimationEffect;
   titleColor: string;
   titleFontSize: string;
   titleFontWeight: string;
@@ -1535,7 +1534,7 @@ export interface BrandItem {
 }
 
 export interface BrandsBlockSetting extends CommonSettings {
-  navAnimation: any;
+  navAnimation: AnimationEffect;
   headingColor: string;
   headingFontSize: string;
   headingFontWeight: string;
