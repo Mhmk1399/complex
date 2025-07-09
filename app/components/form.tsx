@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { DragEndEvent } from "@dnd-kit/core";
 import toast from "react-hot-toast";
@@ -140,7 +140,7 @@ type FormData =
 const scrollbarStyles = `
   /* Scrollbar Track */
   ::-webkit-scrollbar {
-    width: 6px; /* Smaller width for the scrollbar */
+    width: 2px; /* Smaller width for the scrollbar */
     height: 6px; /* Smaller height for horizontal scrollbar */
   }
 
@@ -166,10 +166,17 @@ const scrollbarStyles = `
     background: #ddd; /* Lighter color on hover */
   }
 `;
+
 const FormContainer = styled.div`
+  /* Remove scrollbar styles from here */
+`;
+
+const ScrollableFormContent = styled.div`
   ${scrollbarStyles}
-  overflow-y: auto; /* Ensure the container is scrollable */
-  max-height: 80vh; /* Adjust height as needed */
+  position: relative;
+  height: 100%;
+  overflow-y: scroll;  /* Always show vertical scrollbar */
+  overflow-x: hidden;
 `;
 
 // End scrollbar styles for webkit browsers
@@ -190,6 +197,27 @@ export const Form = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showOrdersMenu, setShowOrdersMenu] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [contentHeight, setContentHeight] = useState<number>(0);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // for get the height of form
+  useEffect(() => {
+    const updateHeight = () => {
+      if (contentRef.current) {
+        setContentHeight(contentRef.current.scrollHeight);
+      }
+    };
+
+    updateHeight();
+
+    // Update height when content changes
+    const observer = new ResizeObserver(updateHeight);
+    if (contentRef.current) {
+      observer.observe(contentRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [showOrdersMenu, selectedComponent, userInputData]);
 
   // Open form when a component is selected
   useEffect(() => {
@@ -1083,72 +1111,105 @@ export const Form = () => {
                     duration: 0.3,
                     ease: "easeInOut",
                   }}
-                  className="fixed right-0 hidden lg:block top-0 h-screen w-[270px] ease-in-out border-l-2  border-white/40 rounded overflow-y-auto"
+                  className="fixed right-0 hidden lg:block top-0 h-screen w-[270px] ease-in-out border-l-2 border-white/40 rounded overflow-hidden"
                   style={{ zIndex: 1000 }}
                 >
-                  <motion.div
-                    className="absolute inset-0 min-h-[2000px] bg-white/60 backdrop-blur-sm"
-                    animate={{
-                      backgroundColor: [
-                        "rgba(255,255,255,0.9)",
-                        "rgba(255,255,255,0.7)",
-                        "rgba(255,255,255,0.9)",
-                      ],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      repeatType: "loop",
-                      ease: "linear",
-                    }}
-                  />
-                  <div className="relative">
-                    {ordersButton}
+                  {/* Scrollable Container with custom scrollbar */}
+                  <ScrollableFormContent>
+                    {/* Animated Background Layer - Uses dynamic content height */}
+                    <motion.div
+                      className="absolute top-0 left-0 right-0 bg-white/80 backdrop-blur-sm"
+                      style={{
+                        height: `${Math.max(
+                          contentHeight,
+                          window.innerHeight
+                        )}px`,
+                        width: "100%",
+                        maxWidth: "270px",
+                      }}
+                      animate={{
+                        backgroundColor: [
+                          "rgba(255,255,255,0.8)",
+                          "rgba(255,255,255,0.9)",
+                          "rgba(255,255,255,0.8)",
+                        ],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        repeatType: "reverse",
+                        ease: "easeInOut",
+                      }}
+                    />
 
-                    <div className="p-2 ">
-                      <h2
-                        className="text-xl mb-2 border-b-2 text-right pb-2 w-fit border-blue-500 font-bold text-[#343a40] ml-auto"
-                        dir="rtl"
-                      >
-                        {showOrdersMenu ? "ترتیب سکشن" : "تنظیمات سکشن"}
-                      </h2>
-                      {showOrdersMenu ? (
-                        <div
-                          className=" p-4 bg-white rounded-lg shadow-lg"
-                          dir="rtl"
-                        >
-                          {/* <h3 className="text-xl text-[#343a40] font-semibold mb-4">
-                          جابجایی سکشن
-                        </h3> */}
+                    {/* Pulse Animation Overlay - Uses dynamic content height */}
+                    <motion.div
+                      className="absolute top-0 left-0 right-0 bg-blue-500/10 backdrop-blur-sm"
+                      style={{
+                        height: `${Math.max(
+                          contentHeight,
+                          window.innerHeight
+                        )}px`,
+                        width: "100%",
+                        maxWidth: "270px",
+                      }}
+                      animate={{
+                        opacity: [0.1, 0.3, 0.1],
+                        scale: [1, 1.02, 1],
+                      }}
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        repeatType: "reverse",
+                        ease: "easeInOut",
+                      }}
+                    />
 
-                          {/* Add Modal Trigger Button */}
+                    {/* Content Layer */}
+                    <div ref={contentRef} className="relative z-10 w-full">
+                      <div className="relative w-full">
+                        {ordersButton}
 
-                          {/* Modal Component */}
-
-                          <DndContext
-                            sensors={sensors}
-                            collisionDetection={closestCenter}
-                            onDragEnd={handleDragEnd}
+                        <div className="p-2 w-full">
+                          <h2
+                            className="text-xl mb-2 border-b-2 text-right pb-2 w-fit border-blue-500 font-bold text-[#343a40] ml-auto"
+                            dir="rtl"
                           >
-                            <SortableContext
-                              items={orders}
-                              strategy={verticalListSortingStrategy}
+                            {showOrdersMenu ? "ترتیب سکشن" : "تنظیمات سکشن"}
+                          </h2>
+                          {showOrdersMenu ? (
+                            <div
+                              className="p-4 bg-white rounded-lg shadow-lg w-full"
+                              dir="rtl"
                             >
-                              {orders.map((id: string) => (
-                                <SortableItem key={id} id={id} />
-                              ))}
-                            </SortableContext>
-                          </DndContext>
+                              <DndContext
+                                sensors={sensors}
+                                collisionDetection={closestCenter}
+                                onDragEnd={handleDragEnd}
+                              >
+                                <SortableContext
+                                  items={orders}
+                                  strategy={verticalListSortingStrategy}
+                                >
+                                  {orders.map((id: string) => (
+                                    <SortableItem key={id} id={id} />
+                                  ))}
+                                </SortableContext>
+                              </DndContext>
+                            </div>
+                          ) : (
+                            <div className="w-full">
+                              {renderFormContent(
+                                setUserInputData,
+                                userInputData as Section,
+                                selectedComponent
+                              )}
+                            </div>
+                          )}
                         </div>
-                      ) : (
-                        renderFormContent(
-                          setUserInputData,
-                          userInputData as Section,
-                          selectedComponent
-                        )
-                      )}
+                      </div>
                     </div>
-                  </div>
+                  </ScrollableFormContent>
                 </motion.div>
               </AnimatePresence>
             )}
