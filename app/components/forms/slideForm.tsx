@@ -73,12 +73,54 @@ export const SlideForm: React.FC<SlideFormProps> = ({
   const [isContentOpen, setIsContentOpen] = useState({});
   const [isUpdating, setIsUpdating] = useState(false);
 
+  const [margin, setMargin] = useState<BoxValues>({
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  });
+
+  const [padding, setPadding] = useState<BoxValues>({
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  });
+  const normalizeBlocks = (data: SlideSection) => {
+    if (Array.isArray(data.blocks)) {
+      return data;
+    }
+    const blocksArray = Object.values(data.blocks).filter(
+      (block) => block !== null && typeof block === "object"
+    ) as SlideBlock[];
+    return {
+      ...data,
+      blocks: blocksArray,
+    };
+  };
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
+    console.log(initialData);
     if (initialData) {
-      setUserInputData(initialData);
+      setUserInputData(normalizeBlocks(initialData));
     }
   }, [selectedComponent]);
+
+  useEffect(() => {
+    setMargin({
+      top: Number(userInputData?.setting?.marginTop) || 0,
+      bottom: Number(userInputData?.setting?.marginBottom) || 0,
+      right: Number(userInputData?.setting?.marginRight) || 0,
+      left: Number(userInputData?.setting?.marginLeft) || 0,
+    });
+
+    setPadding({
+      top: Number(userInputData?.setting?.paddingTop) || 0,
+      bottom: Number(userInputData?.setting?.paddingBottom) || 0,
+      right: Number(userInputData?.setting?.paddingRight) || 0,
+      left: Number(userInputData?.setting?.paddingLeft) || 0,
+    });
+  }, [userInputData?.setting]);
 
   useEffect(() => {
     setIsContentOpen(true);
@@ -113,12 +155,22 @@ export const SlideForm: React.FC<SlideFormProps> = ({
     field: keyof SlideBlock
   ) => {
     const { value } = e.target;
-    setUserInputData((prev: SlideSection) => ({
-      ...prev,
-      blocks: prev.blocks.map((block, i) =>
-        i === index ? { ...block, [field]: value } : block
-      ),
-    }));
+    setUserInputData((prev: SlideSection) => {
+      const blocks: SlideBlock[] = Array.isArray(prev.blocks)
+        ? prev.blocks
+        : Object.values(prev.blocks).filter(
+            (block): block is SlideBlock =>
+              block !== null && typeof block === "object"
+          );
+      return {
+        ...prev,
+        blocks: blocks.map((block, i) =>
+          i === index && typeof block === "object" && block !== null
+            ? { ...block, [field]: value }
+            : block
+        ),
+      };
+    });
   };
 
   const handleSettingChange = (
@@ -138,18 +190,6 @@ export const SlideForm: React.FC<SlideFormProps> = ({
     }));
     setTimeout(() => setIsUpdating(false), 100);
   };
-  const [margin, setMargin] = React.useState<BoxValues>({
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-  });
-  const [padding, setPadding] = React.useState<BoxValues>({
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-  });
 
   const handleUpdate = (
     type: "margin" | "padding",
@@ -179,21 +219,6 @@ export const SlideForm: React.FC<SlideFormProps> = ({
       }));
     }
   };
-  useEffect(() => {
-    setMargin({
-      top: Number(userInputData?.setting?.marginTop) || 0,
-      bottom: Number(userInputData?.setting?.marginBottom) || 0,
-      right: Number(userInputData?.setting?.marginRight) || 0,
-      left: Number(userInputData?.setting?.marginLeft) || 0,
-    });
-
-    setPadding({
-      top: Number(userInputData?.setting?.paddingTop) || 0,
-      bottom: Number(userInputData?.setting?.paddingBottom) || 0,
-      right: Number(userInputData?.setting?.paddingRight) || 0,
-      left: Number(userInputData?.setting?.paddingLeft) || 0,
-    });
-  }, [userInputData?.setting]);
 
   const handleDeleteBlock = (index: number) => {
     setUserInputData((prev: SlideSection) => ({
@@ -220,9 +245,9 @@ export const SlideForm: React.FC<SlideFormProps> = ({
         {/* Tabs */}
         <TabButtons onTabChange={handleTabChange} />
 
-        {isContentOpen && Array.isArray(userInputData?.blocks) && (
+        {isContentOpen && (
           <>
-            {userInputData.blocks.map((block, index) => (
+            {Object.values(userInputData.blocks).map((block, index) => (
               <React.Fragment key={index}>
                 <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100 mt-4">
                   <button
@@ -248,7 +273,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                           d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                         />
                       </svg>
-                      <h3 className="font-semibold text-gray-700">
+                      <h3 className="font-semibold text-nowrap text-gray-700">
                         اسلاید {index + 1}
                       </h3>
                       <div className="flex items-center gap-2">
