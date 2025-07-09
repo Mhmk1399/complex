@@ -27,6 +27,7 @@ export interface ColorSchema {
   secondary: string;
   text: string;
 }
+
 export interface CollapseBlockSetting extends CommonSettings {
   headerAnimation: any;
   titleFontSize: string;
@@ -266,6 +267,7 @@ export interface BlockSetting {
   [key: number]: string | number | boolean | CommonSettings;
 }
 // Add these new interfaces for MultiColumn component
+// Find this interface around line 95-115 and update it:
 export interface MultiColumnBlockSetting extends CommonSettings {
   headingColor?: string;
   titleColor?: string;
@@ -276,6 +278,9 @@ export interface MultiColumnBlockSetting extends CommonSettings {
   btnColor?: string;
   btnBackgroundColor?: string;
   imageRadious?: string;
+  // ADD these two lines:
+  btnAnimation?: AnimationEffect;
+  imageAnimation?: AnimationEffect;
 }
 
 export interface MultiColumnBlock {
@@ -1055,7 +1060,6 @@ export interface DetailPageBlock {
     descriptionFontSize: string;
     btnBackgroundColor: string;
     btnTextColor: string;
-    // [key: string]: any; // Allows dynamic properties
   };
 }
 

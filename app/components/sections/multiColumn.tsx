@@ -115,7 +115,9 @@ const Title = styled.h3<{
   min-height: ${(props) => (props.$preview === "sm" ? "40px" : "60px")};
 `;
 
-const Image = styled.img<{ $data: MultiColumnSection }>`
+const Image = styled.img<{ 
+  $data: MultiColumnSection;
+}>`
   width: 100%;
   height: 100%;
   overflow-y: auto;
@@ -127,9 +129,158 @@ const Image = styled.img<{ $data: MultiColumnSection }>`
     width: 100%;
     height: auto;
   }
+  
+  /* Default hover effect */
   &:hover {
     transform: scale(0.95);
   }
+
+  /* Apply image animations */
+  ${(props) => {
+    const imageAnimation = props.$data.setting?.imageAnimation;
+    if (!imageAnimation) return '';
+    
+    const { type, animation: animConfig } = imageAnimation;
+    const selector = type === 'hover' ? '&:hover' : '&:active';
+    
+    // Generate animation CSS based on type
+    if (animConfig.type === 'pulse') {
+      return `
+        ${selector} {
+          animation: multiColumnImagePulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          transform: none; /* Override default transform */
+        }
+        
+        @keyframes multiColumnImagePulse {
+          0%, 100% { 
+            opacity: 1;
+            filter: brightness(1);
+          }
+          50% { 
+            opacity: 0.7;
+            filter: brightness(1.3);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'glow') {
+      return `
+        ${selector} {
+          animation: multiColumnImageGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          transform: none; /* Override default transform */
+        }
+        
+        @keyframes multiColumnImageGlow {
+          0%, 100% { 
+            filter: brightness(1) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+          }
+          50% { 
+            filter: brightness(1.2) drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+          }
+        }
+      `;
+    } else if (animConfig.type === 'brightness') {
+      return `
+        ${selector} {
+          animation: multiColumnImageBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          transform: none; /* Override default transform */
+        }
+        
+        @keyframes multiColumnImageBrightness {
+          0%, 100% { 
+            filter: brightness(1);
+          }
+          50% { 
+            filter: brightness(1.4);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'blur') {
+      return `
+        ${selector} {
+          animation: multiColumnImageBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          transform: none; /* Override default transform */
+        }
+        
+        @keyframes multiColumnImageBlur {
+          0%, 100% { 
+            filter: blur(0px);
+          }
+          50% { 
+            filter: blur(2px);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'saturate') {
+      return `
+        ${selector} {
+          animation: multiColumnImageSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          transform: none; /* Override default transform */
+        }
+        
+        @keyframes multiColumnImageSaturate {
+          0%, 100% { 
+            filter: saturate(1);
+          }
+          50% { 
+            filter: saturate(1.8);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'contrast') {
+      return `
+        ${selector} {
+          animation: multiColumnImageContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          transform: none; /* Override default transform */
+        }
+        
+        @keyframes multiColumnImageContrast {
+          0%, 100% { 
+            filter: contrast(1);
+          }
+          50% { 
+            filter: contrast(1.5);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'opacity') {
+      return `
+        ${selector} {
+          animation: multiColumnImageOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          transform: none; /* Override default transform */
+        }
+        
+        @keyframes multiColumnImageOpacity {
+          0% { 
+            opacity: 1;
+          }
+          50% { 
+            opacity: 0.4;
+          }
+          100% { 
+            opacity: 1;
+          }
+        }
+      `;
+    } else if (animConfig.type === 'shadow') {
+      return `
+        ${selector} {
+          animation: multiColumnImageShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          transform: none; /* Override default transform */
+        }
+        
+        @keyframes multiColumnImageShadow {
+          0%, 100% { 
+            filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0));
+          }
+          50% { 
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+          }
+        }
+      `;
+    }
+    
+    return '';
+  }}
 `;
 
 const Description = styled.p<{
@@ -152,7 +303,9 @@ const Description = styled.p<{
   overflow-y: visible;
 `;
 
-const Button = styled.a<{ $data: MultiColumnSection }>`
+const Button = styled.a<{ 
+  $data: MultiColumnSection;
+}>`
   display: inline-block;
   padding: 10px 30px;
   background-color: ${(props) =>
@@ -163,6 +316,7 @@ const Button = styled.a<{ $data: MultiColumnSection }>`
   cursor: pointer;
   transition: all 0.5s ease-in-out;
 
+  /* Default hover effect */
   &:hover {
     opacity: 0.7;
   }
@@ -171,6 +325,152 @@ const Button = styled.a<{ $data: MultiColumnSection }>`
     padding: 8px 20px;
     font-size: 14px;
   }
+
+  /* Apply button animations */
+  ${(props) => {
+    const btnAnimation = props.$data.setting?.btnAnimation;
+    if (!btnAnimation) return '';
+    
+    const { type, animation: animConfig } = btnAnimation;
+    const selector = type === 'hover' ? '&:hover' : '&:active';
+    
+    // Generate animation CSS based on type
+    if (animConfig.type === 'pulse') {
+      return `
+        ${selector} {
+          animation: multiColumnBtnPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          opacity: 1; /* Override default opacity */
+        }
+        
+        @keyframes multiColumnBtnPulse {
+          0%, 100% { 
+            opacity: 1;
+            filter: brightness(1);
+          }
+          50% { 
+            opacity: 0.7;
+            filter: brightness(1.3);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'glow') {
+      return `
+        ${selector} {
+          animation: multiColumnBtnGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          opacity: 1; /* Override default opacity */
+        }
+        
+        @keyframes multiColumnBtnGlow {
+          0%, 100% { 
+            filter: brightness(1) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+          }
+          50% { 
+            filter: brightness(1.2) drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+          }
+        }
+      `;
+    } else if (animConfig.type === 'brightness') {
+      return `
+        ${selector} {
+          animation: multiColumnBtnBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          opacity: 1; /* Override default opacity */
+        }
+        
+        @keyframes multiColumnBtnBrightness {
+          0%, 100% { 
+            filter: brightness(1);
+          }
+          50% { 
+            filter: brightness(1.4);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'blur') {
+      return `
+        ${selector} {
+          animation: multiColumnBtnBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          opacity: 1; /* Override default opacity */
+        }
+        
+        @keyframes multiColumnBtnBlur {
+          0%, 100% { 
+            filter: blur(0px);
+          }
+          50% { 
+            filter: blur(2px);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'saturate') {
+      return `
+        ${selector} {
+          animation: multiColumnBtnSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          opacity: 1; /* Override default opacity */
+        }
+        
+        @keyframes multiColumnBtnSaturate {
+          0%, 100% { 
+            filter: saturate(1);
+          }
+          50% { 
+            filter: saturate(1.8);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'contrast') {
+      return `
+        ${selector} {
+          animation: multiColumnBtnContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          opacity: 1; /* Override default opacity */
+        }
+        
+        @keyframes multiColumnBtnContrast {
+          0%, 100% { 
+            filter: contrast(1);
+          }
+          50% { 
+            filter: contrast(1.5);
+          }
+        }
+      `;
+    } else if (animConfig.type === 'opacity') {
+      return `
+        ${selector} {
+          animation: multiColumnBtnOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+        }
+        
+        @keyframes multiColumnBtnOpacity {
+          0% { 
+            opacity: 1;
+          }
+          50% { 
+            opacity: 0.4;
+          }
+          100% { 
+            opacity: 1;
+          }
+        }
+      `;
+    } else if (animConfig.type === 'shadow') {
+      return `
+        ${selector} {
+          animation: multiColumnBtnShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          opacity: 1; /* Override default opacity */
+        }
+        
+        @keyframes multiColumnBtnShadow {
+          0%, 100% { 
+            filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0));
+          }
+          50% { 
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+          }
+        }
+      `;
+    }
+    
+    return '';
+  }}
 `;
 
 const MultiColumn: React.FC<MultiColumnProps> = ({
@@ -191,6 +491,7 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
       setPreview(previewWidth);
     }
   }, [previewWidth]);
+  
   const sectionData = (layout.sections?.children?.sections.find(
     (section) => section.type === actualName
   ) as MultiColumnSection) || {
