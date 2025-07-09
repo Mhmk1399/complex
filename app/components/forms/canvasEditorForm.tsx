@@ -1,11 +1,14 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { CanvasEditorSection, CanvasElement } from "../sections/canvasEditor";
-import { Layout } from "@/lib/types";
+import { Layout, AnimationEffect } from "@/lib/types"; // Add AnimationEffect import
 import { useCanvas } from "@/app/contexts/CanvasContext";
-import { effectService, AnimationEffect } from "@/services/effectService";
+import { effectService } from "@/services/effectService"; // Remove AnimationEffect from here
 import { animationService } from "@/services/animationService";
+
+// Import the types from the canvas editor component
+import { CanvasEditorSection, CanvasElement } from "@/lib/types"; // Import from types instead
+
 
 // Add a ColorInput component similar to richTextForm
 const ColorInput = ({
@@ -276,9 +279,9 @@ const CanvasEditorForm: React.FC<CanvasEditorFormProps> = ({
 
     // Create animation effect object
     const animationEffect: AnimationEffect = {
-      type: animationType,
+      type: animationType as 'hover' | 'click',
       animation: {
-        type: property === 'effect' ? value : animationEffect,
+        type: property === 'effect' ? value : "",
         duration: property === 'duration' ? value : animationDuration,
         timing: property === 'timing' ? value : animationTiming,
         delay: property === 'delay' ? value : animationDelay,
@@ -290,8 +293,8 @@ const CanvasEditorForm: React.FC<CanvasEditorFormProps> = ({
     // Update local state
     switch (property) {
       case 'type':
-        setAnimationType(value as 'hover' | 'click' | 'scroll' | 'load');
-        animationEffect.type = value as 'hover' | 'click' | 'scroll' | 'load';
+        setAnimationType(value as 'hover' | 'click');
+        animationEffect.type = value as 'hover' | 'click';
         break;
       case 'effect':
         setAnimationEffect(value);
@@ -649,7 +652,7 @@ const CanvasEditorForm: React.FC<CanvasEditorFormProps> = ({
         textAlign: "right",
         zIndex: 1,
       },
-      href: elementType === "link" ? "#" : undefined,
+      href: elementType === "link" || elementType === "button" ? "#" : undefined,
       src: elementType === "image" ? "/assets/images/placeholder.jpg" : undefined,
       alt: elementType === "image" ? "Canvas image" : undefined,
       // Add default animation
@@ -1247,8 +1250,7 @@ const CanvasEditorForm: React.FC<CanvasEditorFormProps> = ({
               >
                 <option value="hover">هاور</option>
                 <option value="click">کلیک</option>
-                <option value="scroll">اسکرول</option>
-                <option value="load">بارگذاری</option>
+               
               </select>
             </div>
 
@@ -1334,18 +1336,7 @@ const CanvasEditorForm: React.FC<CanvasEditorFormProps> = ({
               </select>
             </div>
 
-            <div className="mb-4">
-              <label className="block mb-2">شدت انیمیشن</label>
-              <select
-                value={animationIntensity}
-                onChange={(e) => handleAnimationChange('intensity', e.target.value)}
-                className="w-full p-2 border rounded"
-              >
-                <option value="light">ملایم</option>
-                <option value="normal">معمولی</option>
-                <option value="strong">قوی</option>
-              </select>
-            </div>
+           
           </div>
 
           {/* Animation Preview */}
