@@ -3,7 +3,6 @@ import { Compiler } from "../compiler";
 import { Layout, RichTextSection, AnimationEffect } from "@/lib/types";
 import MarginPaddingEditor from "../sections/editor";
 import { useSharedContext } from "@/app/contexts/SharedContext";
-import React from "react";
 import { TabButtons } from "../tabButtons";
 import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
@@ -58,13 +57,13 @@ export const RichText: React.FC<RichTextFormProps> = ({
 }) => {
   const { activeRoutes } = useSharedContext();
   const [useRouteSelectBtn, setUseRouteSelectBtn] = useState(false);
-  const [margin, setMargin] = React.useState<BoxValues>({
+  const [margin, setMargin] = useState<BoxValues>({
     top: 0,
     bottom: 0,
     left: 0,
     right: 0,
   });
-  const [padding, setPadding] = React.useState<BoxValues>({
+  const [padding, setPadding] = useState<BoxValues>({
     top: 0,
     bottom: 0,
     left: 0,

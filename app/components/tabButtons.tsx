@@ -1,64 +1,124 @@
 import { useState } from "react";
-import { FaImage, FaPalette, FaArrowsAlt } from "react-icons/fa"; // Import icons
+import {
+  HiDocumentText,
+  HiColorSwatch,
+  HiOutlineAdjustments,
+  HiSparkles,
+} from "react-icons/hi";
 
 interface TabButtonsProps {
-  onTabChange: (tab: "content" | "style" | "spacing") => void;
+  onTabChange: (tab: "content" | "style" | "spacing" | "animation") => void;
+  initialTab?: "content" | "style" | "spacing" | "animation";
 }
 
-export const TabButtons: React.FC<TabButtonsProps> = ({ onTabChange }) => {
-  const [activeTab, setActiveTab] = useState<"content" | "style" | "spacing">(
-    "content"
-  );
+type TabType = "content" | "style" | "spacing" | "animation";
 
-  const handleTabClick = (tab: "content" | "style" | "spacing") => {
+interface TabConfig {
+  key: TabType;
+  label: string;
+  tooltip: string;
+  icon: React.ComponentType<{ className?: string }>;
+  activeColor: string;
+  hoverColor: string;
+}
+
+const tabConfigs: TabConfig[] = [
+  {
+    key: "content",
+    label: "محتوا",
+    tooltip: "تنظیمات محتوا و متن",
+    icon: HiDocumentText,
+    activeColor: "text-blue-600 border-blue-500",
+    hoverColor: "hover:text-blue-500 hover:border-blue-300",
+  },
+  {
+    key: "style",
+    label: "استایل",
+    tooltip: "رنگ‌ها و ظاهر کلی",
+    icon: HiColorSwatch,
+    activeColor: "text-purple-600 border-purple-500",
+    hoverColor: "hover:text-purple-500 hover:border-purple-300",
+  },
+  {
+    key: "spacing",
+    label: "فاصله",
+    tooltip: "حاشیه و فاصله‌گذاری",
+    icon: HiOutlineAdjustments,
+    activeColor: "text-green-600 border-green-500",
+    hoverColor: "hover:text-green-500 hover:border-green-300",
+  },
+  {
+    key: "animation",
+    label: "انیمیشن",
+    tooltip: "جلوه‌های بصری و حرکت",
+    icon: HiSparkles,
+    activeColor: "text-orange-600 border-orange-500",
+    hoverColor: "hover:text-orange-500 hover:border-orange-300",
+  },
+];
+
+export const TabButtons: React.FC<TabButtonsProps> = ({
+  onTabChange,
+  initialTab = "content",
+}) => {
+  const [activeTab, setActiveTab] = useState<TabType>(initialTab);
+  const [hoveredIcon, setHoveredIcon] = useState<TabType | null>(null);
+
+  const handleTabClick = (tab: TabType) => {
     setActiveTab(tab);
     onTabChange(tab);
   };
 
   return (
-    <div className="flex gap-1 items-center justify-center mb-4 border-b border-gray-200">
-      <button
-        onClick={() => handleTabClick("content")}
-        className={`px-1 py-2 text-sm rounded-t-lg transition-all duration-200 relative flex items-center gap-2 ${
-          activeTab === "content"
-            ? "text-gray-900 font-bold border-gray-200"
-            : "text-gray-900 hover:text-blue-600 bg-transparent"
-        }`}
-      >
-        محتوا
-        <FaImage className="w-3 h-4" />
-        {activeTab === "content" && (
-          <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gray-400"></div>
-        )}
-      </button>
-      <button
-        onClick={() => handleTabClick("style")}
-        className={`px-1 py-2 text-sm rounded-t-lg transition-all duration-200 relative flex items-center gap-2 ${
-          activeTab === "style"
-            ? "text-gray-600 font-bold border-gray-200"
-            : "text-gray-500 hover:text-blue-600 bg-transparent"
-        }`}
-      >
-        استایل
-        <FaPalette className="w-3 h-4" />
-        {activeTab === "style" && (
-          <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gray-400"></div>
-        )}
-      </button>
-      <button
-        onClick={() => handleTabClick("spacing")}
-        className={`px-1 py-2 text-sm rounded-t-lg transition-all duration-200 relative flex items-center gap-2 ${
-          activeTab === "spacing"
-            ? "text-gray-600 font-bold border-gray-200"
-            : "text-gray-500 hover:text-blue-600 bg-transparent"
-        }`}
-      >
-        فاصله
-        <FaArrowsAlt className="w-3 h-4" />
-        {activeTab === "spacing" && (
-          <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gray-400"></div>
-        )}
-      </button>
+    <div className="border-b border-gray-200 mb-6">
+      <div className="flex">
+        {tabConfigs.map((tabConfig) => {
+          const isActive = activeTab === tabConfig.key;
+          const isHovered = hoveredIcon === tabConfig.key;
+          const IconComponent = tabConfig.icon;
+
+          return (
+            <button
+              key={tabConfig.key}
+              onClick={() => handleTabClick(tabConfig.key)}
+              className={`
+                relative flex items-center gap-2 py-3 px-4 text-sm font-medium border-b-2 transition-all duration-200
+                ${
+                  isActive
+                    ? tabConfig.activeColor
+                    : `text-gray-500 border-transparent ${tabConfig.hoverColor}`
+                }
+              `}
+              type="button"
+            >
+              <div
+                className="relative"
+                onMouseEnter={() => setHoveredIcon(tabConfig.key)}
+                onMouseLeave={() => setHoveredIcon(null)}
+              >
+                <IconComponent className="w-4 h-4" />
+
+                {/* Tooltip */}
+                {isHovered && (
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 z-50">
+                    <div className="bg-black/80 backdrop-blur-md text-white text-xs px-3 py-2 rounded-lg shadow-lg whitespace-nowrap">
+                      {tabConfig.tooltip}
+                      {/* Arrow */}
+                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-black"></div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+      {/* <div className="bg-white px-4 py-2  text-xs text-gray-500 flex items-center gap-2">
+        <span className="w-2 h-2 rounded-full bg-current opacity-50" />
+        <span>
+        تنظیمات  {tabConfigs.find((tab) => tab.key === activeTab)?.label} 
+        </span>
+      </div> */}
     </div>
   );
 };

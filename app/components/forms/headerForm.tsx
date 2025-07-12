@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
 import { Layout, Link, HeaderSection } from "@/lib/types";
 import MarginPaddingEditor from "../sections/editor";
-import React from "react";
 import { TabButtons } from "../tabButtons";
+
 interface HeaderFormProps {
   layout: Layout;
   setUserInputData: React.Dispatch<React.SetStateAction<HeaderSection>>;
@@ -73,14 +73,14 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
 
   // Modify the useEffect to include default values to
 
-  const [isDataReady, setIsDataReady] = React.useState(false);
-  const [margin, setMargin] = React.useState<BoxValues>({
+  const [isDataReady, setIsDataReady] = useState(false);
+  const [margin, setMargin] = useState<BoxValues>({
     top: 0,
     bottom: 0,
     left: 0,
     right: 0,
   });
-  const [padding, setPadding] = React.useState<BoxValues>({
+  const [padding, setPadding] = useState<BoxValues>({
     top: 0,
     bottom: 0,
     left: 0,

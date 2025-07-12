@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
 import { BlogSection, BlogListFormProps } from "@/lib/types";
-import React from "react";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
 
@@ -24,17 +23,15 @@ const ColorInput = ({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => (
   <>
-    <label className="block mb-1" htmlFor={name}>
-      {label}
-    </label>
-    <div className="flex flex-col gap-3 items-center">
+    <label className="block mb-1">{label}</label>
+    <div className="flex flex-col rounded-md gap-3 items-center">
       <input
         type="color"
         id={name}
         name={name}
-        value={value}
+        value={value || "#000000"}
         onChange={onChange}
-        className="border p-0.5 rounded-full"
+        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
       />
     </div>
   </>
@@ -48,15 +45,16 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
 }) => {
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
+  const [isAnimationOpen, setIsAnimationOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const [margin, setMargin] = React.useState<BoxValues>({
+  const [margin, setMargin] = useState<BoxValues>({
     top: 0,
     bottom: 0,
     left: 0,
     right: 0,
   });
-  const [padding, setPadding] = React.useState<BoxValues>({
+  const [padding, setPadding] = useState<BoxValues>({
     top: 0,
     bottom: 0,
     left: 0,
@@ -129,9 +127,12 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
     setTimeout(() => setIsUpdating(false), 100);
   };
 
-  const handleTabChange = (tab: "content" | "style" | "spacing") => {
+  const handleTabChange = (
+    tab: "content" | "style" | "spacing" | "animation"
+  ) => {
     setIsStyleSettingsOpen(tab === "style");
     setIsSpacingOpen(tab === "spacing");
+    setIsAnimationOpen(tab === "animation");
   };
 
   return (
@@ -157,47 +158,59 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
               max="4"
               className="border p-2 rounded"
             />
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ پس‌زمینه"
+                name="backgroundColor"
+                value={
+                  userInputData.setting.backgroundColor?.toString() ?? "#ffffff"
+                }
+                onChange={handleSettingChange}
+              />
+            </div>
+            <div className="rounded-lg flex items-center justify-between ">
+              {" "}
+              <ColorInput
+                label="  رنگ پس‌زمینه کارت"
+                name="cardBackgroundColor"
+                value={
+                  userInputData.setting.cardBackgroundColor?.toString() ??
+                  "#ffffff"
+                }
+                onChange={handleSettingChange}
+              />
+            </div>
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ متن"
+                name="textColor"
+                value={userInputData.setting.textColor?.toString() ?? "#000000"}
+                onChange={handleSettingChange}
+              />
+            </div>
 
-            <ColorInput
-              label="رنگ پس‌زمینه"
-              name="backgroundColor"
-              value={
-                userInputData.setting.backgroundColor?.toString() ?? "#ffffff"
-              }
-              onChange={handleSettingChange}
-            />
-            <ColorInput
-              label="  رنگ پس‌زمینه کارت"
-              name="cardBackgroundColor"
-              value={
-                userInputData.setting.cardBackgroundColor?.toString() ??
-                "#ffffff"
-              }
-              onChange={handleSettingChange}
-            />
-
-            <ColorInput
-              label="رنگ متن"
-              name="textColor"
-              value={userInputData.setting.textColor?.toString() ?? "#000000"}
-              onChange={handleSettingChange}
-            />
-            <ColorInput
-              label="رنگ پس‌زمینه دکمه"
-              name="btnBackgroundColor"
-              value={
-                userInputData.setting.btnBackgroundColor?.toString() ??
-                "#000000"
-              }
-              onChange={handleSettingChange}
-            />
-
-            <ColorInput
-              label="رنگ دکمه"
-              name="buttonColor"
-              value={userInputData.setting.buttonColor?.toString() ?? "#0070f3"}
-              onChange={handleSettingChange}
-            />
+            <div className="rounded-lg flex items-center justify-between ">
+              <ColorInput
+                label="رنگ پس‌زمینه دکمه"
+                name="btnBackgroundColor"
+                value={
+                  userInputData.setting.btnBackgroundColor?.toString() ??
+                  "#000000"
+                }
+                onChange={handleSettingChange}
+              />
+            </div>
+            <div className="rounded-lg flex items-center justify-between ">
+              {" "}
+              <ColorInput
+                label="رنگ دکمه"
+                name="buttonColor"
+                value={
+                  userInputData.setting.buttonColor?.toString() ?? "#0070f3"
+                }
+                onChange={handleSettingChange}
+              />
+            </div>
 
             <label htmlFor="borderRadius" className="block mb-2">
               گردی گوشه‌ها
@@ -216,6 +229,15 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
             </div>
           </div>
         </>
+      )}
+
+      {isAnimationOpen && (
+        <div className="p-4 border-t border-gray-100 animate-slideDown">
+          <h3 className="text-lg font-semibold text-sky-700">
+            تنظیمات انیمیشن
+          </h3>
+          <p>تنظیماتی برای انیمیشن وجود ندارد.</p>
+        </div>
       )}
 
       {/* Dropdown Content */}

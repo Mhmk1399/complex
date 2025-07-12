@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
 import { Layout, SlideBannerSection, AnimationEffect } from "@/lib/types";
-import React from "react";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
 import ImageSelectorModal from "../sections/ImageSelectorModal";
