@@ -5,7 +5,6 @@ import ProductCard from "./productCard";
 import { useEffect, useState, useRef } from "react";
 import { Delete } from "../C-D";
 
-
 interface SpecialOfferProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
@@ -18,91 +17,100 @@ interface SpecialOfferProps {
 const ScrollContainer = styled.div<{
   $data: SpecialOfferSection;
 }>`
-    position: relative;
-    width: 100%;
-    padding-top: ${props => props.$data.setting?.paddingTop || "20"}px;
-    padding-bottom: ${props => props.$data.setting?.paddingBottom || "20"}px;
-    margin-top: ${props => props.$data.setting?.marginTop || "20"}px;
-    margin-bottom: ${props => props.$data.setting?.marginBottom || "20"}px;
-    background-color: ${props => props.$data.setting?.backgroundColor || "#ef394e"};
-  `;
+  position: relative;
+  width: 100%;
+  padding-top: ${(props) => props.$data.setting?.paddingTop || "20"}px;
+  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20"}px;
+  margin-top: ${(props) => props.$data.setting?.marginTop || "20"}px;
+  margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20"}px;
+  background-color: ${(props) =>
+    props.$data.setting?.backgroundColor || "#ef394e"};
+`;
 
 const SpecialOfferSection = styled.section<{
   $data: SpecialOfferSection;
   $isMobile: boolean;
 }>`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    height: auto;
-    max-width: 100%;
-    overflow-x: scroll;
-    scroll-behavior: smooth;
-    gap: 8px;
-    padding: ${props => props.$isMobile ? "10px" : "20px"};
-    background-color: ${props => props.$data.setting?.backgroundColor || "#ef394e"};
-    border-radius: ${props => props.$data.blocks?.setting?.cardBorderRadius || "8"}px;
-    direction: rtl;
-  
-    &::-webkit-scrollbar {
-      display: none;
-    }
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  `;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  overflow-x: scroll;
+  scroll-behavior: smooth;
+  gap: 8px;
+  padding: ${(props) => (props.$isMobile ? "10px" : "20px")};
+  background-color: ${(props) =>
+    props.$data.setting?.backgroundColor || "#ef394e"};
+  border-radius: ${(props) =>
+    props.$data.blocks?.setting?.cardBorderRadius || "8"}px;
+  direction: rtl;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+`;
 
 const Heading = styled.h2<{
   $data: SpecialOfferSection;
   $isMobile: boolean;
 }>`
-    color: ${props => props.$data.blocks?.setting?.headingColor || "#FFFFFF"};
-    font-size: ${props => props.$isMobile ? "24px" : `${props.$data.blocks?.setting?.headingFontSize || "32"}px`};
-    font-weight: ${props => props.$data.blocks?.setting?.headingFontWeight || "bold"};
-    text-align: center;
-  `;
+  color: ${(props) => props.$data.blocks?.setting?.headingColor || "#FFFFFF"};
+  font-size: ${(props) =>
+    props.$isMobile
+      ? "24px"
+      : `${props.$data.blocks?.setting?.headingFontSize || "32"}px`};
+  font-weight: ${(props) =>
+    props.$data.blocks?.setting?.headingFontWeight || "bold"};
+  text-align: center;
+`;
 
 const ScrollButton = styled.button<{
   $data: SpecialOfferSection;
 }>`
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: "#FFFFFF";
-    color: ${props => props.$data.blocks?.setting?.btnTextColor || "#000000"};
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  
-    &.left {
-      left: 10px;
-    }
-  
-    &.right {
-      right: 10px;
-    }
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: "#FFFFFF";
+  color: ${(props) => props.$data.blocks?.setting?.btnTextColor || "#000000"};
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-    /* Apply navigation button animations */
-    ${(props) => {
-      const navAnimation = props.$data.blocks?.setting?.navAnimation;
-      if (!navAnimation) return '';
-      
-      const { type, animation: animConfig } = navAnimation;
-      const selector = type === 'hover' ? '&:hover' : '&:active';
-      
-      // Generate animation CSS based on type
-      if (animConfig.type === 'pulse') {
-        return `
+  &.left {
+    left: 10px;
+  }
+
+  &.right {
+    right: 10px;
+  }
+
+  /* Apply navigation button animations */
+  ${(props) => {
+    const navAnimation = props.$data.blocks?.setting?.navAnimation;
+    if (!navAnimation) return "";
+
+    const { type, animation: animConfig } = navAnimation;
+    const selector = type === "hover" ? "&:hover" : "&:active";
+
+    // Generate animation CSS based on type
+    if (animConfig.type === "pulse") {
+      return `
           ${selector} {
-            animation: specialOfferNavPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: specialOfferNavPulse ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes specialOfferNavPulse {
@@ -116,10 +124,12 @@ const ScrollButton = styled.button<{
             }
           }
         `;
-      } else if (animConfig.type === 'glow') {
-        return `
+    } else if (animConfig.type === "glow") {
+      return `
           ${selector} {
-            animation: specialOfferNavGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: specialOfferNavGlow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes specialOfferNavGlow {
@@ -131,10 +141,12 @@ const ScrollButton = styled.button<{
             }
           }
         `;
-      } else if (animConfig.type === 'brightness') {
-        return `
+    } else if (animConfig.type === "brightness") {
+      return `
           ${selector} {
-            animation: specialOfferNavBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: specialOfferNavBrightness ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes specialOfferNavBrightness {
@@ -146,10 +158,12 @@ const ScrollButton = styled.button<{
             }
           }
         `;
-      } else if (animConfig.type === 'blur') {
-        return `
+    } else if (animConfig.type === "blur") {
+      return `
           ${selector} {
-            animation: specialOfferNavBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: specialOfferNavBlur ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes specialOfferNavBlur {
@@ -161,10 +175,12 @@ const ScrollButton = styled.button<{
             }
           }
         `;
-      } else if (animConfig.type === 'saturate') {
-        return `
+    } else if (animConfig.type === "saturate") {
+      return `
           ${selector} {
-            animation: specialOfferNavSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: specialOfferNavSaturate ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes specialOfferNavSaturate {
@@ -176,10 +192,12 @@ const ScrollButton = styled.button<{
             }
           }
         `;
-      } else if (animConfig.type === 'contrast') {
-        return `
+    } else if (animConfig.type === "contrast") {
+      return `
           ${selector} {
-            animation: specialOfferNavContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: specialOfferNavContrast ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes specialOfferNavContrast {
@@ -191,10 +209,12 @@ const ScrollButton = styled.button<{
             }
           }
         `;
-      } else if (animConfig.type === 'opacity') {
-        return `
+    } else if (animConfig.type === "opacity") {
+      return `
           ${selector} {
-            animation: specialOfferNavOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: specialOfferNavOpacity ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes specialOfferNavOpacity {
@@ -209,10 +229,12 @@ const ScrollButton = styled.button<{
             }
           }
         `;
-      } else if (animConfig.type === 'shadow') {
-        return `
+    } else if (animConfig.type === "shadow") {
+      return `
           ${selector} {
-            animation: specialOfferNavShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: specialOfferNavShadow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes specialOfferNavShadow {
@@ -224,11 +246,11 @@ const ScrollButton = styled.button<{
             }
           }
         `;
-      }
-      
-      return '';
-    }}
-  `;
+    }
+
+    return "";
+  }}
+`;
 
 export const SpecialOffer: React.FC<SpecialOfferProps> = ({
   setSelectedComponent,
@@ -238,7 +260,9 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
   setLayout,
   previewWidth,
 }) => {
-  const [specialOfferProducts, setSpecialOfferProducts] = useState<ProductCardData[]>([]);
+  const [specialOfferProducts, setSpecialOfferProducts] = useState<
+    ProductCardData[]
+  >([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -257,8 +281,8 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
     };
 
     handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [previewWidth]);
 
   useEffect(() => {
@@ -272,9 +296,9 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
 
       const response = await fetch(`/api/collections/id`, {
         headers: {
-          'Content-Type': 'application/json',
-          'collectionId': collectionId
-        }
+          "Content-Type": "application/json",
+          collectionId: collectionId,
+        },
       });
       const data = await response.json();
       if (data.collections.length > 0) {
@@ -283,18 +307,20 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
     };
 
     fetchData();
-  }, [ actualName, sectionData?.blocks?.setting?.selectedCollection]);
+  }, [actualName, sectionData?.blocks?.setting?.selectedCollection]);
 
   if (!sectionData) return null;
   if (!layout || !layout.sections) return null;
-  
-  const handleScroll = (direction: 'left' | 'right') => {
+
+  const handleScroll = (direction: "left" | "right") => {
     if (containerRef.current) {
       const scrollAmount = 400;
-      const newScrollPosition = containerRef.current.scrollLeft + (direction === 'left' ? scrollAmount : -scrollAmount);
+      const newScrollPosition =
+        containerRef.current.scrollLeft +
+        (direction === "left" ? scrollAmount : -scrollAmount);
       containerRef.current.scrollTo({
         left: newScrollPosition,
-        behavior: 'smooth'
+        behavior: "smooth",
       });
     }
   };
@@ -303,8 +329,11 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
     <ScrollContainer
       $data={sectionData}
       onClick={() => setSelectedComponent(actualName)}
-      className={`transition-all duration-150 ease-in-out relative ${selectedComponent === actualName ? "border-4 border-blue-500 rounded-2xl shadow-lg" : ""
-        }`}
+      className={`transition-all duration-150 ease-in-out relative ${
+        selectedComponent === actualName
+          ? "border-4 border-blue-500 rounded-2xl shadow-lg"
+          : ""
+      }`}
     >
       {actualName === selectedComponent && (
         <div className="absolute w-fit -top-5 -left-1 z-10 flex">
@@ -355,23 +384,26 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
         $isMobile={preview === "sm"}
       >
         <div className="flex flex-col items-center justify-center gap-y-10 px-10">
-          <Heading
-            $data={sectionData}
-            $isMobile={preview === "sm"}
-          >
+          <Heading $data={sectionData} $isMobile={preview === "sm"}>
             {sectionData.blocks?.textHeading}
           </Heading>
-          <svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill={sectionData.blocks?.setting.headingColor}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="50px"
+            viewBox="0 -960 960 960"
+            width="50px"
+            fill={sectionData.blocks?.setting.headingColor}
+          >
             <path d="M300-520q-58 0-99-41t-41-99q0-58 41-99t99-41q58 0 99 41t41 99q0 58-41 99t-99 41Zm0-80q25 0 42.5-17.5T360-660q0-25-17.5-42.5T300-720q-25 0-42.5 17.5T240-660q0 25 17.5 42.5T300-600Zm360 440q-58 0-99-41t-41-99q0-58 41-99t99-41q58 0 99 41t41 99q0 58-41 99t-99 41Zm0-80q25 0 42.5-17.5T720-300q0-25-17.5-42.5T660-360q-25 0-42.5 17.5T600-300q0 25 17.5 42.5T660-240Zm-444 80-56-56 584-584 56 56-584 584Z" />
           </svg>
         </div>
 
-        {specialOfferProducts.length > 0 && specialOfferProducts.map((product) => (
-          <ProductCard key={product._id} productData={product} />
-        ))}
+        {specialOfferProducts.length > 0 &&
+          specialOfferProducts.map((product) => (
+            <ProductCard key={product._id} productData={product} />
+          ))}
         {specialOfferProducts.length === 0 && (
           <div className="flex flex-row items-center justify-start  lg:justify-end  w-full ">
-
             <span className="text-white text-3xl justify-center text-center w-full flex lg:gap-5">
               لطفا یک مجموعه را انتخاب کنید
             </span>
