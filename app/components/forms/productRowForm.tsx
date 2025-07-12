@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Layout, ProductRowSection, AnimationEffect } from "@/lib/types";
-import React from "react";
 import MarginPaddingEditor from "../sections/editor";
 import { Compiler } from "../compiler";
 import { TabButtons } from "../tabButtons";

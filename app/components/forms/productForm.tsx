@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
 import { ProductSection, Layout } from "@/lib/types";
 import MarginPaddingEditor from "../sections/editor";
-import React from "react";
 import { TabButtons } from "../tabButtons";
 
 interface ProductListProps {
@@ -55,13 +54,13 @@ export const ProductListForm: React.FC<ProductListProps> = ({
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
 
-  const [margin, setMargin] = React.useState<BoxValues>({
+  const [margin, setMargin] = useState<BoxValues>({
     top: 0,
     bottom: 0,
     left: 0,
     right: 0,
   });
-  const [padding, setPadding] = React.useState<BoxValues>({
+  const [padding, setPadding] = useState<BoxValues>({
     top: 0,
     bottom: 0,
     left: 0,

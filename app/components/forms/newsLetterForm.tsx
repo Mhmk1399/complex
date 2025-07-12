@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
 import { Layout, NewsLetterSection, AnimationEffect } from "@/lib/types";
-import React from "react";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
 import { animationService } from "@/services/animationService";
@@ -52,13 +51,13 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
   layout,
   selectedComponent,
 }) => {
-  const [margin, setMargin] = React.useState<BoxValues>({
+  const [margin, setMargin] = useState<BoxValues>({
     top: 0,
     bottom: 0,
     left: 0,
     right: 0,
   });
-  const [padding, setPadding] = React.useState<BoxValues>({
+  const [padding, setPadding] = useState<BoxValues>({
     top: 0,
     bottom: 0,
     left: 0,

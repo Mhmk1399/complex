@@ -12,7 +12,6 @@ import MultiRow from "./sections/multiRow";
 import Footer from "./sections/footer";
 import ProductList from "./sections/productList";
 import DetailPage from "./sections/detailPage";
-import { Collection } from "./sections/collection";
 import BlogList from "./sections/blogList";
 import BlogDetail from "./sections/blogDetail";
 import { SpecialOffer } from "./sections/specialOffer";
@@ -52,7 +51,6 @@ export const Preview: React.FC = () => {
     MultiRow,
     ProductList,
     DetailPage,
-    Collection,
     BlogList,
     BlogDetail,
     SpecialOffer,

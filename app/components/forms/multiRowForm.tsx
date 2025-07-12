@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
 import { Layout, MultiRowSection, AnimationEffect } from "@/lib/types";
 import { useSharedContext } from "@/app/contexts/SharedContext";
-import React from "react";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
 import ImageSelectorModal from "../sections/ImageSelectorModal";
@@ -57,13 +56,13 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
 }) => {
   const { activeRoutes } = useSharedContext();
   const [useRouteSelectBtns, setUseRouteSelectBtns] = useState<Record<number, boolean>>({});
-  const [margin, setMargin] = React.useState<BoxValues>({
+  const [margin, setMargin] = useState<BoxValues>({
     top: 0,
     bottom: 0,
     left: 0,
     right: 0,
   });
-  const [padding, setPadding] = React.useState<BoxValues>({
+  const [padding, setPadding] = useState<BoxValues>({
     top: 0,
     bottom: 0,
     left: 0,

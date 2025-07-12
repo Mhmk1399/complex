@@ -96,7 +96,6 @@ import { FooterForm } from "./forms/footerForm";
 import { Create } from "./C-D";
 import ProductListForm from "./forms/productForm";
 import { DetailForm } from "./forms/detailForm";
-import { CollectionForm } from "./forms/collectionForm";
 import BlogListForm from "./forms/blogForm";
 import { BlogDetailForm } from "./forms/blogDetailForm";
 import { StoryForm } from "./forms/storyForm";
@@ -175,7 +174,7 @@ const ScrollableFormContent = styled.div`
   ${scrollbarStyles}
   position: relative;
   height: 100%;
-  overflow-y: scroll;  /* Always show vertical scrollbar */
+  overflow-y: scroll; /* Always show vertical scrollbar */
   overflow-x: hidden;
 `;
 
@@ -560,19 +559,7 @@ export const Form = () => {
             selectedComponent={selectedComponent}
           />
         );
-      case "Collection":
-        return (
-          <CollectionForm
-            setUserInputData={
-              setUserInputData as React.Dispatch<
-                React.SetStateAction<CollectionSection>
-              >
-            }
-            userInputData={userInputData as CollectionSection}
-            layout={layout}
-            selectedComponent={selectedComponent}
-          />
-        );
+
       case "DetailPage":
         return (
           <DetailForm

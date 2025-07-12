@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Compiler } from "../compiler";
 import { Layout, DetailPageSection } from "@/lib/types";
-import React from "react";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
 //
@@ -31,17 +30,15 @@ const ColorInput = ({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => (
   <>
-    <label className="block mb-1" htmlFor={name}>
-      {label}
-    </label>
-    <div className="flex flex-col gap-3 items-center">
+    <label className="block mb-1">{label}</label>
+    <div className="flex flex-col rounded-md gap-3 items-center">
       <input
         type="color"
         id={name}
         name={name}
         value={value || "#000000"}
         onChange={onChange}
-        className="border p-0.5 rounded-full"
+        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
       />
     </div>
   </>
@@ -53,13 +50,13 @@ export const DetailForm: React.FC<DetailFormProps> = ({
   layout,
   selectedComponent,
 }) => {
-  const [margin, setMargin] = React.useState<BoxValues>({
+  const [margin, setMargin] = useState<BoxValues>({
     top: 0,
     bottom: 0,
     left: 0,
     right: 0,
   });
-  const [padding, setPadding] = React.useState<BoxValues>({
+  const [padding, setPadding] = useState<BoxValues>({
     top: 0,
     bottom: 0,
     left: 0,
@@ -67,6 +64,8 @@ export const DetailForm: React.FC<DetailFormProps> = ({
   });
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
+  const [isAnimationOpen, setIsAnimationOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleUpdate = (
     type: "margin" | "padding",
@@ -118,8 +117,6 @@ export const DetailForm: React.FC<DetailFormProps> = ({
     setUserInputData(initialData);
   }, []);
 
-  const [isUpdating, setIsUpdating] = useState(false);
-
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -137,10 +134,14 @@ export const DetailForm: React.FC<DetailFormProps> = ({
 
     setTimeout(() => setIsUpdating(false), 100);
   };
-  const handleTabChange = (tab: "content" | "style" | "spacing") => {
+  const handleTabChange = (
+    tab: "content" | "style" | "spacing" | "animation"
+  ) => {
     setIsStyleSettingsOpen(tab === "style");
     setIsSpacingOpen(tab === "spacing");
+    setIsAnimationOpen(tab === "animation");
   };
+
   return (
     <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-lg font-bold mb-4">تنظیمات صفحه محصول</h2>
@@ -162,7 +163,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
                   name="imageWidth"
                   value={userInputData?.setting?.imageWidth || "400"}
                   onChange={handleSettingChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 <div className="text-sm text-gray-700">
                   {userInputData?.setting?.imageWidth}px
@@ -177,7 +178,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
                   max={2000}
                   value={userInputData?.setting?.imageHeight || "500"}
                   onChange={handleSettingChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 <div className="text-sm text-gray-700">
                   {userInputData?.setting?.imageHeight}px
@@ -192,7 +193,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
                   max={300}
                   value={userInputData?.setting?.imageRadius || "40"}
                   onChange={handleSettingChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 <div className="text-sm text-gray-700">
                   {userInputData?.setting?.imageRadius}px
@@ -207,7 +208,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
               تنظیمات نام محصول
             </h3>
             <div className="grid grid-cols-1 gap-4">
-              <div>
+              <div className="rounded-lg flex items-center justify-between ">
                 <ColorInput
                   label="رنگ نام محصول"
                   name="productNameColor"
@@ -222,7 +223,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
                   name="productNameFontSize"
                   value={userInputData?.setting?.productNameFontSize || "30"}
                   onChange={handleSettingChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 <div className="text-sm text-gray-700">
                   {userInputData?.setting?.productNameFontSize}px
@@ -243,7 +244,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
                   <option value="600">نیمه ضخیم</option>
                 </select>
               </div>
-              <div>
+              <div className="rounded-lg flex items-center justify-between ">
                 <ColorInput
                   label="رنگ  توضیحات محصول"
                   name="descriptionColor"
@@ -258,7 +259,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
                   name="descriptionFontSize"
                   value={userInputData?.setting?.descriptionFontSize || "30"}
                   onChange={handleSettingChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 <div className="text-sm text-gray-700">
                   {userInputData?.setting?.descriptionFontSize}px
@@ -271,7 +272,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
           <div className="mb-6 rounded-lg">
             <h3 className="font-semibold mb-3 text-sky-700">تنظیمات قیمت</h3>
             <div className="grid grid-cols-1 gap-4">
-              <div>
+              <div className="rounded-lg flex items-center justify-between ">
                 <ColorInput
                   label="رنگ متن قیمت"
                   name="priceColor"
@@ -286,7 +287,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
                   name="priceFontSize"
                   value={userInputData?.setting?.priceFontSize || "24"}
                   onChange={handleSettingChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 <div className="text-sm text-gray-700">
                   {userInputData?.setting?.priceFontSize}px
@@ -300,7 +301,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
           <div className="mb-6  rounded-lg">
             <h3 className="font-semibold mb-3 text-sky-700">تنظیمات وضعیت</h3>
             <div className="grid grid-cols-1 gap-4">
-              <div>
+              <div className="rounded-lg flex items-center justify-between ">
                 <ColorInput
                   label="رنگ متن وضعیت"
                   name="statusColor"
@@ -315,7 +316,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
                   name="statusFontSize"
                   value={userInputData?.setting?.statusFontSize || "24"}
                   onChange={handleSettingChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 <div className="text-sm text-gray-700">
                   {userInputData?.setting?.statusFontSize}px
@@ -330,7 +331,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
               تنظیمات دسته بندی
             </h3>
             <div className="grid grid-cols-1 gap-4">
-              <div>
+              <div className="rounded-lg flex items-center justify-between ">
                 <ColorInput
                   label="رنگ متن دسته بندی"
                   name="categoryColor"
@@ -345,7 +346,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
                   name="categoryFontSize"
                   value={userInputData?.setting?.categoryFontSize || "24"}
                   onChange={handleSettingChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 <div className="text-sm text-gray-700">
                   {userInputData?.setting?.categoryFontSize}px
@@ -358,7 +359,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
           <div className="mb-6  rounded-lg">
             <h3 className="font-semibold mb-3 text-sky-700">تنظیمات دکمه</h3>
             <div className="grid grid-cols-1 gap-4">
-              <div>
+              <div className="rounded-lg flex items-center justify-between ">
                 <ColorInput
                   label="  رنگ پس زمینه دکمه"
                   name="btnBackgroundColor"
@@ -368,7 +369,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
                   onChange={handleSettingChange}
                 />
               </div>
-              <div>
+              <div className="rounded-lg flex items-center justify-between ">
                 <ColorInput
                   label="  رنگ  متن دکمه"
                   name="btnTextColor"
@@ -384,7 +385,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
             <h3 className="font-semibold mb-3 text-sky-700">
               تنظیمات پس‌زمینه
             </h3>
-            <div>
+            <div className="rounded-lg flex items-center justify-between ">
               <ColorInput
                 label="رنگ   پس زمینه"
                 name="backgroundColor"
@@ -395,7 +396,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
           </div>
           <div className="mb-6 rounded-lg">
             <h4 className="font-semibold mb-3 text-sky-700">تنظیمات باکس</h4>
-            <div>
+            <div className="rounded-lg flex items-center justify-between ">
               <ColorInput
                 label="رنگ پس زمینه باکس"
                 name="backgroundColorBox"
@@ -412,7 +413,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
                 max={300}
                 value={userInputData?.setting?.boxRadius || "40"}
                 onChange={handleSettingChange}
-                className="w-full p-2 border rounded"
+                className="w-full p-1 border rounded"
               />
               <div className="text-sm text-gray-700">
                 {userInputData?.setting?.imageRadius}px
@@ -423,7 +424,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
             <h4 className="font-semibold mb-3 text-sky-700">
               تنظیمات ویژگی ها
             </h4>
-            <div>
+            <div className="rounded-lg flex items-center justify-between ">
               <ColorInput
                 label="رنگ عنوان ویژگی"
                 name="propertyKeyColor"
@@ -431,7 +432,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
                 onChange={handleSettingChange}
               />
             </div>
-            <div>
+            <div className="rounded-lg flex items-center justify-between ">
               <ColorInput
                 label="رنگ متن ویژگی"
                 name="propertyValueColor"
@@ -439,7 +440,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
                 onChange={handleSettingChange}
               />
             </div>
-            <div>
+            <div className="rounded-lg flex items-center justify-between ">
               <ColorInput
                 label="رنگ پس زمینه ویژگی"
                 name="propertyBg"
@@ -449,6 +450,15 @@ export const DetailForm: React.FC<DetailFormProps> = ({
             </div>
           </div>
         </>
+      )}
+
+      {isAnimationOpen && (
+        <div className="p-4 border-t border-gray-100 animate-slideDown">
+          <h3 className="text-lg font-semibold text-sky-700">
+            تنظیمات انیمیشن
+          </h3>
+          <p>تنظیماتی برای انیمیشن وجود ندارد.</p>
+        </div>
       )}
 
       {/* Spacing Settings */}
