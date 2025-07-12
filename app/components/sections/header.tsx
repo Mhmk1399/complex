@@ -8,7 +8,7 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Search, ShoppingCart, User, MapPin } from "lucide-react";
+import { Search, ShoppingCart, User } from "lucide-react";
 import { NextResponse } from "next/server";
 
 interface HeaderProps {
@@ -269,15 +269,7 @@ const LoginButton = styled.button`
   text-wrap: nowrap;
 `;
 
-const LocationButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.25rem 0.75rem;
-  background-color: #fff7ed;
-  color: #ea580c;
-  border-radius: 0.5rem;
-`;
+
 const MobileMenuButton = styled.button<{
   $isOpen: boolean;
   $previewWidth: "sm" | "default";

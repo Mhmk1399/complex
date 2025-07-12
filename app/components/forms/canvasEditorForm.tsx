@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Layout, AnimationEffect } from "@/lib/types"; // Add AnimationEffect import
 import { useCanvas } from "@/app/contexts/CanvasContext";
-import { effectService } from "@/services/effectService"; // Remove AnimationEffect from here
 import { animationService } from "@/services/animationService";
 
 // Import the types from the canvas editor component

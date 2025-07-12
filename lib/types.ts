@@ -1367,7 +1367,7 @@ export interface GalleryImage {
 }
 
 export interface GalleryBlockSetting {
-  imageAnimation: AnimationEffect;
+  imageAnimation?: AnimationEffect;
   titleColor: string;
   titleFontSize: string;
   titleFontWeight: string;
@@ -1534,7 +1534,7 @@ export interface BrandItem {
 }
 
 export interface BrandsBlockSetting extends CommonSettings {
-  navAnimation: AnimationEffect;
+  navAnimation?: AnimationEffect;
   headingColor: string;
   headingFontSize: string;
   headingFontWeight: string;

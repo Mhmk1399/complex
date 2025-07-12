@@ -234,7 +234,7 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
       const currentAnimation = prev.setting?.imageAnimation;
       if (!currentAnimation) return prev;
 
-      let updatedAnimation = { ...currentAnimation };
+      const updatedAnimation = { ...currentAnimation };
 
       if (field === 'type') {
         updatedAnimation.type = value as 'hover' | 'click';
@@ -301,7 +301,7 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
       const currentAnimation = prev.setting?.buttonAnimation;
       if (!currentAnimation) return prev;
 
-      let updatedAnimation = { ...currentAnimation };
+      const updatedAnimation = { ...currentAnimation };
 
       if (field === 'type') {
         updatedAnimation.type = value as 'hover' | 'click';

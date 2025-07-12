@@ -4,7 +4,6 @@ import { Layout, BlogDetailSection, AnimationEffect } from "@/lib/types";
 import React from "react";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
-import { effectService } from "@/services/effectService";
 import { AnimationPreview } from "../animationPreview";
 
 interface BlogDetailFormProps {
@@ -178,7 +177,7 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
       const currentAnimation = prev.setting.animation;
       if (!currentAnimation) return prev;
 
-      let updatedAnimation = { ...currentAnimation };
+      const updatedAnimation = { ...currentAnimation };
 
       if (field === 'type') {
         updatedAnimation.type = value as 'hover' | 'click';

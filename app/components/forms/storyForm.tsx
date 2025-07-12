@@ -176,7 +176,7 @@ export const StoryForm: React.FC<StoryFormProps> = ({
       const currentAnimation = prev.blocks.setting.imageAnimation;
       if (!currentAnimation) return prev;
 
-      let updatedAnimation = { ...currentAnimation };
+      const updatedAnimation = { ...currentAnimation };
 
       if (field === 'type') {
         updatedAnimation.type = value as 'hover' | 'click';
