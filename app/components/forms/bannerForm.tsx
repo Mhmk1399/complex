@@ -80,7 +80,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
       setUserInputData((prev: BannerSection) => ({
         ...prev,
         setting: {
-          ...prev.setting,
+          ...prev?.setting,
           marginTop: updatedValues.top.toString(),
           marginBottom: updatedValues.bottom.toString(),
         },
@@ -128,7 +128,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
     setUserInputData((prev: BannerSection) => ({
       ...prev,
       blocks: {
-        ...prev.blocks,
+        ...prev?.blocks,
         [name]: value,
       },
     }));

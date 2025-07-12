@@ -137,10 +137,10 @@ export const Create = (
   }
 };
 
-
-// In C-D.tsx or wherever your Delete function is defined
 // In C-D.tsx or wherever your Delete function is defined
 export const Delete = (actualName: string, layout: Layout, setLayout: React.Dispatch<React.SetStateAction<Layout>>) => {
+
+
   try {
     // Create a deep copy of the layout
     const updatedLayout = JSON.parse(JSON.stringify(layout));
@@ -161,7 +161,7 @@ export const Delete = (actualName: string, layout: Layout, setLayout: React.Disp
           updatedLayout.sections.children.order.splice(orderIndex, 1);
         }
       }
-      
+    
       // Update the layout state
       setLayout(updatedLayout);
     }
@@ -170,13 +170,6 @@ export const Delete = (actualName: string, layout: Layout, setLayout: React.Disp
   }
 };
 
-
-
-// Add this to the Compiler function in compiler.tsx to handle the new component type
-// This is just a reference for what should be in the template data
-
-
-// In app/components/C-D.tsx, in the Create function, add a special case for CanvasEditor:
 
 export const CreateCanvasEditor = (
   sectionName: string,
@@ -267,3 +260,5 @@ export const CreateCanvasEditor = (
     setLayout(updatedLayout as Layout);
   }
 };
+
+

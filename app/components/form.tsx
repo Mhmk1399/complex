@@ -199,7 +199,7 @@ export const Form = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [contentHeight, setContentHeight] = useState<number>(0);
   const contentRef = useRef<HTMLDivElement>(null);
-
+ console.log(selectedComponent,"selectedComponent")
   // for get the height of form
   useEffect(() => {
     const updateHeight = () => {
@@ -275,16 +275,17 @@ export const Form = () => {
     }
   }, [selectedComponent]);
 
-  useEffect(() => {
-    if (Object.keys(userInputData).length > 0) {
-      const newLayout = JasonChanger(
-        layout,
-        selectedComponent,
-        userInputData as Section
-      );
-      setLayout(newLayout);
-    }
-  }, [userInputData]);
+ useEffect(() => {
+  if (userInputData && typeof userInputData === 'object' && Object.keys(userInputData).length > 0) {
+    const newLayout = JasonChanger(
+      layout,
+      selectedComponent,
+      userInputData as Section
+    );
+    setLayout(newLayout);
+  }
+}, [userInputData]);
+
 
   const SortableItem = ({ id }: { id: string }) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
@@ -680,6 +681,7 @@ export const Form = () => {
         return <div>یک سکشن را برای تنظیمات کلیک کنید...</div>;
     }
   };
+
   const ordersButton = (
     <div
       className="flex bg-transparent flex-row mr-4  rounded-2xl mx-2 justify-end items-end mt-9  
