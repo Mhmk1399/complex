@@ -1367,7 +1367,7 @@ export interface GalleryImage {
 }
 
 export interface GalleryBlockSetting {
-  imageAnimation: AnimationEffect;
+  imageAnimation?: AnimationEffect;
   titleColor: string;
   titleFontSize: string;
   titleFontWeight: string;

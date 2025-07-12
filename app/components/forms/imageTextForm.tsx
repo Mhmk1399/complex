@@ -199,7 +199,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
       const currentAnimation = prev.blocks.setting.imageAnimation;
       if (!currentAnimation) return prev;
 
-      let updatedAnimation = { ...currentAnimation };
+      const updatedAnimation = { ...currentAnimation };
 
       if (field === 'type') {
         updatedAnimation.type = value as 'hover' | 'click';
@@ -275,7 +275,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
       const currentAnimation = prev.blocks.setting.buttonAnimation;
       if (!currentAnimation) return prev;
 
-      let updatedAnimation = { ...currentAnimation };
+      const updatedAnimation = { ...currentAnimation };
 
       if (field === 'type') {
         updatedAnimation.type = value as 'hover' | 'click';

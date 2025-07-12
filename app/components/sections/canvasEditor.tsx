@@ -5,8 +5,7 @@ import { Layout, AnimationEffect, AnimationConfig } from "@/lib/types"; // Impor
 import { Delete } from "../C-D";
 import { Rnd } from "react-rnd";
 import { useCanvas } from "@/app/contexts/CanvasContext";
-import { effectService } from "@/services/effectService"; // Remove AnimationEffect from here
-import { animationService } from "@/services/animationService";
+
 
 
 

@@ -117,12 +117,14 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
 
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent);
-    setUserInputData(initialData[0]);
-    // Initialize useRouteSelect array based on existing images
-    if (initialData[0]?.blocks?.images) {
-      setUseRouteSelect(new Array(initialData[0].blocks.images.length).fill(false));
+    if (initialData && initialData[0]) {
+      setUserInputData(initialData[0] as GallerySection);
+      // Initialize useRouteSelect array based on existing images
+      if (initialData[0]?.blocks?.images) {
+        setUseRouteSelect(new Array(initialData[0].blocks.images.length).fill(false));
+      }
     }
-  }, [selectedComponent]);
+  }, [selectedComponent, layout, setUserInputData]);
 
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -136,6 +138,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
       },
     }));
   };
+  
   const [isUpdating, setIsUpdating] = useState(false);
   const handleBlockSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -192,7 +195,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
       ...prev,
       blocks: {
         ...prev.blocks,
-        images: prev.blocks.images.filter((_, i) => i !== index),
+        images: (prev.blocks.images || []).filter((_, i) => i !== index),
       },
     }));
     // Remove the corresponding useRouteSelect item
@@ -237,7 +240,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
       const currentAnimation = prev.blocks.setting.imageAnimation;
       if (!currentAnimation) return prev;
 
-      let updatedAnimation = { ...currentAnimation };
+      const updatedAnimation = { ...currentAnimation };
 
       if (field === 'type') {
         updatedAnimation.type = value as 'hover' | 'click';
@@ -283,6 +286,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
     setIsStyleSettingsOpen(tab === "style");
     setIsSpacingOpen(tab === "spacing");
   };
+  
   useEffect(() => {
     setIsContentOpen(true);
   }, []);
@@ -314,11 +318,9 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
       <h2 className="text-lg font-bold mb-4">تنظیمات گالری</h2>
 
       {/* Tabs */}
-
       <TabButtons onTabChange={handleTabChange} />
 
       {/* Content Section */}
-
       {isContentOpen && (
         <div className="p-4  animate-slideDown">
           <div className="space-y-4">
@@ -432,7 +434,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
                       )}
                     </div>
                   </div>
-                </div>
+                                  </div>
               ))}
             </div>
           </div>
@@ -440,11 +442,10 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
       )}
 
       {/* Images Section */}
-
       {isImagesOpen && (
         <div className="p-4  animate-slideDown">
           <button
-                        onClick={addNewImage}
+            onClick={addNewImage}
             className="mb-4 bg-blue-500 text-white px-4 py-2 rounded"
           >
             افزودن تصویر جدید
@@ -529,7 +530,6 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
       )}
 
       {/* Style Settings */}
-
       {isStyleSettingsOpen && (
         <div className="p-4 animate-slideDown">
           <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
@@ -542,21 +542,18 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
                   min="0"
                   max="100"
                   name="titleFontSize"
-                  value={userInputData?.blocks?.setting?.titleFontSize || "250"}
+                  value={userInputData?.blocks?.setting?.titleFontSize || "25"}
                   onChange={handleBlockSettingChange}
                 />
                 <p className="text-sm text-gray-600 text-nowrap">
-                  {userInputData?.blocks.setting.titleFontSize}px
+                  {userInputData?.blocks?.setting?.titleFontSize || "25"}px
                 </p>
               </div>
               <div>
                 <label className="block mb-2">وزن فونت عنوان</label>
                 <select
                   name="titleFontWeight"
-                  value={
-                    userInputData?.blocks?.setting?.titleFontWeight?.toString() ??
-                    "0"
-                  }
+                  value={userInputData?.blocks?.setting?.titleFontWeight || "normal"}
                   onChange={handleBlockSettingChange}
                   className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
                 >
@@ -568,9 +565,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
                 <ColorInput
                   label="رنگ عنوان"
                   name="titleColor"
-                  value={
-                    userInputData?.blocks?.setting?.titleColor || "#000000"
-                  }
+                  value={userInputData?.blocks?.setting?.titleColor || "#000000"}
                   onChange={handleBlockSettingChange}
                 />
               </div>
@@ -583,23 +578,18 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
                   min="0"
                   max="100"
                   name="descriptionFontSize"
-                  value={
-                    userInputData?.blocks?.setting?.descriptionFontSize || "250"
-                  }
+                  value={userInputData?.blocks?.setting?.descriptionFontSize || "16"}
                   onChange={handleBlockSettingChange}
                 />
                 <p className="text-sm text-gray-600 text-nowrap">
-                  {userInputData?.blocks.setting.descriptionFontSize}px
+                  {userInputData?.blocks?.setting?.descriptionFontSize || "16"}px
                 </p>
               </div>
               <div>
                 <label className="block mb-2">وزن فونت توضیحات</label>
                 <select
                   name="descriptionFontWeight"
-                  value={
-                    userInputData?.blocks?.setting?.descriptionFontWeight?.toString() ??
-                    "0"
-                  }
+                  value={userInputData?.blocks?.setting?.descriptionFontWeight || "normal"}
                   onChange={handleBlockSettingChange}
                   className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
                 >
@@ -611,10 +601,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
                 <ColorInput
                   label="رنگ توضیحات"
                   name="descriptionColor"
-                  value={
-                    userInputData?.blocks?.setting?.descriptionColor ||
-                    "#000000"
-                  }
+                  value={userInputData?.blocks?.setting?.descriptionColor || "#000000"}
                   onChange={handleBlockSettingChange}
                 />
               </div>
@@ -642,11 +629,11 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
                   min="0"
                   max="100"
                   name="gridGap"
-                  value={userInputData?.blocks?.setting?.gridGap || "250"}
+                  value={userInputData?.blocks?.setting?.gridGap || "16"}
                   onChange={handleBlockSettingChange}
                 />
                 <p className="text-sm text-gray-600 text-nowrap">
-                  {userInputData?.blocks.setting.gridGap}px
+                  {userInputData?.blocks?.setting?.gridGap || "16"}px
                 </p>
               </div>
             </div>
@@ -664,7 +651,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
                   className="w-full p-2 border rounded"
                 />
                 <div className="text-gray-500">
-                  {userInputData?.blocks?.setting?.imageHeight}px
+                  {userInputData?.blocks?.setting?.imageHeight || "200"}px
                 </div>
               </div>
               <div>
@@ -677,7 +664,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
                   className="w-full p-2 border rounded"
                 />
                 <div className="text-gray-500">
-                  {userInputData?.blocks?.setting?.imageWidth}px
+                  {userInputData?.blocks?.setting?.imageWidth || "200"}px
                 </div>
               </div>
 
@@ -689,11 +676,11 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
                   min="0"
                   max="100"
                   name="imageRadius"
-                  value={userInputData?.blocks?.setting?.imageRadius || "250"}
+                  value={userInputData?.blocks?.setting?.imageRadius || "8"}
                   onChange={handleBlockSettingChange}
                 />
                 <p className="text-sm text-gray-600 text-nowrap">
-                  {userInputData?.blocks.setting.imageRadius}px
+                  {userInputData?.blocks?.setting?.imageRadius || "8"}px
                 </p>
               </div>
             </div>
@@ -701,7 +688,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
               <ColorInput
                 label="رنگ پس زمینه"
                 name="background"
-                value={userInputData?.blocks?.setting?.background || "#000000"}
+                value={userInputData?.blocks?.setting?.background || "#ffffff"}
                 onChange={handleBlockSettingChange}
               />
             </div>
@@ -888,7 +875,6 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
       )}
 
       {/* Spacing Settings */}
-
       {isSpacingOpen && (
         <div className="p-4 animate-slideDown">
           <div className=" rounded-lg p-2 flex items-center justify-center">
@@ -900,6 +886,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
           </div>
         </div>
       )}
+      
       <ImageSelectorModal
         isOpen={isImageSelectorOpen}
         onClose={() => setIsImageSelectorOpen(false)}
@@ -910,3 +897,4 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
 };
 
 export default GalleryForm;
+

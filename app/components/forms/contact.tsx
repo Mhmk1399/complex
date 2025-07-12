@@ -189,7 +189,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
       const currentAnimation = prev.blocks.setting?.btnAnimation;
       if (!currentAnimation) return prev;
 
-      let updatedAnimation = { ...currentAnimation };
+      const updatedAnimation = { ...currentAnimation };
 
       if (field === 'type') {
         updatedAnimation.type = value as 'hover' | 'click';

@@ -52,23 +52,146 @@ export const AnimationPreview: React.FC<AnimationPreviewProps> = ({ effects }) =
   };
 
   const handleClick = () => {
-    if (!previewRef.current || !effects[0]) return;
-    
-    if (effects[0].type === 'click') {
-      const { animation } = effects[0];
-      previewRef.current.style.animation = 'none';
-      // Force reflow
-      previewRef.current.offsetHeight;
-      setTimeout(() => {
-        if (previewRef.current) {
-          previewRef.current.style.animation = `preview-${animation.type} ${animation.duration} ${animation.timing} ${animation.delay || '0s'} ${animation.iterationCount || '1'}`;
-        }
-      }, 10);
+  if (!previewRef.current || !effects[0]) return;
+
+  if (effects[0].type === 'click') {
+    const { animation } = effects[0];
+    previewRef.current.style.animation = 'none';
+
+    // Force reflow to restart animation
+    void previewRef.current.offsetHeight;
+
+    setTimeout(() => {
+      if (previewRef.current) {
+        previewRef.current.style.animation = `preview-${animation.type} ${animation.duration} ${animation.timing} ${animation.delay || '0s'} ${animation.iterationCount || '1'}`;
+      }
+    }, 10);
+  }
+};
+
+
+  // Generate CSS styles as a string (similar to banner.tsx approach)
+  const animationStyles = `
+    @keyframes preview-pulse {
+      0%, 100% { 
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% { 
+        transform: scale(1.05);
+        opacity: 0.8;
+      }
     }
-  };
+    
+    @keyframes preview-ping {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      75%, 100% {
+        transform: scale(1.1);
+        opacity: 0;
+      }
+    }
+    
+    @keyframes preview-bgOpacity {
+      0%, 100% { 
+        opacity: 1;
+      }
+      50% { 
+        opacity: 0.7;
+      }
+    }
+    
+    @keyframes preview-scaleup {
+      0% {
+        transform: scale(1);
+      }
+      100% {
+        transform: scale(1.1);
+      }
+    }
+    
+    @keyframes preview-scaledown {
+      0% {
+        transform: scale(1);
+      }
+      100% {
+        transform: scale(0.95);
+      }
+    }
+
+    @keyframes preview-glow {
+      0%, 100% { 
+        filter: brightness(1) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+      }
+      50% { 
+        filter: brightness(1.2) drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+      }
+    }
+
+    @keyframes preview-brightness {
+      0%, 100% { 
+        filter: brightness(1);
+      }
+      50% { 
+        filter: brightness(1.4);
+      }
+    }
+
+    @keyframes preview-blur {
+      0%, 100% { 
+        filter: blur(0px);
+      }
+      50% { 
+        filter: blur(2px);
+      }
+    }
+
+    @keyframes preview-saturate {
+      0%, 100% { 
+        filter: saturate(1);
+      }
+      50% { 
+        filter: saturate(1.8);
+      }
+    }
+
+    @keyframes preview-contrast {
+      0%, 100% { 
+        filter: contrast(1);
+      }
+      50% { 
+        filter: contrast(1.5);
+      }
+    }
+
+    @keyframes preview-opacity {
+      0% { 
+        opacity: 1;
+      }
+      50% { 
+        opacity: 0.4;
+      }
+      100% { 
+        opacity: 1;
+      }
+    }
+
+    @keyframes preview-shadow {
+      0%, 100% { 
+        filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0));
+      }
+      50% { 
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+      }
+    }
+  `;
 
   return (
     <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+      <style dangerouslySetInnerHTML={{ __html: animationStyles }} />
+      
       <h6 className="font-medium text-gray-700 mb-3">پیش‌نمایش انیمیشن</h6>
       
       <div className="space-y-2">
@@ -99,123 +222,6 @@ export const AnimationPreview: React.FC<AnimationPreviewProps> = ({ effects }) =
           onClick={handleClick}
         />
       </div>
-
-      <style jsx>{`
-        @keyframes preview-pulse {
-          0%, 100% { 
-            transform: scale(1);
-            opacity: 1;
-          }
-          50% { 
-            transform: scale(1.05);
-            opacity: 0.8;
-          }
-        }
-        
-        @keyframes preview-ping {
-          0% {
-            transform: scale(1);
-            opacity: 1;
-          }
-          75%, 100% {
-            transform: scale(1.1);
-            opacity: 0;
-          }
-        }
-        
-        @keyframes preview-bgOpacity {
-          0%, 100% { 
-            opacity: 1;
-          }
-          50% { 
-            opacity: 0.7;
-          }
-        }
-        
-        @keyframes preview-scaleup {
-          0% {
-            transform: scale(1);
-          }
-          100% {
-            transform: scale(1.1);
-          }
-        }
-        
-        @keyframes preview-scaledown {
-          0% {
-            transform: scale(1);
-          }
-          100% {
-            transform: scale(0.95);
-          }
-        }
-
-        @keyframes preview-glow {
-          0%, 100% { 
-            filter: brightness(1) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
-          }
-          50% { 
-            filter: brightness(1.2) drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
-          }
-        }
-
-        @keyframes preview-brightness {
-          0%, 100% { 
-            filter: brightness(1);
-          }
-          50% { 
-            filter: brightness(1.4);
-          }
-        }
-
-        @keyframes preview-blur {
-          0%, 100% { 
-            filter: blur(0px);
-          }
-          50% { 
-            filter: blur(2px);
-          }
-        }
-
-        @keyframes preview-saturate {
-          0%, 100% { 
-            filter: saturate(1);
-          }
-          50% { 
-            filter: saturate(1.8);
-          }
-        }
-
-        @keyframes preview-contrast {
-          0%, 100% { 
-            filter: contrast(1);
-          }
-          50% { 
-            filter: contrast(1.5);
-          }
-        }
-
-        @keyframes preview-opacity {
-          0% { 
-            opacity: 1;
-          }
-          50% { 
-            opacity: 0.4;
-          }
-          100% { 
-            opacity: 1;
-          }
-        }
-
-        @keyframes preview-shadow {
-          0%, 100% { 
-            filter: drop-shadow(0 0 0px rgba(0, 0, 0, 0));
-          }
-          50% { 
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-          }
-        }
-      `}</style>
     </div>
   );
 };

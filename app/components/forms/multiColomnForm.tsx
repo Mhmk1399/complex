@@ -9,7 +9,6 @@ export interface MultiColumnBlock {
 import MarginPaddingEditor from "../sections/editor";
 import { useSharedContext } from "@/app/contexts/SharedContext";
 import React from "react";
-import { TabButtons } from "../tabButtons";
 import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
 
@@ -79,7 +78,6 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
   const [isAnimationOpen, setIsAnimationOpen] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     setMargin({
@@ -249,7 +247,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
       const currentAnimation = prev.setting?.btnAnimation;
       if (!currentAnimation) return prev;
 
-      let updatedAnimation = { ...currentAnimation };
+      const updatedAnimation = { ...currentAnimation };
 
       if (field === 'type') {
         updatedAnimation.type = value as 'hover' | 'click';
@@ -319,7 +317,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
       const currentAnimation = prev.setting?.imageAnimation;
       if (!currentAnimation) return prev;
 
-      let updatedAnimation = { ...currentAnimation };
+      const updatedAnimation = { ...currentAnimation };
 
       if (field === 'type') {
         updatedAnimation.type = value as 'hover' | 'click';
@@ -439,12 +437,11 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
           <br />
           {userInputData?.blocks &&
             typeof userInputData.blocks === "object" &&
-            Object.entries(userInputData.blocks).map(([key, block], idx) => {
+            Object.entries(userInputData.blocks).map(([key, block]) => {
               const index = Number(key);
               const titleKey = `title${index + 1}`;
               const descKey = `description${index + 1}`;
               const btnLabelKey = `btnLable${index + 1}`;
-              const btnLinkKey = `btnLink${index + 1}`;
 
               if (!block) return null;
               return (

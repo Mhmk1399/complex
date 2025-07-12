@@ -235,7 +235,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
       const currentAnimation = prev.blocks?.setting?.navAnimation;
       if (!currentAnimation) return prev;
 
-      let updatedAnimation = { ...currentAnimation };
+      const updatedAnimation = { ...currentAnimation };
 
       if (field === 'type') {
         updatedAnimation.type = value as 'hover' | 'click';

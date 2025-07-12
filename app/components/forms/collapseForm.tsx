@@ -384,7 +384,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
       const currentAnimation = prev.setting?.headerAnimation;
       if (!currentAnimation) return prev;
 
-      let updatedAnimation = { ...currentAnimation };
+      const updatedAnimation = { ...currentAnimation };
 
       if (field === 'type') {
         updatedAnimation.type = value as 'hover' | 'click';

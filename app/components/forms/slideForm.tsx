@@ -263,7 +263,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
       const currentAnimation = prev.setting?.navAnimation;
       if (!currentAnimation) return prev;
 
-      let updatedAnimation = { ...currentAnimation };
+      const updatedAnimation = { ...currentAnimation };
 
       if (field === 'type') {
         updatedAnimation.type = value as 'hover' | 'click';
@@ -330,7 +330,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
       const currentAnimation = prev.setting?.imageAnimation;
       if (!currentAnimation) return prev;
 
-      let updatedAnimation = { ...currentAnimation };
+      const updatedAnimation = { ...currentAnimation };
 
       if (field === 'type') {
         updatedAnimation.type = value as 'hover' | 'click';
@@ -397,7 +397,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
       const currentAnimation = prev.setting?.btnAnimation;
       if (!currentAnimation) return prev;
 
-      let updatedAnimation = { ...currentAnimation };
+      const updatedAnimation = { ...currentAnimation };
 
       if (field === 'type') {
         updatedAnimation.type = value as 'hover' | 'click';

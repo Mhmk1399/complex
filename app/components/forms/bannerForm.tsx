@@ -155,18 +155,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
     setTimeout(() => setIsUpdating(false), 100);
   };
 
-  const handleSettingChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setUserInputData((prev: BannerSection) => ({
-      ...prev,
-      setting: {
-        ...prev.setting,
-        [name]: value,
-      },
-    }));
-  };
+
 
   // Enhanced Animation handlers with validation
   const handleAnimationToggle = (enabled: boolean) => {
@@ -206,7 +195,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
       const currentAnimation = prev.blocks.setting.animation;
       if (!currentAnimation) return prev;
 
-      let updatedAnimation = { ...currentAnimation };
+      const updatedAnimation = { ...currentAnimation };
 
       if (field === 'type') {
         updatedAnimation.type = value as 'hover' | 'click';
@@ -443,7 +432,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                     onChange={handleBlockSettingChange}
                     className="w-full"
                   />
-                  <div className="text-gray-500 text-sm">
+                                  <div className="text-gray-500 text-sm">
                     {userInputData?.blocks?.setting?.opacityImage || "1"}
                   </div>
                   
@@ -744,3 +733,4 @@ export const BannerForm: React.FC<BannerFormProps> = ({
     </div>
   );
 };
+
