@@ -3,8 +3,6 @@ import { AnimationEffect } from "@/lib/types";
 import {
   HiPlay,
   HiRefresh,
-  HiEye,
-  HiCursorClick,
   HiSparkles,
 } from "react-icons/hi";
 
@@ -36,38 +34,38 @@ export const AnimationPreview: React.FC<AnimationPreviewProps> = ({
     );
   }
 
-  const getAnimationPreview = (
-    type: string
-  ): { icon: string; name: string; description: string } => {
-    const previews: Record<
-      string,
-      { icon: string; name: string; description: string }
-    > = {
-      pulse: { icon: "🫀", name: "پالس", description: "تغییر اندازه و شفافیت" },
-      ping: { icon: "📡", name: "پینگ", description: "موج انتشار" },
-      bgOpacity: {
-        icon: "🌫️",
-        name: "شفافیت پس‌زمینه",
-        description: "تغییر شفافیت",
-      },
-      scaleup: { icon: "🔍", name: "بزرگ‌نمایی", description: "افزایش اندازه" },
-      scaledown: { icon: "🔎", name: "کوچک‌نمایی", description: "کاهش اندازه" },
-      glow: { icon: "✨", name: "درخشش", description: "افکت نورانی" },
-      brightness: { icon: "💡", name: "روشنایی", description: "تغییر نور" },
-      blur: { icon: "🌫️", name: "تاری", description: "محو کردن" },
-      saturate: { icon: "🎨", name: "اشباع رنگ", description: "تقویت رنگ‌ها" },
-      contrast: { icon: "🔳", name: "کنتراست", description: "تضاد رنگی" },
-      opacity: { icon: "👻", name: "شفافیت", description: "تغییر شفافیت کلی" },
-      shadow: { icon: "🌑", name: "سایه", description: "افکت سایه" },
-    };
-    return (
-      previews[type] || {
-        icon: "⚡",
-        name: type,
-        description: "انیمیشن سفارشی",
-      }
-    );
-  };
+  // const getAnimationPreview = (
+  //   type: string
+  // ): { icon: string; name: string; description: string } => {
+  //   const previews: Record<
+  //     string,
+  //     { icon: string; name: string; description: string }
+  //   > = {
+  //     pulse: { icon: "🫀", name: "پالس", description: "تغییر اندازه و شفافیت" },
+  //     ping: { icon: "📡", name: "پینگ", description: "موج انتشار" },
+  //     bgOpacity: {
+  //       icon: "🌫️",
+  //       name: "شفافیت پس‌زمینه",
+  //       description: "تغییر شفافیت",
+  //     },
+  //     scaleup: { icon: "🔍", name: "بزرگ‌نمایی", description: "افزایش اندازه" },
+  //     scaledown: { icon: "🔎", name: "کوچک‌نمایی", description: "کاهش اندازه" },
+  //     glow: { icon: "✨", name: "درخشش", description: "افکت نورانی" },
+  //     brightness: { icon: "💡", name: "روشنایی", description: "تغییر نور" },
+  //     blur: { icon: "🌫️", name: "تاری", description: "محو کردن" },
+  //     saturate: { icon: "🎨", name: "اشباع رنگ", description: "تقویت رنگ‌ها" },
+  //     contrast: { icon: "🔳", name: "کنتراست", description: "تضاد رنگی" },
+  //     opacity: { icon: "👻", name: "شفافیت", description: "تغییر شفافیت کلی" },
+  //     shadow: { icon: "🌑", name: "سایه", description: "افکت سایه" },
+  //   };
+  //   return (
+  //     previews[type] || {
+  //       icon: "⚡",
+  //       name: type,
+  //       description: "انیمیشن سفارشی",
+  //     }
+  //   );
+  // };
 
   const handleMouseEnter = () => {
     if (!previewRef.current || !effects[0]) return;
