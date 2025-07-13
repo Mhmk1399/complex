@@ -252,6 +252,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
   const currentAnimation = userInputData?.blocks?.setting?.animation;
   const hasAnimation = !!currentAnimation;
 
+  
   return (
     <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-lg font-bold mb-4">تنظیمات بنر</h2>

@@ -257,7 +257,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
       {/* Tabs */}
       <TabButtons onTabChange={handleTabChange} />
       {isContentOpen && (
-        <div className="p-4 border-t border-gray-100 space-y-4 animate-slideDown">
+        <div className="p-4  space-y-4 animate-slideDown">
           <div className="p-3  rounded-lg">
             <label className="block mb-2 text-sm font-bold text-gray-700">
               سربرگ فرم
@@ -275,7 +275,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 
       {/* Style Settings */}
       {isStyleSettingsOpen && (
-        <div className="p-4 border-t border-gray-100 space-y-6 animate-slideDown">
+        <div className="p-4  space-y-6 animate-slideDown">
           {/* Heading Settings */}
           <div className="space-y-4">
             <div className="p-3  rounded-lg flex flex-col gap-3">
@@ -612,7 +612,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 
       {/* Spacing Settings */}
       {isSpacingOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
+        <div className="p-4  animate-slideDown">
           <div className=" rounded-lg p-2 flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

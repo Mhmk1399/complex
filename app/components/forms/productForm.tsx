@@ -29,17 +29,15 @@ const ColorInput = ({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => (
   <>
-    <label className="block mb-1" htmlFor={name}>
-      {label}
-    </label>
-    <div className="flex flex-col gap-3 items-center">
+    <label className="block mb-1">{label}</label>
+    <div className="flex flex-col rounded-md gap-3 items-center">
       <input
         type="color"
         id={name}
         name={name}
-        value={value}
+        value={value || "#000000"}
         onChange={onChange}
-        className="border p-0.5 rounded-full"
+        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
       />
     </div>
   </>
@@ -52,7 +50,10 @@ export const ProductListForm: React.FC<ProductListProps> = ({
   selectedComponent,
 }) => {
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
+  const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
+  const [isAnimationOpen, setIsAnimationOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const [margin, setMargin] = useState<BoxValues>({
     top: 0,
@@ -111,14 +112,12 @@ export const ProductListForm: React.FC<ProductListProps> = ({
     });
   }, [userInputData?.setting]);
 
- useEffect(() => {
+  useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
     setUserInputData(initialData);
   }, []);
- 
 
   // Add this state to control updates
-  const [isUpdating, setIsUpdating] = useState(false);
 
   // Modify your change handlers to include debouncing
   const handleSettingChange = (
@@ -141,12 +140,16 @@ export const ProductListForm: React.FC<ProductListProps> = ({
     setTimeout(() => setIsUpdating(false), 100);
   };
 
-  const handleTabChange = (tab: "content" | "style" | "spacing") => {
+  const handleTabChange = (
+    tab: "content" | "style" | "spacing" | "animation"
+  ) => {
+    setIsContentOpen(tab === "content");
     setIsStyleSettingsOpen(tab === "style");
     setIsSpacingOpen(tab === "spacing");
+    setIsAnimationOpen(tab === "animation");
   };
   useEffect(() => {
-    setIsStyleSettingsOpen(true);
+    setIsContentOpen(true);
   }, []);
 
   return (
@@ -155,6 +158,12 @@ export const ProductListForm: React.FC<ProductListProps> = ({
 
       {/* Tabs */}
       <TabButtons onTabChange={handleTabChange} />
+      {isContentOpen && (
+        <div className="p-4  animate-slideDown">
+          <h3 className="text-lg font-semibold text-sky-700">تنظیمات محتوا</h3>
+          <p>تنظیماتی برای انیمیشن وجود ندارد.</p>
+        </div>
+      )}
 
       {isStyleSettingsOpen && (
         <>
@@ -172,63 +181,95 @@ export const ProductListForm: React.FC<ProductListProps> = ({
               placeholder="Grid Columns"
               className="border p-2 rounded"
             />
+            <div className="rounded-lg flex items-center justify-between ">
+              {" "}
+              <ColorInput
+                label="رنگ پس‌زمینه"
+                name="backgroundColor"
+                value={
+                  userInputData.setting.backgroundColor?.toString() ?? "#000000"
+                }
+                onChange={handleSettingChange}
+              />
+            </div>
 
-            <ColorInput
-              label="رنگ پس‌زمینه"
-              name="backgroundColor"
-              value={
-                userInputData.setting.backgroundColor?.toString() ?? "#000000"
-              }
-              onChange={handleSettingChange}
-            />
-            <ColorInput
-              label="رنگ فیلتر"
-              name="filterRowBg"
-              value={
-                userInputData?.setting?.filterRowBg?.toString() || "#000000"
-              }
-              onChange={handleSettingChange}
-            />
-            <ColorInput
-              label="رنگ متن فیلتر"
-              name="filterNameColor"
-              value={
-                userInputData?.setting?.filterNameColor?.toString() || "#000000"
-              }
-              onChange={handleSettingChange}
-            />
-            <ColorInput
-              label=" رنگ پس زمینه فیلتر کارت"
-              name="filterCardBg"
-              value={
-                userInputData?.setting?.filterCardBg?.toString() || "#000000"
-              }
-              onChange={handleSettingChange}
-            />
-            <ColorInput
-              label=" رنگ پس زمینه دکمه"
-              name="filterButtonBg"
-              value={
-                userInputData?.setting?.filterButtonBg?.toString() || "#000000"
-              }
-              onChange={handleSettingChange}
-            />
-            <ColorInput
-              label=" رنگ  متن دکمه"
-              name="filterButtonTextColor"
-              value={
-                userInputData?.setting?.filterButtonTextColor?.toString() ||
-                "#000000"
-              }
-              onChange={handleSettingChange}
-            />
+            <div className="rounded-lg flex items-center justify-between ">
+              {" "}
+              <ColorInput
+                label="رنگ فیلتر"
+                name="filterRowBg"
+                value={
+                  userInputData?.setting?.filterRowBg?.toString() || "#000000"
+                }
+                onChange={handleSettingChange}
+              />
+            </div>
+
+            <div className="rounded-lg flex items-center justify-between ">
+              {" "}
+              <ColorInput
+                label="رنگ متن فیلتر"
+                name="filterNameColor"
+                value={
+                  userInputData?.setting?.filterNameColor?.toString() ||
+                  "#000000"
+                }
+                onChange={handleSettingChange}
+              />
+            </div>
+
+            <div className="rounded-lg flex items-center justify-between ">
+              {" "}
+              <ColorInput
+                label=" رنگ پس زمینه فیلتر کارت"
+                name="filterCardBg"
+                value={
+                  userInputData?.setting?.filterCardBg?.toString() || "#000000"
+                }
+                onChange={handleSettingChange}
+              />
+            </div>
+
+            <div className="rounded-lg flex items-center justify-between ">
+              {" "}
+              <ColorInput
+                label=" رنگ پس زمینه دکمه"
+                name="filterButtonBg"
+                value={
+                  userInputData?.setting?.filterButtonBg?.toString() ||
+                  "#000000"
+                }
+                onChange={handleSettingChange}
+              />
+            </div>
+
+            <div className="rounded-lg flex items-center justify-between ">
+              {" "}
+              <ColorInput
+                label=" رنگ  متن دکمه"
+                name="filterButtonTextColor"
+                value={
+                  userInputData?.setting?.filterButtonTextColor?.toString() ||
+                  "#000000"
+                }
+                onChange={handleSettingChange}
+              />
+            </div>
           </div>
         </>
+      )}
+      {isAnimationOpen && (
+        <div className="p-4  animate-slideDown">
+          <h3 className="text-lg font-semibold text-sky-700">
+            تنظیمات انیمیشن
+          </h3>
+          <p>تنظیماتی برای انیمیشن وجود ندارد.</p>
+        </div>
       )}
 
       {/* Spacing Tab */}
       {isSpacingOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
+        <div className="p-4  animate-slideDown">
           <div className="bg-gray-50 rounded-lg p-2 flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

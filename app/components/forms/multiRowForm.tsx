@@ -7,6 +7,7 @@ import { TabButtons } from "../tabButtons";
 import ImageSelectorModal from "../sections/ImageSelectorModal";
 import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
+import { HiChevronDown, HiSparkles } from "react-icons/hi";
 
 interface MultiRowFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<MultiRowSection>>;
@@ -55,7 +56,9 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
   selectedComponent,
 }) => {
   const { activeRoutes } = useSharedContext();
-  const [useRouteSelectBtns, setUseRouteSelectBtns] = useState<Record<number, boolean>>({});
+  const [useRouteSelectBtns, setUseRouteSelectBtns] = useState<
+    Record<number, boolean>
+  >({});
   const [margin, setMargin] = useState<BoxValues>({
     top: 0,
     bottom: 0,
@@ -72,6 +75,7 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
   const [openRows, setOpenRows] = useState<Record<number, boolean>>({});
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
+  const [isAnimationOpen, setIsAnimationOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isImageSelectorOpen, setIsImageSelectorOpen] = useState(false);
   const [currentEditingIndex, setCurrentEditingIndex] = useState<number>(0);
@@ -159,7 +163,7 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
 
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
-    console.log(initialData)
+    console.log(initialData);
     if (initialData) {
       setUserInputData(initialData);
     }
@@ -204,57 +208,63 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
   // Animation handlers for images
   const handleImageAnimationToggle = (enabled: boolean) => {
     if (enabled) {
-      const defaultConfig = animationService.getDefaultConfig('pulse');
+      const defaultConfig = animationService.getDefaultConfig("pulse");
       const defaultEffect: AnimationEffect = {
-        type: 'hover',
-        animation: defaultConfig
+        type: "hover",
+        animation: defaultConfig,
       };
-      
+
       setUserInputData((prev: MultiRowSection) => ({
         ...prev,
         setting: {
           ...prev.setting,
-          imageAnimation: defaultEffect
-        }
+          imageAnimation: defaultEffect,
+        },
       }));
     } else {
       setUserInputData((prev: MultiRowSection) => ({
         ...prev,
         setting: {
           ...prev.setting,
-          imageAnimation: undefined
-        }
+          imageAnimation: undefined,
+        },
       }));
     }
   };
 
-  const handleImageAnimationChange = (field: string, value: string | number) => {
+  const handleImageAnimationChange = (
+    field: string,
+    value: string | number
+  ) => {
     setUserInputData((prev: MultiRowSection) => {
       const currentAnimation = prev.setting?.imageAnimation;
       if (!currentAnimation) return prev;
 
       const updatedAnimation = { ...currentAnimation };
 
-      if (field === 'type') {
-        updatedAnimation.type = value as 'hover' | 'click';
-      } else if (field.startsWith('animation.')) {
-        const animationField = field.split('.')[1];
+      if (field === "type") {
+        updatedAnimation.type = value as "hover" | "click";
+      } else if (field.startsWith("animation.")) {
+        const animationField = field.split(".")[1];
         let processedValue = value;
-        
-        if (animationField === 'duration' || animationField === 'delay') {
-          const numValue = typeof value === 'string' ? parseFloat(value) : value;
+
+        if (animationField === "duration" || animationField === "delay") {
+          const numValue =
+            typeof value === "string" ? parseFloat(value) : value;
           processedValue = `${numValue}s`;
         }
-        
+
         const newAnimationConfig = {
           ...updatedAnimation.animation,
-          [animationField]: processedValue
+          [animationField]: processedValue,
         };
-        
+
         if (animationService.validateConfig(newAnimationConfig)) {
           updatedAnimation.animation = newAnimationConfig;
         } else {
-          updatedAnimation.animation = animationService.getDefaultConfig(updatedAnimation.animation.type);
+          updatedAnimation.animation = animationService.getDefaultConfig(
+            updatedAnimation.animation.type
+          );
         }
       }
 
@@ -262,8 +272,8 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
         ...prev,
         setting: {
           ...prev.setting,
-          imageAnimation: updatedAnimation
-        }
+          imageAnimation: updatedAnimation,
+        },
       };
     });
   };
@@ -271,57 +281,63 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
   // Animation handlers for buttons
   const handleButtonAnimationToggle = (enabled: boolean) => {
     if (enabled) {
-      const defaultConfig = animationService.getDefaultConfig('pulse');
+      const defaultConfig = animationService.getDefaultConfig("pulse");
       const defaultEffect: AnimationEffect = {
-        type: 'hover',
-        animation: defaultConfig
+        type: "hover",
+        animation: defaultConfig,
       };
-      
+
       setUserInputData((prev: MultiRowSection) => ({
         ...prev,
         setting: {
           ...prev.setting,
-          buttonAnimation: defaultEffect
-        }
+          buttonAnimation: defaultEffect,
+        },
       }));
     } else {
       setUserInputData((prev: MultiRowSection) => ({
         ...prev,
         setting: {
           ...prev.setting,
-          buttonAnimation: undefined
-        }
+          buttonAnimation: undefined,
+        },
       }));
     }
   };
 
-  const handleButtonAnimationChange = (field: string, value: string | number) => {
+  const handleButtonAnimationChange = (
+    field: string,
+    value: string | number
+  ) => {
     setUserInputData((prev: MultiRowSection) => {
       const currentAnimation = prev.setting?.buttonAnimation;
       if (!currentAnimation) return prev;
 
       const updatedAnimation = { ...currentAnimation };
 
-      if (field === 'type') {
-        updatedAnimation.type = value as 'hover' | 'click';
-      } else if (field.startsWith('animation.')) {
-        const animationField = field.split('.')[1];
+      if (field === "type") {
+        updatedAnimation.type = value as "hover" | "click";
+      } else if (field.startsWith("animation.")) {
+        const animationField = field.split(".")[1];
         let processedValue = value;
-        
-        if (animationField === 'duration' || animationField === 'delay') {
-          const numValue = typeof value === 'string' ? parseFloat(value) : value;
+
+        if (animationField === "duration" || animationField === "delay") {
+          const numValue =
+            typeof value === "string" ? parseFloat(value) : value;
           processedValue = `${numValue}s`;
         }
-        
+
         const newAnimationConfig = {
           ...updatedAnimation.animation,
-          [animationField]: processedValue
+          [animationField]: processedValue,
         };
-        
+
         if (animationService.validateConfig(newAnimationConfig)) {
           updatedAnimation.animation = newAnimationConfig;
         } else {
-          updatedAnimation.animation = animationService.getDefaultConfig(updatedAnimation.animation.type);
+          updatedAnimation.animation = animationService.getDefaultConfig(
+            updatedAnimation.animation.type
+          );
         }
       }
 
@@ -329,16 +345,19 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
         ...prev,
         setting: {
           ...prev.setting,
-          buttonAnimation: updatedAnimation
-        }
+          buttonAnimation: updatedAnimation,
+        },
       };
     });
   };
 
-  const handleTabChange = (tab: "content" | "style" | "spacing") => {
+  const handleTabChange = (
+    tab: "content" | "style" | "spacing" | "animation"
+  ) => {
     setIsContentOpen(tab === "content");
     setIsStyleSettingsOpen(tab === "style");
     setIsSpacingOpen(tab === "spacing");
+    setIsAnimationOpen(tab === "animation");
   };
 
   useEffect(() => {
@@ -569,31 +588,37 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                                 <label className="flex items-center gap-2">
                                   <input
                                     type="checkbox"
-                                    checked={useRouteSelectBtns[Number(key)] || false}
+                                    checked={
+                                      useRouteSelectBtns[Number(key)] || false
+                                    }
                                     onChange={(e) =>
-                                      setUseRouteSelectBtns(prev => ({
+                                      setUseRouteSelectBtns((prev) => ({
                                         ...prev,
-                                        [Number(key)]: e.target.checked
+                                        [Number(key)]: e.target.checked,
                                       }))
                                     }
                                     className="rounded"
                                   />
-                                  <span className="text-sm">انتخاب از مسیرهای موجود</span>
+                                  <span className="text-sm">
+                                    انتخاب از مسیرهای موجود
+                                  </span>
                                 </label>
                               </div>
                               {useRouteSelectBtns[Number(key)] ? (
                                 <select
                                   value={block.btnLink || ""}
-                                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                                    setUserInputData(prev => ({
+                                  onChange={(
+                                    e: React.ChangeEvent<HTMLSelectElement>
+                                  ) => {
+                                    setUserInputData((prev) => ({
                                       ...prev,
                                       blocks: {
                                         ...prev.blocks,
                                         [Number(key)]: {
                                           ...prev.blocks[Number(key)],
-                                          btnLink: e.target.value
-                                        }
-                                      }
+                                          btnLink: e.target.value,
+                                        },
+                                      },
                                     }));
                                   }}
                                   className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
@@ -610,7 +635,9 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                                   type="text"
                                   name="btnLink"
                                   value={block.btnLink || ""}
-                                  onChange={(e) => handleBlockChange(e, Number(key))}
+                                  onChange={(e) =>
+                                    handleBlockChange(e, Number(key))
+                                  }
                                   className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                                   placeholder="آدرس لینک یا مسیر سفارشی"
                                 />
@@ -849,111 +876,198 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                   <option value="row-reverse">ردیف معکوس</option>
                 </select>
               </div>
+            </div>
+          </>
+        )}
 
-              {/* Image Animation Settings */}
-              <div className="rounded-lg flex flex-col gap-3 border-t pt-4 mt-6">
-                <div className="flex justify-between items-center">
-                  <h4 className="font-semibold text-sky-700">انیمیشن تصاویر</h4>
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={hasImageAnimation}
-                      onChange={(e) => handleImageAnimationToggle(e.target.checked)}
-                      className="rounded"
-                    />
-                    <span className="text-sm">فعال کردن انیمیشن</span>
-                  </label>
+        {isAnimationOpen && (
+          <div className="space-y-4 animate-slideDown">
+            {" "}
+            <div className="rounded-lg flex flex-col gap-3 border-t pt-4 mt-6">
+              <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <div className="flex items-center gap-2">
+                  <HiSparkles className="w-4 h-4 text-blue-600" />
+                  <span className="text-sm font-medium text-gray-800">
+                    انیمیشن تصویر
+                  </span>
                 </div>
 
-                {hasImageAnimation && currentImageAnimation && (
-                  <div className="border border-gray-200 rounded-lg p-4 space-y-4">
-                    <h5 className="font-medium text-gray-700">تنظیمات انیمیشن تصاویر</h5>
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={hasImageAnimation}
+                    onChange={(e) =>
+                      handleImageAnimationToggle(e.target.checked)
+                    }
+                    className="sr-only"
+                  />
+                  <div
+                    className={`w-[42px] h-5 rounded-full transition-colors duration-200 ${
+                      hasImageAnimation ? "bg-blue-500" : "bg-gray-300"
+                    }`}
+                  >
+                    <div
+                      className={`w-4 h-4 bg-white rounded-full shadow transform transition-transform duration-200 mt-0.5 ${
+                        hasImageAnimation
+                          ? "-translate-x-6"
+                          : "-translate-x-0.5"
+                      }`}
+                    />
+                  </div>
+                </label>
+              </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Effect Type */}
-                      <div>
-                        <label className="block mb-1 text-sm font-medium text-gray-700">
-                          نوع تریگر
-                        </label>
-                        <select
-                          value={currentImageAnimation.type}
-                          onChange={(e) => handleImageAnimationChange('type', e.target.value)}
-                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        >
-                          <option value="hover">هاور (Hover)</option>
-                          <option value="click">کلیک (Click)</option>
-                        </select>
+              {hasImageAnimation && currentImageAnimation && (
+                <div className="space-y-4 p-4 bg-transparent border border-gray-200 rounded-lg">
+                  <h5 className="text-sm font-medium text-gray-700">
+                    تنظیمات انیمیشن تصاویر
+                  </h5>
+
+                  {/* Trigger & Animation Type */}
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">
+                        تریگر
+                      </label>
+                      <select
+                        value={currentImageAnimation.type}
+                        onChange={(e) =>
+                          handleImageAnimationChange("type", e.target.value)
+                        }
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                      >
+                        <option value="hover">هاور</option>
+                        <option value="click">کلیک</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">
+                        نوع انیمیشن
+                      </label>
+                      <select
+                        value={currentImageAnimation.animation.type}
+                        onChange={(e) =>
+                          handleImageAnimationChange(
+                            "animation.type",
+                            e.target.value
+                          )
+                        }
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                      >
+                        {animationService.getAnimationTypes().map((type) => (
+                          <option key={type} value={type}>
+                            {type === "pulse" && "پالس"}
+                            {type === "glow" && "درخشش"}
+                            {type === "brightness" && "روشنایی"}
+                            {type === "blur" && "تاری"}
+                            {type === "saturate" && "اشباع رنگ"}
+                            {type === "contrast" && "کنتراست"}
+                            {type === "opacity" && "شفافیت"}
+                            {type === "shadow" && "سایه"}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {animationService.getAnimationPreview(
+                          currentImageAnimation.animation.type
+                        )}
                       </div>
+                    </div>
+                  </div>
 
-                      {/* Animation Type */}
-                      <div>
-                        <label className="block mb-1 text-sm font-medium text-gray-700">
-                          نوع انیمیشن
-                        </label>
-                        <select
-                          value={currentImageAnimation.animation.type}
-                          onChange={(e) => handleImageAnimationChange('animation.type', e.target.value)}
-                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        >
-                          {animationService.getAnimationTypes().map(type => (
-                            <option key={type} value={type}>
-                              {type === 'pulse' && 'پالس'}
-                              {type === 'glow' && 'درخشش'}
-                              {type === 'brightness' && 'روشنایی'}
-                              {type === 'blur' && 'تاری'}
-                              {type === 'saturate' && 'اشباع رنگ'}
-                              {type === 'contrast' && 'کنتراست'}
-                              {type === 'opacity' && 'شفافیت'}
-                              {type === 'shadow' && 'سایه'}
-                            </option>
-                          ))}
-                        </select>
-                        <div className="text-xs text-gray-500 mt-1">
-                          {animationService.getAnimationPreview(currentImageAnimation.animation.type)}
-                        </div>
+                  {/* Timing Controls */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">
+                        مدت (ثانیه)
+                      </label>
+                      <input
+                        type="number"
+                        min="0.1"
+                        max="10"
+                        step="0.1"
+                        value={
+                          parseFloat(
+                            currentImageAnimation.animation.duration.replace(
+                              "s",
+                              ""
+                            )
+                          ) || 1
+                        }
+                        onChange={(e) =>
+                          handleImageAnimationChange(
+                            "animation.duration",
+                            e.target.value
+                          )
+                        }
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                      />
+                      <div className="text-xs text-gray-500 mt-1">
+                        فعلی: {currentImageAnimation.animation.duration}
                       </div>
+                    </div>
 
-                      {/* Duration */}
-                      <div>
-                        <label className="block mb-1 text-sm font-medium text-gray-700">
-                          مدت زمان (ثانیه)
-                        </label>
-                        <input
-                          type="number"
-                          min="0.1"
-                          max="10"
-                          step="0.1"
-                          value={parseFloat(currentImageAnimation.animation.duration.replace('s', '')) || 1}
-                          onChange={(e) => handleImageAnimationChange('animation.duration', e.target.value)}
-                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                        <div className="text-gray-500 text-xs mt-1">
-                          فعلی: {currentImageAnimation.animation.duration}
-                        </div>
-                      </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">
+                        تکرار
+                      </label>
+                      <select
+                        value={
+                          currentImageAnimation.animation.iterationCount || "1"
+                        }
+                        onChange={(e) =>
+                          handleImageAnimationChange(
+                            "animation.iterationCount",
+                            e.target.value
+                          )
+                        }
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                      >
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="5">5</option>
+                        <option value="infinite">∞</option>
+                      </select>
+                    </div>
+                  </div>
 
-                      {/* Timing Function */}
+                  {/* Advanced Settings - Collapsible */}
+                  <details className="group">
+                    <summary className="flex items-center justify-between cursor-pointer text-xs font-medium text-gray-600 hover:text-gray-800 py-2">
+                      <span>تنظیمات پیشرفته</span>
+                      <HiChevronDown className="w-4 h-4 transform group-open:rotate-180 transition-transform" />
+                    </summary>
+
+                    <div className="mt-3 space-y-3 pt-3 border-t border-gray-200">
                       <div>
-                        <label className="block mb-1 text-sm font-medium text-gray-700">
-                          تابع زمان‌بندی
+                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                          تایمینگ
                         </label>
                         <select
                           value={currentImageAnimation.animation.timing}
-                          onChange={(e) => handleImageAnimationChange('animation.timing', e.target.value)}
-                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          onChange={(e) =>
+                            handleImageAnimationChange(
+                              "animation.timing",
+                              e.target.value
+                            )
+                          }
+                          className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                         >
-                          <option value="ease">ease - طبیعی</option>
-                          <option value="ease-in">ease-in - شروع آهسته</option>
-                          <option value="ease-out">ease-out - پایان آهسته</option>
-                          <option value="ease-in-out">ease-in-out - شروع و پایان آهسته</option>
-                          <option value="linear">linear - خطی</option>
-                          <option value="cubic-bezier(0, 0, 0.2, 1)">cubic-bezier - سفارشی</option>
+                          <option value="ease">ease</option>
+                          <option value="ease-in">ease-in</option>
+                          <option value="ease-out">ease-out</option>
+                          <option value="ease-in-out">ease-in-out</option>
+                          <option value="linear">linear</option>
+                          <option value="cubic-bezier(0, 0, 0.2, 1)">
+                            cubic-bezier
+                          </option>
                         </select>
                       </div>
 
-                      {/* Delay */}
                       <div>
-                        <label className="block mb-1 text-sm font-medium text-gray-700">
+                        <label className="block text-xs font-medium text-gray-700 mb-1">
                           تاخیر (ثانیه)
                         </label>
                         <input
@@ -961,177 +1075,231 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                           min="0"
                           max="5"
                           step="0.1"
-                          value={parseFloat((currentImageAnimation.animation.delay || '0s').replace('s', '')) || 0}
-                          onChange={(e) => handleImageAnimationChange('animation.delay', e.target.value)}
-                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          value={
+                            parseFloat(
+                              (
+                                currentImageAnimation.animation.delay || "0s"
+                              ).replace("s", "")
+                            ) || 0
+                          }
+                          onChange={(e) =>
+                            handleImageAnimationChange(
+                              "animation.delay",
+                              e.target.value
+                            )
+                          }
+                          className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                         />
-                        <div className="text-gray-500 text-xs mt-1">
-                          فعلی: {currentImageAnimation.animation?.delay || '0s'}
+                        <div className="text-xs text-gray-500 mt-1">
+                          فعلی: {currentImageAnimation.animation?.delay || "0s"}
                         </div>
                       </div>
-
-                      {/* Iteration Count */}
-                      <div>
-                        <label className="block mb-1 text-sm font-medium text-gray-700">
-                          تعداد تکرار
-                        </label>
-                        <select
-                          value={currentImageAnimation.animation.iterationCount || '1'}
-                          onChange={(e) => handleImageAnimationChange('animation.iterationCount', e.target.value)}
-                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        >
-                          <option value="1">1 بار</option>
-                          <option value="2">2 بار</option>
-                          <option value="3">3 بار</option>
-                          <option value="5">5 بار</option>
-                          <option value="infinite">بی‌نهایت</option>
-                        </select>
-                      </div>
                     </div>
+                  </details>
 
-                    {/* Animation Preview */}
-                    <div className="mt-4">
+                  {/* Mini Preview with Animation Info */}
+                  <div className="bg-gray-50 rounded-md p-3 border border-gray-200">
+                    <div className="text-center mb-3">
+                      <p className="text-xs text-gray-600 mb-2">پیش‌نمایش</p>
                       <AnimationPreview effects={[currentImageAnimation]} />
                     </div>
+                  </div>
+                </div>
+              )}
 
-                    {/* Animation Info */}
-                    <div className="mt-3 p-3 bg-blue-50 rounded-lg">
-                      <h6 className="font-medium text-blue-800 mb-2">اطلاعات انیمیشن تصاویر</h6>
-                      <div className="text-sm text-blue-700 space-y-1">
-                        <div>
-                          <strong>CSS تولید شده:</strong>
-                          <code className="block mt-1 p-2 bg-white rounded text-xs overflow-x-auto">
-                            {animationService.generateCSS(currentImageAnimation.animation)}
-                          </code>
-                        </div>
-                        <div className="mt-2">
-                          <strong>وضعیت اعتبار:</strong>
-                          <span className={`ml-2 px-2 py-1 rounded text-xs ${
-                            animationService.validateConfig(currentImageAnimation.animation)
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-red-100 text-red-800'
-                          }`}>
-                            {animationService.validateConfig(currentImageAnimation.animation) ? 'معتبر' : 'نامعتبر'}
-                          </span>
-                        </div>
+              {!hasImageAnimation && (
+                <div className="text-center py-6 text-gray-500 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                  <HiSparkles className="w-6 h-6 mx-auto mb-2 text-gray-400" />
+                  <p className="text-xs">انیمیشن تصاویر غیرفعال است</p>
+                </div>
+              )}
+            </div>
+            {/* Button Animation Settings */}
+            <div className="rounded-lg flex flex-col gap-3 border-t pt-4 mt-6">
+              <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <div className="flex items-center gap-2">
+                  <HiSparkles className="w-4 h-4 text-blue-600" />
+                  <span className="text-sm font-medium text-gray-800">
+                    انیمیشن دکمه
+                  </span>
+                </div>
+
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={hasButtonAnimation}
+                    onChange={(e) =>
+                      handleButtonAnimationToggle(e.target.checked)
+                    }
+                    className="sr-only"
+                  />
+                  <div
+                    className={`w-[42px] h-5 rounded-full transition-colors duration-200 ${
+                      hasButtonAnimation ? "bg-blue-500" : "bg-gray-300"
+                    }`}
+                  >
+                    <div
+                      className={`w-4 h-4 bg-white rounded-full shadow transform transition-transform duration-200 mt-0.5 ${
+                        hasButtonAnimation
+                          ? "-translate-x-6"
+                          : "-translate-x-0.5"
+                      }`}
+                    />
+                  </div>
+                </label>
+              </div>
+
+              {hasButtonAnimation && currentButtonAnimation && (
+                <div className="space-y-4 p-4 bg-transparent border border-gray-200 rounded-lg">
+                  <h5 className="text-sm font-medium text-gray-700">
+                    تنظیمات انیمیشن دکمه‌ها
+                  </h5>
+
+                  {/* Trigger & Animation Type */}
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">
+                        تریگر
+                      </label>
+                      <select
+                        value={currentButtonAnimation.type}
+                        onChange={(e) =>
+                          handleButtonAnimationChange("type", e.target.value)
+                        }
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                      >
+                        <option value="hover">هاور</option>
+                        <option value="click">کلیک</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">
+                        نوع انیمیشن
+                      </label>
+                      <select
+                        value={currentButtonAnimation.animation.type}
+                        onChange={(e) =>
+                          handleButtonAnimationChange(
+                            "animation.type",
+                            e.target.value
+                          )
+                        }
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                      >
+                        {animationService.getAnimationTypes().map((type) => (
+                          <option key={type} value={type}>
+                            {type === "pulse" && "پالس"}
+                            {type === "glow" && "درخشش"}
+                            {type === "brightness" && "روشنایی"}
+                            {type === "blur" && "تاری"}
+                            {type === "saturate" && "اشباع رنگ"}
+                            {type === "contrast" && "کنتراست"}
+                            {type === "opacity" && "شفافیت"}
+                            {type === "shadow" && "سایه"}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {animationService.getAnimationPreview(
+                          currentButtonAnimation.animation.type
+                        )}
                       </div>
                     </div>
                   </div>
-                )}
 
-                {!hasImageAnimation && (
-                  <div className="text-center text-gray-500 py-8 border border-gray-200 rounded-lg bg-gray-50">
-                    <div className="mb-2">🖼️</div>
-                    <div>انیمیشن تصاویر غیرفعال است</div>
-                    <div className="text-sm mt-1">برای فعال کردن چک‌باکس بالا را انتخاب کنید</div>
+                  {/* Timing Controls */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">
+                        مدت (ثانیه)
+                      </label>
+                      <input
+                        type="number"
+                        min="0.1"
+                        max="10"
+                        step="0.1"
+                        value={
+                          parseFloat(
+                            currentButtonAnimation.animation.duration.replace(
+                              "s",
+                              ""
+                            )
+                          ) || 1
+                        }
+                        onChange={(e) =>
+                          handleButtonAnimationChange(
+                            "animation.duration",
+                            e.target.value
+                          )
+                        }
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                      />
+                      <div className="text-xs text-gray-500 mt-1">
+                        فعلی: {currentButtonAnimation.animation.duration}
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">
+                        تکرار
+                      </label>
+                      <select
+                        value={
+                          currentButtonAnimation.animation.iterationCount || "1"
+                        }
+                        onChange={(e) =>
+                          handleButtonAnimationChange(
+                            "animation.iterationCount",
+                            e.target.value
+                          )
+                        }
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                      >
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="5">5</option>
+                        <option value="infinite">∞</option>
+                      </select>
+                    </div>
                   </div>
-                )}
-              </div>
 
-              {/* Button Animation Settings */}
-              <div className="rounded-lg flex flex-col gap-3 border-t pt-4 mt-6">
-                <div className="flex justify-between items-center">
-                  <h4 className="font-semibold text-sky-700">انیمیشن دکمه‌ها</h4>
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={hasButtonAnimation}
-                      onChange={(e) => handleButtonAnimationToggle(e.target.checked)}
-                      className="rounded"
-                    />
-                    <span className="text-sm">فعال کردن انیمیشن</span>
-                  </label>
-                </div>
+                  {/* Advanced Settings - Collapsible */}
+                  <details className="group">
+                    <summary className="flex items-center justify-between cursor-pointer text-xs font-medium text-gray-600 hover:text-gray-800 py-2">
+                      <span>تنظیمات پیشرفته</span>
+                      <HiChevronDown className="w-4 h-4 transform group-open:rotate-180 transition-transform" />
+                    </summary>
 
-                {hasButtonAnimation && currentButtonAnimation && (
-                  <div className="border border-gray-200 rounded-lg p-4 space-y-4">
-                    <h5 className="font-medium text-gray-700">تنظیمات انیمیشن دکمه‌ها</h5>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Effect Type */}
+                    <div className="mt-3 space-y-3 pt-3 border-t border-gray-200">
                       <div>
-                        <label className="block mb-1 text-sm font-medium text-gray-700">
-                          نوع تریگر
-                        </label>
-                        <select
-                          value={currentButtonAnimation.type}
-                          onChange={(e) => handleButtonAnimationChange('type', e.target.value)}
-                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        >
-                          <option value="hover">هاور (Hover)</option>
-                          <option value="click">کلیک (Click)</option>
-                        </select>
-                      </div>
-
-                      {/* Animation Type */}
-                      <div>
-                        <label className="block mb-1 text-sm font-medium text-gray-700">
-                          نوع انیمیشن
-                        </label>
-                        <select
-                          value={currentButtonAnimation.animation.type}
-                          onChange={(e) => handleButtonAnimationChange('animation.type', e.target.value)}
-                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        >
-                          {animationService.getAnimationTypes().map(type => (
-                            <option key={type} value={type}>
-                              {type === 'pulse' && 'پالس'}
-                              {type === 'glow' && 'درخشش'}
-                              {type === 'brightness' && 'روشنایی'}
-                              {type === 'blur' && 'تاری'}
-                              {type === 'saturate' && 'اشباع رنگ'}
-                              {type === 'contrast' && 'کنتراست'}
-                              {type === 'opacity' && 'شفافیت'}
-                              {type === 'shadow' && 'سایه'}
-                            </option>
-                          ))}
-                        </select>
-                        <div className="text-xs text-gray-500 mt-1">
-                          {animationService.getAnimationPreview(currentButtonAnimation.animation.type)}
-                        </div>
-                      </div>
-
-                      {/* Duration */}
-                      <div>
-                        <label className="block mb-1 text-sm font-medium text-gray-700">
-                          مدت زمان (ثانیه)
-                        </label>
-                        <input
-                          type="number"
-                          min="0.1"
-                          max="10"
-                          step="0.1"
-                          value={parseFloat(currentButtonAnimation.animation.duration.replace('s', '')) || 1}
-                          onChange={(e) => handleButtonAnimationChange('animation.duration', e.target.value)}
-                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                        <div className="text-gray-500 text-xs mt-1">
-                          فعلی: {currentButtonAnimation.animation.duration}
-                        </div>
-                      </div>
-
-                      {/* Timing Function */}
-                      <div>
-                        <label className="block mb-1 text-sm font-medium text-gray-700">
-                          تابع زمان‌بندی
+                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                          تایمینگ
                         </label>
                         <select
                           value={currentButtonAnimation.animation.timing}
-                          onChange={(e) => handleButtonAnimationChange('animation.timing', e.target.value)}
-                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          onChange={(e) =>
+                            handleButtonAnimationChange(
+                              "animation.timing",
+                              e.target.value
+                            )
+                          }
+                          className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                         >
-                          <option value="ease">ease - طبیعی</option>
-                          <option value="ease-in">ease-in - شروع آهسته</option>
-                          <option value="ease-out">ease-out - پایان آهسته</option>
-                          <option value="ease-in-out">ease-in-out - شروع و پایان آهسته</option>
-                          <option value="linear">linear - خطی</option>
-                          <option value="cubic-bezier(0, 0, 0.2, 1)">cubic-bezier - سفارشی</option>
+                          <option value="ease">ease</option>
+                          <option value="ease-in">ease-in</option>
+                          <option value="ease-out">ease-out</option>
+                          <option value="ease-in-out">ease-in-out</option>
+                          <option value="linear">linear</option>
+                          <option value="cubic-bezier(0, 0, 0.2, 1)">
+                            cubic-bezier
+                          </option>
                         </select>
                       </div>
 
-                      {/* Delay */}
                       <div>
-                        <label className="block mb-1 text-sm font-medium text-gray-700">
+                        <label className="block text-xs font-medium text-gray-700 mb-1">
                           تاخیر (ثانیه)
                         </label>
                         <input
@@ -1139,74 +1307,47 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                           min="0"
                           max="5"
                           step="0.1"
-                          value={parseFloat((currentButtonAnimation.animation.delay || '0s').replace('s', '')) || 0}
-                          onChange={(e) => handleButtonAnimationChange('animation.delay', e.target.value)}
-                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          value={
+                            parseFloat(
+                              (
+                                currentButtonAnimation.animation.delay || "0s"
+                              ).replace("s", "")
+                            ) || 0
+                          }
+                          onChange={(e) =>
+                            handleButtonAnimationChange(
+                              "animation.delay",
+                              e.target.value
+                            )
+                          }
+                          className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                         />
-                        <div className="text-gray-500 text-xs mt-1">
-                          فعلی: {currentButtonAnimation.animation?.delay || '0s'}
+                        <div className="text-xs text-gray-500 mt-1">
+                          فعلی:{" "}
+                          {currentButtonAnimation.animation?.delay || "0s"}
                         </div>
                       </div>
-
-                      {/* Iteration Count */}
-                      <div>
-                        <label className="block mb-1 text-sm font-medium text-gray-700">
-                          تعداد تکرار
-                        </label>
-                        <select
-                          value={currentButtonAnimation.animation.iterationCount || '1'}
-                          onChange={(e) => handleButtonAnimationChange('animation.iterationCount', e.target.value)}
-                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        >
-                          <option value="1">1 بار</option>
-                          <option value="2">2 بار</option>
-                          <option value="3">3 بار</option>
-                          <option value="5">5 بار</option>
-                          <option value="infinite">بی‌نهایت</option>
-                        </select>
-                      </div>
                     </div>
+                  </details>
 
-                    {/* Animation Preview */}
-                    <div className="mt-4">
+                  {/* Mini Preview with Animation Info */}
+                  <div className="bg-gray-50 rounded-md p-3 border border-gray-200">
+                    <div className="text-center mb-3">
+                      <p className="text-xs text-gray-600 mb-2">پیش‌نمایش</p>
                       <AnimationPreview effects={[currentButtonAnimation]} />
                     </div>
-
-                    {/* Animation Info */}
-                    <div className="mt-3 p-3 bg-green-50 rounded-lg">
-                      <h6 className="font-medium text-green-800 mb-2">اطلاعات انیمیشن دکمه‌ها</h6>
-                      <div className="text-sm text-green-700 space-y-1">
-                        <div>
-                          <strong>CSS تولید شده:</strong>
-                          <code className="block mt-1 p-2 bg-white rounded text-xs overflow-x-auto">
-                            {animationService.generateCSS(currentButtonAnimation.animation)}
-                          </code>
-                        </div>
-                        <div className="mt-2">
-                          <strong>وضعیت اعتبار:</strong>
-                          <span className={`ml-2 px-2 py-1 rounded text-xs ${
-                            animationService.validateConfig(currentButtonAnimation.animation)
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-red-100 text-red-800'
-                          }`}>
-                            {animationService.validateConfig(currentButtonAnimation.animation) ? 'معتبر' : 'نامعتبر'}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
                   </div>
-                )}
+                </div>
+              )}
 
-                {!hasButtonAnimation && (
-                  <div className="text-center text-gray-500 py-8 border border-gray-200 rounded-lg bg-gray-50">
-                    <div className="mb-2">🔘</div>
-                    <div>انیمیشن دکمه‌ها غیرفعال است</div>
-                    <div className="text-sm mt-1">برای فعال کردن چک‌باکس بالا را انتخاب کنید</div>
-                  </div>
-                )}
-              </div>
+              {!hasButtonAnimation && (
+                <div className="text-center py-6 text-gray-500 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                  <HiSparkles className="w-6 h-6 mx-auto mb-2 text-gray-400" />
+                  <p className="text-xs">انیمیشن دکمه‌ها غیرفعال است</p>
+                </div>
+              )}
             </div>
-          </>
+          </div>
         )}
 
         {/* Spacing Settings */}

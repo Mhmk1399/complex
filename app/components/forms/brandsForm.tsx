@@ -607,46 +607,7 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
                   <AnimationPreview effects={[currentAnimation]} />
                 </div>
 
-                {/* Compact Animation Info */}
-                <details className="group">
-                  <summary className="flex items-center justify-between cursor-pointer text-xs font-medium text-blue-600 hover:text-blue-800">
-                    <span>اطلاعات انیمیشن</span>
-                    <HiChevronDown className="w-3 h-3 transform group-open:rotate-180 transition-transform" />
-                  </summary>
-
-                  <div className="mt-2 space-y-2">
-                    <div>
-                      <span className="text-xs font-medium text-gray-600">
-                        CSS:
-                      </span>
-                      <code className="block mt-1 p-2 bg-white rounded text-xs overflow-x-auto border">
-                        {animationService.generateCSS(
-                          currentAnimation.animation
-                        )}
-                      </code>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-medium text-gray-600">
-                        وضعیت:
-                      </span>
-                      <span
-                        className={`px-2 py-1 rounded text-xs ${
-                          animationService.validateConfig(
-                            currentAnimation.animation
-                          )
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
-                      >
-                        {animationService.validateConfig(
-                          currentAnimation.animation
-                        )
-                          ? "معتبر"
-                          : "نامعتبر"}
-                      </span>
-                    </div>
-                  </div>
-                </details>
+             
               </div>
             </div>
           )}

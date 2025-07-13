@@ -614,7 +614,7 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
 
       {/* Spacing Settings */}
       {isSpacingOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
+        <div className="p-4  animate-slideDown">
           <div className="rounded-lg p-2 flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

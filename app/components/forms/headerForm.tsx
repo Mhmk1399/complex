@@ -89,6 +89,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
+  const [isAnimationOpen, setIsAnimationOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
@@ -278,10 +279,13 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
     }));
     setTimeout(() => setIsUpdating(false), 100);
   };
-  const handleTabChange = (tab: "content" | "style" | "spacing") => {
+  const handleTabChange = (
+    tab: "content" | "style" | "spacing" | "animation"
+  ) => {
     setIsContentOpen(tab === "content");
     setIsStyleSettingsOpen(tab === "style");
     setIsSpacingOpen(tab === "spacing");
+    setIsAnimationOpen(tab === "animation");
   };
 
   return (
@@ -545,6 +549,15 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {isAnimationOpen && (
+        <div className="p-4  animate-slideDown">
+          <h3 className="text-lg font-semibold text-sky-700">
+            تنظیمات انیمیشن
+          </h3>
+          <p>تنظیماتی برای انیمیشن وجود ندارد.</p>
         </div>
       )}
 

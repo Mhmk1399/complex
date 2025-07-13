@@ -232,7 +232,7 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
       )}
 
       {isAnimationOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
+        <div className="p-4  animate-slideDown">
           <h3 className="text-lg font-semibold text-sky-700">
             تنظیمات انیمیشن
           </h3>
@@ -242,7 +242,7 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
 
       {/* Dropdown Content */}
       {isSpacingOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
+        <div className="p-4 animate-slideDown">
           <div className="bg-gray-50 rounded-lg p-2 flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

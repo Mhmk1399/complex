@@ -64,6 +64,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
+  const [isAnimationOpen, setIsAnimationOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
   const handleUpdate = (
@@ -176,10 +177,13 @@ export const FooterForm: React.FC<FooterFormProps> = ({
     setTimeout(() => setIsUpdating(false), 100);
   };
 
-  const handleTabChange = (tab: "content" | "style" | "spacing") => {
+  const handleTabChange = (
+    tab: "content" | "style" | "spacing" | "animation"
+  ) => {
     setIsContentOpen(tab === "content");
     setIsStyleSettingsOpen(tab === "style");
     setIsSpacingOpen(tab === "spacing");
+    setIsAnimationOpen(tab === "animation");
   };
   useEffect(() => {
     setIsContentOpen(true);
@@ -194,7 +198,6 @@ export const FooterForm: React.FC<FooterFormProps> = ({
       <TabButtons onTabChange={handleTabChange} />
 
       {/* Content Section */}
-
       {isContentOpen && (
         <>
           <div className="space-y-4 p-4 animate-slideDown">
@@ -262,7 +265,6 @@ export const FooterForm: React.FC<FooterFormProps> = ({
       )}
 
       {/* Style Settings */}
-
       {isStyleSettingsOpen && (
         <>
           <div className="grid md:grid-cols-1 gap-4  p-4 animate-slideDown">
@@ -277,7 +279,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
             </div>
 
             <label>سایز متن سربرگ</label>
-            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
+            <div className="flex items-center w-full justify-center gap-4 pط-4 rounded-lg ">
               <input
                 type="range"
                 min="0"
@@ -285,11 +287,12 @@ export const FooterForm: React.FC<FooterFormProps> = ({
                 name="textFontSize"
                 value={userInputData?.blocks?.setting?.textFontSize || "250"}
                 onChange={handleBlockSettingChange}
+                className="w-full"
               />
-              <p className="text-sm text-gray-600 text-nowrap">
-                {userInputData?.blocks.setting.textFontSize}px
-              </p>
             </div>
+            <p className="text-sm text-gray-600 text-nowrap">
+              {userInputData?.blocks.setting.textFontSize}px
+            </p>
             <div>
               <label className="block mb-1">وزن متن سربرگ</label>
               <select
@@ -314,21 +317,22 @@ export const FooterForm: React.FC<FooterFormProps> = ({
               />
             </div>
             <label>سایز توضیحات</label>
-            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
+            <div className="flex items-center w-full justify-center gap-4 pط-4 rounded-lg ">
               <input
                 type="range"
                 min="0"
                 max="100"
                 name="descriptionFontSize"
+                className="w-full"
                 value={
                   userInputData?.blocks?.setting?.descriptionFontSize || "250"
                 }
                 onChange={handleBlockSettingChange}
               />
-              <p className="text-sm text-gray-600 text-nowrap">
-                {userInputData?.blocks.setting.descriptionFontSize}px
-              </p>
             </div>
+            <p className="text-sm text-gray-600 text-nowrap">
+              {userInputData?.blocks.setting.descriptionFontSize}px
+            </p>
 
             <div>
               <label className="block mb-1">وزن متن توضیحات</label>
@@ -496,19 +500,22 @@ export const FooterForm: React.FC<FooterFormProps> = ({
                 onChange={handleBlockSettingChange}
               />
             </div>
-            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
+            <label>سایز متن آیکون ها</label>
+
+            <div className="flex items-center w-full justify-center gap-4 pط-4 rounded-lg ">
               <input
                 type="range"
                 min="0"
                 max="100"
                 name="trustItemSize"
+                className="w-full"
                 value={userInputData?.blocks?.setting?.trustItemSize || "16"}
                 onChange={handleBlockSettingChange}
               />
-              <p className="text-sm text-gray-600 text-nowrap">
-                {userInputData?.blocks.setting.trustItemSize}px
-              </p>
             </div>
+            <p className="text-sm text-gray-600 text-nowrap">
+              {userInputData?.blocks.setting.trustItemSize}px
+            </p>
             <div className="rounded-lg flex items-center justify-between ">
               <ColorInput
                 label="رنگ متن آیتم‌ها"
@@ -560,9 +567,17 @@ export const FooterForm: React.FC<FooterFormProps> = ({
         </>
       )}
 
-      {/* Dropdown Header */}
+      {/* animation */}
+      {isAnimationOpen && (
+        <div className="p-4  animate-slideDown">
+          <h3 className="text-lg font-semibold text-sky-700">
+            تنظیمات انیمیشن
+          </h3>
+          <p>تنظیماتی برای انیمیشن وجود ندارد.</p>
+        </div>
+      )}
 
-      {/* Dropdown Content */}
+      {/* spacing */}
       {isSpacingOpen && (
         <div className="p-4 animate-slideDown">
           <div className=" rounded-lg flex items-center justify-center">

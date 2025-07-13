@@ -60,6 +60,8 @@ export const VideoForm: React.FC<VideoFormProps> = ({
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
+  const [isAnimationOpen, setIsAnimationOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleUpdate = (
     type: "margin" | "padding",
@@ -126,8 +128,6 @@ export const VideoForm: React.FC<VideoFormProps> = ({
     }));
   };
 
-  const [isUpdating, setIsUpdating] = useState(false);
-
   const handleBlockSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -150,11 +150,15 @@ export const VideoForm: React.FC<VideoFormProps> = ({
     setTimeout(() => setIsUpdating(false), 100);
   };
 
-  const handleTabChange = (tab: "content" | "style" | "spacing") => {
+  const handleTabChange = (
+    tab: "content" | "style" | "spacing" | "animation"
+  ) => {
     setIsContentOpen(tab === "content");
     setIsStyleSettingsOpen(tab === "style");
     setIsSpacingOpen(tab === "spacing");
+    setIsAnimationOpen(tab === "animation");
   };
+
   useEffect(() => {
     setIsContentOpen(true);
   }, []);
@@ -214,7 +218,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({
       {/* Style Settings */}
 
       {isStyleSettingsOpen && (
-        <div className="p-4 border-t border-gray-100 space-y-6 animate-slideDown">
+        <div className="p-4  space-y-6 animate-slideDown">
           {/* Heading Settings */}
           <div className=" rounded-lg flex flex-col gap-3">
             <h4 className="text-base font-bold text-sky-700">تنظیمات سربرگ</h4>
@@ -381,11 +385,19 @@ export const VideoForm: React.FC<VideoFormProps> = ({
           </div>
         </div>
       )}
+      {isAnimationOpen && (
+        <div className="p-4  animate-slideDown">
+          <h3 className="text-lg font-semibold text-sky-700">
+            تنظیمات انیمیشن
+          </h3>
+          <p>تنظیماتی برای انیمیشن وجود ندارد.</p>
+        </div>
+      )}
 
       {/* Spacing Settings Dropdown */}
 
       {isSpacingOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
+        <div className="p-4  animate-slideDown">
           <div className="rounded-lg p-2 flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

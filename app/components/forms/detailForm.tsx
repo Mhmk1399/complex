@@ -453,7 +453,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
       )}
 
       {isAnimationOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
+        <div className="p-4  animate-slideDown">
           <h3 className="text-lg font-semibold text-sky-700">
             تنظیمات انیمیشن
           </h3>
@@ -463,7 +463,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
 
       {/* Spacing Settings */}
       {isSpacingOpen && (
-        <div className="p-4 border-t border-gray-100 animate-slideDown">
+        <div className="p-4  animate-slideDown">
           <div className="rounded-lg p-2 flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}
