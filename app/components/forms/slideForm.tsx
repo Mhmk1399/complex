@@ -167,6 +167,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
     >
   ) => {
     if (isUpdating) return;
+    setIsUpdating(true);
 
     const { name, value } = e.target;
     setUserInputData((prev: SlideSection) => ({

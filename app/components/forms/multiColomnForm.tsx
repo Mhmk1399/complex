@@ -77,6 +77,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
   const [isAnimationOpen, setIsAnimationOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     setMargin({
@@ -174,6 +175,8 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
   const handleSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
     const { name, value } = e.target;
     setUserInputData((prev: MultiColumnSection) => ({
       ...prev,
@@ -182,6 +185,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
         [name]: value,
       },
     }));
+    setTimeout(() => setIsUpdating(false), 100);
   };
 
   const handleUpdate = (
