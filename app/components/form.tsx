@@ -135,6 +135,237 @@ type FormData =
   | ProductRowSection
   | BlogSection;
 
+const sections = [
+  {
+    id: "SpecialOffer",
+    label: "پیشنهاد شگفت انگیز",
+    image: offer,
+    bgSize: "cover",
+  },
+  {
+    id: "OfferRow",
+    label: "پیشنهاد های هفتگی",
+    image: market,
+    bgSize: "contain",
+  },
+  { id: "ProductsRow", label: "محصولات", image: newproduct, bgSize: "cover" },
+  { id: "Brands", label: "برند", image: brand, bgSize: "cover" },
+  { id: "Gallery", label: "گالری", image: gallery, bgSize: "cover" },
+  { id: "SlideBanner", label: "بنر", image: slidebanner, bgSize: "cover" },
+  { id: "Story", label: "استوری", image: story, bgSize: "cover" },
+  { id: "RichText", label: "متن غنی", image: richtextImage, bgSize: "cover" },
+  {
+    id: "ImageText",
+    label: "عکس نوشته",
+    image: ImageTextImage,
+    bgSize: "cover",
+  },
+  { id: "Banner", label: "بنر", image: bannerImage, bgSize: "cover" },
+  {
+    id: "CollapseFaq",
+    label: "سوالات متداول",
+    image: CollapseFaqImage,
+    bgSize: "cover",
+    bgPosition: "top",
+  },
+  {
+    id: "ContactForm",
+    label: "ارتباط با ما",
+    image: contactImage,
+    bgSize: "cover",
+    bgPosition: "top",
+  },
+  {
+    id: "NewsLetter",
+    label: " خبرنامه",
+    image: newsLetterImage,
+    bgSize: "cover",
+    bgPosition: "top",
+  },
+  {
+    id: "MultiColumn",
+    label: "ستون ها",
+    image: multiColumnImage,
+    bgSize: "cover",
+  },
+  {
+    id: "SlideShow",
+    label: " اسلاید شو",
+    image: slideShowImage,
+    bgSize: "cover",
+    bgPosition: "top",
+  },
+  {
+    id: "MultiRow",
+    label: "  ردیف ها",
+    image: multiRowImage,
+    bgSize: "cover",
+    bgPosition: "top",
+  },
+  { id: "Video", label: "   ویدیو", image: video, bgSize: "contain" },
+  {
+    id: "CanvasEditor",
+    label: "ویرایشگر کانوا",
+    image: canvasEditorImage,
+    bgSize: "cover",
+  },
+  { id: "Collection", label: "کالکشن", image: collection, bgSize: "contain" },
+];
+const smSections = [
+  {
+    name: "RichText",
+    title: "متن غنی",
+    image: richtextSm.src,
+    height: "12rem",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
+  {
+    name: "ImageText",
+    title: "عکس نوشته",
+    image: imagetextSm.src,
+    height: "12rem",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
+  {
+    name: "Banner",
+    title: "بنر",
+    image: bannerSm.src,
+    height: "12rem",
+    backgroundSize: "contain",
+    backgroundPosition: "center",
+  },
+  {
+    name: "CollapseFaq",
+    title: "سوالات متداول",
+    image: collapseSm.src,
+    height: "30rem",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
+  {
+    name: "ContactForm",
+    title: "ارتباط با ما",
+    image: contactSm.src,
+    height: "20rem",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
+  {
+    name: "NewsLetter",
+    title: "خبرنامه",
+    image: newsletterSm.src,
+    height: "12rem",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
+  {
+    name: "MultiColumn",
+    title: "ستون ها",
+    image: columnSm.src,
+    height: "30rem",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
+  {
+    name: "SlideShow",
+    title: "اسلاید شو",
+    image: slideSm.src,
+    height: "27rem",
+    backgroundSize: "contain",
+    backgroundPosition: "top",
+  },
+  {
+    name: "MultiRow",
+    title: "ردیف ها",
+    image: rowSm.src,
+    height: "30rem",
+    backgroundSize: "contain",
+    backgroundPosition: "top",
+  },
+  {
+    name: "Video",
+    title: "ویدیو",
+    image: videoSm.src,
+    height: "20rem",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
+  {
+    name: "CanvasEditor",
+    title: "ویرایشگر کانوا",
+    image: canvasEditorImage?.src,
+    height: "12rem",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
+  {
+    name: "Collection",
+    title: "کالکشن",
+    image: collectionSm.src,
+    height: "20rem",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
+  {
+    name: "SliderCard",
+    title: "اسلایدر کارت",
+    // image: slidercardSm.src,
+    height: "20rem",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
+  {
+    name: "CategoryBox",
+    title: "دسته بندی",
+    // image: categoryboxSm.src,
+    height: "12rem",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
+  {
+    name: "BlogCard",
+    title: "مقالات",
+    // image: blogcardSm.src,
+    height: "20rem",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
+  {
+    name: "FloatingCard",
+    title: "کارت شناور",
+    // image: floatingcardSm.src,
+    height: "15rem",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
+  {
+    name: "Timeline",
+    title: "تایملاین",
+    // image: timelineSm.src,
+    height: "30rem",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
+  {
+    name: "FeatureBox",
+    title: "فیچر باکس",
+    // image: featureboxSm.src,
+    height: "15rem",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
+  {
+    name: "PriceTable",
+    title: "جدول قیمت",
+    // image: pricetableSm.src,
+    height: "20rem",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
+];
+
 // Start scrollbar styles for webkit browsers
 const scrollbarStyles = `
   /* Scrollbar Track */
@@ -198,7 +429,7 @@ export const Form = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [contentHeight, setContentHeight] = useState<number>(0);
   const contentRef = useRef<HTMLDivElement>(null);
- console.log(selectedComponent,"selectedComponent")
+  console.log(selectedComponent, "selectedComponent");
   // for get the height of form
   useEffect(() => {
     const updateHeight = () => {
@@ -274,17 +505,20 @@ export const Form = () => {
     }
   }, [selectedComponent]);
 
- useEffect(() => {
-  if (userInputData && typeof userInputData === 'object' && Object.keys(userInputData).length > 0) {
-    const newLayout = JasonChanger(
-      layout,
-      selectedComponent,
-      userInputData as Section
-    );
-    setLayout(newLayout);
-  }
-}, [userInputData]);
-
+  useEffect(() => {
+    if (
+      userInputData &&
+      typeof userInputData === "object" &&
+      Object.keys(userInputData).length > 0
+    ) {
+      const newLayout = JasonChanger(
+        layout,
+        selectedComponent,
+        userInputData as Section
+      );
+      setLayout(newLayout);
+    }
+  }, [userInputData]);
 
   const SortableItem = ({ id }: { id: string }) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
@@ -778,311 +1012,27 @@ export const Form = () => {
                     transition={{ delay: 0.4 }}
                     className="modal-content flex flex-col items-center justify-center gap-12"
                   >
-                    <div
-                      onClick={() => addSection("SpecialOffer")}
-                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                      style={{
-                        ...imageContainerStyle,
-                        backgroundImage: `url(${offer.src})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        backgroundRepeat: "no-repeat",
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {"پیشنهاد شگفت انگیز"}
-                      </span>
-                    </div>
-                    <div
-                      onClick={() => addSection("OfferRow")}
-                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                      style={{
-                        ...imageContainerStyle,
-                        backgroundImage: `url(${market.src})`,
-                        backgroundSize: "contain",
-                        backgroundPosition: "center",
-                        backgroundRepeat: "no-repeat",
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {"پیشنهاد های هفتگی"}
-                      </span>
-                    </div>
-                    <div
-                      onClick={() => addSection("ProductsRow")}
-                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                      style={{
-                        ...imageContainerStyle,
-                        backgroundImage: `url(${newproduct.src})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        backgroundRepeat: "no-repeat",
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {"محصولات"}
-                      </span>
-                    </div>
-                    <div
-                      onClick={() => addSection("Brands")}
-                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                      style={{
-                        ...imageContainerStyle,
-                        backgroundImage: `url(${brand.src})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        backgroundRepeat: "no-repeat",
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {"برند"}
-                      </span>
-                    </div>
-                    <div
-                      onClick={() => addSection("Gallery")}
-                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                      style={{
-                        ...imageContainerStyle,
-                        backgroundImage: `url(${gallery.src})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        backgroundRepeat: "no-repeat",
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {"گالری"}
-                      </span>
-                    </div>
-                    <div
-                      onClick={() => addSection("SlideBanner")}
-                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                      style={{
-                        ...imageContainerStyle,
-                        backgroundImage: `url(${slidebanner.src})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        backgroundRepeat: "no-repeat",
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {"بنر"}
-                      </span>
-                    </div>
-                    <div
-                      onClick={() => addSection("Story")}
-                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                      style={{
-                        ...imageContainerStyle,
-                        backgroundImage: `url(${story.src})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        backgroundRepeat: "no-repeat",
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {"استوری"}
-                      </span>
-                    </div>
-                    <div
-                      onClick={() => addSection("RichText")}
-                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                      style={{
-                        ...imageContainerStyle,
-                        backgroundImage: `url(${richtextImage.src})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        backgroundRepeat: "no-repeat",
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {"متن غنی"}
-                      </span>
-                    </div>
-
-                    <div
-                      onClick={() => addSection("ImageText")}
-                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                      style={{
-                        ...imageContainerStyle,
-                        backgroundImage: `url(${ImageTextImage.src})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        backgroundRepeat: "no-repeat",
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {"عکس نوشته"}
-                      </span>
-                    </div>
-                    <div
-                      onClick={() => addSection("Banner")}
-                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                      style={{
-                        ...imageContainerStyle,
-                        backgroundImage: `url(${bannerImage.src})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        backgroundRepeat: "no-repeat",
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {"بنر"}
-                      </span>
-                    </div>
-                    <div
-                      onClick={() => addSection("CollapseFaq")}
-                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                      style={{
-                        ...imageContainerStyle,
-                        backgroundImage: `url(${CollapseFaqImage.src})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "top",
-                        backgroundRepeat: "no-repeat",
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {"سوالات متداول"}
-                      </span>
-                    </div>
-                    <div
-                      onClick={() => addSection("ContactForm")}
-                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                      style={{
-                        ...imageContainerStyle,
-                        backgroundImage: `url(${contactImage.src})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "top",
-                        backgroundRepeat: "no-repeat",
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {"ارتباط با ما"}
-                      </span>
-                    </div>
-                    <div
-                      onClick={() => addSection("NewsLetter")}
-                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                      style={{
-                        ...imageContainerStyle,
-                        backgroundImage: `url(${newsLetterImage.src})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "top",
-                        backgroundRepeat: "no-repeat",
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {" خبرنامه"}
-                      </span>
-                    </div>
-                    <div
-                      onClick={() => addSection("MultiColumn")}
-                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                      style={{
-                        ...imageContainerStyle,
-                        backgroundImage: `url(${multiColumnImage.src})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        backgroundRepeat: "no-repeat",
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {"ستون ها"}
-                      </span>
-                    </div>
-                    <div
-                      onClick={() => addSection("SlideShow")}
-                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                      style={{
-                        ...imageContainerStyle,
-                        backgroundImage: `url(${slideShowImage.src})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "top",
-                        backgroundRepeat: "no-repeat",
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {" اسلاید شو"}
-                      </span>
-                    </div>
-                    <div
-                      onClick={() => addSection("MultiRow")}
-                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                      style={{
-                        ...imageContainerStyle,
-                        backgroundImage: `url(${multiRowImage.src})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "top",
-                        backgroundRepeat: "no-repeat",
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {"  ردیف ها"}
-                      </span>
-                    </div>
-                    <div
-                      onClick={() => addSection("Video")}
-                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                      style={{
-                        ...imageContainerStyle,
-                        backgroundImage: `url(${video.src})`,
-                        backgroundSize: "contain",
-                        backgroundPosition: "center",
-                        backgroundRepeat: "no-repeat",
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {"   ویدیو"}
-                      </span>
-                    </div>
-                    <div
-                      onClick={() => addSection("CanvasEditor")}
-                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                      style={{
-                        ...imageContainerStyle,
-                        backgroundImage: `url(${canvasEditorImage?.src})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        backgroundRepeat: "no-repeat",
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {"ویرایشگر کانوا"}
-                      </span>
-                    </div>
-                    <div
-                      onClick={() => addSection("Collection")}
-                      className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                      style={{
-                        ...imageContainerStyle,
-                        backgroundImage: `url(${collection.src})`,
-                        backgroundSize: "contain",
-                        backgroundPosition: "center",
-                        backgroundRepeat: "no-repeat",
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {"کالکشن"}
-                      </span>
-                    </div>
+                    {sections.map(
+                      ({ id, label, image, bgSize, bgPosition = "center" }) => (
+                        <div
+                          key={id}
+                          onClick={() => addSection(id)}
+                          className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                          style={{
+                            ...imageContainerStyle,
+                            backgroundImage: `url(${image?.src})`,
+                            backgroundSize: bgSize,
+                            backgroundPosition: bgPosition,
+                            backgroundRepeat: "no-repeat",
+                          }}
+                        >
+                          <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                          <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            {label}
+                          </span>
+                        </div>
+                      )
+                    )}
                   </motion.div>
                 </motion.div>
               </motion.div>
@@ -1324,216 +1274,36 @@ export const Form = () => {
                           transition={{ delay: 0.3 }}
                           className="p-2 overflow-y-visible w-[80%] mx-auto mb-72 z-50 flex flex-col items-center gap-2"
                         >
-                          <div
-                            onClick={() => addSection("RichText")}
-                            className="flex flex-col items-center h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                            style={{
-                              ...imageContainerStyle,
-                              backgroundImage: `url(${richtextSm.src})`,
-                              maxWidth: "100%",
-                              backgroundSize: "cover",
-                              backgroundPosition: "center",
-                              backgroundRepeat: "no-repeat",
-                            }}
-                          >
-                            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                            <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              متن غنی
-                            </span>
-                          </div>
-                          <div
-                            onClick={() => addSection("ImageText")}
-                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                            style={{
-                              ...imageContainerStyle,
-                              backgroundImage: `url(${imagetextSm.src})`,
-                              backgroundSize: "cover",
-                              maxWidth: "100%",
-                              backgroundPosition: "center",
-                              backgroundRepeat: "no-repeat",
-                            }}
-                          >
-                            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                            <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              عکس نوشته
-                            </span>
-                          </div>
-                          <div
-                            onClick={() => addSection("Banner")}
-                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                            style={{
-                              ...imageContainerStyle,
-                              backgroundImage: `url(${bannerSm.src})`,
-                              backgroundSize: "contain",
-                              maxWidth: "100%",
-                              backgroundPosition: "center",
-                              backgroundRepeat: "no-repeat",
-                            }}
-                          >
-                            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                            <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              بنر
-                            </span>
-                          </div>
-                          <div
-                            onClick={() => addSection("CollapseFaq")}
-                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                            style={{
-                              ...imageContainerStyle,
-                              backgroundImage: `url(${collapseSm.src})`,
-                              backgroundSize: "cover",
-                              maxWidth: "100%",
-                              height: "30rem",
-                              backgroundPosition: "center",
-                              backgroundRepeat: "no-repeat",
-                            }}
-                          >
-                            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                            <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              سوالات متداول
-                            </span>
-                          </div>
-                          <div
-                            onClick={() => addSection("ContactForm")}
-                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                            style={{
-                              ...imageContainerStyle,
-                              backgroundImage: `url(${contactSm.src})`,
-                              backgroundSize: "cover",
-                              maxWidth: "100%",
-                              height: "20rem",
-                              backgroundPosition: "center",
-                              backgroundRepeat: "no-repeat",
-                            }}
-                          >
-                            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                            <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              {"ارتباط با ما"}
-                            </span>
-                          </div>
-                          <div
-                            onClick={() => addSection("NewsLetter")}
-                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                            style={{
-                              ...imageContainerStyle,
-                              backgroundImage: `url(${newsletterSm.src})`,
-                              backgroundSize: "cover",
-                              maxWidth: "100%",
-                              backgroundPosition: "center",
-                              backgroundRepeat: "no-repeat",
-                            }}
-                          >
-                            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                            <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              خبرنامه
-                            </span>
-                          </div>
-                          <div
-                            onClick={() => addSection("MultiColumn")}
-                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                            style={{
-                              ...imageContainerStyle,
-                              backgroundImage: `url(${columnSm.src})`,
-                              backgroundSize: "cover",
-                              height: "30rem",
-                              maxWidth: "100%",
-                              backgroundPosition: "center",
-                              backgroundRepeat: "no-repeat",
-                            }}
-                          >
-                            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                            <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              ستون ها
-                            </span>
-                          </div>
-                          <div
-                            onClick={() => addSection("SlideShow")}
-                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                            style={{
-                              ...imageContainerStyle,
-                              backgroundImage: `url(${slideSm.src})`,
-                              backgroundSize: "contain",
-                              maxWidth: "100%",
-                              height: "27rem",
-                              backgroundPosition: "top",
-                              backgroundRepeat: "no-repeat",
-                            }}
-                          >
-                            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                            <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              اسلاید شو
-                            </span>
-                          </div>
-                          <div
-                            onClick={() => addSection("MultiRow")}
-                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                            style={{
-                              ...imageContainerStyle,
-                              backgroundImage: `url(${rowSm.src})`,
-                              backgroundSize: "contain",
-                              maxWidth: "100%",
-                              height: "30rem",
-                              backgroundPosition: "top",
-                              backgroundRepeat: "no-repeat",
-                            }}
-                          >
-                            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                            <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              ردیف ها
-                            </span>
-                          </div>
-                          <div
-                            onClick={() => addSection("Video")}
-                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                            style={{
-                              ...imageContainerStyle,
-                              backgroundImage: `url(${videoSm.src})`,
-                              backgroundSize: "cover",
-                              maxWidth: "100%",
-                              height: "20rem",
-                              backgroundPosition: "center",
-                              backgroundRepeat: "no-repeat",
-                            }}
-                          >
-                            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                            <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              ویدیو
-                            </span>
-                          </div>
-                          <div
-                            onClick={() => addSection("CanvasEditor")}
-                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                            style={{
-                              ...imageContainerStyle,
-                              backgroundImage: `url(${canvasEditorImage?.src})`,
-                              backgroundSize: "cover",
-                              backgroundPosition: "center",
-                              backgroundRepeat: "no-repeat",
-                            }}
-                          >
-                            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                            <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              {"ویرایشگر کانوا"}
-                            </span>
-                          </div>
-                          <div
-                            onClick={() => addSection("Collection")}
-                            className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                            style={{
-                              ...imageContainerStyle,
-                              backgroundImage: `url(${collectionSm.src})`,
-                              backgroundSize: "cover",
-                              maxWidth: "100%",
-                              height: "20rem",
-                              backgroundPosition: "center",
-                              backgroundRepeat: "no-repeat",
-                            }}
-                          >
-                            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                            <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              {"کالکشن"}
-                            </span>
-                          </div>
+                          {smSections.map(
+                            ({
+                              name,
+                              title,
+                              image,
+                              height = "12rem",
+                              backgroundSize = "cover",
+                              backgroundPosition = "center",
+                            }) => (
+                              <div
+                                key={name}
+                                onClick={() => addSection(name)}
+                                className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
+                                style={{
+                                  ...imageContainerStyle,
+                                  backgroundImage: `url(${image})`,
+                                  backgroundSize,
+                                  backgroundPosition,
+                                  backgroundRepeat: "no-repeat",
+                                  maxWidth: "100%",
+                                  height,
+                                }}
+                              >
+                                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                                <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                  {title}
+                                </span>
+                              </div>
+                            )
+                          )}
                         </motion.div>
                       </motion.div>
                     </motion.div>
