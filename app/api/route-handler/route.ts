@@ -12,8 +12,6 @@ export async function GET(request: NextRequest) {
     const templates = await listGitHubTemplates(repoUrl);
     return NextResponse.json(templates, { status: 200 });
   } catch (error) {
-    console.log("Error fetching template directory contents:", error);
-    console.error("Error fetching template directory contents:", error);
     return NextResponse.json(
       { error: 'Failed to fetch template directory contents' },
       { status: 500 }

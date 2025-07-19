@@ -16,7 +16,6 @@ export async function GET(request: NextRequest) {
     const secret=process.env.JWT_SECRET;
     const decodedToken = jwt.verify(token, secret||"sdsdsdsd" ) as JwtPayload;
     const storeId = decodedToken.storeId;
-    console.log("category Decoded Token:", decodedToken);
     if (!storeId) {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }

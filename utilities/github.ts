@@ -26,7 +26,6 @@ export async function fetchGitHubFile(
 ): Promise<string> {
   const GITHUB_REPO = getRepoFromUrl(repoUrl || null);
   const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${filePath}`;
-  console.log("Fetching URL:", url);
 
   try {
     const response = await axios.get(url, {

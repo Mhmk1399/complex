@@ -1,9 +1,6 @@
 import connect from "@/lib/data";
-import { NextResponse } from "next/server";
-import { fetchGitHubFile, saveGitHubFile } from '@/utilities/github';
 import { fetchFromStore } from "@/services/fetchFiles";
-
-
+import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   await connect();
@@ -55,40 +52,3 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Failed to process request" }, { status: 500 });
   }
 }
-
-export async function POST(request: Request) {
-  await connect();
-  console.log("POST request received");
-
-  try {
-    const routeName = request.headers.get("selectedRoute");
-    const activeMode = request.headers.get("activeMode") || "lg";
-    const repoUrl = request.headers.get("repoUrl");
-    if (!routeName || !activeMode || !repoUrl) {
-      return NextResponse.json({ error: "Missing required parameters" }, { status: 400 });
-    }
-
-
-
-
-    const newLayout = await request.json();
-
-
-    if (routeName === "home") {
-      const filePath = `public/template/${routeName}${activeMode}.json`;
-      await saveGitHubFile(filePath, JSON.stringify(newLayout, null, 2), repoUrl);
-      return NextResponse.json({ message: "Layout saved successfully" }, { status: 200 });
-    } 
-    
-    const children = newLayout.sections.children;
-    const filePath = `public/template/${routeName}${activeMode}.json`;
-    await saveGitHubFile(filePath, JSON.stringify({ children }, null, 2),repoUrl);
-    return NextResponse.json({ message: "Children section saved successfully" }, { status: 200 });
-
-  } catch (error) {
-    console.log("Error in POST request:", error);
-    return NextResponse.json({ error: "Failed to save layout: " + error }, { status: 500 });
-  }
-}
-
-

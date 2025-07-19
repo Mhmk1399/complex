@@ -35,6 +35,19 @@ import TourGuide from "./sections/guideTour";
 import { useSharedContext } from "@/app/contexts/SharedContext";
 import { CanvasProvider } from "../contexts/CanvasContext";
 
+
+
+const routeIcons = {
+    home: FaHome,
+    about: FaInfoCircle,
+    contact: FaEnvelope,
+    store: FaStore,
+    blog: FaBlog,
+    news: FaNewspaper,
+  };
+
+
+
 export const Main = () => {
   // Get shared state from context
   const {
@@ -158,14 +171,10 @@ export const Main = () => {
       });
     fetchRoutes();
   };
-  const routeIcons = {
-    home: FaHome,
-    about: FaInfoCircle,
-    contact: FaEnvelope,
-    store: FaStore,
-    blog: FaBlog,
-    news: FaNewspaper,
-  };
+  
+
+
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const repoUrl = urlParams.get("repoUrl");
@@ -477,11 +486,7 @@ export const Main = () => {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          // whileHover={{
-          //   background:
-          //     "radial-gradient(circle at var(--x) var(--y), #4facfe 0%, #0052D4 50%)",
-          //   transition: { duration: 0.9 },
-          // }}
+         
           onMouseMove={(e) => {
             const rect = e.currentTarget.getBoundingClientRect();
             const x = ((e.clientX - rect.left) / rect.width) * 100;

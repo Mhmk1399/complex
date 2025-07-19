@@ -5,11 +5,9 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 export async function GET(req: NextRequest) {
   try {
     await connect();
-    console.log("Connected to MongoDB");
     if (!connect) {
       return NextResponse.json({ error: "Failed to connect to database" });
     }
-    console.log(req);
 
     const token = req.headers.get("Authorization");
   
