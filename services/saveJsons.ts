@@ -12,7 +12,7 @@ export async function saveToStore(
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
-        storeId: storeId,
+        storeId: 'ghasem',
         filename: filename,
       },
       body: JSON.stringify(data),

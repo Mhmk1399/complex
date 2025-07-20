@@ -1,5 +1,5 @@
 export async function fetchFromStore(filename: string, storeId: string): Promise<string> {
-  const endpoint = 'http://91.216.104.8:5000/json';
+  const endpoint = 'http://62.3.42.11:5002/json';
   const token = process.env.STORE_API_TOKEN || 'your-secret-token'; // Use ENV for security
 
   console.log(token)
@@ -7,7 +7,7 @@ export async function fetchFromStore(filename: string, storeId: string): Promise
   const response = await fetch(endpoint, {
     method: 'GET',
     headers: {
-      'storeId': storeId,
+      'storeId': 'ghasem',
       'filename': filename,
       'Authorization': `Bearer ${token}`,
     },

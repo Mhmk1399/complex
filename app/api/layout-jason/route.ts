@@ -87,6 +87,7 @@ export async function POST(request: Request) {
 
     const newLayout = await request.json();
     const filename = `${routeName}${activeMode}.json`;
+    console.log(filename);
 
     if (routeName === "home") {
       await saveToStore(filename, storeId, newLayout);
