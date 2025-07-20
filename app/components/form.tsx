@@ -4,7 +4,7 @@ import { AnimatePresence } from "framer-motion";
 import { DragEndEvent } from "@dnd-kit/core";
 import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
-import { FaBars, FaExchangeAlt, FaPuzzlePiece } from "react-icons/fa";
+import { FaBars, FaExchangeAlt, FaPuzzlePiece, FaRobot } from "react-icons/fa";
 import richtextImage from "@/public/assets/images/richtext.png";
 import ImageTextImage from "@/public/assets/images/imagetext.png";
 import bannerImage from "@/public/assets/images/banner.jpg";
@@ -108,6 +108,8 @@ import { styled } from "styled-components";
 import { SpecialForm } from "./forms/specialForm";
 import { useSharedContext } from "@/app/contexts/SharedContext";
 import CanvasEditorForm from "./forms/canvasEditorForm";
+import { AIModal } from "./AIModal";
+import { set } from "lodash";
 type FormData =
   | HeaderSection
   | MultiRowSection
@@ -412,6 +414,8 @@ const ScrollableFormContent = styled.div`
 // End scrollbar styles for webkit browsers
 
 export const Form = () => {
+  const [isAIModalOpen, setIsAIModalOpen] = useState(false);
+
   // Get shared state from context
   const {
     selectedComponent,
@@ -928,6 +932,16 @@ export const Form = () => {
           </>
         )}
       </button>
+      <motion.button
+        id="aiAssistant"
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => setIsAIModalOpen(true)}
+        className={` lg:w-auto text-xs font-semibold border-r mr-12 border-gray-400 lg:-ml-12 px-3 md:mt-0 
+          transition-all duration-300 transform`}
+      >
+        <FaRobot className="w-4 h-4" />
+      </motion.button>
 
       {showOrdersMenu && (
         <button
@@ -974,7 +988,6 @@ export const Form = () => {
             )}
           </motion.div>
         </motion.button>
-
         {isFormOpen && (
           <>
             {isModalOpen && (
@@ -1323,7 +1336,13 @@ export const Form = () => {
               </div>
             </motion.div>
           </>
-        )}
+        )}{" "}
+        <AIModal
+          isOpen={isAIModalOpen}
+          onClose={() => setIsAIModalOpen(false)}
+          currentStyles={userInputData || {}}
+          onApplyChanges={setUserInputData}
+        />
       </div>
     </FormContainer>
   );
