@@ -937,10 +937,10 @@ export const Form = () => {
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsAIModalOpen(true)}
-        className={` lg:w-auto text-xs font-semibold border-r mr-12 border-gray-400 lg:-ml-12 px-3 md:mt-0 
+        className={` lg:w-auto text-xs font-semibold  mb-2 justify-start border-gray-400  px-3 md:mt-0 
           transition-all duration-300 transform`}
       >
-        <FaRobot className="w-4 h-4" />
+        <FaRobot className="w-8 h-8" />
       </motion.button>
 
       {showOrdersMenu && (
