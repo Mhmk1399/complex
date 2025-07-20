@@ -3,7 +3,7 @@ export async function saveToStore(
   storeId: string,
   data: object
 ): Promise<void> {
-  const endpoint = "  http://91.216.104.8:5002/json";
+  const endpoint = "  http://62.3.42.11:5002/json";
   const token = process.env.STORE_API_TOKEN || "your-secret-token";
 
   try {
