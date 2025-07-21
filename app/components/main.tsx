@@ -173,9 +173,9 @@ export const Main = () => {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const repoUrl = urlParams.get("repoUrl");
+    const DiskUrl = urlParams.get("DiskUrl");
     console.log("Fetching data with params:", {
-      repoUrl,
+      DiskUrl,
       selectedRoute,
       activeMode,
     });
@@ -184,7 +184,7 @@ export const Main = () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        repoUrl: repoUrl || "",
+        DiskUrl: DiskUrl || "",
       },
     })
       .then((response) => {

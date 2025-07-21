@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { saveGitHubFile, deleteGitHubFile, listGitHubTemplates, createRoutePage, deleteRoutePage } from "@/utilities/github";
+import { deleteDiskFile, listDiskTemplates, createNewJson } from "@/services/disk";
 
 
 
 export async function GET(request: NextRequest) {
-  const repoUrl = request.headers.get("repoUrl");
-  if (!repoUrl) {
-    return NextResponse.json({ error: "Missing repoUrl" }, { status: 400 });
+  const DiskUrl = request.headers.get("DiskUrl"); // the url of the disk like https://mamad.com/storeid
+  if (!DiskUrl) {
+    return NextResponse.json({ error: "Missing StoreId" }, { status: 400 });
   }
   try {
-    const templates = await listGitHubTemplates(repoUrl);
+    const templates = await listDiskTemplates(DiskUrl);
     return NextResponse.json(templates, { status: 200 });
   } catch (error) {
     return NextResponse.json(
@@ -22,13 +22,9 @@ export async function GET(request: NextRequest) {
 
 // post method for route
 export async function POST(request: NextRequest) {
-  const newRoute = request.headers.get('new-route');
-  const repoUrl = request.headers.get("repoUrl");
-  if (!repoUrl) {
-    return NextResponse.json({ error: "Missing repoUrl" }, { status: 400 });
-  }
+  const filename = request.headers.get('filename');
 
-  if (!newRoute) {
+  if (!filename) {
     return NextResponse.json(
       { error: 'New route name is required' },
       { status: 400 }
@@ -37,22 +33,10 @@ export async function POST(request: NextRequest) {
 
   try {
     // Create the JSON content template for new routes
-    const jsonContent = {
-      children: {
-        type: newRoute,
-        sections: [],
-        order: []
-      }
-    };
 
-    // Create both lg and sm versions
-    const lgFilePath = `public/template/${newRoute}lg.json`;
-    const smFilePath = `public/template/${newRoute}sm.json`;
 
     // Save files to GitHub using the saveGitHubFile function
-    await saveGitHubFile(lgFilePath, JSON.stringify(jsonContent, null, 2),repoUrl);
-    await saveGitHubFile(smFilePath, JSON.stringify(jsonContent, null, 2),repoUrl);
-    await createRoutePage(newRoute,repoUrl);
+    await createNewJson(filename);
 
     return NextResponse.json(
       { message: 'Route files created successfully' },
@@ -70,13 +54,18 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  const route = request.headers.get('route');
-  const repoUrl = request.headers.get("repoUrl");
-  if (!repoUrl) {
-    return NextResponse.json({ error: "Missing repoUrl" }, { status: 400 });
+  const filename = request.headers.get('filename');
+  const StoreId = request.headers.get('StoreId');
+
+
+  if (!filename) {
+    return NextResponse.json(
+      { error: 'Route name is required' },
+      { status: 400 }
+    );
   }
 
-  if (!route) {
+    if (!StoreId) {
     return NextResponse.json(
       { error: 'Route name is required' },
       { status: 400 }
@@ -85,12 +74,8 @@ export async function DELETE(request: NextRequest) {
 
   try {
     // Delete both lg and sm versions
-    const lgFilePath = `public/template/${route}lg.json`;
-    const smFilePath = `public/template/${route}sm.json`;
 
-    await deleteGitHubFile(lgFilePath,repoUrl);
-    await deleteGitHubFile(smFilePath,repoUrl);
-    await deleteRoutePage(route,repoUrl);
+    await deleteDiskFile(filename, StoreId);
 
 
     return NextResponse.json(

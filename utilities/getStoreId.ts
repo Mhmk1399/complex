@@ -1,4 +1,4 @@
-import { fetchGitHubFile } from "@/utilities/github";
+import { fetchGitHubFile } from "@/services/disk";
 import { NextRequest } from "next/server";
 
 export async function GetStoreId(request:NextRequest) {

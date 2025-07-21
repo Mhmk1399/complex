@@ -1,4 +1,4 @@
-import { fetchGitHubFile } from './github';
+import { fetchGitHubFile } from '../services/disk';
 import jwt from 'jsonwebtoken';
 import connect from '@/lib/data';
 import users from '@/models/users';
