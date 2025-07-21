@@ -280,6 +280,14 @@ export const StoryForm: React.FC<StoryFormProps> = ({
                 onChange={handleSettingChange}
               />
             </div>
+            <div className="rounded-lg inline-flex items-center justify-between gap-2">
+              <ColorInput
+                label="رنگ پس زمینه"
+                name="backgroundColor"
+                value={userInputData?.blocks?.setting?.backgroundColor ?? "#fff"}
+                onChange={handleSettingChange}
+              />
+            </div>
 
             <label className="block mt-3">سایز عنوان</label>
             <div className=" shadow-sm">

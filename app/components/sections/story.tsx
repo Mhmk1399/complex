@@ -34,7 +34,7 @@ const StoryContainer = styled.div<{
   margin-top: ${(props) => props.$data.setting?.marginTop || "10"}px;
   margin-bottom: ${(props) => props.$data.setting?.marginBottom || "10"}px;
   background-color: ${(props) =>
-    props.$data.setting?.backgroundColor || "#ffffff"};
+    props.$data.blocks?.setting?.backgroundColor || "#ffffff"};
 `;
 
 const StoriesWrapper = styled.section`

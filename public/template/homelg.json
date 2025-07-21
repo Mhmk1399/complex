@@ -906,7 +906,8 @@
               "titleFontWeight": "normal",
               "imageWidth": "70px",
               "imageHeight": "70px",
-              "imageRadius": "500"
+              "imageRadius": "500",
+              "backgroundColor": "ffffff"
             }
           },
           "setting": {
