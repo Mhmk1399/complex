@@ -1,7 +1,7 @@
 import { fetchGitHubFile } from "@/services/disk";
 import { NextRequest } from "next/server";
 
-export async function GetStoreId(request:NextRequest) {
+export async function GetstoreId(request:NextRequest) {
     const repoUrl = request.headers.get("repoUrl");
   if (!repoUrl) {
     return new Response("Repository URL not provided", { status: 400 });

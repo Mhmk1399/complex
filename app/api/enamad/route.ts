@@ -1,8 +1,8 @@
 import Enamad from "@/models/enamad";
 import { NextRequest, NextResponse } from "next/server";
 import connect from "@/lib/data";
-// Import GET as GetStoreId from the test route:
-import { GetStoreId } from "@/utilities/getStoreId";
+// Import GET as GetstoreId from the test route:
+import { GetstoreId } from "@/utilities/getstoreId";
 export async function GET(request: NextRequest) {
   try {
     await connect();
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     
     
     
-    const storeId = await GetStoreId(request);
+    const storeId = await GetstoreId(request);
     console.log("storeId", storeId);
     const enamads = await Enamad.find({ storeId: storeId });
     return NextResponse.json(enamads);

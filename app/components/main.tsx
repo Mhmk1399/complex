@@ -95,22 +95,22 @@ export const Main = () => {
       // Decode the token without verification (client-side)
       const decodedToken = jwt.decode(token) as JwtPayload;
 
-      if (!decodedToken?.user?.vercelUrl) {
+      if (!decodedToken?.user?.DeployedUrl) {
         toast.error("آدرس سایت یافت نشد");
         return;
       }
 
-      window.open(decodedToken.user.vercelUrl, "_blank", "noopener,noreferrer");
+      window.open(decodedToken.user.DeployedUrl, "_blank", "noopener,noreferrer");
     } catch (error) {
       console.error("Error opening site:", error);
       toast.error("مشکل در باز کردن سایت");
     }
   };
 
-  // اینجا لیت فایل های داخل گیت هابو میبینیم
+  // add new route on disk
   const handleAddRoute = async ({ name }: { name: string }) => {
     const urlParams = new URLSearchParams(window.location.search);
-    const repoUrl = urlParams.get("repoUrl");
+    const DiskUrl = urlParams.get("DiskUrl");
     if (routes.includes(name)) {
       toast.error("این مسیر در حال حاظر موجود است", { autoClose: 3000 });
       return;
@@ -121,10 +121,9 @@ export const Main = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "new-route": name,
-          repoUrl: repoUrl || "",
-        },
-        body: JSON.stringify({ name }),
+          filename: name,
+          DiskUrl: DiskUrl || "",
+        }
       });
 
       if (!response.ok) {
@@ -150,7 +149,7 @@ export const Main = () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        repoUrl: repoUrl || "",
+        DiskUrl: DiskUrl || "",
       },
     })
       .then((response) => {
@@ -207,9 +206,9 @@ export const Main = () => {
   // Replace the direct import with API call
   const sendTokenToServer = async () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const repoUrl = urlParams.get("repoUrl");
+    const DiskUrl = urlParams.get("DiskUrl");
     console.log("Fetching data with params:", {
-      repoUrl,
+      DiskUrl,
       selectedRoute,
       activeMode,
     });
@@ -221,7 +220,7 @@ export const Main = () => {
           "Content-Type": "application/json",
           selectedRoute: selectedRoute,
           activeMode: activeMode,
-          repoUrl: repoUrl || "",
+          DiskUrl: DiskUrl || "",
         },
       });
 
@@ -273,9 +272,9 @@ export const Main = () => {
   const handleSave = async () => {
     setSaveStatus("saving");
     const urlParams = new URLSearchParams(window.location.search);
-    const repoUrl = urlParams.get("repoUrl");
+    const DiskUrl = urlParams.get("DiskUrl");
     console.log("Fetching data with params:", {
-      repoUrl,
+      DiskUrl,
       selectedRoute,
       activeMode,
     });
@@ -286,7 +285,7 @@ export const Main = () => {
           "Content-Type": "application/json",
           selectedRoute: selectedRoute,
           activeMode: activeMode,
-          repoUrl: repoUrl || "",
+          DiskUrl: DiskUrl || "",
         },
         body: JSON.stringify(layout),
       });
@@ -312,13 +311,13 @@ export const Main = () => {
 
   const fetchRoutes = async () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const repoUrl = urlParams.get("repoUrl");
+    const DiskUrl = urlParams.get("DiskUrl");
     try {
       const response = await fetch("/api/route-handler", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          repoUrl: repoUrl || "",
+          DiskUrl: DiskUrl || "",
         },
       });
 
@@ -339,9 +338,9 @@ export const Main = () => {
 
   const handleDeleteRoute = async () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const repoUrl = urlParams.get("repoUrl");
+    const DiskUrl = urlParams.get("DiskUrl");
     console.log("Fetching data with params:", {
-      repoUrl,
+      DiskUrl,
       selectedRoute,
       activeMode,
     });
@@ -351,8 +350,8 @@ export const Main = () => {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          route: selectedRoute,
-          repoUrl: repoUrl || "",
+          filename: selectedRoute,
+          DiskUrl: DiskUrl || "",
         },
       });
 

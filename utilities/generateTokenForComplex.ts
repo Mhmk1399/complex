@@ -1,11 +1,10 @@
-import { fetchGitHubFile } from '../services/disk';
 import jwt from 'jsonwebtoken';
 import connect from '@/lib/data';
 import users from '@/models/users';
-export async function generateTokenForComplex(repoUrl: string): Promise<string> {
+export async function generateTokenForComplex(DiskUrl: string): Promise<string> {
   try {
-     const repoUrlParts = repoUrl.split('/');
-     const storeId = repoUrlParts[repoUrlParts.length - 1];
+     const DiskUrlParts = DiskUrl.split('/');
+     const storeId = DiskUrlParts[DiskUrlParts.length - 1];
 
     await connect();
     console.log('MongoDB connected successfully');

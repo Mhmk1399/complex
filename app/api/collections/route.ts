@@ -72,11 +72,11 @@ export async function GET(request: NextRequest) {
   // Validate storeId in token
   const storeId = decodedToken.storeId;
   if (!storeId) {
-    console.error("StoreId Missing in Token");
+    console.error("storeId Missing in Token");
     return NextResponse.json(
       { 
         error: "Invalid token structure", 
-        details: "StoreId is required" 
+        details: "storeId is required" 
       }, 
       { status: 401 }
     );

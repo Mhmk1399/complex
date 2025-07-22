@@ -3,10 +3,11 @@ import { deleteDiskFile, listDiskTemplates, createNewJson } from "@/services/dis
 
 
 
+
 export async function GET(request: NextRequest) {
-  const DiskUrl = request.headers.get("DiskUrl"); // the url of the disk like https://mamad.com/storeid
+  const DiskUrl = request.headers.get("DiskUrl"); // the url of the disk like https://mamad.com/storeId
   if (!DiskUrl) {
-    return NextResponse.json({ error: "Missing StoreId" }, { status: 400 });
+    return NextResponse.json({ error: "Missing storeId" }, { status: 400 });
   }
   try {
     const templates = await listDiskTemplates(DiskUrl);
@@ -23,6 +24,8 @@ export async function GET(request: NextRequest) {
 // post method for route
 export async function POST(request: NextRequest) {
   const filename = request.headers.get('filename');
+  const DiskUrl = request.headers.get('DiskUrl');
+
 
   if (!filename) {
     return NextResponse.json(
@@ -35,7 +38,7 @@ export async function POST(request: NextRequest) {
     // Create the JSON content template for new routes
 
 
-    // Save files to GitHub using the saveGitHubFile function
+    
     await createNewJson(filename);
 
     return NextResponse.json(
@@ -55,7 +58,7 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   const filename = request.headers.get('filename');
-  const StoreId = request.headers.get('StoreId');
+  const DiskUrl = request.headers.get('DiskUrl');
 
 
   if (!filename) {
@@ -65,7 +68,7 @@ export async function DELETE(request: NextRequest) {
     );
   }
 
-    if (!StoreId) {
+    if (!DiskUrl) {
     return NextResponse.json(
       { error: 'Route name is required' },
       { status: 400 }
@@ -75,7 +78,7 @@ export async function DELETE(request: NextRequest) {
   try {
     // Delete both lg and sm versions
 
-    await deleteDiskFile(filename, StoreId);
+    await deleteDiskFile(filename, DiskUrl);
 
 
     return NextResponse.json(

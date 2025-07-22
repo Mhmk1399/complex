@@ -1,8 +1,8 @@
 import connect from "@/lib/data";
 import { NextResponse } from "next/server";
 // import { fetchGitHubFile, saveGitHubFile } from "@/services/disk";
-import { fetchFromStore } from "@/services/fetchFiles";
-import { saveToStore } from "@/services/saveJsons";
+import { fetchFromStore } from "@/services/disk";
+import { saveToStore } from "@/services/disk";
 
 export async function GET(request: Request) {
   await connect();
@@ -10,9 +10,9 @@ export async function GET(request: Request) {
   try {
     const routeName = request.headers.get("selectedRoute");
     const activeMode = request.headers.get("activeMode") || "lg";
-    const storeId = request.headers.get("storeId") || "test2"; // You can add this header client-side
+    const DiskUrl = request.headers.get("DiskUrl") || "test2"; 
 
-    if (!routeName || !activeMode || !storeId) {
+    if (!routeName || !activeMode || !DiskUrl) {
       return NextResponse.json(
         { error: "Missing required parameters" },
         { status: 400 }
@@ -25,23 +25,23 @@ export async function GET(request: Request) {
       Expires: "0",
     };
 
-    const getFilename = (name: string) => `${name}${activeMode}.json`;
+    const getFilename = (routeName: string) => `${routeName}${activeMode}.json`;
     console.log(getFilename("about"));
 
     // Home route
     if (routeName === "home") {
       const homeContent = JSON.parse(
-        await fetchFromStore(getFilename("home"), storeId)
+        await fetchFromStore(getFilename("home"), DiskUrl)
       );
       return NextResponse.json(homeContent, { status: 200, headers });
     }
 
     try {
       const routeContent = JSON.parse(
-        await fetchFromStore(getFilename(routeName), storeId)
+        await fetchFromStore(getFilename(routeName), DiskUrl)
       );
       const homeContent = JSON.parse(
-        await fetchFromStore(getFilename("home"), storeId)
+        await fetchFromStore(getFilename("home"), DiskUrl)
       );
 
       const layout = {
@@ -76,9 +76,9 @@ export async function POST(request: Request) {
   try {
     const routeName = request.headers.get("selectedRoute");
     const activeMode = request.headers.get("activeMode") || "lg";
-    const storeId = request.headers.get("storeId") || "default-store";
+    const DiskUrl = request.headers.get("DiskUrl") || "default-store";
 
-    if (!routeName || !activeMode || !storeId) {
+    if (!routeName || !activeMode || !DiskUrl) {
       return NextResponse.json(
         { error: "Missing required parameters" },
         { status: 400 }
@@ -90,7 +90,7 @@ export async function POST(request: Request) {
     console.log(filename);
 
     if (routeName === "home") {
-      await saveToStore(filename, storeId, newLayout);
+      await saveToStore(filename, DiskUrl, newLayout);
       return NextResponse.json(
         { message: "Layout saved successfully" },
         { status: 200 }
@@ -98,7 +98,7 @@ export async function POST(request: Request) {
     }
 
     const children = newLayout.sections?.children || [];
-    await saveToStore(filename, storeId, { children });
+    await saveToStore(filename, DiskUrl, { children });
     return NextResponse.json(
       { message: "Children section saved successfully" },
       { status: 200 }
