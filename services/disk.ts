@@ -164,7 +164,7 @@ export async function saveToStore(
 
   const storeId = getStoreIdFromUrl(DiskUrl)
   const VPS_URL =  getVpsFromUrl(DiskUrl)
-  const token = process.env.STORE_API_TOKEN || "your-secret-token";
+  const token = process.env.VPS_TOKEN || "your-secret-token";
 
   const endpoint = `${VPS_URL}/json` || "";
 
