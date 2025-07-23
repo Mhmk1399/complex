@@ -11,7 +11,7 @@ function HomeContent() {
   useEffect(() => {
     const fetchToken = async () => {
       try {
-        const repoUrl = searchParams.get("repoUrl");
+        const DiskUrl = searchParams.get("DiskUrl");
         const existingToken = localStorage.getItem("complexToken");
 
         if (existingToken) {
@@ -19,14 +19,14 @@ function HomeContent() {
           return;
         }
 
-        if (!repoUrl) {
+        if (!DiskUrl) {
           setError("No repository URL provided");
           setIsLoading(false);
           return;
         }
 
         const response = await fetch(
-          `/api/genrateToken?repoUrl=${encodeURIComponent(repoUrl)}`
+          `/api/genrateToken?DiskUrl=${encodeURIComponent(DiskUrl)}`
         );
 
         if (!response.ok) {

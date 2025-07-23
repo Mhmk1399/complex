@@ -62,7 +62,7 @@ export const Main = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [routes, setRoutes] = useState<string[]>([]);
-  const [isAIModalOpen, setIsAIModalOpen] = useState(false);
+  // const [isAIModalOpen, setIsAIModalOpen] = useState(false);
   const [activeMode, setActiveMode] = useState<"sm" | "lg">("sm");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeElement, setActiveElement] = useState<
@@ -195,7 +195,8 @@ export const Main = () => {
       })
       .then((data) => {
         if (data) {
-          setActiveRoutes(data);
+          const cleanedRoutes = cleanRouteNames(data);
+          setActiveRoutes(cleanedRoutes);
         }
       })
       .catch((error) => {
@@ -213,12 +214,14 @@ export const Main = () => {
       activeMode,
     });
 
+    console.log(selectedRoute, "selectedRoute");
+
     try {
       const response = await fetch("/api/layout-jason", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          selectedRoute: selectedRoute,
+          selectedRoute: selectedRoute.split(".")[0],
           activeMode: activeMode,
           DiskUrl: DiskUrl || "",
         },
@@ -326,8 +329,14 @@ export const Main = () => {
       }
 
       const result = await response.json();
-      setRoutes(result);
-      setActiveRoutes(result); // Now updates context state
+      console.log("Routes fetched successfully:", result); // Debug log
+      
+      // Clean route names before setting state
+      const cleanedRoutes = cleanRouteNames(result);
+      console.log("Cleaned routes:", cleanedRoutes);
+      
+      setRoutes(cleanedRoutes);
+      setActiveRoutes(cleanedRoutes); // Now updates context state
     } catch (error) {
       console.log("Error fetching routes:", error);
     }
@@ -335,6 +344,15 @@ export const Main = () => {
   useEffect(() => {
     fetchRoutes();
   }, []);
+
+  // Function to clean route names by removing sm.json/lg.json and removing duplicates
+  const cleanRouteNames = (routes) => {
+    // Remove sm.json and lg.json from route names
+    const cleanedRoutes = routes.map(route => route.replace(/(sm|lg)\.json$/, ''));
+    
+    // Remove duplicates
+    return [...new Set(cleanedRoutes)];
+  };
 
   const handleDeleteRoute = async () => {
     const urlParams = new URLSearchParams(window.location.search);

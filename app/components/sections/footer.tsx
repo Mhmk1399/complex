@@ -342,29 +342,29 @@ const Footer: React.FC<FooterProps> = ({
       });
     }
   };
-  useEffect(() => {
-    const fetchEnamad = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (token) {
-          const res = await fetch("/api/enamad", {
-            headers: { Authorization: token },
-          });
-          const data = await res.json();
-          setEnamad(data);
-          console.log("Enamad data:", data);
+  // useEffect(() => {
+  //   const fetchEnamad = async () => {
+  //     try {
+  //       const token = localStorage.getItem("token");
+  //       if (token) {
+  //         const res = await fetch("/api/enamad", {
+  //           headers: { Authorization: token },
+  //         });
+  //         const data = await res.json();
+  //         setEnamad(data);
+  //         console.log("Enamad data:", data);
 
-          // If the API returns an array with data then show the enamad image.
-          if (data && Array.isArray(data) && data.length > 0) {
-            setEnamadExists(true);
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching enamad data", error);
-      }
-    };
-    fetchEnamad();
-  }, []);
+  //         // If the API returns an array with data then show the enamad image.
+  //         if (data && Array.isArray(data) && data.length > 0) {
+  //           setEnamadExists(true);
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching enamad data", error);
+  //     }
+  //   };
+  //   fetchEnamad();
+  // }, []);
   useEffect(() => {
     const fetchCategories = async () => {
       try {

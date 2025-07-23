@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
 
 
     
-    await createNewJson(filename);
+    await createNewJson(filename, DiskUrl || "");
 
     return NextResponse.json(
       { message: 'Route files created successfully' },

@@ -134,7 +134,8 @@ export async function fetchFromStore(filename: string, DiskUrl: string): Promise
   const endpoint = `${VPS_URL}/json`;
   const token = process.env.VPS_TOKEN || 'your-secret-token'; // Use ENV for security
 
-  console.log(token)
+  console.log(filename, "filenameaaaaaa")
+
 
   const response = await fetch(endpoint, {
     method: 'GET',

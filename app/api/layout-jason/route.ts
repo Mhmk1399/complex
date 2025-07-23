@@ -7,6 +7,7 @@ import { saveToStore } from "@/services/disk";
 export async function GET(request: Request) {
   await connect();
 
+  
   try {
     const routeName = request.headers.get("selectedRoute");
     const activeMode = request.headers.get("activeMode") || "lg";
@@ -25,23 +26,31 @@ export async function GET(request: Request) {
       Expires: "0",
     };
 
-    const getFilename = (routeName: string) => `${routeName}${activeMode}.json`;
-    console.log(getFilename("about"));
+    console.log(request.body)
 
-    // Home route
-    if (routeName === "home") {
+
+    const getFilename = (routeName: string) => `${routeName}${activeMode}.json`;
+
+    console.log(routeName, "routename")
+    console.log(activeMode, "activeMode");
+
+    const blog = "blogsm.json";
+    
+
+    if (routeName === "home" || routeName === "home") {
       const homeContent = JSON.parse(
-        await fetchFromStore(getFilename("home"), DiskUrl)
+        await fetchFromStore(getFilename(`home`), DiskUrl)
       );
       return NextResponse.json(homeContent, { status: 200, headers });
     }
 
     try {
+      console.log("Fetching route content");
       const routeContent = JSON.parse(
         await fetchFromStore(getFilename(routeName), DiskUrl)
       );
       const homeContent = JSON.parse(
-        await fetchFromStore(getFilename("home"), DiskUrl)
+        await fetchFromStore(getFilename(`home`), DiskUrl)
       );
 
       const layout = {
