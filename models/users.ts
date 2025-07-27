@@ -8,7 +8,8 @@ const UserSchema = new mongoose.Schema(
     repoUrl: { type: String, required: false },
     vercelUrl: { type: String, required: false },
     storeId: { type: String, required: true, unique: true },
-
+    trialDate: {type: Date},
+    type: { type: String, enum: ["trialUser", "paidUser"], default: "trialUser" }
   },
   { timestamps: true }
 );

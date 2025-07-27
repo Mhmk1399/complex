@@ -38,7 +38,7 @@ export class DeepSeekClient {
       );
 
       return response.data.choices[0].message.content;
-    } catch (error: any) {
+    } catch (error) {
       let errorMessage = "Failed to call DeepSeek API";
 
       if (axios.isAxiosError(error)) {
@@ -51,7 +51,7 @@ export class DeepSeekClient {
         } else {
           errorMessage += `: ${error.message}`;
         }
-      } else {
+      } else if (error instanceof Error) {
         errorMessage += `: ${error.message}`;
       }
 

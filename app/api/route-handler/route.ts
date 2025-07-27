@@ -13,6 +13,7 @@ export async function GET(request: NextRequest) {
     const templates = await listDiskTemplates(DiskUrl);
     return NextResponse.json(templates, { status: 200 });
   } catch (error) {
+    console.error('Error fetching templates:', error);
     return NextResponse.json(
       { error: 'Failed to fetch template directory contents' },
       { status: 500 }
@@ -47,7 +48,6 @@ export async function POST(request: NextRequest) {
     );
 
   } catch (error) {
-    console.log('Error creating route files:', error);
     console.error('Error creating route files:', error);
     return NextResponse.json(
       { error: 'Failed to create route files' },

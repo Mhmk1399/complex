@@ -34,7 +34,7 @@ export async function GET(request: Request) {
     console.log(routeName, "routename")
     console.log(activeMode, "activeMode");
 
-    const blog = "blogsm.json";
+    
     
 
     if (routeName === "home" || routeName === "home") {

@@ -109,7 +109,6 @@ import { SpecialForm } from "./forms/specialForm";
 import { useSharedContext } from "@/app/contexts/SharedContext";
 import CanvasEditorForm from "./forms/canvasEditorForm";
 import { AIModal } from "./AIModal";
-import { set } from "lodash";
 type FormData =
   | HeaderSection
   | MultiRowSection
@@ -1340,8 +1339,8 @@ export const Form = () => {
         <AIModal
           isOpen={isAIModalOpen}
           onClose={() => setIsAIModalOpen(false)}
-          currentStyles={userInputData || {}}
-          onApplyChanges={setUserInputData}
+          currentStyles={JSON.stringify(userInputData || {})}
+          onApplyChanges={(data) => setUserInputData(data as FormData)}
         />
       </div>
     </FormContainer>

@@ -8,8 +8,8 @@ import { ToastContainer, toast } from "react-toastify";
 interface AIModalProps {
   isOpen: boolean;
   onClose: () => void;
-  currentStyles: any; // Current component styles
-  onApplyChanges: (updatedStyles: any) => void; // Callback to apply changes
+  currentStyles: string; // Current component styles
+  onApplyChanges: (updatedStyles: unknown) => void; // Callback to apply changes
 }
 
 export const AIModal = ({
@@ -50,9 +50,10 @@ export const AIModal = ({
       onApplyChanges(updatedStyles);
       toast.success("Component updated with AI!");
       onClose();
-    } catch (error: any) {
+    } catch (error) {
       console.error("AI Error:", error);
-      toast.error(`AI Error: ${error.message || "Failed to process request"}`);
+      const errorMessage = error instanceof Error ? error.message : "Failed to process request";
+      toast.error(`AI Error: ${errorMessage}`);
     } finally {
       setIsLoading(false);
     }

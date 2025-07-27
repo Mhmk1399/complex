@@ -1,5 +1,5 @@
 import connect from "@/lib/data";
-import { fetchFromStore } from "@/services/fetchFiles";
+import { fetchFromStore } from "@/services/disk";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {

@@ -35,7 +35,6 @@ import "react-toastify/dist/ReactToastify.css";
 import TourGuide from "./sections/guideTour";
 import { useSharedContext } from "@/app/contexts/SharedContext";
 import { CanvasProvider } from "../contexts/CanvasContext";
-import { AIModal } from "./AIModal";
 
 const routeIcons = {
   home: FaHome,
@@ -50,7 +49,7 @@ const routeIcons = {
 export const Main = () => {
   // Get shared state from context
   const {
-    selectedComponent,
+    // selectedComponent,
     layout,
     setLayout,
     previewWidth,
@@ -71,7 +70,7 @@ export const Main = () => {
   // Removed isFormOpen state - now using context
   const [newRouteName, setNewRouteName] = useState("");
   const [isMetaDataModalOpen, setIsMetaDataModalOpen] = useState(false);
-  
+
   const [metaData, setMetaData] = useState({
     title: "",
     description: "",
@@ -100,7 +99,11 @@ export const Main = () => {
         return;
       }
 
-      window.open(decodedToken.user.DeployedUrl, "_blank", "noopener,noreferrer");
+      let siteUrl = decodedToken.user.DeployedUrl;
+      if (!/^https?:\/\//i.test(siteUrl)) {
+        siteUrl = "https://" + siteUrl;
+      }
+      window.open(siteUrl, "_blank", "noopener,noreferrer");
     } catch (error) {
       console.error("Error opening site:", error);
       toast.error("مشکل در باز کردن سایت");
@@ -123,7 +126,7 @@ export const Main = () => {
           "Content-Type": "application/json",
           filename: name,
           DiskUrl: DiskUrl || "",
-        }
+        },
       });
 
       if (!response.ok) {
@@ -196,14 +199,14 @@ export const Main = () => {
       .then((data) => {
         if (data) {
           const cleanedRoutes = cleanRouteNames(data);
-          setActiveRoutes(cleanedRoutes);
+          setActiveRoutes(cleanedRoutes as string[]);
         }
       })
       .catch((error) => {
         console.log("Error sending token to server:", error);
       });
   }, [selectedRoute, activeMode]);
-  
+
   // Replace the direct import with API call
   const sendTokenToServer = async () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -330,13 +333,13 @@ export const Main = () => {
 
       const result = await response.json();
       console.log("Routes fetched successfully:", result); // Debug log
-      
+
       // Clean route names before setting state
       const cleanedRoutes = cleanRouteNames(result);
       console.log("Cleaned routes:", cleanedRoutes);
-      
-      setRoutes(cleanedRoutes);
-      setActiveRoutes(cleanedRoutes); // Now updates context state
+
+      setRoutes(cleanedRoutes as string[]);
+      setActiveRoutes(cleanedRoutes as string[]); // Now updates context state
     } catch (error) {
       console.log("Error fetching routes:", error);
     }
@@ -346,10 +349,12 @@ export const Main = () => {
   }, []);
 
   // Function to clean route names by removing sm.json/lg.json and removing duplicates
-  const cleanRouteNames = (routes) => {
+  const cleanRouteNames = (routes: string[]) => {
     // Remove sm.json and lg.json from route names
-    const cleanedRoutes = routes.map(route => route.replace(/(sm|lg)\.json$/, ''));
-    
+    const cleanedRoutes = routes.map((route) =>
+      route.replace(/(sm|lg)\.json$/, "")
+    );
+
     // Remove duplicates
     return [...new Set(cleanedRoutes)];
   };
@@ -525,7 +530,6 @@ export const Main = () => {
                     افزودن متا دیتا
                   </button>
                 </motion.div>
-                
 
                 <motion.button
                   id="sitePreview"
@@ -791,7 +795,6 @@ export const Main = () => {
           changeRouteRef={changeRouteRef}
           setActiveElement={setActiveElement}
         />
-        
       </CanvasProvider>
     </div>
   );
