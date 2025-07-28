@@ -8,7 +8,7 @@ export async function GET(request: Request) {
   try {
     const routeName = request.headers.get("selectedRoute");
     const activeMode = request.headers.get("activeMode") || "lg";
-    const storeId = request.headers.get("storeId") || "test2"; // You can add this header client-side
+    const storeId = request.headers.get("storeId") || ""; // You can add this header client-side
 
     if (!routeName || !activeMode || !storeId) {
       return NextResponse.json({ error: "Missing required parameters" }, { status: 400 });

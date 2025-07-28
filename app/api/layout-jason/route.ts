@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   try {
     const routeName = request.headers.get("selectedRoute");
     const activeMode = request.headers.get("activeMode") || "lg";
-    const DiskUrl = request.headers.get("DiskUrl") || "test2"; 
+    const DiskUrl = request.headers.get("DiskUrl") || ""; 
 
     if (!routeName || !activeMode || !DiskUrl) {
       return NextResponse.json(
@@ -20,11 +20,6 @@ export async function GET(request: Request) {
       );
     }
 
-    const headers = {
-      "Cache-Control": "no-cache, no-store, must-revalidate",
-      Pragma: "no-cache",
-      Expires: "0",
-    };
 
     console.log(request.body)
 
@@ -41,7 +36,7 @@ export async function GET(request: Request) {
       const homeContent = JSON.parse(
         await fetchFromStore(getFilename(`home`), DiskUrl)
       );
-      return NextResponse.json(homeContent, { status: 200, headers });
+      return NextResponse.json(homeContent, { status: 200 });
     }
 
     try {
@@ -61,7 +56,7 @@ export async function GET(request: Request) {
         },
       };
 
-      return NextResponse.json(layout, { status: 200, headers });
+      return NextResponse.json(layout, { status: 200 });
     } catch (error) {
       console.error("Error fetching content:", error);
       return NextResponse.json(

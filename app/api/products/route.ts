@@ -2,6 +2,7 @@ import connect from "@/lib/data";
 import { NextRequest, NextResponse } from "next/server";
 import Products from "@/models/products";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import category from "@/models/category";
 export async function GET(request: NextRequest) {
   await connect();
   if (!connect) {
@@ -39,7 +40,10 @@ export async function GET(request: NextRequest) {
 
       const storeId = decodedToken.storeId;
 
-      const products = await Products.find({ storeId: storeId }).populate("category");
+      const products = await Products.find({ storeId: storeId }).populate({
+        path: "Category",
+        model: category
+      });
       console.log("products data", products);
 
       if (!products || products.length === 0) {

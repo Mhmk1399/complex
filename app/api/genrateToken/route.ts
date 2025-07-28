@@ -7,6 +7,7 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     
     const DiskUrl = searchParams.get('DiskUrl');
+    console.log(DiskUrl)
 
     if (!DiskUrl) {
       return NextResponse.json(
