@@ -5,9 +5,9 @@ import { deleteDiskFile, listDiskTemplates, createNewJson } from "@/services/dis
 
 
 export async function GET(request: NextRequest) {
-  const DiskUrl = request.headers.get("DiskUrl"); // the url of the disk like https://mamad.com/storeId
+  const DiskUrl = request.headers.get("DiskUrl");
   if (!DiskUrl) {
-    return NextResponse.json({ error: "Missing storeId" }, { status: 400 });
+    return NextResponse.json({ error: "Missing DiskUrl" }, { status: 400 });
   }
   try {
     const templates = await listDiskTemplates(DiskUrl);
@@ -22,11 +22,10 @@ export async function GET(request: NextRequest) {
 }
 
 
-// post method for route
+// create new route
 export async function POST(request: NextRequest) {
   const filename = request.headers.get('filename');
   const DiskUrl = request.headers.get('DiskUrl');
-
 
   if (!filename) {
     return NextResponse.json(
@@ -37,9 +36,6 @@ export async function POST(request: NextRequest) {
 
   try {
     // Create the JSON content template for new routes
-
-
-    
     await createNewJson(filename, DiskUrl || "");
 
     return NextResponse.json(

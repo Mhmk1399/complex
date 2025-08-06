@@ -21,18 +21,20 @@ export async function GET(request: Request) {
     }
 
 
-    console.log(request.body)
+    
 
 
-    const getFilename = (routeName: string) => `${routeName}${activeMode}.json`;
+    const getFilename = (routeName: string) => `${routeName}${activeMode}`;
 
     console.log(routeName, "routename")
     console.log(activeMode, "activeMode");
 
+    console.log(getFilename("home"),"adfasdfasdf")
+
     
     
 
-    if (routeName === "home" || routeName === "home") {
+    if (routeName === "home") {
       const homeContent = JSON.parse(
         await fetchFromStore(getFilename(`home`), DiskUrl)
       );
@@ -90,7 +92,9 @@ export async function POST(request: Request) {
     }
 
     const newLayout = await request.json();
-    const filename = `${routeName}${activeMode}.json`;
+
+    console.log(newLayout, "json body")
+    const filename = `${routeName}${activeMode}`;
     console.log(filename);
 
     if (routeName === "home") {
@@ -101,7 +105,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const children = newLayout.sections?.children || [];
+    const children = newLayout.sections?.children || {};
     await saveToStore(filename, DiskUrl, { children });
     return NextResponse.json(
       { message: "Children section saved successfully" },

@@ -1,6 +1,7 @@
 import axios from "axios";
+import { json } from "stream/consumers";
 
-function getStoreIdFromUrl(url: string | null): string {
+export function getStoreIdFromUrl(url: string | null): string {
   if (!url) return "userwebsite"; // default fallback
 
   try {
@@ -12,7 +13,7 @@ function getStoreIdFromUrl(url: string | null): string {
 }
 
 
-function getVpsFromUrl(url: string | null): string {
+export function getVpsFromUrl(url: string | null): string {
   if (!url) return "http://default.com"; // fallback
 
   try {
@@ -36,7 +37,7 @@ export async function deleteDiskFile(
 
   const storeId = getStoreIdFromUrl(DiskUrl);
   const vpsUrl = getVpsFromUrl(DiskUrl);
-  const url = `${vpsUrl}/create-json`;
+  const url = `${vpsUrl}/json/${storeId}/${filename}`;
 
   try {
     // Get the current file to get its SHA (required for deletion)
@@ -45,69 +46,68 @@ export async function deleteDiskFile(
     await axios.delete(url, {
       headers: {
         Authorization: `Bearer ${process.env.VPS_TOKEN}`,
-        storeId: storeId,
-        filename: filename
       }
     });
   } catch (error: any) {
     console.error(
-      "Error deleting file from GitHub:",
+      "Error deleting file from disk:",
       error.response?.data || error.message
     );
-    throw new Error("Failed to delete file from GitHub");
+    throw new Error("Failed to delete file from disk");
   }
 }
 
 //done
-export async function listDiskTemplates(DiskUrl?: string): Promise<string[]> {
-  const storeId = getStoreIdFromUrl(DiskUrl || null);
-  const vpsUrl = getVpsFromUrl(DiskUrl || null);
-  const url = `${vpsUrl}/list-json`;
+export async function listDiskTemplates(DiskUrl: string) {
+  if (!DiskUrl) {
+    throw new Error("Missing DiskUrl");
+  }
 
-try {
-  const response = await axios.get(url, {
+  const storeId = getStoreIdFromUrl(DiskUrl);
+  const vpsUrl = getVpsFromUrl(DiskUrl);
+  const url = `${vpsUrl}/json/${storeId}/`;
+
+  const response = await fetch(url, {
+    method: "GET",
     headers: {
       Authorization: `Bearer ${process.env.VPS_TOKEN}`,
-      storeId: storeId,
-      Accept: "application/json",
     },
   });
 
-  return response.data.json_files ?? []; 
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData?.detail || "Failed to list templates");
+  }
 
-} catch (error: any) {
-  console.error(
-    "Error listing templates from VPS:",
-    error.response?.data || error.message
-  );
-  throw new Error("Failed to list templates from VPS");
+  const data = await response.json();
+  return data;
 }
 
-}
 
 
 
 export async function createNewJson(
   filename: string,
   DiskUrl?: string
-  // storeId: string
 ): Promise<void> {
-
   const storeId = getStoreIdFromUrl(DiskUrl || null);
   const vpsUrl = getVpsFromUrl(DiskUrl || null);
-
-  const endpoint = `${vpsUrl}/create-json` || "";
+  const endpoint = `${vpsUrl}/json/${storeId}/${filename}`;
   const token = process.env.VPS_TOKEN || "your-secret-token";
 
   try {
+    const defaultData = {
+      sections: {
+        children: {},
+      },
+    };
     const response = await fetch(endpoint, {
-      method: "POST",
+      method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
-        storeId: storeId,
-        filename: filename,
-      }
+      },
+      body: JSON.stringify(defaultData),
     });
 
     if (!response.ok) {
@@ -117,13 +117,13 @@ export async function createNewJson(
       );
     }
   } catch (error) {
-    console.log(error)
     console.error("Error saving to store:", error);
   }
 }
 
 
 
+//get json file content
 export async function fetchFromStore(filename: string, DiskUrl: string): Promise<string> {
 
 
@@ -131,7 +131,7 @@ export async function fetchFromStore(filename: string, DiskUrl: string): Promise
   const storeId = getStoreIdFromUrl(DiskUrl || null)
   const VPS_URL =  getVpsFromUrl(DiskUrl || null)
 
-  const endpoint = `${VPS_URL}/json`;
+  const endpoint = `${VPS_URL}/json/${storeId}/${filename}`;
   const token = process.env.VPS_TOKEN || 'your-secret-token'; // Use ENV for security
 
   console.log(filename, "filenameaaaaaa")
@@ -140,11 +140,8 @@ export async function fetchFromStore(filename: string, DiskUrl: string): Promise
   const response = await fetch(endpoint, {
     method: 'GET',
     headers: {
-      storeId: storeId,
-      'filename': filename,
       'Authorization': `Bearer ${token}`,
-    },
-    cache: 'no-store',
+    }
   });
 
   if (!response.ok) {
@@ -155,7 +152,7 @@ export async function fetchFromStore(filename: string, DiskUrl: string): Promise
 }
 
 
-
+//update json 
 export async function saveToStore(
   filename: string,
   DiskUrl: string,
@@ -166,7 +163,9 @@ export async function saveToStore(
   const VPS_URL =  getVpsFromUrl(DiskUrl)
   const token = process.env.VPS_TOKEN || "your-secret-token";
 
-  const endpoint = `${VPS_URL}/json` || "";
+  const endpoint = `${VPS_URL}/json/${storeId}/${filename}` || "";
+
+  console.log(newLayout,"body on disk utils")
 
   try {
     const response = await fetch(endpoint, {
@@ -174,8 +173,6 @@ export async function saveToStore(
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
-        storeId: storeId,
-        filename: filename,
       },
       body: JSON.stringify(newLayout),
     });
