@@ -97,10 +97,19 @@ export async function createNewJson(
 
   try {
     const defaultData = {
-      sections: {
-        children: {},
-      },
-    };
+  "children": {
+    "type": "about",
+     "metaData":{
+      "title":"juju",
+      "description":"juju page"
+    },
+    "sections": [
+
+    ],
+    "order": []
+  }
+}
+
     const response = await fetch(endpoint, {
       method: "PUT",
       headers: {

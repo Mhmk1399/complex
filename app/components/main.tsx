@@ -164,8 +164,9 @@ export const Main = () => {
       })
       .then((data) => {
         if (data) {
-          setActiveRoutes(data); // Now updates context state
+          setActiveRoutes(data.files); // Now updates context state
         }
+        console.log(data)
       })
       .catch((error) => {
         console.error("Error fetching routes:", error);
@@ -197,8 +198,9 @@ export const Main = () => {
         return response.json();
       })
       .then((data) => {
+        
         if (data) {
-          const cleanedRoutes = cleanRouteNames(data);
+          const cleanedRoutes = cleanRouteNames(data.files);
           setActiveRoutes(cleanedRoutes as string[]);
         }
       })
@@ -753,7 +755,7 @@ export const Main = () => {
                   dir="rtl"
                 >
                   <option value="">انتخاب مسیر</option>
-                  {routes
+                  {activeRoutes
                     .filter(
                       (route) => !["home", "about", "contact"].includes(route)
                     )
