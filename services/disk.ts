@@ -65,7 +65,7 @@ export async function listDiskTemplates(DiskUrl: string) {
 
   const storeId = getStoreIdFromUrl(DiskUrl);
   const vpsUrl = getVpsFromUrl(DiskUrl);
-  const url = `${vpsUrl}/json/${storeId}/`;
+  const url = `${vpsUrl}/json/${storeId}`;
 
   const response = await fetch(url, {
     method: "GET",
