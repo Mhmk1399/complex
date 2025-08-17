@@ -111,68 +111,77 @@ export const Main = () => {
   };
 
   // add new route on disk
-  const handleAddRoute = async ({ name }: { name: string }) => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const DiskUrl = urlParams.get("DiskUrl");
-    if (routes.includes(name)) {
-      toast.error("این مسیر در حال حاظر موجود است", { autoClose: 3000 });
-      return;
-    }
+const handleAddRoute = async ({ name }: { name: string }) => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const DiskUrl = urlParams.get("DiskUrl");
 
-    try {
-      const response = await fetch("/api/route-handler", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          filename: name,
-          DiskUrl: DiskUrl || "",
-        },
-      });
+  if (routes.includes(name)) {
+    toast.error("این مسیر در حال حاظر موجود است", { autoClose: 3000 });
+    return;
+  }
 
-      if (!response.ok) {
-        throw new Error("Failed to add route");
-      }
-
-      const result = await response.json();
-      console.log("Route added:", result);
-
-      fetchRoutes(); // Fetch updated routes
-      toast.success("مسیر جدید ساخته شد", {
-        autoClose: 3000,
-      });
-    } catch (error) {
-      console.log("Error adding route:", error);
-
-      toast.error("مشکل در ساخت مسیر", {
-        autoClose: 3000,
-      });
-    }
-
-    fetch("/api/route-handler", {
-      method: "GET",
+  try {
+    const response = await fetch("/api/route-handler", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
+        filename: name,          // ✅ kept in headers since your flow uses it
         DiskUrl: DiskUrl || "",
       },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          return null;
-        }
+    });
 
-        return response.json();
-      })
-      .then((data) => {
-        if (data) {
-          setActiveRoutes(data.files); // Now updates context state
-        }
-        console.log(data)
-      })
-      .catch((error) => {
-        console.error("Error fetching routes:", error);
-      });
-    fetchRoutes();
-  };
+    if (!response.ok) {
+      throw new Error("Failed to add route");
+    }
+
+    const result = await response.json();
+    console.log("Route added:", result);
+
+    fetchRoutes(); // Fetch updated routes
+    toast.success("مسیر جدید ساخته شد", {
+      autoClose: 3000,
+    });
+  } catch (error) {
+    console.log("Error adding route:", error);
+
+    toast.error("مشکل در ساخت مسیر", {
+      autoClose: 3000,
+    });
+  }
+
+  fetch("/api/route-handler", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      DiskUrl: DiskUrl || "",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return null;
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (data) {
+        const cleanRoutes = [
+          ...new Set(
+            data.files.map((f: string) =>
+              f.replace(/(lg|sm)?\.json$/, "")
+            )
+          ),
+        ];
+        setActiveRoutes(cleanRoutes as string[]); // Now updates context state
+      }
+      console.log(data, "dafddasfhhadshaahdfhsdfhahdfhdahhf");
+    })
+    .catch((error) => {
+      console.error("Error fetching routes:", error);
+    });
+
+  // ❌ removed extra fetchRoutes() here – it was redundant
+};
+
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -200,7 +209,7 @@ export const Main = () => {
       .then((data) => {
         
         if (data) {
-          const cleanedRoutes = cleanRouteNames(data.files);
+          const cleanedRoutes = cleanRouteNames(data.files as string[]);
           setActiveRoutes(cleanedRoutes as string[]);
         }
       })
@@ -337,7 +346,7 @@ export const Main = () => {
       console.log("Routes fetched successfully:", result); // Debug log
 
       // Clean route names before setting state
-      const cleanedRoutes = cleanRouteNames(result);
+      const cleanedRoutes = cleanRouteNames(result.files as string[]);
       console.log("Cleaned routes:", cleanedRoutes);
 
       setRoutes(cleanedRoutes as string[]);
