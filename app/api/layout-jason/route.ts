@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   try {
     const routeName = request.headers.get("selectedRoute");
     const activeMode = request.headers.get("activeMode") || "lg";
-    const DiskUrl = request.headers.get("DiskUrl") || "test2"; 
+    const DiskUrl = request.headers.get("DiskUrl") || ""; 
 
     if (!routeName || !activeMode || !DiskUrl) {
       return NextResponse.json(
@@ -20,28 +20,25 @@ export async function GET(request: Request) {
       );
     }
 
-    const headers = {
-      "Cache-Control": "no-cache, no-store, must-revalidate",
-      Pragma: "no-cache",
-      Expires: "0",
-    };
 
-    console.log(request.body)
+    
 
 
-    const getFilename = (routeName: string) => `${routeName}${activeMode}.json`;
+    const getFilename = (routeName: string) => `${routeName}${activeMode}`;
 
     console.log(routeName, "routename")
     console.log(activeMode, "activeMode");
 
-    const blog = "blogsm.json";
+    console.log(getFilename("home"),"adfasdfasdf")
+
+    
     
 
-    if (routeName === "home" || routeName === "home") {
+    if (routeName === "home") {
       const homeContent = JSON.parse(
         await fetchFromStore(getFilename(`home`), DiskUrl)
       );
-      return NextResponse.json(homeContent, { status: 200, headers });
+      return NextResponse.json(homeContent, { status: 200 });
     }
 
     try {
@@ -61,7 +58,7 @@ export async function GET(request: Request) {
         },
       };
 
-      return NextResponse.json(layout, { status: 200, headers });
+      return NextResponse.json(layout, { status: 200 });
     } catch (error) {
       console.error("Error fetching content:", error);
       return NextResponse.json(
@@ -95,7 +92,9 @@ export async function POST(request: Request) {
     }
 
     const newLayout = await request.json();
-    const filename = `${routeName}${activeMode}.json`;
+
+    console.log(newLayout, "json body")
+    const filename = `${routeName}${activeMode}`;
     console.log(filename);
 
     if (routeName === "home") {
@@ -106,7 +105,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const children = newLayout.sections?.children || [];
+    const children = newLayout.sections?.children || {};
     await saveToStore(filename, DiskUrl, { children });
     return NextResponse.json(
       { message: "Children section saved successfully" },

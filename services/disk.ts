@@ -1,6 +1,7 @@
 import axios from "axios";
+import { json } from "stream/consumers";
 
-function getStoreIdFromUrl(url: string | null): string {
+export function getStoreIdFromUrl(url: string | null): string {
   if (!url) return "userwebsite"; // default fallback
 
   try {
@@ -11,7 +12,12 @@ function getStoreIdFromUrl(url: string | null): string {
   }
 }
 
+<<<<<<< HEAD
 function getVpsFromUrl(url: string | null): string {
+=======
+
+export function getVpsFromUrl(url: string | null): string {
+>>>>>>> f2e829112494a1ab6b29845f3ce3739d13f66ac2
   if (!url) return "http://default.com"; // fallback
 
   try {
@@ -34,7 +40,7 @@ export async function deleteDiskFile(
 ): Promise<void> {
   const storeId = getStoreIdFromUrl(DiskUrl);
   const vpsUrl = getVpsFromUrl(DiskUrl);
-  const url = `${vpsUrl}/create-json`;
+  const url = `${vpsUrl}/json/${storeId}/${filename}`;
 
   try {
     // Get the current file to get its SHA (required for deletion)
@@ -42,25 +48,30 @@ export async function deleteDiskFile(
     await axios.delete(url, {
       headers: {
         Authorization: `Bearer ${process.env.VPS_TOKEN}`,
+<<<<<<< HEAD
         storeId: storeId,
         filename: filename,
       },
+=======
+      }
+>>>>>>> f2e829112494a1ab6b29845f3ce3739d13f66ac2
     });
   } catch (error: any) {
     console.error(
-      "Error deleting file from GitHub:",
+      "Error deleting file from disk:",
       error.response?.data || error.message
     );
-    throw new Error("Failed to delete file from GitHub");
+    throw new Error("Failed to delete file from disk");
   }
 }
 
 //done
-export async function listDiskTemplates(DiskUrl?: string): Promise<string[]> {
-  const storeId = getStoreIdFromUrl(DiskUrl || null);
-  const vpsUrl = getVpsFromUrl(DiskUrl || null);
-  const url = `${vpsUrl}/list-json`;
+export async function listDiskTemplates(DiskUrl: string) {
+  if (!DiskUrl) {
+    throw new Error("Missing DiskUrl");
+  }
 
+<<<<<<< HEAD
   try {
     const response = await axios.get(url, {
       headers: {
@@ -80,26 +91,68 @@ export async function listDiskTemplates(DiskUrl?: string): Promise<string[]> {
   }
 }
 
+=======
+  const storeId = getStoreIdFromUrl(DiskUrl);
+  const vpsUrl = getVpsFromUrl(DiskUrl);
+  const url = `${vpsUrl}/json/${storeId}`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${process.env.VPS_TOKEN}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData?.detail || "Failed to list templates");
+  }
+
+  const data = await response.json();
+  return data;
+}
+
+
+
+
+>>>>>>> f2e829112494a1ab6b29845f3ce3739d13f66ac2
 export async function createNewJson(
   filename: string,
   DiskUrl?: string
-  // storeId: string
 ): Promise<void> {
   const storeId = getStoreIdFromUrl(DiskUrl || null);
   const vpsUrl = getVpsFromUrl(DiskUrl || null);
-
-  const endpoint = `${vpsUrl}/create-json` || "";
+  const endpoint = `${vpsUrl}/json/${storeId}/${filename}`;
   const token = process.env.VPS_TOKEN || "your-secret-token";
 
   try {
+    const defaultData = {
+  "children": {
+    "type": "about",
+     "metaData":{
+      "title":"juju",
+      "description":"juju page"
+    },
+    "sections": [
+
+    ],
+    "order": []
+  }
+}
+
     const response = await fetch(endpoint, {
-      method: "POST",
+      method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
+<<<<<<< HEAD
         storeId: storeId,
         filename: filename,
       },
+=======
+      },
+      body: JSON.stringify(defaultData),
+>>>>>>> f2e829112494a1ab6b29845f3ce3739d13f66ac2
     });
 
     if (!response.ok) {
@@ -109,11 +162,15 @@ export async function createNewJson(
       );
     }
   } catch (error) {
+<<<<<<< HEAD
     console.log(error);
+=======
+>>>>>>> f2e829112494a1ab6b29845f3ce3739d13f66ac2
     console.error("Error saving to store:", error);
   }
 }
 
+<<<<<<< HEAD
 export async function fetchFromStore(
   filename: string,
   DiskUrl: string
@@ -123,17 +180,38 @@ export async function fetchFromStore(
 
   const endpoint = `${VPS_URL}/json`;
   const token = process.env.VPS_TOKEN || "your-secret-token"; // Use ENV for security
+=======
+
+
+//get json file content
+export async function fetchFromStore(filename: string, DiskUrl: string): Promise<string> {
+
+
+
+  const storeId = getStoreIdFromUrl(DiskUrl || null)
+  const VPS_URL =  getVpsFromUrl(DiskUrl || null)
+
+  const endpoint = `${VPS_URL}/json/${storeId}/${filename}`;
+  const token = process.env.VPS_TOKEN || 'your-secret-token'; // Use ENV for security
+
+  console.log(filename, "filenameaaaaaa")
+>>>>>>> f2e829112494a1ab6b29845f3ce3739d13f66ac2
 
   console.log(filename, "filenameaaaaaa");
 
   const response = await fetch(endpoint, {
     method: "GET",
     headers: {
+<<<<<<< HEAD
       storeId: storeId,
       filename: filename,
       Authorization: `Bearer ${token}`,
     },
     cache: "no-store",
+=======
+      'Authorization': `Bearer ${token}`,
+    }
+>>>>>>> f2e829112494a1ab6b29845f3ce3739d13f66ac2
   });
 
   if (!response.ok) {
@@ -145,16 +223,30 @@ export async function fetchFromStore(
   return await response.text(); // or .json() if you're sure all responses are valid JSON
 }
 
+<<<<<<< HEAD
+=======
+
+//update json 
+>>>>>>> f2e829112494a1ab6b29845f3ce3739d13f66ac2
 export async function saveToStore(
   filename: string,
   DiskUrl: string,
   newLayout: object
 ): Promise<void> {
+<<<<<<< HEAD
   const storeId = getStoreIdFromUrl(DiskUrl);
   const VPS_URL = getVpsFromUrl(DiskUrl);
   const token = process.env.STORE_API_TOKEN || "your-secret-token";
+=======
 
-  const endpoint = `${VPS_URL}/json` || "";
+  const storeId = getStoreIdFromUrl(DiskUrl)
+  const VPS_URL =  getVpsFromUrl(DiskUrl)
+  const token = process.env.VPS_TOKEN || "your-secret-token";
+>>>>>>> f2e829112494a1ab6b29845f3ce3739d13f66ac2
+
+  const endpoint = `${VPS_URL}/json/${storeId}/${filename}` || "";
+
+  console.log(newLayout,"body on disk utils")
 
   try {
     const response = await fetch(endpoint, {
@@ -162,8 +254,6 @@ export async function saveToStore(
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
-        storeId: storeId,
-        filename: filename,
       },
       body: JSON.stringify(newLayout),
     });

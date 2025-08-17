@@ -330,8 +330,8 @@ const Footer: React.FC<FooterProps> = ({
   previewWidth,
 }) => {
   const [preview, setPreview] = useState(previewWidth);
-  const [enamadExists, setEnamadExists] = useState(false);
-  const [enamad, setEnamad] = useState({});
+  const [enamadExists] = useState(false);
+  const [enamad] = useState({});
   const [categories, setCategories] = useState<Category[]>([]);
 
   const scrollToTop = () => {

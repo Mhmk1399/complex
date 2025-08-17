@@ -11,7 +11,7 @@ interface DeepSeekResponse {
 export class DeepSeekClient {
   private static readonly BASE_URL = "https://api.deepseek.com/v1";
   static async sendPrompt(prompt: string): Promise<string> {
-    const apiKey = "sk-c4f549a03c6f410fb06fda73d74e885b";
+    const apiKey = process.env.AI_DEEPSEEK_KEY;
 
     try {
       const response = await axios.post<DeepSeekResponse>(
@@ -38,7 +38,7 @@ export class DeepSeekClient {
       );
 
       return response.data.choices[0].message.content;
-    } catch (error: any) {
+    } catch (error) {
       let errorMessage = "Failed to call DeepSeek API";
 
       if (axios.isAxiosError(error)) {
@@ -51,7 +51,7 @@ export class DeepSeekClient {
         } else {
           errorMessage += `: ${error.message}`;
         }
-      } else {
+      } else if (error instanceof Error) {
         errorMessage += `: ${error.message}`;
       }
 

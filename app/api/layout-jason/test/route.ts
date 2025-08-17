@@ -1,17 +1,18 @@
 import connect from "@/lib/data";
-import { fetchFromStore } from "@/services/fetchFiles";
+import { fetchFromStore } from "@/services/disk";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   await connect();
+  console.log("asdfasdfasdf hit  asdfasdfasdf")
 
   try {
     const routeName = request.headers.get("selectedRoute");
     const activeMode = request.headers.get("activeMode") || "lg";
-    const storeId = request.headers.get("storeId") || "test2"; // You can add this header client-side
+    const DiskUrl = request.headers.get("DiskUrl") || ""; // You can add this header client-side
 
-    if (!routeName || !activeMode || !storeId) {
-      return NextResponse.json({ error: "Missing required parameters" }, { status: 400 });
+    if (!routeName || !activeMode || !DiskUrl) {
+      return NextResponse.json({ error: "Missing required headers" }, { status: 400 });
     }
 
     const headers = {
@@ -20,18 +21,25 @@ export async function GET(request: Request) {
       'Expires': '0',
     };
 
-    const getFilename = (name: string) => `${name}${activeMode}.json`;
-    console.log(getFilename('about'))
+    const getFilename = (selectedRoute: string, activeMode: string) => `${selectedRoute}${activeMode}`;
+    console.log(getFilename('about' , 'sm'),"asdfasdfasdfasdfasdfdasfasdfasdafasdfa")
+
+    console.log("Fetching data with params:", {
+      DiskUrl,
+      routeName,
+      activeMode,
+    })
+
 
     // Home route
     if (routeName === "home") {
-      const homeContent = JSON.parse(await fetchFromStore(getFilename("home"), storeId));
+      const homeContent = JSON.parse(await fetchFromStore(getFilename("home" ,activeMode), DiskUrl));
       return NextResponse.json(homeContent, { status: 200, headers });
     }
 
     try {
-      const routeContent = JSON.parse(await fetchFromStore(getFilename(routeName), storeId));
-      const homeContent = JSON.parse(await fetchFromStore(getFilename("home"), storeId));
+      const routeContent = JSON.parse(await fetchFromStore(getFilename(routeName, activeMode), DiskUrl));
+      const homeContent = JSON.parse(await fetchFromStore(getFilename("home" , activeMode), DiskUrl));
 
       const layout = {
         sections: {
