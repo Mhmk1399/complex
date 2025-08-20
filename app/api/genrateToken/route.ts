@@ -5,7 +5,7 @@ export async function GET(request: NextRequest) {
   try {
     // Get the repoUrl from the query parameters
     const searchParams = request.nextUrl.searchParams;
-    
+    console.log(searchParams,"searchParams")
     const DiskUrl = searchParams.get('DiskUrl');
     console.log(DiskUrl)
 

@@ -2,6 +2,7 @@ import connect from "@/lib/data";
 import { NextRequest, NextResponse } from "next/server";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import collections from "@/models/collections";
+import products from "@/models/products";
 
 export async function GET(request: NextRequest) {
   // Establish database connection
@@ -84,7 +85,10 @@ export async function GET(request: NextRequest) {
 
   // Fetch products
   try {
-    const products = await collections.find({ storeId }).populate("products");
+    const product = await collections.find({ storeId }).populate({
+      path: "products",
+    model:products
+    });
 
     if (!products || products.length === 0) {
       console.warn(`No products found for storeId: ${storeId}`);
@@ -99,8 +103,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(
       { 
-        products, 
-        count: products.length 
+        product, 
       }, 
       { status: 200 }
     );

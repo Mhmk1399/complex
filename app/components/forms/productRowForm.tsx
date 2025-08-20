@@ -80,6 +80,7 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
   const [collections, setCollections] = useState<
     Array<{ name: string; _id: string }>
   >([]);
+  const [collectionsError, setCollectionsError] = useState<string | null>(null);
 
   useEffect(() => {
     setMargin({
@@ -108,10 +109,17 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
           },
         });
         const data = await response.json();
-        setCollections(data.products);
-        console.log(data.products);
+        if (data.products && Array.isArray(data.products)) {
+          setCollections(data.products);
+          setCollectionsError(null);
+        } else {
+          setCollections([]);
+          setCollectionsError("هیچ کالکشنی یافت نشد");
+        }
       } catch (error) {
         console.error("Error fetching special offers:", error);
+        setCollections([]);
+        setCollectionsError("خطا در بارگذاری کالکشنها. لطفاً کالکشن را در داشبورد اضافه کنید.");
       }
     };
 
@@ -329,12 +337,19 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
               className="w-full p-2 border rounded"
             >
               <option value="">انتخاب کنید</option>
-              {collections.map((collection) => (
-                <option key={collection._id} value={collection._id}>
-                  {collection.name}
-                </option>
-              ))}
+              {collections && collections.length > 0 ? (
+                collections.map((collection) => (
+                  <option key={collection._id} value={collection._id}>
+                    {collection.name}
+                  </option>
+                ))
+              ) : (
+                <option disabled>هیچ کالکشنی موجود نیست</option>
+              )}
             </select>
+            {collectionsError && (
+              <p className="mt-2 text-sm text-red-600">{collectionsError}</p>
+            )}
           </div>
         </div>
       )}

@@ -12,20 +12,13 @@ export function getStoreIdFromUrl(url: string | null): string {
   }
 }
 
-<<<<<<< HEAD
-function getVpsFromUrl(url: string | null): string {
-=======
 
 export function getVpsFromUrl(url: string | null): string {
->>>>>>> f2e829112494a1ab6b29845f3ce3739d13f66ac2
   if (!url) return "http://default.com"; // fallback
 
   try {
     const decodedUrl = decodeURIComponent(url);
-    const firstSlashIndex = decodedUrl.indexOf(
-      "/",
-      decodedUrl.indexOf("//") + 2
-    );
+    const firstSlashIndex = decodedUrl.indexOf("/", decodedUrl.indexOf("//") + 2);
     return firstSlashIndex !== -1
       ? decodedUrl.slice(0, firstSlashIndex)
       : decodedUrl;
@@ -34,10 +27,14 @@ export function getVpsFromUrl(url: string | null): string {
   }
 }
 
+
+
 export async function deleteDiskFile(
   filename: string,
   DiskUrl: string
 ): Promise<void> {
+  
+
   const storeId = getStoreIdFromUrl(DiskUrl);
   const vpsUrl = getVpsFromUrl(DiskUrl);
   const url = `${vpsUrl}/json/${storeId}/${filename}`;
@@ -45,16 +42,11 @@ export async function deleteDiskFile(
   try {
     // Get the current file to get its SHA (required for deletion)
 
+
     await axios.delete(url, {
       headers: {
         Authorization: `Bearer ${process.env.VPS_TOKEN}`,
-<<<<<<< HEAD
-        storeId: storeId,
-        filename: filename,
-      },
-=======
       }
->>>>>>> f2e829112494a1ab6b29845f3ce3739d13f66ac2
     });
   } catch (error: any) {
     console.error(
@@ -71,27 +63,6 @@ export async function listDiskTemplates(DiskUrl: string) {
     throw new Error("Missing DiskUrl");
   }
 
-<<<<<<< HEAD
-  try {
-    const response = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${process.env.VPS_TOKEN}`,
-        storeId: storeId,
-        Accept: "application/json",
-      },
-    });
-
-    return response.data.json_files ?? [];
-  } catch (error: any) {
-    console.error(
-      "Error listing templates from VPS:",
-      error.response?.data || error.message
-    );
-    throw new Error("Failed to list templates from VPS");
-  }
-}
-
-=======
   const storeId = getStoreIdFromUrl(DiskUrl);
   const vpsUrl = getVpsFromUrl(DiskUrl);
   const url = `${vpsUrl}/json/${storeId}`;
@@ -115,7 +86,6 @@ export async function listDiskTemplates(DiskUrl: string) {
 
 
 
->>>>>>> f2e829112494a1ab6b29845f3ce3739d13f66ac2
 export async function createNewJson(
   filename: string,
   DiskUrl?: string
@@ -145,14 +115,8 @@ export async function createNewJson(
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
-<<<<<<< HEAD
-        storeId: storeId,
-        filename: filename,
-      },
-=======
       },
       body: JSON.stringify(defaultData),
->>>>>>> f2e829112494a1ab6b29845f3ce3739d13f66ac2
     });
 
     if (!response.ok) {
@@ -162,25 +126,10 @@ export async function createNewJson(
       );
     }
   } catch (error) {
-<<<<<<< HEAD
-    console.log(error);
-=======
->>>>>>> f2e829112494a1ab6b29845f3ce3739d13f66ac2
     console.error("Error saving to store:", error);
   }
 }
 
-<<<<<<< HEAD
-export async function fetchFromStore(
-  filename: string,
-  DiskUrl: string
-): Promise<string> {
-  const storeId = getStoreIdFromUrl(DiskUrl || null);
-  const VPS_URL = getVpsFromUrl(DiskUrl || null);
-
-  const endpoint = `${VPS_URL}/json`;
-  const token = process.env.VPS_TOKEN || "your-secret-token"; // Use ENV for security
-=======
 
 
 //get json file content
@@ -195,54 +144,33 @@ export async function fetchFromStore(filename: string, DiskUrl: string): Promise
   const token = process.env.VPS_TOKEN || 'your-secret-token'; // Use ENV for security
 
   console.log(filename, "filenameaaaaaa")
->>>>>>> f2e829112494a1ab6b29845f3ce3739d13f66ac2
 
-  console.log(filename, "filenameaaaaaa");
 
   const response = await fetch(endpoint, {
-    method: "GET",
+    method: 'GET',
     headers: {
-<<<<<<< HEAD
-      storeId: storeId,
-      filename: filename,
-      Authorization: `Bearer ${token}`,
-    },
-    cache: "no-store",
-=======
       'Authorization': `Bearer ${token}`,
     }
->>>>>>> f2e829112494a1ab6b29845f3ce3739d13f66ac2
   });
 
   if (!response.ok) {
-    throw new Error(
-      `Failed to fetch file: ${filename} — Status ${response.status}`
-    );
+    throw new Error(`Failed to fetch file: ${filename} — Status ${response.status}`);
   }
 
   return await response.text(); // or .json() if you're sure all responses are valid JSON
 }
 
-<<<<<<< HEAD
-=======
 
 //update json 
->>>>>>> f2e829112494a1ab6b29845f3ce3739d13f66ac2
 export async function saveToStore(
   filename: string,
   DiskUrl: string,
   newLayout: object
 ): Promise<void> {
-<<<<<<< HEAD
-  const storeId = getStoreIdFromUrl(DiskUrl);
-  const VPS_URL = getVpsFromUrl(DiskUrl);
-  const token = process.env.STORE_API_TOKEN || "your-secret-token";
-=======
 
   const storeId = getStoreIdFromUrl(DiskUrl)
   const VPS_URL =  getVpsFromUrl(DiskUrl)
   const token = process.env.VPS_TOKEN || "your-secret-token";
->>>>>>> f2e829112494a1ab6b29845f3ce3739d13f66ac2
 
   const endpoint = `${VPS_URL}/json/${storeId}/${filename}` || "";
 
@@ -265,7 +193,7 @@ export async function saveToStore(
       );
     }
   } catch (error) {
-    console.log(error);
+    console.log(error)
     console.error("Error saving to store:", error);
   }
 }

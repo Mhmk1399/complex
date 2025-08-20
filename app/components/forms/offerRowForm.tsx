@@ -62,6 +62,7 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
   const [collections, setCollections] = useState<
     Array<{ name: string; _id: string }>
   >([]);
+  const [collectionsError, setCollectionsError] = useState<string | null>(null);
   const [margin, setMargin] = useState<BoxValues>({
     top: 0,
     bottom: 0,
@@ -138,12 +139,17 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
           },
         });
         const data = await response.json();
-        if (data.products.length > 0) {
+        if (data.products && Array.isArray(data.products)) {
           setCollections(data.products);
+          setCollectionsError(null);
+        } else {
+          setCollections([]);
+          setCollectionsError("هیچ کالکشنی یافت نشد");
         }
-        console.log(data.products);
       } catch (error) {
         console.error("Error fetching special offers:", error);
+        setCollections([]);
+        setCollectionsError("خطا در بارگذاری کالکشنها. لطفاً کالکشن را در داشبورد اضافه کنید.");
       }
     };
 
@@ -386,12 +392,19 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
                 className="w-full p-2 border rounded"
               >
                 <option value="">انتخاب کنید</option>
-                {collections.map((collection) => (
-                  <option key={collection._id} value={collection._id}>
-                    {collection.name}
-                  </option>
-                ))}
+                {collections && collections.length > 0 ? (
+                  collections.map((collection) => (
+                    <option key={collection._id} value={collection._id}>
+                      {collection.name}
+                    </option>
+                  ))
+                ) : (
+                  <option disabled>هیچ کالکشنی موجود نیست</option>
+                )}
               </select>
+              {collectionsError && (
+                <p className="mt-2 text-sm text-red-600">{collectionsError}</p>
+              )}
             </div>
           </div>
         </div>
