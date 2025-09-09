@@ -11,7 +11,11 @@ interface DeepSeekResponse {
 export class DeepSeekClient {
   private static readonly BASE_URL = "https://api.deepseek.com/v1";
   static async sendPrompt(prompt: string): Promise<string> {
-    const apiKey = process.env.AI_DEEPSEEK_KEY;
+    const apiKey = "sk-087c65add4844cabbf5fa98e2ef02519";
+    
+    if (!apiKey) {
+      throw new Error("AI_DEEPSEEK_KEY environment variable is not set");
+    }
 
     try {
       const response = await axios.post<DeepSeekResponse>(
@@ -37,8 +41,13 @@ export class DeepSeekClient {
         }
       );
 
+      if (!response.data.choices?.[0]?.message?.content) {
+        throw new Error("Invalid response format from DeepSeek API");
+      }
+      
       return response.data.choices[0].message.content;
     } catch (error) {
+      console.log(error);
       let errorMessage = "Failed to call DeepSeek API";
 
       if (axios.isAxiosError(error)) {
