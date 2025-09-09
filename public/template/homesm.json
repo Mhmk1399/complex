@@ -393,7 +393,7 @@
           }
         },
         {
-          "type": "ProductsRow-2",
+          "type": "ProductsRow",
           "blocks": {
             "textHeading": " محصولات پرفروش ",
             "setting": {
@@ -423,7 +423,7 @@
           }
         },
         {
-          "type": "Gallery-2",
+          "type": "Gallery",
           "blocks": {
             "title": " ",
             "description": " ",
@@ -466,16 +466,12 @@
       ],
       "order": [
         "Story",
-       
-     
         "SlideBanner",
         "SpecialOffer",
         "OfferRow",
-        "ProductsRow-2",
-        "Gallery",
-        "Brands",
         "ProductsRow",
-        "Gallery-2"
+        "Brands",
+        "Gallery"
       ]
     },
     "sectionFooter": {

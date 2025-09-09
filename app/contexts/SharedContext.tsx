@@ -48,13 +48,7 @@ export const SharedProvider: React.FC<SharedProviderProps> = ({ children }) => {
 
   // Active routes
   const [activeRoutes, setActiveRoutes] = useState([
-    "home",
-    "about",
-    "contact",
-    "store",
-    "BlogList",
-    "BlogDetail",
-    "DetailPage",
+   'مسیری پیدا نشد',
   ]);
 
   // Initialize orders from layout

@@ -1,16 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { deleteDiskFile, listDiskTemplates, createNewJson } from "@/services/disk";
+import { deleteMongoDBFile, listMongoDBTemplates, createNewMongoJSON } from "@/services/mongodb";
+import connect from "@/lib/data";
 
 
 
 
 export async function GET(request: NextRequest) {
-  const DiskUrl = request.headers.get("DiskUrl");
-  if (!DiskUrl) {
-    return NextResponse.json({ error: "Missing DiskUrl" }, { status: 400 });
-  }
+  await connect();
+  const storeId = request.headers.get("storeId") || "default-store";
   try {
-    const templates = await listDiskTemplates(DiskUrl);
+    const templates = await listMongoDBTemplates(storeId);
     return NextResponse.json(templates, { status: 200 });
   } catch (error) {
     console.error('Error fetching templates:', error);
@@ -24,10 +23,11 @@ export async function GET(request: NextRequest) {
 
 // create new route
 export async function POST(request: NextRequest) {
-  const filename = request.headers.get('filename');
-  const DiskUrl = request.headers.get('DiskUrl');
+  await connect();
+  const routeName = request.headers.get('filename');
+  const storeId = request.headers.get('storeId') || "default-store";
 
-  if (!filename) {
+  if (!routeName) {
     return NextResponse.json(
       { error: 'New route name is required' },
       { status: 400 }
@@ -35,8 +35,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    // Create the JSON content template for new routes
-    await createNewJson(filename, DiskUrl || "");
+    await createNewMongoJSON(routeName, storeId);
 
     return NextResponse.json(
       { message: 'Route files created successfully' },
@@ -53,18 +52,11 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  const filename = request.headers.get('filename');
-  const DiskUrl = request.headers.get('DiskUrl');
+  await connect();
+  const routeName = request.headers.get('filename');
+  const storeId = request.headers.get('storeId') || "default-store";
 
-
-  if (!filename) {
-    return NextResponse.json(
-      { error: 'Route name is required' },
-      { status: 400 }
-    );
-  }
-
-    if (!DiskUrl) {
+  if (!routeName) {
     return NextResponse.json(
       { error: 'Route name is required' },
       { status: 400 }
@@ -72,10 +64,7 @@ export async function DELETE(request: NextRequest) {
   }
 
   try {
-    // Delete both lg and sm versions
-
-    await deleteDiskFile(filename, DiskUrl);
-
+    await deleteMongoDBFile(routeName, storeId);
 
     return NextResponse.json(
       { message: 'Route files deleted successfully' },

@@ -1,19 +1,16 @@
 import connect from "@/lib/data";
 import { NextResponse } from "next/server";
-// import { fetchGitHubFile, saveGitHubFile } from "@/services/disk";
-import { fetchFromStore } from "@/services/disk";
-import { saveToStore } from "@/services/disk";
+import { fetchFromMongoDB, saveToMongoDB } from "@/services/mongodb";
 
 export async function GET(request: Request) {
   await connect();
 
-  
   try {
     const routeName = request.headers.get("selectedRoute");
     const activeMode = request.headers.get("activeMode") || "lg";
-    const DiskUrl = request.headers.get("DiskUrl") || ""; 
+    const storeId = request.headers.get("storeId") || "default-store";
 
-    if (!routeName || !activeMode || !DiskUrl) {
+    if (!routeName || !activeMode) {
       return NextResponse.json(
         { error: "Missing required parameters" },
         { status: 400 }
@@ -29,25 +26,24 @@ export async function GET(request: Request) {
     console.log(routeName, "routename")
     console.log(activeMode, "activeMode");
 
-    console.log(getFilename("home"),"adfasdfasdf")
+    console.log(getFilename("home")," filename")
 
     
     
 
     if (routeName === "home") {
       const homeContent = JSON.parse(
-        await fetchFromStore(getFilename(`home`), DiskUrl)
+        await fetchFromMongoDB("home", activeMode, storeId)
       );
       return NextResponse.json(homeContent, { status: 200 });
     }
 
     try {
-      console.log("Fetching route content");
       const routeContent = JSON.parse(
-        await fetchFromStore(getFilename(routeName), DiskUrl)
+        await fetchFromMongoDB(routeName, activeMode, storeId)
       );
       const homeContent = JSON.parse(
-        await fetchFromStore(getFilename(`home`), DiskUrl)
+        await fetchFromMongoDB("home", activeMode, storeId)
       );
 
       const layout = {
@@ -77,14 +73,13 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   await connect();
-  console.log("POST request received");
 
   try {
     const routeName = request.headers.get("selectedRoute");
     const activeMode = request.headers.get("activeMode") || "lg";
-    const DiskUrl = request.headers.get("DiskUrl") || "default-store";
+    const storeId = request.headers.get("storeId") || "default-store";
 
-    if (!routeName || !activeMode || !DiskUrl) {
+    if (!routeName || !activeMode) {
       return NextResponse.json(
         { error: "Missing required parameters" },
         { status: 400 }
@@ -98,7 +93,7 @@ export async function POST(request: Request) {
     console.log(filename);
 
     if (routeName === "home") {
-      await saveToStore(filename, DiskUrl, newLayout);
+      await saveToMongoDB(routeName, activeMode, storeId, newLayout);
       return NextResponse.json(
         { message: "Layout saved successfully" },
         { status: 200 }
@@ -106,7 +101,7 @@ export async function POST(request: Request) {
     }
 
     const children = newLayout.sections?.children || {};
-    await saveToStore(filename, DiskUrl, { children });
+    await saveToMongoDB(routeName, activeMode, storeId, { children });
     return NextResponse.json(
       { message: "Children section saved successfully" },
       { status: 200 }

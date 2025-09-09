@@ -469,7 +469,7 @@
           }
         },
         {
-          "type": "NewsLetter-1",
+          "type": "NewsLetter",
           "blocks": {
             "heading": "عضویت در خبرنامه",
             "description": "توضیحات درباره خبرنامه",
@@ -1030,7 +1030,7 @@
           }
         },
         {
-          "type": "ProductsRow-2",
+          "type": "ProductsRow",
           "blocks": {
             "textHeading": " محصولات پرفروش ",
             "setting": {
@@ -1297,7 +1297,6 @@
         "SlideBanner",
         "SpecialOffer",
         "OfferRow",
-        "ProductsRow-2",
         "Brands",
         "ProductsRow",
         "Gallery",

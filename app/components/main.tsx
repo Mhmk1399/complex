@@ -110,10 +110,9 @@ export const Main = () => {
     }
   };
 
-  // add new route on disk
+  // add new route
 const handleAddRoute = async ({ name }: { name: string }) => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const DiskUrl = urlParams.get("DiskUrl");
+  const storeId = localStorage.getItem("storeId") || "storemfcdfog4456qhn";
 
   if (routes.includes(name)) {
     toast.error("این مسیر در حال حاظر موجود است", { autoClose: 3000 });
@@ -125,8 +124,8 @@ const handleAddRoute = async ({ name }: { name: string }) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        filename: name,          // ✅ kept in headers since your flow uses it
-        DiskUrl: DiskUrl || "",
+        filename: name,
+        storeId: storeId,
       },
     });
 
@@ -134,101 +133,26 @@ const handleAddRoute = async ({ name }: { name: string }) => {
       throw new Error("Failed to add route");
     }
 
-    const result = await response.json();
-    console.log("Route added:", result);
-
-    fetchRoutes(); // Fetch updated routes
+    fetchRoutes();
     toast.success("مسیر جدید ساخته شد", {
       autoClose: 3000,
     });
   } catch (error) {
     console.log("Error adding route:", error);
-
     toast.error("مشکل در ساخت مسیر", {
       autoClose: 3000,
     });
   }
-
-  fetch("/api/route-handler", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      DiskUrl: DiskUrl || "",
-    },
-  })
-    .then((response) => {
-      if (!response.ok) {
-        return null;
-      }
-      return response.json();
-    })
-    .then((data) => {
-      if (data) {
-        const cleanRoutes = [
-          ...new Set(
-            data.files.map((f: string) =>
-              f.replace(/(lg|sm)?\.json$/, "")
-            )
-          ),
-        ];
-        setActiveRoutes(cleanRoutes as string[]); // Now updates context state
-      }
-      console.log(data, "dafddasfhhadshaahdfhsdfhahdfhdahhf");
-    })
-    .catch((error) => {
-      console.error("Error fetching routes:", error);
-    });
-
-  // ❌ removed extra fetchRoutes() here – it was redundant
 };
 
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const DiskUrl = urlParams.get("DiskUrl");
-    console.log("Fetching data with params:", {
-      DiskUrl,
-      selectedRoute,
-      activeMode,
-    });
-
-    fetch("/api/route-handler", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        DiskUrl: DiskUrl || "",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          return null;
-        }
-
-        return response.json();
-      })
-      .then((data) => {
-        
-        if (data) {
-          const cleanedRoutes = cleanRouteNames(data.files as string[]);
-          setActiveRoutes(cleanedRoutes as string[]);
-        }
-      })
-      .catch((error) => {
-        console.log("Error sending token to server:", error);
-      });
+    fetchRoutes();
   }, [selectedRoute, activeMode]);
 
   // Replace the direct import with API call
   const sendTokenToServer = async () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const DiskUrl = urlParams.get("DiskUrl");
-    console.log("Fetching data with params:", {
-      DiskUrl,
-      selectedRoute,
-      activeMode,
-    });
-
-    console.log(selectedRoute, "selectedRoute");
+    const storeId = localStorage.getItem("storeId") || "storemfcdfog4456qhn";
 
     try {
       const response = await fetch("/api/layout-jason", {
@@ -237,7 +161,7 @@ const handleAddRoute = async ({ name }: { name: string }) => {
           "Content-Type": "application/json",
           selectedRoute: selectedRoute.split(".")[0],
           activeMode: activeMode,
-          DiskUrl: DiskUrl || "",
+          storeId: storeId,
         },
       });
 
@@ -291,13 +215,8 @@ const handleAddRoute = async ({ name }: { name: string }) => {
   
   const handleSave = async () => {
     setSaveStatus("saving");
-    const urlParams = new URLSearchParams(window.location.search);
-    const DiskUrl = urlParams.get("DiskUrl");
-    console.log("Fetching data with params:", {
-      DiskUrl,
-      selectedRoute,
-      activeMode,
-    });
+    const storeId = localStorage.getItem("storeId") || "storemfcdfog4456qhn";
+    
     try {
       const response = await fetch("/api/layout-jason", {
         method: "POST",
@@ -305,7 +224,7 @@ const handleAddRoute = async ({ name }: { name: string }) => {
           "Content-Type": "application/json",
           selectedRoute: selectedRoute,
           activeMode: activeMode,
-          DiskUrl: DiskUrl || "",
+          storeId: storeId,
         },
         body: JSON.stringify(layout),
       });
@@ -330,14 +249,13 @@ const handleAddRoute = async ({ name }: { name: string }) => {
   };
 
   const fetchRoutes = async () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const DiskUrl = urlParams.get("DiskUrl");
+    const storeId = localStorage.getItem("storeId") || "storemfcdfog4456qhn";
     try {
       const response = await fetch("/api/route-handler", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          DiskUrl: DiskUrl || "",
+          storeId: storeId,
         },
       });
 
@@ -346,41 +264,16 @@ const handleAddRoute = async ({ name }: { name: string }) => {
       }
 
       const result = await response.json();
-      console.log("Routes fetched successfully:", result); // Debug log
-
-      // Clean route names before setting state
       const cleanedRoutes = cleanRouteNames(result.files as string[]);
-      console.log("Cleaned routes:", cleanedRoutes);
-
       setRoutes(cleanedRoutes as string[]);
-      setActiveRoutes(cleanedRoutes as string[]); // Now updates context state
+      setActiveRoutes(cleanedRoutes as string[]);
     } catch (error) {
       console.log("Error fetching routes:", error);
     }
   };
-  useEffect(() => {
-    fetchRoutes();
-  }, []);
-
-  // Function to clean route names by removing sm.json/lg.json and removing duplicates
-  const cleanRouteNames = (routes: string[]) => {
-    // Remove sm.json and lg.json from route names
-    const cleanedRoutes = routes.map((route) =>
-      route.replace(/(sm|lg)\.json$/, "")
-    );
-
-    // Remove duplicates
-    return [...new Set(cleanedRoutes)];
-  };
 
   const handleDeleteRoute = async () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const DiskUrl = urlParams.get("DiskUrl");
-    console.log("Fetching data with params:", {
-      DiskUrl,
-      selectedRoute,
-      activeMode,
-    });
+    const storeId = localStorage.getItem("storeId") || "storemfcdfog4456qhn";
 
     try {
       const response = await fetch("/api/route-handler", {
@@ -388,7 +281,7 @@ const handleAddRoute = async ({ name }: { name: string }) => {
         headers: {
           "Content-Type": "application/json",
           filename: selectedRoute,
-          DiskUrl: DiskUrl || "",
+          storeId: storeId,
         },
       });
 
@@ -396,9 +289,7 @@ const handleAddRoute = async ({ name }: { name: string }) => {
         throw new Error("Failed to delete route");
       }
 
-      const result = await response.json();
-      console.log("Route deleted successfully:", result);
-      fetchRoutes(); // Fetch updated routes
+      fetchRoutes();
       setSelectedRoute("home");
       toast.success(" حذف مسیر انجام شد! ", {
         autoClose: 3000,
@@ -409,10 +300,19 @@ const handleAddRoute = async ({ name }: { name: string }) => {
         autoClose: 3000,
       });
     }
-    fetchRoutes();
-    setSelectedRoute("home");
     sendTokenToServer();
   };
+
+  const cleanRouteNames = (routes: string[]) => {
+    const cleanedRoutes = routes.map((route) =>
+      route.replace(/(sm|lg)\.json$/, "")
+    );
+    return [...new Set(cleanedRoutes)];
+  };
+
+  useEffect(() => {
+    fetchRoutes();
+  }, []);
   // Add this useEffect to control the guide flow
   const handleMetaDataSave = () => {
     const updatedLayout = {
