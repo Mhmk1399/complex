@@ -23,18 +23,14 @@ import {
   Layout,
   StoreChildren,
 } from "../../lib/types";
-import About from "@/public/template/aboutlg.json";
-import Contact from "@/public/template/contactlg.json";
-import Store from "@/public/template/storelg.json";
-import DetailPage from "@/public/template/detaillg.json";
-import Blog from "@/public/template/bloglg.json";
-import BlogDetail from "@/public/template/blogdetaillg.json";
+
 import { AnimatePresence, motion } from "framer-motion";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TourGuide from "./sections/guideTour";
 import { useSharedContext } from "@/app/contexts/SharedContext";
 import { CanvasProvider } from "../contexts/CanvasContext";
+import { createApiService } from "@/lib/api-factory";
 
 const routeIcons = {
   home: FaHome,
@@ -57,6 +53,19 @@ export const Main = () => {
     activeRoutes,
     setActiveRoutes,
   } = useSharedContext();
+
+  // Frontend cache
+  const [cache, setCache] = useState<Record<string, { data: any; timestamp: number }>>({});
+  const CACHE_DURATION = 60000; // 1 minute
+
+  // API service with dynamic headers
+  const api = createApiService({
+    baseUrl: '/api',
+    headers: {
+      'Content-Type': 'application/json',
+      storeId: typeof window !== 'undefined' ? localStorage.getItem('storeId') || 'storemfcdfog4456qhn' : 'storemfcdfog4456qhn'
+    }
+  });
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -112,26 +121,15 @@ export const Main = () => {
 
   // add new route
 const handleAddRoute = async ({ name }: { name: string }) => {
-  const storeId = localStorage.getItem("storeId") || "storemfcdfog4456qhn";
-
   if (routes.includes(name)) {
     toast.error("این مسیر در حال حاظر موجود است", { autoClose: 3000 });
     return;
   }
 
   try {
-    const response = await fetch("/api/route-handler", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        filename: name,
-        storeId: storeId,
-      },
+    await api.endpoint('/route-handler').post(null, {
+      headers: { filename: name }
     });
-
-    if (!response.ok) {
-      throw new Error("Failed to add route");
-    }
 
     fetchRoutes();
     toast.success("مسیر جدید ساخته شد", {
@@ -152,25 +150,23 @@ const handleAddRoute = async ({ name }: { name: string }) => {
 
   // Replace the direct import with API call
   const sendTokenToServer = async () => {
-    const storeId = localStorage.getItem("storeId") || "storemfcdfog4456qhn";
-
+    const cacheKey = `layout-${selectedRoute}-${activeMode}`;
+    const cached = cache[cacheKey];
+    
+    if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+      const data = cached.data;
+      setLayout(data);
+      return data;
+    }
+    
     try {
-      const response = await fetch("/api/layout-jason", {
-        method: "GET",
+      const data = await api.endpoint('/layout-jason').get({
         headers: {
-          "Content-Type": "application/json",
           selectedRoute: selectedRoute.split(".")[0],
           activeMode: activeMode,
-          storeId: storeId,
-        },
+        }
       });
-
-      if (!response.ok) {
-        console.log("Server error:", response.statusText);
-        return;
-      }
-
-      const data = await response.json();
+      setCache(prev => ({ ...prev, [cacheKey]: { data, timestamp: Date.now() } }));
       setLayout(data);
       return data;
     } catch (error) {
@@ -182,59 +178,47 @@ const handleAddRoute = async ({ name }: { name: string }) => {
     sendTokenToServer();
   }, [activeMode, selectedRoute]);
 
-  useEffect(() => {
-    const currentLayoutData = activeMode === "sm" ? smData : layout;
+  // useEffect(() => {
+  //   if (activeMode === "sm") {
+  //     const routeConfigs = {
+  //       about: About.children as unknown as AboutChildren,
+  //       contact: Contact.children as unknown as AboutChildren,
+  //       DetailPage: DetailPage.children as DetailPageChildren,
+  //       store: Store.children as StoreChildren,
+  //       BlogList: Blog.children as BlogChildren,
+  //       BlogDetail: BlogDetail.children as BlogDetailChildren,
+  //       default: smData.sections.children,
+  //     };
 
-    const routeConfigs = {
-      about: About.children as unknown as AboutChildren,
-      contact: Contact.children as unknown as AboutChildren,
-      DetailPage: DetailPage.children as DetailPageChildren,
-      store: Store.children as StoreChildren,
-      BlogList: Blog.children as BlogChildren,
-      BlogDetail: BlogDetail.children as BlogDetailChildren,
-      // Add default case for custom routes
-      default: currentLayoutData.sections.children,
-    };
+  //     const children =
+  //       routeConfigs[selectedRoute as keyof typeof routeConfigs] ||
+  //       routeConfigs.default;
 
-    const children =
-      routeConfigs[selectedRoute as keyof typeof routeConfigs] ||
-      routeConfigs.default;
-
-    if (children) {
-      setLayout((prevLayout: Layout) => ({
-        ...prevLayout,
-        sections: {
-          ...prevLayout.sections,
-          children: children as Layout["sections"]["children"],
-        },
-      }));
-    }
-  }, [selectedRoute, activeMode]);
+  //     if (children) {
+  //       setLayout((prevLayout: Layout) => ({
+  //         ...prevLayout,
+  //         sections: {
+  //           ...prevLayout.sections,
+  //           children: children as Layout["sections"]["children"],
+  //         },
+  //       }));
+  //     }
+  //   }
+  // }, [selectedRoute, activeMode]);
 
 
   
   const handleSave = async () => {
     setSaveStatus("saving");
-    const storeId = localStorage.getItem("storeId") || "storemfcdfog4456qhn";
     
     try {
-      const response = await fetch("/api/layout-jason", {
-        method: "POST",
+      const result = await api.endpoint('/layout-jason').post(layout, {
         headers: {
-          "Content-Type": "application/json",
           selectedRoute: selectedRoute,
           activeMode: activeMode,
-          storeId: storeId,
-        },
-        body: JSON.stringify(layout),
+        }
       });
-
-      const result = await response.json(); // Get response data
-      console.log("Save response:", result); // Debug log
-      if (!response.ok) {
-        throw new Error("Failed to save layout");
-      }
-
+      console.log("Save response:", result);
       setSaveStatus("saved");
       setTimeout(() => setSaveStatus("idle"), 2000);
     } catch (error) {
@@ -249,21 +233,19 @@ const handleAddRoute = async ({ name }: { name: string }) => {
   };
 
   const fetchRoutes = async () => {
-    const storeId = localStorage.getItem("storeId") || "storemfcdfog4456qhn";
+    const cacheKey = 'routes';
+    const cached = cache[cacheKey];
+    
+    if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+      const cleanedRoutes = cleanRouteNames(cached.data.files as string[]);
+      setRoutes(cleanedRoutes as string[]);
+      setActiveRoutes(cleanedRoutes as string[]);
+      return;
+    }
+    
     try {
-      const response = await fetch("/api/route-handler", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          storeId: storeId,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch routes");
-      }
-
-      const result = await response.json();
+      const result = await api.endpoint('/route-handler').get();
+      setCache(prev => ({ ...prev, [cacheKey]: { data: result, timestamp: Date.now() } }));
       const cleanedRoutes = cleanRouteNames(result.files as string[]);
       setRoutes(cleanedRoutes as string[]);
       setActiveRoutes(cleanedRoutes as string[]);
@@ -273,21 +255,10 @@ const handleAddRoute = async ({ name }: { name: string }) => {
   };
 
   const handleDeleteRoute = async () => {
-    const storeId = localStorage.getItem("storeId") || "storemfcdfog4456qhn";
-
     try {
-      const response = await fetch("/api/route-handler", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          filename: selectedRoute,
-          storeId: storeId,
-        },
+      await api.endpoint('/route-handler').delete({
+        headers: { filename: selectedRoute }
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to delete route");
-      }
 
       fetchRoutes();
       setSelectedRoute("home");

@@ -11,6 +11,7 @@ import ProductCard from "./productCard";
 import { useEffect, useState } from "react";
 import React from "react";
 import { FiFilter } from "react-icons/fi";
+import { createApiService } from "@/lib/api-factory";
 
 interface ProductListProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -150,8 +151,28 @@ const ProductList: React.FC<ProductListProps> = ({
 }) => {
   const [preview, setPreview] = useState(previewWidth);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
-  const [productData, setProductData] = useState<ProductCardData[]>([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const api = createApiService({
+    baseUrl: '/api',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: typeof window !== 'undefined' ? `Bearer ${localStorage.getItem('complexToken')}` : ''
+    }
+  });
+
+  const { data: productsData, error: productsError } = api.useGet('/products', {
+    revalidateOnFocus: false,
+    refreshInterval: 60000
+  });
+
+  const { data: categoriesData, error: categoriesError } = api.useGet('/category', {
+    revalidateOnFocus: false,
+    refreshInterval: 60000
+  });
+
+  const productData = productsData?.products || [];
+  const categoriesDataList = categoriesData || [];
   const [filteredProducts, setFilteredProducts] = useState<ProductCardData[]>(
     []
   );
@@ -159,9 +180,7 @@ const ProductList: React.FC<ProductListProps> = ({
   const [priceRange, setPriceRange] = useState({ min: 0, max: 0 });
   const [showColorModal, setShowColorModal] = useState(false);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
-  const [categoriesData, setCategoriesData] = useState<CategoryWithChildren[]>(
-    []
-  );
+
   const [sortBy, setSortBy] = useState<SortOption>("newest");
   const sortOptions = [
     { value: "newest", label: "جدیدترین" },
@@ -244,8 +263,8 @@ const ProductList: React.FC<ProductListProps> = ({
 
     if (selectedFilters.category) {
       // Find the selected category in categoriesData
-      const selectedCategory = categoriesData.find(
-        (cat) => cat.name === selectedFilters.category
+      const selectedCategory = categoriesDataList.find(
+        (cat: CategoryWithChildren) => cat.name === selectedFilters.category
       );
 
       if (selectedCategory) {
@@ -293,81 +312,8 @@ const ProductList: React.FC<ProductListProps> = ({
     return categories;
   };
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch("/api/category", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("complexToken")}`,
-          },
-        });
-        const data = await response.json();
-        setCategoriesData(data);
 
-        // Extract all category names including children for the dropdown
-        const allCategories = data.flatMap((category: CategoryWithChildren) => {
-          const parentName = category.name;
-          const childrenNames =
-            category.children?.map(
-              (child: CategoryWithChildren) => child.name
-            ) || [];
-          return [parentName, ...childrenNames];
-        });
-        console.log(allCategories);
-      } catch (error) {
-        console.log("Error fetching categories:", error);
-      }
-    };
 
-    fetchCategories();
-  }, []);
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const token = localStorage.getItem("complexToken");
-
-        const response = await fetch("/api/products", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            // Ensure the full "Bearer " prefix is included
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        console.log("Raw product data:", data); // Add this for debugging
-
-        // Add more robust error checking
-        if (!data || !Array.isArray(data.products)) {
-          console.error("Invalid product data structure:", data);
-          setProductData([]);
-          return;
-        }
-
-        const productInfo = data.products.map((product: ProductCardData) => ({
-          ...product,
-          images: product.images || [], // Provide a default empty array
-          colors: product.colors || [], // Provide a default empty array
-          price: product.price || "0", // Provide a default price
-        }));
-
-        setProductData(productInfo);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-        setProductData([]); // Set to empty array to prevent undefined errors
-      }
-    };
-
-    fetchProducts();
-  }, []);
 
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
@@ -425,7 +371,7 @@ const ProductList: React.FC<ProductListProps> = ({
                   }
                 >
                   <option value="">همه</option>
-                  {categoriesData.map((category) => (
+                  {categoriesDataList.map((category: CategoryWithChildren) => (
                     <React.Fragment key={category._id}>
                       <option value={category.name}>{category.name}</option>
                       {category.children?.map((child) => (
@@ -682,7 +628,7 @@ const ProductList: React.FC<ProductListProps> = ({
               }
             >
               <option value="">همه</option>
-              {categoriesData.map((category) => (
+              {categoriesDataList.map((category: CategoryWithChildren) => (
                 <React.Fragment key={category._id}>
                   <option value={category.name}>{category.name}</option>
                   {category.children?.map((child) => (

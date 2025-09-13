@@ -18,9 +18,6 @@ export async function GET(request: Request) {
     }
 
 
-    
-
-
     const getFilename = (routeName: string) => `${routeName}${activeMode}`;
 
     console.log(routeName, "routename")

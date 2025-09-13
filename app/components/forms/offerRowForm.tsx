@@ -6,6 +6,7 @@ import { TabButtons } from "../tabButtons";
 import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
 import { HiChevronDown, HiSparkles } from "react-icons/hi";
+import { createApiService } from "@/lib/api-factory";
 
 interface OfferRowFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<OfferRowSection>>;
@@ -59,10 +60,7 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
   const [isAnimationOpen, setIsAnimationOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const [collections, setCollections] = useState<
-    Array<{ name: string; _id: string }>
-  >([]);
-  const [collectionsError, setCollectionsError] = useState<string | null>(null);
+
   const [margin, setMargin] = useState<BoxValues>({
     top: 0,
     bottom: 0,
@@ -128,33 +126,22 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
     }
   };
 
-  useEffect(() => {
-    const fetchSpecialOffers = async () => {
-      try {
-        const response = await fetch("/api/collections", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `${localStorage.getItem("complexToken")}`,
-          },
-        });
-        const data = await response.json();
-        if (data.products && Array.isArray(data.products)) {
-          setCollections(data.products);
-          setCollectionsError(null);
-        } else {
-          setCollections([]);
-          setCollectionsError("هیچ کالکشنی یافت نشد");
-        }
-      } catch (error) {
-        console.error("Error fetching special offers:", error);
-        setCollections([]);
-        setCollectionsError("خطا در بارگذاری کالکشنها. لطفاً کالکشن را در داشبورد اضافه کنید.");
-      }
-    };
+  const api = createApiService({
+    baseUrl: '/api',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: typeof window !== 'undefined' ? localStorage.getItem('complexToken') || '' : ''
+    }
+  });
 
-    fetchSpecialOffers();
-  }, []);
+  const { data: collectionsData, error: collectionsError } = api.useGet('/collections', {
+    revalidateOnFocus: false,
+    refreshInterval: 60000
+  });
+
+  const collections = collectionsData?.products || [];
+  const collectionsErrorMessage = collectionsError ? "خطا در بارگذاری کالکشنها. لطفاً کالکشن را در داشبورد اضافه کنید." : 
+    (collections.length === 0 ? "هیچ کالکشنی یافت نشد" : null);
 
   const handleBlockSettingChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -393,7 +380,7 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
               >
                 <option value="">انتخاب کنید</option>
                 {collections && collections.length > 0 ? (
-                  collections.map((collection) => (
+                  collections.map((collection:{name:string,_id:string}) => (
                     <option key={collection._id} value={collection._id}>
                       {collection.name}
                     </option>
@@ -402,8 +389,8 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
                   <option disabled>هیچ کالکشنی موجود نیست</option>
                 )}
               </select>
-              {collectionsError && (
-                <p className="mt-2 text-sm text-red-600">{collectionsError}</p>
+              {collectionsErrorMessage && (
+                <p className="mt-2 text-sm text-red-600">{collectionsErrorMessage}</p>
               )}
             </div>
           </div>

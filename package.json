@@ -40,6 +40,7 @@
     "react-toastify": "^11.0.2",
     "redis": "^5.6.1",
     "styled-components": "^6.1.13",
+    "swr": "^2.3.6",
     "uuid": "^11.0.3"
   },
   "devDependencies": {

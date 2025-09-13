@@ -9,6 +9,7 @@ import {
 import Image from "next/image";
 import { Delete } from "../C-D";
 import { styled } from "styled-components";
+import { createApiService } from "@/lib/api-factory";
 
 interface DetailPageProps {
   productId: string;
@@ -165,28 +166,28 @@ const DetailPage: React.FC<DetailPageProps> = ({
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    const fetchProductDetails = async () => {
-      try {
-        const response = await fetch(`/api/products/${productId}`);
-        if (!response.ok) {
-          throw new Error(await response.text());
-        }
-        const data = await response.json();
-        setProduct(data);
-
-        setSelectedImage(data.images[0]?.imageSrc || "");
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        console.log("Error fetching product details:", error);
-      }
-    };
-
-    if (productId) {
-      fetchProductDetails();
+  const api = createApiService({
+    baseUrl: '/api',
+    headers: {
+      'Content-Type': 'application/json'
     }
-  }, [productId]);
+  });
+
+  const { data: productData, error } = api.useGet(`/products/${productId}`, {
+    revalidateOnFocus: false,
+    refreshInterval: 60000
+  });
+
+  useEffect(() => {
+    if (productData) {
+      setProduct(productData);
+      setSelectedImage(productData.images[0]?.imageSrc || "");
+      setLoading(false);
+    } else if (error) {
+      console.log("Error fetching product details:", error);
+      setLoading(false);
+    }
+  }, [productData, error]);
 
   if (loading) {
     return (

@@ -6,6 +6,7 @@ import { TabButtons } from "../tabButtons";
 import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
 import { HiChevronDown, HiSparkles } from "react-icons/hi";
+import { createApiService } from "@/lib/api-factory";
 
 interface SpecialFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<SpecialOfferSection>>;
@@ -58,10 +59,22 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
   const [isAnimationOpen, setIsAnimationOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [collections, setCollections] = useState<
-    Array<{ name: string; _id: string }>
-  >([]);
-  const [collectionsError, setCollectionsError] = useState<string | null>(null);
+  const api = createApiService({
+    baseUrl: '/api',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: typeof window !== 'undefined' ? localStorage.getItem('complexToken') || '' : ''
+    }
+  });
+
+  const { data: collectionsData, error: collectionsError } = api.useGet('/collections', {
+    revalidateOnFocus: false,
+    refreshInterval: 60000
+  });
+
+  const collections = collectionsData?.products || [];
+  const collectionsErrorMessage = collectionsError ? "خطا در بارگذاری کالکشنها. لطفاً کالکشن را در داشبورد اضافه کنید." : 
+    (collections.length === 0 ? "هیچ کالکشنی یافت نشد" : null);
 
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
@@ -128,33 +141,6 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
     }
   };
 
-  useEffect(() => {
-    const fetchSpecialOffers = async () => {
-      try {
-        const response = await fetch("/api/collections", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `${localStorage.getItem("complexToken")}`,
-          },
-        });
-        const data = await response.json();
-        if (data.products && Array.isArray(data.products)) {
-          setCollections(data.products);
-          setCollectionsError(null);
-        } else {
-          setCollections([]);
-          setCollectionsError("هیچ کالکشنی یافت نشد");
-        }
-      } catch (error) {
-        console.error("Error fetching special offers:", error);
-        setCollections([]);
-        setCollectionsError("خطا در بارگذاری کالکشن‌ها. لطفاً کالکشن را در داشبورد اضافه کنید.");
-      }
-    };
-
-    fetchSpecialOffers();
-  }, []);
 
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -339,7 +325,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
               >
                 <option value="">انتخاب کنید</option>
                 {collections && collections.length > 0 ? (
-                  collections.map((collection) => (
+                  collections.map((collection: {name:string,_id:string}) => (
                     <option key={collection._id} value={collection._id}>
                       {collection.name}
                     </option>
@@ -348,8 +334,8 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
                   <option disabled>هیچ کالکشنی موجود نیست</option>
                 )}
               </select>
-              {collectionsError && (
-                <p className="mt-2 text-sm text-red-600">{collectionsError}</p>
+              {collectionsErrorMessage && (
+                <p className="mt-2 text-sm text-red-600">{collectionsErrorMessage}</p>
               )}
             </div>
           </div>

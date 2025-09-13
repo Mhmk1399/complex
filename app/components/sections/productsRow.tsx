@@ -4,6 +4,7 @@ import type { Layout, ProductRowSection } from "@/lib/types";
 import ProductCard from "./productCard";
 import { useEffect, useState, useRef } from "react";
 import { Delete } from "../C-D";
+import { createApiService } from "@/lib/api-factory";
 
 interface ProductsRowProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -247,11 +248,29 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [collectionProducts, setCollectionProducts] = useState([]);
 
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
   ) as ProductRowSection;
+
+  const api = createApiService({
+    baseUrl: '/api',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+
+  const collectionId = sectionData?.blocks?.setting?.selectedCollection;
+  const { data: collectionsData, error: collectionsError } = api.useGet(
+    collectionId ? '/collections/id' : null,
+    {
+      headers: { collectionId },
+      revalidateOnFocus: false,
+      refreshInterval: 60000
+    }
+  );
+
+  const collectionProducts = collectionsData?.collections?.[0]?.products || [];
 
   // Move both useEffect hooks here, before  returns
   useEffect(() => {
@@ -268,31 +287,7 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, [previewWidth]);
 
-  useEffect(() => {
-    const fetchCollectionProducts = async () => {
-      try {
-        const collectionId = sectionData?.blocks?.setting?.selectedCollection;
-        if (!collectionId) return;
 
-        const response = await fetch(`/api/collections/id`, {
-          headers: {
-            "Content-Type": "application/json",
-            collectionId: collectionId,
-          },
-        });
-        const data = await response.json();
-        setCollectionProducts(data.collections[0].products);
-        console.log(
-          "Collection Products:",
-          data.collections[0].products
-        )
-      } catch (error) {
-        console.log("Error fetching collection products:", error);
-      }
-    };
-
-    fetchCollectionProducts();
-  }, [sectionData?.blocks?.setting?.selectedCollection, actualName]);
 
   // Now place your conditional returns
   if (!layout || !layout.sections || !sectionData) return null;

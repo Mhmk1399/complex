@@ -4,6 +4,7 @@ import { BlogDetailSection, Layout } from "@/lib/types";
 import Image from "next/image";
 import { styled } from "styled-components";
 import { Delete } from "../C-D";
+import { createApiService } from "@/lib/api-factory";
 
 interface BlogDetailProps {
   blogId: string;
@@ -236,21 +237,27 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, [previewWidth]);
 
-  useEffect(() => {
-    const fetchBlog = async () => {
-      try {
-        const response = await fetch(`/api/blogs`);
-        const data = await response.json();
-        setBlog(data.blogs[0]);
-      } catch (error) {
-        console.error("Error fetching blog:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const api = createApiService({
+    baseUrl: '/api',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
 
-    fetchBlog();
-  }, []);
+  const { data: blogData, error } = api.useGet('/blogs', {
+    revalidateOnFocus: false,
+    refreshInterval: 60000
+  });
+
+  useEffect(() => {
+    if (blogData) {
+      setBlog(blogData.blogs[0]);
+      setLoading(false);
+    } else if (error) {
+      console.error("Error fetching blog:", error);
+      setLoading(false);
+    }
+  }, [blogData, error]);
 
   const sectionData = layout?.sections?.children?.sections?.find(
     (section) => section.type === actualName

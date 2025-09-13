@@ -6,6 +6,7 @@ import { TabButtons } from "../tabButtons";
 import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
 import { HiChevronDown, HiSparkles } from "react-icons/hi";
+import { createApiService } from "@/lib/api-factory";
 
 interface ProductRowFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<ProductRowSection>>;
@@ -77,10 +78,7 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
     setUserInputData(initialData);
   }, [selectedComponent]);
 
-  const [collections, setCollections] = useState<
-    Array<{ name: string; _id: string }>
-  >([]);
-  const [collectionsError, setCollectionsError] = useState<string | null>(null);
+
 
   useEffect(() => {
     setMargin({
@@ -98,33 +96,22 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
     });
   }, [userInputData?.setting]);
 
-  useEffect(() => {
-    const fetchSpecialOffers = async () => {
-      try {
-        const response = await fetch("/api/collections", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `${localStorage.getItem("complexToken")}`,
-          },
-        });
-        const data = await response.json();
-        if (data.products && Array.isArray(data.products)) {
-          setCollections(data.products);
-          setCollectionsError(null);
-        } else {
-          setCollections([]);
-          setCollectionsError("هیچ کالکشنی یافت نشد");
-        }
-      } catch (error) {
-        console.error("Error fetching special offers:", error);
-        setCollections([]);
-        setCollectionsError("خطا در بارگذاری کالکشنها. لطفاً کالکشن را در داشبورد اضافه کنید.");
-      }
-    };
+  const api = createApiService({
+    baseUrl: '/api',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: typeof window !== 'undefined' ? localStorage.getItem('complexToken') || '' : ''
+    }
+  });
 
-    fetchSpecialOffers();
-  }, []);
+  const { data: collectionsData, error: collectionsError } = api.useGet('/collections', {
+    revalidateOnFocus: false,
+    refreshInterval: 60000
+  });
+
+  const collections = collectionsData?.products || [];
+  const collectionsErrorMessage = collectionsError ? "خطا در بارگذاری کالکشنها. لطفاً کالکشن را در داشبورد اضافه کنید." : 
+    (collections.length === 0 ? "هیچ کالکشنی یافت نشد" : null);
 
   const handleUpdate = (
     type: "margin" | "padding",
@@ -347,8 +334,8 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
                 <option disabled>هیچ کالکشنی موجود نیست</option>
               )}
             </select>
-            {collectionsError && (
-              <p className="mt-2 text-sm text-red-600">{collectionsError}</p>
+            {collectionsErrorMessage && (
+              <p className="mt-2 text-sm text-red-600">{collectionsErrorMessage}</p>
             )}
           </div>
         </div>

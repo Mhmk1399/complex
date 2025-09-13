@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { Delete } from "../C-D";
+import { createApiService } from "@/lib/api-factory";
 
 interface StoryProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -235,7 +236,21 @@ export const Story: React.FC<StoryProps> = ({
   const [selectedStory, setSelectedStory] = useState<string | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
-  const [stories, setStories] = useState<Story[]>([]);
+
+  const api = createApiService({
+    baseUrl: '/api',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: typeof window !== 'undefined' ? localStorage.getItem('complexToken') || '' : ''
+    }
+  });
+
+  const { data: storiesData, error: storiesError } = api.useGet('/story', {
+    revalidateOnFocus: false,
+    refreshInterval: 60000
+  });
+
+  const stories = storiesData || [];
 
   useEffect(() => {
     if (window.innerWidth <= 425) {
@@ -245,26 +260,6 @@ export const Story: React.FC<StoryProps> = ({
     }
   }, [previewWidth]);
 
-  useEffect(() => {
-    const fetchAllStories = async () => {
-      try {
-        const headers: HeadersInit = {
-          "Authorization": `${localStorage.getItem("complexToken")}`,
-          "Content-Type": "application/json",
-        }
-  
-        const response = await fetch("/api/story", {
-          method: "GET",
-          headers: headers,
-        });
-        const data = await response.json();
-        setStories(data);
-      } catch (error) {
-        console.log("خطا در دریافت استوری‌ها", error);
-      }
-    };
-    fetchAllStories();
-  }, []);
   
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName

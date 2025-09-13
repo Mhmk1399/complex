@@ -4,6 +4,7 @@ import type { Layout, ProductCardData, SpecialOfferSection } from "@/lib/types";
 import ProductCard from "./productCard";
 import { useEffect, useState, useRef } from "react";
 import { Delete } from "../C-D";
+import { createApiService } from "@/lib/api-factory";
 
 interface SpecialOfferProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -260,9 +261,6 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
   setLayout,
   previewWidth,
 }) => {
-  const [specialOfferProducts, setSpecialOfferProducts] = useState<
-    ProductCardData[]
-  >([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -270,6 +268,25 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
   ) as SpecialOfferSection;
+
+  const api = createApiService({
+    baseUrl: '/api',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+
+  const collectionId = sectionData?.blocks?.setting?.selectedCollection;
+  const { data: collectionsData, error: collectionsError } = api.useGet(
+    collectionId ? '/collections/id' : null,
+    {
+      headers: { collectionId },
+      revalidateOnFocus: false,
+      refreshInterval: 60000
+    }
+  );
+
+  const specialOfferProducts = collectionsData?.collections?.[0]?.products || [];
 
   useEffect(() => {
     const handleResize = () => {
@@ -285,29 +302,7 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, [previewWidth]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const sectionData = layout?.sections?.children?.sections.find(
-        (section) => section.type === actualName
-      ) as SpecialOfferSection;
 
-      const collectionId = sectionData?.blocks?.setting?.selectedCollection;
-      if (!collectionId) return;
-
-      const response = await fetch(`/api/collections/id`, {
-        headers: {
-          "Content-Type": "application/json",
-          collectionId: collectionId,
-        },
-      });
-      const data = await response.json();
-      if (data.collections.length > 0) {
-        setSpecialOfferProducts(data.collections[0].products);
-      }
-    };
-
-    fetchData();
-  }, [actualName, sectionData?.blocks?.setting?.selectedCollection]);
 
   if (!sectionData) return null;
   if (!layout || !layout.sections) return null;

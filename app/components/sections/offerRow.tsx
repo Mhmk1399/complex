@@ -5,6 +5,7 @@ import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { Delete } from "../C-D";
 import Link from "next/link";
+import { createApiService } from "@/lib/api-factory";
 
 interface OfferRowProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -381,35 +382,28 @@ export const OfferRow: React.FC<OfferRowProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [preview, setPreview] = useState(previewWidth);
-  const [categories, setCategories] = useState([]);
-
   const sectionData = layout?.sections?.children?.sections?.find(
     (section) => section.type === actualName
   ) as OfferRowSection;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const sectionData = layout?.sections?.children?.sections.find(
-        (section) => section.type === actualName
-      ) as SpecialOfferSection;
+  const api = createApiService({
+    baseUrl: '/api',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
 
-      const collectionId = sectionData?.blocks?.setting?.selectedCollection;
-      if (!collectionId) return;
+  const collectionId = sectionData?.blocks?.setting?.selectedCollection;
+  const { data: collectionsData, error: collectionsError } = api.useGet(
+    collectionId ? '/collections/id' : null,
+    {
+      headers: { collectionId },
+      revalidateOnFocus: false,
+      refreshInterval: 60000
+    }
+  );
 
-      const response = await fetch(`/api/collections/id`, {
-        headers: {
-          "Content-Type": "application/json",
-          collectionId: collectionId,
-        },
-      });
-      const data = await response.json();
-      if (data?.collections?.length > 0) {
-        setCategories(data.collections[0].products);
-      }
-    };
-
-    fetchData();
-  }, [actualName, sectionData?.blocks?.setting?.selectedCollection]);
+  const categories = collectionsData?.collections?.[0]?.products || [];
 
   useEffect(() => {
     if (window.innerWidth <= 424) {
