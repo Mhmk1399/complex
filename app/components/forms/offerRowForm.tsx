@@ -139,7 +139,7 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
     refreshInterval: 60000
   });
 
-  const collections = collectionsData?.products || [];
+  const collections = collectionsData?.product || [];
   const collectionsErrorMessage = collectionsError ? "خطا در بارگذاری کالکشنها. لطفاً کالکشن را در داشبورد اضافه کنید." : 
     (collections.length === 0 ? "هیچ کالکشنی یافت نشد" : null);
 

@@ -250,7 +250,7 @@ export const Story: React.FC<StoryProps> = ({
     refreshInterval: 60000
   });
 
-  const stories = storiesData || [];
+  const stories: Story[] = storiesData || [];
 
   useEffect(() => {
     if (window.innerWidth <= 425) {
@@ -330,19 +330,19 @@ export const Story: React.FC<StoryProps> = ({
         )}
         <StoriesWrapper ref={containerRef} className="overflow-x-auto">
           {(stories.length > 0 ? stories : sectionData.blocks.stories).map(
-            (story, idx) => (
+            (story: any, idx: number) => (
               <StoryItem
-                key={"id" in story ? story.id + idx : idx}
+                key={"_id" in story ? story._id + idx : idx}
                 $data={sectionData}
                 onClick={() =>
                   setSelectedStory(
-                    "image" in story ? story.image : story.imageUrl
+                    story.image || story.imageUrl
                   )
                 }
               >
                 <div className="story-ring">
                   <Image
-                    src={"image" in story ? story.image : story.imageUrl}
+                    src={story.image || story.imageUrl}
                     alt={story.title}
                     className="story-image w-[100px] h-[100px] object-cover"
                     width={100}
@@ -374,7 +374,7 @@ export const Story: React.FC<StoryProps> = ({
               onClick={(e) => e.stopPropagation()}
             >
               <button
-                className="absolute -top-20 right-3 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm text-white text-2xl hover:bg-white/30 transition-all"
+                className="absolute -top-20 right-3 z-100 w-10 h-10 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm text-white text-2xl hover:bg-white/30 transition-all"
                 onClick={() => setSelectedStory(null)}
               >
                 ×

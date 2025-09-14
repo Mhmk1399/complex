@@ -278,7 +278,7 @@ const MobileMenuButton = styled.button<{
   background: none;
   border: none;
   padding: 10px;
-  z-index: 100;
+  z-index: 90;
 
   @media (max-width: 768px) {
     display: block;

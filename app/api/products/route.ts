@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
       const storeId = decodedToken.storeId;
 
       const products = await Products.find({ storeId: storeId }).populate({
-        path: "Category",
+        path: "category",
         model: category
       });
       console.log("products data", products);
