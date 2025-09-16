@@ -7,12 +7,11 @@ import { FiImage } from "react-icons/fi";
 
 // Interface for image file
 interface ImageFile {
-  _id: string;
-  fileName: string;
-  fileUrl: string;
-  fileType: string;
-  fileSize: number;
-  storeId: string;
+  id: string;
+  filename: string;
+  url: string;
+  uploadedAt: string;
+  size: number;
 }
 
 // Props interface for the modal
@@ -33,7 +32,7 @@ export default function ImageSelectorModal({
   // Fetch images based on store ID from token
   const fetchImages = async () => {
     try {
-      const response = await fetch("/api/uploadFile", {
+      const response = await fetch("/api/upload", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -41,8 +40,9 @@ export default function ImageSelectorModal({
         },
       });
       const data = await response.json();
-      console.log("Fetched images:", data);
-      setImages(data);
+      if (data.success && data.images) {
+        setImages(data.images);
+      }
     } catch (error) {
       console.error("Error fetching images:", error);
     }
@@ -97,10 +97,10 @@ export default function ImageSelectorModal({
               {Array.isArray(images) &&
                 images.map((image: ImageFile) => (
                   <motion.div
-                    key={image._id}
+                    key={image.id}
                     className={`relative cursor-pointer rounded-lg overflow-hidden 
                     ${
-                      selectedImage?._id === image._id
+                      selectedImage?.id === image.id
                         ? "border-4 border-blue-500"
                         : "border-2 border-transparent"
                     }
@@ -109,8 +109,8 @@ export default function ImageSelectorModal({
                     onClick={() => handleImageSelect(image)}
                   >
                     <Image
-                      src={image.fileUrl}
-                      alt={image.fileName}
+                      src={image.url}
+                      alt={image.filename}
                       width={300}
                       height={300}
                       className="object-cover w-full h-48"

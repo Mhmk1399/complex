@@ -1,10 +1,12 @@
 import jwt from 'jsonwebtoken';
 import connect from '@/lib/data';
 import users from '@/models/users';
-export async function generateTokenForComplex(DiskUrl: string): Promise<string> {
+export async function generateTokenForComplex(storeId: string): Promise<string> {
   try {
-     const DiskUrlParts = DiskUrl.split('/');
-     const storeId = DiskUrlParts[DiskUrlParts.length - 1];
+    if (!storeId.trim()) {
+      throw new Error('storeId is required');
+    }
+     
 
     await connect();
     console.log('MongoDB connected successfully');

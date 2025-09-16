@@ -6,18 +6,18 @@ export async function GET(request: NextRequest) {
     // Get the repoUrl from the query parameters
     const searchParams = request.nextUrl.searchParams;
     console.log(searchParams,"searchParams")
-    const DiskUrl = searchParams.get('DiskUrl');
-    console.log(DiskUrl)
+    const storeId = searchParams.get('storeId');
+    console.log(storeId,"storeId")
 
-    if (!DiskUrl) {
+    if (!storeId) {
       return NextResponse.json(
-        { error: 'Repository URL is required' }, 
+        { error: 'storeId URL is required' }, 
         { status: 400 }
       );
     }
 
-    // Generate token using the repository URL
-    const token = await generateTokenForComplex(DiskUrl);
+    
+    const token = await generateTokenForComplex(storeId);
 
     return NextResponse.json({ 
       token,
