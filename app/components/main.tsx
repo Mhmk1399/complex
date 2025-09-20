@@ -58,12 +58,35 @@ export const Main = () => {
   const [cache, setCache] = useState<Record<string, { data: any; timestamp: number }>>({});
   const CACHE_DURATION = 60000; // 1 minute
 
-  // API service with dynamic headers
+  // Get storeId from subdomain in production or env in development
+  const getStoreId = () => {
+    const isDev = process.env.NODE_ENV === 'development';
+    
+    if (isDev) {
+      return process.env.NEXT_PUBLIC_DEV_STORE_ID;
+    }
+    
+    if (typeof window !== 'undefined') {
+      const hostname = window.location.hostname;
+      const subdomain = hostname.split('.')[0];
+      return subdomain;
+    }
+    return null;
+  };
+  
+  const getAuthToken = () => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('token') || localStorage.getItem('authToken');
+    }
+    return null;
+  };
+  
   const api = createApiService({
     baseUrl: '/api',
     headers: {
       'Content-Type': 'application/json',
-      storeId: typeof window !== 'undefined' ? localStorage.getItem('storeId') || 'storemfcdfog4456qhn' : 'storemfcdfog4456qhn'
+      'Authorization': `Bearer ${getAuthToken()}`
     }
   });
 
@@ -91,31 +114,31 @@ export const Main = () => {
   // Removed orders state - now using context
   const [selectedRoute, setSelectedRoute] = useState<string>("home");
 
-  // اینجا ادرس سایتی که ساخته میشه داده میشه به دکمه
+  // site of the vendor on the userwebsite
   const handleSiteView = () => {
+    const token = getAuthToken();
+    if (!token) {
+      toast.error("توکن یافت نشد");
+      return;
+    }
+    
     try {
-      const token = localStorage.getItem("complexToken");
-      if (!token) {
-        toast.error("توکن یافت نشد");
+      const decoded = jwt.decode(token) as any;
+      const storeId = decoded?.storeId;
+      
+      if (!storeId) {
+        toast.error("شناسه فروشگاه یافت نشد");
         return;
       }
-
-      // Decode the token without verification (client-side)
-      const decodedToken = jwt.decode(token) as JwtPayload;
-
-      if (!decodedToken?.user?.DeployedUrl) {
-        toast.error("آدرس سایت یافت نشد");
-        return;
-      }
-
-      let siteUrl = decodedToken.user.DeployedUrl;
-      if (!/^https?:\/\//i.test(siteUrl)) {
-        siteUrl = "https://" + siteUrl;
-      }
+      
+      const isDev = process.env.NODE_ENV === 'development';
+      const siteUrl = isDev 
+        ? `http://localhost:3001` // Development URL
+        : `https://${storeId}.yourdomain.com`; // Production URL
       window.open(siteUrl, "_blank", "noopener,noreferrer");
     } catch (error) {
-      console.error("Error opening site:", error);
-      toast.error("مشکل در باز کردن سایت");
+      console.error("Error decoding token:", error);
+      toast.error("مشکل در خواندن توکن");
     }
   };
 
@@ -249,7 +272,7 @@ const handleAddRoute = async ({ name }: { name: string }) => {
       const cleanedRoutes = cleanRouteNames(result.files as string[]);
       setRoutes(cleanedRoutes as string[]);
       setActiveRoutes(cleanedRoutes as string[]);
-    } catch (error) {
+    } catch (error: any) {
       console.log("Error fetching routes:", error);
     }
   };
@@ -284,6 +307,8 @@ const handleAddRoute = async ({ name }: { name: string }) => {
   useEffect(() => {
     fetchRoutes();
   }, []);
+
+
   // Add this useEffect to control the guide flow
   const handleMetaDataSave = () => {
     const updatedLayout = {
