@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { deleteMongoDBFile, listMongoDBTemplates, createNewMongoJSON } from "@/services/mongodb";
 import connect from "@/lib/data";
-
-
-
+import { getStoreIdFromRequest } from "@/utilities/getStoreId";
 
 export async function GET(request: NextRequest) {
   await connect();
-  const storeId = request.headers.get("storeId") || "default-store";
+  const storeId = getStoreIdFromRequest(request);
   try {
     const templates = await listMongoDBTemplates(storeId);
     return NextResponse.json(templates, { status: 200 });
@@ -20,12 +18,11 @@ export async function GET(request: NextRequest) {
   }
 }
 
-
 // create new route
 export async function POST(request: NextRequest) {
   await connect();
   const routeName = request.headers.get('filename');
-  const storeId = request.headers.get('storeId') || "default-store";
+  const storeId = getStoreIdFromRequest(request);
 
   if (!routeName) {
     return NextResponse.json(
@@ -54,7 +51,7 @@ export async function POST(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   await connect();
   const routeName = request.headers.get('filename');
-  const storeId = request.headers.get('storeId') || "default-store";
+  const storeId = getStoreIdFromRequest(request);
 
   if (!routeName) {
     return NextResponse.json(
@@ -79,6 +76,3 @@ export async function DELETE(request: NextRequest) {
     );
   }
 }
-
-
-

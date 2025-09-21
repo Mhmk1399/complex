@@ -1,16 +1,19 @@
 import connect from "@/lib/data";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { fetchFromMongoDB, saveToMongoDB } from "@/services/mongodb";
 import homelg from "@/public/template/homelg.json";
 import homesm from "@/public/template/homesm.json";
 import fs from "fs/promises";
 import path from "path";
+import { getStoreIdFromRequest } from "@/utilities/getStoreId";
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
+  await connect();
+
   try {
     const routeName = request.headers.get("selectedRoute");
     const activeMode = request.headers.get("activeMode") || "lg";
-    const storeId = request.headers.get("storeId") || "default-store";
+    const storeId = getStoreIdFromRequest(request);
 
     if (!routeName || !activeMode) {
       return NextResponse.json(
@@ -27,6 +30,7 @@ export async function GET(request: Request) {
 
     // Resolve the path to the JSON files in the public/template directory
     const basePath = path.join(process.cwd(), "public", "template");
+    console.log(getFilename("home"), " filename");
 
     if (routeName === "home") {
       const filePath = path.join(basePath, `home${activeMode}.json`);
@@ -79,13 +83,13 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   await connect();
 
   try {
     const routeName = request.headers.get("selectedRoute");
     const activeMode = request.headers.get("activeMode") || "lg";
-    const storeId = request.headers.get("storeId") || "default-store";
+    const storeId = getStoreIdFromRequest(request);
 
     if (!routeName || !activeMode) {
       return NextResponse.json(
