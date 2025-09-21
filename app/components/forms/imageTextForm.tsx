@@ -7,6 +7,7 @@ import ImageSelectorModal from "../sections/ImageSelectorModal";
 import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
 import { HiChevronDown, HiSparkles } from "react-icons/hi";
+import { DynamicRangeInput } from "./DynamicInputs";
 
 interface ImageTextFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<ImageTextSection>>;
@@ -440,21 +441,14 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
                 </div>
 
                 <div className="w-full">
-                  <label className="block mb-1">سایز عنوان</label>
-                  <input
-                    type="range"
+                  <DynamicRangeInput
+                    label="سایز عنوان"
+                    name="headingFontSize"
                     min="10"
                     max="100"
-                    name="headingFontSize"
-                    value={
-                      userInputData?.blocks?.setting?.headingFontSize || "30"
-                    }
+                    value={userInputData?.blocks?.setting?.headingFontSize || "30"}
                     onChange={handleSettingChange}
-                    className="w-full"
                   />
-                  <p className="text-sm text-gray-600">
-                    {userInputData?.blocks?.setting?.headingFontSize || "30"}px
-                  </p>
                 </div>
               </div>
 
@@ -469,24 +463,14 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
                 </div>
 
                 <div className="w-full">
-                  <label className="block mb-1">سایز توضیحات</label>
-                  <input
-                    type="range"
+                  <DynamicRangeInput
+                    label="سایز توضیحات"
+                    name="descriptionFontSize"
                     min="10"
                     max="50"
-                    name="descriptionFontSize"
-                    value={
-                      userInputData?.blocks?.setting?.descriptionFontSize ||
-                      "24"
-                    }
+                    value={userInputData?.blocks?.setting?.descriptionFontSize || "24"}
                     onChange={handleSettingChange}
-                    className="w-full"
                   />
-                  <p className="text-sm text-gray-600">
-                    {userInputData?.blocks?.setting?.descriptionFontSize ||
-                      "24"}
-                    px
-                  </p>
                 </div>
               </div>
 
@@ -513,53 +497,39 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block mb-1">عرض تصویر</label>
-                  <input
-                    type="range"
+                  <DynamicRangeInput
+                    label="عرض تصویر"
+                    name="imageWidth"
                     min="100"
                     max="800"
-                    name="imageWidth"
                     value={userInputData?.blocks?.setting?.imageWidth || "500"}
                     onChange={handleSettingChange}
-                    className="w-full"
                   />
-                  <p className="text-sm text-gray-600">
-                    {userInputData?.blocks?.setting?.imageWidth || "500"}px
-                  </p>
                 </div>
 
                 <div>
-                  <label className="block mb-1">ارتفاع تصویر</label>
-                  <input
-                    type="range"
+                  <DynamicRangeInput
+                    label="ارتفاع تصویر"
+                    name="imageHeight"
                     min="100"
                     max="600"
-                    name="imageHeight"
                     value={userInputData?.blocks?.setting?.imageHeight || "200"}
                     onChange={handleSettingChange}
-                    className="w-full"
                   />
-                  <p className="text-sm text-gray-600">
-                    {userInputData?.blocks?.setting?.imageHeight || "200"}px
-                  </p>
                 </div>
               </div>
 
               <div>
-                <label className="block mb-1">شفافیت تصویر</label>
-                <input
-                  type="range"
+                <DynamicRangeInput
+                  label="شفافیت تصویر"
+                  name="opacityImage"
                   min="0"
                   max="1"
                   step="0.1"
-                  name="opacityImage"
                   value={userInputData?.blocks?.setting?.opacityImage || "1"}
                   onChange={handleSettingChange}
-                  className="w-full"
+                  displayUnit=""
                 />
-                <p className="text-sm text-gray-600">
-                  {userInputData?.blocks?.setting?.opacityImage || "1"}
-                </p>
               </div>
             </div>
           </div>

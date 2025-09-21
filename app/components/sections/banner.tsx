@@ -28,7 +28,7 @@ const SectionBanner = styled.section<{
   padding-bottom: ${(props) => props.$data.setting.paddingBottom}px;
   padding-left: ${(props) => props.$data.setting.paddingLeft}px;
   padding-right: ${(props) => props.$data.setting.paddingRight}px;
-  
+
   @media (max-width: 768px) {
     height: ${(props) => (props.$preview === "sm" ? "200px" : "300px")};
   }
@@ -41,7 +41,7 @@ const BannerImage = styled(Image)<{
 }>`
   opacity: ${(props) => props.$data.blocks.setting.opacityImage || "1"};
   border-radius: ${(props) =>
-    props.$data.blocks.setting.imageRadious || "10px"};
+    props.$data.blocks.setting.imageRadious || "10"}px;
   object-fit: ${(props) => props.$data.blocks.setting.imageBehavior || "cover"};
 `;
 
@@ -53,12 +53,16 @@ const BannerTextBox = styled.div<{
   position: absolute;
   top: 50%;
   left: 50%;
+  border: ${(props) => props.$data.blocks.setting.border || "1"}px solid
+    ${(props) => props.$data.blocks.setting.borderColor || "1"};
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   opacity: ${(props) => props.$data.blocks.setting.opacityTextBox || "1"};
+  width: ${(props) => props.$data.blocks.setting.boxWidth || "700"}px;
+  height: ${(props) => props.$data.blocks.setting.boxHeight || "200"}px;
   background-color: ${(props) =>
     props.$data.blocks.setting.backgroundColorBox || "rgba(0, 0, 0, 0.5)"};
   padding: ${(props) => (props.$preview === "sm" ? "20px 30px" : "70px 20px")};
@@ -68,16 +72,18 @@ const BannerTextBox = styled.div<{
   /* Apply animations using CSS filters and properties that don't affect positioning */
   ${(props) => {
     const animation = props.$data.blocks.setting.animation;
-    if (!animation) return '';
-    
+    if (!animation) return "";
+
     const { type, animation: animConfig } = animation;
-    const selector = type === 'hover' ? '&:hover' : '&:active';
-    
+    const selector = type === "hover" ? "&:hover" : "&:active";
+
     // Generate animation CSS based on type
-    if (animConfig.type === 'pulse') {
+    if (animConfig.type === "pulse") {
       return `
         ${selector} {
-          animation: bannerPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: bannerPulse ${animConfig.duration} ${animConfig.timing} ${
+        animConfig.delay || "0s"
+      } ${animConfig.iterationCount || "1"};
         }
         
         @keyframes bannerPulse {
@@ -91,10 +97,12 @@ const BannerTextBox = styled.div<{
           }
         }
       `;
-    } else if (animConfig.type === 'glow') {
+    } else if (animConfig.type === "glow") {
       return `
         ${selector} {
-          animation: bannerGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: bannerGlow ${animConfig.duration} ${animConfig.timing} ${
+        animConfig.delay || "0s"
+      } ${animConfig.iterationCount || "1"};
         }
         
                 @keyframes bannerGlow {
@@ -106,10 +114,12 @@ const BannerTextBox = styled.div<{
           }
         }
       `;
-    } else if (animConfig.type === 'brightness') {
+    } else if (animConfig.type === "brightness") {
       return `
         ${selector} {
-          animation: bannerBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: bannerBrightness ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes bannerBrightness {
@@ -121,25 +131,29 @@ const BannerTextBox = styled.div<{
           }
         }
       `;
-    } else if (animConfig.type === 'blur') {
+    } else if (animConfig.type === "blur") {
       return `
         ${selector} {
-          animation: bannerBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: bannerBlur ${animConfig.duration} ${animConfig.timing} ${
+        animConfig.delay || "0s"
+      } ${animConfig.iterationCount || "1"};
         }
         
         @keyframes bannerBlur {
           0%, 100% { 
-            filter: blur(0px);
+            backdrop: blur(0px);
           }
           50% { 
             filter: blur(2px);
           }
         }
       `;
-    } else if (animConfig.type === 'saturate') {
+    } else if (animConfig.type === "saturate") {
       return `
         ${selector} {
-          animation: bannerSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: bannerSaturate ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes bannerSaturate {
@@ -151,10 +165,12 @@ const BannerTextBox = styled.div<{
           }
         }
       `;
-    } else if (animConfig.type === 'contrast') {
+    } else if (animConfig.type === "contrast") {
       return `
         ${selector} {
-          animation: bannerContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: bannerContrast ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes bannerContrast {
@@ -166,10 +182,12 @@ const BannerTextBox = styled.div<{
           }
         }
       `;
-    } else if (animConfig.type === 'opacity') {
+    } else if (animConfig.type === "opacity") {
       return `
         ${selector} {
-          animation: bannerOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: bannerOpacity ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes bannerOpacity {
@@ -184,10 +202,12 @@ const BannerTextBox = styled.div<{
           }
         }
       `;
-    } else if (animConfig.type === 'shadow') {
+    } else if (animConfig.type === "shadow") {
       return `
         ${selector} {
-          animation: bannerShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: bannerShadow ${animConfig.duration} ${animConfig.timing} ${
+        animConfig.delay || "0s"
+      } ${animConfig.iterationCount || "1"};
         }
         
         @keyframes bannerShadow {
@@ -200,8 +220,8 @@ const BannerTextBox = styled.div<{
         }
       `;
     }
-    
-    return '';
+
+    return "";
   }}
 `;
 
@@ -303,10 +323,9 @@ const Banner: React.FC<props> = ({
               <button
                 className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 "
                 onClick={() => {
-                 setSelectedComponent("");
+                  setSelectedComponent("");
                   Delete(actualName, layout, setLayout);
                   setShowDeleteModal(false);
-                  
                 }}
               >
                 حذف

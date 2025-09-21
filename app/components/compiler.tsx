@@ -30,11 +30,14 @@ export const Compiler = (data: string | object, name: string) => {
     return structuredClone(processedData.sections[sectionKey]);
   }
 
-  return structuredClone(
-    processedData.sections.children.sections.filter(
-      (section: Section) => section.type === name
-    )
-  );
+  if (processedData?.sections?.children?.sections) {
+    return structuredClone(
+      processedData.sections.children.sections.filter(
+        (section: Section) => section.type === name
+      )
+    );
+  }
+  return [];
 };
 export const JasonChanger = (
   data: string | object,
@@ -59,13 +62,15 @@ export const JasonChanger = (
   }
 
   // For other sections, find and update in children sections
-  processedData.sections.children.sections =
-    processedData.sections.children.sections.map((section: Section) => {
-      if (section.type === name) {
-        return newData;
-      }
-      return section;
-    });
+  if (processedData?.sections?.children?.sections) {
+    processedData.sections.children.sections =
+      processedData.sections.children.sections.map((section: Section) => {
+        if (section.type === name) {
+          return newData;
+        }
+        return section;
+      });
+  }
 
   return processedData;
 };

@@ -5,7 +5,7 @@ import {
   CollapseBlockSetting,
   AnimationEffect,
 } from "@/lib/types";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import styled from "styled-components";
 import { Delete } from "../C-D";
 
@@ -90,16 +90,18 @@ const Question = styled.div<{
   /* Apply global animation to all accordion headers */
   ${(props) => {
     const animation = props.$globalAnimation;
-    if (!animation) return '';
-    
+    if (!animation) return "";
+
     const { type, animation: animConfig } = animation;
-    const selector = type === 'hover' ? '&:hover' : '&:active';
-    
+    const selector = type === "hover" ? "&:hover" : "&:active";
+
     // Generate animation CSS based on type
-    if (animConfig.type === 'pulse') {
+    if (animConfig.type === "pulse") {
       return `
         ${selector} {
-          animation: accordionHeaderPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: accordionHeaderPulse ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes accordionHeaderPulse {
@@ -113,10 +115,12 @@ const Question = styled.div<{
           }
         }
       `;
-    } else if (animConfig.type === 'glow') {
+    } else if (animConfig.type === "glow") {
       return `
         ${selector} {
-          animation: accordionHeaderGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: accordionHeaderGlow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes accordionHeaderGlow {
@@ -128,10 +132,12 @@ const Question = styled.div<{
           }
         }
       `;
-    } else if (animConfig.type === 'brightness') {
+    } else if (animConfig.type === "brightness") {
       return `
         ${selector} {
-          animation: accordionHeaderBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: accordionHeaderBrightness ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes accordionHeaderBrightness {
@@ -143,10 +149,12 @@ const Question = styled.div<{
           }
         }
       `;
-    } else if (animConfig.type === 'blur') {
+    } else if (animConfig.type === "blur") {
       return `
         ${selector} {
-          animation: accordionHeaderBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: accordionHeaderBlur ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes accordionHeaderBlur {
@@ -158,10 +166,12 @@ const Question = styled.div<{
           }
         }
       `;
-    } else if (animConfig.type === 'saturate') {
+    } else if (animConfig.type === "saturate") {
       return `
         ${selector} {
-          animation: accordionHeaderSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: accordionHeaderSaturate ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes accordionHeaderSaturate {
@@ -173,10 +183,12 @@ const Question = styled.div<{
           }
         }
       `;
-    } else if (animConfig.type === 'contrast') {
+    } else if (animConfig.type === "contrast") {
       return `
         ${selector} {
-          animation: accordionHeaderContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: accordionHeaderContrast ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes accordionHeaderContrast {
@@ -188,10 +200,12 @@ const Question = styled.div<{
           }
         }
       `;
-    } else if (animConfig.type === 'opacity') {
+    } else if (animConfig.type === "opacity") {
       return `
         ${selector} {
-          animation: accordionHeaderOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: accordionHeaderOpacity ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes accordionHeaderOpacity {
@@ -206,10 +220,12 @@ const Question = styled.div<{
           }
         }
       `;
-    } else if (animConfig.type === 'shadow') {
+    } else if (animConfig.type === "shadow") {
       return `
         ${selector} {
-          animation: accordionHeaderShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: accordionHeaderShadow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes accordionHeaderShadow {
@@ -222,8 +238,8 @@ const Question = styled.div<{
         }
       `;
     }
-    
-    return '';
+
+    return "";
   }}
 `;
 
@@ -273,22 +289,26 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
   const [openIndexes, setOpenIndexes] = useState<number[]>([]);
   const [blocks, setBlocks] = useState<CollapseBlock[]>([]);
 
-  const sectionData = (layout?.sections?.children?.sections?.find(
-    (section) => section.type === actualName
-  ) as CollapseSection) || {
-    blocks: [],
-    setting: {},
-    type: "collapse",
-  };
+  const sectionData = useMemo(() => {
+    return (
+      (layout?.sections?.children?.sections?.find(
+        (section) => section.type === actualName
+      ) as CollapseSection) || {
+        blocks: [],
+        setting: {},
+        type: "collapse",
+      }
+    );
+  }, [layout?.sections?.children?.sections, actualName]);
 
   useEffect(() => {
-    if (sectionData?.blocks) {
+    if (sectionData?.blocks && typeof sectionData.blocks === "object") {
       const blocksArray = Object.keys(sectionData.blocks)
         .filter((key) => !isNaN(Number(key)))
         .map((key) => sectionData.blocks[Number(key)]);
       setBlocks(blocksArray);
     }
-  }, [sectionData]);
+  }, [sectionData.blocks]);
 
   if (!sectionData) {
     return null;
@@ -303,22 +323,25 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
   // Handle click animations for global animation
   const handleQuestionClick = (e: React.MouseEvent, index: number) => {
     e.stopPropagation();
-    
+
     const globalAnimation = sectionData.setting?.headerAnimation;
-    
-    if (globalAnimation && globalAnimation.type === 'click') {
+
+    if (globalAnimation && globalAnimation.type === "click") {
       // Add clicked class for click animations
       const element = e.currentTarget as HTMLElement;
-      element.classList.add('clicked');
-      
-      const duration = parseFloat(globalAnimation.animation.duration.replace('s', '')) * 1000;
-      const delay = parseFloat((globalAnimation.animation.delay || '0s').replace('s', '')) * 1000;
-      
+      element.classList.add("clicked");
+
+      const duration =
+        parseFloat(globalAnimation.animation.duration.replace("s", "")) * 1000;
+      const delay =
+        parseFloat((globalAnimation.animation.delay || "0s").replace("s", "")) *
+        1000;
+
       setTimeout(() => {
-        element.classList.remove('clicked');
+        element.classList.remove("clicked");
       }, duration + delay);
     }
-    
+
     toggleOpen(index);
   };
 
@@ -370,7 +393,7 @@ const CollapseFaq: React.FC<CollapseFaqProps> = ({
       ) : (
         <div>Loading...</div>
       )}
-      
+
       {showDeleteModal && (
         <div className="fixed inset-0  bg-black bg-opacity-70 z-50 flex items-center justify-center ">
           <div className="bg-white p-8 rounded-lg">

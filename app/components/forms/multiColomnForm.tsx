@@ -96,12 +96,16 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
   }, [userInputData?.setting]);
 
   useEffect(() => {
-    const initialData = Compiler(layout, selectedComponent)[0];
-    console.log(initialData);
-    if (initialData) {
-      setUserInputData(initialData);
+    if (layout?.sections?.children?.sections) {
+      const initialData = Compiler(layout, selectedComponent)[0];
+      console.log(initialData);
+      if (initialData) {
+        setUserInputData(initialData);
+      }
     }
-  }, [selectedComponent]);
+  }, [selectedComponent, layout?.sections?.children?.sections]);
+
+  
   useEffect(() => {
     setIsContentOpen(true);
   }, []);

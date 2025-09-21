@@ -21,7 +21,6 @@ export interface BrandsBlockSettings extends CommonSettings {
   navAnimation?: AnimationEffect; // Add this line for navigation button animations
 }
 
-
 export interface ColorSchema {
   primary: string;
   secondary: string;
@@ -196,9 +195,9 @@ interface MegaMenuItem {
 //   megaMenu?: MegaMenuItem[];
 // }
 export interface AnimationSettings {
-  animationType?: 'fade' | 'slide' | 'zoom' | 'none';
+  animationType?: "fade" | "slide" | "zoom" | "none";
   animationDuration?: number;
-  animationTiming?: 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'linear';
+  animationTiming?: "ease" | "ease-in" | "ease-out" | "ease-in-out" | "linear";
   animationDelay?: number;
 }
 
@@ -212,7 +211,7 @@ export interface AnimationConfig {
 }
 
 export interface AnimationEffect {
-  type: 'hover' | 'click';
+  type: "hover" | "click";
   animation: AnimationConfig;
 }
 
@@ -231,6 +230,10 @@ export interface BannerBlockSettings extends CommonSettings {
   imageRadious: string;
   imageBehavior: string;
   animation?: AnimationEffect;
+  boxWidth: string;
+  boxHeight: string;
+  borderColor:string
+  border:string
 }
 export interface AnimationState {
   isPlaying: boolean;
@@ -243,7 +246,7 @@ export interface AnimationState {
 // Animation hook return type
 export interface UseAnimationReturn {
   isAnimating: boolean;
-  trigger: (type?: 'hover' | 'click') => void;
+  trigger: (type?: "hover" | "click") => void;
   stop: () => void;
   reset: () => void;
   state: AnimationState;
@@ -483,7 +486,6 @@ export interface ImageTextBlockSetting extends CommonSettings {
   buttonAnimation?: AnimationEffect; // Add button animation support
 }
 
-
 // Add this new interface for ImageText blocks
 export interface ImageTextBlock {
   imageSrc: string;
@@ -655,9 +657,9 @@ export interface SlideBlockSetting {
   opacityImage?: string;
   imageRadious?: string;
   imageBehavior?: string;
-imageAnimation?: AnimationEffect;
-btnAnimation?: AnimationEffect;
-navAnimation?: AnimationEffect;
+  imageAnimation?: AnimationEffect;
+  btnAnimation?: AnimationEffect;
+  navAnimation?: AnimationEffect;
 }
 
 export interface SlideBlock {
@@ -787,10 +789,9 @@ export interface MultiRowBlockSetting extends CommonSettings {
   btnColor: string;
   btnBackgroundColor: string;
   imageAlign: string;
-   buttonAnimation?: AnimationEffect;
-  imageAnimation?: AnimationEffect; 
+  buttonAnimation?: AnimationEffect;
+  imageAnimation?: AnimationEffect;
 }
-
 
 export interface MultiRowBlock {
   heading: string;
@@ -1120,7 +1121,6 @@ export interface CollectionBlockSetting extends CommonSettings {
   backgroundColor: string;
   navAnimation?: AnimationEffect; // Add this line for navigation button animations
 }
-
 
 export interface CollectionProduct {
   id: string;
@@ -1462,7 +1462,6 @@ export interface SlideBannerBlockSetting extends CommonSettings {
   navAnimation?: AnimationEffect; // Add this line for navigation button animations
 }
 
-
 export interface SlideItem {
   imageSrc: string;
   imageAlt: string;
@@ -1509,7 +1508,6 @@ export interface OfferItem {
     imageAly: string;
   };
 }
-
 
 export interface OfferRowBlock {
   offers: OfferItem[];
@@ -1577,7 +1575,6 @@ export interface ProductRowBlockSetting extends CommonSettings {
   navAnimation?: AnimationEffect; // Add this line for navigation button animations
 }
 
-
 export interface ProductRowBlock {
   textHeading: string;
   products: ProductRowSection[];
@@ -1629,12 +1626,11 @@ export interface AnimationConfig {
   timing: string;
   delay?: string;
   iterationCount?: string;
-  intensity?: 'light' | 'normal' | 'strong'; // ADD this line
+  intensity?: "light" | "normal" | "strong"; // ADD this line
 }
 
-
 export interface AnimationEffect {
-  type: 'hover' | 'click' ; // ADD 'scroll' and 'load'
+  type: "hover" | "click"; // ADD 'scroll' and 'load'
   animation: AnimationConfig;
   trigger?: {
     threshold?: number; // ADD this for scroll animations
@@ -1642,7 +1638,6 @@ export interface AnimationEffect {
 }
 
 export interface AnimationSettings {
-
   effect?: AnimationEffect; // Changed from effects array to single effect
 }
 

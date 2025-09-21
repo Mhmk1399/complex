@@ -808,38 +808,6 @@
         },
 
         {
-          "type": "Banner",
-          "blocks": {
-            "imageSrc": "/assets/images/ban.jpg",
-            "imageAlt": "",
-            "text": "lggggg",
-            "description": " توضیحات بنر",
-            "setting": {
-              "descriptionColor": "#E5E5E5",
-              "descriptionFontSize": "22",
-              "descriptionFontWeight": "bold",
-              "textColor": "#FCA311",
-              "textFontSize": "71",
-              "textFontWeight": "bold",
-              "backgroundColorBox": "#14213d",
-              "backgroundBoxRadious": "54",
-              "opacityImage": "1",
-              "opacityTextBox": "0.7",
-              "imageRadious": "14",
-              "imageBehavior": "cover"
-            }
-          },
-          "setting": {
-            "paddingTop": "30",
-            "paddingBottom": "30",
-            "marginTop": "20",
-            "marginBottom": "20",
-            "imageBehavior": "cover",
-            "paddingLeft": "10",
-            "paddingRight": "10"
-          }
-        },
-        {
           "type": "ProductsRow",
           "blocks": {
             "textHeading": " محصولات پرفروش ",
@@ -1142,18 +1110,22 @@
             "imageSrc": "/assets/images/ban.jpg",
             "imageAlt": "",
             "text": "سربرگ بنر",
-            "description": " توضیحات بنر",
+            "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.",
             "setting": {
               "descriptionColor": "#000000",
               "descriptionFontSize": "15",
               "descriptionFontWeight": "normal",
               "textColor": "#1d6bdf",
-              "textFontSize": "30",
+              "textFontSize": "54",
               "textFontWeight": "bold",
               "backgroundColorBox": "#ffffff",
               "backgroundBoxRadious": "10",
               "opacityImage": 1,
-              "opacityTextBox": 0.8,
+              "opacityTextBox": 1,
+              "boxWidth": "900",
+              "boxHeight": "400",
+              "border": "0",
+              "borderColor": "black",
               "imageRadious": "14",
               "imageBehavior": "cover"
             }
@@ -1168,34 +1140,39 @@
         {
           "type": "RichText",
           "blocks": {
-            "textHeading": "سربرگ",
-            "description": "توضیحات درباره محصول",
+            "imageSrc": "",
+            "imageAlt": "",
+            "heading": "",
+            "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد\n\n",
+            "textHeading": "سربرگ اصلی",
             "btnText": "دکمه",
-            "btnLink": "/",
+            "btnLink": "store",
             "setting": {
-              "textHeadingColor": "#FCA311",
-              "textHeadingFontSize": "40",
+              "textHeadingColor": "#fcfcfc",
+              "textHeadingFontSize": "46",
               "textHeadingFontWeight": "bold",
-              "descriptionColor": "#E5E5E5",
-              "descriptionFontSize": "18",
-              "descriptionFontWeight": "normal",
-              "background": "#14213D",
-              "btnTextColor": "#ffffff",
-              "btnBackgroundColor": "#FCA311",
-              "lineWidth": "500",
-              "lineColor": "#fff",
-              "lineHeight": "2",
-              "lineBottom": "10",
-              "lineTop": "10"
+              "descriptionColor": "#ffffff",
+              "descriptionFontSize": "16",
+              "descriptionFontWeight": "bold",
+              "background": "#eb0fee",
+              "btnTextColor": "#582222",
+              "btnBackgroundColor": "#f3f2f2",
+              "lineWidth": "340",
+              "lineHeight": "6",
+              "lineTop": "-25",
+              "lineBottom": "39",
+              "lineColor": "#de2121"
             }
           },
           "setting": {
             "paddingTop": "30",
             "paddingBottom": "30",
-            "marginTop": "20",
+            "marginTop": "0",
             "marginBottom": "20",
             "paddinRight": "0",
-            "paddinLeft": "0"
+            "paddinLeft": "0",
+            "paddingLeft": "20",
+            "paddingRight": "20"
           }
         },
         {
@@ -1290,9 +1267,11 @@
         }
       ],
       "order": [
-        "Collection",
-        "Video",
+        "Banner",
+        "RichText",
         "SlideShow",
+        "Video",
+        "Collection",
         "Story",
         "SlideBanner",
         "SpecialOffer",
@@ -1305,9 +1284,7 @@
         "MultiColumn",
         "CollapseFaq",
         "ImageText",
-        "ContactForm",
-        "Banner",
-        "RichText"
+        "ContactForm"
       ]
     },
     "sectionFooter": {

@@ -547,8 +547,10 @@ export const Form = () => {
   };
 
   useEffect(() => {
-    setOrders([...layout.sections.children.order]);
-  }, [layout.sections.children.order]);
+    if (layout?.sections?.children?.order) {
+      setOrders([...layout.sections.children.order]);
+    }
+  }, [layout?.sections?.children?.order]);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -559,16 +561,18 @@ export const Form = () => {
       const newOrders = arrayMove(orders, oldIndex, newIndex);
 
       setOrders(newOrders);
-      setLayout({
-        ...layout,
-        sections: {
-          ...layout.sections,
-          children: {
-            ...layout.sections.children,
-            order: newOrders,
+      if (layout?.sections?.children) {
+        setLayout({
+          ...layout,
+          sections: {
+            ...layout.sections,
+            children: {
+              ...layout.sections.children,
+              order: newOrders,
+            },
           },
-        },
-      });
+        });
+      }
     }
   };
 
@@ -1062,14 +1066,13 @@ export const Form = () => {
                     duration: 0.3,
                     ease: "easeInOut",
                   }}
-                  className="fixed right-0 hidden lg:block top-0 h-screen w-[270px] ease-in-out border-l-2 border-white/40 rounded overflow-hidden"
+                  className="fixed right-0 hidden lg:block top-0 h-screen w-[270px] bg-white/80 backdrop-blur-sm ease-in-out border-l-2 border-white/40 rounded overflow-hidden"
                   style={{ zIndex: 1000 }}
                 >
                   {/* Scrollable Container with custom scrollbar */}
                   <ScrollableFormContent>
-                    {/* Animated Background Layer - Uses dynamic content height */}
-                    <motion.div
-                      className="absolute top-0 left-0 right-0 bg-white/80 backdrop-blur-sm"
+                     {/* <motion.div
+                      className="absolute top-0 left-0 right-0 bg-white backdrop-blur-sm"
                       style={{
                         height: `${Math.max(
                           contentHeight,
@@ -1077,25 +1080,11 @@ export const Form = () => {
                         )}px`,
                         width: "100%",
                         maxWidth: "270px",
-                      }}
-                      animate={{
-                        backgroundColor: [
-                          "rgba(255,255,255,0.8)",
-                          "rgba(255,255,255,0.9)",
-                          "rgba(255,255,255,0.8)",
-                        ],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        repeatType: "reverse",
-                        ease: "easeInOut",
                       }}
                     />
 
-                    {/* Pulse Animation Overlay - Uses dynamic content height */}
-                    <motion.div
-                      className="absolute top-0 left-0 right-0 bg-blue-500/10 backdrop-blur-sm"
+                     <motion.div
+                      className="absolute top-0 left-0 right-0 bg-white   backdrop-blur-sm"
                       style={{
                         height: `${Math.max(
                           contentHeight,
@@ -1104,17 +1093,7 @@ export const Form = () => {
                         width: "100%",
                         maxWidth: "270px",
                       }}
-                      animate={{
-                        opacity: [0.1, 0.3, 0.1],
-                        scale: [1, 1.02, 1],
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        repeatType: "reverse",
-                        ease: "easeInOut",
-                      }}
-                    />
+                    /> */}
 
                     {/* Content Layer */}
                     <div ref={contentRef} className="relative z-10 w-full">

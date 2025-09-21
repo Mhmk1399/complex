@@ -6,6 +6,11 @@ import { TabButtons } from "../tabButtons";
 import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
 import { HiSparkles, HiChevronDown } from "react-icons/hi";
+import {
+  DynamicRangeInput,
+  DynamicSelectInput,
+  ColorInput,
+} from "./DynamicInputs";
 
 interface BannerFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<BannerSection>>;
@@ -20,32 +25,6 @@ interface BoxValues {
   left: number;
   right: number;
 }
-
-const ColorInput = ({
-  label,
-  name,
-  value,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <>
-    <label className="block mb-1">{label}</label>
-    <div className="flex flex-col rounded-md gap-3 items-center">
-      <input
-        type="color"
-        id={name}
-        name={name}
-        value={value || "#000000"}
-        onChange={onChange}
-        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
-      />
-    </div>
-  </>
-);
 
 export const BannerForm: React.FC<BannerFormProps> = ({
   setUserInputData,
@@ -252,7 +231,6 @@ export const BannerForm: React.FC<BannerFormProps> = ({
   const currentAnimation = userInputData?.blocks?.setting?.animation;
   const hasAnimation = !!currentAnimation;
 
-  
   return (
     <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-lg font-bold mb-4">تنظیمات بنر</h2>
@@ -264,31 +242,6 @@ export const BannerForm: React.FC<BannerFormProps> = ({
       {isContentOpen && (
         <div className="p-4 space-y-4 animate-slideDown">
           {/* Image Input */}
-          <div className="rounded-lg">
-            <label className="block mb-2 text-sm font-bold text-gray-700">
-              آپلود عکس
-            </label>
-            <input
-              type="text"
-              name="imageSrc"
-              value={userInputData?.blocks?.imageSrc ?? ""}
-              onChange={handleBlockChange}
-              className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-            />
-          </div>
-          <div className="rounded-lg">
-            <label className="block mb-2 text-sm font-bold text-gray-700">
-              لینک عکس
-            </label>
-            <input
-              type="text"
-              name="imageLink"
-              value={userInputData?.blocks?.imageLink ?? ""}
-              onChange={handleBlockChange}
-              className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-            />
-          </div>
-
           {/* Header Input */}
           <div className="rounded-lg">
             <label className="block mb-2 text-sm font-bold text-gray-700">
@@ -316,6 +269,30 @@ export const BannerForm: React.FC<BannerFormProps> = ({
               rows={3}
             />
           </div>
+          <div className="rounded-lg">
+            <label className="block mb-2 text-sm font-bold text-gray-700">
+              آپلود عکس
+            </label>
+            <input
+              type="text"
+              name="imageSrc"
+              value={userInputData?.blocks?.imageSrc ?? ""}
+              onChange={handleBlockChange}
+              className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+            />
+          </div>
+          <div className="rounded-lg">
+            <label className="block mb-2 text-sm font-bold text-gray-700">
+              متن جایگزین عکس
+            </label>
+            <input
+              type="text"
+              name="imageAlt"
+              value={userInputData?.blocks?.imageAlt ?? ""}
+              onChange={handleBlockChange}
+              className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+            />
+          </div>
         </div>
       )}
 
@@ -326,11 +303,11 @@ export const BannerForm: React.FC<BannerFormProps> = ({
             <div className="">
               <div className="grid md:grid-cols-1 gap-4">
                 {/* Text Settings */}
-                <div className="rounded-lg flex flex-col gap-3">
+                <div className="flex flex-col gap-3 px-2 border-gray-400 border-b-2 pb-2">
                   <h4 className="font-semibold text-sky-700 my-4">
                     تنظیمات سربرگ
                   </h4>
-                  <div className="rounded-lg flex items-center justify-between ">
+                  <div className="rounded-lg flex items-center justify-between mb-2 ">
                     {" "}
                     <ColorInput
                       label="رنگ سربرگ"
@@ -343,10 +320,8 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                     />
                   </div>
 
-                  <label>سایز سربرگ</label>
-                  <input
-                    type="range"
-                    className="w-full"
+                  <DynamicRangeInput
+                    label="سایز سربرگ"
                     name="textFontSize"
                     min="12"
                     max="100"
@@ -356,25 +331,22 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                     }
                     onChange={handleBlockSettingChange}
                   />
-                  <div className="text-gray-500 text-sm">
-                    {userInputData?.blocks?.setting?.textFontSize}px
-                  </div>
-                  <label className="block mb-1">وزن سربرگ</label>
-                  <select
+                  <DynamicSelectInput
+                    label="وزن سربرگ"
                     name="textFontWeight"
                     value={
                       userInputData?.blocks?.setting?.textFontWeight?.toString() ??
                       "bold"
                     }
+                    options={[
+                      { value: "bold", label: "ضخیم" },
+                      { value: "normal", label: "نرمال" },
+                    ]}
                     onChange={handleBlockSettingChange}
-                    className="w-full p-2 border rounded"
-                  >
-                    <option value="bold">ضخیم</option>
-                    <option value="normal">نرمال</option>
-                  </select>
+                  />
                 </div>
 
-                <div className="rounded-lg flex flex-col gap-3">
+                <div className="flex flex-col gap-3 px-2 border-gray-400 border-b-2 pb-2">
                   <h4 className="font-semibold text-sky-700 my-4">
                     تنظیمات توضیحات
                   </h4>
@@ -391,12 +363,10 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                     />
                   </div>
 
-                  <label>سایز توضیحات</label>
-                  <input
-                    type="range"
-                    className="w-full"
+                  <DynamicRangeInput
+                    label="سایز توضیحات"
                     name="descriptionFontSize"
-                    min="10"
+                    min="0"
                     max="100"
                     value={
                       userInputData?.blocks?.setting?.descriptionFontSize?.toString() ??
@@ -404,34 +374,28 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                     }
                     onChange={handleBlockSettingChange}
                   />
-                  <div className="text-gray-500 text-sm">
-                    {userInputData?.blocks?.setting?.descriptionFontSize}px
-                  </div>
-                  <label className="block mb-1">وزن توضیحات</label>
-                  <select
+                  <DynamicSelectInput
+                    label="وزن توضیحات"
                     name="descriptionFontWeight"
                     value={
                       userInputData?.blocks?.setting?.descriptionFontWeight?.toString() ??
                       "normal"
                     }
+                    options={[
+                      { value: "bold", label: "ضخیم" },
+                      { value: "normal", label: "نرمال" },
+                    ]}
                     onChange={handleBlockSettingChange}
-                    className="w-full p-2 border rounded"
-                  >
-                    <option value="bold">ضخیم</option>
-                    <option value="normal">نرمال</option>
-                  </select>
+                  />
                 </div>
 
                 {/* Image Settings */}
-                <div className="rounded-lg flex flex-col gap-3">
+                <div className="flex flex-col gap-3 px-2 border-gray-400 border-b-2 pb-2">
                   <h4 className="font-semibold text-sky-700 my-4">
                     تنظیمات تصویر
                   </h4>
-                  <label className="block mb-2 text-sm font-medium text-gray-700">
-                    شفافیت تصویر
-                  </label>
-                  <input
-                    type="range"
+                  <DynamicRangeInput
+                    label="شفافیت تصویر"
                     name="opacityImage"
                     min="0"
                     max="1"
@@ -441,75 +405,73 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                       "1"
                     }
                     onChange={handleBlockSettingChange}
-                    className="w-full"
+                    displayUnit=""
                   />
-                  <div className="text-gray-500 text-sm">
-                    {userInputData?.blocks?.setting?.opacityImage || "1"}
-                  </div>
 
                   <div className="mt-4 rounded-lg">
-                    <label className="block mb-2 text-sm font-medium text-gray-700">
-                      رفتار عکس
-                    </label>
-                    <select
+                    <DynamicSelectInput
+                      label="رفتار عکس"
                       name="imageBehavior"
                       value={
                         userInputData?.blocks?.setting?.imageBehavior?.toString() ??
                         "cover"
                       }
+                      options={[
+                        { value: "cover", label: "پوشش" },
+                        { value: "contain", label: "شامل" },
+                        { value: "fill", label: "کامل" },
+                      ]}
                       onChange={handleBlockSettingChange}
                       className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                    >
-                      <option value="cover">پوشش</option>
-                      <option value="contain">شامل</option>
-                      <option value="fill">کامل</option>
-                    </select>
+                    />
                   </div>
 
-                  <label>انحنای زاویه تصویر</label>
-                  <input
-                    className="w-full"
-                    type="range"
+                  <DynamicRangeInput
+                    label="انحنای زاویه تصویر"
                     name="imageRadious"
                     min="0"
-                    max="50"
+                    max="200"
+                    step={5}
                     value={
                       userInputData?.blocks?.setting?.imageRadious?.toString() ??
                       "10"
                     }
                     onChange={handleBlockSettingChange}
                   />
-                  <div className="text-gray-500 text-sm">
-                    {userInputData?.blocks?.setting?.imageRadious?.toString() ??
-                      "10"}
-                    px
-                  </div>
                 </div>
 
                 {/* Box Settings */}
-                <div className="rounded-lg flex flex-col gap-3">
+                <div className="flex flex-col gap-3 px-2 border-gray-400 border-b-2 pb-2">
                   <h4 className="font-semibold text-sky-700 my-4">
                     تنظیمات کادر
                   </h4>
-                  <label className="block mb-2 text-base font-medium text-gray-800">
-                    شفافیت کادر
-                  </label>
-                  <input
-                    type="range"
-                    name="opacityTextBox"
+
+                  <DynamicRangeInput
+                    label="عرض کادر"
+                    name="boxWidth"
                     min="0"
-                    max="1"
-                    step="0.1"
+                    max="1500"
+                    step="10"
                     value={
-                      userInputData?.blocks?.setting?.opacityTextBox?.toString() ??
+                      userInputData?.blocks?.setting?.boxWidth?.toString() ??
                       "1"
                     }
                     onChange={handleBlockSettingChange}
-                    className="w-full"
+                    displayUnit=""
                   />
-                  <div className="text-gray-500 text-sm">
-                    {userInputData?.blocks?.setting?.opacityTextBox || "1"}
-                  </div>
+                  <DynamicRangeInput
+                    label="ارتفاع کادر"
+                    name="boxHeight"
+                    min="0"
+                    max="500"
+                    step="10"
+                    value={
+                      userInputData?.blocks?.setting?.boxHeight?.toString() ??
+                      "1"
+                    }
+                    onChange={handleBlockSettingChange}
+                    displayUnit=""
+                  />
                   <div className="rounded-lg flex items-center justify-between ">
                     <ColorInput
                       label="رنگ پس زمینه کادر"
@@ -521,25 +483,54 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                       onChange={handleBlockSettingChange}
                     />
                   </div>
+                  <DynamicRangeInput
+                    label="حاشیه"
+                    name="border"
+                    min="0"
+                    max="30"
+                    step="1"
+                    value={
+                      userInputData?.blocks?.setting?.border?.toString() ?? "1"
+                    }
+                    onChange={handleBlockSettingChange}
+                    displayUnit=""
+                  />
+                  <div className="rounded-lg flex items-center justify-between ">
+                    <ColorInput
+                      label="رنگ حاشیه"
+                      name="borderColor"
+                      value={
+                        userInputData?.blocks?.setting?.borderColor?.toString() ??
+                        "#333333"
+                      }
+                      onChange={handleBlockSettingChange}
+                    />
+                  </div>
 
-                  <label>انحنای زاویه کادر</label>
-                  <input
-                    className="w-full"
-                    type="range"
+                  <DynamicRangeInput
+                    label="انحنای زاویه کادر"
                     name="backgroundBoxRadious"
                     min="0"
-                    max="50"
+                    max="200"
                     value={
                       userInputData?.blocks?.setting?.backgroundBoxRadious?.toString() ??
                       "10"
                     }
                     onChange={handleBlockSettingChange}
                   />
-                  <div className="text-gray-500 text-sm">
-                    {userInputData?.blocks?.setting?.backgroundBoxRadious?.toString() ??
-                      "10"}
-                    px
-                  </div>
+                  <DynamicRangeInput
+                    label="شفافیت کادر"
+                    name="opacityTextBox"
+                    min="0"
+                    max="1"
+                    step="0.1"
+                    value={
+                      userInputData?.blocks?.setting?.opacityTextBox?.toString() ??
+                      "1"
+                    }
+                    onChange={handleBlockSettingChange}
+                    displayUnit=""
+                  />
                 </div>
               </div>
             </div>

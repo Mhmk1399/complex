@@ -1,10 +1,12 @@
 import connect from "@/lib/data";
 import { NextResponse } from "next/server";
 import { fetchFromMongoDB, saveToMongoDB } from "@/services/mongodb";
+import homelg from "@/public/template/homelg.json";
+import homesm from "@/public/template/homesm.json";
+import fs from "fs/promises";
+import path from "path";
 
 export async function GET(request: Request) {
-  await connect();
-
   try {
     const routeName = request.headers.get("selectedRoute");
     const activeMode = request.headers.get("activeMode") || "lg";
@@ -17,31 +19,40 @@ export async function GET(request: Request) {
       );
     }
 
-
     const getFilename = (routeName: string) => `${routeName}${activeMode}`;
 
-    console.log(routeName, "routename")
+    console.log(routeName, "routename");
     console.log(activeMode, "activeMode");
+    console.log(getFilename(routeName), "filename");
 
-    console.log(getFilename("home")," filename")
-
-    
-    
+    // Resolve the path to the JSON files in the public/template directory
+    const basePath = path.join(process.cwd(), "public", "template");
 
     if (routeName === "home") {
-      const homeContent = JSON.parse(
-        await fetchFromMongoDB("home", activeMode, storeId)
-      );
-      return NextResponse.json(homeContent, { status: 200 });
+      const filePath = path.join(basePath, `home${activeMode}.json`);
+      try {
+        const homeContent = JSON.parse(await fs.readFile(filePath, "utf-8"));
+        return NextResponse.json(homeContent, { status: 200 });
+      } catch (error) {
+        console.error(`Error reading ${filePath}:`, error);
+        return NextResponse.json(
+          { error: `Failed to fetch home${activeMode} content` },
+          { status: 404 }
+        );
+      }
     }
 
     try {
+      const routeFilePath = path.join(
+        basePath,
+        `${routeName}${activeMode}.json`
+      );
+      const homeFilePath = path.join(basePath, `home${activeMode}.json`);
+
       const routeContent = JSON.parse(
-        await fetchFromMongoDB(routeName, activeMode, storeId)
+        await fs.readFile(routeFilePath, "utf-8")
       );
-      const homeContent = JSON.parse(
-        await fetchFromMongoDB("home", activeMode, storeId)
-      );
+      const homeContent = JSON.parse(await fs.readFile(homeFilePath, "utf-8"));
 
       const layout = {
         sections: {
@@ -85,7 +96,7 @@ export async function POST(request: Request) {
 
     const newLayout = await request.json();
 
-    console.log(newLayout, "json body")
+    console.log(newLayout, "json body");
     const filename = `${routeName}${activeMode}`;
     console.log(filename);
 
@@ -111,3 +122,65 @@ export async function POST(request: Request) {
     );
   }
 }
+
+// export async function GET(request: Request) {
+//   await connect();
+
+//   try {
+//     const routeName = request.headers.get("selectedRoute");
+//     const activeMode = request.headers.get("activeMode") || "lg";
+//     const storeId = request.headers.get("storeId") || "default-store";
+
+//     if (!routeName || !activeMode) {
+//       return NextResponse.json(
+//         { error: "Missing required parameters" },
+//         { status: 400 }
+//       );
+//     }
+
+//     const getFilename = (routeName: string) => `${routeName}${activeMode}`;
+
+//     console.log(routeName, "routename")
+//     console.log(activeMode, "activeMode");
+
+//     console.log(getFilename("home")," filename")
+
+//     if (routeName === "home") {
+//       const homeContent = JSON.parse(
+//         await fetchFromMongoDB("home", activeMode, storeId)
+//       );
+//       return NextResponse.json(homeContent, { status: 200 });
+//     }
+
+//     try {
+//       const routeContent = JSON.parse(
+//         await fetchFromMongoDB(routeName, activeMode, storeId)
+//       );
+//       const homeContent = JSON.parse(
+//         await fetchFromMongoDB("home", activeMode, storeId)
+//       );
+
+//       const layout = {
+//         sections: {
+//           sectionHeader: homeContent.sections.sectionHeader,
+//           children: routeContent.children,
+//           sectionFooter: homeContent.sections.sectionFooter,
+//         },
+//       };
+
+//       return NextResponse.json(layout, { status: 200 });
+//     } catch (error) {
+//       console.error("Error fetching content:", error);
+//       return NextResponse.json(
+//         { error: "Failed to fetch route content" },
+//         { status: 404 }
+//       );
+//     }
+//   } catch (error) {
+//     console.error("Error processing request:", error);
+//     return NextResponse.json(
+//       { error: "Failed to process request" },
+//       { status: 500 }
+//     );
+//   }
+// }
