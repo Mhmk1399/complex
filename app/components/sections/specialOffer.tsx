@@ -1,10 +1,11 @@
 "use client";
 import styled from "styled-components";
-import type { Layout, ProductCardData, SpecialOfferSection } from "@/lib/types";
+import type { Layout, ProductCardType, SpecialOfferSection } from "@/lib/types";
 import ProductCard from "./productCard";
 import { useEffect, useState, useRef } from "react";
 import { Delete } from "../C-D";
 import { createApiService } from "@/lib/api-factory";
+import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 
 interface SpecialOfferProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -19,13 +20,25 @@ const ScrollContainer = styled.div<{
   $data: SpecialOfferSection;
 }>`
   position: relative;
-  width: 100%;
-  padding-top: ${(props) => props.$data.setting?.paddingTop || "20"}px;
-  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20"}px;
-  margin-top: ${(props) => props.$data.setting?.marginTop || "20"}px;
-  margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20"}px;
+  max-width: 100%;
+  margin-top: ${(props) => props.$data.setting.marginTop || "30"}px;
+  margin-bottom: ${(props) => props.$data.setting.marginBottom}px;
+  margin-right: ${(props) => props.$data.setting.marginRight}px;
+  margin-left: ${(props) => props.$data.setting.marginLeft}px;
+  padding-top: ${(props) => props.$data.setting.paddingTop}px;
+  padding-bottom: ${(props) => props.$data.setting.paddingBottom}px;
+  padding-left: ${(props) => props.$data.setting.paddingLeft}px;
+  padding-right: ${(props) => props.$data.setting.paddingRight}px;
   background-color: ${(props) =>
     props.$data.setting?.backgroundColor || "#ef394e"};
+  min-height: ${(props) => props.$data.blocks.setting.height}px;
+
+  box-shadow: ${(props) =>
+    `${props.$data.blocks.setting?.shadowOffsetX || 0}px 
+     ${props.$data.blocks.setting?.shadowOffsetY || 4}px 
+     ${props.$data.blocks.setting?.shadowBlur || 10}px 
+     ${props.$data.blocks.setting?.shadowSpread || 0}px 
+     ${props.$data.blocks.setting?.shadowColor || "#fff"}`};
 `;
 
 const SpecialOfferSection = styled.section<{
@@ -62,9 +75,7 @@ const Heading = styled.h2<{
 }>`
   color: ${(props) => props.$data.blocks?.setting?.headingColor || "#FFFFFF"};
   font-size: ${(props) =>
-    props.$isMobile
-      ? "24px"
-      : `${props.$data.blocks?.setting?.headingFontSize || "32"}px`};
+    `${props.$data.blocks?.setting?.headingFontSize || "32"}px`};
   font-weight: ${(props) =>
     props.$data.blocks?.setting?.headingFontWeight || "bold"};
   text-align: center;
@@ -76,18 +87,20 @@ const ScrollButton = styled.button<{
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: "#FFFFFF";
+  background-color: ${(props) =>
+    props.$data.blocks?.setting?.btnBackgroundColor || "#000000"};
   color: ${(props) => props.$data.blocks?.setting?.btnTextColor || "#000000"};
   border: none;
-  border-radius: 50%;
+  border-radius: ${(props) => props.$data.blocks?.setting?.btnRadius || "5"}px;
   width: 40px;
+  opacity: 0.8;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 10;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
 
   &.left {
     left: 10px;
@@ -270,23 +283,24 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
   ) as SpecialOfferSection;
 
   const api = createApiService({
-    baseUrl: '/api',
+    baseUrl: "/api",
     headers: {
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json",
+    },
   });
 
   const collectionId = sectionData?.blocks?.setting?.selectedCollection;
   const { data: collectionsData, error: collectionsError } = api.useGet(
-    collectionId ? '/collections/id' : null,
+    collectionId ? "/collections/id" : null,
     {
       headers: { collectionId },
       revalidateOnFocus: false,
-      refreshInterval: 60000
+      refreshInterval: 60000,
     }
   );
 
-  const specialOfferProducts = collectionsData?.collections?.[0]?.products || [];
+  const specialOfferProducts =
+    collectionsData?.collections?.[0]?.products || [];
 
   useEffect(() => {
     const handleResize = () => {
@@ -301,8 +315,6 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [previewWidth]);
-
-
 
   if (!sectionData) return null;
   if (!layout || !layout.sections) return null;
@@ -394,12 +406,16 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
         </div>
 
         {specialOfferProducts.length > 0 &&
-          specialOfferProducts.map((product) => (
+          specialOfferProducts.map((product: ProductCardType) => (
             <ProductCard key={product._id} productData={product} />
           ))}
         {specialOfferProducts.length === 0 && (
           <div className="flex flex-row items-center justify-start  lg:justify-end  w-full ">
-            <span className="text-white text-3xl justify-center text-center w-full flex lg:gap-5">
+            <span
+              className={`text-white ${
+                preview === "sm" ? "text-base" : "text-xl"
+              } justify-center text-center w-full flex lg:gap-5`}
+            >
               لطفا یک مجموعه را انتخاب کنید
             </span>
           </div>
@@ -408,23 +424,19 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
 
       {/* Navigation Buttons with Animation */}
       <ScrollButton
-        className="left bg-white"
+        className="left"
         onClick={() => handleScroll("left")}
         $data={sectionData}
       >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="#000000">
-          <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
-        </svg>
+        <BiChevronLeft size={24} />
       </ScrollButton>
 
       <ScrollButton
-        className="right bg-white"
+        className="right"
         onClick={() => handleScroll("right")}
         $data={sectionData}
       >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="#000000">
-          <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
-        </svg>
+        <BiChevronRight size={24} />
       </ScrollButton>
     </ScrollContainer>
   );

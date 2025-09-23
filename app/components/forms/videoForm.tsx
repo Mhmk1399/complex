@@ -3,6 +3,12 @@ import { Compiler } from "../compiler";
 import { VideoFormProps, VideoSection } from "@/lib/types";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
+import {
+  ColorInput,
+  DynamicCheckboxInput,
+  DynamicRangeInput,
+  DynamicSelectInput,
+} from "./DynamicInputs";
 
 interface BoxValues {
   top: number;
@@ -10,34 +16,6 @@ interface BoxValues {
   left: number;
   right: number;
 }
-
-const ColorInput = ({
-  label,
-  name,
-  value,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <>
-    <div className="flex flex-row gap-6 items-center">
-      <label className="block mb-1" htmlFor={name}>
-        {label}
-      </label>
-      <input
-        type="color"
-        id={name}
-        name={name}
-        value={value || "#000000"}
-        onChange={onChange}
-        className="border p-0.5 rounded-full"
-      />
-    </div>
-  </>
-);
 
 export const VideoForm: React.FC<VideoFormProps> = ({
   setUserInputData,
@@ -75,6 +53,8 @@ export const VideoForm: React.FC<VideoFormProps> = ({
           ...prev.setting,
           marginTop: updatedValues.top.toString(),
           marginBottom: updatedValues.bottom.toString(),
+          marginLeft: updatedValues.left.toString(),
+          marginRight: updatedValues.right.toString(),
         },
       }));
     } else {
@@ -186,6 +166,18 @@ export const VideoForm: React.FC<VideoFormProps> = ({
               className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
             />
           </div>
+          <div className=" rounded-lg">
+            <label className="block mb-2 text-sm font-bold text-gray-700">
+              توضیحات
+            </label>
+            <input
+              type="text"
+              name="descrption"
+              value={userInputData.blocks.descrption ?? ""}
+              onChange={handleBlockChange}
+              className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+            />
+          </div>
 
           <div className=" rounded-lg">
             <label className="block mb-2 text-sm font-bold text-gray-700">
@@ -206,6 +198,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({
             </label>
             <input
               type="text"
+              placeholder="متن جایگزین ویدیو"
               name="videoAlt"
               value={userInputData.blocks.videoAlt ?? ""}
               onChange={handleBlockChange}
@@ -222,54 +215,70 @@ export const VideoForm: React.FC<VideoFormProps> = ({
           {/* Heading Settings */}
           <div className=" rounded-lg flex flex-col gap-3">
             <h4 className="text-base font-bold text-sky-700">تنظیمات سربرگ</h4>
-            <div className="rounded-lg">
-              <ColorInput
-                label="رنگ سربرگ"
-                name="headingColor"
-                value={
-                  userInputData.blocks.setting?.headingColor?.toString() ??
-                  "#000000"
-                }
-                onChange={handleBlockSettingChange}
-              />
-            </div>
+            <ColorInput
+              label="رنگ سربرگ"
+              name="headingColor"
+              value={userInputData.blocks.setting?.headingColor ?? "#000000"}
+              onChange={handleBlockSettingChange}
+            />
 
-            <div className="rounded-lg">
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                سایز سربرگ
-              </label>
-              <input
-                type="range"
-                name="headingFontSize"
-                value={
-                  userInputData.blocks?.setting?.headingFontSize?.toString() ??
-                  "30px"
-                }
-                onChange={handleBlockSettingChange}
-                className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
-              />
-              <span className="text-sm text-gray-500">
-                {userInputData.blocks?.setting?.headingFontSize}px
-              </span>
-            </div>
+            <DynamicRangeInput
+              label="سایز سربرگ"
+              name="headingFontSize"
+              min={10}
+              max={100}
+              step={1}
+              value={userInputData.blocks.setting?.headingFontSize ?? 30}
+              onChange={handleBlockSettingChange}
+              displayUnit="px"
+            />
 
-            <div className=" rounded-lg">
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                وزن سربرگ
-              </label>
-              <select
-                name="headingFontWeight"
-                value={
-                  userInputData.blocks.setting?.headingFontWeight?.toString() ??
-                  "bold"
-                }
-                onChange={handleBlockSettingChange}
-                className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="normal">نرمال</option>
-                <option value="bold">ضخیم</option>
-              </select>
-            </div>
+            <DynamicSelectInput
+              label="وزن سربرگ"
+              name="headingFontWeight"
+              value={userInputData.blocks.setting?.headingFontWeight ?? "bold"}
+              options={[
+                { value: "normal", label: "نرمال" },
+                { value: "bold", label: "ضخیم" },
+              ]}
+              onChange={handleBlockSettingChange}
+            />
+          </div>
+          {/* description Settings */}
+          <div className=" rounded-lg flex flex-col gap-3">
+            <h4 className="text-base font-bold text-sky-700">
+              تنظیمات توضیحات
+            </h4>
+            <ColorInput
+              label="رنگ توضیحات"
+              name="descrptionColor"
+              value={userInputData.blocks.setting?.descrptionColor ?? "#000000"}
+              onChange={handleBlockSettingChange}
+            />
+
+            <DynamicRangeInput
+              label="سایز توضیحات"
+              name="descrptionFontSize"
+              min={10}
+              max={100}
+              step={1}
+              value={userInputData.blocks.setting?.descrptionFontSize ?? 30}
+              onChange={handleBlockSettingChange}
+              displayUnit="px"
+            />
+
+            <DynamicSelectInput
+              label="وزن توضیحات"
+              name="descrptionFontWeight"
+              value={
+                userInputData.blocks.setting?.descrptionFontWeight ?? "bold"
+              }
+              options={[
+                { value: "normal", label: "نرمال" },
+                { value: "bold", label: "ضخیم" },
+              ]}
+              onChange={handleBlockSettingChange}
+            />
           </div>
 
           {/* Video Settings */}
@@ -278,40 +287,37 @@ export const VideoForm: React.FC<VideoFormProps> = ({
               <h4 className="text-base font-bold text-sky-700 mb-4">
                 تنظیمات ویدیو
               </h4>
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                عرض ویدیو
-              </label>
-              <input
-                type="range"
+              <DynamicRangeInput
+                label="عرض ویدیو"
                 name="videoWidth"
-                max={1000}
-                value={
-                  userInputData.blocks?.setting?.videoWidth?.toString() ??
-                  "1000px"
-                }
+                min={100}
+                max={2000}
+                step={10}
+                value={userInputData.blocks.setting?.videoWidth ?? 600}
                 onChange={handleBlockSettingChange}
-                className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
+                displayUnit="px"
               />
-              <span className="text-sm text-gray-500">
-                {userInputData.blocks?.setting?.videoWidth}px
-              </span>
+              <DynamicRangeInput
+                label="ارتفاع ویدیو"
+                name="videoHeight"
+                min={100}
+                max={2000}
+                step={10}
+                value={userInputData.blocks.setting?.videoHeight ?? 600}
+                onChange={handleBlockSettingChange}
+                displayUnit="px"
+              />
 
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                انحنای زوایا
-              </label>
-              <input
-                type="range"
+              <DynamicRangeInput
+                label="انحنای زوایا"
                 name="videoRadious"
-                value={
-                  userInputData.blocks.setting?.videoRadious?.toString() ??
-                  "20px"
-                }
+                min={0}
+                max={50}
+                step={1}
+                value={userInputData.blocks.setting?.videoRadious ?? 20}
                 onChange={handleBlockSettingChange}
-                className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
+                displayUnit="px"
               />
-              <span className="text-sm text-gray-500">
-                {userInputData.blocks.setting?.videoRadious}px
-              </span>
 
               <label className="block mb-2 text-sm font-bold text-gray-700">
                 پوستر ویدیو
@@ -326,65 +332,103 @@ export const VideoForm: React.FC<VideoFormProps> = ({
                 className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
               />
 
-              <h4 className="font-bold text-gray-700 mb-3">
+              <h4 className="font-bold text-base text-sky-700 mb-3">
                 تنظیمات کنترل ویدیو
               </h4>
-              <div className="grid grid-cols-1 gap-4">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="videoLoop"
-                    checked={userInputData.blocks.setting?.videoLoop ?? true}
-                    onChange={handleBlockSettingChange}
-                    className="mr-2"
-                  />
-                  <label className="text-sm font-medium">تکرار</label>
-                </div>
+              <div className="grid grid-cols-1 gap-1">
+                <DynamicCheckboxInput
+                  label="تکرار"
+                  name="videoLoop"
+                  checked={userInputData.blocks.setting?.videoLoop ?? true}
+                  onChange={handleBlockSettingChange}
+                />
 
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="videoMute"
-                    checked={userInputData.blocks.setting?.videoMute ?? false}
-                    onChange={handleBlockSettingChange}
-                    className="mr-2"
-                  />
-                  <label className="text-sm font-medium">بیصدا</label>
-                </div>
+                <DynamicCheckboxInput
+                  label="بیصدا"
+                  name="videoMute"
+                  checked={userInputData.blocks.setting?.videoMute ?? false}
+                  onChange={handleBlockSettingChange}
+                />
 
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="videoAutoplay"
-                    checked={
-                      userInputData.blocks.setting?.videoAutoplay ?? true
-                    }
-                    onChange={handleBlockSettingChange}
-                    className="mr-2"
-                  />
-                  <label className="text-sm font-medium">پخش خودکار</label>
-                </div>
+                <DynamicCheckboxInput
+                  label="پخش خودکار"
+                  name="videoAutoplay"
+                  checked={userInputData.blocks.setting?.videoAutoplay ?? true}
+                  onChange={handleBlockSettingChange}
+                />
               </div>
             </div>
 
             <div className="rounded-lg flex flex-col gap-3">
               <h4 className="font-bold text-sky-700 mb-3">تنظیمات پس زمینه</h4>
               <ColorInput
-                label="رنگ پس زمینه"
+                label="رنگ پس‌زمینه ویدیو"
                 name="backgroundVideoSection"
                 value={
-                  userInputData.blocks.setting?.backgroundVideoSection?.toString() ??
+                  userInputData.blocks.setting?.backgroundVideoSection ??
                   "#e4e4e4"
                 }
                 onChange={handleBlockSettingChange}
               />
-              <div className="text-sm text-gray-600">
-                {userInputData.blocks.setting?.backgroundVideoSection}
-              </div>
+              <DynamicRangeInput
+                label="انحنا"
+                name="radius"
+                min={0}
+                max={200}
+                step={10}
+                value={userInputData.blocks.setting?.radius ?? 600}
+                onChange={handleBlockSettingChange}
+                displayUnit="px"
+              />
+            </div>
+            {/* ✅ New Shadow Settings */}
+            <div className="space-y-4 rounded-lg">
+              <h4 className="font-bold text-sky-700 my-3">تنظیمات سایه</h4>
+              <DynamicRangeInput
+                label="افست افقی سایه"
+                name="shadowOffsetX"
+                min="-50"
+                max="50"
+                value={userInputData?.setting?.shadowOffsetX?.toString() ?? "0"}
+                onChange={handleBlockSettingChange}
+              />
+              <DynamicRangeInput
+                label="افست عمودی سایه"
+                name="shadowOffsetY"
+                min="-50"
+                max="50"
+                value={userInputData?.setting?.shadowOffsetY?.toString() ?? "0"}
+                onChange={handleBlockSettingChange}
+              />
+              <DynamicRangeInput
+                label="میزان بلور سایه"
+                name="shadowBlur"
+                min="0"
+                max="100"
+                value={userInputData?.setting?.shadowBlur?.toString() ?? "0"}
+                onChange={handleBlockSettingChange}
+              />
+              <DynamicRangeInput
+                label="میزان گسترش سایه"
+                name="shadowSpread"
+                min="-20"
+                max="20"
+                value={userInputData?.setting?.shadowSpread?.toString() ?? "0"}
+                onChange={handleBlockSettingChange}
+              />
+              <ColorInput
+                label="رنگ سایه"
+                name="shadowColor"
+                value={userInputData?.setting?.shadowColor?.toString() ?? "0"}
+                onChange={handleBlockSettingChange}
+              />
             </div>
           </div>
         </div>
       )}
+
+      {/* animation settings */}
+
       {isAnimationOpen && (
         <div className="p-4  animate-slideDown">
           <h3 className="text-lg font-semibold text-sky-700">
@@ -397,7 +441,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({
       {/* Spacing Settings Dropdown */}
 
       {isSpacingOpen && (
-        <div className="p-4  animate-slideDown">
+        <div className="animate-slideDown">
           <div className="rounded-lg p-2 flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

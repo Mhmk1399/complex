@@ -1,7 +1,7 @@
 "use client";
 import { Main } from "./components/main";
 import { Suspense } from "react";
-import AuthHandler from "./components/AuthHandler";
+// import AuthHandler from "./components/AuthHandler";
 
 function HomeContent() {
   return <Main />;
@@ -10,9 +10,9 @@ function HomeContent() {
 export default function Home() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <AuthHandler>
+      {/* <AuthHandler> */}
         <HomeContent />
-      </AuthHandler>
+      {/* </AuthHandler> */}
     </Suspense>
   );
 }

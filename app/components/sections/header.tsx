@@ -269,7 +269,6 @@ const LoginButton = styled.button`
   text-wrap: nowrap;
 `;
 
-
 const MobileMenuButton = styled.button<{
   $isOpen: boolean;
   $previewWidth: "sm" | "default";
@@ -370,8 +369,10 @@ const Header: React.FC<HeaderProps> = ({
       const token = localStorage.getItem("complexToken");
       console.log("token", token);
       if (!token) {
-        return NextResponse.json({ error: "Token not provided" }, { status: 401 });
-
+        return NextResponse.json(
+          { error: "Token not provided" },
+          { status: 401 }
+        );
       }
 
       try {
@@ -387,7 +388,6 @@ const Header: React.FC<HeaderProps> = ({
 
         setCategories(data);
         console.log("categories", data);
-        
       } catch (error) {
         console.log("Error fetching categories", error);
         setCategories([
@@ -592,11 +592,7 @@ const Header: React.FC<HeaderProps> = ({
                       {categories
                         ?.filter((category) => category.children.length > 0)
                         .map((category, idx) => (
-                          <Link
-                            href={`#`}
-                            key={category._id}
-                            className="block"
-                          >
+                          <Link href={`#`} key={category._id} className="block">
                             <div
                               className={`py-3 px-4 rounded-md ml-4 cursor-pointer transition-all duration-200 ${
                                 idx === hoverd ? "bg-gray-100 font-bold" : ""
@@ -612,7 +608,7 @@ const Header: React.FC<HeaderProps> = ({
                     <div className="flex-1 p-4">
                       <div className="grid grid-cols-3 gap-4">
                         {categories
-                          .filter((category) => category.children.length > 0)
+                          ?.filter((category) => category.children.length > 0)
                           [hoverd]?.children.map((child) => {
                             // Since child is now the full object, we can use it directly
                             return (

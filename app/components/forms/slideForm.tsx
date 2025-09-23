@@ -7,6 +7,12 @@ import { TabButtons } from "../tabButtons";
 import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
 import { HiChevronDown, HiSparkles } from "react-icons/hi";
+import { useSharedContext } from "@/app/contexts/SharedContext";
+import {
+  DynamicRangeInput,
+  DynamicSelectInput,
+  ColorInput,
+} from "./DynamicInputs";
 
 interface SlideFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<SlideSection>>;
@@ -21,32 +27,6 @@ interface BoxValues {
   right: number;
 }
 
-const ColorInput = ({
-  label,
-  name,
-  value,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <>
-    <label className="block mb-1">{label}</label>
-    <div className="flex flex-col rounded-md gap-3 items-center">
-      <input
-        type="color"
-        id={name}
-        name={name}
-        value={value || "#000000"}
-        onChange={onChange}
-        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
-      />
-    </div>
-  </>
-);
-
 export const SlideForm: React.FC<SlideFormProps> = ({
   setUserInputData,
   userInputData,
@@ -58,7 +38,8 @@ export const SlideForm: React.FC<SlideFormProps> = ({
   const [isContentOpen, setIsContentOpen] = useState({});
   const [isAnimationOpen, setIsAnimationOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-
+  const { activeRoutes } = useSharedContext();
+  const [useRouteSelectBtn, setUseRouteSelectBtn] = useState(false);
   const [margin, setMargin] = useState<BoxValues>({
     top: 0,
     bottom: 0,
@@ -192,6 +173,8 @@ export const SlideForm: React.FC<SlideFormProps> = ({
           ...prev.setting,
           marginTop: updatedValues.top.toString(),
           marginBottom: updatedValues.bottom.toString(),
+          marginLeft: updatedValues.left.toString(),
+          marginRight: updatedValues.right.toString(),
         },
       }));
     } else {
@@ -210,10 +193,16 @@ export const SlideForm: React.FC<SlideFormProps> = ({
   };
 
   const handleDeleteBlock = (index: number) => {
-    setUserInputData((prev: SlideSection) => ({
-      ...prev,
-      blocks: prev.blocks.filter((_, i) => i !== index),
-    }));
+    setUserInputData((prev: SlideSection) => {
+      // Prevent deletion if only one slide remains
+      if (prev.blocks.length <= 1) {
+        return prev;
+      }
+      return {
+        ...prev,
+        blocks: prev.blocks.filter((_, i) => i !== index),
+      };
+    });
   };
 
   // Animation handlers for navigation buttons
@@ -459,7 +448,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
           <>
             {Object.values(userInputData.blocks).map((block, index) => (
               <React.Fragment key={index}>
-                <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100 mt-4">
+                <div className="mb-6 animate-slideDown bg-white rounded-xl shadow-sm border border-gray-100 mt-4">
                   <button
                     onClick={() =>
                       setIsContentOpen((prev) => ({
@@ -467,7 +456,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                         [index]: !prev[index as keyof typeof prev],
                       }))
                     }
-                    className="w-full flex justify-between items-center p-4 hover: rounded-xl transition-all duration-200"
+                    className="w-full  flex justify-between items-center p-2 hover: rounded-xl transition-all duration-200"
                   >
                     <div className="flex items-center gap-2">
                       <svg
@@ -490,12 +479,22 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                         <span
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleDeleteBlock(index);
+                            if (userInputData.blocks.length > 1) {
+                              handleDeleteBlock(index);
+                            }
                           }}
-                          className="p-1 hover:bg-red-100 rounded-full mr-16 cursor-pointer"
+                          className={`p-1 rounded-full mr-16 transition-colors ${
+                            userInputData.blocks.length <= 1
+                              ? "bg-gray-100 cursor-not-allowed opacity-50"
+                              : "hover:bg-red-100 cursor-pointer"
+                          }`}
                         >
                           <svg
-                            className="w-5 h-5 text-red-500"
+                            className={`w-5 h-5 ${
+                              userInputData.blocks.length <= 1
+                                ? "text-gray-400"
+                                : "text-red-500"
+                            }`}
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -540,6 +539,20 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                           value={block.imageSrc || ""}
                           onChange={(e) =>
                             handleBlockChange(e, index, "imageSrc")
+                          }
+                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        />
+                      </div>
+                      <div className="p-3  rounded-lg">
+                        <label className="block mb-2 text-sm font-bold text-gray-700">
+                          متن جایگزین تصویر
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="متن جایگزین تصویر"
+                          value={block.imageAlt || ""}
+                          onChange={(e) =>
+                            handleBlockChange(e, index, "imageAlt")
                           }
                           className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                         />
@@ -589,14 +602,57 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                         <label className="block mb-2 text-sm font-bold text-gray-700">
                           لینک دکمه
                         </label>
-                        <input
-                          type="text"
-                          value={block.btnLink || ""}
-                          onChange={(e) =>
-                            handleBlockChange(e, index, "btnLink")
-                          }
-                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                        />
+                        <div className="mb-2">
+                          <label className="flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              checked={useRouteSelectBtn}
+                              onChange={(e) =>
+                                setUseRouteSelectBtn(e.target.checked)
+                              }
+                              className="rounded"
+                            />
+                            <span className="text-sm">
+                              انتخاب از مسیرهای موجود
+                            </span>
+                          </label>
+                        </div>
+                        {useRouteSelectBtn ? (
+                          <select
+                            value={block?.btnLink ?? ""}
+                            onChange={(
+                              e: React.ChangeEvent<HTMLSelectElement>
+                            ) => {
+                              setUserInputData((prev) => ({
+                                ...prev,
+                                blocks: {
+                                  ...prev.blocks,
+                                  btnLink: e.target.value,
+                                },
+                              }));
+                            }}
+                            name="btnLink"
+                            className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                          >
+                            <option value="">انتخاب مسیر</option>
+                            {activeRoutes.map((route: string) => (
+                              <option key={route} value={route}>
+                                {route}
+                              </option>
+                            ))}
+                          </select>
+                        ) : (
+                          <input
+                            type="text"
+                            name="btnLink"
+                            value={block?.btnLink ?? ""}
+                            onChange={(e) =>
+                              handleBlockChange(e, index, "btnLink")
+                            }
+                            className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                            placeholder="آدرس لینک یا مسیر سفارشی"
+                          />
+                        )}
                       </div>
                     </div>
                   )}
@@ -607,6 +663,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
             {/* Add Block Button - Outside of the map */}
             <button
               onClick={handelAddBlock}
+              title="افزودن اسلاید"
               className="px-1 rounded-lg mb-3 w-full text-3xl group hover:font-extrabold transition-all"
             >
               +
@@ -621,198 +678,222 @@ export const SlideForm: React.FC<SlideFormProps> = ({
               {/* Text Settings */}
               <div className="space-y-4 rounded-lg">
                 <h4 className="font-bold text-sky-700 mb-3">تنظیمات سربرگ</h4>
-                <div className="space-y-3">
-                  <div>
-                    <label className="text-sm text-gray-600 mb-1 block">
-                      سایز
-                    </label>
-                    <input
-                      type="range"
-                      name="textFontSize"
-                      value={userInputData?.setting?.textFontSize || 15}
-                      onChange={handleSettingChange}
-                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                    />
-                    <div className="text-xs text-gray-500 mt-1">
-                      {userInputData?.setting?.textFontSize || 15}px
-                    </div>
-                  </div>
+                <div className=" ">
+                  <DynamicRangeInput
+                    label="سایز"
+                    name="textFontSize"
+                    min={10}
+                    max={100}
+                    step={1}
+                    value={userInputData?.setting?.textFontSize || 15}
+                    onChange={handleSettingChange}
+                    displayUnit="px"
+                  />
 
-                  <div>
-                    <label className="text-lg text-gray-600 mb-1 block">
-                      وزن متن
-                    </label>
-                    <select
-                      name="textFontWeight"
-                      value={userInputData?.setting?.textFontWeight ?? "400"}
-                      onChange={handleSettingChange}
-                      className="w-full p-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    >
-                      <option value="bold">ضخیم</option>
-                      <option value="normal">نرمال</option>
-                    </select>
-                  </div>
+                  <DynamicSelectInput
+                    label="وزن متن"
+                    name="textFontWeight"
+                    value={userInputData?.setting?.textFontWeight ?? "400"}
+                    options={[
+                      { value: "bold", label: "ضخیم" },
+                      { value: "normal", label: "نرمال" },
+                    ]}
+                    onChange={handleSettingChange}
+                  />
 
-                  <div className="rounded-lg flex items-center justify-between ">
-                    <ColorInput
-                      label="رنگ سربرگ"
-                      name="textColor"
-                      value={
-                        userInputData?.setting?.textColor?.toString() ??
-                        "#ffffff"
-                      }
-                      onChange={handleSettingChange}
-                    />
-                  </div>
+                  <ColorInput
+                    label="رنگ سربرگ"
+                    name="textColor"
+                    value={
+                      userInputData?.setting?.textColor?.toString() ?? "#ffffff"
+                    }
+                    onChange={handleSettingChange}
+                  />
                 </div>
               </div>
 
               {/* Description Settings */}
               <div className="space-y-4 rounded-lg">
                 <h4 className="font-bold text-sky-700 mb-3">تنظیمات توضیحات</h4>
-                <div className="space-y-3">
-                  <div>
-                    <label className="text-sm text-gray-600 mb-1 block">
-                      سایز
-                    </label>
-                    <input
-                      type="range"
-                      name="descriptionFontSize"
-                      min="0"
-                      max="100"
-                      value={userInputData?.setting?.descriptionFontSize || 15}
-                      onChange={handleSettingChange}
-                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                    />
-                    <div className="text-xs text-gray-500 mt-1">
-                      {userInputData?.setting?.descriptionFontSize || 15}px
-                    </div>
-                  </div>
+                <div className=" ">
+                  <DynamicRangeInput
+                    label="سایز"
+                    name="descriptionFontSize"
+                    min={10}
+                    max={100}
+                    step={1}
+                    value={userInputData?.setting?.descriptionFontSize || 15}
+                    onChange={handleSettingChange}
+                    displayUnit="px"
+                  />
 
-                  <div>
-                    <label className="text-sm text-gray-600 mb-1 block">
-                      وزن متن
-                    </label>
-                    <select
-                      name="descriptionFontWeight"
-                      value={
-                        userInputData?.setting?.descriptionFontWeight ?? "400"
-                      }
-                      onChange={handleSettingChange}
-                      className="w-full p-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    >
-                      <option value="bold">ضخیم</option>
-                      <option value="normal">نرمال</option>
-                    </select>
-                  </div>
+                  <DynamicSelectInput
+                    label="وزن متن"
+                    name="descriptionFontWeight"
+                    value={
+                      userInputData?.setting?.descriptionFontWeight ?? "400"
+                    }
+                    options={[
+                      { value: "bold", label: "ضخیم" },
+                      { value: "normal", label: "نرمال" },
+                    ]}
+                    onChange={handleSettingChange}
+                  />
 
-                  <div className="rounded-lg flex items-center justify-between ">
-                    <ColorInput
-                      label="رنگ سربرگ"
-                      name="descriptionColor"
-                      value={
-                        userInputData?.setting?.descriptionColor?.toString() ??
-                        "#ffffff"
-                      }
-                      onChange={handleSettingChange}
-                    />
-                  </div>
+                  <ColorInput
+                    label="رنگ سربرگ"
+                    name="descriptionColor"
+                    value={
+                      userInputData?.setting?.descriptionColor?.toString() ??
+                      "#ffffff"
+                    }
+                    onChange={handleSettingChange}
+                  />
                 </div>
               </div>
 
               {/* Image Settings */}
               <div className="space-y-4 rounded-lg">
                 <h4 className="font-bold text-sky-700 mb-3">تنظیمات تصویر</h4>
-                <div className="space-y-3">
-                  <div>
-                    <label className="text-sm text-gray-600 mb-1 block">
-                      انحنای تصویر
-                    </label>
-                    <input
-                      type="range"
-                      name="imageRadious"
-                      value={userInputData?.setting?.imageRadious || 15}
-                      onChange={handleSettingChange}
-                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                    />
-                    <div className="text-xs text-gray-500 mt-1">
-                      {userInputData?.setting?.imageRadious || 15}px
-                    </div>
-                  </div>
+                <div className=" ">
+                  <DynamicRangeInput
+                    label="عرض"
+                    name="imageWidth"
+                    min={10}
+                    max={2000}
+                    step={1}
+                    value={userInputData?.setting?.imageWidth || 200}
+                    onChange={handleSettingChange}
+                    displayUnit="px"
+                  />
+                  <DynamicRangeInput
+                    label="ارتفاع"
+                    name="imageHeight"
+                    min={10}
+                    max={1000}
+                    step={1}
+                    value={userInputData?.setting?.imageHeight || 200}
+                    onChange={handleSettingChange}
+                    displayUnit="px"
+                  />
+                  <DynamicRangeInput
+                    label="انحنا"
+                    name="imageRadious"
+                    min={0}
+                    max={200}
+                    step={1}
+                    value={userInputData?.setting?.imageRadious || 15}
+                    onChange={handleSettingChange}
+                    displayUnit="px"
+                  />
 
-                  <div className="p-3  rounded-lg">
-                    <label className="block mb-2 text-sm font-medium text-gray-700">
-                      شفافیت تصویر
-                    </label>
-                    <select
-                      name="opacityImage"
-                      value={
-                        userInputData?.setting?.opacityImage?.toLocaleString() ??
-                        "1"
-                      }
-                      onChange={handleSettingChange}
-                      className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                    >
-                      {Array.from({ length: 11 }, (_, i) => i / 10).map(
-                        (value) => (
-                          <option key={value} value={value}>
-                            {value}
-                          </option>
-                        )
-                      )}
-                    </select>
-                  </div>
+                  {/* Opacity Select as DynamicSelectInput */}
+                  <DynamicSelectInput
+                    label="شفافیت تصویر"
+                    name="opacityImage"
+                    value={
+                      userInputData?.setting?.opacityImage?.toString() ?? "1"
+                    }
+                    options={Array.from({ length: 11 }, (_, i) => {
+                      const value = (i / 10).toString();
+                      return { value, label: value };
+                    })}
+                    onChange={handleSettingChange}
+                  />
 
-                  <div>
-                    <label className="text-sm text-gray-600 mb-1 block">
-                      رفتار تصویر
-                    </label>
-                    <div className="flex items-center gap-2">
-                      <select
-                        name="imageBehavior"
-                        value={
-                          userInputData?.setting?.imageBehavior?.toLocaleString() ??
-                          "cover"
-                        }
-                        onChange={handleSettingChange}
-                        className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                      >
-                        <option value="cover">پوشش</option>
-                        <option value="contain">شامل</option>
-                        <option value="fill">کامل</option>
-                      </select>
-                    </div>
-                  </div>
+                  <DynamicSelectInput
+                    label="رفتار تصویر"
+                    name="imageBehavior"
+                    value={
+                      userInputData?.setting?.imageBehavior?.toString() ?? "1"
+                    }
+                    options={[
+                      { value: "cover", label: "پوشش" },
+                      { value: "contain", label: "شامل" },
+                      { value: "fill", label: "کامل" },
+                    ]}
+                    onChange={handleSettingChange}
+                  />
                 </div>
               </div>
 
               {/* Button Settings */}
               <div className="space-y-4 rounded-lg">
                 <h4 className="font-bold text-sky-700 mb-3">تنظیمات دکمه</h4>
-                <div className="space-y-3">
-                  <div className="rounded-lg flex items-center justify-between ">
-                    <ColorInput
-                      label="رنگ متن دکمه"
-                      name="btnTextColor"
-                      value={
-                        userInputData?.setting?.btnTextColor?.toString() ??
-                        "#ffffff"
-                      }
-                      onChange={handleSettingChange}
-                    />
-                  </div>
+                <div className=" ">
+                  <DynamicRangeInput
+                    label="عرض"
+                    name="btnWidth"
+                    min={0}
+                    max={500}
+                    step={1}
+                    value={userInputData?.setting?.btnWidth || 100}
+                    onChange={handleSettingChange}
+                    displayUnit="px"
+                  />
+                  <DynamicRangeInput
+                    label="انحنا"
+                    name="btnRadius"
+                    min={0}
+                    max={20}
+                    step={1}
+                    value={userInputData?.setting?.btnRadius || 100}
+                    onChange={handleSettingChange}
+                    displayUnit="px"
+                  />
+                  <ColorInput
+                    label="رنگ متن دکمه"
+                    name="btnTextColor"
+                    value={
+                      userInputData?.setting?.btnTextColor?.toString() ??
+                      "#ffffff"
+                    }
+                    onChange={handleSettingChange}
+                  />
 
-                  <div className="rounded-lg flex items-center justify-between ">
-                    <ColorInput
-                      label="رنگ پس زمینه دکمه"
-                      name="btnBackgroundColor"
-                      value={
-                        userInputData?.setting?.btnBackgroundColor?.toString() ??
-                        "#ffffff"
-                      }
-                      onChange={handleSettingChange}
-                    />
-                  </div>
+                  <ColorInput
+                    label="رنگ پس زمینه دکمه"
+                    name="btnBackgroundColor"
+                    value={
+                      userInputData?.setting?.btnBackgroundColor?.toString() ??
+                      "#ffffff"
+                    }
+                    onChange={handleSettingChange}
+                  />
+                </div>
+              </div>
+              <div className="space-y-4 rounded-lg">
+                <h4 className="font-bold text-sky-700 mb-3">
+                  تنظیمات دکمه های ناوبری
+                </h4>
+                <div className=" ">
+                  <ColorInput
+                    label="رنگ دکمه"
+                    name="navColor"
+                    value={
+                      userInputData?.setting?.navColor?.toString() ?? "#ffffff"
+                    }
+                    onChange={handleSettingChange}
+                  />
+
+                  <ColorInput
+                    label="رنگ پس زمینه دکمه"
+                    name="navBg"
+                    value={
+                      userInputData?.setting?.navBg?.toString() ?? "#ffffff"
+                    }
+                    onChange={handleSettingChange}
+                  />
+                  <DynamicRangeInput
+                    label="انحنا"
+                    name="navRadius"
+                    min={0}
+                    max={20}
+                    step={1}
+                    value={userInputData?.setting?.navRadius || 100}
+                    onChange={handleSettingChange}
+                    displayUnit="px"
+                  />
                 </div>
               </div>
 
@@ -822,18 +903,58 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                   تنظیمات پس زمینه
                 </h4>
                 <div className="space-y-3">
-                  <div className="rounded-lg flex items-center justify-between ">
-                    <ColorInput
-                      label="رنگ  پس زمینه"
-                      name="backgroundColorBox"
-                      value={
-                        userInputData?.setting?.backgroundColorBox?.toString() ??
-                        "#ffffff"
-                      }
-                      onChange={handleSettingChange}
-                    />
-                  </div>
+                  <ColorInput
+                    label="رنگ  پس زمینه"
+                    name="backgroundColorBox"
+                    value={
+                      userInputData?.setting?.backgroundColorBox?.toString() ??
+                      "#ffffff"
+                    }
+                    onChange={handleSettingChange}
+                  />
                 </div>
+              </div>
+              {/* ✅ New Shadow Settings */}
+              <div className="space-y-4 rounded-lg">
+                <h4 className="font-bold text-sky-700 my-3">تنظیمات سایه</h4>
+                <DynamicRangeInput
+                  label="افست افقی سایه"
+                  name="shadowOffsetX"
+                  min="-50"
+                  max="50"
+                  value={userInputData?.setting?.shadowOffsetX?.toString() ?? "0"}
+                  onChange={handleSettingChange}
+                />
+                <DynamicRangeInput
+                  label="افست عمودی سایه"
+                  name="shadowOffsetY"
+                  min="-50"
+                  max="50"
+                  value={userInputData?.setting?.shadowOffsetY?.toString() ?? "0"}
+                  onChange={handleSettingChange}
+                />
+                <DynamicRangeInput
+                  label="میزان بلور سایه"
+                  name="shadowBlur"
+                  min="0"
+                  max="100"
+                  value={userInputData?.setting?.shadowBlur?.toString() ?? "0"}
+                  onChange={handleSettingChange}
+                />
+                <DynamicRangeInput
+                  label="میزان گسترش سایه"
+                  name="shadowSpread"
+                  min="-20"
+                  max="20"
+                  value={userInputData?.setting?.shadowSpread?.toString() ?? "0"}
+                  onChange={handleSettingChange}
+                />
+                <ColorInput
+                  label="رنگ سایه"
+                  name="shadowColor"
+                  value={userInputData?.setting?.shadowColor?.toString() ?? "0"}
+                  onChange={handleSettingChange}
+                />
               </div>
             </div>
           </div>
@@ -1442,7 +1563,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
         )}
 
         {isSpacingOpen && (
-          <div className="p-4 animate-slideDown">
+          <div className="animate-slideDown">
             <div className=" rounded-lg p-2 flex items-center justify-center">
               <MarginPaddingEditor
                 margin={margin}

@@ -7,6 +7,11 @@ import { TabButtons } from "../tabButtons";
 import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
 import { HiChevronDown, HiSparkles } from "react-icons/hi";
+import {
+  DynamicRangeInput,
+  DynamicSelectInput,
+  ColorInput,
+} from "./DynamicInputs";
 
 interface RichTextFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<RichTextSection>>;
@@ -21,32 +26,6 @@ interface BoxValues {
   left: number;
   right: number;
 }
-
-const ColorInput = ({
-  label,
-  name,
-  value,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <>
-    <label className="block mb-1">{label}</label>
-    <div className="flex flex-col rounded-md gap-3 items-center">
-      <input
-        type="color"
-        id={name}
-        name={name}
-        value={value || "#000000"}
-        onChange={onChange}
-        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
-      />
-    </div>
-  </>
-);
 
 export const RichText: React.FC<RichTextFormProps> = ({
   setUserInputData,
@@ -86,6 +65,8 @@ export const RichText: React.FC<RichTextFormProps> = ({
           ...prev.setting,
           marginTop: updatedValues.top.toString(),
           marginBottom: updatedValues.bottom.toString(),
+          marginLeft: updatedValues.left.toString(),
+          marginRight: updatedValues.right.toString(),
         },
       }));
     } else {
@@ -364,217 +345,269 @@ export const RichText: React.FC<RichTextFormProps> = ({
               <h4 className="font-bold text-sky-700">تنظیمات سربرگ</h4>
               {/* Header Settings */}
 
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                سایز سربرگ
-              </label>
-              <input
-                type="range"
+              <DynamicRangeInput
+                label="سایز سربرگ"
                 name="textHeadingFontSize"
+                min="12"
+                max="100"
                 value={
                   userInputData?.blocks?.setting?.textHeadingFontSize?.toString() ??
-                  "0"
+                  "24"
                 }
                 onChange={handleBlockSettingChange}
-                className="w-full"
               />
-              <span className="text-sm">
-                {userInputData?.blocks?.setting?.textHeadingFontSize}px
-              </span>
 
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                وزن سربرگ
-              </label>
-              <select
+              <DynamicSelectInput
+                label="وزن سربرگ"
                 name="textHeadingFontWeight"
                 value={
                   userInputData?.blocks?.setting?.textHeadingFontWeight?.toString() ??
-                  "0"
+                  "bold"
+                }
+                options={[
+                  { value: "bold", label: "ضخیم" },
+                  { value: "normal", label: "نرمال" },
+                ]}
+                onChange={handleBlockSettingChange}
+              />
+              <ColorInput
+                label="رنگ سربرگ"
+                name="textHeadingColor"
+                value={
+                  userInputData?.blocks?.setting?.textHeadingColor?.toString() ??
+                  "#000000"
                 }
                 onChange={handleBlockSettingChange}
-                className="w-full p-2 border border-gray-200 rounded-lg"
-              >
-                <option value="bold">ضخیم</option>
-                <option value="normal">نرمال</option>
-              </select>
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنگ سربرگ"
-                  name="textHeadingColor"
-                  value={
-                    userInputData?.blocks?.setting?.textHeadingColor?.toString() ??
-                    "#000000"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-              </div>
+              />
             </div>
             {/* Description Settings */}{" "}
             <div className="p-3 -gray-100 rounded-lg flex flex-col gap-3">
               <h4 className="font-bold text-sky-700">تنظیمات توضیحات</h4>
 
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                سایز توضیحات
-              </label>
-              <input
-                type="range"
+              <DynamicRangeInput
+                label="سایز توضیحات"
                 name="descriptionFontSize"
+                min="10"
+                max="50"
                 value={
                   userInputData?.blocks?.setting?.descriptionFontSize?.toString() ??
-                  "0"
+                  "16"
                 }
                 onChange={handleBlockSettingChange}
-                className="w-full"
               />
-              <span className="text-sm">
-                {userInputData?.blocks?.setting?.descriptionFontSize}px
-              </span>
 
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                وزن توضیحات
-              </label>
-              <select
+              <DynamicSelectInput
+                label="وزن توضیحات"
                 name="descriptionFontWeight"
                 value={
                   userInputData?.blocks?.setting?.descriptionFontWeight?.toString() ??
-                  "0"
+                  "normal"
+                }
+                options={[
+                  { value: "bold", label: "ضخیم" },
+                  { value: "normal", label: "نرمال" },
+                ]}
+                onChange={handleBlockSettingChange}
+              />
+              <ColorInput
+                label="رنگ توضیحات"
+                name="descriptionColor"
+                value={
+                  userInputData?.blocks?.setting?.descriptionColor?.toString() ??
+                  "#000000"
                 }
                 onChange={handleBlockSettingChange}
-                className="w-full p-2 border border-gray-200 rounded-lg"
-              >
-                <option value="bold">ضخیم</option>
-                <option value="normal">نرمال</option>
-              </select>
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنگ توضیحات"
-                  name="descriptionColor"
-                  value={
-                    userInputData?.blocks?.setting?.descriptionColor?.toString() ??
-                    "#000000"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-              </div>
+              />
             </div>
             {/* Background and Button Colors */}
             <div className="p-3 -gray-100 rounded-lg flex flex-col gap-3">
-              <h4 className="font-bold text-sky-700">تنظیمات رنگ ها</h4>
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنگ پس زمینه"
-                  name="background"
-                  value={
-                    userInputData?.blocks?.setting?.background?.toString() ??
-                    "#000000"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-              </div>
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنگ متن دکمه"
-                  name="btnTextColor"
-                  value={
-                    userInputData?.blocks?.setting?.btnTextColor?.toString() ??
-                    "#ffffff"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-              </div>
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنگ پس زمینه دکمه"
-                  name="btnBackgroundColor"
-                  value={
-                    userInputData?.blocks?.setting?.btnBackgroundColor?.toString() ??
-                    "#000000"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-              </div>
+              <h4 className="font-bold text-sky-700">تنظیمات پس زمینه </h4>
+              <ColorInput
+                label="رنگ پس زمینه"
+                name="background"
+                value={
+                  userInputData?.blocks?.setting?.background?.toString() ??
+                  "#ffffff"
+                }
+                onChange={handleBlockSettingChange}
+              />
+              <DynamicRangeInput
+                label="انحنای حاشیه"
+                name="backgroundRadius"
+                min="0"
+                max="500"
+                step={5}
+                value={
+                  userInputData?.blocks?.setting?.backgroundRadius?.toString() ??
+                  "20"
+                }
+                onChange={handleBlockSettingChange}
+              />
+
+              <DynamicSelectInput
+                label="چیدمان"
+                name="align"
+                value={
+                  userInputData?.blocks?.setting?.align?.toString() ?? "center"
+                }
+                options={[
+                  { value: "center", label: "وسط" },
+                  { value: "strat", label: "راست" },
+                  { value: "end", label: "چپ" },
+                ]}
+                onChange={handleBlockSettingChange}
+              />
+            </div>
+            <div className="p-3 -gray-100 rounded-lg flex flex-col gap-3">
+              <h4 className="font-bold text-sky-700">تنظیمات دکمه</h4>
+
+              <ColorInput
+                label="رنگ متن "
+                name="btnTextColor"
+                value={
+                  userInputData?.blocks?.setting?.btnTextColor?.toString() ??
+                  "#ffffff"
+                }
+                onChange={handleBlockSettingChange}
+              />
+              <ColorInput
+                label="رنگ پس زمینه "
+                name="btnBackgroundColor"
+                value={
+                  userInputData?.blocks?.setting?.btnBackgroundColor?.toString() ??
+                  "#000000"
+                }
+                onChange={handleBlockSettingChange}
+              />
+              <DynamicRangeInput
+                label="عرض "
+                name="btnWidth"
+                min="0"
+                max="2000"
+                value={
+                  userInputData?.blocks?.setting?.btnWidth?.toString() ?? "20"
+                }
+                onChange={handleBlockSettingChange}
+              />
+              <DynamicRangeInput
+                label="انحنای حاشیه"
+                name="btnRadius"
+                min="0"
+                max="25"
+                value={
+                  userInputData?.blocks?.setting?.btnRadius?.toString() ?? "5"
+                }
+                onChange={handleBlockSettingChange}
+              />
             </div>
             {/* Line Colors */}
             <div className="p-3 -gray-100 rounded-lg flex flex-col gap-3">
               <h4 className="font-bold text-sky-700"> تنظیمات خط</h4>
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنگ خط"
-                  name="lineColor"
-                  value={
-                    userInputData?.blocks?.setting?.lineColor?.toString() ??
-                    "#000000"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-              </div>
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                عرض خط
-              </label>
-              <input
-                type="range"
-                min={0}
-                max={2000}
+              <ColorInput
+                label="رنگ خط"
+                name="lineColor"
+                value={
+                  userInputData?.blocks?.setting?.lineColor?.toString() ??
+                  "#000000"
+                }
+                onChange={handleBlockSettingChange}
+              />
+              <DynamicRangeInput
+                label="عرض خط"
                 name="lineWidth"
+                min="0"
+                max="2000"
                 value={
                   userInputData?.blocks?.setting?.lineWidth?.toString() ?? "500"
                 }
                 onChange={handleBlockSettingChange}
-                className="w-full"
               />
-              <span className="text-sm">
-                {userInputData?.blocks?.setting?.lineWidth}px
-              </span>
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                قطر خط
-              </label>
-              <input
-                type="range"
-                min={0}
-                max={200}
+              <DynamicRangeInput
+                label="قطر خط"
                 name="lineHeight"
+                min="0"
+                max="200"
                 value={
-                  userInputData?.blocks?.setting?.lineHeight?.toString() ?? "0"
+                  userInputData?.blocks?.setting?.lineHeight?.toString() ?? "2"
                 }
                 onChange={handleBlockSettingChange}
-                className="w-full"
               />
-              <span className="text-sm">
-                {userInputData?.blocks?.setting?.lineHeight}px
-              </span>
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                فاصله از بالا
-              </label>
-              <input
-                type="range"
-                min={-100}
-                max={100}
+              <DynamicRangeInput
+                label="فاصله از بالا"
                 name="lineTop"
+                min="-100"
+                max="100"
                 value={
                   userInputData?.blocks?.setting?.lineTop?.toString() ?? "0"
                 }
                 onChange={handleBlockSettingChange}
-                className="w-full"
               />
-              <span className="text-sm">
-                {userInputData?.blocks?.setting?.lineTop}px
-              </span>
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                فاصله از پایین
-              </label>
-              <input
-                type="range"
-                min={-100}
-                max={100}
+              <DynamicRangeInput
+                label="فاصله از پایین"
                 name="lineBottom"
+                min="-100"
+                max="100"
                 value={
                   userInputData?.blocks?.setting?.lineBottom?.toString() ?? "0"
                 }
                 onChange={handleBlockSettingChange}
-                className="w-full"
               />
-              <span className="text-sm">
-                {userInputData?.blocks?.setting?.lineBottom}px
-              </span>
+            </div>
+            {/* ✅ New Shadow Settings */}
+            <div className="space-y-4 rounded-lg">
+              <h4 className="font-bold text-sky-700 my-3">تنظیمات سایه</h4>
+              <DynamicRangeInput
+                label="افست افقی سایه"
+                name="shadowOffsetX"
+                min="-50"
+                max="50"
+                value={
+                  userInputData?.blocks?.setting?.shadowOffsetX?.toString() ??
+                  "0"
+                }
+                onChange={handleBlockSettingChange}
+              />
+              <DynamicRangeInput
+                label="افست عمودی سایه"
+                name="shadowOffsetY"
+                min="-50"
+                max="50"
+                value={
+                  userInputData?.blocks?.setting?.shadowOffsetY?.toString() ??
+                  "4"
+                }
+                onChange={handleBlockSettingChange}
+              />
+              <DynamicRangeInput
+                label="میزان بلور سایه"
+                name="shadowBlur"
+                min="0"
+                max="100"
+                value={
+                  userInputData?.blocks?.setting?.shadowBlur?.toString() ?? "10"
+                }
+                onChange={handleBlockSettingChange}
+              />
+              <DynamicRangeInput
+                label="میزان گسترش سایه"
+                name="shadowSpread"
+                min="-20"
+                max="20"
+                value={
+                  userInputData?.blocks?.setting?.shadowSpread?.toString() ??
+                  "0"
+                }
+                onChange={handleBlockSettingChange}
+              />
+              <ColorInput
+                label="رنگ سایه"
+                name="shadowColor"
+                value={
+                  userInputData?.blocks?.setting?.shadowColor ??
+                  "rgba(0,0,0,0.25)"
+                }
+                onChange={handleBlockSettingChange}
+              />
             </div>
           </div>
         </div>
@@ -787,8 +820,6 @@ export const RichText: React.FC<RichTextFormProps> = ({
                   <p className="text-xs text-gray-600 mb-2">پیش‌نمایش</p>
                   <AnimationPreview effects={[currentAnimation]} />
                 </div>
-
-           
               </div>
             </div>
           )}
@@ -802,10 +833,10 @@ export const RichText: React.FC<RichTextFormProps> = ({
         </div>
       )}
 
-      {/* Spacing Settings */}
+      {/* Spacing Settings Dropdown */}
       {isSpacingOpen && (
-        <div className="p-4  animate-slideDown">
-          <div className=" rounded-lg p-2 flex items-center justify-center">
+        <div className="animate-slideDown">
+          <div className="rounded-lg items-center justify-center">
             <MarginPaddingEditor
               margin={margin}
               padding={padding}

@@ -26,15 +26,23 @@ const Section = styled.section<{
   padding-right: ${(props) => props.$data?.setting?.paddingRight || "10"}px;
   margin-top: ${(props) => props.$data?.setting?.marginTop || "30"}px;
   margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "30"}px;
+  margin-right: ${(props) => props.$data.setting.marginRight}px;
+  margin-left: ${(props) => props.$data.setting.marginLeft}px;
   background-color: ${(props) =>
     props.$data?.blocks?.setting?.background || "#ffffff"};
   display: flex;
   flex-direction: column;
-  border-radius: 30px;
-  align-items: center;
-  margin-left: 10px;
-  margin-right: 10px;
+  border-radius: ${(props) =>
+    props.$data?.blocks?.setting?.backgroundRadius || "30"}px;
+  align-items: ${(props) => props.$data?.blocks?.setting?.align || "center"};
+  text-align: ${(props) => props.$data?.blocks?.setting?.align || "center"};
   gap: 15px;
+  box-shadow: ${(props) =>
+    `${props.$data.blocks.setting?.shadowOffsetX || 0}px 
+     ${props.$data.blocks.setting?.shadowOffsetY || 4}px 
+     ${props.$data.blocks.setting?.shadowBlur || 10}px 
+     ${props.$data.blocks.setting?.shadowSpread || 0}px 
+     ${props.$data.blocks.setting?.shadowColor || "#fff"}`};
 `;
 
 const H1 = styled.h1<{
@@ -43,17 +51,10 @@ const H1 = styled.h1<{
   $preview: "sm" | "default";
 }>`
   color: ${(props) => props.$data?.setting?.textHeadingColor || "#000"};
-  font-size: ${(props) =>
-    props.$preview === "sm"
-      ? "18"
-      : props.$data?.setting?.textHeadingFontSize || "24"}px;
+  font-size: ${(props) => props.$data?.setting?.textHeadingFontSize || "24"}px;
   font-weight: ${(props) =>
     props.$data?.setting?.textHeadingFontWeight || "bold"};
-  // border-bottom: 3px solid #ffffff;
   padding-bottom: 10px;
-  @media (max-width: 768px) {
-    font-size: 28px;
-  }
 `;
 
 const P = styled.p<{
@@ -62,17 +63,9 @@ const P = styled.p<{
   $preview: "sm" | "default";
 }>`
   color: ${(props) => props.$data?.setting?.descriptionColor || "#666"};
-  text-align: center;
-  padding: 0px 70px;
-  font-size: ${(props) =>
-    props.$preview === "sm"
-      ? "14"
-      : props.$data?.setting?.descriptionFontSize || "24"}px;
+  font-size: ${(props) => props.$data?.setting?.descriptionFontSize || "24"}px;
   font-weight: ${(props) =>
     props.$data?.setting?.descriptionFontWeight || "normal"};
-  @media (max-width: 768px) {
-    font-size: 16px;
-  }
 `;
 
 const HR = styled.hr<{
@@ -96,24 +89,26 @@ const Btn = styled.button<{
   background-color: ${(props) =>
     props.$data?.setting?.btnBackgroundColor || "#007BFF"};
   padding: ${(props) => (props.$preview === "sm" ? "7px 20px" : "15px 30px")};
-  border-radius: 5px;
+  border-radius: ${(props) => props.$data?.setting?.btnRadius || "5"}px;
   border: none;
   cursor: pointer;
-
+  width: ${(props) => props.$data?.setting?.btnWidth || "20"}px;
 
   /* Apply button animations */
   ${(props) => {
     const btnAnimation = props.$data?.setting?.btnAnimation;
-    if (!btnAnimation) return '';
-    
+    if (!btnAnimation) return "";
+
     const { type, animation: animConfig } = btnAnimation;
-    const selector = type === 'hover' ? '&:hover' : '&:active';
-    
+    const selector = type === "hover" ? "&:hover" : "&:active";
+
     // Generate animation CSS based on type
-    if (animConfig.type === 'pulse') {
+    if (animConfig.type === "pulse") {
       return `
         ${selector} {
-          animation: richTextBtnPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: richTextBtnPulse ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes richTextBtnPulse {
@@ -127,10 +122,12 @@ const Btn = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'glow') {
+    } else if (animConfig.type === "glow") {
       return `
         ${selector} {
-          animation: richTextBtnGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: richTextBtnGlow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes richTextBtnGlow {
@@ -142,10 +139,12 @@ const Btn = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'brightness') {
+    } else if (animConfig.type === "brightness") {
       return `
         ${selector} {
-          animation: richTextBtnBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: richTextBtnBrightness ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes richTextBtnBrightness {
@@ -157,10 +156,12 @@ const Btn = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'blur') {
+    } else if (animConfig.type === "blur") {
       return `
         ${selector} {
-          animation: richTextBtnBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: richTextBtnBlur ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes richTextBtnBlur {
@@ -172,10 +173,12 @@ const Btn = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'saturate') {
+    } else if (animConfig.type === "saturate") {
       return `
         ${selector} {
-          animation: richTextBtnSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: richTextBtnSaturate ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes richTextBtnSaturate {
@@ -187,10 +190,12 @@ const Btn = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'contrast') {
+    } else if (animConfig.type === "contrast") {
       return `
         ${selector} {
-          animation: richTextBtnContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: richTextBtnContrast ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes richTextBtnContrast {
@@ -202,10 +207,12 @@ const Btn = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'opacity') {
+    } else if (animConfig.type === "opacity") {
       return `
         ${selector} {
-          animation: richTextBtnOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: richTextBtnOpacity ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes richTextBtnOpacity {
@@ -220,10 +227,12 @@ const Btn = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'shadow') {
+    } else if (animConfig.type === "shadow") {
       return `
         ${selector} {
-          animation: richTextBtnShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: richTextBtnShadow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes richTextBtnShadow {
@@ -236,8 +245,8 @@ const Btn = styled.button<{
         }
       `;
     }
-    
-    return '';
+
+    return "";
   }}
 `;
 
@@ -260,7 +269,7 @@ const RichText: React.FC<RichTextProps> = ({
       setPreview(previewWidth);
     }
   }, [previewWidth]);
-  
+
   const sectionData = layout?.sections?.children?.sections?.find(
     (section) => section.type === actualName
   ) as RichTextSection;
@@ -282,7 +291,7 @@ const RichText: React.FC<RichTextProps> = ({
       dir="rtl"
       $data={sectionData}
       onClick={() => setSelectedComponent(actualName)}
-      className={`transition-all duration-150 ease-in-out relative ${
+      className={`transition-all  duration-150 ease-in-out relative ${
         selectedComponent === actualName
           ? "border-4 border-blue-500 rounded-lg shadow-lg "
           : ""
@@ -350,7 +359,7 @@ const RichText: React.FC<RichTextProps> = ({
         </P>
       )}
       {btnLink && (
-        <Link href={btnLink || "#"} passHref legacyBehavior>
+        <Link href={"#"} passHref legacyBehavior>
           <Btn $data={blocks} $previewWidth={previewWidth} $preview={preview}>
             {btnText}
           </Btn>

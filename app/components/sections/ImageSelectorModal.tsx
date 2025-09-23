@@ -93,7 +93,7 @@ export default function ImageSelectorModal({
               <h3 className="text-xl text-gray-600">تصویری یافت نشد</h3>
             </div>
           ) : (
-            <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1   gap-4">
               {Array.isArray(images) &&
                 images.map((image: ImageFile) => (
                   <motion.div

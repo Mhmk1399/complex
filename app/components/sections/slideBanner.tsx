@@ -21,7 +21,7 @@ const SlideBannerSection = styled.section<{
   $previewWidth: "sm" | "default";
 }>`
   position: relative;
-  width: 100%;
+  max-width: 100%;
   padding-top: ${(props) => props.$data.setting?.paddingTop || "20"}px;
   padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20"}px;
   padding-left: ${(props) => props.$data.setting?.paddingLeft || "20"}px;
@@ -29,7 +29,15 @@ const SlideBannerSection = styled.section<{
   height: ${(props) => props.$data.blocks?.setting?.height || "20"}px;
   margin-top: ${(props) => props.$data.setting?.marginTop || "30"}px;
   margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20"}px;
+  margin-left: ${(props) => props.$data.setting?.marginLeft || "20"}px;
+  margin-right: ${(props) => props.$data.setting?.marginRight || "20"}px;
   overflow: hidden;
+  box-shadow: ${(props) =>
+    `${props.$data.blocks.setting?.shadowOffsetX || 0}px 
+     ${props.$data.blocks.setting?.shadowOffsetY || 4}px 
+     ${props.$data.blocks.setting?.shadowBlur || 10}px 
+     ${props.$data.blocks.setting?.shadowSpread || 0}px 
+     ${props.$data.blocks.setting?.shadowColor || "#fff"}`};
 `;
 
 const SlideContainer = styled.div<{ $previewWidth: "sm" | "default" }>`
@@ -61,10 +69,10 @@ const Slide = styled.div<{
 
 const NavigationButtons = styled.div`
   position: absolute;
-  bottom: 20px;
+  bottom: 10px;
   right: 20px;
   display: flex;
-  gap: 10px;
+  gap: 5px;
   z-index: 10;
 `;
 
@@ -73,32 +81,34 @@ const NavButton = styled.button<{
 }>`
   background: ${(props) => props.$data.blocks.setting.bgArrow};
   border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  border-radius: ${(props) => props.$data.blocks.setting.arrowRadius}px;
+  width: ${(props) => props.$data.blocks.setting.arrowWidth}px;
+  height: ${(props) => props.$data.blocks.setting.arrowHeight}px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
-
+  color: ${(props) => props.$data.blocks.setting.arrowColor};
   &:hover {
-    background: rgba(255, 255, 255, 1);
+    background: ${(props) => props.$data.blocks.setting.arrowBgHover || "#555"};
   }
 
   /* Apply navigation button animations */
   ${(props) => {
     const navAnimation = props.$data.blocks?.setting?.navAnimation;
-    if (!navAnimation) return '';
-    
+    if (!navAnimation) return "";
+
     const { type, animation: animConfig } = navAnimation;
-    const selector = type === 'hover' ? '&:hover' : '&:active';
-    
+    const selector = type === "hover" ? "&:hover" : "&:active";
+
     // Generate animation CSS based on type
-    if (animConfig.type === 'pulse') {
+    if (animConfig.type === "pulse") {
       return `
         ${selector} {
-          animation: slideNavPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideNavPulse ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideNavPulse {
@@ -112,10 +122,12 @@ const NavButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'glow') {
+    } else if (animConfig.type === "glow") {
       return `
         ${selector} {
-          animation: slideNavGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideNavGlow ${animConfig.duration} ${animConfig.timing} ${
+        animConfig.delay || "0s"
+      } ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideNavGlow {
@@ -127,10 +139,12 @@ const NavButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'brightness') {
+    } else if (animConfig.type === "brightness") {
       return `
         ${selector} {
-          animation: slideNavBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideNavBrightness ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideNavBrightness {
@@ -142,10 +156,12 @@ const NavButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'blur') {
+    } else if (animConfig.type === "blur") {
       return `
         ${selector} {
-          animation: slideNavBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideNavBlur ${animConfig.duration} ${animConfig.timing} ${
+        animConfig.delay || "0s"
+      } ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideNavBlur {
@@ -157,10 +173,12 @@ const NavButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'saturate') {
+    } else if (animConfig.type === "saturate") {
       return `
         ${selector} {
-          animation: slideNavSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideNavSaturate ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideNavSaturate {
@@ -172,10 +190,12 @@ const NavButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'contrast') {
+    } else if (animConfig.type === "contrast") {
       return `
         ${selector} {
-          animation: slideNavContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideNavContrast ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideNavContrast {
@@ -187,10 +207,12 @@ const NavButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'opacity') {
+    } else if (animConfig.type === "opacity") {
       return `
         ${selector} {
-          animation: slideNavOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideNavOpacity ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideNavOpacity {
@@ -205,10 +227,12 @@ const NavButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'shadow') {
+    } else if (animConfig.type === "shadow") {
       return `
         ${selector} {
-          animation: slideNavShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideNavShadow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideNavShadow {
@@ -221,8 +245,8 @@ const NavButton = styled.button<{
         }
       `;
     }
-    
-    return '';
+
+    return "";
   }}
 `;
 
@@ -265,7 +289,7 @@ const SlideBanner: React.FC<props> = ({
   const [currentSlide, setCurrentSlide] = useState(0);
   const [preview, setPreview] = useState(previewWidth);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  
+
   useEffect(() => {
     if (window.innerWidth < 426) {
       setPreview("sm");
@@ -379,7 +403,7 @@ const SlideBanner: React.FC<props> = ({
           <BsChevronLeft size={20} />
         </NavButton>
       </NavigationButtons>
-      
+
       <DotsContainer>
         {sectionData.blocks.slides.map((_, index) => (
           <Dot
@@ -395,4 +419,3 @@ const SlideBanner: React.FC<props> = ({
 };
 
 export default SlideBanner;
-

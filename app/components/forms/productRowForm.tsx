@@ -7,6 +7,7 @@ import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
 import { HiChevronDown, HiSparkles } from "react-icons/hi";
 import { createApiService } from "@/lib/api-factory";
+import { MdDangerous } from "react-icons/md";
 
 interface ProductRowFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<ProductRowSection>>;
@@ -78,8 +79,6 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
     setUserInputData(initialData);
   }, [selectedComponent]);
 
-
-
   useEffect(() => {
     setMargin({
       top: Number(userInputData?.setting?.marginTop) || 0,
@@ -97,21 +96,30 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
   }, [userInputData?.setting]);
 
   const api = createApiService({
-    baseUrl: '/api',
+    baseUrl: "/api",
     headers: {
-      'Content-Type': 'application/json',
-      Authorization: typeof window !== 'undefined' ? localStorage.getItem('complexToken') || '' : ''
-    }
+      "Content-Type": "application/json",
+      Authorization:
+        typeof window !== "undefined"
+          ? localStorage.getItem("complexToken") || ""
+          : "",
+    },
   });
 
-  const { data: collectionsData, error: collectionsError } = api.useGet('/collections', {
-    revalidateOnFocus: false,
-    refreshInterval: 60000
-  });
+  const { data: collectionsData, error: collectionsError } = api.useGet(
+    "/collections",
+    {
+      revalidateOnFocus: false,
+      refreshInterval: 60000,
+    }
+  );
 
   const collections = collectionsData?.product || [];
-  const collectionsErrorMessage = collectionsError ? "خطا در بارگذاری کالکشنها. لطفاً کالکشن را در داشبورد اضافه کنید." : 
-    (collections.length === 0 ? "هیچ کالکشنی یافت نشد" : null);
+  const collectionsErrorMessage = collectionsError
+    ? "خطا در بارگذاری کالکشنها. لطفاً کالکشن را در داشبورد اضافه کنید."
+    : collections.length === 0
+    ? "هیچ کالکشنی یافت نشد"
+    : null;
 
   const handleUpdate = (
     type: "margin" | "padding",
@@ -325,7 +333,7 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
             >
               <option value="">انتخاب کنید</option>
               {collections && collections.length > 0 ? (
-                collections.map((collection) => (
+                collections.map((collection: { name: string; _id: string }) => (
                   <option key={collection._id} value={collection._id}>
                     {collection.name}
                   </option>
@@ -334,9 +342,10 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
                 <option disabled>هیچ کالکشنی موجود نیست</option>
               )}
             </select>
-            {collectionsErrorMessage && (
-              <p className="mt-2 text-sm text-red-600">{collectionsErrorMessage}</p>
-            )}
+            <p className="mt-2 text-xs inline-block border border-red-500 p-3 rounded-xl text-red-600">
+              {collectionsErrorMessage}
+              <MdDangerous />
+            </p>
           </div>
         </div>
       )}

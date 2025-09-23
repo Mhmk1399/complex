@@ -32,18 +32,30 @@ const StoryContainer = styled.div<{
 }>`
   padding-top: ${(props) => props.$data.setting?.paddingTop || "20"}px;
   padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20"}px;
+  padding-right: ${(props) => props.$data.setting?.paddingRight || "20"}px;
+  padding-left: ${(props) => props.$data.setting?.paddingLeft || "20"}px;
   margin-top: ${(props) => props.$data.setting?.marginTop || "10"}px;
   margin-bottom: ${(props) => props.$data.setting?.marginBottom || "10"}px;
+  margin-right: ${(props) => props.$data.setting.marginRight}px;
+  margin-left: ${(props) => props.$data.setting.marginLeft}px;
   background-color: ${(props) =>
     props.$data.blocks?.setting?.backgroundColor || "#ffffff"};
+  box-shadow: ${(props) =>
+    `${props.$data.blocks.setting.shadowOffsetX || 0}px 
+     ${props.$data.blocks.setting.shadowOffsetY || 4}px 
+     ${props.$data.blocks.setting.shadowBlur || 10}px 
+     ${props.$data.blocks.setting.shadowSpread || 0}px 
+     ${props.$data.blocks.setting.shadowColor || "#fff"}`};
 `;
 
-const StoriesWrapper = styled.section`
+const StoriesWrapper = styled.section<{
+  $data: StorySection;
+}>`
   display: flex;
   direction: rtl;
   justify-content: flex-start;
   overflow-x: auto;
-  gap: 12px;
+  gap: ${(props) => props.$data.blocks.setting.storyGap || 12}px;
   padding: 10px;
   scroll-behavior: smooth;
   width: 100%;
@@ -63,7 +75,8 @@ const StoryItem = styled.div<{
   align-items: center;
   cursor: pointer;
   flex-shrink: 0;
-  width: 104px;
+  width: ${(props) => props.$data.blocks.setting.storyWidth || 104}px;
+  height: ${(props) => props.$data.blocks.setting.storyHeight || 300}px;
 
   .story-ring {
     padding: 2px;
@@ -74,20 +87,22 @@ const StoryItem = styled.div<{
   .story-image {
     border-radius: ${(props) => props.$data.blocks.setting.imageRadius}%;
     object-fit: cover;
-    
+
     /* Apply story image animations */
     ${(props) => {
       const imageAnimation = props.$data.blocks?.setting?.imageAnimation;
-      if (!imageAnimation) return '';
-      
+      if (!imageAnimation) return "";
+
       const { type, animation: animConfig } = imageAnimation;
-      const selector = type === 'hover' ? '&:hover' : '&:active';
-      
+      const selector = type === "hover" ? "&:hover" : "&:active";
+
       // Generate animation CSS based on type
-      if (animConfig.type === 'pulse') {
+      if (animConfig.type === "pulse") {
         return `
           ${selector} {
-            animation: storyImagePulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: storyImagePulse ${animConfig.duration} ${
+          animConfig.timing
+        } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes storyImagePulse {
@@ -101,10 +116,12 @@ const StoryItem = styled.div<{
             }
           }
         `;
-      } else if (animConfig.type === 'glow') {
+      } else if (animConfig.type === "glow") {
         return `
           ${selector} {
-            animation: storyImageGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: storyImageGlow ${animConfig.duration} ${
+          animConfig.timing
+        } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes storyImageGlow {
@@ -116,10 +133,12 @@ const StoryItem = styled.div<{
             }
           }
         `;
-      } else if (animConfig.type === 'brightness') {
+      } else if (animConfig.type === "brightness") {
         return `
           ${selector} {
-            animation: storyImageBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: storyImageBrightness ${animConfig.duration} ${
+          animConfig.timing
+        } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes storyImageBrightness {
@@ -131,10 +150,12 @@ const StoryItem = styled.div<{
             }
           }
         `;
-      } else if (animConfig.type === 'blur') {
+      } else if (animConfig.type === "blur") {
         return `
           ${selector} {
-            animation: storyImageBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: storyImageBlur ${animConfig.duration} ${
+          animConfig.timing
+        } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes storyImageBlur {
@@ -146,10 +167,12 @@ const StoryItem = styled.div<{
             }
           }
         `;
-      } else if (animConfig.type === 'saturate') {
+      } else if (animConfig.type === "saturate") {
         return `
           ${selector} {
-            animation: storyImageSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: storyImageSaturate ${animConfig.duration} ${
+          animConfig.timing
+        } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes storyImageSaturate {
@@ -161,10 +184,12 @@ const StoryItem = styled.div<{
             }
           }
         `;
-      } else if (animConfig.type === 'contrast') {
+      } else if (animConfig.type === "contrast") {
         return `
           ${selector} {
-            animation: storyImageContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: storyImageContrast ${animConfig.duration} ${
+          animConfig.timing
+        } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes storyImageContrast {
@@ -176,10 +201,12 @@ const StoryItem = styled.div<{
             }
           }
         `;
-      } else if (animConfig.type === 'opacity') {
+      } else if (animConfig.type === "opacity") {
         return `
           ${selector} {
-            animation: storyImageOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: storyImageOpacity ${animConfig.duration} ${
+          animConfig.timing
+        } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes storyImageOpacity {
@@ -194,10 +221,12 @@ const StoryItem = styled.div<{
             }
           }
         `;
-      } else if (animConfig.type === 'shadow') {
+      } else if (animConfig.type === "shadow") {
         return `
           ${selector} {
-            animation: storyImageShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: storyImageShadow ${animConfig.duration} ${
+          animConfig.timing
+        } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes storyImageShadow {
@@ -210,8 +239,8 @@ const StoryItem = styled.div<{
           }
         `;
       }
-      
-      return '';
+
+      return "";
     }}
   }
 
@@ -238,16 +267,19 @@ export const Story: React.FC<StoryProps> = ({
   const [preview, setPreview] = useState(previewWidth);
 
   const api = createApiService({
-    baseUrl: '/api',
+    baseUrl: "/api",
     headers: {
-      'Content-Type': 'application/json',
-      Authorization: typeof window !== 'undefined' ? localStorage.getItem('complexToken') || '' : ''
-    }
+      "Content-Type": "application/json",
+      Authorization:
+        typeof window !== "undefined"
+          ? localStorage.getItem("complexToken") || ""
+          : "",
+    },
   });
 
-  const { data: storiesData, error: storiesError } = api.useGet('/story', {
+  const { data: storiesData, error: storiesError } = api.useGet("/story", {
     revalidateOnFocus: false,
-    refreshInterval: 60000
+    refreshInterval: 60000,
   });
 
   const stories: Story[] = storiesData || [];
@@ -260,7 +292,6 @@ export const Story: React.FC<StoryProps> = ({
     }
   }, [previewWidth]);
 
-  
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
   ) as StorySection;
@@ -328,25 +359,25 @@ export const Story: React.FC<StoryProps> = ({
             </button>
           </div>
         )}
-        <StoriesWrapper ref={containerRef} className="overflow-x-auto">
+        <StoriesWrapper
+          $data={sectionData}
+          ref={containerRef}
+          className="overflow-x-auto"
+        >
           {(stories.length > 0 ? stories : sectionData.blocks.stories).map(
             (story: any, idx: number) => (
               <StoryItem
                 key={"_id" in story ? story._id + idx : idx}
                 $data={sectionData}
-                onClick={() =>
-                  setSelectedStory(
-                    story.image || story.imageUrl
-                  )
-                }
+                onClick={() => setSelectedStory(story.image || story.imageUrl)}
               >
                 <div className="story-ring">
                   <Image
                     src={story.image || story.imageUrl}
                     alt={story.title}
-                    className="story-image w-[100px] h-[100px] object-cover"
-                    width={100}
-                    height={100}
+                    className="story-image h-[100px] object-cover"
+                    width={800}
+                    height={800}
                   />
                 </div>
                 <span className="story-title">{story.title}</span>

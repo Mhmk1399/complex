@@ -7,6 +7,11 @@ import ImageSelectorModal from "../sections/ImageSelectorModal";
 import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
 import { HiChevronDown, HiSparkles } from "react-icons/hi";
+import {
+  ColorInput,
+  DynamicRangeInput,
+  DynamicSelectInput,
+} from "./DynamicInputs";
 interface BrandsFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<BrandsSection>>;
   userInputData: BrandsSection;
@@ -14,14 +19,14 @@ interface BrandsFormProps {
   selectedComponent: string;
 }
 
-interface ImageFile {
-  _id: string;
-  fileName: string;
-  fileUrl: string;
-  fileType: string;
-  fileSize: number;
-  storeId: string;
-}
+// interface ImageFile {
+//   _id: string;
+//   fileName: string;
+//   fileUrl: string;
+//   fileType: string;
+//   fileSize: number;
+//   storeId: string;
+// }
 
 interface BoxValues {
   top: number;
@@ -29,32 +34,6 @@ interface BoxValues {
   left: number;
   right: number;
 }
-
-const ColorInput = ({
-  label,
-  name,
-  value,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <>
-    <label className="block mb-1">{label}</label>
-    <div className="flex flex-col rounded-md gap-3 items-center">
-      <input
-        type="color"
-        id={name}
-        name={name}
-        value={value || "#000000"}
-        onChange={onChange}
-        className=" p-0.5 border  rounded-md border-gray-200 w-8 h-8 bg-transparent "
-      />
-    </div>
-  </>
-);
 
 export const BrandsForm: React.FC<BrandsFormProps> = ({
   setUserInputData,
@@ -149,6 +128,8 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
           ...prev.setting,
           marginTop: updatedValues.top.toString(),
           marginBottom: updatedValues.bottom.toString(),
+          marginLeft: updatedValues.left.toString(),
+          marginRight: updatedValues.right.toString(),
         },
       }));
     } else {
@@ -159,6 +140,8 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
           ...prev.setting,
           paddingTop: updatedValues.top.toString(),
           paddingBottom: updatedValues.bottom.toString(),
+          paddingLeft: updatedValues.left.toString(),
+          paddingRight: updatedValues.right.toString(),
         },
       }));
     }
@@ -246,7 +229,7 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
     });
   };
 
-  const handleImageSelect = (image: ImageFile) => {
+  const handleImageSelect = (image: any) => {
     handleBrandChange(currentSlideIndex, "logo", image.fileUrl);
     setIsImageSelectorOpen(false);
   };
@@ -286,6 +269,20 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
               setUserInputData((prev) => ({
                 ...prev,
                 blocks: { ...prev.blocks, heading: e.target.value },
+              }))
+            }
+            className="w-full mt-2 p-2 border rounded mb-4"
+          />
+          <label htmlFor="">توضیحات</label>
+
+          <input
+            type="text"
+            placeholder="توضیحات"
+            value={userInputData?.blocks?.description || ""}
+            onChange={(e) =>
+              setUserInputData((prev) => ({
+                ...prev,
+                blocks: { ...prev.blocks, description: e.target.value },
               }))
             }
             className="w-full mt-2 p-2 border rounded mb-4"
@@ -332,70 +329,219 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
       {/* Style Settings */}
       {isStyleSettingsOpen && (
         <div className="p-4  animate-slideDown">
-          <div className="grid gap-4">
-            <div className="rounded-lg flex items-center justify-between ">
-              <ColorInput
-                label="رنگ عنوان"
-                name="headingColor"
-                value={userInputData?.blocks?.setting?.headingColor}
-                onChange={handleSettingChange}
-              />
-            </div>
-            <label htmlFor="">سایز عنوان کلی</label>
-            <input
-              type="range"
-              min="10"
-              max="100"
+          <div className="rounded-lg">
+            <h4 className="font-bold text-sky-700 my-3">تنظیمات عنوان</h4>
+            <ColorInput
+              label="رنگ عنوان"
+              name="headingColor"
+              value={userInputData?.blocks?.setting?.headingColor}
+              onChange={handleSettingChange}
+            />
+            <DynamicRangeInput
+              label="سایز عنوان"
               name="headingFontSize"
-              value={userInputData?.blocks?.setting?.headingFontSize || "250"}
-              onChange={handleSettingChange}
-            />
-            <p className="text-sm text-gray-600 text-nowrap">
-              {userInputData?.blocks.setting.headingFontSize}px
-            </p>
-
-            <div className="rounded-lg flex items-center justify-between ">
-              <ColorInput
-                label="رنگ نام برند"
-                name="brandNameColor"
-                value={userInputData?.blocks?.setting?.brandNameColor}
-                onChange={handleSettingChange}
-              />
-            </div>
-            <label htmlFor="">سایز عنوان برند</label>
-            <input
-              type="range"
-              min="10"
+              min="0"
               max="100"
-              name="brandNameFontSize"
-              value={userInputData?.blocks?.setting?.brandNameFontSize || "250"}
+              value={
+                userInputData?.blocks?.setting?.headingFontSize?.toString() ??
+                "16"
+              }
               onChange={handleSettingChange}
             />
-            <p className="text-sm text-gray-600 text-nowrap">
-              {userInputData?.blocks.setting.brandNameFontSize}px
-            </p>
+            <DynamicSelectInput
+              label="وزن عنوان"
+              name="headingFontWeight"
+              value={
+                userInputData?.blocks?.setting?.headingFontWeight?.toString() ??
+                "normal"
+              }
+              options={[
+                { value: "bold", label: "ضخیم" },
+                { value: "normal", label: "نرمال" },
+              ]}
+              onChange={handleSettingChange}
+            />
+          </div>
+          <div className="rounded-lg">
+            <h4 className="font-bold text-sky-700 my-3">تنظیمات توضیحات</h4>
+            <ColorInput
+              label="رنگ توضیحات"
+              name="descriptionColor"
+              value={
+                userInputData?.blocks?.setting?.descriptionColor?.toString() ??
+                "#000000"
+              }
+              onChange={handleSettingChange}
+            />
+            <DynamicRangeInput
+              label="سایز توضیحات"
+              name="descriptionFontSize"
+              min="0"
+              max="100"
+              value={
+                userInputData?.blocks?.setting?.descriptionFontSize?.toString() ??
+                "16"
+              }
+              onChange={handleSettingChange}
+            />
+            <DynamicSelectInput
+              label="وزن توضیحات"
+              name="descriptionFontWeight"
+              value={
+                userInputData?.blocks?.setting?.descriptionFontWeight?.toString() ??
+                "normal"
+              }
+              options={[
+                { value: "bold", label: "ضخیم" },
+                { value: "normal", label: "نرمال" },
+              ]}
+              onChange={handleSettingChange}
+            />
+          </div>
+          <div className="rounded-lg">
+            <h4 className="font-bold text-sky-700 my-3">تنظیمات برند</h4>
+
+            <ColorInput
+              label="رنگ نام برند"
+              name="brandNameColor"
+              value={userInputData?.blocks?.setting?.brandNameColor}
+              onChange={handleSettingChange}
+            />
+
+            <DynamicRangeInput
+              label="سایز عنوان برند"
+              name="brandNameFontSize"
+              min="0"
+              max="80"
+              value={
+                userInputData?.blocks?.setting?.brandNameFontSize?.toString() ??
+                "16"
+              }
+              onChange={handleSettingChange}
+            />
+            <DynamicSelectInput
+              label="وزن برند"
+              name="brandNameFontWeight"
+              value={
+                userInputData?.blocks?.setting?.brandNameFontWeight?.toString() ??
+                "normal"
+              }
+              options={[
+                { value: "bold", label: "ضخیم" },
+                { value: "normal", label: "نرمال" },
+              ]}
+              onChange={handleSettingChange}
+            />
 
             <div className="rounded-lg">
-              <label className="block mb-2">اندازه لوگو</label>
-              <div className="flex gap-4">
-                <input
-                  type="number"
-                  name="logoWidth"
-                  placeholder="عرض"
-                  value={userInputData?.blocks?.setting?.logoWidth || 96}
-                  onChange={handleSettingChange}
-                  className="w-1/2 p-2 border rounded"
-                />
-                <input
-                  type="number"
-                  name="logoHeight"
-                  placeholder="ارتفاع"
-                  value={userInputData?.blocks?.setting?.logoHeight || 96}
-                  onChange={handleSettingChange}
-                  className="w-1/2 p-2 border rounded"
-                />
-              </div>
+              <h4 className="font-bold text-sky-700 my-3">تنظیمات لوگو</h4>
+
+              <DynamicRangeInput
+                label="عرض"
+                name="logoWidth"
+                min="0"
+                max="500"
+                value={
+                  userInputData?.blocks?.setting?.logoWidth?.toString() ?? "16"
+                }
+                onChange={handleSettingChange}
+              />
+              <DynamicRangeInput
+                label="ارتفاع"
+                name="logoHeight"
+                min="0"
+                max="500"
+                value={
+                  userInputData?.blocks?.setting?.logoHeight?.toString() ?? "16"
+                }
+                onChange={handleSettingChange}
+              />
             </div>
+          </div>
+          <div className="rounded-lg">
+            <h4 className="font-bold text-sky-700 my-3">تنظیمات دکمه</h4>
+
+            <ColorInput
+              label="رنگ"
+              name="btnColor"
+              value={
+                userInputData?.blocks?.setting?.btnColor?.toString() ?? "#000"
+              }
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="پس زمینه"
+              name="btnBackgroundColor"
+              value={
+                userInputData?.blocks?.setting?.btnBackgroundColor?.toString() ??
+                "#fff"
+              }
+              onChange={handleSettingChange}
+            />
+
+            <DynamicRangeInput
+              label="انحنا"
+              name="btnRadius"
+              min="0"
+              max="30"
+              value={
+                userInputData?.blocks?.setting?.btnRadius?.toString() ?? "16"
+              }
+              onChange={handleSettingChange}
+            />
+          </div>
+          {/* ✅ New Shadow Settings */}
+          <div className="space-y-4 rounded-lg">
+            <h4 className="font-bold text-sky-700 my-3">تنظیمات سایه</h4>
+            <DynamicRangeInput
+              label="افست افقی سایه"
+              name="shadowOffsetX"
+              min="-50"
+              max="50"
+              value={
+                userInputData?.blocks?.setting?.shadowOffsetX?.toString() ?? "0"
+              }
+              onChange={handleSettingChange}
+            />
+            <DynamicRangeInput
+              label="افست عمودی سایه"
+              name="shadowOffsetY"
+              min="-50"
+              max="50"
+              value={
+                userInputData?.blocks?.setting?.shadowOffsetY?.toString() ?? "4"
+              }
+              onChange={handleSettingChange}
+            />
+            <DynamicRangeInput
+              label="میزان بلور سایه"
+              name="shadowBlur"
+              min="0"
+              max="100"
+              value={
+                userInputData?.blocks?.setting?.shadowBlur?.toString() ?? "10"
+              }
+              onChange={handleSettingChange}
+            />
+            <DynamicRangeInput
+              label="میزان گسترش سایه"
+              name="shadowSpread"
+              min="-20"
+              max="20"
+              value={
+                userInputData?.blocks?.setting?.shadowSpread?.toString() ?? "0"
+              }
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ سایه"
+              name="shadowColor"
+              value={
+                userInputData?.blocks?.setting?.shadowColor ??
+                "rgba(0,0,0,0.25)"
+              }
+              onChange={handleSettingChange}
+            />
           </div>
         </div>
       )}
@@ -606,8 +752,6 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
                   <p className="text-xs text-gray-600 mb-2">پیش‌نمایش</p>
                   <AnimationPreview effects={[currentAnimation]} />
                 </div>
-
-             
               </div>
             </div>
           )}
@@ -623,7 +767,7 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
 
       {/* Spacing Settings */}
       {isSpacingOpen && (
-        <div className="p-4  animate-slideDown">
+        <div className="animate-slideDown">
           <div className="bg-gray-50 rounded-lg flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

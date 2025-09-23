@@ -8,6 +8,11 @@ import Link from "next/link";
 import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
 import { HiChevronDown, HiSparkles } from "react-icons/hi";
+import {
+  ColorInput,
+  DynamicRangeInput,
+  DynamicSelectInput,
+} from "./DynamicInputs";
 
 interface StoryFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<StorySection>>;
@@ -22,32 +27,6 @@ interface BoxValues {
   left: number;
   right: number;
 }
-
-const ColorInput = ({
-  label,
-  name,
-  value,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <>
-    <label className="block mb-1">{label}</label>
-    <div className="flex flex-col rounded-md gap-3 items-center">
-      <input
-        type="color"
-        id={name}
-        name={name}
-        value={value || "#000000"}
-        onChange={onChange}
-        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
-      />
-    </div>
-  </>
-);
 
 export const StoryForm: React.FC<StoryFormProps> = ({
   setUserInputData,
@@ -106,6 +85,8 @@ export const StoryForm: React.FC<StoryFormProps> = ({
           ...prev.setting,
           marginTop: updatedValues.top.toString(),
           marginBottom: updatedValues.bottom.toString(),
+          marginLeft: updatedValues.left.toString(),
+          marginRight: updatedValues.right.toString(),
         },
       }));
     } else {
@@ -116,6 +97,8 @@ export const StoryForm: React.FC<StoryFormProps> = ({
           ...prev.setting,
           paddingTop: updatedValues.top.toString(),
           paddingBottom: updatedValues.bottom.toString(),
+          paddingLeft: updatedValues.left.toString(),
+          paddingRight: updatedValues.right.toString(),
         },
       }));
     }
@@ -263,59 +246,120 @@ export const StoryForm: React.FC<StoryFormProps> = ({
       {/* Style Tab */}
       {isStyleSettingsOpen && (
         <div className=" rounded-lg p-4 animate-slideDown">
-          <div className="flex flex-col gap-4">
-            <div className="rounded-lg inline-flex items-center justify-between gap-2">
-              <ColorInput
-                label="رنگ حلقه استوری"
-                name="storyRingColor"
-                value={userInputData?.blocks.setting.storyRingColor}
-                onChange={handleSettingChange}
-              />
-            </div>
-            <div className="rounded-lg inline-flex items-center justify-between gap-2">
-              <ColorInput
-                label="رنگ عنوان"
-                name="titleColor"
-                value={userInputData?.blocks.setting.titleColor}
-                onChange={handleSettingChange}
-              />
-            </div>
-            <div className="rounded-lg inline-flex items-center justify-between gap-2">
-              <ColorInput
-                label="رنگ پس زمینه"
-                name="backgroundColor"
-                value={userInputData?.blocks?.setting?.backgroundColor ?? "#fff"}
-                onChange={handleSettingChange}
-              />
-            </div>
+          <h4 className="font-bold text-sky-700 my-3">تنظیمات استایل</h4>
 
-            <label className="block mt-3">سایز عنوان</label>
-            <div className=" shadow-sm">
-              <input
-                type="range"
-                min="10"
-                max="100"
-                name="titleFontSize"
-                value={userInputData?.blocks.setting.titleFontSize}
-                onChange={handleSettingChange}
-                className="w-full"
-              />
-            </div>
-            <p className="text-sm text-gray-600 text-nowrap">
-              {userInputData?.blocks.setting.titleFontSize}px
-            </p>
-            <label htmlFor="" className="block mt-3">
-              وزن فونت عنوان
-            </label>
-            <select
-              name="titleFontWeight"
-              value={userInputData?.blocks.setting.titleFontWeight}
+          <div className="flex flex-col gap-4">
+            <ColorInput
+              label="رنگ عنوان"
+              name="titleColor"
+              value={userInputData.blocks.setting?.titleColor ?? "#e4e4e4"}
               onChange={handleSettingChange}
-              className="w-full p-2 border rounded mt-2"
-            >
-              <option value="normal">معمولی</option>
-              <option value="bold">ضخیم</option>
-            </select>
+            />
+            <DynamicSelectInput
+              label="وزن فونت"
+              name="titleFontWeight"
+              value={userInputData.blocks.setting?.titleFontWeight ?? "bold"}
+              options={[
+                { value: "normal", label: "نرمال" },
+                { value: "bold", label: "ضخیم" },
+              ]}
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ حلقه استوری"
+              name="storyRingColor"
+              value={userInputData.blocks.setting?.storyRingColor ?? "#e4e4e4"}
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ پس زمینه"
+              name="backgroundColor"
+              value={userInputData.blocks.setting?.backgroundColor ?? "#e4e4e4"}
+              onChange={handleSettingChange}
+            />
+
+            <DynamicRangeInput
+              label="سایز متن"
+              name="titleFontSize"
+              min={0}
+              max={100}
+              step={1}
+              value={userInputData.blocks.setting?.titleFontSize ?? 600}
+              onChange={handleSettingChange}
+              displayUnit="px"
+            />
+            <DynamicRangeInput
+              label="عرض"
+              name="storyWidth"
+              min={0}
+              max={500}
+              step={1}
+              value={userInputData.blocks.setting?.storyWidth ?? 600}
+              onChange={handleSettingChange}
+              displayUnit="px"
+            />
+            <DynamicRangeInput
+              label="ارتفاع"
+              name="storyHeight"
+              min={0}
+              max={500}
+              step={1}
+              value={userInputData.blocks.setting?.storyHeight ?? 600}
+              onChange={handleSettingChange}
+              displayUnit="px"
+            />
+            <DynamicRangeInput
+              label="فاصله بین استوری ها"
+              name="storyGap"
+              min={0}
+              max={100}
+              step={1}
+              value={userInputData.blocks.setting?.storyGap ?? 600}
+              onChange={handleSettingChange}
+              displayUnit="px"
+            />
+          </div>
+          {/* ✅ New Shadow Settings */}
+          <div className="space-y-4 rounded-lg">
+            <h4 className="font-bold text-sky-700 my-3">تنظیمات سایه</h4>
+            <DynamicRangeInput
+              label="افست افقی سایه"
+              name="shadowOffsetX"
+              min="-50"
+              max="50"
+              value={userInputData?.setting?.shadowOffsetX?.toString() ?? "0"}
+              onChange={handleSettingChange}
+            />
+            <DynamicRangeInput
+              label="افست عمودی سایه"
+              name="shadowOffsetY"
+              min="-50"
+              max="50"
+              value={userInputData?.setting?.shadowOffsetY?.toString() ?? "0"}
+              onChange={handleSettingChange}
+            />
+            <DynamicRangeInput
+              label="میزان بلور سایه"
+              name="shadowBlur"
+              min="0"
+              max="100"
+              value={userInputData?.setting?.shadowBlur?.toString() ?? "0"}
+              onChange={handleSettingChange}
+            />
+            <DynamicRangeInput
+              label="میزان گسترش سایه"
+              name="shadowSpread"
+              min="-20"
+              max="20"
+              value={userInputData?.setting?.shadowSpread?.toString() ?? "0"}
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ سایه"
+              name="shadowColor"
+              value={userInputData?.setting?.shadowColor?.toString() ?? "0"}
+              onChange={handleSettingChange}
+            />
           </div>
         </div>
       )}
@@ -525,8 +569,6 @@ export const StoryForm: React.FC<StoryFormProps> = ({
                   <p className="text-xs text-gray-600 mb-2">پیش‌نمایش</p>
                   <AnimationPreview effects={[currentAnimation]} />
                 </div>
-
-             
               </div>
             </div>
           )}
@@ -542,7 +584,7 @@ export const StoryForm: React.FC<StoryFormProps> = ({
 
       {/* Spacing Settings */}
       {isSpacingOpen && (
-        <div className="p-4  animate-slideDown">
+        <div className="animate-slideDown">
           <div className=" rounded-lg flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

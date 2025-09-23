@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { Delete } from "../C-D";
 import type { Layout, BrandsSection } from "@/lib/types";
+import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 
 interface BrandsProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -17,14 +18,23 @@ interface BrandsProps {
 const BrandsContainer = styled.div<{
   $data: BrandsSection;
 }>`
-  padding-top: ${(props) => props.$data.setting?.paddingTop || "5"}px;
-  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "5"}px;
-  margin-top: ${(props) => props.$data.setting?.marginTop || "2"}px;
-  margin-bottom: ${(props) => props.$data.setting?.marginBottom || "2"}px;
+  margin-top: ${(props) => props.$data.setting.marginTop || "30"}px;
+  margin-bottom: ${(props) => props.$data.setting.marginBottom}px;
+  margin-right: ${(props) => props.$data.setting.marginRight}px;
+  margin-left: ${(props) => props.$data.setting.marginLeft}px;
+  padding-top: ${(props) => props.$data.setting.paddingTop}px;
+  padding-bottom: ${(props) => props.$data.setting.paddingBottom}px;
+  padding-left: ${(props) => props.$data.setting.paddingLeft}px;
+  padding-right: ${(props) => props.$data.setting.paddingRight}px;
   background-color: ${(props) =>
     props.$data.setting?.backgroundColor || "#FFFFFF"};
   border-radius: ${(props) => props.$data.setting?.borderRadius || "20"}px;
-  border: ${(props) => props.$data.setting?.border || "1px solid #E0E0E0"};
+  box-shadow: ${(props) =>
+    `${props.$data.blocks.setting?.shadowOffsetX || 0}px 
+     ${props.$data.blocks.setting?.shadowOffsetY || 4}px 
+     ${props.$data.blocks.setting?.shadowBlur || 10}px 
+     ${props.$data.blocks.setting?.shadowSpread || 0}px 
+     ${props.$data.blocks.setting?.shadowColor || "#fff"}`};
 `;
 
 const Heading = styled.h2<{
@@ -33,13 +43,24 @@ const Heading = styled.h2<{
 }>`
   color: ${(props) => props.$data.blocks?.setting?.headingColor || "#14213D"};
   font-size: ${(props) =>
-    props.$isMobile
-      ? "24px"
-      : `${props.$data.blocks?.setting?.headingFontSize || "32"}px`};
+    `${props.$data.blocks?.setting?.headingFontSize || "32"}px`};
   font-weight: ${(props) =>
     props.$data.blocks?.setting?.headingFontWeight || "bold"};
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1px;
+`;
+const Description = styled.p<{
+  $data: BrandsSection;
+  $isMobile: boolean;
+}>`
+  color: ${(props) =>
+    props.$data.blocks?.setting?.descriptionColor || "#14213D"};
+  font-size: ${(props) =>
+    `${props.$data.blocks?.setting?.descriptionFontSize || "32"}px`};
+  font-weight: ${(props) =>
+    props.$data.blocks?.setting?.descriptionFontWeight || "bold"};
+  text-align: center;
+  padding:0 20px;
 `;
 
 const BrandsGrid = styled.div<{
@@ -65,9 +86,11 @@ const ScrollButton = styled.button<{
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: #ffffff;
+  background-color: ${(props) =>
+    props.$data.blocks?.setting?.btnBackgroundColor || "#fff"};
+  color: ${(props) => props.$data.blocks?.setting?.btnColor || "#000"};
   border: none;
-  border-radius: 50%;
+  border-radius: ${(props) => props.$data.blocks?.setting?.btnRadius || "5"}px;
   width: 40px;
   height: 40px;
   display: flex;
@@ -88,16 +111,18 @@ const ScrollButton = styled.button<{
   /* Apply navigation button animations */
   ${(props) => {
     const navAnimation = props.$data.blocks?.setting?.navAnimation;
-    if (!navAnimation) return '';
-    
+    if (!navAnimation) return "";
+
     const { type, animation: animConfig } = navAnimation;
-    const selector = type === 'hover' ? '&:hover' : '&:active';
-    
+    const selector = type === "hover" ? "&:hover" : "&:active";
+
     // Generate animation CSS based on type
-    if (animConfig.type === 'pulse') {
+    if (animConfig.type === "pulse") {
       return `
         ${selector} {
-          animation: brandNavPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: brandNavPulse ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes brandNavPulse {
@@ -111,10 +136,12 @@ const ScrollButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'glow') {
+    } else if (animConfig.type === "glow") {
       return `
         ${selector} {
-          animation: brandNavGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: brandNavGlow ${animConfig.duration} ${animConfig.timing} ${
+        animConfig.delay || "0s"
+      } ${animConfig.iterationCount || "1"};
         }
         
         @keyframes brandNavGlow {
@@ -126,10 +153,12 @@ const ScrollButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'brightness') {
+    } else if (animConfig.type === "brightness") {
       return `
         ${selector} {
-          animation: brandNavBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: brandNavBrightness ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes brandNavBrightness {
@@ -141,10 +170,12 @@ const ScrollButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'blur') {
+    } else if (animConfig.type === "blur") {
       return `
         ${selector} {
-          animation: brandNavBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: brandNavBlur ${animConfig.duration} ${animConfig.timing} ${
+        animConfig.delay || "0s"
+      } ${animConfig.iterationCount || "1"};
         }
         
         @keyframes brandNavBlur {
@@ -156,10 +187,12 @@ const ScrollButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'saturate') {
+    } else if (animConfig.type === "saturate") {
       return `
         ${selector} {
-          animation: brandNavSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: brandNavSaturate ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes brandNavSaturate {
@@ -171,10 +204,12 @@ const ScrollButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'contrast') {
+    } else if (animConfig.type === "contrast") {
       return `
         ${selector} {
-          animation: brandNavContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: brandNavContrast ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes brandNavContrast {
@@ -185,10 +220,12 @@ const ScrollButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'opacity') {
+    } else if (animConfig.type === "opacity") {
       return `
         ${selector} {
-          animation: brandNavOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: brandNavOpacity ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes brandNavOpacity {
@@ -203,10 +240,12 @@ const ScrollButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'shadow') {
+    } else if (animConfig.type === "shadow") {
       return `
         ${selector} {
-          animation: brandNavShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: brandNavShadow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes brandNavShadow {
@@ -219,8 +258,8 @@ const ScrollButton = styled.button<{
         }
       `;
     }
-    
-    return '';
+
+    return "";
   }}
 `;
 
@@ -289,7 +328,8 @@ export const Brands: React.FC<BrandsProps> = ({
   if (!layout || !layout.sections || !sectionData) return null;
 
   return (
-    <div
+    <BrandsContainer
+      $data={sectionData}
       onClick={() => setSelectedComponent(actualName)}
       className={`transition-all duration-150 ease-in-out relative ${
         selectedComponent === actualName
@@ -297,118 +337,108 @@ export const Brands: React.FC<BrandsProps> = ({
           : ""
       }`}
     >
-      <BrandsContainer
-        $data={sectionData}
-        onClick={() => setSelectedComponent(actualName)}
-        className={`transition-all duration-150 ease-in-out relative ${
-          selectedComponent === actualName
-            ? "border-4 border-blue-500 rounded-2xl shadow-lg"
-            : ""
-        }`}
-      >
-        {actualName === selectedComponent && (
-          <div className="absolute w-fit -top-5 -left-1 z-10 flex">
-            <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
-              {actualName}
-            </div>
-            <button
-              className="font-extrabold text-xl hover:bg-blue-500 bg-red-500 pb-1 rounded-r-lg px-3 text-white transform transition-all ease-in-out duration-300"
-              onClick={() => setShowDeleteModal(true)}
-            >
-              x
-            </button>
+      {actualName === selectedComponent && (
+        <div className="absolute w-fit -top-5 -left-1 z-10 flex">
+          <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
+            {actualName}
           </div>
-        )}
+          <button
+            className="font-extrabold text-xl hover:bg-blue-500 bg-red-500 pb-1 rounded-r-lg px-3 text-white transform transition-all ease-in-out duration-300"
+            onClick={() => setShowDeleteModal(true)}
+          >
+            x
+          </button>
+        </div>
+      )}
 
-        <Heading $data={sectionData} $isMobile={preview === "sm"}>
-          {sectionData.blocks?.heading}
-        </Heading>
+      <Heading $data={sectionData} $isMobile={preview === "sm"}>
+        {sectionData.blocks?.heading}
+      </Heading>
+      <Description $data={sectionData} $isMobile={preview === "sm"}>
+        {sectionData.blocks?.description}
+      </Description>
 
-        <BrandsGrid
-          ref={containerRef}
-          $data={sectionData}
-          $isMobile={preview === "sm"}
-          dir="rtl"
-        >
-          {sectionData.blocks?.brands.map((brand) => (
-            <BrandCard
-              className="border-l p-3"
-              key={brand.id}
-              $data={sectionData}
+      <BrandsGrid
+        ref={containerRef}
+        $data={sectionData}
+        $isMobile={preview === "sm"}
+        dir="rtl"
+      >
+        {sectionData.blocks?.brands.map((brand) => (
+          <BrandCard
+            className="border-l p-3"
+            key={brand.id}
+            $data={sectionData}
+          >
+            <div
+              className="relative "
+              style={{
+                width: `${sectionData.blocks?.setting?.logoWidth || 96}px`,
+                height: `${sectionData.blocks?.setting?.logoHeight || 96}px`,
+              }}
             >
-              <div
-                className="relative "
-                style={{
-                  width: `${sectionData.blocks?.setting?.logoWidth || 96}px`,
-                  height: `${sectionData.blocks?.setting?.logoHeight || 96}px`,
+              <Image
+                src={brand.logo}
+                alt={brand.name}
+                fill
+                className="object-contain"
+              />
+            </div>
+            <BrandName $data={sectionData}>{brand.name}</BrandName>
+          </BrandCard>
+        ))}
+      </BrandsGrid>
+
+      {/* Left Scroll Button with Animation */}
+      <ScrollButton
+        className="left"
+        onClick={() => handleScroll("left")}
+        $data={sectionData}
+      >
+        {" "}
+        <BiChevronLeft size={24} />
+      </ScrollButton>
+
+      {/* Right Scroll Button with Animation */}
+      <ScrollButton
+        className="right"
+        onClick={() => handleScroll("right")}
+        $data={sectionData}
+      >
+        {" "}
+        <BiChevronRight size={24} />
+      </ScrollButton>
+
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center">
+          <div className="bg-white p-8 rounded-lg">
+            <h3 className="text-lg font-bold mb-4">
+              مطمئن هستید؟
+              <span className="text-blue-400 font-bold mx-1">
+                {actualName}
+              </span>{" "}
+              آیا از حذف
+            </h3>
+            <div className="flex gap-4 justify-end">
+              <button
+                className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                انصراف
+              </button>
+              <button
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                onClick={() => {
+                  Delete(actualName, layout, setLayout);
+                  setShowDeleteModal(false);
                 }}
               >
-                <Image
-                  src={brand.logo}
-                  alt={brand.name}
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <BrandName $data={sectionData}>{brand.name}</BrandName>
-            </BrandCard>
-          ))}
-        </BrandsGrid>
-
-        {/* Left Scroll Button with Animation */}
-        <ScrollButton
-          className="left bg-white"
-          onClick={() => handleScroll("left")}
-          $data={sectionData}
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
-          </svg>
-        </ScrollButton>
-
-        {/* Right Scroll Button with Animation */}
-        <ScrollButton
-          className="right bg-white"
-          onClick={() => handleScroll("right")}
-          $data={sectionData}
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
-          </svg>
-        </ScrollButton>
-
-        {showDeleteModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center">
-            <div className="bg-white p-8 rounded-lg">
-              <h3 className="text-lg font-bold mb-4">
-                مطمئن هستید؟
-                <span className="text-blue-400 font-bold mx-1">
-                  {actualName}
-                </span>{" "}
-                آیا از حذف
-              </h3>
-              <div className="flex gap-4 justify-end">
-                <button
-                  className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
-                  onClick={() => setShowDeleteModal(false)}
-                >
-                  انصراف
-                </button>
-                <button
-                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-                  onClick={() => {
-                    Delete(actualName, layout, setLayout);
-                    setShowDeleteModal(false);
-                  }}
-                >
-                  حذف
-                </button>
-              </div>
+                حذف
+              </button>
             </div>
           </div>
-        )}
-      </BrandsContainer>
-    </div>
+        </div>
+      )}
+    </BrandsContainer>
   );
 };
-

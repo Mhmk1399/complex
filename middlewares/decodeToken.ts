@@ -8,7 +8,10 @@ export const roleMiddleware = async (token: string) => {
       throw new Error("JWT_SECRET is not defined");
     }
 
-    const decoded = jwt.verify(token, jwtSecret) as { id: string; storeId: string };
+    const decoded = jwt.verify(token, jwtSecret) as {
+      id: string;
+      storeId: string;
+    };
     const storeId = decoded.storeId;
 
     if (!storeId) {
@@ -16,6 +19,9 @@ export const roleMiddleware = async (token: string) => {
     }
     return storeId;
   } catch (error) {
-    return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 };

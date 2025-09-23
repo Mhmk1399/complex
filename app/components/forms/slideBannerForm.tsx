@@ -7,6 +7,7 @@ import ImageSelectorModal from "../sections/ImageSelectorModal";
 import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
 import { HiChevronDown, HiSparkles } from "react-icons/hi";
+import { ColorInput, DynamicRangeInput } from "./DynamicInputs";
 
 interface SlideBannerFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<SlideBannerSection>>;
@@ -15,47 +16,12 @@ interface SlideBannerFormProps {
   selectedComponent: string;
 }
 
-interface ImageFile {
-  _id: string;
-  fileName: string;
-  fileUrl: string;
-  fileType: string;
-  fileSize: number;
-  storeId: string;
-}
-
 interface BoxValues {
   top: number;
   bottom: number;
   left: number;
   right: number;
 }
-
-const ColorInput = ({
-  label,
-  name,
-  value,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <>
-    <label className="block mb-1">{label}</label>
-    <div className="flex flex-col rounded-md gap-3 items-center">
-      <input
-        type="color"
-        id={name}
-        name={name}
-        value={value || "#000000"}
-        onChange={onChange}
-        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
-      />
-    </div>
-  </>
-);
 
 export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
   setUserInputData,
@@ -112,6 +78,8 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
           ...prev.setting,
           marginTop: updatedValues.top.toString(),
           marginBottom: updatedValues.bottom.toString(),
+          marginLeft: updatedValues.left.toString(),
+          marginRight: updatedValues.right.toString(),
         },
       }));
     } else {
@@ -262,9 +230,17 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
     setIsContentOpen(true);
   }, []);
 
-  const handleImageSelect = (image: ImageFile) => {
-    handleSlideChange(currentSlideIndex, "imageSrc", image.fileUrl);
-    handleSlideChange(currentSlideIndex, "imageAlt", image.fileName);
+  const handleImageSelect = (image: any) => {
+    handleSlideChange(
+      currentSlideIndex,
+      "imageSrc",
+      image.url || image.fileUrl
+    );
+    handleSlideChange(
+      currentSlideIndex,
+      "imageAlt",
+      image.filename || image.fileName
+    );
     setIsImageSelectorOpen(false);
   };
 
@@ -322,62 +298,142 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
       )}
 
       {/* Style Settings */}
-      {isStyleSettingsOpen && (
+       {isStyleSettingsOpen && (
         <div className="p-4 border-gray-100 animate-slideDown">
-          <div className="space-y-4">
-            <div className="rounded-lg">
-              <label className="block mb-2">ارتفاع اسلایدر</label>
-              <div className="rounded-lg w-full shadow-sm">
-                <input
-                  type="range"
-                  min="0"
-                  className="w-full"
-                  max="1000"
-                  name="height"
-                  value={userInputData?.blocks?.setting?.height || "250"}
-                  onChange={handleSettingChange}
-                />
-              </div>
-              <p className="text-sm text-gray-600 text-nowrap">
-                {userInputData?.blocks.setting.height}px
-              </p>
-            </div>
+          <div className="space-y-4 rounded-lg">
+            <h4 className="font-bold text-sky-700 mb-3">تنظیمات ارتفاع بنر</h4>
+            <DynamicRangeInput
+              label="ارتفاع بنر"
+              name="height"
+              min="50"
+              max="1500"
+              value={
+                userInputData?.blocks?.setting?.height?.toString() ?? "300"
+              }
+              onChange={handleSettingChange}
+            />
+          </div>
 
-            <div className="rounded-lg flex items-center justify-between">
-              <ColorInput
-                label="رنگ فلش"
-                name="bgArrow"
-                value={
-                  userInputData?.blocks?.setting?.bgArrow?.toString() ??
-                  "#333333"
-                }
-                onChange={handleSettingChange}
-              />
-            </div>
+          <div className="space-y-4 rounded-lg">
+            <h4 className="font-bold text-sky-700 my-3">تنظیمات دکمه</h4>
+            <DynamicRangeInput
+              label="عرض دکمه"
+              name="arrowWidth"
+              min="0"
+              max="100"
+              value={
+                userInputData?.blocks?.setting?.arrowWidth?.toString() ?? "30"
+              }
+              onChange={handleSettingChange}
+            />
+            <DynamicRangeInput
+              label="ارتفاع دکمه"
+              name="arrowHeight"
+              min="0"
+              max="100"
+              value={
+                userInputData?.blocks?.setting?.arrowHeight?.toString() ?? "30"
+              }
+              onChange={handleSettingChange}
+            />
+            <DynamicRangeInput
+              label="انحنای دکمه"
+              name="arrowRadius"
+              min="0"
+              max="50"
+              value={
+                userInputData?.blocks?.setting?.arrowRadius?.toString() ?? "5"
+              }
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ دکمه"
+              name="arrowColor"
+              value={userInputData?.blocks?.setting?.arrowColor ?? "#000000"}
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ پس زمینه دکمه"
+              name="bgArrow"
+              value={userInputData?.blocks?.setting?.bgArrow ?? "#000000"}
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ پس زمینه با هاور"
+              name="arrowBgHover"
+              value={userInputData?.blocks?.setting?.arrowBgHover ?? "#000000"}
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ نقطه‌های غیرفعال"
+              name="inactiveDotColor"
+              value={
+                userInputData?.blocks?.setting?.inactiveDotColor ?? "#000000"
+              }
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ نقطه‌های فعال"
+              name="activeDotColor"
+              value={
+                userInputData?.blocks?.setting?.activeDotColor ?? "#000000"
+              }
+              onChange={handleSettingChange}
+            />
+          </div>
 
-            <div className="rounded-lg flex items-center justify-between gap-2">
-              <ColorInput
-                label="رنگ نقطه‌های غیرفعال"
-                name="inactiveDotColor"
-                value={
-                  userInputData?.blocks?.setting?.inactiveDotColor?.toString() ??
-                  "#333333"
-                }
-                onChange={handleSettingChange}
-              />
-            </div>
-
-            <div className="rounded-lg flex items-center justify-between gap-2">
-              <ColorInput
-                label="رنگ نقطه‌ی فعال"
-                name="activeDotColor"
-                value={
-                  userInputData?.blocks?.setting?.activeDotColor?.toString() ??
-                  "#333333"
-                }
-                onChange={handleSettingChange}
-              />
-            </div>
+          {/* ✅ New Shadow Settings */}
+          <div className="space-y-4 rounded-lg">
+            <h4 className="font-bold text-sky-700 my-3">تنظیمات سایه</h4>
+            <DynamicRangeInput
+              label="افست افقی سایه"
+              name="shadowOffsetX"
+              min="-50"
+              max="50"
+              value={
+                userInputData?.blocks?.setting?.shadowOffsetX?.toString() ?? "0"
+              }
+              onChange={handleSettingChange}
+            />
+            <DynamicRangeInput
+              label="افست عمودی سایه"
+              name="shadowOffsetY"
+              min="-50"
+              max="50"
+              value={
+                userInputData?.blocks?.setting?.shadowOffsetY?.toString() ?? "4"
+              }
+              onChange={handleSettingChange}
+            />
+            <DynamicRangeInput
+              label="میزان بلور سایه"
+              name="shadowBlur"
+              min="0"
+              max="100"
+              value={
+                userInputData?.blocks?.setting?.shadowBlur?.toString() ?? "10"
+              }
+              onChange={handleSettingChange}
+            />
+            <DynamicRangeInput
+              label="میزان گسترش سایه"
+              name="shadowSpread"
+              min="-20"
+              max="20"
+              value={
+                userInputData?.blocks?.setting?.shadowSpread?.toString() ?? "0"
+              }
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ سایه"
+              name="shadowColor"
+              value={
+                userInputData?.blocks?.setting?.shadowColor ??
+                "rgba(0,0,0,0.25)"
+              }
+              onChange={handleSettingChange}
+            />
           </div>
         </div>
       )}
@@ -601,11 +657,10 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
           )}
         </div>
       )}
-
-      {/* Spacing Settings */}
+      {/* Spacing Settings Dropdown */}
       {isSpacingOpen && (
-        <div className="p-4 animate-slideDown">
-          <div className="rounded-lg p-2 flex items-center justify-center">
+        <div className="animate-slideDown">
+          <div className="rounded-lg items-center justify-center">
             <MarginPaddingEditor
               margin={margin}
               padding={padding}

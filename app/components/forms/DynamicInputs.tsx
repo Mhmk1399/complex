@@ -25,6 +25,14 @@ interface ColorInputProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
+interface DynamicCheckboxInputProps {
+  label: string;
+  name: string;
+  checked: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
+  disabled?: boolean;
+}
 
 export const DynamicRangeInput: React.FC<DynamicRangeInputProps> = ({
   label,
@@ -93,9 +101,7 @@ export const DynamicSelectInput: React.FC<DynamicSelectInputProps> = ({
 
   // Sync selected value with label
   const selectedOption = options.find((option) => option.value === value);
-  const displayLabel = selectedOption
-    ? selectedOption.label
-    : "Select an option";
+  const displayLabel = selectedOption ? selectedOption.label : "انتخاب کنید";
 
   // Filter options based on search term
   const filteredOptions = options;
@@ -195,7 +201,7 @@ export const DynamicSelectInput: React.FC<DynamicSelectInputProps> = ({
                 ))
               ) : (
                 <li className="px-4 py-2 text-gray-500 italic">
-                  No options found
+                  چیزی پیدا نشد
                 </li>
               )}
             </ul>
@@ -307,8 +313,8 @@ export const ColorInput: React.FC<ColorInputProps> = ({
             onChange={handleHexChange}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
-            className={`w-full px-3 py-2.5 text-sm font-mono uppercase rounded-lg border-2
-              transition-all duration-200 shadow-sm focus:outline-none
+            className={`w-full px-3 py-2.5 text-sm font-mono uppercase rounded-lg  
+              transition-all duration-200   focus:outline-none
               ${
                 isValidHex
                   ? "border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
@@ -327,5 +333,40 @@ export const ColorInput: React.FC<ColorInputProps> = ({
         </div>
       </div>
     </div>
+  );
+};
+
+export const DynamicCheckboxInput: React.FC<DynamicCheckboxInputProps> = ({
+  label,
+  name,
+  checked,
+  onChange,
+  className = "",
+  disabled = false,
+}) => {
+  return (
+    <label
+      htmlFor={name}
+      className={`flex items-center gap-3 cursor-pointer select-none p-2 rounded-lg transition
+        ${
+          disabled
+            ? "opacity-50 cursor-not-allowed"
+            : "hover:bg-gray-50 active:bg-gray-100"
+        }
+        ${className}`}
+    >
+      <input
+        type="checkbox"
+        id={name}
+        name={name}
+        checked={checked}
+        onChange={onChange}
+        disabled={disabled}
+        className="w-3 h-3 accent-indigo-600 border-gray-300 rounded 
+                     
+                   transition duration-200"
+      />
+      <span className="text-sm font-medium text-gray-800">{label}</span>
+    </label>
   );
 };

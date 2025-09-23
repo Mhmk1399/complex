@@ -7,6 +7,12 @@ import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
 import { HiChevronDown, HiSparkles } from "react-icons/hi";
 import { createApiService } from "@/lib/api-factory";
+import {
+  ColorInput,
+  DynamicRangeInput,
+  DynamicSelectInput,
+} from "./DynamicInputs";
+import { MdDangerous } from "react-icons/md";
 
 interface SpecialFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<SpecialOfferSection>>;
@@ -22,32 +28,6 @@ interface BoxValues {
   right: number;
 }
 
-const ColorInput = ({
-  label,
-  name,
-  value,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <>
-    <label className="block mb-1">{label}</label>
-    <div className="flex flex-col rounded-md gap-3 items-center">
-      <input
-        type="color"
-        id={name}
-        name={name}
-        value={value || "#000000"}
-        onChange={onChange}
-        className=" p-0.5 border  rounded-md border-gray-200 w-8 h-8 bg-transparent "
-      />
-    </div>
-  </>
-);
-
 export const SpecialForm: React.FC<SpecialFormProps> = ({
   setUserInputData,
   userInputData,
@@ -60,21 +40,30 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
   const [isAnimationOpen, setIsAnimationOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const api = createApiService({
-    baseUrl: '/api',
+    baseUrl: "/api",
     headers: {
-      'Content-Type': 'application/json',
-      Authorization: typeof window !== 'undefined' ? localStorage.getItem('complexToken') || '' : ''
-    }
+      "Content-Type": "application/json",
+      Authorization:
+        typeof window !== "undefined"
+          ? localStorage.getItem("complexToken") || ""
+          : "",
+    },
   });
 
-  const { data: collectionsData, error: collectionsError } = api.useGet('/collections', {
-    revalidateOnFocus: false,
-    refreshInterval: 60000
-  });
+  const { data: collectionsData, error: collectionsError } = api.useGet(
+    "/collections",
+    {
+      revalidateOnFocus: false,
+      refreshInterval: 60000,
+    }
+  );
 
   const collections = collectionsData?.product || [];
-  const collectionsErrorMessage = collectionsError ? "خطا در بارگذاری کالکشنها. لطفاً کالکشن را در داشبورد اضافه کنید." : 
-    (collections.length === 0 ? "هیچ کالکشنی یافت نشد" : null);
+  const collectionsErrorMessage = collectionsError
+    ? "خطا در بارگذاری کالکشنها. لطفاً کالکشن را در داشبورد اضافه کنید."
+    : collections.length === 0
+    ? "هیچ کالکشنی یافت نشد"
+    : null;
 
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
@@ -140,7 +129,6 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
       }));
     }
   };
-
 
   const handleBlockChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -325,17 +313,22 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
               >
                 <option value="">انتخاب کنید</option>
                 {collections && collections.length > 0 ? (
-                  collections.map((collection: {name:string,_id:string}) => (
-                    <option key={collection._id} value={collection._id}>
-                      {collection.name}
-                    </option>
-                  ))
+                  collections.map(
+                    (collection: { name: string; _id: string }) => (
+                      <option key={collection._id} value={collection._id}>
+                        {collection.name}
+                      </option>
+                    )
+                  )
                 ) : (
                   <option disabled>هیچ کالکشنی موجود نیست</option>
                 )}
               </select>
               {collectionsErrorMessage && (
-                <p className="mt-2 text-sm text-red-600">{collectionsErrorMessage}</p>
+                <p className="mt-2 text-xs inline-block border border-red-500 p-3 rounded-xl text-red-600">
+                  {collectionsErrorMessage}
+                  <MdDangerous />
+                </p>
               )}
             </div>
           </div>
@@ -348,60 +341,143 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
           <div className="grid md:grid-cols-1 gap-4">
             <div className="rounded-lg">
               <h4 className="font-semibold text-sky-700 my-4">تنظیمات عنوان</h4>
-              <div className="rounded-lg flex items-center justify-between">
-                <ColorInput
-                  label="رنگ عنوان"
-                  name="headingColor"
-                  value={
-                    userInputData?.blocks?.setting?.headingColor || "#FFFFFF"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-              </div>
-              <br />
-              <label>سایز عنوان</label>
 
-              <div className=" shadow-sm">
-                <input
-                  type="range"
-                  min="10"
-                  max="100"
-                  name="headingFontSize"
-                  className="w-full"
-                  value={
-                    userInputData?.blocks?.setting?.headingFontSize || "250"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-              </div>
-              <p className="text-sm text-gray-600 text-nowrap">
-                {userInputData?.blocks.setting.headingFontSize}px
-              </p>
-              <label htmlFor="">وزن عنوان</label>
-              <select
+              <ColorInput
+                label="رنگ عنوان"
+                name="headingColor"
+                value={
+                  userInputData?.blocks?.setting?.headingColor || "#FFFFFF"
+                }
+                onChange={handleBlockSettingChange}
+              />
+
+              <DynamicRangeInput
+                label="سایز عنوان"
+                name="headingFontSize"
+                min="0"
+                max="100"
+                value={userInputData?.blocks?.setting?.headingFontSize || "250"}
+                onChange={handleBlockSettingChange}
+              />
+
+              <DynamicSelectInput
+                label="وزن توضیحات"
                 name="headingFontWeight"
                 value={
                   userInputData?.blocks?.setting?.headingFontWeight || "normal"
                 }
+                options={[
+                  { value: "bold", label: "ضخیم" },
+                  { value: "normal", label: "نرمال" },
+                ]}
                 onChange={handleBlockSettingChange}
-                className="w-full mt-4 p-2 border rounded"
-              >
-                <option value="bold">ضخیم</option>
-                <option value="normal">معمولی</option>
-              </select>
+              />
             </div>
 
-            <div className="p-3 -mb-5 rounded-lg">
-              <h4 className="font-semibold text-sky-700 my-4">
+            <div className=" rounded-lg">
+              <h4 className="font-semibold text-sky-700 my-3">
                 تنظیمات پس زمینه
               </h4>
-            </div>
-            <div className="rounded-lg pr-3 inline-flex items-center justify-between gap-24">
+
               <ColorInput
                 label="رنگ پس زمینه"
                 name="backgroundColor"
                 value={userInputData?.setting?.backgroundColor || "#ef394e"}
                 onChange={handleSettingChange}
+              />
+
+              <DynamicRangeInput
+                label="ارتفاع"
+                name="height"
+                min="0"
+                max="2000"
+                value={userInputData?.blocks?.setting?.height || "250"}
+                onChange={handleBlockSettingChange}
+              />
+            </div>
+            <div className=" rounded-lg">
+              <h4 className="font-semibold text-sky-700 my-3">تنظیمات دکمه</h4>
+
+              <ColorInput
+                label="رنگ پس زمینه"
+                name="btnBackgroundColor"
+                value={
+                  userInputData?.blocks?.setting?.btnBackgroundColor ||
+                  "#ef394e"
+                }
+                onChange={handleBlockSettingChange}
+              />
+              <ColorInput
+                label="رنگ"
+                name="btnTextColor"
+                value={
+                  userInputData?.blocks?.setting?.btnTextColor || "#ef394e"
+                }
+                onChange={handleBlockSettingChange}
+              />
+              <DynamicRangeInput
+                label="انحنا"
+                name="btnRadius"
+                min="0"
+                max="30"
+                value={userInputData?.blocks?.setting?.btnRadius || "250"}
+                onChange={handleBlockSettingChange}
+              />
+            </div>
+            {/* ✅ New Shadow Settings */}
+            <div className="space-y-4 rounded-lg">
+              <h4 className="font-bold text-sky-700 my-3">تنظیمات سایه</h4>
+              <DynamicRangeInput
+                label="افست افقی سایه"
+                name="shadowOffsetX"
+                min="-50"
+                max="50"
+                value={
+                  userInputData?.blocks?.setting?.shadowOffsetX?.toString() ??
+                  "0"
+                }
+                onChange={handleBlockSettingChange}
+              />
+              <DynamicRangeInput
+                label="افست عمودی سایه"
+                name="shadowOffsetY"
+                min="-50"
+                max="50"
+                value={
+                  userInputData?.blocks?.setting?.shadowOffsetY?.toString() ??
+                  "4"
+                }
+                onChange={handleBlockSettingChange}
+              />
+              <DynamicRangeInput
+                label="میزان بلور سایه"
+                name="shadowBlur"
+                min="0"
+                max="100"
+                value={
+                  userInputData?.blocks?.setting?.shadowBlur?.toString() ?? "10"
+                }
+                onChange={handleBlockSettingChange}
+              />
+              <DynamicRangeInput
+                label="میزان گسترش سایه"
+                name="shadowSpread"
+                min="-20"
+                max="20"
+                value={
+                  userInputData?.blocks?.setting?.shadowSpread?.toString() ??
+                  "0"
+                }
+                onChange={handleBlockSettingChange}
+              />
+              <ColorInput
+                label="رنگ سایه"
+                name="shadowColor"
+                value={
+                  userInputData?.blocks?.setting?.shadowColor ??
+                  "rgba(0,0,0,0.25)"
+                }
+                onChange={handleBlockSettingChange}
               />
             </div>
           </div>
@@ -613,8 +689,6 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
                   <p className="text-xs text-gray-600 mb-2">پیش‌نمایش</p>
                   <AnimationPreview effects={[currentAnimation]} />
                 </div>
-
-             
               </div>
             </div>
           )}
@@ -630,7 +704,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
 
       {/* Spacing Settings */}
       {isSpacingOpen && (
-        <div className="p-4  animate-slideDown">
+        <div className="animate-slideDown">
           <div className=" rounded-lg p-2 flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

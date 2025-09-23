@@ -20,43 +20,53 @@ const Section = styled.section<{ $data: VideoSection; $previewWidth: string }>`
   padding-right: ${(props) => props.$data.setting?.paddingRight || "10"}px;
   margin-top: ${(props) => props.$data?.setting?.marginTop || "0"}px;
   margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "0"}px;
+  margin-left: ${(props) => props.$data?.setting?.marginLeft || "0"}px;
+  margin-right: ${(props) => props.$data?.setting?.marginRight || "0"}px;
   background-color: ${(props) =>
     props.$data.blocks.setting?.backgroundVideoSection || "#e4e4e4"};
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-radius: 20px;
+  border-radius: ${(props) => props.$data.blocks.setting?.radius || "10"}px;
   gap: 15px;
-  // width: ${(props) => (props.$previewWidth === "sm" ? "375px" : "100%")};
+  min-width: max-content;
+  box-shadow: ${(props) =>
+    `${props.$data.blocks.setting.shadowOffsetX || 0}px 
+     ${props.$data.blocks.setting.shadowOffsetY || 4}px 
+     ${props.$data.blocks.setting.shadowBlur || 10}px 
+     ${props.$data.blocks.setting.shadowSpread || 0}px 
+     ${props.$data.blocks.setting.shadowColor || "#fff"}`};
 `;
 
-const Heading = styled.h1<{ $data: VideoSection; $previewWidth: string }>`
+const Heading = styled.h2<{ $data: VideoSection; $previewWidth: string }>`
   color: ${(props) => props.$data.blocks.setting?.headingColor || "#333"};
   font-size: ${(props) =>
-    props.$previewWidth === "sm"
-      ? "20"
-      : props.$data.blocks?.setting?.headingFontSize || "24"}px;
+    props.$data.blocks?.setting?.headingFontSize || "24"}px;
   font-weight: ${(props) =>
     props.$data.blocks?.setting?.headingFontWeight || "bold"};
   text-align: center;
   padding: 0 ${(props) => (props.$previewWidth === "sm" ? "10" : "0")}px;
-  @media (max-width: 768px) {
-    font-size:20px;
+`;
+const Desciption = styled.h2<{ $data: VideoSection; $previewWidth: string }>`
+  color: ${(props) => props.$data.blocks.setting?.descrptionColor || "#333"};
+  font-size: ${(props) =>
+    props.$data.blocks?.setting?.descrptionFontSize || "24"}px;
+  font-weight: ${(props) =>
+    props.$data.blocks?.setting?.descrptionFontWeight || "bold"};
+  text-align: center;
+  padding: 0 ${(props) => (props.$previewWidth === "sm" ? "10" : "0")}px;
 `;
 
 const VideoElement = styled.video<{
   $data: VideoSection;
   $previewWidth: string;
 }>`
-  width: ${(props) =>
-    props.$previewWidth === "sm"
-      ? "355px"
-      : props.$data.blocks.setting?.videoWidth || "100%"}px;
+  width: ${(props) => props.$data.blocks.setting?.videoWidth || "100"}px;
+  max-width: 100vw;
+  height: ${(props) => props.$data.blocks.setting?.videoHeight || "100"}px;
   border-radius: ${(props) =>
-    props.$data.blocks.setting?.videoRadious || "10px"}px;
-  height: auto;
-  padding: ${(props) => (props.$previewWidth === "sm" ? "0 10px" : "0")};
+    props.$data.blocks.setting?.videoRadious || "10"}px;
 `;
 
 const Video: React.FC<VideoProps> = ({
@@ -136,6 +146,11 @@ const Video: React.FC<VideoProps> = ({
           {blocks.heading}
         </Heading>
       )}
+      {blocks.descrption && (
+        <Desciption $data={sectionData} $previewWidth={previewWidth}>
+          {blocks.descrption}
+        </Desciption>
+      )}
 
       {blocks.videoUrl && (
         <VideoElement
@@ -147,6 +162,7 @@ const Video: React.FC<VideoProps> = ({
           autoPlay={blocks.setting?.videoAutoplay}
           poster={blocks.setting?.videoPoster}
           controls
+          className="object-fill"
         >
           {blocks.videoAlt && <track kind="captions" label={blocks.videoAlt} />}
         </VideoElement>

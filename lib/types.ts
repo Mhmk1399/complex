@@ -11,6 +11,14 @@ export interface BrandsBlockSettings extends CommonSettings {
   headingColor: string;
   headingFontSize: string;
   headingFontWeight: string;
+  descriptionColor: string;
+  descriptionFontSize: string;
+  descriptionFontWeight: string;
+  shadowColor?: string;
+  shadowSpread?: string;
+  shadowBlur?: string;
+  shadowOffsetY?: string;
+  shadowOffsetX?: string;
   brandNameColor: string;
   brandNameFontSize: string;
   brandNameFontWeight: string;
@@ -79,7 +87,12 @@ export interface CommonSettings {
   formBackground: string;
   textColor?: string;
   btnTextColor?: string;
+  btnWidth?: string;
+  btnRadius?: string;
   imageWidth?: string;
+  navRadius: string;
+  navColor: string;
+  navBg: string;
   imageHeight?: string;
   opacityImage?: string;
   heading?: string;
@@ -96,7 +109,10 @@ export interface CommonSettings {
   paddingTop?: string;
   paddingBottom?: string;
   marginTop?: string;
+  backgroundRadius?: string;
   marginBottom?: string;
+  marginLeft?: string;
+  marginRight?: string;
   textFontSize?: string;
   textFontWeight?: string;
   descriptionFontSize?: string;
@@ -117,8 +133,16 @@ export interface CommonSettings {
   setting: CollapseBlockSetting;
   paddingRight?: string;
   paddingLeft?: string;
-  marginRight?: string;
-  marginLeft?: string;
+  arrowHeight?: string;
+  arrowWidth?: string;
+  arrowRadius?: string;
+  arrowColor?: string;
+  arrowBgHover?: string;
+  shadowColor?: string;
+  shadowSpread?: string;
+  shadowBlur?: string;
+  shadowOffsetY?: string;
+  shadowOffsetX?: string;
   borderRadius?: string;
   border: string;
   textColor1?: string;
@@ -232,8 +256,8 @@ export interface BannerBlockSettings extends CommonSettings {
   animation?: AnimationEffect;
   boxWidth: string;
   boxHeight: string;
-  borderColor:string
-  border:string
+  borderColor: string;
+  border: string;
 }
 export interface AnimationState {
   isPlaying: boolean;
@@ -392,11 +416,20 @@ export interface RichTextBlock {
     marginTop?: string;
     marginBottom?: string;
     background?: string;
+    backgroundRadius?: string;
+    btnWidth?: string;
+    btnRadius?: string;
+    align?: string;
     lineHeight: string;
     lineTop: string;
     lineBottom: string;
     lineWidth: string;
     lineColor: string;
+    shadowColor?: string;
+    shadowSpread?: string;
+    shadowBlur?: string;
+    shadowOffsetY?: string;
+    shadowOffsetX?: string;
     btnAnimation?: AnimationEffect; // Add button animation support
   };
 }
@@ -660,6 +693,11 @@ export interface SlideBlockSetting {
   imageAnimation?: AnimationEffect;
   btnAnimation?: AnimationEffect;
   navAnimation?: AnimationEffect;
+  shadowColor?: string;
+  shadowSpread?: string;
+  shadowBlur?: string;
+  shadowOffsetY?: string;
+  shadowOffsetX?: string;
 }
 
 export interface SlideBlock {
@@ -681,6 +719,15 @@ export interface SlideSection {
   imageBehavior: string;
   btnBackgroundColor: string;
   btnTextColor: string;
+  navRadius: string;
+  navColor: string;
+  shadowColor?: string;
+  shadowSpread?: string;
+  shadowBlur?: string;
+  shadowOffsetY?: string;
+  shadowOffsetX?: string;
+  navBg: string;
+  btnWidth: string;
   blocks: SlideBlock[];
   setting: CommonSettings & {
     paddingTop: string;
@@ -701,19 +748,30 @@ export interface SlideSection {
 // Add these new interfaces for Video component
 export interface VideoBlockSetting extends Partial<CommonSettings> {
   headingColor?: string;
+  descrptionColor?: string;
   backgroundVideoSection?: string;
   headingFontSize?: string;
   headingFontWeight?: string;
+  descrptionFontSize?: string;
+  descrptionFontWeight?: string;
   videoWidth?: string;
+  videoHeight?: string;
   videoRadious?: string;
   videoPoster?: string;
   videoLoop?: boolean;
   videoMute?: boolean;
   videoAutoplay?: boolean;
+  radius?: string;
+  shadowColor?: string;
+  shadowSpread?: string;
+  shadowBlur?: string;
+  shadowOffsetY?: string;
+  shadowOffsetX?: string;
 }
 
 export interface VideoBlock {
   heading?: string;
+  descrption?: string;
   videoUrl: string;
   videoAlt?: string;
   setting: VideoBlockSetting;
@@ -974,6 +1032,26 @@ export interface ProductCard {
   priceColor?: string;
   btnBackgroundColor?: string;
   btnColor?: string;
+}
+export interface ProductCardType {
+  blocks: ProductListSection[];
+  setting: ProductBlockSetting;
+  cardBorderRadius?: string;
+  cardBackground?: string;
+  imageWidth?: string;
+  imageHeight?: string;
+  imageRadius?: string;
+  nameFontSize?: string;
+  nameFontWeight?: string;
+  nameColor?: string;
+  descriptionFontSize?: string;
+  descriptionFontWeight?: string;
+  descriptionColor?: string;
+  priceFontSize?: string;
+  priceColor?: string;
+  btnBackgroundColor?: string;
+  btnColor?: string;
+  _id?: string;
 }
 export interface DetailPageBlockSettings {
   imageWidth: string;
@@ -1356,6 +1434,7 @@ export interface SpecialOfferBlockSetting extends CommonSettings {
   selectedCollection: string;
   headingColor: string;
   headingFontSize: string;
+  height: string;
   headingFontWeight: string;
   navAnimation?: AnimationEffect; // Add this line for navigation button animations
 }
@@ -1419,6 +1498,9 @@ export interface StoryBlockSetting extends CommonSettings {
   imageHeight: string;
   imageRadius: string;
   imageAnimation?: AnimationEffect; // Add this line for story image animations
+  storyWidth?: string;
+  storyHeight?: string;
+  storyGap?: string;
 }
 
 export interface StoryBlock {
@@ -1549,6 +1631,7 @@ export interface BrandsBlockSetting extends CommonSettings {
 
 export interface BrandsBlock {
   heading: string;
+  description: string;
   brands: BrandItem[];
   setting: BrandsBlockSetting;
 }

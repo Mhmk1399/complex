@@ -1,7 +1,6 @@
 "use client";
 import styled from "styled-components";
 import Image from "next/image";
-import Link from "next/link";
 import { Layout, BannerSection } from "@/lib/types";
 import { Delete } from "../C-D";
 import { useEffect, useState } from "react";
@@ -24,6 +23,8 @@ const SectionBanner = styled.section<{
   height: ${(props) => (props.$preview === "sm" ? "300px" : "600px")};
   margin-top: ${(props) => props.$data.setting.marginTop || "30"}px;
   margin-bottom: ${(props) => props.$data.setting.marginBottom}px;
+  margin-right: ${(props) => props.$data.setting.marginRight}px;
+  margin-left: ${(props) => props.$data.setting.marginLeft}px;
   padding-top: ${(props) => props.$data.setting.paddingTop}px;
   padding-bottom: ${(props) => props.$data.setting.paddingBottom}px;
   padding-left: ${(props) => props.$data.setting.paddingLeft}px;
@@ -32,6 +33,12 @@ const SectionBanner = styled.section<{
   @media (max-width: 768px) {
     height: ${(props) => (props.$preview === "sm" ? "200px" : "300px")};
   }
+  box-shadow: ${(props) =>
+    `${props.$data.blocks.setting?.shadowOffsetX || 0}px 
+     ${props.$data.blocks.setting?.shadowOffsetY || 4}px 
+     ${props.$data.blocks.setting?.shadowBlur || 10}px 
+     ${props.$data.blocks.setting?.shadowSpread || 0}px 
+     ${props.$data.blocks.setting?.shadowColor || "#fff"}`};
 `;
 
 const BannerImage = styled(Image)<{
@@ -231,16 +238,10 @@ const HeadingText = styled.h2<{
   $preview: "sm" | "default";
 }>`
   color: ${(props) => props.$data.blocks.setting.textColor || "#ffffff"};
-  font-size: ${(props) =>
-    props.$preview === "sm"
-      ? "18px"
-      : props.$data.blocks.setting.textFontSize || "16px"}px;
+  font-size: ${(props) => props.$data.blocks.setting.textFontSize || "16"}px;
   font-weight: ${(props) =>
     props.$data.blocks.setting.textFontWeight || "bold"};
   text-align: center;
-  @media (max-width: 768px) {
-    font-size: ${(props) => (props.$preview === "sm" ? "16px" : "28px")};
-  }
 `;
 
 const DescriptionText = styled.p<{
@@ -250,16 +251,11 @@ const DescriptionText = styled.p<{
 }>`
   color: ${(props) => props.$data.blocks.setting.descriptionColor || "#ffffff"};
   font-size: ${(props) =>
-    props.$preview === "sm"
-      ? "14px"
-      : props.$data.blocks.setting.descriptionFontSize || "16px"}px;
+    props.$data.blocks.setting.descriptionFontSize || "16px"}px;
   font-weight: ${(props) =>
     props.$data.blocks.setting.descriptionFontWeight || "normal"};
   margin-top: 14px;
   text-align: center;
-  @media (max-width: 768px) {
-    font-size: ${(props) => (props.$preview === "sm" ? "12px" : "16px")};
-  }
 `;
 
 const Banner: React.FC<props> = ({
@@ -349,25 +345,16 @@ const Banner: React.FC<props> = ({
         </div>
       ) : null}
 
-      <Link
-        href={"#"}
-        style={{
-          position: "relative",
-          display: "block",
-          width: "100%",
-          height: "100%",
-        }}
-      >
-        <BannerImage
-          $preview={preview}
-          $previewWidth={previewWidth}
-          $data={sectionData}
-          alt={imageAlt || "banner"}
-          src={imageSrc || "/assets/images/banner2.webp"}
-          fill
-          priority
-        />
-      </Link>
+      <BannerImage
+        $preview={preview}
+        $previewWidth={previewWidth}
+        $data={sectionData}
+        alt={imageAlt || "banner"}
+        src={imageSrc || "/assets/images/banner2.webp"}
+        fill
+        priority
+      />
+
       <BannerTextBox
         $data={sectionData}
         $previewWidth={previewWidth}

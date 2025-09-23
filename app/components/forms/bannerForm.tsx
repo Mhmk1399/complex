@@ -62,6 +62,8 @@ export const BannerForm: React.FC<BannerFormProps> = ({
           ...prev?.setting,
           marginTop: updatedValues.top.toString(),
           marginBottom: updatedValues.bottom.toString(),
+          marginLeft: updatedValues.left.toString(),
+          marginRight: updatedValues.right.toString(),
         },
       }));
     } else {
@@ -532,6 +534,63 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                     displayUnit=""
                   />
                 </div>
+                {/* ✅ New Shadow Settings */}
+                <div className="space-y-4 rounded-lg">
+                  <h4 className="font-bold text-sky-700 my-3">تنظیمات سایه</h4>
+                  <DynamicRangeInput
+                    label="افست افقی سایه"
+                    name="shadowOffsetX"
+                    min="-50"
+                    max="50"
+                    value={
+                      userInputData?.blocks?.setting?.shadowOffsetX?.toString() ??
+                      "0"
+                    }
+                    onChange={handleBlockSettingChange}
+                  />
+                  <DynamicRangeInput
+                    label="افست عمودی سایه"
+                    name="shadowOffsetY"
+                    min="-50"
+                    max="50"
+                    value={
+                      userInputData?.blocks?.setting?.shadowOffsetY?.toString() ??
+                      "4"
+                    }
+                    onChange={handleBlockSettingChange}
+                  />
+                  <DynamicRangeInput
+                    label="میزان بلور سایه"
+                    name="shadowBlur"
+                    min="0"
+                    max="100"
+                    value={
+                      userInputData?.blocks?.setting?.shadowBlur?.toString() ??
+                      "10"
+                    }
+                    onChange={handleBlockSettingChange}
+                  />
+                  <DynamicRangeInput
+                    label="میزان گسترش سایه"
+                    name="shadowSpread"
+                    min="-20"
+                    max="20"
+                    value={
+                      userInputData?.blocks?.setting?.shadowSpread?.toString() ??
+                      "0"
+                    }
+                    onChange={handleBlockSettingChange}
+                  />
+                  <ColorInput
+                    label="رنگ سایه"
+                    name="shadowColor"
+                    value={
+                      userInputData?.blocks?.setting?.shadowColor ??
+                      "rgba(0,0,0,0.25)"
+                    }
+                    onChange={handleBlockSettingChange}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -740,7 +799,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
 
       {/* Spacing Settings Dropdown */}
       {isSpacingOpen && (
-        <div className="p-4 animate-slideDown">
+        <div className="animate-slideDown">
           <div className="rounded-lg p-2 flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

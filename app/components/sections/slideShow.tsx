@@ -1,9 +1,15 @@
 "use client";
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
-import { SlideSection, Layout, SlideBlock } from "@/lib/types";
+import {
+  SlideSection,
+  Layout,
+  SlideBlock,
+  SlideBlockSetting,
+} from "@/lib/types";
 import { Delete } from "../C-D";
 import Link from "next/link";
+import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 
 interface SlideShowProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -19,36 +25,45 @@ const SectionSlideShow = styled.section<{
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
-  position: relative;
-  margin: 0px;
-  margin-top: ${(props) => props.$data.setting.marginTop}px;
-  margin-bottom: ${(props) => props.$data.setting.marginBottom}px;
-  padding-top: ${(props) => props.$data.setting.paddingTop}px;
-  padding-bottom: ${(props) => props.$data.setting.paddingBottom}px;
-  padding-left: ${(props) => props.$data.setting.paddingLeft}px;
-  padding-right: ${(props) => props.$data.setting.paddingRight}px;
+  max-width: 100%;
+  margin-top: ${(props) => props.$data.setting.marginTop || 0}px;
+  margin-bottom: ${(props) => props.$data.setting.marginBottom || 0}px;
+  margin-right: ${(props) => props.$data.setting.marginRight || 0}px;
+  margin-left: ${(props) => props.$data.setting.marginLeft || 0}px;
+  padding: ${(props) =>
+    `${props.$data.setting.paddingTop}px ${props.$data.setting.paddingRight}px ${props.$data.setting.paddingBottom}px ${props.$data.setting.paddingLeft}px`};
   background-color: ${(props) =>
     props.$data.setting.backgroundColorBox || "transparent"};
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  transition: background-color 0.3s ease;
+  position: relative;
+  box-shadow: ${(props) =>
+    `${props.$data.setting.shadowOffsetX || 0}px 
+     ${props.$data.setting.shadowOffsetY || 4}px 
+     ${props.$data.setting.shadowBlur || 10}px 
+     ${props.$data.setting.shadowSpread || 0}px 
+     ${props.$data.setting.shadowColor || "#fff"}`};
 `;
 
 const SlideContainer = styled.div<{
+  $data: SlideBlockSetting;
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
   width: 100%;
-  max-width: ${(props) => (props.$preview === "sm" ? "400px" : "800px")};
+  max-width: ${(props) => (props.$preview === "sm" ? "400px" : "2000px")};
   overflow: hidden;
-  position: relative;
+  border-radius: 16px;
 `;
 
 const SlidesWrapper = styled.div<{ $currentIndex: number }>`
   display: flex;
-  transition: transform 0.6s ease-in-out;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   transform: translateX(${(props) => props.$currentIndex * -100}%);
+  will-change: transform;
 `;
 
 const Slide = styled.div`
@@ -56,31 +71,51 @@ const Slide = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 10px 0;
+
+  /* Smooth fade-in on mount */
+  animation: fadeIn 0.5s ease;
+  @keyframes fadeIn {
+    from {
+      opacity: 0.6;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 `;
 
-const SlideImage = styled.img<{ 
+const SlideImage = styled.img<{
   $data: SlideSection["setting"];
   $imageAnimation?: SlideSection["setting"]["imageAnimation"];
 }>`
-  width: 100%;
-  border-radius: ${(props) => props.$data?.imageRadious || "10"}px;
+  width: ${(props) => props.$data?.imageWidth || "200"}px;
+  height: ${(props) => props.$data?.imageHeight || "200"}px;
+  position: relative;
+
+  border-radius: ${(props) => props.$data?.imageRadious || "12"}px;
   opacity: ${(props) => props.$data?.opacityImage || 1};
   object-fit: ${(props) => props.$data?.imageBehavior || "cover"};
-  
+  transition: transform 0.4s ease, opacity 0.4s ease;
+
   /* Apply image animations */
   ${(props) => {
     const imageAnimation = props.$imageAnimation;
-    if (!imageAnimation) return '';
-    
+    if (!imageAnimation) return "";
+
     const { type, animation: animConfig } = imageAnimation;
-    const selector = type === 'hover' ? '&:hover' : '&:active';
-    
+    const selector = type === "hover" ? "&:hover" : "&:active";
+
     // Generate animation CSS based on type
-    if (animConfig.type === 'pulse') {
+    if (animConfig.type === "pulse") {
       const baseOpacity = Number(props.$data?.opacityImage || 1);
       return `
         ${selector} {
-          animation: slideImagePulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideImagePulse ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideImagePulse {
@@ -94,10 +129,12 @@ const SlideImage = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'glow') {
+    } else if (animConfig.type === "glow") {
       return `
         ${selector} {
-          animation: slideImageGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideImageGlow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideImageGlow {
@@ -109,10 +146,12 @@ const SlideImage = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'brightness') {
+    } else if (animConfig.type === "brightness") {
       return `
         ${selector} {
-          animation: slideImageBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideImageBrightness ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideImageBrightness {
@@ -124,10 +163,12 @@ const SlideImage = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'blur') {
+    } else if (animConfig.type === "blur") {
       return `
         ${selector} {
-          animation: slideImageBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideImageBlur ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideImageBlur {
@@ -139,10 +180,12 @@ const SlideImage = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'saturate') {
+    } else if (animConfig.type === "saturate") {
       return `
         ${selector} {
-          animation: slideImageSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideImageSaturate ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideImageSaturate {
@@ -154,10 +197,12 @@ const SlideImage = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'contrast') {
+    } else if (animConfig.type === "contrast") {
       return `
         ${selector} {
-          animation: slideImageContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideImageContrast ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideImageContrast {
@@ -169,11 +214,13 @@ const SlideImage = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'opacity') {
+    } else if (animConfig.type === "opacity") {
       const baseOpacity = Number(props.$data?.opacityImage || 1);
       return `
         ${selector} {
-          animation: slideImageOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideImageOpacity ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideImageOpacity {
@@ -188,10 +235,12 @@ const SlideImage = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'shadow') {
+    } else if (animConfig.type === "shadow") {
       return `
         ${selector} {
-          animation: slideImageShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideImageShadow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideImageShadow {
@@ -204,8 +253,8 @@ const SlideImage = styled.img<{
         }
       `;
     }
-    
-    return '';
+
+    return "";
   }}
 `;
 
@@ -213,7 +262,9 @@ const SlideTextBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 15px;
+  padding: 0 12px;
+  text-align: center;
 `;
 
 const SlideHeading = styled.h3<{
@@ -221,12 +272,11 @@ const SlideHeading = styled.h3<{
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
-  color: ${(props) => props.$data.textColor || "#000"};
-  font-size: ${(props) =>
-    props.$preview === "sm" ? "18" : props.$data?.textFontSize || "22"}px;
-  font-weight: ${(props) => props.$data.textFontWeight || "bold"};
-  margin-top: 5px;
-  text-align: center;
+  color: ${(props) => props.$data.textColor || "#111"};
+  font-size: ${(props) => props.$data?.textFontSize || "22"}px;
+  font-weight: ${(props) => props.$data.textFontWeight || "600"};
+  margin: 8px 0;
+  letter-spacing: 0.3px;
 `;
 
 const SlideDescription = styled.p<{
@@ -234,14 +284,10 @@ const SlideDescription = styled.p<{
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
-  color: ${(props) => props.$data.descriptionColor || "#333"};
-  font-size: ${(props) =>
-    props.$preview === "sm"
-      ? "14"
-      : props.$data?.descriptionFontSize || "22"}px;
-  font-weight: ${(props) => props.$data.descriptionFontWeight || "normal"};
-  padding: 20px;
-  text-align: center;
+  color: ${(props) => props.$data.descriptionColor || "#555"};
+  font-size: ${(props) => props.$data?.descriptionFontSize || "18"}px;
+  font-weight: ${(props) => props.$data.descriptionFontWeight || "400"};
+  line-height: 1.6;
   margin-top: 5px;
 `;
 
@@ -251,37 +297,37 @@ const NavButton = styled.button<{
 }>`
   position: absolute;
   top: 50%;
-  transform: translateY(-250%);
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
+  transform: translateY(-50%);
+  background-color: ${(props) =>
+    props.$data.setting.navBg
+      ? props.$data.setting.navBg + "B3" // HEX + alpha (B3 = ~70%)
+      : "rgba(85,85,85,0.7)"};
+  color: ${(props) => props.$data.setting.navColor || "#fff"};
   padding: 10px;
   border: none;
-  border-radius: 20%;
+  border-radius: ${(props) => props.$data.setting.navRadius || "2"}px;
   cursor: pointer;
   z-index: 10;
-  
-  @media (max-width: 425px) {
-    transform: translateY(-390%);
-    padding: 7px;
-  }
+
   @media (max-width: 768px) {
-    transform: translateY(-290%);
     padding: 7px;
   }
 
   /* Apply navigation button animations */
   ${(props) => {
     const navAnimation = props.$navAnimation;
-    if (!navAnimation) return '';
-    
+    if (!navAnimation) return "";
+
     const { type, animation: animConfig } = navAnimation;
-    const selector = type === 'hover' ? '&:hover' : '&:active';
-    
+    const selector = type === "hover" ? "&:hover" : "&:active";
+
     // Generate animation CSS based on type
-    if (animConfig.type === 'pulse') {
+    if (animConfig.type === "pulse") {
       return `
         ${selector} {
-          animation: slideNavPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideNavPulse ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideNavPulse {
@@ -295,10 +341,12 @@ const NavButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'glow') {
+    } else if (animConfig.type === "glow") {
       return `
         ${selector} {
-          animation: slideNavGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideNavGlow ${animConfig.duration} ${animConfig.timing} ${
+        animConfig.delay || "0s"
+      } ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideNavGlow {
@@ -310,10 +358,12 @@ const NavButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'brightness') {
+    } else if (animConfig.type === "brightness") {
       return `
         ${selector} {
-          animation: slideNavBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideNavBrightness ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideNavBrightness {
@@ -325,10 +375,12 @@ const NavButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'blur') {
+    } else if (animConfig.type === "blur") {
       return `
         ${selector} {
-          animation: slideNavBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideNavBlur ${animConfig.duration} ${animConfig.timing} ${
+        animConfig.delay || "0s"
+      } ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideNavBlur {
@@ -340,10 +392,12 @@ const NavButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'saturate') {
+    } else if (animConfig.type === "saturate") {
       return `
         ${selector} {
-          animation: slideNavSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideNavSaturate ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideNavSaturate {
@@ -355,10 +409,12 @@ const NavButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'contrast') {
+    } else if (animConfig.type === "contrast") {
       return `
         ${selector} {
-          animation: slideNavContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideNavContrast ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideNavContrast {
@@ -370,10 +426,12 @@ const NavButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'opacity') {
+    } else if (animConfig.type === "opacity") {
       return `
         ${selector} {
-          animation: slideNavOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideNavOpacity ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideNavOpacity {
@@ -388,10 +446,12 @@ const NavButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'shadow') {
+    } else if (animConfig.type === "shadow") {
       return `
         ${selector} {
-          animation: slideNavShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideNavShadow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideNavShadow {
@@ -404,8 +464,8 @@ const NavButton = styled.button<{
         }
       `;
     }
-    
-    return '';
+
+    return "";
   }}
 `;
 
@@ -421,29 +481,35 @@ const Button = styled.button<{
   $data: SlideSection;
   $btnAnimation?: SlideSection["setting"]["btnAnimation"];
 }>`
+  margin-top: 12px;
   text-align: center;
   background-color: ${(props) =>
-    props.$data?.setting?.btnBackgroundColor || ""};
-  color: ${(props) => props.$data?.setting?.btnTextColor || ""};
-  padding: 10px 20px;
+    props.$data?.setting?.btnBackgroundColor || "#007bff"};
+  color: ${(props) => props.$data?.setting?.btnTextColor || "#fff"};
+  padding: 10px 22px;
   border: none;
-  border-radius: 4px;
+  border-radius: ${(props) => props.$data?.setting?.btnRadius || "50"}px;
   cursor: pointer;
+  font-weight: 500;
+  font-size: 15px;
   transition: all 0.3s ease;
+  width: ${(props) => props.$data?.setting?.btnWidth || "50"}px;
 
   /* Apply button animations */
   ${(props) => {
     const btnAnimation = props.$btnAnimation;
-    if (!btnAnimation) return '';
-    
+    if (!btnAnimation) return "";
+
     const { type, animation: animConfig } = btnAnimation;
-    const selector = type === 'hover' ? '&:hover' : '&:active';
-    
+    const selector = type === "hover" ? "&:hover" : "&:active";
+
     // Generate animation CSS based on type
-    if (animConfig.type === 'pulse') {
+    if (animConfig.type === "pulse") {
       return `
         ${selector} {
-          animation: slideBtnPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideBtnPulse ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideBtnPulse {
@@ -457,10 +523,12 @@ const Button = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'glow') {
+    } else if (animConfig.type === "glow") {
       return `
         ${selector} {
-          animation: slideBtnGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideBtnGlow ${animConfig.duration} ${animConfig.timing} ${
+        animConfig.delay || "0s"
+      } ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideBtnGlow {
@@ -472,10 +540,12 @@ const Button = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'brightness') {
+    } else if (animConfig.type === "brightness") {
       return `
         ${selector} {
-          animation: slideBtnBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideBtnBrightness ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideBtnBrightness {
@@ -487,10 +557,12 @@ const Button = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'blur') {
+    } else if (animConfig.type === "blur") {
       return `
         ${selector} {
-          animation: slideBtnBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideBtnBlur ${animConfig.duration} ${animConfig.timing} ${
+        animConfig.delay || "0s"
+      } ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideBtnBlur {
@@ -502,10 +574,12 @@ const Button = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'saturate') {
+    } else if (animConfig.type === "saturate") {
       return `
         ${selector} {
-          animation: slideBtnSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideBtnSaturate ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideBtnSaturate {
@@ -517,10 +591,12 @@ const Button = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'contrast') {
+    } else if (animConfig.type === "contrast") {
       return `
         ${selector} {
-          animation: slideBtnContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideBtnContrast ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideBtnContrast {
@@ -532,10 +608,12 @@ const Button = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'opacity') {
+    } else if (animConfig.type === "opacity") {
       return `
         ${selector} {
-          animation: slideBtnOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideBtnOpacity ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideBtnOpacity {
@@ -550,10 +628,12 @@ const Button = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'shadow') {
+    } else if (animConfig.type === "shadow") {
       return `
         ${selector} {
-          animation: slideBtnShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: slideBtnShadow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes slideBtnShadow {
@@ -566,8 +646,8 @@ const Button = styled.button<{
         }
       `;
     }
-    
-    return '';
+
+    return "";
   }}
 `;
 
@@ -607,8 +687,10 @@ const SlideShow: React.FC<SlideShowProps> = ({
   const handleNext = () =>
     setCurrentIndex((prev) => (prev + 1) % (blocks.length || 1));
   const handlePrev = () =>
-    setCurrentIndex((prev) => (prev - 1 + (blocks.length || 1)) % (blocks.length || 1));
-  
+    setCurrentIndex(
+      (prev) => (prev - 1 + (blocks.length || 1)) % (blocks.length || 1)
+    );
+
   if (currentIndex >= (blocks.length || 0)) {
     setCurrentIndex(blocks.length - 1);
     return null;
@@ -671,7 +753,11 @@ const SlideShow: React.FC<SlideShowProps> = ({
         </div>
       ) : null}
 
-      <SlideContainer $previewWidth={previewWidth} $preview={preview}>
+      <SlideContainer
+        $data={sectionData}
+        $previewWidth={previewWidth}
+        $preview={preview}
+      >
         <SlidesWrapper $currentIndex={currentIndex}>
           {blocks.map((slide, index) => (
             <Slide key={index}>
@@ -696,11 +782,11 @@ const SlideShow: React.FC<SlideShowProps> = ({
                 >
                   {slide.description}
                 </SlideDescription>
-                <Button 
+                <Button
                   $data={sectionData}
                   $btnAnimation={sectionData.setting?.btnAnimation}
                 >
-                  <Link href={slide.btnLink || "#"} target="_blank">
+                  <Link href={"#"}>
                     {slide.btnText ? slide.btnText : "بیشتر بخوانید"}
                   </Link>
                 </Button>
@@ -708,21 +794,21 @@ const SlideShow: React.FC<SlideShowProps> = ({
             </Slide>
           ))}
         </SlidesWrapper>
-        
-        <PrevButton 
+
+        <PrevButton
           onClick={handlePrev}
           $data={sectionData}
           $navAnimation={sectionData.setting?.navAnimation}
         >
-          {"<"}
+          <BiChevronLeft size={24} />
         </PrevButton>
-        
-        <NextButton 
+
+        <NextButton
           onClick={handleNext}
           $data={sectionData}
           $navAnimation={sectionData.setting?.navAnimation}
         >
-          {">"}
+          <BiChevronRight size={24} />
         </NextButton>
       </SlideContainer>
     </SectionSlideShow>
