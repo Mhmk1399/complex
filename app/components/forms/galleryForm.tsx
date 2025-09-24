@@ -8,7 +8,13 @@ import ImageSelectorModal from "../sections/ImageSelectorModal";
 import { useSharedContext } from "@/app/contexts/SharedContext";
 import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
-import { HiChevronDown, HiSparkles } from "react-icons/hi";
+import {
+  ColorInput,
+  DynamicNumberInput,
+  DynamicRangeInput,
+  DynamicSelectInput,
+} from "./DynamicInputs";
+import { HiChevronDown, HiSparkles, HiTrash, HiPlus } from "react-icons/hi";
 
 interface GalleryFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<GallerySection>>;
@@ -17,14 +23,14 @@ interface GalleryFormProps {
   selectedComponent: string;
 }
 
-interface ImageFile {
-  _id: string;
-  fileName: string;
-  fileUrl: string;
-  fileType: string;
-  fileSize: number;
-  storeId: string;
-}
+// interface ImageFile {
+//   _id: string;
+//   fileName: string;
+//   fileUrl: string;
+//   fileType: string;
+//   fileSize: number;
+//   storeId: string;
+// }
 
 interface BoxValues {
   top: number;
@@ -32,32 +38,6 @@ interface BoxValues {
   left: number;
   right: number;
 }
-
-const ColorInput = ({
-  label,
-  name,
-  value,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <>
-    <label className="block mb-1">{label}</label>
-    <div className="flex flex-col rounded-md gap-3 items-center">
-      <input
-        type="color"
-        id={name}
-        name={name}
-        value={value || "#000000"}
-        onChange={onChange}
-        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
-      />
-    </div>
-  </>
-);
 
 export const GalleryForm: React.FC<GalleryFormProps> = ({
   setUserInputData,
@@ -83,7 +63,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
   const [isAnimationOpen, setIsAnimationOpen] = useState(false);
-  const [isImagesOpen] = useState(false);
+  // const [isImagesOpen] = useState(false);
   const [isImageSelectorOpen, setIsImageSelectorOpen] = useState(false);
   const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(0);
   const [useRouteSelect, setUseRouteSelect] = useState<boolean[]>([]);
@@ -101,6 +81,8 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
           ...prev.setting,
           marginTop: updatedValues.top.toString(),
           marginBottom: updatedValues.bottom.toString(),
+          marginLeft: updatedValues.left.toString(),
+          marginRight: updatedValues.right.toString(),
         },
       }));
     } else {
@@ -186,7 +168,11 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
         ...prev.blocks,
         images: [
           ...(prev.blocks.images || []),
-          { imageSrc: "", imageAlt: "", imageLink: "" },
+          {
+            imageSrc: "/assets/images/digi4banners2.webp",
+            imageAlt: "تصویر",
+            imageLink: "#",
+          },
         ],
       },
     }));
@@ -195,6 +181,11 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
   };
 
   const removeImage = (index: number) => {
+    // Prevent deleting if only one image remains
+    if ((userInputData?.blocks?.images?.length || 0) <= 1) {
+      return;
+    }
+
     setUserInputData((prev) => ({
       ...prev,
       blocks: {
@@ -304,7 +295,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
     setIsContentOpen(true);
   }, []);
 
-  const handleImageSelect = (image: ImageFile) => {
+  const handleImageSelect = (image: any) => {
     handleImageChange(currentSlideIndex, "imageSrc", image.fileUrl);
     handleImageChange(currentSlideIndex, "imageAlt", image.fileName);
     setIsImageSelectorOpen(false);
@@ -336,7 +327,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
       {/* Content Section */}
       {isContentOpen && (
         <div className="p-4  animate-slideDown">
-          <div className="space-y-4">
+          <div className=" ">
             <div>
               <label className="block mb-2">عنوان</label>
               <input
@@ -357,200 +348,198 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
                 rows={3}
               />
             </div>
-            <div className=" border-t  border-gray-100 animate-slideDown">
-              <button
-                onClick={addNewImage}
-                className="mb-4 bg-blue-500 text-white px-4 py-2 rounded"
-              >
-                افزودن تصویر جدید
-              </button>
-
-              {userInputData?.blocks?.images?.map((image, index) => (
-                <div key={index} className="mb-4 p-4 border h-full rounded">
-                  <div className="flex justify-between items-center mb-4">
-                    <h4>تصویر {index + 1}</h4>
-                    <button
-                      onClick={() => removeImage(index)}
-                      className="text-red-500"
-                    >
-                      حذف
-                    </button>
-                  </div>
-                  <div className="space-y-4">
-                    <div className="flex gap-2 items-center">
-                      <input
-                        type="text"
-                        placeholder="آدرس تصویر"
-                        value={image.imageSrc}
-                        onChange={(e) =>
-                          handleImageChange(index, "imageSrc", e.target.value)
-                        }
-                        className="w-full hidden mb-2 p-2 border rounded"
-                      />
-                      <button
-                        onClick={() => {
-                          setCurrentSlideIndex(index);
-                          setIsImageSelectorOpen(true);
-                        }}
-                        className="px-4 py-2 mb-4 mt-1 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                      >
-                        انتخاب تصویر
-                      </button>
-                    </div>
-                    <div>
-                      <label className="block mb-2">متن جایگزین</label>
-                      <input
-                        type="text"
-                        value={image.imageAlt || ""}
-                        onChange={(e) =>
-                          handleImageChange(index, "imageAlt", e.target.value)
-                        }
-                        className="w-full p-2 border rounded"
-                      />
-                    </div>
-                    <div>
-                      <label className="block mb-2">لینک (اختیاری)</label>
-                      <div className="mb-2">
-                        <label className="flex items-center gap-2">
-                          <input
-                            type="checkbox"
-                            checked={useRouteSelect[index] || false}
-                            onChange={(e) =>
-                              handleRouteSelectToggle(index, e.target.checked)
-                            }
-                            className="rounded"
-                          />
-                          <span className="text-sm">
-                            انتخاب از مسیرهای موجود
-                          </span>
-                        </label>
-                      </div>
-                      {useRouteSelect[index] ? (
-                        <select
-                          value={image.imageLink || ""}
-                          onChange={(e) =>
-                            handleRouteChange(index, e.target.value)
-                          }
-                          className="w-full p-2 border rounded"
-                        >
-                          <option value="">انتخاب مسیر</option>
-                          {activeRoutes.map((route) => (
-                            <option key={route} value={route}>
-                              {route}
-                            </option>
-                          ))}
-                        </select>
-                      ) : (
-                        <input
-                          type="text"
-                          value={image.imageLink || ""}
-                          onChange={(e) =>
-                            handleImageChange(
-                              index,
-                              "imageLink",
-                              e.target.value
-                            )
-                          }
-                          className="w-full p-2 border rounded"
-                          placeholder="آدرس لینک یا مسیر سفارشی"
-                        />
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Images Section */}
-      {isImagesOpen && (
-        <div className="p-4  animate-slideDown">
-          <button
-            onClick={addNewImage}
-            className="mb-4 bg-blue-500 text-white px-4 py-2 rounded"
-          >
-            افزودن تصویر جدید
-          </button>
-
-          {userInputData?.blocks?.images?.map((image, index) => (
-            <div key={index} className="mb-6 p-4 border rounded">
-              <div className="flex justify-between items-center mb-4">
-                <h4>تصویر {index + 1}</h4>
+            <div className="animate-slideDown">
+              {/* Add New Image Button */}
+              <div className="mb-6">
                 <button
-                  onClick={() => removeImage(index)}
-                  className="text-red-500"
+                  onClick={addNewImage}
+                  className="flex items-center gap-2 bg-gradient-to-r mt-3 from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-1 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
                 >
-                  حذف
+                  <HiPlus className="w-4 h-4" />
+                  افزودن تصویر جدید
                 </button>
               </div>
+
+              {/* Images List */}
               <div className="space-y-4">
-                <div>
-                  <label className="block mb-2">آدرس تصویر</label>
-                  <input
-                    type="text"
-                    value={image.imageSrc || ""}
-                    onChange={(e) =>
-                      handleImageChange(index, "imageSrc", e.target.value)
-                    }
-                    className="w-full p-2 border rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block mb-2">متن جایگزین</label>
-                  <input
-                    type="text"
-                    value={image.imageAlt || ""}
-                    onChange={(e) =>
-                      handleImageChange(index, "imageAlt", e.target.value)
-                    }
-                    className="w-full p-2 border rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block mb-2">لینک (اختیاری)</label>
-                  <div className="mb-2">
-                    <label className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={useRouteSelect[index] || false}
-                        onChange={(e) =>
-                          handleRouteSelectToggle(index, e.target.checked)
-                        }
-                        className="rounded"
-                      />
-                      <span className="text-sm">انتخاب از مسیرهای موجود</span>
-                    </label>
+                {userInputData?.blocks?.images?.map((image, index) => (
+                  <div
+                    key={index}
+                    className="bg-white border border-gray-200 rounded-xl p-2 shadow-sm hover:shadow-md transition-shadow duration-200"
+                  >
+                    {/* Header */}
+                    <div className="flex justify-between items-center mb-4 pb-3 border-b border-gray-100">
+                      <div className="flex items-center gap-3">
+                        <h4 className="font-medium bg-blue-100 text-blue-400  px-2 py-1 rounded-md text-sm">
+                          تصویر {index + 1}
+                        </h4>
+                      </div>
+
+                      {/* Delete Button - Only show if more than 1 image */}
+                      {(userInputData?.blocks?.images?.length || 0) > 1 && (
+                        <button
+                          onClick={() => removeImage(index)}
+                          className="flex items-center gap-1 text-red-500 hover:text-red-700 hover:bg-red-50 px-2 py-1 rounded-md transition-colors duration-200"
+                          title="حذف تصویر"
+                        >
+                          <HiTrash className="w-4 h-4" />
+                        </button>
+                      )}
+
+                      {/* Show message if this is the last image */}
+                      {(userInputData?.blocks?.images?.length || 0) <= 1 && (
+                        <span className="text-xs text-nowrap text-red-500 bg-gray-100 px-2 py-1 rounded-md">
+                          غیر قابل حذف{" "}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Image Preview */}
+                    {image.imageSrc && (
+                      <div className="mb-4">
+                        <div className="w-full h-32 bg-gray-100 rounded-lg overflow-hidden border">
+                          <img
+                            src={image.imageSrc}
+                            alt={image.imageAlt || "پیش‌نمایش"}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src =
+                                "/assets/images/placeholder.jpg";
+                            }}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Form Fields */}
+                    <div className="space-y-4">
+                      {/* Image Source */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          آدرس تصویر
+                        </label>
+                        <div className="flex flex-col gap-2">
+                          <input
+                            type="text"
+                            value={image.imageSrc || ""}
+                            onChange={(e) =>
+                              handleImageChange(
+                                index,
+                                "imageSrc",
+                                e.target.value
+                              )
+                            }
+                            className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            placeholder="آدرس تصویر را وارد کنید"
+                          />
+                          <button
+                            onClick={() => {
+                              setCurrentSlideIndex(index);
+                              setIsImageSelectorOpen(true);
+                            }}
+                            className="px-4 py-3 border border-blue-500 bg-gray-50 hover:bg-blue-200 text-blue-700 rounded-lg transition-colors duration-200 whitespace-nowrap"
+                          >
+                            انتخاب فایل
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Alt Text */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          متن جایگزین
+                        </label>
+                        <input
+                          type="text"
+                          value={image.imageAlt || ""}
+                          onChange={(e) =>
+                            handleImageChange(index, "imageAlt", e.target.value)
+                          }
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                          placeholder="توضیح کوتاه برای تصویر"
+                        />
+                      </div>
+
+                      {/* Link Settings */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-3">
+                          لینک (اختیاری)
+                        </label>
+
+                        {/* Route Selection Toggle */}
+                        <div className="mb-3">
+                          <label className="flex items-center gap-3 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={useRouteSelect[index] || false}
+                              onChange={(e) =>
+                                handleRouteSelectToggle(index, e.target.checked)
+                              }
+                              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                            />
+                            <span className="text-sm text-gray-600">
+                              انتخاب از مسیرهای موجود
+                            </span>
+                          </label>
+                        </div>
+
+                        {/* Link Input */}
+                        {useRouteSelect[index] ? (
+                          <select
+                            value={image.imageLink || ""}
+                            onChange={(e) =>
+                              handleRouteChange(index, e.target.value)
+                            }
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                          >
+                            <option value="">انتخاب مسیر</option>
+                            {activeRoutes.map((route) => (
+                              <option key={route} value={route}>
+                                {route}
+                              </option>
+                            ))}
+                          </select>
+                        ) : (
+                          <input
+                            type="text"
+                            value={image.imageLink || ""}
+                            onChange={(e) =>
+                              handleImageChange(
+                                index,
+                                "imageLink",
+                                e.target.value
+                              )
+                            }
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            placeholder="آدرس لینک یا مسیر سفارشی"
+                          />
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  {useRouteSelect[index] ? (
-                    <select
-                      value={image.imageLink || ""}
-                      onChange={(e) => handleRouteChange(index, e.target.value)}
-                      className="w-full p-2 border rounded"
-                    >
-                      <option value="">انتخاب مسیر</option>
-                      {activeRoutes.map((route) => (
-                        <option key={route} value={route}>
-                          {route}
-                        </option>
-                      ))}
-                    </select>
-                  ) : (
-                    <input
-                      type="text"
-                      value={image.imageLink || ""}
-                      onChange={(e) =>
-                        handleImageChange(index, "imageLink", e.target.value)
-                      }
-                      className="w-full p-2 border rounded"
-                      placeholder="آدرس لینک یا مسیر سفارشی"
-                    />
-                  )}
-                </div>
+                ))}
               </div>
+
+              {/* Empty State */}
+              {(!userInputData?.blocks?.images ||
+                userInputData.blocks.images.length === 0) && (
+                <div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                  <div className="text-gray-400 mb-2">
+                    <HiPlus className="w-8 h-8 mx-auto" />
+                  </div>
+                  <p className="text-gray-500 mb-4">
+                    هیچ تصویری اضافه نشده است
+                  </p>
+                  <button
+                    onClick={addNewImage}
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+                  >
+                    اولین تصویر را اضافه کنید
+                  </button>
+                </div>
+              )}
             </div>
-          ))}
+          </div>
         </div>
       )}
 
@@ -559,82 +548,68 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
         <div className="p-4 animate-slideDown">
           <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
             {/* Title Settings */}
-            <div className="space-y-4">
-              <h4 className="font-bold">تنظیمات عنوان</h4>
-              <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  name="titleFontSize"
-                  value={userInputData?.blocks?.setting?.titleFontSize || "25"}
-                  onChange={handleBlockSettingChange}
-                />
-                <p className="text-sm text-gray-600 text-nowrap">
-                  {userInputData?.blocks?.setting?.titleFontSize || "25"}px
-                </p>
-              </div>
-              <div>
-                <label className="block mb-2">وزن فونت عنوان</label>
-                <select
-                  name="titleFontWeight"
-                  value={
-                    userInputData?.blocks?.setting?.titleFontWeight || "normal"
-                  }
-                  onChange={handleBlockSettingChange}
-                  className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="bold">ضخیم</option>
-                  <option value="normal">نرمال</option>
-                </select>
-              </div>
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنگ عنوان"
-                  name="titleColor"
-                  value={
-                    userInputData?.blocks?.setting?.titleColor || "#000000"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-              </div>
+            <div className=" ">
+              <h4 className="font-bold text-sky-700 my-3">تنظیمات عنوان</h4>
+
+              <DynamicRangeInput
+                label="سایز"
+                name="titleFontSize"
+                min="0"
+                max="100"
+                value={userInputData?.blocks?.setting?.titleFontSize || "25"}
+                onChange={handleBlockSettingChange}
+              />
+
+              <DynamicSelectInput
+                label="وزن عنوان"
+                name="titleFontWeight"
+                value={
+                  userInputData?.blocks?.setting?.titleFontWeight || "normal"
+                }
+                options={[
+                  { value: "normal", label: "نرمال" },
+                  { value: "bold", label: "ضخیم" },
+                ]}
+                onChange={handleBlockSettingChange}
+              />
+              <ColorInput
+                label="رنگ عنوان"
+                name="titleColor"
+                value={userInputData?.blocks?.setting?.titleColor || "#000000"}
+                onChange={handleBlockSettingChange}
+              />
             </div>
-            <div className="space-y-4">
-              <h4 className="font-bold">تنظیمات توضیحات</h4>
-              <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-                <input
-                  type="range"
+
+            <div className=" ">
+              <h4 className="font-bold text-sky-700 my-3">تنظیمات توضیحات</h4>
+
+              <div className=" ">
+                <DynamicRangeInput
+                  label="سایز"
+                  name="descriptionFontSize"
                   min="0"
                   max="100"
-                  name="descriptionFontSize"
                   value={
-                    userInputData?.blocks?.setting?.descriptionFontSize || "16"
+                    userInputData?.blocks?.setting?.descriptionFontSize || "25"
                   }
                   onChange={handleBlockSettingChange}
                 />
-                <p className="text-sm text-gray-600 text-nowrap">
-                  {userInputData?.blocks?.setting?.descriptionFontSize || "16"}
-                  px
-                </p>
-              </div>
-              <div>
-                <label className="block mb-2">وزن فونت توضیحات</label>
-                <select
+
+                <DynamicSelectInput
+                  label="وزن  "
                   name="descriptionFontWeight"
                   value={
                     userInputData?.blocks?.setting?.descriptionFontWeight ||
                     "normal"
                   }
+                  options={[
+                    { value: "normal", label: "نرمال" },
+                    { value: "bold", label: "ضخیم" },
+                  ]}
                   onChange={handleBlockSettingChange}
-                  className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="bold">ضخیم</option>
-                  <option value="normal">نرمال</option>
-                </select>
-              </div>
-              <div className="rounded-lg flex items-center justify-between ">
+                />
                 <ColorInput
-                  label="رنگ توضیحات"
+                  label="رنگ  "
                   name="descriptionColor"
                   value={
                     userInputData?.blocks?.setting?.descriptionColor ||
@@ -646,87 +621,113 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
             </div>
 
             {/* Grid Settings */}
-            <div className="space-y-4">
-              <h4 className="font-bold">تنظیمات شبکه</h4>
-              <div>
-                <label className="block mb-2">تعداد ستون‌ها</label>
-                <input
-                  type="number"
-                  name="gridColumns"
-                  min="1"
-                  max="6"
-                  value={userInputData?.blocks?.setting?.gridColumns || "3"}
-                  onChange={handleBlockSettingChange}
-                  className="w-full p-2 border rounded"
-                />
-              </div>
+            <div className=" ">
+              <h4 className="font-bold text-sky-700 my-3">تنظیمات شبکه</h4>
+              <DynamicNumberInput
+                label="تعداد ستون‌ها"
+                name="gridColumns"
+                min={1}
+                max={6}
+                value={userInputData?.blocks?.setting?.gridColumns || 3}
+                onChange={handleBlockSettingChange}
+              />
 
-              <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  name="gridGap"
-                  value={userInputData?.blocks?.setting?.gridGap || "16"}
-                  onChange={handleBlockSettingChange}
-                />
-                <p className="text-sm text-gray-600 text-nowrap">
-                  {userInputData?.blocks?.setting?.gridGap || "16"}px
-                </p>
-              </div>
+              <DynamicRangeInput
+                label="فاصله بین تصاویر"
+                name="gridGap"
+                min="0"
+                max="100"
+                value={userInputData?.blocks?.setting?.gridGap || "25"}
+                onChange={handleBlockSettingChange}
+              />
             </div>
 
             {/* Image Settings */}
-            <div className="space-y-4">
-              <h4 className="font-bold">تنظیمات تصاویر</h4>
-              <div>
-                <label className="block mb-2">ارتفاع تصاویر</label>
-                <input
-                  type="number"
-                  name="imageHeight"
-                  value={userInputData?.blocks?.setting?.imageHeight || "200"}
-                  onChange={handleBlockSettingChange}
-                  className="w-full p-2 border rounded"
-                />
-                <div className="text-gray-500">
-                  {userInputData?.blocks?.setting?.imageHeight || "200"}px
-                </div>
-              </div>
-              <div>
-                <label className="block mb-2">عرض تصاویر</label>
-                <input
-                  type="number"
-                  name="imageWidth"
-                  value={userInputData?.blocks?.setting?.imageWidth || "200"}
-                  onChange={handleBlockSettingChange}
-                  className="w-full p-2 border rounded"
-                />
-                <div className="text-gray-500">
-                  {userInputData?.blocks?.setting?.imageWidth || "200"}px
-                </div>
-              </div>
+            <div className=" ">
+              <h4 className="font-bold text-sky-700 my-3">تنظیمات تصاویر</h4>
 
-              <label className="block">گردی گوشه‌ها</label>
-
-              <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  name="imageRadius"
-                  value={userInputData?.blocks?.setting?.imageRadius || "8"}
-                  onChange={handleBlockSettingChange}
-                />
-                <p className="text-sm text-gray-600 text-nowrap">
-                  {userInputData?.blocks?.setting?.imageRadius || "8"}px
-                </p>
-              </div>
+              <DynamicRangeInput
+                label=" ارتفاع تصاویر"
+                name="imageHeight"
+                min="0"
+                max="1000"
+                value={userInputData?.blocks?.setting?.imageHeight || "25"}
+                onChange={handleBlockSettingChange}
+              />
+              <DynamicRangeInput
+                label=" عرض تصاویر"
+                name="imageWidth"
+                min="0"
+                max="2000"
+                value={userInputData?.blocks?.setting?.imageWidth || "25"}
+                onChange={handleBlockSettingChange}
+              />
+              <DynamicRangeInput
+                label=" انحنا تصاویر"
+                name="imageRadius"
+                min="0"
+                max="100"
+                value={userInputData?.blocks?.setting?.imageRadius || "25"}
+                onChange={handleBlockSettingChange}
+              />
             </div>
-            <div className="rounded-lg flex items-center justify-between ">
+            <div>
+              <h4 className="font-bold text-sky-700 my-3">تنظیمات تصاویر</h4>
               <ColorInput
                 label="رنگ پس زمینه"
                 name="background"
                 value={userInputData?.blocks?.setting?.background || "#ffffff"}
+                onChange={handleBlockSettingChange}
+              />
+              <DynamicRangeInput
+                label="انحنا"
+                name="Radius"
+                min="0"
+                max="100"
+                value={userInputData?.blocks?.setting?.Radius || "25"}
+                onChange={handleBlockSettingChange}
+              />
+            </div>
+
+            {/* ✅ New Shadow Settings */}
+            <div className="  rounded-lg">
+              <h4 className="font-bold text-sky-700 my-3">تنظیمات سایه</h4>
+              <DynamicRangeInput
+                label="افست افقی سایه"
+                name="shadowOffsetX"
+                min="-50"
+                max="50"
+                value={userInputData?.setting?.shadowOffsetX?.toString() ?? "0"}
+                onChange={handleBlockSettingChange}
+              />
+              <DynamicRangeInput
+                label="افست عمودی سایه"
+                name="shadowOffsetY"
+                min="-50"
+                max="50"
+                value={userInputData?.setting?.shadowOffsetY?.toString() ?? "0"}
+                onChange={handleBlockSettingChange}
+              />
+              <DynamicRangeInput
+                label="میزان بلور سایه"
+                name="shadowBlur"
+                min="0"
+                max="100"
+                value={userInputData?.setting?.shadowBlur?.toString() ?? "0"}
+                onChange={handleBlockSettingChange}
+              />
+              <DynamicRangeInput
+                label="میزان گسترش سایه"
+                name="shadowSpread"
+                min="-20"
+                max="20"
+                value={userInputData?.setting?.shadowSpread?.toString() ?? "0"}
+                onChange={handleBlockSettingChange}
+              />
+              <ColorInput
+                label="رنگ سایه"
+                name="shadowColor"
+                value={userInputData?.setting?.shadowColor?.toString() ?? "0"}
                 onChange={handleBlockSettingChange}
               />
             </div>
@@ -766,7 +767,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
           </div>
 
           {hasImageAnimation && currentImageAnimation && (
-            <div className="space-y-4 p-4 bg-transparent border border-gray-200 rounded-lg">
+            <div className="  p-4 bg-transparent border border-gray-200 rounded-lg">
               <h5 className="text-sm font-medium text-gray-700">
                 تنظیمات انیمیشن تصاویر گالری
               </h5>
@@ -966,7 +967,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
 
       {/* Spacing Settings */}
       {isSpacingOpen && (
-        <div className="p-4 animate-slideDown">
+        <div className="animate-slideDown">
           <div className=" rounded-lg p-2 flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

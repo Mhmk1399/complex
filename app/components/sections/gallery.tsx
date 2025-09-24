@@ -20,17 +20,27 @@ const Section = styled.section<{
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
-  padding-top: ${(props) => props.$data?.setting?.paddingTop || "20"}px;
-  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "20"}px;
-  padding-left: ${(props) => props.$data?.setting?.paddingLeft || "0"}px;
-  padding-right: ${(props) => props.$data?.setting?.paddingRight || "0"}px;
-  margin-top: ${(props) => props.$data?.setting?.marginTop || "0"}px;
-  margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "0"}px;
+  max-width: 100%;
+  margin-top: ${(props) => props.$data.setting.marginTop || "30"}px;
+  margin-bottom: ${(props) => props.$data.setting.marginBottom}px;
+  margin-right: ${(props) => props.$data.setting.marginRight}px;
+  margin-left: ${(props) => props.$data.setting.marginLeft}px;
+  padding-top: ${(props) => props.$data.setting.paddingTop}px;
+  padding-bottom: ${(props) => props.$data.setting.paddingBottom}px;
+  padding-left: ${(props) => props.$data.setting.paddingLeft}px;
+  padding-right: ${(props) => props.$data.setting.paddingRight}px;
   background-color: ${(props) =>
     props.$data?.blocks?.setting?.background || "#ffffff"};
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-radius: ${(props) => props.$data.blocks?.setting?.Radius || "5"}px;
+  box-shadow: ${(props) =>
+    `${props.$data.blocks.setting?.shadowOffsetX || 0}px 
+     ${props.$data.blocks.setting?.shadowOffsetY || 4}px 
+     ${props.$data.blocks.setting?.shadowBlur || 10}px 
+     ${props.$data.blocks.setting?.shadowSpread || 0}px 
+     ${props.$data.blocks.setting?.shadowColor || "#fff"}`};
 `;
 
 const Title = styled.h2<{ $data: GallerySection }>`
@@ -49,7 +59,7 @@ const Description = styled.p<{ $data: GallerySection }>`
   font-weight: ${(props) =>
     props.$data?.blocks?.setting?.descriptionFontWeight || "normal"};
   margin-bottom: 30px;
-  padding:10px 90px;
+  padding: 0px 20px;
   text-align: center;
 `;
 
@@ -78,20 +88,22 @@ const ImageWrapper = styled.div<{ $data: GallerySection }>`
   overflow: hidden;
   transition: transform 0.3s ease;
   object-fit: fill;
-  
+
   /* Apply image animations */
   ${(props) => {
     const imageAnimation = props.$data.blocks?.setting?.imageAnimation;
-    if (!imageAnimation) return '&:hover { transform: scale(1.05); }';
-    
+    if (!imageAnimation) return "&:hover { transform: scale(1.05); }";
+
     const { type, animation: animConfig } = imageAnimation;
-    const selector = type === 'hover' ? '&:hover' : '&:active';
-    
+    const selector = type === "hover" ? "&:hover" : "&:active";
+
     // Generate animation CSS based on type
-    if (animConfig.type === 'pulse') {
+    if (animConfig.type === "pulse") {
       return `
         ${selector} {
-          animation: galleryImagePulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: galleryImagePulse ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes galleryImagePulse {
@@ -105,10 +117,12 @@ const ImageWrapper = styled.div<{ $data: GallerySection }>`
           }
         }
       `;
-    } else if (animConfig.type === 'glow') {
+    } else if (animConfig.type === "glow") {
       return `
         ${selector} {
-          animation: galleryImageGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: galleryImageGlow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes galleryImageGlow {
@@ -120,10 +134,12 @@ const ImageWrapper = styled.div<{ $data: GallerySection }>`
           }
         }
       `;
-    } else if (animConfig.type === 'brightness') {
+    } else if (animConfig.type === "brightness") {
       return `
         ${selector} {
-          animation: galleryImageBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: galleryImageBrightness ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes galleryImageBrightness {
@@ -135,10 +151,12 @@ const ImageWrapper = styled.div<{ $data: GallerySection }>`
           }
         }
       `;
-    } else if (animConfig.type === 'blur') {
+    } else if (animConfig.type === "blur") {
       return `
         ${selector} {
-          animation: galleryImageBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: galleryImageBlur ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes galleryImageBlur {
@@ -150,10 +168,12 @@ const ImageWrapper = styled.div<{ $data: GallerySection }>`
           }
         }
       `;
-    } else if (animConfig.type === 'saturate') {
+    } else if (animConfig.type === "saturate") {
       return `
         ${selector} {
-          animation: galleryImageSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: galleryImageSaturate ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes galleryImageSaturate {
@@ -165,10 +185,12 @@ const ImageWrapper = styled.div<{ $data: GallerySection }>`
           }
         }
       `;
-    } else if (animConfig.type === 'contrast') {
+    } else if (animConfig.type === "contrast") {
       return `
         ${selector} {
-          animation: galleryImageContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: galleryImageContrast ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes galleryImageContrast {
@@ -180,10 +202,12 @@ const ImageWrapper = styled.div<{ $data: GallerySection }>`
           }
         }
       `;
-    } else if (animConfig.type === 'opacity') {
+    } else if (animConfig.type === "opacity") {
       return `
         ${selector} {
-          animation: galleryImageOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: galleryImageOpacity ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes galleryImageOpacity {
@@ -198,10 +222,12 @@ const ImageWrapper = styled.div<{ $data: GallerySection }>`
           }
         }
       `;
-    } else if (animConfig.type === 'shadow') {
+    } else if (animConfig.type === "shadow") {
       return `
         ${selector} {
-          animation: galleryImageShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: galleryImageShadow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes galleryImageShadow {
@@ -214,9 +240,9 @@ const ImageWrapper = styled.div<{ $data: GallerySection }>`
         }
       `;
     }
-    
+
     // Default hover effect if no animation is configured
-    return '&:hover { transform: scale(1.05); }';
+    return "&:hover { transform: scale(1.05); }";
   }}
 `;
 
@@ -295,13 +321,20 @@ const Gallery: React.FC<GalleryProps> = ({
             className="font-extrabold text-xl hover:bg-blue-500 bg-red-500 pb-1 rounded-r-lg px-3 text-white transform transition-all duration-300"
             onClick={() => setShowDeleteModal(true)}
           >
-             x
+            x
           </button>
         </div>
       )}
-      {title && <Title $data={sectionData}>{title}</Title>}
+
+      {title && (
+        <Title dir="rtl" $data={sectionData}>
+          {title}
+        </Title>
+      )}
       {description && (
-        <Description $data={sectionData}>{description}</Description>
+        <Description dir="rtl" $data={sectionData}>
+          {description}
+        </Description>
       )}
 
       <ImageGrid $data={sectionData} $preview={preview}>

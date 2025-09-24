@@ -361,10 +361,17 @@ export interface NewsLetterBlockSetting extends CommonSettings {
     >
   >;
   headingColor: string;
+  formRadius: string;
+  inputRadius: string;
+  btnRadius: string;
+  btnWidth: string;
+  inputWidth: string;
   headingFontSize: string;
   headingFontWeight: string;
   descriptionColor: string;
   descriptionFontSize: string;
+  inputTextColor: string;
+  inputBackgroundColor: string;
   descriptionFontWeight: string;
   btnTextColor: string;
   btnBackgroundColor: string;
@@ -1459,6 +1466,12 @@ export interface GalleryBlockSetting {
   imageRadius: string;
   gridColumns: string;
   gridGap: string;
+  shadowColor?: string;
+  shadowSpread?: string;
+  shadowBlur?: string;
+  shadowOffsetY?: string;
+  shadowOffsetX?: string;
+  Radius?: string;
 }
 
 export interface GalleryBlock {
@@ -1473,8 +1486,16 @@ export interface GallerySectionSetting {
   paddingBottom: string;
   marginTop: string;
   marginBottom: string;
+  marginLeft: string;
+  marginRight: string;
   paddingLeft: string;
   paddingRight: string;
+  shadowColor?: string;
+  shadowSpread?: string;
+  shadowBlur?: string;
+  shadowOffsetY?: string;
+  shadowOffsetX?: string;
+  Radius?: string;
 }
 
 export interface SpecialOfferBlock {
@@ -1644,6 +1665,7 @@ export interface BrandsSection {
 export interface ProductRowBlockSetting extends CommonSettings {
   gridColumns: number;
   imageRadius: string;
+  Radius: string;
   productNameColor: string;
   priceColor: string;
   descriptionColor: string;
@@ -1653,6 +1675,9 @@ export interface ProductRowBlockSetting extends CommonSettings {
   cardBorderRadius: string;
   headingColor: string;
   headingFontSize: string;
+  height: string;
+  btnColor: string;
+  btnRadius: string;
   headingFontWeight: string;
   selectedCollection: string;
   navAnimation?: AnimationEffect; // Add this line for navigation button animations

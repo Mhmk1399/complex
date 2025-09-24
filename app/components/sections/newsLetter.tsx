@@ -13,75 +13,96 @@ interface NewsLetterProps {
   previewWidth: "sm" | "default";
 }
 
-const Section = styled.section<{ $data: NewsLetterSection; $previewWidth: "sm" | "default" }>`
+const Section = styled.section<{
+  $data: NewsLetterSection;
+  $previewWidth: "sm" | "default";
+}>`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: ${(props) => props.$data.setting.paddingTop || "20"}px;
-  padding-bottom: ${(props) => props.$data.setting.paddingBottom || "20"}px;
-  padding-left: ${(props) => props.$data.setting.paddingLeft || "20"}px;
-  padding-right: ${(props) => props.$data.setting.paddingRight || "20"}px;
-  margin-top: ${(props) => props.$data.setting.marginTop || "20"}px;
-  margin-bottom: ${(props) => props.$data.setting.marginBottom || "20"}px;
-  background-color: ${(props) => props.$data.blocks.setting.formBackground || "#f9f9f9"};
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  // width: ${(props) => (props.$previewWidth === "sm" ? "425px" : "100%")};
+  max-width: 100%;
+  margin-top: ${(props) => props.$data.setting.marginTop || "30"}px;
+  margin-bottom: ${(props) => props.$data.setting.marginBottom}px;
+  margin-right: ${(props) => props.$data.setting.marginRight}px;
+  margin-left: ${(props) => props.$data.setting.marginLeft}px;
+  padding-top: ${(props) => props.$data.setting.paddingTop}px;
+  padding-bottom: ${(props) => props.$data.setting.paddingBottom}px;
+  padding-left: ${(props) => props.$data.setting.paddingLeft}px;
+  padding-right: ${(props) => props.$data.setting.paddingRight}px;
+  background-color: ${(props) =>
+    props.$data.blocks.setting.formBackground || "#f9f9f9"};
+  border-radius: ${(props) => props.$data.blocks.setting.formRadius || "5"}px;
   transition: all 0.3s ease;
-  margin-left: 10px;
-  margin-right: 10px;
+  box-shadow: ${(props) =>
+    `${props.$data.blocks.setting?.shadowOffsetX || 0}px 
+     ${props.$data.blocks.setting?.shadowOffsetY || 4}px 
+     ${props.$data.blocks.setting?.shadowBlur || 10}px 
+     ${props.$data.blocks.setting?.shadowSpread || 0}px 
+     ${props.$data.blocks.setting?.shadowColor || "#fff"}`};
 `;
 
-const Heading = styled.h2<{ $data: NewsLetterSection; $previewWidth: "sm" | "default" }>`
+const Heading = styled.h2<{
+  $data: NewsLetterSection;
+  $previewWidth: "sm" | "default";
+}>`
   color: ${(props) => props.$data.blocks.setting.headingColor};
-  font-size: ${(props) => props.$previewWidth === "sm" 
-    ? `${parseInt(props.$data.blocks.setting.headingFontSize) * 0.8}px`
-    : `${props.$data.blocks.setting.headingFontSize}px`};
-  font-weight: ${(props) => props.$data?.blocks?.setting?.headingFontWeight || "bold"};
+  font-size: ${(props) => props.$data.blocks.setting.headingFontSize}px;
+  font-weight: ${(props) =>
+    props.$data?.blocks?.setting?.headingFontWeight || "bold"};
   text-align: center;
-  padding: ${(props) => props.$previewWidth === "sm" ? "10px" : "20px"};
 `;
 
-const Description = styled.p<{ $data: NewsLetterSection; $previewWidth: "sm" | "default" }>`
+const Description = styled.p<{
+  $data: NewsLetterSection;
+  $previewWidth: "sm" | "default";
+}>`
   color: ${(props) => props.$data.blocks.setting.descriptionColor};
-  font-size: ${(props) => props.$previewWidth === "sm"
-    ? `${parseInt(props.$data.blocks.setting.descriptionFontSize) * 0.8}px`
-    : `${props.$data.blocks.setting.descriptionFontSize}px`};
+  font-size: ${(props) => props.$data.blocks.setting.descriptionFontSize}px;
   font-weight: ${(props) => props.$data.blocks.setting.descriptionFontWeight};
   text-align: center;
-  margin-bottom: ${(props) => props.$previewWidth === "sm" ? "15px" : "20px"};
-  padding: 0 ${(props) => props.$previewWidth === "sm" ? "15px" : "20px"};
+  padding: 5px 10px;
 `;
 
 const Form = styled.form<{ $previewWidth: "sm" | "default" }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: ${(props) => props.$previewWidth === "sm" ? "90%" : "100%"};
-  padding: 0 ${(props) => props.$previewWidth === "sm" ? "15px" : "20px"};
-`;
-
-const Input = styled.input<{ $previewWidth: "sm" | "default" }>`
-  padding: ${(props) => props.$previewWidth === "sm" ? "6px" : "8px"};
-  margin-bottom: ${(props) => props.$previewWidth === "sm" ? "10px" : "15px"};
-  border: 1px solid #ccc;
-  border-radius: 15px;
-  font-size: ${(props) => props.$previewWidth === "sm" ? "14px" : "16px"};
+  margin: 10px;
   width: 100%;
-  max-width: ${(props) => props.$previewWidth === "sm" ? "300px" : "400px"};
+  padding: 10px;
 `;
 
-const Button = styled.button<{ $data: NewsLetterSection; $previewWidth: "sm" | "default" }>`
-  padding: ${(props) => props.$previewWidth === "sm" ? "8px 20px" : "10px 30px"};
+const Input = styled.input<{
+  $previewWidth: "sm" | "default";
+  $data: NewsLetterSection;
+}>`
+  padding: 10px;
+  margin-bottom: 5px;
+  border: 1px solid #ccc;
+  background-color: ${(props) =>
+    props.$data.blocks.setting.inputBackgroundColor};
+  color: ${(props) => props.$data.blocks.setting.inputTextColor};
+  border-radius: ${(props) => props.$data.blocks.setting.inputRadius || "5"}px;
+  font-size: ${(props) => (props.$previewWidth === "sm" ? "14px" : "16px")};
+  max-width: 100%;
+  width: ${(props) => props.$data.blocks.setting.inputWidth || "300"}px;
+`;
+
+const Button = styled.button<{
+  $data: NewsLetterSection;
+  $previewWidth: "sm" | "default";
+}>`
+  padding: 10px 30px;
   background-color: ${(props) => props.$data.blocks.setting.btnBackgroundColor};
   color: ${(props) => props.$data.blocks.setting.btnTextColor};
   border: none;
   margin-top: 4px;
-  border-radius: 5px;
-  font-size: ${(props) => props.$previewWidth === "sm" ? "14px" : "16px"};
+  border-radius: ${(props) => props.$data.blocks.setting.btnRadius || "5"}px;
   font-weight: 500;
   cursor: pointer;
+  max-width: 100%;
+  width: ${(props) => props.$data.blocks.setting.btnWidth || "5"}px;
   transition: all 0.4s ease-in-out;
 
   &:hover {
@@ -91,16 +112,18 @@ const Button = styled.button<{ $data: NewsLetterSection; $previewWidth: "sm" | "
   /* Apply button animations */
   ${(props) => {
     const btnAnimation = props.$data.blocks?.setting?.btnAnimation;
-    if (!btnAnimation) return '';
-    
+    if (!btnAnimation) return "";
+
     const { type, animation: animConfig } = btnAnimation;
-    const selector = type === 'hover' ? '&:hover' : '&:active';
-    
+    const selector = type === "hover" ? "&:hover" : "&:active";
+
     // Generate animation CSS based on type
-    if (animConfig.type === 'pulse') {
+    if (animConfig.type === "pulse") {
       return `
         ${selector} {
-          animation: newsletterBtnPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: newsletterBtnPulse ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes newsletterBtnPulse {
@@ -114,10 +137,12 @@ const Button = styled.button<{ $data: NewsLetterSection; $previewWidth: "sm" | "
           }
         }
       `;
-    } else if (animConfig.type === 'glow') {
+    } else if (animConfig.type === "glow") {
       return `
         ${selector} {
-          animation: newsletterBtnGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: newsletterBtnGlow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes newsletterBtnGlow {
@@ -129,10 +154,12 @@ const Button = styled.button<{ $data: NewsLetterSection; $previewWidth: "sm" | "
           }
         }
       `;
-    } else if (animConfig.type === 'brightness') {
+    } else if (animConfig.type === "brightness") {
       return `
         ${selector} {
-          animation: newsletterBtnBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: newsletterBtnBrightness ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes newsletterBtnBrightness {
@@ -144,10 +171,12 @@ const Button = styled.button<{ $data: NewsLetterSection; $previewWidth: "sm" | "
           }
         }
       `;
-    } else if (animConfig.type === 'blur') {
+    } else if (animConfig.type === "blur") {
       return `
         ${selector} {
-          animation: newsletterBtnBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: newsletterBtnBlur ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes newsletterBtnBlur {
@@ -159,10 +188,12 @@ const Button = styled.button<{ $data: NewsLetterSection; $previewWidth: "sm" | "
           }
         }
       `;
-    } else if (animConfig.type === 'saturate') {
+    } else if (animConfig.type === "saturate") {
       return `
         ${selector} {
-          animation: newsletterBtnSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: newsletterBtnSaturate ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes newsletterBtnSaturate {
@@ -174,10 +205,12 @@ const Button = styled.button<{ $data: NewsLetterSection; $previewWidth: "sm" | "
           }
         }
       `;
-    } else if (animConfig.type === 'contrast') {
+    } else if (animConfig.type === "contrast") {
       return `
         ${selector} {
-          animation: newsletterBtnContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: newsletterBtnContrast ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes newsletterBtnContrast {
@@ -189,10 +222,12 @@ const Button = styled.button<{ $data: NewsLetterSection; $previewWidth: "sm" | "
           }
         }
       `;
-    } else if (animConfig.type === 'opacity') {
+    } else if (animConfig.type === "opacity") {
       return `
         ${selector} {
-          animation: newsletterBtnOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: newsletterBtnOpacity ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes newsletterBtnOpacity {
@@ -207,10 +242,12 @@ const Button = styled.button<{ $data: NewsLetterSection; $previewWidth: "sm" | "
           }
         }
       `;
-    } else if (animConfig.type === 'shadow') {
+    } else if (animConfig.type === "shadow") {
       return `
         ${selector} {
-          animation: newsletterBtnShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: newsletterBtnShadow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes newsletterBtnShadow {
@@ -223,8 +260,8 @@ const Button = styled.button<{ $data: NewsLetterSection; $previewWidth: "sm" | "
         }
       `;
     }
-    
-    return '';
+
+    return "";
   }}
 `;
 
@@ -234,32 +271,34 @@ const NewsLetter: React.FC<NewsLetterProps> = ({
   actualName,
   selectedComponent,
   setLayout,
-  previewWidth
+  previewWidth,
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const sectionData = layout.sections?.children?.sections?.find(
     (section) => section.type === actualName
   ) as NewsLetterSection;
 
-  
   if (!sectionData) return null;
 
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     // Handle click animation trigger
     const btnAnimation = sectionData.blocks?.setting?.btnAnimation;
-    if (btnAnimation && btnAnimation.type === 'click') {
+    if (btnAnimation && btnAnimation.type === "click") {
       const button = e.currentTarget;
-      button.classList.add('clicked');
-      
+      button.classList.add("clicked");
+
       // Remove the class after animation completes
-      const duration = parseFloat(btnAnimation.animation.duration.replace('s', '')) * 1000;
-      const delay = parseFloat((btnAnimation.animation.delay || '0s').replace('s', '')) * 1000;
-      
+      const duration =
+        parseFloat(btnAnimation.animation.duration.replace("s", "")) * 1000;
+      const delay =
+        parseFloat((btnAnimation.animation.delay || "0s").replace("s", "")) *
+        1000;
+
       setTimeout(() => {
-        button.classList.remove('clicked');
+        button.classList.remove("clicked");
       }, duration + delay);
     }
-    
+
     // Prevent form submission for demo purposes
     e.preventDefault();
   };
@@ -280,7 +319,7 @@ const NewsLetter: React.FC<NewsLetterProps> = ({
         <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center">
           <div className="bg-white p-8 rounded-lg">
             <h3 className="text-lg font-bold mb-4">
-            آیا از حذف
+              آیا از حذف
               <span className="text-blue-400 font-bold mx-1">{actualName}</span>
               مطمئن هستید؟
             </h3>
@@ -318,20 +357,27 @@ const NewsLetter: React.FC<NewsLetterProps> = ({
           </button>
         </div>
       )}
-      
-      <Heading $data={sectionData} $previewWidth={previewWidth}>
+
+      <Heading dir="rtl" $data={sectionData} $previewWidth={previewWidth}>
         {sectionData.blocks.heading || "خبرنامه ما"}
       </Heading>
-      
-      <Description $data={sectionData} $previewWidth={previewWidth}>
-        {sectionData.blocks.description || "برای دریافت آخرین اخبار ایمیل خود را وارد کنید"}
+
+      <Description dir="rtl" $data={sectionData} $previewWidth={previewWidth}>
+        {sectionData.blocks.description ||
+          "برای دریافت آخرین اخبار ایمیل خود را وارد کنید"}
       </Description>
-      
+
       <Form $previewWidth={previewWidth} onSubmit={(e) => e.preventDefault()}>
-        <Input $previewWidth={previewWidth} type="email" placeholder="ایمیل خود را وارد کنید" required />
-        <Button 
-          $data={sectionData} 
-          $previewWidth={previewWidth} 
+        <Input
+          $data={sectionData}
+          $previewWidth={previewWidth}
+          type="email"
+          placeholder="ایمیل خود را وارد کنید"
+          required
+        />
+        <Button
+          $data={sectionData}
+          $previewWidth={previewWidth}
           type="submit"
           onClick={handleButtonClick}
         >

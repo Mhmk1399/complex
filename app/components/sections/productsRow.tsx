@@ -5,6 +5,7 @@ import ProductCard from "./productCard";
 import { useEffect, useState, useRef } from "react";
 import { Delete } from "../C-D";
 import { createApiService } from "@/lib/api-factory";
+import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 
 interface ProductsRowProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -19,13 +20,25 @@ const ScrollContainer = styled.div<{
   $data: ProductRowSection;
 }>`
   position: relative;
-  width: 100%;
-  padding-top: ${(props) => props.$data.setting?.paddingTop || "20"}px;
-  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20"}px;
-  margin-top: ${(props) => props.$data.setting?.marginTop || "20"}px;
-  margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20"}px;
+  max-width: 100%;
+  margin-top: ${(props) => props.$data.setting.marginTop || "30"}px;
+  margin-bottom: ${(props) => props.$data.setting.marginBottom}px;
+  margin-right: ${(props) => props.$data.setting.marginRight}px;
+  margin-left: ${(props) => props.$data.setting.marginLeft}px;
+  padding-top: ${(props) => props.$data.setting.paddingTop}px;
+  padding-bottom: ${(props) => props.$data.setting.paddingBottom}px;
+  padding-left: ${(props) => props.$data.setting.paddingLeft}px;
+  padding-right: ${(props) => props.$data.setting.paddingRight}px;
+  height: ${(props) => props.$data.blocks.setting.height || 200}px;
   background-color: ${(props) =>
     props.$data.setting?.backgroundColor || "#ffffff"};
+  border-radius: ${(props) => props.$data.blocks?.setting?.Radius || "5"}px;
+  box-shadow: ${(props) =>
+    `${props.$data.blocks.setting?.shadowOffsetX || 0}px 
+     ${props.$data.blocks.setting?.shadowOffsetY || 4}px 
+     ${props.$data.blocks.setting?.shadowBlur || 10}px 
+     ${props.$data.blocks.setting?.shadowSpread || 0}px 
+     ${props.$data.blocks.setting?.shadowColor || "#fff"}`};
 `;
 
 const ProductsRowSection = styled.section<{
@@ -62,27 +75,29 @@ const Heading = styled.h2<{
 }>`
   color: ${(props) => props.$data.blocks?.setting?.headingColor || "#000000"};
   font-size: ${(props) =>
-    props.$isMobile
-      ? "24px"
-      : `${props.$data.blocks?.setting?.headingFontSize || "32"}px`};
+    `${props.$data.blocks?.setting?.headingFontSize || "32"}px`};
   font-weight: ${(props) =>
     props.$data.blocks?.setting?.headingFontWeight || "bold"};
   text-align: right;
   margin-bottom: 20px;
+  padding-top: 5px;
+  border-bottom: 1px solid
+    ${(props) => props.$data.blocks?.setting?.headingColor || "#000000"};
 `;
 
 const ScrollButton = styled.button<{
   $data: ProductRowSection;
-  $position: 'left' | 'right';
+  $position: "left" | "right";
 }>`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   ${(props) => props.$position}: 10px;
-  background: #ffffff;
-  color: ${(props) => props.$data.blocks?.setting?.btnTextColor || "#000000"};
+  background-color: ${(props) =>
+    props.$data.blocks?.setting?.btnBackgroundColor || "#fff"};
+  color: ${(props) => props.$data.blocks?.setting?.btnColor || "#000"};
   border: none;
-  border-radius: 50%;
+  border-radius: ${(props) => props.$data.blocks?.setting?.btnRadius || "5"}px;
   width: 40px;
   height: 40px;
   display: flex;
@@ -100,16 +115,18 @@ const ScrollButton = styled.button<{
   /* Apply navigation button animations */
   ${(props) => {
     const navAnimation = props.$data.blocks?.setting?.navAnimation;
-    if (!navAnimation) return '';
-    
+    if (!navAnimation) return "";
+
     const { type, animation: animConfig } = navAnimation;
-    const selector = type === 'hover' ? '&:hover' : '&:active';
-    
+    const selector = type === "hover" ? "&:hover" : "&:active";
+
     // Generate animation CSS based on type
-    if (animConfig.type === 'pulse') {
+    if (animConfig.type === "pulse") {
       return `
         ${selector} {
-          animation: productRowNavPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: productRowNavPulse ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes productRowNavPulse {
@@ -123,10 +140,12 @@ const ScrollButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'glow') {
+    } else if (animConfig.type === "glow") {
       return `
         ${selector} {
-          animation: productRowNavGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: productRowNavGlow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes productRowNavGlow {
@@ -138,10 +157,12 @@ const ScrollButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'brightness') {
+    } else if (animConfig.type === "brightness") {
       return `
         ${selector} {
-          animation: productRowNavBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: productRowNavBrightness ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes productRowNavBrightness {
@@ -153,10 +174,12 @@ const ScrollButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'blur') {
+    } else if (animConfig.type === "blur") {
       return `
         ${selector} {
-          animation: productRowNavBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: productRowNavBlur ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes productRowNavBlur {
@@ -168,10 +191,12 @@ const ScrollButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'saturate') {
+    } else if (animConfig.type === "saturate") {
       return `
         ${selector} {
-          animation: productRowNavSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: productRowNavSaturate ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes productRowNavSaturate {
@@ -183,10 +208,12 @@ const ScrollButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'contrast') {
+    } else if (animConfig.type === "contrast") {
       return `
         ${selector} {
-          animation: productRowNavContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: productRowNavContrast ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes productRowNavContrast {
@@ -198,10 +225,12 @@ const ScrollButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'opacity') {
+    } else if (animConfig.type === "opacity") {
       return `
         ${selector} {
-          animation: productRowNavOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: productRowNavOpacity ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes productRowNavOpacity {
@@ -216,10 +245,12 @@ const ScrollButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'shadow') {
+    } else if (animConfig.type === "shadow") {
       return `
         ${selector} {
-          animation: productRowNavShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: productRowNavShadow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes productRowNavShadow {
@@ -232,8 +263,8 @@ const ScrollButton = styled.button<{
         }
       `;
     }
-    
-    return '';
+
+    return "";
   }}
 `;
 
@@ -254,19 +285,19 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
   ) as ProductRowSection;
 
   const api = createApiService({
-    baseUrl: '/api',
+    baseUrl: "/api",
     headers: {
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json",
+    },
   });
 
   const collectionId = sectionData?.blocks?.setting?.selectedCollection;
   const { data: collectionsData, error: collectionsError } = api.useGet(
-    collectionId ? '/collections/id' : null,
+    collectionId ? "/collections/id" : null,
     {
       headers: { collectionId },
       revalidateOnFocus: false,
-      refreshInterval: 60000
+      refreshInterval: 60000,
     }
   );
 
@@ -286,8 +317,6 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [previewWidth]);
-
-
 
   // Now place your conditional returns
   if (!layout || !layout.sections || !sectionData) return null;
@@ -316,67 +345,6 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
             : ""
         }`}
       >
-        {actualName === selectedComponent && (
-          <div className="absolute w-fit -top-5 -left-1 z-10 flex">
-            <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
-              {actualName}
-            </div>
-            <button
-              className="font-extrabold text-xl hover:bg-blue-500 bg-red-500 pb-1 rounded-r-lg px-3 text-white transform transition-all ease-in-out duration-300"
-              onClick={() => setShowDeleteModal(true)}
-            >
-              x
-            </button>
-          </div>
-        )}
-
-        <Heading
-          $data={sectionData}
-          $isMobile={preview === "sm"}
-          className="border-b-2 border-red-500 w-fit ml-auto mr-3 text-center"
-        >
-          {sectionData.blocks?.textHeading}
-        </Heading>
-
-        <ProductsRowSection
-          ref={containerRef}
-          $data={sectionData}
-          $isMobile={preview === "sm"}
-        >
-          {collectionProducts.length > 0 ? (
-            collectionProducts.map((product, idx) => (
-              <ProductCard key={idx} productData={product} />
-            ))
-          ) : (
-            <div className="flex flex-row items-center justify-start lg:justify-end w-full">
-              <span className="text-gray-500 text-xl justify-center text-center w-full flex lg:gap-5">
-                لطفا یک مجموعه را انتخاب کنید
-              </span>
-            </div>
-          )}
-        </ProductsRowSection>
-
-        {/* Navigation Buttons with Animation */}
-        <ScrollButton
-          $data={sectionData}
-          $position="left"
-          onClick={() => handleScroll("left")}
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="#00000">
-            <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
-          </svg>
-        </ScrollButton>
-
-        <ScrollButton
-          $data={sectionData}
-          $position="right"
-          onClick={() => handleScroll("right")}
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="#00000">
-            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
-          </svg>
-        </ScrollButton>
-
         {showDeleteModal && (
           <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center">
             <div className="bg-white p-8 rounded-lg">
@@ -407,6 +375,63 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
             </div>
           </div>
         )}
+        {actualName === selectedComponent && (
+          <div className="absolute w-fit -top-5 -left-1 z-10 flex">
+            <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
+              {actualName}
+            </div>
+            <button
+              className="font-extrabold text-xl hover:bg-blue-500 bg-red-500 pb-1 rounded-r-lg px-3 text-white transform transition-all ease-in-out duration-300"
+              onClick={() => setShowDeleteModal(true)}
+            >
+              x
+            </button>
+          </div>
+        )}
+
+        <Heading
+          dir="rtl"
+          $data={sectionData}
+          $isMobile={preview === "sm"}
+          className="w-fit ml-auto mr-3 text-center"
+        >
+          {sectionData.blocks?.textHeading}
+        </Heading>
+
+        <ProductsRowSection
+          ref={containerRef}
+          $data={sectionData}
+          $isMobile={preview === "sm"}
+        >
+          {collectionProducts.length > 0 ? (
+            collectionProducts.map((product: any, idx: number) => (
+              <ProductCard key={idx} productData={product} />
+            ))
+          ) : (
+            <div className="flex flex-row items-center justify-start lg:justify-end w-full">
+              <span className="text-gray-500 text-xl justify-center text-center w-full flex lg:gap-5">
+                لطفا یک مجموعه را انتخاب کنید
+              </span>
+            </div>
+          )}
+        </ProductsRowSection>
+
+        {/* Navigation Buttons with Animation */}
+        <ScrollButton
+          $data={sectionData}
+          $position="left"
+          onClick={() => handleScroll("left")}
+        >
+          <BiChevronLeft size={24} />
+        </ScrollButton>
+
+        <ScrollButton
+          $data={sectionData}
+          $position="right"
+          onClick={() => handleScroll("right")}
+        >
+          <BiChevronRight size={24} />
+        </ScrollButton>
       </ScrollContainer>
     </div>
   );

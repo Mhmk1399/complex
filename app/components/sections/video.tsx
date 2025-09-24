@@ -142,12 +142,12 @@ const Video: React.FC<VideoProps> = ({
       )}
 
       {blocks.heading && (
-        <Heading $data={sectionData} $previewWidth={previewWidth}>
+        <Heading dir="rtl" $data={sectionData} $previewWidth={previewWidth}>
           {blocks.heading}
         </Heading>
       )}
       {blocks.descrption && (
-        <Desciption $data={sectionData} $previewWidth={previewWidth}>
+        <Desciption  $data={sectionData} $previewWidth={previewWidth}>
           {blocks.descrption}
         </Desciption>
       )}

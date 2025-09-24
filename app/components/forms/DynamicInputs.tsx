@@ -33,6 +33,16 @@ interface DynamicCheckboxInputProps {
   className?: string;
   disabled?: boolean;
 }
+interface DynamicNumberInputProps {
+  label: string;
+  name: string;
+  value: number | string;
+  min?: number;
+  max?: number;
+  step?: number;
+  className?: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
 
 export const DynamicRangeInput: React.FC<DynamicRangeInputProps> = ({
   label,
@@ -368,5 +378,40 @@ export const DynamicCheckboxInput: React.FC<DynamicCheckboxInputProps> = ({
       />
       <span className="text-sm font-medium text-gray-800">{label}</span>
     </label>
+  );
+};
+export const DynamicNumberInput: React.FC<DynamicNumberInputProps> = ({
+  label,
+  name,
+  value,
+  min = 0,
+  max = 100,
+  step = 1,
+  className = "",
+  onChange,
+}) => {
+  return (
+    <div className={`mb-2 w-full ${className}`}>
+      <label
+        htmlFor={name}
+        className="block text-sm font-semibold text-gray-800 mb-2 tracking-wide"
+      >
+        {label}
+      </label>
+      <input
+        type="number"
+        id={name}
+        name={name}
+        value={value}
+        min={min}
+        max={max}
+        step={step}
+        onChange={onChange}
+        className="w-full px-3 py-2 rounded-lg border-2 border-gray-300 
+          bg-white text-gray-800 text-sm font-medium
+          focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200
+          hover:border-indigo-200 hover:shadow-sm transition-all duration-300 ease-in-out"
+      />
+    </div>
   );
 };

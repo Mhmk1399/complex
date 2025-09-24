@@ -60,7 +60,7 @@ const Description = styled.p<{
   font-weight: ${(props) =>
     props.$data.blocks?.setting?.descriptionFontWeight || "bold"};
   text-align: center;
-  padding:0 20px;
+  padding: 0 20px;
 `;
 
 const BrandsGrid = styled.div<{
@@ -351,10 +351,10 @@ export const Brands: React.FC<BrandsProps> = ({
         </div>
       )}
 
-      <Heading $data={sectionData} $isMobile={preview === "sm"}>
+      <Heading dir="rtl" $data={sectionData} $isMobile={preview === "sm"}>
         {sectionData.blocks?.heading}
       </Heading>
-      <Description $data={sectionData} $isMobile={preview === "sm"}>
+      <Description dir="rtl" $data={sectionData} $isMobile={preview === "sm"}>
         {sectionData.blocks?.description}
       </Description>
 

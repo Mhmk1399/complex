@@ -769,6 +769,7 @@ const SlideShow: React.FC<SlideShowProps> = ({
               />
               <SlideTextBox>
                 <SlideHeading
+                  dir="rtl"
                   $preview={preview}
                   $data={sectionData.setting}
                   $previewWidth={previewWidth}
@@ -776,6 +777,7 @@ const SlideShow: React.FC<SlideShowProps> = ({
                   {slide.text}
                 </SlideHeading>
                 <SlideDescription
+                  dir="rtl"
                   $preview={preview}
                   $data={sectionData.setting}
                   $previewWidth={previewWidth}

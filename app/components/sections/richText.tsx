@@ -341,7 +341,12 @@ const RichText: React.FC<RichTextProps> = ({
       ) : null}
 
       {textHeading && (
-        <H1 $data={blocks} $previewWidth={previewWidth} $preview={preview}>
+        <H1
+          dir="rtl"
+          $data={blocks}
+          $previewWidth={previewWidth}
+          $preview={preview}
+        >
           {textHeading}
         </H1>
       )}
@@ -354,7 +359,12 @@ const RichText: React.FC<RichTextProps> = ({
       />
 
       {description && (
-        <P $previewWidth={previewWidth} $data={blocks} $preview={preview}>
+        <P
+          dir="rtl"
+          $previewWidth={previewWidth}
+          $data={blocks}
+          $preview={preview}
+        >
           {description}
         </P>
       )}

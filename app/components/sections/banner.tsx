@@ -361,6 +361,7 @@ const Banner: React.FC<props> = ({
         $preview={preview}
       >
         <HeadingText
+          dir="rtl"
           $data={sectionData}
           $previewWidth={previewWidth}
           $preview={preview}
@@ -368,6 +369,7 @@ const Banner: React.FC<props> = ({
           {text || "سربرگ بنر"}
         </HeadingText>
         <DescriptionText
+          dir="rtl"
           $data={sectionData}
           $previewWidth={previewWidth}
           $preview={preview}
