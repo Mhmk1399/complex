@@ -17,18 +17,26 @@ const Section = styled.section<{
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
-  padding-top: ${(props) => props.$data.setting?.paddingTop || "20"}px;
-  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "20"}px;
-  paddding-left: ${(props) => props.$data.setting?.paddingLeft || "0"}px;
-  padding-right: ${(props) => props.$data.setting?.paddingRight || "0"}px;
-  margin-top: ${(props) => props.$data.setting?.marginTop || "20"}px;
-  margin-bottom: ${(props) => props.$data.setting?.marginBottom || "20"}px;
+  max-width: 100%;
+  margin-top: ${(props) => props.$data.setting.marginTop || "30"}px;
+  margin-bottom: ${(props) => props.$data.setting.marginBottom}px;
+  margin-right: ${(props) => props.$data.setting.marginRight}px;
+  margin-left: ${(props) => props.$data.setting.marginLeft}px;
+  padding-top: ${(props) => props.$data.setting.paddingTop}px;
+  padding-bottom: ${(props) => props.$data.setting.paddingBottom}px;
+  padding-left: ${(props) => props.$data.setting.paddingLeft}px;
+  padding-right: ${(props) => props.$data.setting.paddingRight}px;
   background-color: ${(props) =>
     props.$data.setting?.backgroundColorMultiRow || "#ffffff"};
-  width: ${(props) => (props.$preview === "sm" ? "auto" : "100%")};
-  border-radius: 12px;
+  border-radius: ${(props) => props.$data.setting.formRadius || "5"}px;
   display: flex;
   flex-direction: column;
+  box-shadow: ${(props) =>
+    `${props.$data.setting?.shadowOffsetX || 0}px 
+     ${props.$data.setting?.shadowOffsetY || 4}px 
+     ${props.$data.setting?.shadowBlur || 10}px 
+     ${props.$data.setting?.shadowSpread || 0}px 
+     ${props.$data.setting?.shadowColor || "#fff"}`};
 `;
 
 const RowContainer = styled.div<{
@@ -55,7 +63,7 @@ const Row = styled.div<{
   padding: ${(props) => (props.$preview === "sm" ? "15px" : "30px")};
   background-color: ${(props) =>
     props.$data.setting?.backgroundColorBox || "#f9f9f9"};
-  border-radius: 18px;
+  border-radius: ${(props) => props.$data.setting.rowRadius || "0"}px;
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
@@ -82,33 +90,33 @@ const Image = styled.img<{
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
-  width: ${(props) =>
-    props.$preview === "sm" ? "100%" : props.$data.setting?.imageWidth}px;
-  height: ${(props) =>
-    props.$preview === "sm" ? "200px" : props.$data.setting?.imageHeight}px;
+  width: ${(props) => props.$data.setting?.imageWidth}px;
+  height: ${(props) => props.$data.setting?.imageHeight}px;
   object-fit: cover;
+  max-width: 100%;
   border-radius: ${(props) => props.$data.setting?.imageRadius || "8px"}px;
   transition: all 0.3s ease-in-out;
 
   &:hover {
     transform: scale(1.01);
-    opacity: 0.7;
     cursor: pointer;
   }
 
   /* Apply image animations */
   ${(props) => {
     const imageAnimation = props.$data.setting?.imageAnimation;
-    if (!imageAnimation) return '';
-    
+    if (!imageAnimation) return "";
+
     const { type, animation: animConfig } = imageAnimation;
-    const selector = type === 'hover' ? '&:hover' : '&:active';
-    
+    const selector = type === "hover" ? "&:hover" : "&:active";
+
     // Generate animation CSS based on type
-    if (animConfig.type === 'pulse') {
+    if (animConfig.type === "pulse") {
       return `
         ${selector} {
-          animation: multiRowImagePulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiRowImagePulse ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes multiRowImagePulse {
@@ -122,10 +130,12 @@ const Image = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'glow') {
+    } else if (animConfig.type === "glow") {
       return `
         ${selector} {
-          animation: multiRowImageGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiRowImageGlow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes multiRowImageGlow {
@@ -137,10 +147,12 @@ const Image = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'brightness') {
+    } else if (animConfig.type === "brightness") {
       return `
         ${selector} {
-          animation: multiRowImageBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiRowImageBrightness ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes multiRowImageBrightness {
@@ -152,10 +164,12 @@ const Image = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'blur') {
+    } else if (animConfig.type === "blur") {
       return `
         ${selector} {
-          animation: multiRowImageBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiRowImageBlur ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes multiRowImageBlur {
@@ -167,10 +181,12 @@ const Image = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'saturate') {
+    } else if (animConfig.type === "saturate") {
       return `
         ${selector} {
-          animation: multiRowImageSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiRowImageSaturate ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes multiRowImageSaturate {
@@ -182,10 +198,12 @@ const Image = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'contrast') {
+    } else if (animConfig.type === "contrast") {
       return `
         ${selector} {
-          animation: multiRowImageContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiRowImageContrast ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes multiRowImageContrast {
@@ -197,10 +215,12 @@ const Image = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'opacity') {
+    } else if (animConfig.type === "opacity") {
       return `
         ${selector} {
-          animation: multiRowImageOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiRowImageOpacity ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes multiRowImageOpacity {
@@ -215,10 +235,12 @@ const Image = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'shadow') {
+    } else if (animConfig.type === "shadow") {
       return `
         ${selector} {
-          animation: multiRowImageShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiRowImageShadow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes multiRowImageShadow {
@@ -231,8 +253,8 @@ const Image = styled.img<{
         }
       `;
     }
-    
-    return '';
+
+    return "";
   }}
 `;
 
@@ -241,10 +263,7 @@ const Title = styled.h2<{
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
-  font-size: ${(props) =>
-    props.$preview === "sm"
-      ? "24"
-      : props.$data.setting?.titleFontSize || "24"}px;
+  font-size: ${(props) => props.$data.setting?.titleFontSize || "24"}px;
   font-weight: ${(props) => props.$data.setting?.titleFontWeight || "bold"};
   color: ${(props) => props.$data?.setting?.titleColor || "#ffffff"};
   text-align: center;
@@ -257,16 +276,9 @@ const Heading = styled.h2<{
   $preview: "sm" | "default";
 }>`
   color: ${(props) => props.$data.setting?.headingColor || "#333"};
-  font-size: ${(props) =>
-    props.$preview === "sm"
-      ? "22"
-      : props.$data.setting?.headingFontSize || "24"}px;
+  font-size: ${(props) => props.$data.setting?.headingFontSize || "24"}px;
   font-weight: ${(props) => props.$data.setting?.headingFontWeight || "bold"};
   text-align: center;
-  @media (max-width: 768px) {
-    font-size: 24px;
-    margin-top: 10px;
-  }
 `;
 
 const Description = styled.p<{
@@ -274,10 +286,7 @@ const Description = styled.p<{
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
-  font-size: ${(props) =>
-    props.$preview === "sm"
-      ? "14"
-      : props.$data.setting?.descriptionFontSize || "16"}px;
+  font-size: ${(props) => props.$data.setting?.descriptionFontSize || "16"}px;
   font-weight: ${(props) =>
     props.$data?.setting?.descriptionFontWeight || "normal"};
   color: ${(props) => props.$data.setting?.descriptionColor || "#666"};
@@ -291,11 +300,12 @@ const Button = styled.a<{
   $preview: "sm" | "default";
 }>`
   padding: ${(props) => (props.$preview === "sm" ? "8px 20px" : "10px 30px")};
-  font-size: ${(props) => (props.$preview === "sm" ? "14px" : "16px")};
   background-color: ${(props) =>
     props.$data.setting?.btnBackgroundColor || "#007BFF"};
   color: ${(props) => props.$data.setting?.btnColor || "#fff"};
-  border-radius: 5px;
+  border-radius: ${(props) => props.$data.setting.btnRadius || "5"}px;
+  width: ${(props) => props.$data.setting.btnWidth || "5"}px;
+  max-width: 100%;
   text-align: center;
   transition: opacity 0.3s ease;
 
@@ -306,16 +316,18 @@ const Button = styled.a<{
   /* Apply button animations */
   ${(props) => {
     const buttonAnimation = props.$data.setting?.buttonAnimation;
-    if (!buttonAnimation) return '';
-    
+    if (!buttonAnimation) return "";
+
     const { type, animation: animConfig } = buttonAnimation;
-    const selector = type === 'hover' ? '&:hover' : '&:active';
-    
+    const selector = type === "hover" ? "&:hover" : "&:active";
+
     // Generate animation CSS based on type
-    if (animConfig.type === 'pulse') {
+    if (animConfig.type === "pulse") {
       return `
         ${selector} {
-          animation: multiRowButtonPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiRowButtonPulse ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes multiRowButtonPulse {
@@ -329,10 +341,12 @@ const Button = styled.a<{
           }
         }
       `;
-    } else if (animConfig.type === 'glow') {
+    } else if (animConfig.type === "glow") {
       return `
         ${selector} {
-          animation: multiRowButtonGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiRowButtonGlow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes multiRowButtonGlow {
@@ -344,10 +358,12 @@ const Button = styled.a<{
           }
         }
       `;
-    } else if (animConfig.type === 'brightness') {
+    } else if (animConfig.type === "brightness") {
       return `
         ${selector} {
-          animation: multiRowButtonBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiRowButtonBrightness ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes multiRowButtonBrightness {
@@ -359,10 +375,12 @@ const Button = styled.a<{
           }
         }
       `;
-    } else if (animConfig.type === 'blur') {
+    } else if (animConfig.type === "blur") {
       return `
         ${selector} {
-          animation: multiRowButtonBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiRowButtonBlur ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes multiRowButtonBlur {
@@ -374,10 +392,12 @@ const Button = styled.a<{
           }
         }
       `;
-    } else if (animConfig.type === 'saturate') {
+    } else if (animConfig.type === "saturate") {
       return `
         ${selector} {
-          animation: multiRowButtonSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiRowButtonSaturate ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes multiRowButtonSaturate {
@@ -389,10 +409,12 @@ const Button = styled.a<{
           }
         }
       `;
-    } else if (animConfig.type === 'contrast') {
+    } else if (animConfig.type === "contrast") {
       return `
         ${selector} {
-          animation: multiRowButtonContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiRowButtonContrast ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes multiRowButtonContrast {
@@ -404,10 +426,12 @@ const Button = styled.a<{
           }
         }
       `;
-    } else if (animConfig.type === 'opacity') {
+    } else if (animConfig.type === "opacity") {
       return `
         ${selector} {
-          animation: multiRowButtonOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiRowButtonOpacity ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes multiRowButtonOpacity {
@@ -422,10 +446,12 @@ const Button = styled.a<{
           }
         }
       `;
-    } else if (animConfig.type === 'shadow') {
+    } else if (animConfig.type === "shadow") {
       return `
         ${selector} {
-          animation: multiRowButtonShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiRowButtonShadow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes multiRowButtonShadow {
@@ -438,8 +464,8 @@ const Button = styled.a<{
         }
       `;
     }
-    
-    return '';
+
+    return "";
   }}
 `;
 
@@ -524,6 +550,7 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
         </div>
       ) : null}
       <Title
+        dir="rtl"
         $data={sectionData}
         $previewWidth={previewWidth}
         $preview={preview}
@@ -573,11 +600,13 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
                   $previewWidth={previewWidth}
                   $data={sectionData}
                   $preview={preview}
+                  dir="rtl"
                 >
                   {block.heading}
                 </Heading>
                 <Description
                   $preview={preview}
+                  dir="rtl"
                   $data={sectionData}
                   $previewWidth={previewWidth}
                 >
@@ -589,7 +618,7 @@ const MultiRow: React.FC<MultiRowShowProps> = ({
                   $data={sectionData}
                   $previewWidth={previewWidth}
                 >
-                  {block.btnLable || "Learn More"}
+                  {block.btnLable || "بیشتر"}
                 </Button>
               </ContentWrapper>
             </Row>

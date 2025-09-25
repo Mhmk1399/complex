@@ -11,7 +11,12 @@ import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
 import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
-import { HiChevronDown, HiSparkles } from "react-icons/hi";
+import { HiChevronDown, HiSparkles, HiTrash, HiPlus } from "react-icons/hi";
+import {
+  ColorInput,
+  DynamicRangeInput,
+  DynamicSelectInput,
+} from "./DynamicInputs";
 interface BoxValues {
   top: number;
   bottom: number;
@@ -25,32 +30,6 @@ interface CollapseFormProps {
   layout: Layout;
   selectedComponent: string;
 }
-
-const ColorInput = ({
-  label,
-  name,
-  value,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <>
-    <label className="block mb-1">{label}</label>
-    <div className="flex flex-col rounded-md gap-3 items-center">
-      <input
-        type="color"
-        id={name}
-        name={name}
-        value={value || "#000000"}
-        onChange={onChange}
-        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
-      />
-    </div>
-  </>
-);
 
 export const CollapseForm: React.FC<CollapseFormProps> = ({
   setUserInputData,
@@ -91,6 +70,8 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
           ...prev.setting,
           marginTop: updatedValues.top.toString(),
           marginBottom: updatedValues.bottom.toString(),
+          marginLeft: updatedValues.left.toString(),
+          marginRight: updatedValues.right.toString(),
         },
       }));
     } else {
@@ -155,6 +136,14 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
   };
 
   const handleDeleteBlock = (index: number) => {
+    // Prevent deleting if only one block remains
+    const safeBlocks = Array.isArray(userInputData?.blocks)
+      ? userInputData.blocks
+      : [];
+    if (safeBlocks.length <= 1) {
+      return;
+    }
+
     setUserInputData((prev: CollapseSection) => {
       // Remove the block at the specified index
       const safeBlocks = Array.isArray(prev.blocks) ? prev.blocks : [];
@@ -253,13 +242,13 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
       };
     });
 
-    // Close  open accordions that might be out of range
+    // Clean up open accordions that might be out of range
     setOpenAccordions((prev) => {
       const updated = { ...prev };
       // Remove accordion states for indices that no longer exist
       Object.keys(updated).forEach((key) => {
         const idx = parseInt(key);
-        if (idx >= userInputData.blocks.length - 1) {
+        if (idx >= (userInputData?.blocks?.length || 0) - 1) {
           delete updated[idx];
         }
       });
@@ -448,16 +437,17 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
 
   return (
     <>
-      <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+      <div className="p-2 max-w-4xl space-y-2 rounded" dir="rtl">
         <h2 className="text-lg font-bold mb-4">تنظیمات آکاردئون</h2>
 
         {/* Tabs */}
         <TabButtons onTabChange={handleTabChange} />
-
+        {/* content Settings */}
         {isContentOpen && (
-          <div className="p-4 ">
-            <div className=" rounded-lg">
-              <label htmlFor="" className="block mb-2 font-bold">
+          <div className="p-2 animate-slideDown">
+            {/* Main Heading Section */}
+            <div className="mb-6   rounded-xl  ">
+              <label className="  mb-3 font-bold text-gray-800 flex items-center gap-2">
                 متن سربرگ
               </label>
               <input
@@ -466,148 +456,314 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                 onChange={(e) =>
                   handleBlockChange(0, "heading", e.target.value)
                 }
-                className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm"
+                placeholder="عنوان اصلی بخش را وارد کنید"
               />
             </div>
-            <br />
-            {Array.isArray(userInputData?.blocks) &&
-              userInputData.blocks.map((block, index) => {
-                return (
-                  <div
-                    key={index}
-                    className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100"
-                  >
-                    {/* Accordion Header Button */}
-                    <button
-                      onClick={() =>
-                        setOpenAccordions((prev) => ({
-                          ...prev,
-                          [index]: !prev[index],
-                        }))
-                      }
-                      className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
+
+            {/* Add New Block Button */}
+            <div className="mb-6">
+              <button
+                onClick={handleAddBlock}
+                className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg w-full justify-center"
+              >
+                <HiPlus className="w-5 h-5" />
+                افزودن آکاردئون جدید
+              </button>
+            </div>
+
+            {/* Accordions Section Header */}
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                <svg
+                  className="w-5 h-5 text-gray-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 10h16M4 14h16M4 18h16"
+                  />
+                </svg>
+                آکاردئون‌ها
+              </h3>
+              <span className="text-sm font-normal text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                {Array.isArray(userInputData?.blocks)
+                  ? userInputData.blocks.length
+                  : 0}{" "}
+                آیتم
+              </span>
+            </div>
+
+            {/* Accordions List */}
+            <div className="space-y-4">
+              {Array.isArray(userInputData?.blocks) &&
+                userInputData.blocks.map((block, index) => {
+                  const totalBlocks = userInputData.blocks?.length || 0;
+
+                  return (
+                    <div
+                      key={index}
+                      className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200"
                     >
-                      <div className="flex items-center justify-center gap-2">
-                        <h3 className="font-semibold text-gray-700">
-                          آکاردئون {index + 1}
-                        </h3>
-                        <div className="flex items-center gap-2 mr-12">
-                          <span
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDeleteBlock(index);
-                            }}
-                            className="p-1 hover:bg-red-100 rounded-full cursor-pointer"
+                      {/* Accordion Header */}
+                      <div className="flex justify-between items-center p-1 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+                        <button
+                          onClick={() =>
+                            setOpenAccordions((prev) => ({
+                              ...prev,
+                              [index]: !prev[index],
+                            }))
+                          }
+                          className="flex items-center gap-3 flex-1 text-left hover:bg-white/50 p-2 rounded-lg transition-colors"
+                        >
+                          <div>
+                            <p className="text-sm text-gray-500 truncate max-w-xs">
+                              {String(
+                                block[
+                                  `text${index + 1}` as keyof typeof block
+                                ] || "بدون عنوان"
+                              )}
+                            </p>
+                          </div>
+                          <svg
+                            className={`w-5 h-5 text-gray-400 transition-transform duration-200 mr-auto ${
+                              openAccordions[index] ? "rotate-180" : ""
+                            }`}
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
                           >
-                            <svg
-                              className="w-5 h-5 text-red-500"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 9l-7 7-7-7"
+                            />
+                          </svg>
+                        </button>
+
+                        {/* Delete Button - Only show if more than 1 block */}
+                        <div className="flex items-center gap-2">
+                          {totalBlocks > 1 ? (
+                            <button
+                              onClick={() => handleDeleteBlock(index)}
+                              className="flex items-center gap-1 text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-2 rounded-lg transition-colors duration-200"
+                              title="حذف آکاردئون"
                             >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                              />
-                            </svg>
-                          </span>
+                              <HiTrash className="w-4 h-4" />
+                            </button>
+                          ) : (
+                            <span className="text-xs text-red-500 bg-gray-100 px-3 py-2 rounded-lg">
+                              غیر قابل
+                            </span>
+                          )}
                         </div>
                       </div>
-                      <svg
-                        className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-                          openAccordions[index] ? "rotate-180" : ""
-                        }`}
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    </button>
 
-                    {/* Accordion Content */}
-                    {openAccordions[index] && (
-                      <div className=" border-b border-gray-100 space-y-4">
-                        {/* Title Input */}
-                        <div className="  rounded-lg">
-                          <label className="block mb-2 text-sm font-bold text-gray-700">
-                            عنوان
-                          </label>
-                          <input
-                            type="text"
-                            value={String(
-                              block[`text${index + 1}` as keyof typeof block] ||
-                                ""
-                            )}
-                            onChange={(e) =>
-                              handleBlockChange(
-                                index,
-                                `text${index + 1}`,
-                                e.target.value
-                              )
-                            }
-                            className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                          />
-                        </div>
+                      {/* Accordion Content */}
+                      {openAccordions[index] && (
+                        <div className="p-6 animate-slideDown">
+                          <div className="space-y-6">
+                            {/* Title Input */}
+                            <div className="space-y-2">
+                              <label className="block text-sm font-semibold text-gray-700">
+                                عنوان آکاردئون
+                              </label>
+                              <input
+                                type="text"
+                                value={String(
+                                  block[
+                                    `text${index + 1}` as keyof typeof block
+                                  ] || ""
+                                )}
+                                onChange={(e) =>
+                                  handleBlockChange(
+                                    index,
+                                    `text${index + 1}`,
+                                    e.target.value
+                                  )
+                                }
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                placeholder="عنوان این آکاردئون را وارد کنید"
+                              />
+                            </div>
 
-                        {/* Content Textarea */}
-                        <div className="p-3  rounded-lg">
-                          <label className="block mb-2 text-sm font-bold text-gray-700">
-                            محتوا
-                          </label>
-                          <textarea
-                            value={String(
-                              block[
-                                `content${index + 1}` as keyof typeof block
-                              ] || ""
-                            )}
-                            onChange={(e) =>
-                              handleBlockChange(
-                                index,
-                                `content${index + 1}`,
-                                e.target.value
-                              )
-                            }
-                            className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                            rows={3}
-                          />
-                        </div>
-
-                        {/* Color Settings */}
-                        <div className=" rounded-lg space-y-4">
-                          <div className="rounded-lg flex items-center justify-between ">
-                            <ColorInput
-                              label={`رنگ عنوان ${index + 1}`}
-                              name={`textColor${index + 1}`}
-                              value={String(
-                                userInputData?.blocks?.[index]?.setting?.[
-                                  `textColor${
-                                    index + 1
-                                  }` as keyof CollapseBlockSetting
-                                ] ?? "#000000"
-                              )}
-                              onChange={(e) =>
-                                handleBlockSettingChange(
-                                  index,
-                                  `textColor${index + 1}`,
-                                  e.target.value
-                                )
-                              }
-                            />
+                            {/* Content Textarea */}
+                            <div className="space-y-2">
+                              <label className="block text-sm font-semibold text-gray-700">
+                                محتوای آکاردئون
+                              </label>
+                              <textarea
+                                value={String(
+                                  block[
+                                    `content${index + 1}` as keyof typeof block
+                                  ] || ""
+                                )}
+                                onChange={(e) =>
+                                  handleBlockChange(
+                                    index,
+                                    `content${index + 1}`,
+                                    e.target.value
+                                  )
+                                }
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                rows={4}
+                                placeholder="محتوای تفصیلی این آکاردئون را وارد کنید"
+                              />
+                            </div>
                           </div>
-                          <br />
-                          <label>سایز عنوان {index + 1}</label>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+            </div>
 
-                          <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-                            <input
-                              type="range"
+            {/* Empty State */}
+            {(!userInputData?.blocks || userInputData.blocks.length === 0) && (
+              <div className="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
+                <div className="text-gray-400 mb-4">
+                  <svg
+                    className="w-16 h-16 mx-auto"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1}
+                      d="M4 6h16M4 10h16M4 14h16M4 18h16"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-medium text-gray-700 mb-2">
+                  هیچ آکاردئونی اضافه نشده است
+                </h3>
+                <p className="text-gray-500 mb-6">
+                  برای شروع، اولین آکاردئون خود را اضافه کنید
+                </p>
+                <button
+                  onClick={handleAddBlock}
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors inline-flex items-center gap-2"
+                >
+                  <HiPlus className="w-5 h-5" />
+                  اولین آکاردئون را اضافه کنید
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Style Settings */}
+        {isStyleSettingsOpen && (
+          <div className="p-4 animate-slideDown">
+            <div className="space-y-6">
+              {/* Header Settings */}
+              <div>
+                <h4 className="font-semibold mb-2 text-sky-700">
+                  تنظیمات سربرگ
+                </h4>
+                <DynamicRangeInput
+                  label="سایز"
+                  name="headingFontSize"
+                  min="0"
+                  max="100"
+                  value={userInputData?.setting?.headingFontSize || "250"}
+                  onChange={handleSettingChange}
+                />{" "}
+                <DynamicSelectInput
+                  label="وزن"
+                  name="headingFontWeight"
+                  value={userInputData?.setting?.headingFontWeight ?? "normal"}
+                  options={[
+                    { value: "normal", label: "نرمال" },
+                    { value: "bold", label: "ضخیم" },
+                  ]}
+                  onChange={(e) =>
+                    handleSettingChange(
+                      e as unknown as React.ChangeEvent<HTMLInputElement>
+                    )
+                  }
+                />
+                <ColorInput
+                  label="رنگ سربرگ"
+                  name="headingColor"
+                  value={
+                    userInputData?.setting?.headingColor?.toString() ??
+                    "#333333"
+                  }
+                  onChange={handleSettingChange}
+                />
+              </div>
+              {/* background */}
+              <div>
+                <h4 className="font-semibold mb-2 text-sky-700">
+                  تنظیمات پس زمینه
+                </h4>
+                <DynamicRangeInput
+                  label="انحنا"
+                  name="formRadius"
+                  min="0"
+                  max="100"
+                  value={userInputData?.setting?.formRadius || "250"}
+                  onChange={handleSettingChange}
+                />{" "}
+                <ColorInput
+                  label="رنگ پس زمینه"
+                  name="background"
+                  value={
+                    userInputData?.setting?.background?.toString() ?? "#333333"
+                  }
+                  onChange={handleSettingChange}
+                />
+              </div>
+
+              {/* Individual Accordion Settings */}
+              <div className="space-y-4">
+                <h4 className="font-semibold text-sky-700 flex items-center gap-2">
+                  <svg
+                    className="w-5 h-5 font-semibold mb-2 text-sky-700"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"
+                    />
+                  </svg>
+                  تنظیمات هر آکاردئون
+                </h4>
+
+                {Array.isArray(userInputData?.blocks) &&
+                  userInputData.blocks.map((block, index) => (
+                    <div
+                      key={index}
+                      className="bg-white border border-blue-200 rounded-lg p-2 shadow-sm"
+                    >
+                      <div className="flex items-center gap-2 mb-4">
+                        <h5 className="font-bold text-gray-700">
+                          آکاردئون {index + 1}
+                        </h5>
+                      </div>
+
+                      <div className="grid md:grid-cols-1 gap-6">
+                        {/* Title Settings */}
+                        <div className="space-y-4">
+                          <h6 className="font-medium text-gray-600 border-b pb-2">
+                            تنظیمات عنوان
+                          </h6>
+
+                          <div className="rounded-lg flex flex-col items-center justify-between">
+                            <DynamicRangeInput
+                              label="سایز"
                               min="0"
                               max="100"
                               name={`textFontSize${index + 1}`}
@@ -625,48 +781,35 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                                   e.target.value
                                 )
                               }
-                            />
-                            <p className="text-sm text-gray-600 text-nowrap">
-                              {String(
+                            />{" "}
+                            <DynamicSelectInput
+                              label="وزن"
+                              options={[
+                                { value: "normal", label: "نرمال" },
+                                { value: "bold", label: "ضخیم" },
+                              ]}
+                              name={`textFontWeight${index + 1}`}
+                              value={
                                 userInputData?.blocks?.[index]?.setting?.[
-                                  `textFontSize${
+                                  `textFontWeight${
                                     index + 1
                                   }` as keyof CollapseBlockSetting
-                                ] ?? "16"
-                              )}
-                              px
-                            </p>
-                          </div>
-                          <br />
-                          <label>وزن عنوان {index + 1}</label>
-                          <select
-                            name={`textFontWeight${index + 1}`}
-                            value={
-                              userInputData?.blocks?.[index]?.setting?.[
-                                `textFontWeight${
-                                  index + 1
-                                }` as keyof CollapseBlockSetting
-                              ]?.toString() ?? "normal"
-                            }
-                            onChange={(e) =>
-                              handleBlockSettingChange(
-                                index,
-                                `textFontWeight${index + 1}`,
-                                e.target.value
-                              )
-                            }
-                            className="w-full p-2 border rounded"
-                          >
-                            <option value="light">نازک</option>
-                            <option value="bold">ضخیم</option>
-                          </select>
-                          <div className="rounded-lg flex items-center justify-between ">
+                                ]?.toString() ?? "normal"
+                              }
+                              onChange={(e) =>
+                                handleBlockSettingChange(
+                                  index,
+                                  `textFontWeight${index + 1}`,
+                                  e.target.value
+                                )
+                              }
+                            />
                             <ColorInput
-                              label={`رنگ محتوا ${index + 1}`}
-                              name={`contentColor${index + 1}`}
+                              label={`رنگ عنوان`}
+                              name={`textColor${index + 1}`}
                               value={String(
                                 userInputData?.blocks?.[index]?.setting?.[
-                                  `contentColor${
+                                  `textColor${
                                     index + 1
                                   }` as keyof CollapseBlockSetting
                                 ] ?? "#000000"
@@ -674,17 +817,23 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                               onChange={(e) =>
                                 handleBlockSettingChange(
                                   index,
-                                  `contentColor${index + 1}`,
+                                  `textColor${index + 1}`,
                                   e.target.value
                                 )
                               }
                             />
                           </div>
-                          <br />
-                          <label>سایز محتوا {index + 1}</label>
-                          <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-                            <input
-                              type="range"
+                        </div>
+
+                        {/* Content Settings */}
+                        <div className="space-y-4">
+                          <h6 className="font-medium text-gray-600 border-b pb-2">
+                            تنظیمات محتوا
+                          </h6>
+
+                          <div className="rounded-lg flex flex-col items-center justify-between">
+                            <DynamicRangeInput
+                              label="سایز"
                               min="0"
                               max="100"
                               name={`contentFontSize${index + 1}`}
@@ -702,121 +851,100 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
                                   e.target.value
                                 )
                               }
-                            />
-                            <p className="text-sm text-gray-600 text-nowrap">
-                              {String(
+                            />{" "}
+                            <DynamicSelectInput
+                              label="وزن"
+                              options={[
+                                { value: "normal", label: "نرمال" },
+                                { value: "bold", label: "ضخیم" },
+                              ]}
+                              name={`contentFontWeight${index + 1}`}
+                              value={
                                 userInputData?.blocks?.[index]?.setting?.[
-                                  `contentFontSize${
+                                  `contentFontWeight${
                                     index + 1
                                   }` as keyof CollapseBlockSetting
-                                ] ?? "14"
+                                ]?.toString() ?? "normal"
+                              }
+                              onChange={(e) =>
+                                handleBlockSettingChange(
+                                  index,
+                                  `contentFontWeight${index + 1}`,
+                                  e.target.value
+                                )
+                              }
+                            />
+                            <ColorInput
+                              label={`رنگ محتوا`}
+                              name={`contentColor${index + 1}`}
+                              value={String(
+                                userInputData?.blocks?.[index]?.setting?.[
+                                  `contentColor${
+                                    index + 1
+                                  }` as keyof CollapseBlockSetting
+                                ] ?? "#000000"
                               )}
-                              px
-                            </p>
+                              onChange={(e) =>
+                                handleBlockSettingChange(
+                                  index,
+                                  `contentColor${index + 1}`,
+                                  e.target.value
+                                )
+                              }
+                            />
                           </div>
-
-                          <br />
-                          <label>وزن محتوا {index + 1}</label>
-                          <select
-                            name={`contentFontWeight${index + 1}`}
-                            value={
-                              userInputData?.blocks?.[index]?.setting?.[
-                                `contentFontWeight${
-                                  index + 1
-                                }` as keyof CollapseBlockSetting
-                              ]?.toString() ?? "normal"
-                            }
-                            onChange={(e) =>
-                              handleBlockSettingChange(
-                                index,
-                                `contentFontWeight${index + 1}`,
-                                e.target.value
-                              )
-                            }
-                            className="w-full p-2 border rounded"
-                          >
-                            <option value="light">نازک</option>
-                            <option value="bold">ضخیم</option>
-                          </select>
                         </div>
                       </div>
-                    )}
-                  </div>
-                );
-              })}
-            {/* Add Block Button */}
-            <button
-              onClick={handleAddBlock}
-              className="px-1 rounded-lg mb-3 w-full text-3xl group hover:font-extrabold transition-all"
-            >
-              +
-              <div className="bg-blue-500 w-full pb-0.5 group-hover:bg-blue-600 group-hover:pb-1 transition-all"></div>
-            </button>
-          </div>
-        )}
-
-        {/* Style Settings */}
-        {isStyleSettingsOpen && (
-          <div className="p-4  animate-slideDown">
-            <div className="rounded-lg flex items-center justify-between ">
-              <ColorInput
-                label="رنگ سربرگ"
-                name="headingColor"
-                value={
-                  userInputData?.setting?.headingColor?.toString() ?? "#333333"
-                }
+                    </div>
+                  ))}
+              </div>
+            </div>
+            {/* ✅ New Shadow Settings */}
+            <div className="rounded-lg">
+              <h4 className="font-bold text-sky-700 my-3">تنظیمات سایه</h4>
+              <DynamicRangeInput
+                label="افست افقی سایه"
+                name="shadowOffsetX"
+                min="-50"
+                max="50"
+                value={userInputData?.setting?.shadowOffsetX?.toString() ?? "0"}
                 onChange={handleSettingChange}
               />
-            </div>
-            <br />
-            <label htmlFor="">سایز سربرگ</label>
-            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-              <input
-                type="range"
+              <DynamicRangeInput
+                label="افست عمودی سایه"
+                name="shadowOffsetY"
+                min="-50"
+                max="50"
+                value={userInputData?.setting?.shadowOffsetY?.toString() ?? "0"}
+                onChange={handleSettingChange}
+              />
+              <DynamicRangeInput
+                label="میزان بلور سایه"
+                name="shadowBlur"
                 min="0"
                 max="100"
-                name="headingFontSize"
-                value={userInputData?.setting?.headingFontSize || "250"}
+                value={userInputData?.setting?.shadowBlur?.toString() ?? "0"}
                 onChange={handleSettingChange}
               />
-              <p className="text-sm text-gray-600 text-nowrap">
-                {userInputData?.setting?.headingFontSize}px
-              </p>
-            </div>
-            <br />
-            <div>
-              <label className="block mb-1">وزن سربرگ</label>
-              <select
-                name="headingFontWeight"
-                value={
-                  userInputData?.setting?.headingFontWeight?.toString() ??
-                  "normal"
-                }
-                onChange={(e) =>
-                  handleSettingChange(
-                    e as unknown as React.ChangeEvent<HTMLInputElement>
-                  )
-                }
-                className="w-full p-2 border rounded"
-              >
-                <option value="bold">ضخیم</option>
-                <option value="lighter">نازک</option>
-              </select>
-            </div>
-            <br />
-            <div className="rounded-lg flex items-center justify-between ">
+              <DynamicRangeInput
+                label="میزان گسترش سایه"
+                name="shadowSpread"
+                min="-20"
+                max="20"
+                value={userInputData?.setting?.shadowSpread?.toString() ?? "0"}
+                onChange={handleSettingChange}
+              />
               <ColorInput
-                label="رنگ پس زمینه"
-                name="background"
-                value={
-                  userInputData?.setting?.background?.toString() ?? "#333333"
-                }
+                label="رنگ سایه"
+                name="shadowColor"
+                value={userInputData?.setting?.shadowColor?.toString() ?? "0"}
                 onChange={handleSettingChange}
               />
             </div>
           </div>
         )}
 
+        {/* animation Settings */}
         {isAnimationOpen && (
           <div className="space-y-4 animate-slideDown">
             {/* Header with Toggle */}{" "}
@@ -1041,7 +1169,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
 
         {/* Spacing Settings Dropdown */}
         {isSpacingOpen && (
-          <div className="p-4  animate-slideDown">
+          <div className="animate-slideDown">
             <div className="bg-gray-50 rounded-lg flex items-center justify-center">
               <MarginPaddingEditor
                 margin={margin}

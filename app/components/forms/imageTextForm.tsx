@@ -7,22 +7,18 @@ import ImageSelectorModal from "../sections/ImageSelectorModal";
 import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
 import { HiChevronDown, HiSparkles } from "react-icons/hi";
-import { DynamicRangeInput } from "./DynamicInputs";
+import {
+  ColorInput,
+  DynamicRangeInput,
+  DynamicSelectInput,
+} from "./DynamicInputs";
+import { useSharedContext } from "@/app/contexts/SharedContext";
 
 interface ImageTextFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<ImageTextSection>>;
   userInputData: ImageTextSection;
   layout: Layout;
   selectedComponent: string;
-}
-
-interface ImageFile {
-  _id: string;
-  fileName: string;
-  fileUrl: string;
-  fileType: string;
-  fileSize: number;
-  storeId: string;
 }
 
 interface BoxValues {
@@ -32,38 +28,15 @@ interface BoxValues {
   right: number;
 }
 
-const ColorInput = ({
-  label,
-  name,
-  value,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <>
-    <label className="block mb-1">{label}</label>
-    <div className="flex flex-col rounded-md gap-3 items-center">
-      <input
-        type="color"
-        id={name}
-        name={name}
-        value={value || "#000000"}
-        onChange={onChange}
-        className="p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent"
-      />
-    </div>
-  </>
-);
-
 export const ImageTextForm: React.FC<ImageTextFormProps> = ({
   setUserInputData,
   userInputData,
   layout,
   selectedComponent,
 }) => {
+  // Get activeRoutes from context
+  const { activeRoutes } = useSharedContext();
+
   const [margin, setMargin] = useState<BoxValues>({
     top: 0,
     bottom: 0,
@@ -82,6 +55,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
   const [isAnimationOpen, setIsAnimationOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isImageSelectorOpen, setIsImageSelectorOpen] = useState(false);
+  const [useRouteSelect, setUseRouteSelect] = useState(false);
 
   useEffect(() => {
     setMargin({
@@ -148,6 +122,8 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
           ...prev.setting,
           marginTop: updatedValues.top.toString(),
           marginBottom: updatedValues.bottom.toString(),
+          marginLeft: updatedValues.left.toString(),
+          marginRight: updatedValues.right.toString(),
         },
       }));
     } else {
@@ -158,6 +134,8 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
           ...prev.setting,
           paddingTop: updatedValues.top.toString(),
           paddingBottom: updatedValues.bottom.toString(),
+          paddingLeft: updatedValues.left.toString(),
+          paddingRight: updatedValues.right.toString(),
         },
       }));
     }
@@ -340,9 +318,19 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
     setIsContentOpen(true);
   }, []);
 
-  const handleImageSelect = (image: ImageFile) => {
+  const handleImageSelect = (image: any) => {
     handleContentChange("imageSrc", image.fileUrl);
     setIsImageSelectorOpen(false);
+  };
+
+  // Handle route selection toggle
+  const handleRouteSelectToggle = (checked: boolean) => {
+    setUseRouteSelect(checked);
+  };
+
+  // Handle route change
+  const handleRouteChange = (route: string) => {
+    handleContentChange("btnLink", route);
   };
 
   // Get current animation values
@@ -353,7 +341,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
   const hasButtonAnimation = !!currentButtonAnimation;
 
   return (
-    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+    <div className="p-2 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-lg font-bold mb-4">تنظیمات تصویر و متن</h2>
 
       {/* Tabs */}
@@ -361,61 +349,220 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
 
       {/* Content Section */}
       {isContentOpen && (
-        <div className="p-4 animate-slideDown">
-          <div className="space-y-4">
-            <div>
-              <label className="block mb-2">عنوان</label>
-              <input
-                type="text"
-                placeholder="عنوان"
-                value={userInputData?.blocks?.heading || ""}
-                onChange={(e) => handleContentChange("heading", e.target.value)}
-                className="w-full p-2 border rounded"
-              />
-            </div>
+        <div className="p-2 animate-slideDown">
+          {/* Main Content Section */}
+          <div className="mb-6 p-4 ">
+            <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4">
+              محتوای اصلی
+            </h3>
 
-            <div>
-              <label className="block mb-2">توضیحات</label>
-              <textarea
-                placeholder="توضیحات"
-                value={userInputData?.blocks?.description || ""}
-                onChange={(e) =>
-                  handleContentChange("description", e.target.value)
-                }
-                className="w-full p-2 border rounded h-24"
-              />
-            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block mb-2 text-sm font-semibold text-gray-700">
+                  عنوان
+                </label>
+                <input
+                  type="text"
+                  placeholder="عنوان بخش را وارد کنید"
+                  value={userInputData?.blocks?.heading || ""}
+                  onChange={(e) =>
+                    handleContentChange("heading", e.target.value)
+                  }
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                />
+              </div>
 
-            <div>
-              <label className="block mb-2">متن دکمه</label>
-              <input
-                type="text"
-                placeholder="متن دکمه"
-                value={userInputData?.blocks?.btnText || ""}
-                onChange={(e) => handleContentChange("btnText", e.target.value)}
-                className="w-full p-2 border rounded"
-              />
-            </div>
+              <div>
+                <label className="block mb-2 text-sm font-semibold text-gray-700">
+                  توضیحات
+                </label>
+                <textarea
+                  placeholder="توضیحات تفصیلی را وارد کنید"
+                  value={userInputData?.blocks?.description || ""}
+                  onChange={(e) =>
+                    handleContentChange("description", e.target.value)
+                  }
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all h-24 resize-none"
+                />
+              </div>
 
-            <div>
-              <label className="block mb-2">لینک دکمه</label>
-              <input
-                type="text"
-                placeholder="لینک دکمه"
-                value={userInputData?.blocks?.btnLink || ""}
-                onChange={(e) => handleContentChange("btnLink", e.target.value)}
-                className="w-full p-2 border rounded"
-              />
+              <div>
+                <label className="block mb-2 text-sm font-semibold text-gray-700">
+                  متن دکمه
+                </label>
+                <input
+                  type="text"
+                  placeholder="متن روی دکمه"
+                  value={userInputData?.blocks?.btnText || ""}
+                  onChange={(e) =>
+                    handleContentChange("btnText", e.target.value)
+                  }
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                />
+              </div>
             </div>
+          </div>
 
-            <div>
-              <label className="block mb-2">تصویر</label>
+          {/* Button Link Section */}
+          <div className="mb-6 p-4 ">
+            <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4">
+              تنظیمات لینک دکمه
+            </h3>
+
+            <div className="space-y-4">
+              {/* Route Selection Toggle */}
+              <div className="mb-3">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={useRouteSelect}
+                    onChange={(e) => handleRouteSelectToggle(e.target.checked)}
+                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-600">
+                    انتخاب از مسیرهای موجود
+                  </span>
+                </label>
+              </div>
+
+              {/* Link Input */}
+              {useRouteSelect ? (
+                <div>
+                  <label className="block mb-2 text-sm font-semibold text-gray-700">
+                    انتخاب مسیر
+                  </label>
+                  <select
+                    value={userInputData?.blocks?.btnLink || ""}
+                    onChange={(e) => handleRouteChange(e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  >
+                    <option value="">انتخاب مسیر</option>
+                    {activeRoutes.map((route) => (
+                      <option key={route} value={route}>
+                        {route}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ) : (
+                <div>
+                  <label className="block mb-2 text-sm font-semibold text-gray-700">
+                    لینک سفارشی
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="آدرس لینک یا مسیر سفارشی"
+                    value={userInputData?.blocks?.btnLink || ""}
+                    onChange={(e) =>
+                      handleContentChange("btnLink", e.target.value)
+                    }
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Image Section */}
+          <div className="mb-6 p-4 ">
+            <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4">
+              تنظیمات تصویر
+            </h3>
+
+            {/* Image Preview */}
+            {userInputData?.blocks?.imageSrc && (
+              <div className="mb-4">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  پیش‌نمایش تصویر
+                </label>
+                <div className="relative w-full h-40 bg-gray-100 rounded-lg overflow-hidden border-2 border-dashed border-gray-300 group">
+                  <img
+                    src={userInputData.blocks.imageSrc}
+                    alt="پیش‌نمایش"
+                    className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
+                    onError={(e) => {
+                      e.currentTarget.src = "/assets/images/placeholder.jpg";
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* No Image State */}
+            {!userInputData?.blocks?.imageSrc && (
+              <div className="mb-4">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  انتخاب تصویر
+                </label>
+                <div
+                  onClick={() => setIsImageSelectorOpen(true)}
+                  className="w-full h-40 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 hover:border-gray-400 transition-all duration-200"
+                >
+                  <svg
+                    className="w-12 h-12 text-gray-400 mb-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1}
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                  <p className="text-gray-500 text-sm text-center">
+                    کلیک کنید تا تصویر انتخاب کنید
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Image Selection Button */}
+            <div className="flex flex-col gap-2">
               <button
                 onClick={() => setIsImageSelectorOpen(true)}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-2 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
               >
-                انتخاب تصویر
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+                {userInputData?.blocks?.imageSrc
+                  ? "تغییر تصویر"
+                  : "انتخاب تصویر"}
               </button>
+
+              {userInputData?.blocks?.imageSrc && (
+                <button
+                  onClick={() => handleContentChange("imageSrc", "")}
+                  className="flex items-center gap-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
+                >
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                  حذف تصویر
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -424,126 +571,253 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
       {/* Style Settings */}
       {isStyleSettingsOpen && (
         <div className="p-4 animate-slideDown w-full">
-          <div className="grid gap-4">
+          <div className="grid gap-6">
             {/* Text Styling */}
-            <div className="space-y-4 w-full">
-              <h3 className="font-semibold text-gray-700">تنظیمات متن</h3>
-
-              <div className=" gap-4 w-full">
-                <div className="rounded-lg flex items-center justify-between ">
-                  {" "}
-                  <ColorInput
-                    label="رنگ عنوان"
-                    name="headingColor"
-                    value={userInputData?.blocks?.setting?.headingColor}
-                    onChange={handleSettingChange}
-                  />
-                </div>
-
-                <div className="w-full">
-                  <DynamicRangeInput
-                    label="سایز عنوان"
-                    name="headingFontSize"
-                    min="10"
-                    max="100"
-                    value={userInputData?.blocks?.setting?.headingFontSize || "30"}
-                    onChange={handleSettingChange}
-                  />
-                </div>
+            <div className="space-y-4 ">
+              {/* heading */}
+              <div className="grid md:grid-cols-1 gap-4 w-full">
+                <h3 className="font-semibold text-sky-800 flex items-center gap-2">
+                  تنظیمات متن
+                </h3>
+                <DynamicRangeInput
+                  label="سایز عنوان"
+                  name="headingFontSize"
+                  min="10"
+                  max="100"
+                  value={
+                    userInputData?.blocks?.setting?.headingFontSize || "30"
+                  }
+                  onChange={handleSettingChange}
+                />
+                <DynamicSelectInput
+                  label="وزن"
+                  name="headingFontWeight"
+                  options={[
+                    { value: "normal", label: "نرمال" },
+                    { value: "bold", label: "ضخیم" },
+                  ]}
+                  value={
+                    userInputData?.blocks?.setting?.headingFontWeight || "30"
+                  }
+                  onChange={handleSettingChange}
+                />
+                <ColorInput
+                  label="رنگ عنوان"
+                  name="headingColor"
+                  value={
+                    userInputData?.blocks?.setting?.headingColor || "#000000"
+                  }
+                  onChange={handleSettingChange}
+                />
               </div>
+              {/* description */}
+              <div className="grid md:grid-cols-1 gap-4">
+                <h3 className="font-semibold text-sky-800 flex items-center gap-2">
+                  تنظیمات توضیحات
+                </h3>
 
-              <div className=" gap-4">
-                <div className="rounded-lg flex items-center justify-between ">
-                  <ColorInput
-                    label="رنگ توضیحات"
-                    name="descriptionColor"
-                    value={userInputData?.blocks?.setting?.descriptionColor}
-                    onChange={handleSettingChange}
-                  />
-                </div>
-
-                <div className="w-full">
-                  <DynamicRangeInput
-                    label="سایز توضیحات"
-                    name="descriptionFontSize"
-                    min="10"
-                    max="50"
-                    value={userInputData?.blocks?.setting?.descriptionFontSize || "24"}
-                    onChange={handleSettingChange}
-                  />
-                </div>
+                <DynamicRangeInput
+                  label="سایز  "
+                  name="descriptionFontSize"
+                  min="10"
+                  max="50"
+                  value={
+                    userInputData?.blocks?.setting?.descriptionFontSize || "16"
+                  }
+                  onChange={handleSettingChange}
+                />
+                <DynamicSelectInput
+                  label="وزن"
+                  name="descriptionFontWeight"
+                  options={[
+                    { value: "normal", label: "نرمال" },
+                    { value: "bold", label: "ضخیم" },
+                  ]}
+                  value={
+                    userInputData?.blocks?.setting?.descriptionFontWeight ||
+                    "30"
+                  }
+                  onChange={handleSettingChange}
+                />
+                <ColorInput
+                  label="رنگ  "
+                  name="descriptionColor"
+                  value={
+                    userInputData?.blocks?.setting?.descriptionColor ||
+                    "#666666"
+                  }
+                  onChange={handleSettingChange}
+                />
               </div>
+            </div>
+            {/* Button Styling */}
+            <div className="space-y-4 ">
+              <h3 className="font-semibold text-sky-800 flex items-center gap-2">
+                تنظیمات دکمه
+              </h3>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4">
+                <DynamicRangeInput
+                  label="عرض  "
+                  name="btnWidth"
+                  min="10"
+                  max="1200"
+                  value={userInputData?.blocks?.setting?.btnWidth || "16"}
+                  onChange={handleSettingChange}
+                />
+                <DynamicRangeInput
+                  label="انحنا  "
+                  name="btnRadiuos"
+                  min="0"
+                  max="30"
+                  value={userInputData?.blocks?.setting?.btnRadiuos || "16"}
+                  onChange={handleSettingChange}
+                />
                 <ColorInput
                   label="رنگ متن دکمه"
                   name="btnTextColor"
-                  value={userInputData?.blocks?.setting?.btnTextColor}
+                  value={
+                    userInputData?.blocks?.setting?.btnTextColor || "#ffffff"
+                  }
                   onChange={handleSettingChange}
                 />
 
                 <ColorInput
                   label="رنگ پس‌زمینه دکمه"
                   name="btnBackgroundColor"
-                  value={userInputData?.blocks?.setting?.btnBackgroundColor}
+                  value={
+                    userInputData?.blocks?.setting?.btnBackgroundColor ||
+                    "#3b82f6"
+                  }
                   onChange={handleSettingChange}
                 />
               </div>
             </div>
+            {/* background Styling */}
+            <div className="space-y-4 ">
+              <h3 className="font-semibold text-sky-800 flex items-center gap-2">
+                تنظیمات پس زمینه
+              </h3>
 
-            {/* Image Settings */}
-            <div className="space-y-4 border-t pt-4">
-              <h3 className="font-semibold text-gray-700">تنظیمات تصویر</h3>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <DynamicRangeInput
-                    label="عرض تصویر"
-                    name="imageWidth"
-                    min="100"
-                    max="800"
-                    value={userInputData?.blocks?.setting?.imageWidth || "500"}
-                    onChange={handleSettingChange}
-                  />
-                </div>
-
-                <div>
-                  <DynamicRangeInput
-                    label="ارتفاع تصویر"
-                    name="imageHeight"
-                    min="100"
-                    max="600"
-                    value={userInputData?.blocks?.setting?.imageHeight || "200"}
-                    onChange={handleSettingChange}
-                  />
-                </div>
-              </div>
-
-              <div>
+              <div className="grid grid-cols-1 gap-4">
                 <DynamicRangeInput
-                  label="شفافیت تصویر"
-                  name="opacityImage"
-                  min="0"
-                  max="1"
-                  step="0.1"
-                  value={userInputData?.blocks?.setting?.opacityImage || "1"}
+                  label="انحنا "
+                  name="boxRadiuos"
+                  min="10"
+                  max="200"
+                  value={userInputData?.blocks?.setting?.boxRadiuos || "16"}
                   onChange={handleSettingChange}
-                  displayUnit=""
+                />
+
+                <ColorInput
+                  label="رنگ"
+                  name="background"
+                  value={
+                    userInputData?.blocks?.setting?.background || "#ffffff"
+                  }
+                  onChange={handleSettingChange}
                 />
               </div>
             </div>
+            {/* Image Settings */}
+            <div className="space-y-4 ">
+              <h3 className="font-semibold text-sky-800 flex items-center gap-2">
+                تنظیمات تصویر
+              </h3>
+
+              <DynamicRangeInput
+                label="عرض تصویر"
+                name="imageWidth"
+                min="100"
+                max="1400"
+                value={userInputData?.blocks?.setting?.imageWidth || "500"}
+                onChange={handleSettingChange}
+              />
+
+              <DynamicRangeInput
+                label="ارتفاع تصویر"
+                name="imageHeight"
+                min="100"
+                max="600"
+                value={userInputData?.blocks?.setting?.imageHeight || "300"}
+                onChange={handleSettingChange}
+              />
+
+              <DynamicRangeInput
+                label="شفافیت تصویر"
+                name="opacityImage"
+                min="0"
+                max="1"
+                step="0.1"
+                value={userInputData?.blocks?.setting?.opacityImage || "1"}
+                onChange={handleSettingChange}
+                displayUnit=""
+              />
+
+              <DynamicRangeInput
+                label="انحنای گوشه‌ها"
+                name="imageRadius"
+                min="0"
+                max="50"
+                value={userInputData?.blocks?.setting?.imageRadius || "8"}
+                onChange={handleSettingChange}
+              />
+            </div>
+          </div>
+          {/* ✅ New Shadow Settings */}
+          <div className="rounded-lg">
+            <h4 className="font-bold text-sky-700 my-3">تنظیمات سایه</h4>
+            <DynamicRangeInput
+              label="افست افقی سایه"
+              name="shadowOffsetX"
+              min="-50"
+              max="50"
+              value={userInputData?.blocks?.setting?.shadowOffsetX?.toString() ?? "0"}
+              onChange={handleSettingChange}
+            />
+            <DynamicRangeInput
+              label="افست عمودی سایه"
+              name="shadowOffsetY"
+              min="-50"
+              max="50"
+              value={userInputData?.blocks?.setting?.shadowOffsetY?.toString() ?? "0"}
+              onChange={handleSettingChange}
+            />
+            <DynamicRangeInput
+              label="میزان بلور سایه"
+              name="shadowBlur"
+              min="0"
+              max="100"
+              value={userInputData?.blocks?.setting?.shadowBlur?.toString() ?? "0"}
+              onChange={handleSettingChange}
+            />
+            <DynamicRangeInput
+              label="میزان گسترش سایه"
+              name="shadowSpread"
+              min="-20"
+              max="20"
+              value={userInputData?.blocks?.setting?.shadowSpread?.toString() ?? "0"}
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ سایه"
+              name="shadowColor"
+              value={userInputData?.blocks?.setting?.shadowColor?.toString() ?? "0"}
+              onChange={handleSettingChange}
+            />
           </div>
         </div>
       )}
 
-      {/* Animation */}
+      {/* Animation Settings */}
       {isAnimationOpen && (
-        <>
-          <div className="space-y-4 animate-slideDown">
-            <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
+        <div className="space-y-6 animate-slideDown">
+          {/* Image Animation */}
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-200">
+            <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <HiSparkles className="w-4 h-4 text-blue-600" />
-                <span className="text-sm font-medium text-gray-800">
+                <HiSparkles className="w-5 h-5 text-blue-600" />
+                <span className="text-sm font-medium text-blue-800">
                   انیمیشن تصویر
                 </span>
               </div>
@@ -570,13 +844,13 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
             </div>
 
             {hasImageAnimation && currentImageAnimation && (
-              <div className="space-y-4 p-4 bg-transparent border border-gray-200 rounded-lg">
+              <div className="space-y-4 p-4 bg-white border border-gray-200 rounded-lg">
                 <h5 className="text-sm font-medium text-gray-700">
                   تنظیمات انیمیشن تصویر
                 </h5>
 
                 {/* Trigger & Animation Type */}
-                <div className="space-y-3">
+                <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-medium text-gray-700 mb-1">
                       تریگر
@@ -620,11 +894,6 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
                         </option>
                       ))}
                     </select>
-                    <div className="text-xs text-gray-500 mt-1">
-                      {animationService.getAnimationPreview(
-                        currentImageAnimation.animation.type
-                      )}
-                    </div>
                   </div>
                 </div>
 
@@ -724,7 +993,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
             )}
 
             {!hasImageAnimation && (
-              <div className="text-center py-6 text-gray-500 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+              <div className="text-center py-6 text-gray-500 bg-white rounded-lg border-2 border-dashed border-gray-300">
                 <HiSparkles className="w-6 h-6 mx-auto mb-2 text-gray-400" />
                 <p className="text-xs">انیمیشن تصویر غیرفعال است</p>
               </div>
@@ -732,11 +1001,11 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
           </div>
 
           {/* Button Animation Settings */}
-          <div className="space-y-4 animate-slideDown">
-            <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl border border-green-200">
+            <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <HiSparkles className="w-4 h-4 text-blue-600" />
-                <span className="text-sm font-medium text-gray-800">
+                <HiSparkles className="w-5 h-5 text-green-600" />
+                <span className="text-sm font-medium text-green-800">
                   انیمیشن دکمه
                 </span>
               </div>
@@ -752,7 +1021,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
                 />
                 <div
                   className={`w-[42px] h-5 rounded-full transition-colors duration-200 ${
-                    hasButtonAnimation ? "bg-blue-500" : "bg-gray-300"
+                    hasButtonAnimation ? "bg-green-500" : "bg-gray-300"
                   }`}
                 >
                   <div
@@ -765,13 +1034,13 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
             </div>
 
             {hasButtonAnimation && currentButtonAnimation && (
-              <div className="space-y-4 p-4 bg-transparent border border-gray-200 rounded-lg">
+              <div className="space-y-4 p-4 bg-white border border-gray-200 rounded-lg">
                 <h5 className="text-sm font-medium text-gray-700">
                   تنظیمات انیمیشن دکمه
                 </h5>
 
                 {/* Trigger & Animation Type */}
-                <div className="space-y-3">
+                <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-medium text-gray-700 mb-1">
                       تریگر
@@ -781,7 +1050,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
                       onChange={(e) =>
                         handleButtonAnimationChange("type", e.target.value)
                       }
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-green-500 focus:border-green-500"
                     >
                       <option value="hover">هاور</option>
                       <option value="click">کلیک</option>
@@ -800,7 +1069,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
                           e.target.value
                         )
                       }
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-green-500 focus:border-green-500"
                     >
                       {animationService.getAnimationTypes().map((type) => (
                         <option key={type} value={type}>
@@ -815,11 +1084,6 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
                         </option>
                       ))}
                     </select>
-                    <div className="text-xs text-gray-500 mt-1">
-                      {animationService.getAnimationPreview(
-                        currentButtonAnimation.animation.type
-                      )}
-                    </div>
                   </div>
                 </div>
 
@@ -848,7 +1112,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
                           e.target.value
                         )
                       }
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-green-500 focus:border-green-500"
                     />
                   </div>
 
@@ -866,7 +1130,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
                           e.target.value
                         )
                       }
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-green-500 focus:border-green-500"
                     >
                       <option value="1">1</option>
                       <option value="2">2</option>
@@ -896,7 +1160,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
                             e.target.value
                           )
                         }
-                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-green-500 focus:border-green-500"
                       >
                         <option value="ease">ease</option>
                         <option value="ease-in">ease-in</option>
@@ -919,19 +1183,35 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
             )}
 
             {!hasButtonAnimation && (
-              <div className="text-center py-6 text-gray-500 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+              <div className="text-center py-6 text-gray-500 bg-white rounded-lg border-2 border-dashed border-gray-300">
                 <HiSparkles className="w-6 h-6 mx-auto mb-2 text-gray-400" />
                 <p className="text-xs">انیمیشن دکمه غیرفعال است</p>
               </div>
             )}
           </div>
-        </>
+        </div>
       )}
 
       {/* Spacing Settings */}
       {isSpacingOpen && (
         <div className="p-4 animate-slideDown">
-          <div className="bg-gray-50 rounded-lg flex items-center justify-center">
+          <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-4 border border-gray-200">
+            <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4">
+              <svg
+                className="w-5 h-5 text-gray-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                />
+              </svg>
+              تنظیمات فاصله‌گذاری
+            </h3>
             <MarginPaddingEditor
               margin={margin}
               padding={padding}
@@ -941,6 +1221,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
         </div>
       )}
 
+      {/* Image Selector Modal */}
       <ImageSelectorModal
         isOpen={isImageSelectorOpen}
         onClose={() => setIsImageSelectorOpen(false)}

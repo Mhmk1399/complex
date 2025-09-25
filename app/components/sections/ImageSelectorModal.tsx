@@ -10,6 +10,7 @@ interface ImageFile {
   id: string;
   filename: string;
   url: string;
+  fileUrl: string;
   uploadedAt: string;
   size: number;
 }

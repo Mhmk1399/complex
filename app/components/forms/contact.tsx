@@ -6,7 +6,11 @@ import { TabButtons } from "../tabButtons";
 import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
 import { HiChevronDown, HiSparkles } from "react-icons/hi";
-
+import {
+  ColorInput,
+  DynamicRangeInput,
+  DynamicSelectInput,
+} from "./DynamicInputs";
 
 interface ContactFormProps {
   setUserInputData: React.Dispatch<
@@ -22,32 +26,6 @@ interface BoxValues {
   left: number;
   right: number;
 }
-
-const ColorInput = ({
-  label,
-  name,
-  value,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <>
-    <label className="block mb-1">{label}</label>
-    <div className="flex flex-col rounded-md gap-3 items-center">
-      <input
-        type="color"
-        id={name}
-        name={name}
-        value={value || "#000000"}
-        onChange={onChange}
-        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
-      />
-    </div>
-  </>
-);
 
 export const ContactForm: React.FC<ContactFormProps> = ({
   setUserInputData,
@@ -85,6 +63,8 @@ export const ContactForm: React.FC<ContactFormProps> = ({
           ...prev.setting,
           marginTop: updatedValues.top.toString(),
           marginBottom: updatedValues.bottom.toString(),
+          marginLeft: updatedValues.left.toString(),
+          marginRight: updatedValues.right.toString(),
         },
       }));
     } else {
@@ -249,7 +229,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
   const hasAnimation = !!currentAnimation;
 
   return (
-    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+    <div className="p-2 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-xl font-bold my-4">تنظیمات فرم ارتباط با ما</h2>
 
       {/* Content Section */}
@@ -278,115 +258,199 @@ export const ContactForm: React.FC<ContactFormProps> = ({
         <div className="p-4  space-y-6 animate-slideDown">
           {/* Heading Settings */}
           <div className="space-y-4">
-            <div className="p-3  rounded-lg flex flex-col gap-3">
-              <h4 className="text-base font-semibold text-sky-600">
-                تنظیمات سربرگ
-              </h4>
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنگ سربرگ"
-                  name="headingColor"
-                  value={
-                    userInputData?.blocks?.setting?.headingColor?.toLocaleString() ??
-                    "#ffffff"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-              </div>
-
-              <div>
-                <label className="block mb-2 text-sm font-bold text-gray-700">
-                  سایز سربرگ
-                </label>
-                <input
-                  type="range"
-                  name="headingFontSize"
-                  value={
-                    userInputData?.blocks?.setting?.headingFontSize?.toLocaleString() ??
-                    "25px"
-                  }
-                  onChange={handleBlockSettingChange}
-                  className="w-full p-1 border rounded "
-                />
-                <span className="text-sm text-gray-600">
-                  {userInputData?.blocks?.setting?.headingFontSize}px
-                </span>
-              </div>
-
-              <div>
-                <label className="block mb-2 text-sm font-bold text-gray-700">
-                  وزن سربرگ
-                </label>
-                <select
-                  name="headingFontWeight"
-                  value={
-                    userInputData?.blocks?.setting?.headingFontWeight?.toLocaleString() ??
-                    "bold"
-                  }
-                  onChange={(e) =>
-                    handleBlockSettingChange(
-                      e as unknown as React.ChangeEvent<HTMLInputElement>
-                    )
-                  }
-                  className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="bold">ضخیم</option>
-                  <option value="lighter">نازک</option>
-                </select>
-              </div>
-            </div>
+            <h4 className="text-base font-semibold text-sky-600">
+              تنظیمات سربرگ
+            </h4>
+            <DynamicRangeInput
+              label="سایز عنوان"
+              name="headingFontSize"
+              min="10"
+              max="100"
+              value={userInputData?.blocks?.setting?.headingFontSize || "30"}
+              onChange={handleBlockSettingChange}
+            />
+            <DynamicSelectInput
+              label="وزن"
+              name="headingFontWeight"
+              options={[
+                { value: "normal", label: "نرمال" },
+                { value: "bold", label: "ضخیم" },
+              ]}
+              value={userInputData?.blocks?.setting?.headingFontWeight || "30"}
+              onChange={(e) =>
+                handleBlockSettingChange(
+                  e as unknown as React.ChangeEvent<HTMLInputElement>
+                )
+              }
+            />
+            <ColorInput
+              label="رنگ سربرگ"
+              name="headingColor"
+              value={
+                userInputData?.blocks?.setting?.headingColor?.toLocaleString() ??
+                "#ffffff"
+              }
+              onChange={handleBlockSettingChange}
+            />
           </div>
-
           {/* Button Settings */}
           <div className="space-y-4">
-            <div className="p-3  rounded-lg flex flex-col gap-3">
-              <h4 className="text-base font-semibold text-sky-600">
-                تنظیمات دکمه
-              </h4>
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنگ پس زمینه دکمه"
-                  name="btnBackgroundColor"
-                  value={
-                    userInputData?.blocks?.setting?.btnBackgroundColor?.toLocaleString() ??
-                    "#9c119c"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-              </div>
+            <h4 className="text-base font-semibold text-sky-600">
+              تنظیمات دکمه
+            </h4>
+            <DynamicRangeInput
+              label="عرض"
+              name="btnWidth"
+              min="70"
+              max="1000"
+              value={userInputData?.blocks?.setting?.btnWidth || "30"}
+              onChange={handleBlockSettingChange}
+            />
+            <DynamicRangeInput
+              label="انحنا"
+              name="btnRadiuos"
+              min="0"
+              max="30"
+              value={userInputData?.blocks?.setting?.btnRadiuos || "30"}
+              onChange={handleBlockSettingChange}
+            />
+            <ColorInput
+              label="رنگ پس زمینه دکمه"
+              name="btnBackgroundColor"
+              value={
+                userInputData?.blocks?.setting?.btnBackgroundColor?.toLocaleString() ??
+                "#9c119c"
+              }
+              onChange={handleBlockSettingChange}
+            />
 
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنگ متن دکمه"
-                  name="btnTextColor"
-                  value={
-                    userInputData?.blocks?.setting?.btnTextColor?.toLocaleString() ??
-                    "#ffffff"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-              </div>
-            </div>
+            <ColorInput
+              label="رنگ متن دکمه"
+              name="btnTextColor"
+              value={
+                userInputData?.blocks?.setting?.btnTextColor?.toLocaleString() ??
+                "#ffffff"
+              }
+              onChange={handleBlockSettingChange}
+            />
           </div>
+          {/* inputs & label */}
+          <div className="space-y-4">
+            <h4 className="text-base font-semibold text-sky-600">
+              تنظیمات فرم
+            </h4>
+            <DynamicRangeInput
+              label="عرض"
+              name="inputWidth"
+              min="70"
+              max="1000"
+              value={userInputData?.blocks?.setting?.inputWidth || "30"}
+              onChange={handleBlockSettingChange}
+            />
+            <DynamicRangeInput
+              label="انحنا"
+              name="inputRadiuos"
+              min="0"
+              max="30"
+              value={userInputData?.blocks?.setting?.inputRadiuos || "30"}
+              onChange={handleBlockSettingChange}
+            />
+            <ColorInput
+              label="رنگ برچسب"
+              name="labelColor"
+              value={
+                userInputData?.blocks?.setting?.labelColor?.toLocaleString() ??
+                "#9c119c"
+              }
+              onChange={handleBlockSettingChange}
+            />
 
+            <ColorInput
+              label="رنگ متن دکمه"
+              name="btnTextColor"
+              value={
+                userInputData?.blocks?.setting?.btnTextColor?.toLocaleString() ??
+                "#ffffff"
+              }
+              onChange={handleBlockSettingChange}
+            />
+          </div>
           {/* Background Settings */}
           <div className="space-y-4">
             <div className="p-3  rounded-lg flex flex-col gap-3">
               <h4 className="text-base font-semibold text-sky-600">
                 تنظیمات رنگ پس زمینه
               </h4>
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنگ پس زمینه فرم"
-                  name="formBackground"
-                  value={
-                    userInputData?.blocks?.setting?.formBackground?.toLocaleString() ??
-                    "#11769c"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-              </div>
+              <DynamicRangeInput
+                label="انحنا"
+                name="boxRadiuos"
+                min="0"
+                max="100"
+                value={userInputData?.blocks?.setting?.boxRadiuos || "30"}
+                onChange={handleBlockSettingChange}
+              />
+              <ColorInput
+                label="رنگ پس زمینه فرم"
+                name="formBackground"
+                value={
+                  userInputData?.blocks?.setting?.formBackground?.toLocaleString() ??
+                  "#11769c"
+                }
+                onChange={handleBlockSettingChange}
+              />
             </div>
+          </div>
+          {/* ✅ New Shadow Settings */}
+          <div className="rounded-lg">
+            <h4 className="font-bold text-sky-700 my-3">تنظیمات سایه</h4>
+            <DynamicRangeInput
+              label="افست افقی سایه"
+              name="shadowOffsetX"
+              min="-50"
+              max="50"
+              value={
+                userInputData?.blocks?.setting?.shadowOffsetX?.toString() ?? "0"
+              }
+              onChange={handleBlockSettingChange}
+            />
+            <DynamicRangeInput
+              label="افست عمودی سایه"
+              name="shadowOffsetY"
+              min="-50"
+              max="50"
+              value={
+                userInputData?.blocks?.setting?.shadowOffsetY?.toString() ?? "0"
+              }
+              onChange={handleBlockSettingChange}
+            />
+            <DynamicRangeInput
+              label="میزان بلور سایه"
+              name="shadowBlur"
+              min="0"
+              max="100"
+              value={
+                userInputData?.blocks?.setting?.shadowBlur?.toString() ?? "0"
+              }
+              onChange={handleBlockSettingChange}
+            />
+            <DynamicRangeInput
+              label="میزان گسترش سایه"
+              name="shadowSpread"
+              min="-20"
+              max="20"
+              value={
+                userInputData?.blocks?.setting?.shadowSpread?.toString() ?? "0"
+              }
+              onChange={handleBlockSettingChange}
+            />
+            <ColorInput
+              label="رنگ سایه"
+              name="shadowColor"
+              value={
+                userInputData?.blocks?.setting?.shadowColor?.toString() ?? "0"
+              }
+              onChange={handleBlockSettingChange}
+            />
           </div>
         </div>
       )}
@@ -612,7 +676,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 
       {/* Spacing Settings */}
       {isSpacingOpen && (
-        <div className="p-4  animate-slideDown">
+        <div className="animate-slideDown">
           <div className=" rounded-lg p-2 flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

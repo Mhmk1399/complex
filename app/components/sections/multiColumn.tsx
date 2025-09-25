@@ -17,26 +17,15 @@ const Section = styled.section<{
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
-  padding-top: ${(props) =>
-    props.$preview === "sm" ? "10" : props.$data.setting?.paddingTop || "20"}px;
-  padding-bottom: ${(props) =>
-    props.$preview === "sm"
-      ? "10"
-      : props.$data.setting?.paddingBottom || "20"}px;
-  padding-right: ${(props) =>
-    props.$preview === "sm"
-      ? "10"
-      : props.$data.setting?.paddingRight || "20"}px;
-  padding-left: ${(props) =>
-    props.$preview === "sm"
-      ? "10"
-      : props.$data.setting?.paddingLeft || "20"}px;
-  margin-top: ${(props) =>
-    props.$preview === "sm" ? "10" : props.$data.setting?.marginTop || "20"}px;
-  margin-bottom: ${(props) =>
-    props.$preview === "sm"
-      ? "10"
-      : props.$data.setting?.marginBottom || "20"}px;
+  max-width: 100%;
+  margin-top: ${(props) => props.$data.setting.marginTop || "30"}px;
+  margin-bottom: ${(props) => props.$data.setting.marginBottom}px;
+  margin-right: ${(props) => props.$data.setting.marginRight}px;
+  margin-left: ${(props) => props.$data.setting.marginLeft}px;
+  padding-top: ${(props) => props.$data.setting.paddingTop}px;
+  padding-bottom: ${(props) => props.$data.setting.paddingBottom}px;
+  padding-left: ${(props) => props.$data.setting.paddingLeft}px;
+  padding-right: ${(props) => props.$data.setting.paddingRight}px;
   background-color: ${(props) =>
     props.$data.setting?.backgroundColorBox || "#ffffff"};
   display: flex;
@@ -44,10 +33,13 @@ const Section = styled.section<{
   justify-content: center;
   align-items: center;
   gap: ${(props) => (props.$preview === "sm" ? "10" : "15")}px;
-  border-radius: 12px;
-  width: ${(props) => (props.$preview === "sm" ? "100%" : "auto")}px;
-  margin-left: ${(props) => (props.$preview === "sm" ? "5" : "10")}px;
-  margin-right: ${(props) => (props.$preview === "sm" ? "5" : "10")}px;
+  border-radius: ${(props) => props.$data.setting.formRadius || 5}px;
+  box-shadow: ${(props) =>
+    `${props.$data.setting?.shadowOffsetX || 0}px 
+     ${props.$data.setting?.shadowOffsetY || 4}px 
+     ${props.$data.setting?.shadowBlur || 10}px 
+     ${props.$data.setting?.shadowSpread || 0}px 
+     ${props.$data.setting?.shadowColor || "#fff"}`};
 `;
 
 const Heading = styled.h2<{
@@ -71,7 +63,7 @@ const ColumnContainer = styled.div<{
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
-  // display: flex;
+  display: flex;
   gap: ${(props) => (props.$preview === "sm" ? "10px" : "20px")};
   justify-content: center;
   align-items: center;
@@ -115,13 +107,13 @@ const Title = styled.h3<{
   min-height: ${(props) => (props.$preview === "sm" ? "40px" : "60px")};
 `;
 
-const Image = styled.img<{ 
+const Image = styled.img<{
   $data: MultiColumnSection;
 }>`
   width: 100%;
-  height: 100%;
+  height: ${(props) => props.$data.setting?.imageHeight || "5"}px;
   overflow-y: auto;
-  border-radius: ${(props) => props.$data.setting?.imageRadious || "5px"}px;
+  border-radius: ${(props) => props.$data.setting?.imageRadious || "5"}px;
   margin-bottom: 10px;
   transition: all 0.5s ease-in-out;
 
@@ -129,25 +121,27 @@ const Image = styled.img<{
     width: 100%;
     height: auto;
   }
-  
+
   /* Default hover effect */
   &:hover {
-    transform: scale(0.95);
+    transform: scale(0.99);
   }
 
   /* Apply image animations */
   ${(props) => {
     const imageAnimation = props.$data.setting?.imageAnimation;
-    if (!imageAnimation) return '';
-    
+    if (!imageAnimation) return "";
+
     const { type, animation: animConfig } = imageAnimation;
-    const selector = type === 'hover' ? '&:hover' : '&:active';
-    
+    const selector = type === "hover" ? "&:hover" : "&:active";
+
     // Generate animation CSS based on type
-    if (animConfig.type === 'pulse') {
+    if (animConfig.type === "pulse") {
       return `
         ${selector} {
-          animation: multiColumnImagePulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiColumnImagePulse ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           transform: none; /* Override default transform */
         }
         
@@ -162,10 +156,12 @@ const Image = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'glow') {
+    } else if (animConfig.type === "glow") {
       return `
         ${selector} {
-          animation: multiColumnImageGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiColumnImageGlow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           transform: none; /* Override default transform */
         }
         
@@ -178,10 +174,12 @@ const Image = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'brightness') {
+    } else if (animConfig.type === "brightness") {
       return `
         ${selector} {
-          animation: multiColumnImageBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiColumnImageBrightness ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           transform: none; /* Override default transform */
         }
         
@@ -194,10 +192,12 @@ const Image = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'blur') {
+    } else if (animConfig.type === "blur") {
       return `
         ${selector} {
-          animation: multiColumnImageBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiColumnImageBlur ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           transform: none; /* Override default transform */
         }
         
@@ -210,10 +210,12 @@ const Image = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'saturate') {
+    } else if (animConfig.type === "saturate") {
       return `
         ${selector} {
-          animation: multiColumnImageSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiColumnImageSaturate ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           transform: none; /* Override default transform */
         }
         
@@ -226,10 +228,12 @@ const Image = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'contrast') {
+    } else if (animConfig.type === "contrast") {
       return `
         ${selector} {
-          animation: multiColumnImageContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiColumnImageContrast ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           transform: none; /* Override default transform */
         }
         
@@ -242,10 +246,12 @@ const Image = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'opacity') {
+    } else if (animConfig.type === "opacity") {
       return `
         ${selector} {
-          animation: multiColumnImageOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiColumnImageOpacity ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           transform: none; /* Override default transform */
         }
         
@@ -261,10 +267,12 @@ const Image = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'shadow') {
+    } else if (animConfig.type === "shadow") {
       return `
         ${selector} {
-          animation: multiColumnImageShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiColumnImageShadow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           transform: none; /* Override default transform */
         }
         
@@ -278,8 +286,8 @@ const Image = styled.img<{
         }
       `;
     }
-    
-    return '';
+
+    return "";
   }}
 `;
 
@@ -303,7 +311,7 @@ const Description = styled.p<{
   overflow-y: visible;
 `;
 
-const Button = styled.a<{ 
+const Button = styled.a<{
   $data: MultiColumnSection;
 }>`
   display: inline-block;
@@ -311,7 +319,9 @@ const Button = styled.a<{
   background-color: ${(props) =>
     props.$data.setting?.btnBackgroundColor || "#000"};
   color: ${(props) => props.$data.setting?.btnColor || "#fff"};
-  border-radius: 5px;
+  border-radius: ${(props) => props.$data.setting?.btnRadius || "5"}px;
+  max-width: 100%;
+  text-align: center;
   text-decoration: none;
   cursor: pointer;
   transition: all 0.5s ease-in-out;
@@ -329,16 +339,18 @@ const Button = styled.a<{
   /* Apply button animations */
   ${(props) => {
     const btnAnimation = props.$data.setting?.btnAnimation;
-    if (!btnAnimation) return '';
-    
+    if (!btnAnimation) return "";
+
     const { type, animation: animConfig } = btnAnimation;
-    const selector = type === 'hover' ? '&:hover' : '&:active';
-    
+    const selector = type === "hover" ? "&:hover" : "&:active";
+
     // Generate animation CSS based on type
-    if (animConfig.type === 'pulse') {
+    if (animConfig.type === "pulse") {
       return `
         ${selector} {
-          animation: multiColumnBtnPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiColumnBtnPulse ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           opacity: 1; /* Override default opacity */
         }
         
@@ -353,10 +365,12 @@ const Button = styled.a<{
           }
         }
       `;
-    } else if (animConfig.type === 'glow') {
+    } else if (animConfig.type === "glow") {
       return `
         ${selector} {
-          animation: multiColumnBtnGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiColumnBtnGlow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           opacity: 1; /* Override default opacity */
         }
         
@@ -369,10 +383,12 @@ const Button = styled.a<{
           }
         }
       `;
-    } else if (animConfig.type === 'brightness') {
+    } else if (animConfig.type === "brightness") {
       return `
         ${selector} {
-          animation: multiColumnBtnBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiColumnBtnBrightness ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           opacity: 1; /* Override default opacity */
         }
         
@@ -385,10 +401,12 @@ const Button = styled.a<{
           }
         }
       `;
-    } else if (animConfig.type === 'blur') {
+    } else if (animConfig.type === "blur") {
       return `
         ${selector} {
-          animation: multiColumnBtnBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiColumnBtnBlur ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           opacity: 1; /* Override default opacity */
         }
         
@@ -401,10 +419,12 @@ const Button = styled.a<{
           }
         }
       `;
-    } else if (animConfig.type === 'saturate') {
+    } else if (animConfig.type === "saturate") {
       return `
         ${selector} {
-          animation: multiColumnBtnSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiColumnBtnSaturate ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           opacity: 1; /* Override default opacity */
         }
         
@@ -417,10 +437,12 @@ const Button = styled.a<{
           }
         }
       `;
-    } else if (animConfig.type === 'contrast') {
+    } else if (animConfig.type === "contrast") {
       return `
         ${selector} {
-          animation: multiColumnBtnContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiColumnBtnContrast ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           opacity: 1; /* Override default opacity */
         }
         
@@ -433,10 +455,12 @@ const Button = styled.a<{
           }
         }
       `;
-    } else if (animConfig.type === 'opacity') {
+    } else if (animConfig.type === "opacity") {
       return `
         ${selector} {
-          animation: multiColumnBtnOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiColumnBtnOpacity ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes multiColumnBtnOpacity {
@@ -451,10 +475,12 @@ const Button = styled.a<{
           }
         }
       `;
-    } else if (animConfig.type === 'shadow') {
+    } else if (animConfig.type === "shadow") {
       return `
         ${selector} {
-          animation: multiColumnBtnShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: multiColumnBtnShadow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           opacity: 1; /* Override default opacity */
         }
         
@@ -468,8 +494,8 @@ const Button = styled.a<{
         }
       `;
     }
-    
-    return '';
+
+    return "";
   }}
 `;
 
@@ -491,7 +517,7 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
       setPreview(previewWidth);
     }
   }, [previewWidth]);
-  
+
   const sectionData = (layout.sections?.children?.sections.find(
     (section) => section.type === actualName
   ) as MultiColumnSection) || {
@@ -561,6 +587,7 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
       ) : null}
 
       <Heading
+        dir="rtl"
         $data={sectionData}
         $previewWidth={previewWidth}
         $preview={preview}
@@ -585,6 +612,7 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
                 $data={sectionData}
                 $previewWidth={previewWidth}
                 $preview={preview}
+                dir="rtl"
               >
                 {
                   typedBlock[
@@ -596,6 +624,7 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
                 $previewWidth={previewWidth}
                 $data={sectionData}
                 $preview={preview}
+                dir="rtl"
               >
                 {
                   typedBlock[

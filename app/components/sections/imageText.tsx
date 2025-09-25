@@ -24,15 +24,24 @@ const Section = styled.section<{
   justify-content: center;
   border-radius: ${(props) =>
     props.$data.blocks?.setting?.boxRadiuos || "10"}px;
-  padding-top: ${(props) => props.$data.setting?.paddingTop || "0"}px;
-  padding-bottom: ${(props) => props.$data.setting?.paddingBottom || "0"}px;
-  padding-left: ${(props) => props.$data.setting?.paddingLeft || "0"}px;
-  padding-right: ${(props) => props.$data.setting?.paddingRight || "0"}px;
-  margin-top: ${(props) => props.$data.setting?.marginTop || "0"}px;
-  margin-bottom: ${(props) => props.$data.setting?.marginBottom || "0"}px;
+  max-width: 100%;
+  margin-top: ${(props) => props.$data.setting.marginTop || "30"}px;
+  margin-bottom: ${(props) => props.$data.setting.marginBottom}px;
+  margin-right: ${(props) => props.$data.setting.marginRight}px;
+  margin-left: ${(props) => props.$data.setting.marginLeft}px;
+  padding-top: ${(props) => props.$data.setting.paddingTop}px;
+  padding-bottom: ${(props) => props.$data.setting.paddingBottom}px;
+  padding-left: ${(props) => props.$data.setting.paddingLeft}px;
+  padding-right: ${(props) => props.$data.setting.paddingRight}px;
   background-color: ${(props) =>
     props.$data.blocks?.setting?.background || "transparent"};
   flex-direction: ${(props) => (props.$preview === "sm" ? "column" : "row")};
+  box-shadow: ${(props) =>
+    `${props.$data.blocks?.setting?.shadowOffsetX || 0}px 
+     ${props.$data.blocks?.setting?.shadowOffsetY || 4}px 
+     ${props.$data.blocks?.setting?.shadowBlur || 10}px 
+     ${props.$data.blocks?.setting?.shadowSpread || 0}px 
+     ${props.$data.blocks?.setting?.shadowColor || "#fff"}`};
   @media (max-width: 769px) {
     flex-direction: column;
   }
@@ -47,22 +56,25 @@ const Image = styled.img<{
   height: ${(props) => props.$data?.blocks?.setting?.imageHeight || "200"}px;
   opacity: ${(props) => props.$data?.blocks?.setting?.opacityImage || "1"};
   border-radius: ${(props) =>
-    props.$data?.blocks?.setting?.boxRadiuos || "10"}px;
+    props.$data?.blocks?.setting?.imageRadius || "10"}px;
   object-fit: cover;
+  margin-left: 5px;
 
   /* Apply image animations */
   ${(props) => {
     const imageAnimation = props.$data.blocks?.setting?.imageAnimation;
-    if (!imageAnimation) return '';
-    
+    if (!imageAnimation) return "";
+
     const { type, animation: animConfig } = imageAnimation;
-    const selector = type === 'hover' ? '&:hover' : '&:active';
-    
+    const selector = type === "hover" ? "&:hover" : "&:active";
+
     // Generate animation CSS based on type
-    if (animConfig.type === 'pulse') {
+    if (animConfig.type === "pulse") {
       return `
         ${selector} {
-          animation: imageTextImagePulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: imageTextImagePulse ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes imageTextImagePulse {
@@ -76,10 +88,12 @@ const Image = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'glow') {
+    } else if (animConfig.type === "glow") {
       return `
         ${selector} {
-          animation: imageTextImageGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: imageTextImageGlow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes imageTextImageGlow {
@@ -91,10 +105,12 @@ const Image = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'brightness') {
+    } else if (animConfig.type === "brightness") {
       return `
         ${selector} {
-          animation: imageTextImageBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: imageTextImageBrightness ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes imageTextImageBrightness {
@@ -106,10 +122,12 @@ const Image = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'blur') {
+    } else if (animConfig.type === "blur") {
       return `
         ${selector} {
-          animation: imageTextImageBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: imageTextImageBlur ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes imageTextImageBlur {
@@ -121,10 +139,12 @@ const Image = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'saturate') {
+    } else if (animConfig.type === "saturate") {
       return `
         ${selector} {
-          animation: imageTextImageSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: imageTextImageSaturate ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes imageTextImageSaturate {
@@ -136,10 +156,12 @@ const Image = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'contrast') {
+    } else if (animConfig.type === "contrast") {
       return `
         ${selector} {
-          animation: imageTextImageContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: imageTextImageContrast ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes imageTextImageContrast {
@@ -151,10 +173,12 @@ const Image = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'opacity') {
+    } else if (animConfig.type === "opacity") {
       return `
         ${selector} {
-          animation: imageTextImageOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: imageTextImageOpacity ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes imageTextImageOpacity {
@@ -169,10 +193,12 @@ const Image = styled.img<{
           }
         }
       `;
-    } else if (animConfig.type === 'shadow') {
+    } else if (animConfig.type === "shadow") {
       return `
         ${selector} {
-          animation: imageTextImageShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: imageTextImageShadow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes imageTextImageShadow {
@@ -185,8 +211,8 @@ const Image = styled.img<{
         }
       `;
     }
-    
-    return '';
+
+    return "";
   }}
 `;
 
@@ -219,9 +245,7 @@ const Heading = styled.h2<{
 }>`
   color: ${(props) => props.$data.blocks?.setting?.headingColor || "#333"};
   font-size: ${(props) =>
-    props.$preview === "sm"
-      ? "22"
-      : props.$data.blocks?.setting?.headingFontSize || "30"}px;
+    props.$data.blocks?.setting?.headingFontSize || "30"}px;
   font-weight: ${(props) =>
     props.$data.blocks?.setting?.headingFontWeight || "bold"};
   margin-bottom: 10px;
@@ -235,9 +259,7 @@ const Description = styled.p<{
   color: ${(props) =>
     props.$data.blocks?.setting?.descriptionColor || "#666666"};
   font-size: ${(props) =>
-    props.$preview === "sm"
-      ? "18"
-      : props.$data?.blocks?.setting?.descriptionFontSize || "24"}px;
+    props.$data?.blocks?.setting?.descriptionFontSize || "24"}px;
   font-weight: ${(props) =>
     props.$data.blocks?.setting?.descriptionFontWeight || "normal"};
   margin-bottom: 20px;
@@ -249,27 +271,27 @@ const Button = styled.a<{ $data: ImageTextSection }>`
   color: ${(props) => props.$data.blocks?.setting?.btnTextColor || "#fff"};
   background-color: ${(props) =>
     props.$data.blocks?.setting?.btnBackgroundColor || "#007bff"};
+  max-width: 100%;
+  width: ${(props) => props.$data.blocks?.setting?.btnWidth || "100"}px;
   text-decoration: none;
-  border-radius: 5px;
-  transition: opacity 0.3s;
-
-  &:hover {
-    opacity: 0.8;
-  }
+  border-radius: ${(props) => props.$data.blocks?.setting?.btnRadiuos || "5"}px;
+  transition: transform 0.2s;
 
   /* Apply button animations */
   ${(props) => {
     const buttonAnimation = props.$data.blocks?.setting?.buttonAnimation;
-    if (!buttonAnimation) return '';
-    
+    if (!buttonAnimation) return "";
+
     const { type, animation: animConfig } = buttonAnimation;
-    const selector = type === 'hover' ? '&:hover' : '&:active';
-    
+    const selector = type === "hover" ? "&:hover" : "&:active";
+
     // Generate animation CSS based on type
-    if (animConfig.type === 'pulse') {
+    if (animConfig.type === "pulse") {
       return `
         ${selector} {
-          animation: imageTextButtonPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: imageTextButtonPulse ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes imageTextButtonPulse {
@@ -283,10 +305,12 @@ const Button = styled.a<{ $data: ImageTextSection }>`
           }
         }
       `;
-    } else if (animConfig.type === 'glow') {
+    } else if (animConfig.type === "glow") {
       return `
         ${selector} {
-          animation: imageTextButtonGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: imageTextButtonGlow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes imageTextButtonGlow {
@@ -298,10 +322,12 @@ const Button = styled.a<{ $data: ImageTextSection }>`
           }
         }
       `;
-    } else if (animConfig.type === 'brightness') {
+    } else if (animConfig.type === "brightness") {
       return `
         ${selector} {
-          animation: imageTextButtonBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: imageTextButtonBrightness ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes imageTextButtonBrightness {
@@ -313,10 +339,12 @@ const Button = styled.a<{ $data: ImageTextSection }>`
           }
         }
       `;
-    } else if (animConfig.type === 'blur') {
+    } else if (animConfig.type === "blur") {
       return `
         ${selector} {
-          animation: imageTextButtonBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: imageTextButtonBlur ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes imageTextButtonBlur {
@@ -328,10 +356,12 @@ const Button = styled.a<{ $data: ImageTextSection }>`
           }
         }
       `;
-    } else if (animConfig.type === 'saturate') {
+    } else if (animConfig.type === "saturate") {
       return `
         ${selector} {
-          animation: imageTextButtonSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: imageTextButtonSaturate ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes imageTextButtonSaturate {
@@ -343,10 +373,12 @@ const Button = styled.a<{ $data: ImageTextSection }>`
           }
         }
       `;
-    } else if (animConfig.type === 'contrast') {
+    } else if (animConfig.type === "contrast") {
       return `
         ${selector} {
-          animation: imageTextButtonContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: imageTextButtonContrast ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes imageTextButtonContrast {
@@ -358,10 +390,12 @@ const Button = styled.a<{ $data: ImageTextSection }>`
           }
         }
       `;
-    } else if (animConfig.type === 'opacity') {
+    } else if (animConfig.type === "opacity") {
       return `
         ${selector} {
-          animation: imageTextButtonOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: imageTextButtonOpacity ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes imageTextButtonOpacity {
@@ -376,10 +410,12 @@ const Button = styled.a<{ $data: ImageTextSection }>`
           }
         }
       `;
-    } else if (animConfig.type === 'shadow') {
+    } else if (animConfig.type === "shadow") {
       return `
         ${selector} {
-          animation: imageTextButtonShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: imageTextButtonShadow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes imageTextButtonShadow {
@@ -392,8 +428,8 @@ const Button = styled.a<{ $data: ImageTextSection }>`
         }
       `;
     }
-    
-    return '';
+
+    return "";
   }}
 `;
 
@@ -499,6 +535,7 @@ const ImageText: React.FC<ImageTextProps> = ({
         $previewWidth={previewWidth}
       >
         <Heading
+          dir="rtl"
           $preview={preview}
           $data={sectionData}
           $previewWidth={previewWidth}
@@ -506,6 +543,7 @@ const ImageText: React.FC<ImageTextProps> = ({
           {heading || "Default Heading"}
         </Heading>
         <Description
+          dir="rtl"
           $preview={preview}
           $data={sectionData}
           $previewWidth={previewWidth}

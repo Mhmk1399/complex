@@ -7,7 +7,12 @@ import { TabButtons } from "../tabButtons";
 import ImageSelectorModal from "../sections/ImageSelectorModal";
 import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
-import { HiChevronDown, HiSparkles } from "react-icons/hi";
+import { HiChevronDown, HiSparkles, HiTrash, HiPlus } from "react-icons/hi";
+import {
+  ColorInput,
+  DynamicRangeInput,
+  DynamicSelectInput,
+} from "./DynamicInputs";
 
 interface MultiRowFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<MultiRowSection>>;
@@ -22,32 +27,6 @@ interface BoxValues {
   left: number;
   right: number;
 }
-
-const ColorInput = ({
-  label,
-  name,
-  value,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <>
-    <label className="block mb-1">{label}</label>
-    <div className="flex flex-col rounded-md gap-3 items-center">
-      <input
-        type="color"
-        id={name}
-        name={name}
-        value={value || "#000000"}
-        onChange={onChange}
-        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
-      />
-    </div>
-  </>
-);
 
 export const MultiRowForm: React.FC<MultiRowFormProps> = ({
   setUserInputData,
@@ -106,6 +85,16 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
   };
 
   const handleDeleteRow = (index: number) => {
+    // Get all numeric keys (rows)
+    const existingKeys = Object.keys(userInputData?.blocks || {})
+      .filter((key) => !isNaN(Number(key)))
+      .map(Number);
+
+    // Prevent deleting if only one row remains
+    if (existingKeys.length <= 1) {
+      return;
+    }
+
     setUserInputData((prev: MultiRowSection) => {
       const newBlocks = { ...prev.blocks };
       delete newBlocks[index];
@@ -113,6 +102,19 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
         ...prev,
         blocks: newBlocks,
       };
+    });
+
+    // Clean up related states
+    setOpenRows((prev) => {
+      const newOpenRows = { ...prev };
+      delete newOpenRows[index];
+      return newOpenRows;
+    });
+
+    setUseRouteSelectBtns((prev) => {
+      const newRouteSelect = { ...prev };
+      delete newRouteSelect[index];
+      return newRouteSelect;
     });
   };
 
@@ -128,6 +130,8 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
           ...prev.setting,
           marginTop: updatedValues.top.toString(),
           marginBottom: updatedValues.bottom.toString(),
+          marginLeft: updatedValues.left.toString(),
+          marginRight: updatedValues.right.toString(),
         },
       }));
     } else {
@@ -163,7 +167,6 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
 
   useEffect(() => {
     const initialData = Compiler(layout, selectedComponent)[0];
-    console.log(initialData);
     if (initialData) {
       setUserInputData(initialData);
     }
@@ -372,17 +375,21 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
 
   return (
     <>
-      <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+      <div className="p-2 max-w-4xl space-y-2 rounded" dir="rtl">
         <h2 className="text-lg font-bold mb-4">ردیف ها</h2>
 
         {/* Tabs */}
         <TabButtons onTabChange={handleTabChange} />
 
         {isContentOpen && (
-          <div className="p-4 animate-slideDown">
-            <div className="rounded-lg">
-              <label htmlFor="" className="block mb-2 font-bold">
-                متن سربرگ
+          <div className="p-2 animate-slideDown">
+            {/* Main Title Section */}
+            <div className="mb-6   rounded-xl  ">
+              <label
+                htmlFor="title"
+                className="  mb-3 font-bold text-gray-800 flex items-center gap-2"
+              >
+                متن عنوان
               </label>
               <input
                 type="text"
@@ -394,268 +401,354 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                     title: e.target.value,
                   }))
                 }
-                className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                placeholder="Main Title"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm"
+                placeholder="عنوان اصلی بخش را وارد کنید"
               />
             </div>
-            <br />
-            <label htmlFor="" className="block mb-2 font-bold">
-              ردیف ها
-            </label>
-            {userInputData?.blocks &&
-              typeof userInputData.blocks === "object" &&
-              Object.keys(userInputData.blocks)
-                .filter((key) => !isNaN(Number(key))) // Only get numeric keys
-                .map((key) => {
-                  const block = userInputData.blocks[Number(key)];
-                  if (!block || typeof block !== "object") return null;
 
-                  return (
-                    <div
-                      key={key}
-                      className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100"
-                    >
-                      {/* Row Header Button */}
-                      <button
-                        onClick={() =>
-                          setOpenRows((prev) => ({
-                            ...prev,
-                            [Number(key)]: !prev[Number(key)],
-                          }))
-                        }
-                        className="w-full flex justify-between items-center p-4 hover:bg-gray-50 rounded-xl transition-all duration-200"
+            {/* Add New Row Button */}
+            <div className="mb-6">
+              <button
+                onClick={handleAddRow}
+                className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg w-full justify-center"
+              >
+                <HiPlus className="w-5 h-5" />
+                افزودن ردیف جدید
+              </button>
+            </div>
+
+            {/* Rows Section Header */}
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                <svg
+                  className="w-5 h-5 text-gray-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 10h16M4 14h16M4 18h16"
+                  />
+                </svg>
+                ردیف‌ها
+              </h3>
+              <span className="text-sm font-normal text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                {
+                  Object.keys(userInputData?.blocks || {}).filter(
+                    (key) => !isNaN(Number(key))
+                  ).length
+                }{" "}
+                ردیف
+              </span>
+            </div>
+
+            {/* Rows List */}
+            <div className="space-y-4">
+              {userInputData?.blocks &&
+                typeof userInputData.blocks === "object" &&
+                Object.keys(userInputData.blocks)
+                  .filter((key) => !isNaN(Number(key))) // Only get numeric keys
+                  .map((key) => {
+                    const block = userInputData.blocks[Number(key)];
+                    const rowIndex = Number(key);
+                    const totalRows = Object.keys(userInputData.blocks).filter(
+                      (k) => !isNaN(Number(k))
+                    ).length;
+
+                    if (!block || typeof block !== "object") return null;
+
+                    return (
+                      <div
+                        key={key}
+                        className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200"
                       >
-                        <div className="flex items-center gap-2">
-                          <svg
-                            className="w-5 h-5 text-blue-500"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+                        {/* Row Header */}
+                        <div className="flex justify-between items-center p-1 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+                          <button
+                            onClick={() =>
+                              setOpenRows((prev) => ({
+                                ...prev,
+                                [rowIndex]: !prev[rowIndex],
+                              }))
+                            }
+                            className="flex items-center gap-3 flex-1 text-left hover:bg-white/50 p-2 rounded-lg transition-colors"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M4 6h16M4 12h16M4 18h16"
-                            />
-                          </svg>
-                          <h3 className="font-semibold text-nowrap text-gray-700">
-                            ردیف {Number(key) + 1}
-                          </h3>
-                          <div className="flex items-center gap-2">
-                            <span
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteRow(Number(key));
-                              }}
-                              className="p-1 hover:bg-red-100 mr-10 rounded-full cursor-pointer"
+                            <div>
+                              <p className="text-sm text-gray-500 truncate max-w-xs">
+                                {block.heading || "بدون عنوان"}
+                              </p>
+                            </div>
+                            <svg
+                              className={`w-5 h-5 text-gray-400 transition-transform duration-200 mr-auto ${
+                                openRows[rowIndex] ? "rotate-180" : ""
+                              }`}
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
                             >
-                              <svg
-                                className="w-5 h-5 text-red-500"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 9l-7 7-7-7"
+                              />
+                            </svg>
+                          </button>
+
+                          {/* Delete Button - Only show if more than 1 row */}
+                          <div className="flex items-center gap-2">
+                            {totalRows > 1 ? (
+                              <button
+                                onClick={() => handleDeleteRow(rowIndex)}
+                                className="flex items-center gap-1 text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-2 rounded-lg transition-colors duration-200"
+                                title="حذف ردیف"
                               >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                />
-                              </svg>
-                            </span>
+                                <HiTrash className="w-4 h-4" />
+                              </button>
+                            ) : (
+                              <span className="text-xs text-red-500 bg-gray-100 px-3 py-2 rounded-lg">
+                                غیر قابل حذف
+                              </span>
+                            )}
                           </div>
                         </div>
-                        <svg
-                          className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-                            openRows[Number(key)] ? "rotate-180" : ""
-                          }`}
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 9l-7 7-7-7"
-                          />
-                        </svg>
-                      </button>
 
-                      {/* Row Content */}
-                      {openRows[Number(key)] && (
-                        <div className="p-4 animate-slideDown">
-                          <div className="space-y-4">
-                            {/* Title Input */}
-                            <div className="p-3 rounded-lg">
-                              <label className="block mb-2 text-sm font-bold text-gray-700">
-                                عنوان
-                              </label>
-                              <input
-                                type="text"
-                                name="heading"
-                                value={block.heading || ""}
-                                onChange={(e) =>
-                                  handleBlockChange(e, Number(key))
-                                }
-                                className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                              />
-                            </div>
-
-                            {/* Description Textarea */}
-                            <div className="p-3 rounded-lg">
-                              <label className="block mb-2 text-sm font-bold text-gray-700">
-                                توضیحات
-                              </label>
-                              <textarea
-                                name="description"
-                                value={block.description || ""}
-                                onChange={(e) =>
-                                  handleBlockChange(e, Number(key))
-                                }
-                                className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                                rows={3}
-                              />
-                            </div>
-
-                            {/* Image Input */}
-                            <div className="p-3 rounded-lg">
-                              <label className="block mb-2 text-sm font-bold text-gray-700">
-                                تصویر
-                              </label>
-                              <div className="flex gap-2 items-center">
-                                <input
-                                  type="text"
-                                  name="imageSrc"
-                                  value={block.imageSrc || ""}
-                                  onChange={(e) =>
-                                    handleBlockChange(e, Number(key))
-                                  }
-                                  className="w-full p-2 border hidden border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                                />
-                                <button
-                                  onClick={() => {
-                                    setCurrentEditingIndex(Number(key));
-                                    setIsImageSelectorOpen(true);
-                                  }}
-                                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all"
-                                  type="button"
-                                >
-                                  انتخاب تصویر
-                                </button>
-                              </div>
-                            </div>
-
-                            {/* Image Alt Input */}
-                            <div className="p-3 rounded-lg">
-                              <label className="block mb-2 text-sm font-bold text-gray-700">
-                                متن جایگزین تصویر
-                              </label>
-                              <input
-                                type="text"
-                                name="imageAlt"
-                                value={block.imageAlt || ""}
-                                onChange={(e) =>
-                                  handleBlockChange(e, Number(key))
-                                }
-                                className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                              />
-                            </div>
-
-                            {/* Button Label Input */}
-                            <div className="p-3 rounded-lg">
-                              <label className="block mb-2 text-sm font-bold text-gray-700">
-                                متن دکمه
-                              </label>
-                              <input
-                                type="text"
-                                name="btnLable"
-                                value={block.btnLable || ""}
-                                onChange={(e) =>
-                                  handleBlockChange(e, Number(key))
-                                }
-                                className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                              />
-                            </div>
-
-                            {/* Button Link Input */}
-                            <div className="p-3 rounded-lg">
-                              <label className="block mb-2 text-sm font-bold text-gray-700">
-                                لینک دکمه
-                              </label>
-                              <div className="mb-2">
-                                <label className="flex items-center gap-2">
-                                  <input
-                                    type="checkbox"
-                                    checked={
-                                      useRouteSelectBtns[Number(key)] || false
-                                    }
-                                    onChange={(e) =>
-                                      setUseRouteSelectBtns((prev) => ({
-                                        ...prev,
-                                        [Number(key)]: e.target.checked,
-                                      }))
-                                    }
-                                    className="rounded"
-                                  />
-                                  <span className="text-sm">
-                                    انتخاب از مسیرهای موجود
-                                  </span>
-                                </label>
-                              </div>
-                              {useRouteSelectBtns[Number(key)] ? (
-                                <select
-                                  value={block.btnLink || ""}
-                                  onChange={(
-                                    e: React.ChangeEvent<HTMLSelectElement>
-                                  ) => {
-                                    setUserInputData((prev) => ({
-                                      ...prev,
-                                      blocks: {
-                                        ...prev.blocks,
-                                        [Number(key)]: {
-                                          ...prev.blocks[Number(key)],
-                                          btnLink: e.target.value,
-                                        },
-                                      },
-                                    }));
-                                  }}
-                                  className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                                >
-                                  <option value="">انتخاب مسیر</option>
-                                  {activeRoutes.map((route: string) => (
-                                    <option key={route} value={route}>
-                                      {route}
-                                    </option>
-                                  ))}
-                                </select>
-                              ) : (
-                                <input
-                                  type="text"
-                                  name="btnLink"
-                                  value={block.btnLink || ""}
-                                  onChange={(e) =>
-                                    handleBlockChange(e, Number(key))
-                                  }
-                                  className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                                  placeholder="آدرس لینک یا مسیر سفارشی"
-                                />
+                        {/* Row Content */}
+                        {openRows[rowIndex] && (
+                          <div className="p-6 animate-slideDown">
+                            <div className="grid gap-6">
+                              {/* Image Preview */}
+                              {block.imageSrc && (
+                                <div className="mb-4">
+                                  <div className="w-full h-40 bg-gray-100 rounded-lg overflow-hidden border-2 border-dashed border-gray-300">
+                                    <img
+                                      src={block.imageSrc}
+                                      alt={block.imageAlt || "پیش‌نمایش"}
+                                      className="w-full h-full object-cover"
+                                      onError={(e) => {
+                                        e.currentTarget.src =
+                                          "/assets/images/placeholder.jpg";
+                                      }}
+                                    />
+                                  </div>
+                                </div>
                               )}
+
+                              {/* Form Fields Grid */}
+                              <div className="grid md:grid-cols-1 gap-6">
+                                {/* Title Input */}
+                                <div className="space-y-2">
+                                  <label className="block text-sm font-semibold text-gray-700">
+                                    عنوان ردیف
+                                  </label>
+                                  <input
+                                    type="text"
+                                    name="heading"
+                                    value={block.heading || ""}
+                                    onChange={(e) =>
+                                      handleBlockChange(e, rowIndex)
+                                    }
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                    placeholder="عنوان این ردیف را وارد کنید"
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Description Textarea */}
+                              <div className="space-y-2">
+                                <label className="block text-sm font-semibold text-gray-700">
+                                  توضیحات
+                                </label>
+                                <textarea
+                                  name="description"
+                                  value={block.description || ""}
+                                  onChange={(e) =>
+                                    handleBlockChange(e, rowIndex)
+                                  }
+                                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                  rows={4}
+                                  placeholder="توضیحات تفصیلی این ردیف را وارد کنید"
+                                />
+                              </div>
+                              {/* Button Label Input */}
+                              <div className="space-y-2">
+                                <label className="block text-sm font-semibold text-gray-700">
+                                  متن دکمه
+                                </label>
+                                <input
+                                  type="text"
+                                  name="btnLable"
+                                  value={block.btnLable || ""}
+                                  onChange={(e) =>
+                                    handleBlockChange(e, rowIndex)
+                                  }
+                                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                  placeholder="متن روی دکمه"
+                                />
+                              </div>
+
+                              {/* Image Section */}
+                              <div className="grid md:grid-cols-1 gap-6">
+                                <div className="space-y-2">
+                                  <label className="block text-sm font-semibold text-gray-700">
+                                    تصویر
+                                  </label>
+                                  <div className="flex flex-col gap-2">
+                                    <input
+                                      type="text"
+                                      name="imageSrc"
+                                      value={block.imageSrc || ""}
+                                      onChange={(e) =>
+                                        handleBlockChange(e, rowIndex)
+                                      }
+                                      className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                      placeholder="آدرس تصویر"
+                                    />
+                                    <button
+                                      onClick={() => {
+                                        setCurrentEditingIndex(rowIndex);
+                                        setIsImageSelectorOpen(true);
+                                      }}
+                                      className="px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors whitespace-nowrap"
+                                      type="button"
+                                    >
+                                      انتخاب فایل
+                                    </button>
+                                  </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                  <label className="block text-sm font-semibold text-gray-700">
+                                    متن جایگزین تصویر
+                                  </label>
+                                  <input
+                                    type="text"
+                                    name="imageAlt"
+                                    value={block.imageAlt || ""}
+                                    onChange={(e) =>
+                                      handleBlockChange(e, rowIndex)
+                                    }
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                    placeholder="توضیح کوتاه برای تصویر"
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Button Link Section */}
+                              <div className="space-y-3">
+                                <label className="block text-sm font-semibold text-gray-700">
+                                  لینک دکمه
+                                </label>
+
+                                {/* Route Selection Toggle */}
+                                <div className="mb-3">
+                                  <label className="flex items-center gap-3 cursor-pointer">
+                                    <input
+                                      type="checkbox"
+                                      checked={
+                                        useRouteSelectBtns[rowIndex] || false
+                                      }
+                                      onChange={(e) =>
+                                        setUseRouteSelectBtns((prev) => ({
+                                          ...prev,
+                                          [rowIndex]: e.target.checked,
+                                        }))
+                                      }
+                                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                    />
+                                    <span className="text-sm text-gray-600">
+                                      انتخاب از مسیرهای موجود
+                                    </span>
+                                  </label>
+                                </div>
+
+                                {/* Link Input */}
+                                {useRouteSelectBtns[rowIndex] ? (
+                                  <select
+                                    value={block.btnLink || ""}
+                                    onChange={(
+                                      e: React.ChangeEvent<HTMLSelectElement>
+                                    ) => {
+                                      setUserInputData((prev) => ({
+                                        ...prev,
+                                        blocks: {
+                                          ...prev.blocks,
+                                          [rowIndex]: {
+                                            ...prev.blocks[rowIndex],
+                                            btnLink: e.target.value,
+                                          },
+                                        },
+                                      }));
+                                    }}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                  >
+                                    <option value="">انتخاب مسیر</option>
+                                    {activeRoutes.map((route: string) => (
+                                      <option key={route} value={route}>
+                                        {route}
+                                      </option>
+                                    ))}
+                                  </select>
+                                ) : (
+                                  <input
+                                    type="text"
+                                    name="btnLink"
+                                    value={block.btnLink || ""}
+                                    onChange={(e) =>
+                                      handleBlockChange(e, rowIndex)
+                                    }
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                    placeholder="آدرس لینک یا مسیر سفارشی"
+                                  />
+                                )}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-            <button
-              onClick={handleAddRow}
-              className="px-1 rounded-lg mb-3 w-full text-3xl group hover:font-extrabold transition-all"
-            >
-              +
-              <div className="bg-blue-500 w-full pb-0.5 group-hover:bg-blue-600 group-hover:pb-1 transition-all"></div>
-            </button>
+                        )}
+                      </div>
+                    );
+                  })}
+            </div>
+
+            {/* Empty State */}
+            {(!userInputData?.blocks ||
+              Object.keys(userInputData.blocks).filter(
+                (key) => !isNaN(Number(key))
+              ).length === 0) && (
+              <div className="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
+                <div className="text-gray-400 mb-4">
+                  <svg
+                    className="w-16 h-16 mx-auto"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1}
+                      d="M4 6h16M4 10h16M4 14h16M4 18h16"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-medium text-gray-700 mb-2">
+                  هیچ ردیفی اضافه نشده است
+                </h3>
+                <p className="text-gray-500 mb-6">
+                  برای شروع، اولین ردیف خود را اضافه کنید
+                </p>
+                <button
+                  onClick={handleAddRow}
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors inline-flex items-center gap-2"
+                >
+                  <HiPlus className="w-5 h-5" />
+                  اولین ردیف را اضافه کنید
+                </button>
+              </div>
+            )}
           </div>
         )}
 
@@ -663,79 +756,91 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
         {isStyleSettingsOpen && (
           <>
             <div className="grid md:grid-cols-1 gap-4 animate-slideDown">
-              <h4 className="font-semibold my-2">تنظیمات سربرگ</h4>
-              <div className="rounded-lg flex items-center justify-between ">
+              {/* title */}
+              <div>
+                {" "}
+                <h4 className="font-semibold text-sky-700">تنظیمات سربرگ</h4>
+                <DynamicRangeInput
+                  label="سایز"
+                  name="titleFontSize"
+                  min="0"
+                  max="100"
+                  value={userInputData?.setting?.titleFontSize || "250"}
+                  onChange={handleSettingChange}
+                />{" "}
+                <DynamicSelectInput
+                  label="وزن"
+                  name="titleFontWeight"
+                  value={userInputData?.setting?.titleFontWeight ?? "normal"}
+                  options={[
+                    { value: "normal", label: "نرمال" },
+                    { value: "bold", label: "ضخیم" },
+                  ]}
+                  onChange={handleSettingChange}
+                />
                 <ColorInput
-                  label="رنگ سربرگ"
+                  label="رنگ "
                   name="titleColor"
                   value={userInputData?.setting?.titleColor ?? "#000000"}
                   onChange={handleSettingChange}
                 />
               </div>
-              <label className="block mb-1">سایز سربرگ</label>
-
-              <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  name="titleFontSize"
-                  value={userInputData?.setting?.titleFontSize || "250"}
-                  onChange={handleSettingChange}
-                />
-                <p className="text-sm text-gray-600 text-nowrap">
-                  {userInputData?.setting?.titleFontSize}px
-                </p>
-              </div>
+              {/* heading */}
               <div>
-                <label className="block mb-1">وزن سربرگ</label>
-                <select
-                  name="titleFontWeight"
-                  value={userInputData?.setting?.titleFontWeight ?? "normal"}
-                  onChange={handleSettingChange}
-                  className="w-full p-2 border rounded"
-                >
-                  <option value="normal">نرمال</option>
-                  <option value="bold">ضخیم</option>
-                </select>
-              </div>
-              <h4 className="font-semibold my-2">تنظیمات عنوان</h4>
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنگ عنوان"
-                  name="headingColor"
-                  value={userInputData?.setting?.headingColor ?? "#fcbf49"}
-                  onChange={handleSettingChange}
-                />
-              </div>
-              <label className="block mb-1">سایز عنوان</label>
-              <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-                <input
-                  type="range"
+                <h4 className="font-semibold my-2 text-sky-700">
+                  تنظیمات عنوان
+                </h4>
+                <DynamicRangeInput
+                  label="سایز"
+                  name="headingFontSize"
                   min="0"
                   max="100"
-                  name="headingFontSize"
                   value={userInputData?.setting?.headingFontSize || "250"}
                   onChange={handleSettingChange}
-                />
-                <p className="text-sm text-gray-600 text-nowrap">
-                  {userInputData?.setting?.headingFontSize}px
-                </p>
-              </div>
-              <div>
-                <label className="block mb-1">وزن عنوان</label>
-                <select
+                />{" "}
+                <DynamicSelectInput
+                  label="وزن"
                   name="headingFontWeight"
-                  value={userInputData?.setting?.headingFontWeight ?? "bold"}
+                  value={userInputData?.setting?.headingFontWeight ?? "normal"}
+                  options={[
+                    { value: "normal", label: "نرمال" },
+                    { value: "bold", label: "ضخیم" },
+                  ]}
                   onChange={handleSettingChange}
-                  className="w-full p-2 border rounded"
-                >
-                  <option value="normal">نرمال</option>
-                  <option value="bold">ضخیم</option>
-                </select>
+                />
+                <ColorInput
+                  label="رنگ "
+                  name="headingColor"
+                  value={userInputData?.setting?.headingColor ?? "#000000"}
+                  onChange={handleSettingChange}
+                />
               </div>
-              <h4 className="font-semibold my-2">تنظیمات توضیحات</h4>
-              <div className="rounded-lg flex items-center justify-between ">
+              {/* description */}
+              <div>
+                {" "}
+                <h4 className="font-semibold my-2 text-sky-700">
+                  تنظیمات توضیحات
+                </h4>
+                <DynamicRangeInput
+                  label="سایز"
+                  name="descriptionFontSize"
+                  min="0"
+                  max="100"
+                  value={userInputData?.setting?.descriptionFontSize || "250"}
+                  onChange={handleSettingChange}
+                />{" "}
+                <DynamicSelectInput
+                  label="وزن"
+                  name="descriptionFontWeight"
+                  value={
+                    userInputData?.setting?.descriptionFontWeight ?? "normal"
+                  }
+                  options={[
+                    { value: "normal", label: "نرمال" },
+                    { value: "bold", label: "ضخیم" },
+                  ]}
+                  onChange={handleSettingChange}
+                />
                 <ColorInput
                   label="رنگ توضیحات"
                   name="descriptionColor"
@@ -743,36 +848,42 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                   onChange={handleSettingChange}
                 />
               </div>
-              <label className="block mb-1">سایز توضیحات</label>
-              <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-                <input
-                  type="range"
+              {/* rows */}
+              <div>
+                {" "}
+                <h4 className="font-semibold my-2 text-sky-700">
+                  تنظیمات پس زمینه ردیف
+                </h4>
+                <DynamicRangeInput
+                  label="انحنا"
+                  name="rowRadius"
                   min="0"
                   max="100"
-                  name="descriptionFontSize"
-                  value={userInputData?.setting?.descriptionFontSize || "250"}
+                  value={userInputData?.setting?.rowRadius || "20"}
                   onChange={handleSettingChange}
-                />
-                <p className="text-sm text-gray-600 text-nowrap">
-                  {userInputData?.setting?.descriptionFontSize}px
-                </p>
-              </div>
-              <div>
-                <label className="block mb-1">وزن توضیحات</label>
-                <select
-                  name="descriptionFontWeight"
+                />{" "}
+                <ColorInput
+                  label="رنگ پس زمینه"
+                  name="backgroundColorBox"
                   value={
-                    userInputData?.setting?.descriptionFontWeight ?? "bold"
+                    userInputData?.setting?.backgroundColorBox ?? "#2b2d42"
                   }
                   onChange={handleSettingChange}
-                  className="w-full p-2 border rounded"
-                >
-                  <option value="normal">نرمال</option>
-                  <option value="bold">ضخیم</option>
-                </select>
+                />
               </div>
-              <h4 className="font-semibold my-2">تنظیمات پس زمینه</h4>
-              <div className="rounded-lg flex items-center justify-between ">
+              {/* background */}
+              <div>
+                <h4 className="font-semibold my-2 text-sky-700">
+                  تنظیمات پس زمینه{" "}
+                </h4>
+                <DynamicRangeInput
+                  label="انحنا"
+                  name="formRadius"
+                  min="0"
+                  max="100"
+                  value={userInputData?.setting?.formRadius || "20"}
+                  onChange={handleSettingChange}
+                />{" "}
                 <ColorInput
                   label="رنگ پس زمینه"
                   name="backgroundColorMultiRow"
@@ -782,26 +893,33 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                   onChange={handleSettingChange}
                 />
               </div>
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنگ پس زمینه ردیف ها"
-                  name="backgroundColorBox"
-                  value={
-                    userInputData?.setting?.backgroundColorBox ?? "#2b2d42"
-                  }
+              {/* button */}
+              <div>
+                <h4 className="font-semibold my-2 text-sky-700">
+                  تنظیمات دکمه{" "}
+                </h4>
+                <DynamicRangeInput
+                  label="عرض"
+                  name="btnWidth"
+                  min="0"
+                  max="900"
+                  value={userInputData?.setting?.btnWidth || "20"}
                   onChange={handleSettingChange}
-                />
-              </div>
-              <h4 className="font-semibold my-2">تنظیمات دکمه </h4>
-              <div className="rounded-lg flex items-center justify-between ">
+                />{" "}
+                <DynamicRangeInput
+                  label="انحنا"
+                  name="btnRadius"
+                  min="0"
+                  max="30"
+                  value={userInputData?.setting?.btnRadius || "5"}
+                  onChange={handleSettingChange}
+                />{" "}
                 <ColorInput
                   label="رنگ متن دکمه"
                   name="btnColor"
                   value={userInputData?.setting?.btnColor ?? "#ffffff"}
                   onChange={handleSettingChange}
                 />
-              </div>
-              <div className="rounded-lg flex items-center justify-between ">
                 <ColorInput
                   label="رنگ پس زمینه دکمه"
                   name="btnBackgroundColor"
@@ -811,70 +929,94 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                   onChange={handleSettingChange}
                 />
               </div>
-              <div className="grid md:grid-cols-1 gap-4 mt-4">
-                <h4 className="font-semibold mb-2">تنظیمات تصویر</h4>
-                <label className="block ">عرض تصویر</label>
-                <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-                  <input
-                    type="range"
-                    min="0"
-                    max="1000"
-                    name="imageWidth"
-                    value={parseInt(
-                      userInputData?.setting?.imageWidth ?? "700"
-                    )}
-                    onChange={handleSettingChange}
-                  />
-                  <p className="text-sm text-gray-600 text-nowrap">
-                    {userInputData?.setting?.imageWidth}px
-                  </p>
-                </div>
-                <label className="block">ارتفاع تصویر</label>
-                <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-                  <input
-                    type="range"
-                    min="0"
-                    max="1000"
-                    name="imageHeight"
-                    value={parseInt(
-                      userInputData?.setting?.imageHeight ?? "300"
-                    )}
-                    onChange={handleSettingChange}
-                  />
-                  <p className="text-sm text-gray-600 text-nowrap">
-                    {userInputData?.setting?.imageHeight}px
-                  </p>
-                </div>
-                <label className="block">انحنا زوایای تصویر</label>
-                <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-                  <input
-                    type="range"
-                    min="0"
-                    max="200"
-                    name="imageRadius"
-                    value={parseInt(
-                      userInputData?.setting?.imageRadius ?? "45"
-                    )}
-                    onChange={handleSettingChange}
-                  />
-                  <p className="text-sm text-gray-600 text-nowrap">
-                    {userInputData?.setting?.imageRadius}px
-                  </p>
-                </div>
-              </div>
-
-              {/* Layout Settings */}
-              <div className="mt-4">
-                <label className="block mb-1">جایگاه تصویر</label>
-                <select
+              {/* Image */}
+              <div>
+                <h4 className="font-semibold my-2 text-sky-700">
+                  تنظیمات تصویر
+                </h4>
+                <DynamicRangeInput
+                  label="عرض"
+                  name="imageWidth"
+                  min="0"
+                  max="2000"
+                  value={userInputData?.setting?.imageWidth || "5"}
+                  onChange={handleSettingChange}
+                />{" "}
+                <DynamicRangeInput
+                  label="ارتفاع"
+                  name="imageHeight"
+                  min="0"
+                  max="2000"
+                  value={userInputData?.setting?.imageHeight || "5"}
+                  onChange={handleSettingChange}
+                />{" "}
+                <DynamicRangeInput
+                  label="انحنا"
+                  name="imageRadius"
+                  min="0"
+                  max="200"
+                  value={userInputData?.setting?.imageRadius || "5"}
+                  onChange={handleSettingChange}
+                />{" "}
+                <DynamicSelectInput
+                  label="وزن"
                   name="imageAlign"
                   value={userInputData?.setting?.imageAlign ?? "row"}
+                  options={[
+                    { value: "row", label: "ردیف" },
+                    { value: "row-reverse", label: "ردیف معکوس" },
+                  ]}
                   onChange={handleSettingChange}
-                  className="w-full p-2 border rounded"
-                >
-                  <option value="row">ردیف</option>
-                  <option value="row-reverse">ردیف معکوس</option>
-                </select>
+                />
+              </div>
+
+              {/* ✅ New Shadow Settings */}
+              <div className="rounded-lg">
+                <h4 className="font-bold text-sky-700 my-3">تنظیمات سایه</h4>
+                <DynamicRangeInput
+                  label="افست افقی سایه"
+                  name="shadowOffsetX"
+                  min="-50"
+                  max="50"
+                  value={
+                    userInputData?.setting?.shadowOffsetX?.toString() ?? "0"
+                  }
+                  onChange={handleSettingChange}
+                />
+                <DynamicRangeInput
+                  label="افست عمودی سایه"
+                  name="shadowOffsetY"
+                  min="-50"
+                  max="50"
+                  value={
+                    userInputData?.setting?.shadowOffsetY?.toString() ?? "0"
+                  }
+                  onChange={handleSettingChange}
+                />
+                <DynamicRangeInput
+                  label="میزان بلور سایه"
+                  name="shadowBlur"
+                  min="0"
+                  max="100"
+                  value={userInputData?.setting?.shadowBlur?.toString() ?? "0"}
+                  onChange={handleSettingChange}
+                />
+                <DynamicRangeInput
+                  label="میزان گسترش سایه"
+                  name="shadowSpread"
+                  min="-20"
+                  max="20"
+                  value={
+                    userInputData?.setting?.shadowSpread?.toString() ?? "0"
+                  }
+                  onChange={handleSettingChange}
+                />
+                <ColorInput
+                  label="رنگ سایه"
+                  name="shadowColor"
+                  value={userInputData?.setting?.shadowColor?.toString() ?? "0"}
+                  onChange={handleSettingChange}
+                />
               </div>
             </div>
           </>
@@ -1352,7 +1494,7 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
 
         {/* Spacing Settings */}
         {isSpacingOpen && (
-          <div className="p-4 animate-slideDown">
+          <div className="animate-slideDown">
             <div className="rounded-lg flex items-center justify-center">
               <MarginPaddingEditor
                 margin={margin}

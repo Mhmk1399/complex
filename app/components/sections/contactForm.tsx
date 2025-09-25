@@ -17,19 +17,30 @@ const FormContainer = styled.div<{
   $data: ContactFormDataSection;
   $preview: "sm" | "default";
 }>`
-  padding-top: ${(props) => props.$data?.setting?.paddingTop || "20"}px;
-  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "20"}px;
-  padding-left: ${(props) => props.$data?.setting?.paddingLeft || "20"}px;
-  padding-right: ${(props) => props.$data?.setting?.paddingRight || "20"}px;
-  margin-top: ${(props) => props.$data?.setting?.marginTop || "20"}px;
+  margin-top: ${(props) => props.$data.setting.marginTop || "30"}px;
+  margin-bottom: ${(props) => props.$data.setting.marginBottom}px;
+  margin-right: ${(props) => props.$data.setting.marginRight}px;
+  margin-left: ${(props) => props.$data.setting.marginLeft}px;
+  padding-top: ${(props) => props.$data.setting.paddingTop}px;
+  padding-bottom: ${(props) => props.$data.setting.paddingBottom}px;
+  padding-left: ${(props) => props.$data.setting.paddingLeft}px;
+  padding-right: ${(props) => props.$data.setting.paddingRight}px;
   margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "20"}px;
   background-color: ${(props) =>
     props.$data?.blocks?.setting?.formBackground || "#f8f9fa"};
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: ${(props) =>
+    props.$data.blocks?.setting?.boxRadiuos || "10"}px;
+  box-shadow: ${(props) =>
+    `${props.$data.blocks?.setting?.shadowOffsetX || 0}px 
+     ${props.$data.blocks?.setting?.shadowOffsetY || 4}px 
+     ${props.$data.blocks?.setting?.shadowBlur || 10}px 
+     ${props.$data.blocks?.setting?.shadowSpread || 0}px 
+     ${props.$data.blocks?.setting?.shadowColor || "#fff"}`};
 `;
 
 const FormHeading = styled.h2<{
@@ -38,9 +49,7 @@ const FormHeading = styled.h2<{
 }>`
   color: ${(props) => props.$data?.blocks?.setting?.headingColor || "#333"};
   font-size: ${(props) =>
-    props.$preview === "sm"
-      ? "20px"
-      : `${props.$data?.blocks?.setting?.headingFontSize || "28"}px`};
+    `${props.$data?.blocks?.setting?.headingFontSize || "28"}px`};
   font-weight: ${(props) =>
     props.$data?.blocks?.setting?.headingFontWeight || "bold"};
   text-align: center;
@@ -51,18 +60,27 @@ const FormGroup = styled.div`
   margin-bottom: 1.5rem;
 `;
 
-const Label = styled.label`
+const Label = styled.label<{
+  $data: ContactFormDataSection;
+}>`
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: #555;
+  margin-right: 10px;
+  color: ${(props) => props.$data?.blocks?.setting?.labelColor || "#333"};
 `;
 
-const Input = styled.input`
-  width: 100%;
+const Input = styled.input<{
+  $data: ContactFormDataSection;
+}>`
+  max-width: 100%;
+  width: ${(props) => props.$data.blocks?.setting?.inputWidth || "10"}px;
   padding: 12px;
+  margin-right: 10px;
+  margin-left: 10px;
   border: 2px solid #e1e5e9;
-  border-radius: 8px;
+  border-radius: ${(props) =>
+    props.$data.blocks?.setting?.inputRadiuos || "10"}px;
   font-size: 16px;
   transition: border-color 0.3s ease;
 
@@ -72,15 +90,19 @@ const Input = styled.input`
   }
 `;
 
-const TextArea = styled.textarea`
-  width: 100%;
+const TextArea = styled.textarea<{
+  $data: ContactFormDataSection;
+}>`
+  max-width: 100%;
+  width: ${(props) => props.$data.blocks?.setting?.inputWidth || "10"}px;
   padding: 12px;
   border: 2px solid #e1e5e9;
-  border-radius: 8px;
+  border-radius: ${(props) =>
+    props.$data.blocks?.setting?.inputRadiuos || "10"}px;
   font-size: 16px;
-  min-height: 120px;
   resize: vertical;
   transition: border-color 0.3s ease;
+  margin-right: 10px;
 
   &:focus {
     outline: none;
@@ -97,11 +119,13 @@ const SubmitButton = styled.button<{
   color: ${(props) => props.$data?.blocks?.setting?.btnTextColor || "#ffffff"};
   padding: ${(props) => (props.$preview === "sm" ? "10px 20px" : "12px 30px")};
   border: none;
-  border-radius: 8px;
+  border-radius: ${(props) =>
+    props.$data.blocks?.setting?.btnRadiuos || "10"}px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  width: 100%;
+  width: ${(props) => props.$data.blocks?.setting?.btnWidth || "10"}px;
+  max-width: 100%;
   transition: all 0.3s ease;
 
   &:hover {
@@ -112,16 +136,18 @@ const SubmitButton = styled.button<{
   /* Apply button animations */
   ${(props) => {
     const btnAnimation = props.$data?.blocks?.setting?.btnAnimation;
-    if (!btnAnimation) return '';
-    
+    if (!btnAnimation) return "";
+
     const { type, animation: animConfig } = btnAnimation;
-    const selector = type === 'hover' ? '&:hover' : '&:active';
-    
+    const selector = type === "hover" ? "&:hover" : "&:active";
+
     // Generate animation CSS based on type
-    if (animConfig.type === 'pulse') {
+    if (animConfig.type === "pulse") {
       return `
         ${selector} {
-          animation: contactFormBtnPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: contactFormBtnPulse ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes contactFormBtnPulse {
@@ -135,10 +161,12 @@ const SubmitButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'glow') {
+    } else if (animConfig.type === "glow") {
       return `
         ${selector} {
-          animation: contactFormBtnGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: contactFormBtnGlow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes contactFormBtnGlow {
@@ -150,10 +178,12 @@ const SubmitButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'brightness') {
+    } else if (animConfig.type === "brightness") {
       return `
         ${selector} {
-          animation: contactFormBtnBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: contactFormBtnBrightness ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes contactFormBtnBrightness {
@@ -165,10 +195,12 @@ const SubmitButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'blur') {
+    } else if (animConfig.type === "blur") {
       return `
         ${selector} {
-          animation: contactFormBtnBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: contactFormBtnBlur ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes contactFormBtnBlur {
@@ -180,10 +212,12 @@ const SubmitButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'saturate') {
+    } else if (animConfig.type === "saturate") {
       return `
         ${selector} {
-          animation: contactFormBtnSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: contactFormBtnSaturate ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes contactFormBtnSaturate {
@@ -195,10 +229,12 @@ const SubmitButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'contrast') {
+    } else if (animConfig.type === "contrast") {
       return `
         ${selector} {
-          animation: contactFormBtnContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: contactFormBtnContrast ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes contactFormBtnContrast {
@@ -210,10 +246,12 @@ const SubmitButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'opacity') {
+    } else if (animConfig.type === "opacity") {
       return `
         ${selector} {
-          animation: contactFormBtnOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: contactFormBtnOpacity ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes contactFormBtnOpacity {
@@ -228,10 +266,12 @@ const SubmitButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'shadow') {
+    } else if (animConfig.type === "shadow") {
       return `
         ${selector} {
-          animation: contactFormBtnShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: contactFormBtnShadow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes contactFormBtnShadow {
@@ -244,8 +284,8 @@ const SubmitButton = styled.button<{
         }
       `;
     }
-    
-    return '';
+
+    return "";
   }}
 `;
 
@@ -261,7 +301,6 @@ const ContactForm: React.FC<ContactFormProps> = ({
   const [preview, setPreview] = useState(previewWidth);
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
     phone: "",
     message: "",
   });
@@ -296,18 +335,17 @@ const ContactForm: React.FC<ContactFormProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       // Here you would typically send the form data to your API
       console.log("Form submitted:", formData);
-      
+
       // Show success message or handle response
       alert("پیام شما با موفقیت ارسال شد!");
-      
+
       // Reset form
       setFormData({
         name: "",
-        email: "",
         phone: "",
         message: "",
       });
@@ -318,7 +356,9 @@ const ContactForm: React.FC<ContactFormProps> = ({
   };
 
   return (
-    <div
+    <FormContainer
+      $data={sectionData}
+      $preview={preview}
       onClick={() => setSelectedComponent(actualName)}
       className={`transition-all duration-150 ease-in-out relative ${
         selectedComponent === actualName
@@ -326,117 +366,109 @@ const ContactForm: React.FC<ContactFormProps> = ({
           : ""
       }`}
     >
-      <FormContainer $data={sectionData} $preview={preview}>
-        {actualName === selectedComponent && (
-          <div className="absolute w-fit -top-5 -left-1 z-10 flex">
-            <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
-              {actualName}
-            </div>
-            <button
-              className="font-extrabold text-xl hover:bg-blue-500 bg-red-500 pb-1 rounded-r-lg px-3 text-white transform transition-all ease-in-out duration-300"
-              onClick={() => setShowDeleteModal(true)}
-            >
-              x
-            </button>
+      {actualName === selectedComponent && (
+        <div className="absolute w-fit -top-5 -left-1 z-10 flex">
+          <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
+            {actualName}
           </div>
-        )}
-
-        <FormHeading $data={sectionData} $preview={preview}>
-          {sectionData.blocks?.heading || "تماس با ما"}
-        </FormHeading>
-
-        <form onSubmit={handleSubmit} dir="rtl">
-          <FormGroup>
-            <Label htmlFor="name">نام و نام خانوادگی *</Label>
-            <Input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              required
-              placeholder="نام و نام خانوادگی خود را وارد کنید"
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <Label htmlFor="email">ایمیل *</Label>
-            <Input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-              placeholder="آدرس ایمیل خود را وارد کنید"
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <Label htmlFor="phone">شماره تماس</Label>
-            <Input
-              type="tel"
-              id="phone"
-              name="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-              placeholder="شماره تماس خود را وارد کنید"
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <Label htmlFor="message">پیام *</Label>
-            <TextArea
-              id="message"
-              name="message"
-              value={formData.message}
-              onChange={handleInputChange}
-              required
-              placeholder="پیام خود را اینجا بنویسید..."
-            />
-          </FormGroup>
-
-          <SubmitButton
-            type="submit"
-            $data={sectionData}
-            $preview={preview}
+          <button
+            className="font-extrabold text-xl hover:bg-blue-500 bg-red-500 pb-1 rounded-r-lg px-3 text-white transform transition-all ease-in-out duration-300"
+            onClick={() => setShowDeleteModal(true)}
           >
-            ارسال پیام
-          </SubmitButton>
-        </form>
+            x
+          </button>
+        </div>
+      )}
 
-        {showDeleteModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center">
-            <div className="bg-white p-8 rounded-lg">
-              <h3 className="text-lg font-bold mb-4">
-                آیا از حذف
-                <span className="text-blue-400 font-bold mx-1">
-                  {actualName}
-                </span>
-                مطمئن هستید؟
-              </h3>
-              <div className="flex gap-4 justify-end">
-                <button
-                  className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
-                  onClick={() => setShowDeleteModal(false)}
-                >
-                  انصراف
-                </button>
-                <button
-                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-                  onClick={() => {
-                    Delete(actualName, layout, setLayout);
-                    setShowDeleteModal(false);
-                  }}
-                >
-                  حذف
-                </button>
-              </div>
+      <FormHeading $data={sectionData} $preview={preview}>
+        {sectionData.blocks?.heading || "تماس با ما"}
+      </FormHeading>
+
+      <form
+        onSubmit={handleSubmit}
+        dir="rtl"
+        className="w-full  flex flex-col justify-center items-center px-4"
+      >
+        <FormGroup>
+          <Label $data={sectionData} htmlFor="name">
+            نام و نام خانوادگی *
+          </Label>
+          <Input
+            $data={sectionData}
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            required
+            placeholder="نام و نام خانوادگی خود را وارد کنید"
+          />
+        </FormGroup>
+
+        <FormGroup>
+          <Label $data={sectionData} htmlFor="phone">
+            شماره تماس
+          </Label>
+          <Input
+            $data={sectionData}
+            type="tel"
+            id="phone"
+            name="phone"
+            value={formData.phone}
+            onChange={handleInputChange}
+            placeholder="شماره تماس خود را وارد کنید"
+          />
+        </FormGroup>
+
+        <FormGroup>
+          <Label $data={sectionData} htmlFor="message">
+            پیام *
+          </Label>
+          <TextArea
+            $data={sectionData}
+            id="message"
+            name="message"
+            value={formData.message}
+            onChange={handleInputChange}
+            required
+            placeholder="پیام خود را اینجا بنویسید..."
+          />
+        </FormGroup>
+
+        <SubmitButton type="submit" $data={sectionData} $preview={preview}>
+          ارسال پیام
+        </SubmitButton>
+      </form>
+
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center">
+          <div className="bg-white p-8 rounded-lg">
+            <h3 className="text-lg font-bold mb-4">
+              آیا از حذف
+              <span className="text-blue-400 font-bold mx-1">{actualName}</span>
+              مطمئن هستید؟
+            </h3>
+            <div className="flex gap-4 justify-end">
+              <button
+                className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                انصراف
+              </button>
+              <button
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                onClick={() => {
+                  Delete(actualName, layout, setLayout);
+                  setShowDeleteModal(false);
+                }}
+              >
+                حذف
+              </button>
             </div>
           </div>
-        )}
-      </FormContainer>
-    </div>
+        </div>
+      )}
+    </FormContainer>
   );
 };
 
