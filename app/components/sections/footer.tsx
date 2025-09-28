@@ -4,14 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Layout, FooterSection } from "@/lib/types";
 import { useState, useEffect } from "react";
-import { BiTimer } from "react-icons/bi";
-import {
-  FaTruck,
-  FaMoneyBillWave,
-  FaExchangeAlt,
-  FaCertificate,
-  FaArrowUp,
-} from "react-icons/fa";
+import { FaArrowUp } from "react-icons/fa";
+
 interface Category {
   _id: string;
   name: string;
@@ -27,49 +21,40 @@ interface FooterProps {
   previewWidth: "sm" | "default";
 }
 
-const trustItems = [
-  {
-    icon: FaTruck,
-    text: "امکان تحویل اکسپرس",
-  },
-  {
-    icon: FaMoneyBillWave,
-    text: " پرداخت در محل",
-  },
-  {
-    icon: BiTimer,
-    text: "۷ روز هفته ۲۴ ساعته",
-  },
-  {
-    icon: FaExchangeAlt,
-    text: "7 روز ضمانت بازگشت کالا",
-  },
-  {
-    icon: FaCertificate,
-    text: "ضمانت اصل بودن کالا",
-  },
-];
-
 const FooterContainer = styled.footer<{
   $data: FooterSection;
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
-  padding-top: ${(props) => props.$data?.setting?.paddingTop || "20"}px;
-  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "20"}px;
-  padding-left: ${(props) => props.$data?.setting?.paddingLeft || "0"}px;
-  padding-right: ${(props) => props.$data?.setting?.paddingRight || "0"}px;
+  padding: ${(props) => {
+    const top = props.$data?.setting?.paddingTop || "24";
+    const bottom = props.$data?.setting?.paddingBottom || "24";
+    const left = props.$data?.setting?.paddingLeft || "16";
+    const right = props.$data?.setting?.paddingRight || "16";
+    return props.$preview === "sm"
+      ? `${parseInt(top) * 0.7}px ${parseInt(right) * 0.7}px ${
+          parseInt(bottom) * 0.7
+        }px ${parseInt(left) * 0.7}px`
+      : `${top}px ${right}px ${bottom}px ${left}px`;
+  }};
   margin-top: ${(props) => props.$data?.setting?.marginTop || "0"}px;
   margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "0"}px;
-  background-color: ${(props) => props.$data?.setting?.backgroundColor};
+  background-color: ${(props) =>
+    props.$data?.setting?.backgroundColor || "#f8f9fa"};
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   position: relative;
-  gap: ${(props) => (props.$preview === "sm" ? "8px" : "10px")};
+  gap: ${(props) => (props.$preview === "sm" ? "12px" : "16px")};
   text-align: center;
-  // width: ${(props) => (props.$preview === "sm" ? "425px" : "100%")};
+  transition: all 0.2s ease;
+  border-radius: ${(props) => props.$data?.blocks?.setting?.bgRadius || "0"}px;
+  box-shadow: ${(props) =>
+    `${props.$data.blocks.setting?.shadowOffsetX || 0}px 
+     ${props.$data.blocks.setting?.shadowOffsetY || 4}px 
+     ${props.$data.blocks.setting?.shadowBlur || 10}px 
+     ${props.$data.blocks.setting?.shadowSpread || 0}px 
+     ${props.$data.blocks.setting?.shadowColor || "#fff"}`};
 `;
 
 const FooterText = styled.h2<{
@@ -78,15 +63,16 @@ const FooterText = styled.h2<{
   $preview: "sm" | "default";
 }>`
   font-size: ${(props) => {
-    const baseFontSize = props.$data?.blocks?.setting?.textFontSize || "16";
+    const baseFontSize = props.$data?.blocks?.setting?.textFontSize || "20";
     return props.$preview === "sm"
       ? `${parseInt(baseFontSize) * 0.8}px`
       : `${baseFontSize}px`;
   }};
   font-weight: ${(props) =>
-    props.$data?.blocks?.setting?.textFontWeight || "normal"};
-  color: ${(props) => props.$data?.blocks?.setting?.textColor || "#ffffff"};
-  padding: ${(props) => (props.$preview === "sm" ? "8px 4px" : "10px 5px")};
+    props.$data?.blocks?.setting?.textFontWeight || "600"};
+  color: ${(props) => props.$data?.blocks?.setting?.textColor || "#1f2937"};
+  margin: 0;
+  padding: ${(props) => (props.$preview === "sm" ? "4px 8px" : "6px 12px")};
 `;
 
 const FooterDescription = styled.p<{
@@ -96,16 +82,19 @@ const FooterDescription = styled.p<{
 }>`
   font-size: ${(props) => {
     const baseFontSize =
-      props.$data?.blocks?.setting?.descriptionFontSize || "16";
+      props.$data?.blocks?.setting?.descriptionFontSize || "14";
     return props.$preview === "sm"
-      ? `${parseInt(baseFontSize) * 0.8}px`
+      ? `${parseInt(baseFontSize) * 0.85}px`
       : `${baseFontSize}px`;
   }};
   font-weight: ${(props) =>
-    props.$data?.blocks?.setting?.descriptionFontWeight || "normal"};
+    props.$data?.blocks?.setting?.descriptionFontWeight || "400"};
   color: ${(props) =>
-    props.$data?.blocks?.setting?.descriptionColor || "#ffffff"};
-  padding: ${(props) => (props.$preview === "sm" ? "0 20px" : "0 50px")};
+    props.$data?.blocks?.setting?.descriptionColor || "#6b7280"};
+  margin: 0;
+  padding: ${(props) => (props.$preview === "sm" ? "0 16px" : "0 24px")};
+  line-height: 1.5;
+  max-width: 800px;
 `;
 
 const SocialLinks = styled.div<{
@@ -114,10 +103,12 @@ const SocialLinks = styled.div<{
 }>`
   display: flex;
   justify-content: center;
-  gap: ${(props) => (props.$preview === "sm" ? "10px" : "30px")};
-  margin: ${(props) => (props.$preview === "sm" ? "8px 0" : "10px 0")};
+  gap: ${(props) => (props.$preview === "sm" ? "12px" : "16px")};
+  margin: ${(props) => (props.$preview === "sm" ? "8px 0" : "12px 0")};
+  padding: ${(props) => (props.$preview === "sm" ? "8px" : "12px")};
   transition: all 0.3s ease-in-out;
 `;
+
 const FooterLinks = styled.div<{
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
@@ -125,121 +116,81 @@ const FooterLinks = styled.div<{
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: ${(props) => (props.$preview === "sm" ? "10px" : "15px")};
-  margin-top: ${(props) => (props.$preview === "sm" ? "8px" : "10px")};
-  padding: ${(props) => (props.$preview === "sm" ? "0 10px" : "0")};
+  gap: ${(props) => (props.$preview === "sm" ? "12px" : "16px")};
+  margin: ${(props) => (props.$preview === "sm" ? "8px 0" : "12px 0")};
+  padding: ${(props) => (props.$preview === "sm" ? "8px" : "12px")};
 `;
+
 const NumberPart = styled.div<{
   $data: FooterSection;
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
-  color: ${(props) => props.$data?.blocks?.setting?.textColor || "#ffffff"};
-`;
+  color: ${(props) => props.$data?.blocks?.setting?.textColor || "#1f2937"};
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  font-size: ${(props) => (props.$preview === "sm" ? "14px" : "15px")};
+  background: #ffffff;
+  transition: border-color 0.2s ease;
 
-const SvgBox = styled.div<{
-  $previewWidth: "sm" | "default";
-  $preview: "sm" | "default";
-  $data: FooterSection;
-}>`
-  width: ${(props) => {
-    const baseWidth = props.$data?.blocks?.setting?.logoWidth || "100";
-    return props.$preview === "sm"
-      ? `${parseInt(baseWidth) * 0.8}px`
-      : `${baseWidth}px`;
-  }};
-  height: ${(props) => {
-    const baseHeight = props.$data?.blocks?.setting?.logoHeight || "100";
-    return props.$preview === "sm"
-      ? `${parseInt(baseHeight) * 0.8}px`
-      : `${baseHeight}px`;
-  }};
-  border-radius: 50%;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease-in-out;
   &:hover {
-    transform: scale(1.08);
+    border-color: #d1d5db;
   }
-`;
-const TrustIconsContainer = styled.div`
-  display: flex;
-  width: 100%;
-  padding: 2rem 0;
-  flex-wrap: nowrap;
-  gap: 2px;
-  justify-content: center;
-  @media (min-width: 768px) {
-    justify-content: space-around;
-    align-items: center;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      color: #3b82f6;
+    }
   }
 `;
 
-const TrustItem = styled.div<{
-  $previewWidth: "sm" | "default";
-  $preview: "sm" | "default";
-  $data: FooterSection;
-}>`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  text-align: center;
-  width: ${(props) => (props.$preview === "sm" ? "80px" : "120px")};
-`;
-
-const IconBox = styled(SvgBox)`
-  background: ${(props) =>
-    props.$data?.blocks?.setting?.trustIconBackground || "#f8f9fa"};
-  color: ${(props) => props.$data?.blocks?.setting?.trustIconColor || "red"};
-  padding: 1rem;
-`;
-
-const TrustText = styled.span<{
-  $data: FooterSection;
-}>`
-  font-size: ${(props) =>
-    props.$data?.blocks?.setting?.trustItemSize || "14"}px;
-  color: ${(props) => props.$data?.blocks?.setting?.trustItemColor || "#333"};
-  font-weight: 500;
-`;
 const ScrollTopButton = styled.button<{
   $data: FooterSection;
 }>`
   position: absolute;
-  top: 50px;
-  left: 20px;
-  width: full;
-  height: 40px;
+  top: 16px;
+  left: 16px;
+  height: 36px;
   background: ${(props) =>
-    props.$data?.blocks?.setting?.scrollButtonBg || "transparent"};
+    props.$data?.blocks?.setting?.scrollButtonBg || "#ffffff"};
   color: ${(props) =>
-    props.$data?.blocks?.setting?.scrollButtonColor || "#000"};
-  border: 1px solid black;
+    props.$data?.blocks?.setting?.scrollButtonColor || "#374151"};
+  border: 1px solid #e5e7eb;
   cursor: pointer;
   display: flex;
-  border-radius: 5px;
+  border-radius: 6px;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 0 10px;
+  transition: all 0.2s ease;
+  padding: 0 12px;
   z-index: 10;
+  font-size: 13px;
+  font-weight: 500;
+  gap: 6px;
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    background: #f9fafb;
+    border-color: #d1d5db;
+    transform: translateY(-1px);
   }
 `;
 
 const FooterLink = styled(Link)<{ $data: FooterSection }>`
-  font-weight: bold;
+  font-weight: 500;
   text-decoration: none;
-  color: ${(props) => props.$data?.blocks?.setting?.linkColor || "#ffffff"};
+  color: ${(props) => props.$data?.blocks?.setting?.linkColor || "#374151"};
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  font-size: 14px;
+
   &:hover {
-    opacity: 0.7;
+    color: #3b82f6;
+    background: #f8fafc;
   }
 `;
 
@@ -248,57 +199,55 @@ const Logo = styled(Image)<{
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
-  width: ${(props) => {
-    const baseWidth = props.$data?.blocks?.setting?.logoWidth || "100";
-    return props.$preview === "sm"
-      ? `${parseInt(baseWidth) * 0.8}px`
-      : `${baseWidth}px`;
-  }};
-  height: ${(props) => {
-    const baseHeight = props.$data?.blocks?.setting?.logoHeight || "100";
-    return props.$preview === "sm"
-      ? `${parseInt(baseHeight) * 0.8}px`
-      : `${baseHeight}px`;
-  }};
-  border-radius: ${(props) =>
-    props.$data?.blocks?.setting?.logoRadius || "6"}px;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.02);
+  }
 `;
+
 const CategoryGrid = styled.div<{
   $preview: "sm" | "default";
   $previewWidth: "sm" | "default";
 }>`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(${(props) => (props.$preview === "sm" ? "160px" : "200px")}, 1fr)
+  );
+  gap: ${(props) => (props.$preview === "sm" ? "12px" : "24px")};
   width: 100%;
-  max-width: 1200px;
-  padding: ${(props) => (props.$preview === "sm" ? "10px" : "20px")};
+  max-width: 1000px;
+  padding: ${(props) => (props.$preview === "sm" ? "12px" : "16px")};
   margin: 0 auto;
 
   @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
   }
 
   @media (max-width: 480px) {
-    grid-template-columns: 1fr;
-    gap: 12px;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
   }
 `;
 
 const ParentCategoryLink = styled(Link)<{
   $data: FooterSection;
 }>`
-  color: ${(props) => props.$data?.blocks?.setting?.categoryColor || "#000000"};
-  font-weight: 700;
-  font-size: 16px;
-  padding: 8px;
+  color: ${(props) => props.$data?.blocks?.setting?.categoryColor || "#1f2937"};
+  font-weight: 600;
+  font-size: 14px;
+  padding: 8px 12px;
   text-align: center;
   border-radius: 6px;
-  transition: all 0.3s ease;
-  background-color: ${(props) =>
-    props.$data?.blocks?.setting?.categoryBg || "#fff"};
-  border: 1px solid #e9ecef;
+  transition: all 0.2s ease;
+  background: ${(props) =>
+    props.$data?.blocks?.setting?.categoryBg || "#ffffff"};
+  border: 1px solid #e5e7eb;
+  text-decoration: none;
+  display: block;
 
   &:hover {
     opacity: 0.7;
@@ -310,16 +259,46 @@ const ParentCategoryLink = styled(Link)<{
 const ChildCategoryLink = styled(Link)<{
   $data: FooterSection;
 }>`
-  color: ${(props) => props.$data?.blocks?.setting?.categoryColor || "#666666"};
-  font-weight: 500;
-  font-size: 14px;
-  padding: 4px 12px;
+  color: ${(props) => props.$data?.blocks?.setting?.categoryColor || "#6b7280"};
+  font-weight: 400;
+  font-size: 12px;
+  padding: 4px 8px;
   text-align: right;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  display: block;
+  text-decoration: none;
 
   &:hover {
     opacity: 0.8;
     transform: translateX(2px);
+  }
+`;
+
+const CategorySection = styled.div`
+  display: flex;
+  flex-col;
+  gap: 6px;
+`;
+
+const ChildrenContainer = styled.div`
+  display: flex;
+  flex-col;
+  gap: 2px;
+  padding-right: 8px;
+  border-right: 2px solid #f3f4f6;
+`;
+
+const SocialLinkItem = styled(Link)`
+  transition: transform 0.2s ease;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    transform: translateY(-2px) scale(1.05);
   }
 `;
 
@@ -342,29 +321,7 @@ const Footer: React.FC<FooterProps> = ({
       });
     }
   };
-  // useEffect(() => {
-  //   const fetchEnamad = async () => {
-  //     try {
-  //       const token = localStorage.getItem("token");
-  //       if (token) {
-  //         const res = await fetch("/api/enamad", {
-  //           headers: { Authorization: token },
-  //         });
-  //         const data = await res.json();
-  //         setEnamad(data);
-  //         console.log("Enamad data:", data);
 
-  //         // If the API returns an array with data then show the enamad image.
-  //         if (data && Array.isArray(data) && data.length > 0) {
-  //           setEnamadExists(true);
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching enamad data", error);
-  //     }
-  //   };
-  //   fetchEnamad();
-  // }, []);
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -388,14 +345,12 @@ const Footer: React.FC<FooterProps> = ({
                 storeId: "",
                 slug: "laptops",
               },
-              // ... other default categories
             ];
 
         setCategories(fetchedCategories);
       } catch (error) {
         console.log("Error fetching categories", error);
 
-        // Default categories if fetch fails
         setCategories([
           {
             _id: "1",
@@ -452,6 +407,7 @@ const Footer: React.FC<FooterProps> = ({
       setPreview(previewWidth);
     }
   }, [previewWidth]);
+
   const sectionData = layout?.sections?.sectionFooter as FooterSection;
 
   if (!sectionData) {
@@ -477,36 +433,41 @@ const Footer: React.FC<FooterProps> = ({
       $data={sectionData}
       $previewWidth={previewWidth}
       onClick={() => setSelectedComponent("sectionFooter")}
-      className={`transition-all duration-150 ease-in-out relative ${
-        selectedComponent === "sectionFooter" ? "border-4 border-blue-500 " : ""
+      className={`${
+        selectedComponent === "sectionFooter"
+          ? "border-2 border-blue-500 rounded"
+          : ""
       }`}
     >
       {"sectionFooter" === selectedComponent ? (
-        <div className="absolute w-fit -top-5 -left-1 z-10 flex ">
-          <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
-            {"sectionFooter"}
+        <div className="absolute -top-6 -left-1 z-10">
+          <div className="bg-blue-500 py-1 px-3 rounded text-white text-sm">
+            sectionFooter
           </div>
         </div>
       ) : null}
+
       <Logo
         $preview={preview}
         $previewWidth={previewWidth}
         $data={sectionData}
         src={logo || "/assets/images/logo.webp"}
-        width={100}
-        height={100}
+        width={preview === "sm" ? 60 : 80}
+        height={preview === "sm" ? 60 : 80}
         alt="Logo"
-        className="ml-auto mr-6"
       />
+
       <NumberPart
         $data={sectionData}
         $preview={preview}
         $previewWidth={previewWidth}
-        className="ml-auto  mt-4 mr-6"
       >
-        <Link href={`tel:${phoneNumber || "123123123"}`}>{phoneNumber} | </Link>
-        <span className="text-sm text-gray-500 mr-1">{textNumber}</span>
+        <Link href={`tel:${phoneNumber || "123123123"}`}>{phoneNumber}</Link>
+        {textNumber && (
+          <span className="text-xs opacity-70 mr-2">{textNumber}</span>
+        )}
       </NumberPart>
+
       <ScrollTopButton
         $data={sectionData}
         onClick={(e) => {
@@ -514,7 +475,7 @@ const Footer: React.FC<FooterProps> = ({
           scrollToTop();
         }}
       >
-        <FaArrowUp className="ml-2" size={15} />
+        <FaArrowUp size={12} />
         <span> بازگشت به بالا </span>
       </ScrollTopButton>
 
@@ -533,102 +494,76 @@ const Footer: React.FC<FooterProps> = ({
       >
         {description}
       </FooterDescription>
-      <TrustIconsContainer
-        className={`${
-          preview === "sm"
-            ? "w-full flex-row items-center justify-center flex"
-            : "w-full flex justify-center"
-        }`}
+
+      <SocialLinks
+        className="flex flex-row gap-4 my-4"
+        $preview={preview}
+        $previewWidth={previewWidth}
       >
-        {trustItems.map((item, index) => (
-          <TrustItem
-            key={index}
-            $preview={preview}
-            $previewWidth={previewWidth}
-            $data={sectionData}
-          >
-            <IconBox
-              $preview={preview}
-              $previewWidth={previewWidth}
-              $data={sectionData}
-            >
-              <item.icon size={preview === "sm" ? 24 : 32} />
-            </IconBox>
-            <TrustText $data={sectionData}>{item.text}</TrustText>
-          </TrustItem>
-        ))}
-      </TrustIconsContainer>
+        <SocialLinkItem
+          href={instagramLink ? instagramLink : "/"}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Image
+            src="/assets/images/instagram.png"
+            alt="Instagram"
+            width={preview === "sm" ? 24 : 28}
+            height={preview === "sm" ? 24 : 28}
+          />
+        </SocialLinkItem>
+        <SocialLinkItem
+          href={whatsappLink ? whatsappLink : "/"}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Image
+            src="/assets/images/whatsapp.png"
+            alt="Whatsapp"
+            width={preview === "sm" ? 24 : 28}
+            height={preview === "sm" ? 24 : 28}
+          />
+        </SocialLinkItem>
+        <SocialLinkItem
+          href={telegramLink ? telegramLink : "/"}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Image
+            src="/assets/images/telegram.png"
+            alt="Telegram"
+            width={preview === "sm" ? 24 : 28}
+            height={preview === "sm" ? 24 : 28}
+          />
+        </SocialLinkItem>
+      </SocialLinks>
 
-      <div className="flex flex-col-reverse gap-6 lg:flex-col-reverse items-center justify-center w-full ">
-        <SocialLinks $preview={preview} $previewWidth={previewWidth}>
-          <Link
-            href={instagramLink ? instagramLink : "/"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:scale-105 transition-all duration-300 ease-in-out"
-          >
-            <Image
-              src="/assets/images/instagram.png"
-              alt="Instagram"
-              width={30}
-              height={30}
-            />
-          </Link>
-          <Link
-            href={whatsappLink ? whatsappLink : "/"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:scale-105 transition-all duration-300 ease-in-out"
-          >
-            <Image
-              src="/assets/images/whatsapp.png"
-              alt="Whatsapp"
-              width={30}
-              height={30}
-            />
-          </Link>
-          <Link
-            href={telegramLink ? telegramLink : "/"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:scale-105 transition-all duration-300 ease-in-out"
-          >
-            <Image
-              src="/assets/images/telegram.png"
-              alt="Telegram"
-              width={30}
-              height={30}
-            />
-          </Link>
-        </SocialLinks>
+      <CategoryGrid $preview={preview} $previewWidth={previewWidth}>
+        {categories
+          .filter((category) => category.children.length > 0)
+          .map((category) => (
+            <CategorySection key={category._id}>
+              <ParentCategoryLink
+                href={`/category/${category.name}`}
+                $data={sectionData}
+              >
+                {category.name}
+              </ParentCategoryLink>
 
-        <CategoryGrid $preview={preview} $previewWidth={previewWidth}>
-          {categories
-            .filter((category) => category.children.length > 0)
-            .map((category) => (
-              <div key={category._id} className="flex flex-col gap-3">
-                <ParentCategoryLink
-                  href={`/category/${category.name}`}
-                  $data={sectionData}
-                >
-                  {category.name}
-                </ParentCategoryLink>
-
-                <div className="flex flex-col gap-2 pr-4 border-r-2 border-gray-200">
-                  {category.children.map((child, index) => (
-                    <ChildCategoryLink
-                      key={`${category._id}-${child._id}-${index}`}
-                      href={`/category/${child.name}`}
-                      $data={sectionData}
-                    >
-                      {child.name}
-                    </ChildCategoryLink>
-                  ))}
-                </div>
-              </div>
-            ))}
-        </CategoryGrid>
-      </div>
+              <ChildrenContainer>
+                {category.children.map((child, index) => (
+                  <ChildCategoryLink
+                    key={`${category._id}-${child._id}-${index}`}
+                    href={`/category/${child.name}`}
+                    $data={sectionData}
+                  >
+                    {child.name}
+                  </ChildCategoryLink>
+                ))}
+              </ChildrenContainer>
+            </CategorySection>
+          ))}
+      </CategoryGrid>
 
       {links && Array.isArray(links) && links.length > 0 && (
         <FooterLinks $previewWidth={previewWidth} $preview={preview}>
@@ -645,14 +580,16 @@ const Footer: React.FC<FooterProps> = ({
           ))}
         </FooterLinks>
       )}
+
       {enamadExists && (
-        <div>
+        <div className="hover:scale-105 transition-transform duration-200">
           <Link href={enamad} target="_blank">
             <Image
               src="/assets/images/enamad.jpg"
               alt="Enamad Certification"
-              width={100}
-              height={50}
+              width={80}
+              height={40}
+              className="rounded border"
             />
           </Link>
         </div>

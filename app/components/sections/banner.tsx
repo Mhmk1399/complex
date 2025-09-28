@@ -47,8 +47,7 @@ const BannerImage = styled(Image)<{
   $preview: "sm" | "default";
 }>`
   opacity: ${(props) => props.$data.blocks.setting.opacityImage || "1"};
-  border-radius: ${(props) =>
-    props.$data.blocks.setting.imageRadious || "10"}px;
+  border-radius: ${(props) => props.$data.blocks.setting.imageRadious || "0"}px;
   object-fit: ${(props) => props.$data.blocks.setting.imageBehavior || "cover"};
 `;
 
@@ -295,7 +294,7 @@ const Banner: React.FC<props> = ({
       onClick={() => setSelectedComponent(actualName)}
       className={`transition-all duration-150 ease-in-out relative ${
         selectedComponent === actualName
-          ? "border-4 border-blue-500 rounded-2xl shadow-lg "
+          ? "border-4 border-blue-500  shadow-lg "
           : ""
       }`}
     >

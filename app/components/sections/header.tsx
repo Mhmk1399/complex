@@ -6,9 +6,17 @@ import {
   HeaderBlock,
 } from "@/lib/types";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { Search, ShoppingCart, User } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  Menu,
+  MenuIcon,
+  ShoppingCart,
+  User,
+  X,
+} from "lucide-react";
 import { NextResponse } from "next/server";
 
 interface HeaderProps {
@@ -24,42 +32,41 @@ interface Category {
   storeId: string;
 }
 
-// Styled components
+// Styled components with improved spacing and transitions
 const HeaderWrapper = styled.header<{
   $data: HeaderSection;
   $previewWidth: "sm" | "default";
 }>`
-  width: 100%;
+  min-width: 100%;
   border-bottom: 1px solid #e5e7eb;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   position: relative;
+  transition: all 0.2s ease-in-out;
   margin-top: ${(props) => props.$data.setting?.marginTop || "20"}px;
-  margin-bottom: ${(props) => props.$data?.setting?.marginBottom}px;
-  padding-top: ${(props) => props.$data?.setting?.paddingTop}px;
-  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom}px;
-  padding-left: ${(props) => props.$data?.setting?.paddingLeft}px;
-  padding-right: ${(props) => props.$data?.setting?.paddingRight};
+  margin-bottom: ${(props) => props.$data?.setting?.marginBottom || "0"}px;
+  padding-top: ${(props) => props.$data?.setting?.paddingTop || "0"}px;
+  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || "0"}px;
+  padding-left: ${(props) => props.$data?.setting?.paddingLeft || "0"}px;
+  padding-right: ${(props) => props.$data?.setting?.paddingRight || "0"}px;
   background-color: ${(props) =>
-    props.$data?.blocks?.setting?.bgColor || "#000"};
+    props.$data?.blocks?.setting?.bgColor || "#ffffff"};
+  border-radius: ${(props) => props.$data?.blocks?.setting?.bgRadius || "2"}px;
+  box-shadow: ${(props) =>
+    `${props.$data.blocks.setting?.shadowOffsetX || 0}px 
+     ${props.$data.blocks.setting?.shadowOffsetY || 4}px 
+     ${props.$data.blocks.setting?.shadowBlur || 10}px 
+     ${props.$data.blocks.setting?.shadowSpread || 0}px 
+     ${props.$data.blocks.setting?.shadowColor || "#fff"}`};
 
   ${(props) =>
     props.$previewWidth === "sm" &&
     `
     max-width: 425px;
-    padding: 0.5rem;
+    padding: 0;
     
     ${MainSection} {
       flex-direction: column;
-      padding: 0.5rem;
-    }
-    
-    ${SearchContainer} {
-      width: 100%;
-      margin: 0.5rem 0;
-    }
-    
-    ${SearchInput} {
-      width: 100%;
+      padding: 1rem;
+      gap: 1rem;
     }
     
     ${Logo} {
@@ -74,96 +81,101 @@ const HeaderWrapper = styled.header<{
     ${ActionButtons} {
       width: 100%;
       justify-content: space-between;
+      padding: 0 0.5rem;
     }
   `}
+`;
+
+const MobilePreviewWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 425px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  background: #f8fafc;
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  }
 `;
 
 const AnnouncementBar = styled.div<{
   $data: HeaderSection;
 }>`
-  width: 100%;
   background-color: ${(props) =>
     props.$data.blocks?.setting?.announcementBgColor || "#f1b80c"};
   color: ${(props) =>
     props.$data.blocks?.setting?.announcementTextColor || "#ffffff"};
-  padding: 17px 16px;
+  padding: 12px 24px;
   text-align: center;
   font-size: ${(props) =>
     props.$data.blocks.setting?.announcementFontSize || "14"}px;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  transition: all 0.3s ease;
+  border-top-left-radius: ${(props) =>
+    props.$data?.blocks?.setting?.bgRadius || "2"}px;
+  border-top-right-radius: ${(props) =>
+    props.$data?.blocks?.setting?.bgRadius || "2"}px;
 
   @media (max-width: 768px) {
     font-size: 12px;
-    padding: 6px 12px;
+    padding: 8px 16px;
   }
 `;
 
 const MainSection = styled.div`
   display: flex;
+  min-width: 100%;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   flex-direction: row-reverse;
-  padding: 0.5rem 1.5rem;
-
+  padding: 0rem 2rem;
+  gap: 1rem;
+  transition: padding 0.3s ease;
   @media (max-width: 768px) {
-    padding: 0.75rem;
+    padding: 1rem;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    gap: 1.5rem;
   }
 `;
 
 const LogoContainer = styled.div`
-  display: flex;
+  display: hidden;
   width: 100%;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
+  transition: transform 0.2s ease;
+
   @media (max-width: 768px) {
     width: fit-content;
+  }
+  @media (min-width: 768px) {
+    display: flex;
   }
 `;
 
 const Logo = styled.img<{
   $data: HeaderSection;
 }>`
-  width: ${(props) => props.$data.blocks.setting?.imageWidth || "60"}px;
-  height: ${(props) => props.$data.blocks.setting?.imageHeight || "60"}px;
-  border-radius: ${(props) =>
-    props.$data.blocks.setting?.imageRadius || "30"}px;
+  width: 60px;
+  height: 60px;
   margin-left: auto;
-`;
-
-const SearchContainer = styled.div`
-  position: relative;
-  // flex: 1;
-  @media (min-width: 768px) {
-    margin-right: 1rem;
-    // margin-left: 500px;
-  }
-`;
-
-const SearchInput = styled.input`
-  width: 500px;
-  padding: 0.5rem 2.5rem 0.5rem 1rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  text-align: right;
-  background-color: #f3f4f6;
-
-  @media (max-width: 768px) {
-    width: 100%;
-    padding: 0.5rem 1rem;
-  }
-
-  &:focus {
-    outline: none;
-    ring: 1px solid #000;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   }
 `;
 
 const NavContainer = styled.nav`
   display: flex;
   align-items: center;
-  padding: 0.5rem 1.5rem;
+  padding: 0.75rem 2rem;
   @media (max-width: 768px) {
     display: none;
   }
@@ -176,194 +188,454 @@ const NavList = styled.ul<{
   display: ${(props) => (props.$previewWidth === "sm" ? "none" : "flex")};
   align-items: center;
   flex-direction: row-reverse;
-  gap: ${(props) => props.$data.blocks.setting?.gap || "1"}px;
+  gap: ${(props) => props.$data.blocks.setting?.gap || "32"}px;
 `;
 
 const NavItem = styled(Link)<{
   $data: HeaderSection;
 }>`
-  color: ${(props) => props.$data.blocks.setting?.itemColor || "#000"};
-  font-size: ${(props) => props.$data.blocks.setting?.itemFontSize || "14"}px;
-  font-weight: ${(props) =>
-    props.$data.blocks.setting?.itemFontWeight || "normal"};
+  color: ${(props) => props.$data.blocks.setting?.itemColor || "#1f2937"};
+  font-size: 15px;
+  font-weight: 500;
   cursor: pointer;
   text-align: right;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
 
   &:hover {
     color: ${(props) =>
-      props.$data.blocks.setting?.itemHoverColor || "#FCA311"};
+      props.$data.blocks.setting?.itemHoverColor || "#f59e0b"};
+    transform: translateY(-1px);
   }
 `;
+
 const MegaMenu = styled.div<{ isVisible?: boolean; $data: HeaderSection }>`
   position: absolute;
-  top: 100%;
+  top: calc(100% + 8px);
   right: 0;
   width: 800px;
   background-color: ${(props) =>
-    props.$data.blocks?.setting?.megaMenuBg || "#f1b80c"};
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    props.$data.blocks?.setting?.megaMenuBg || "#ffffff"};
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s ease;
+  transform: translateY(-8px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 50;
   display: flex;
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: ${(props) =>
+    props.$data.blocks?.setting?.megaMenuRadius || "5"}px;
+  padding: 2rem;
   direction: rtl;
+  border: 1px solid #f1f5f9;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    right: 32px;
+    width: 16px;
+    height: 16px;
+    background: ${(props) =>
+      props.$data.blocks?.setting?.megaMenuBg || "#ffffff"};
+    transform: rotate(45deg);
+    border-left: 1px solid #f1f5f9;
+    border-top: 1px solid #f1f5f9;
+  }
 `;
 
 const NavItemWrapper = styled.li<{ $data?: HeaderSection }>`
   position: relative;
+  list-style: none;
+
   &:hover ${MegaMenu} {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
   }
 `;
+
 const CategoryItem = styled.span<{ $data: HeaderSection }>`
   color: ${(props) =>
-    props.$data.blocks.setting?.categoryItemColor || "#374151"};
+    props.$data.blocks.setting?.categoryItemColor || "#64748b"};
   font-size: ${(props) =>
     props.$data.blocks.setting?.categoryItemSize || "14"}px;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 500;
 
   &:hover {
     color: ${(props) =>
-      props.$data.blocks.setting?.categoryItemHoverColor || "#2563eb"};
+      props.$data.blocks.setting?.categoryItemHoverColor || "#3b82f6"};
   }
 `;
 
 const MegaMenuTitle = styled.h3`
-  font-size: 0.95rem;
-  color: #374151;
+  font-size: 1rem;
+  color: #1e293b;
   text-wrap: nowrap;
   text-align: right;
-  transition: all 0.2s ease;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 `;
 
-const CategoryIconWrapper = styled.div`
+const CategoryIconWrapper = styled.div<{ $data: HeaderSection }>`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
+  font-size: 15px;
+  transition: transform 0.2s ease;
+
+  svg {
+    transition: transform 0.3s ease;
+  }
+
+  &:hover svg {
+    transform: rotate(180deg);
+  }
 `;
 
 const ActionButtons = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 1rem;
+  gap: 1.5rem;
   width: 100%;
+
   @media (max-width: 768px) {
     justify-content: space-between;
+    gap: 1rem;
   }
 `;
 
 const LoginButton = styled.button`
   display: flex;
   align-items: center;
-  gap: 0.25rem;
-  padding: 0.25rem 0.75rem;
-  border: 1px solid #e4e4e4;
-  border-radius: 0.5rem;
-  color: #6c757d;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  color: #64748b;
   text-wrap: nowrap;
+  font-weight: 500;
+  font-size: 14px;
+  background: #ffffff;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+
+  &:hover {
+    border-color: #cbd5e1;
+    background: #f8fafc;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    color: #475569;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 `;
 
 const MobileMenuButton = styled.button<{
   $isOpen: boolean;
   $previewWidth: "sm" | "default";
 }>`
-  display: ${(props) => (props.$previewWidth === "sm" ? "block" : "none")};
-  background: none;
-  border: none;
-  padding: 10px;
+  display: ${(props) => (props.$previewWidth === "sm" ? "flex" : "none")};
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.5rem;
   z-index: 90;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  svg {
+    transition: transform 0.3s ease;
+    color: #475569;
+  }
+
+  ${(props) =>
+    props.$isOpen &&
+    `
+    svg {
+      transform: rotate(90deg);
+    }
+  `}
 
   @media (max-width: 768px) {
-    display: block;
+    display: flex;
   }
 `;
 
 const MobileMenu = styled.div<{
   $isOpen: boolean;
   $previewWidth: "sm" | "default";
+  $data: HeaderSection;
 }>`
   display: ${(props) =>
-    props.$previewWidth === "sm" && props.$isOpen ? "inline" : "none"};
-  position: ${(props) =>
-    props.$previewWidth === "sm" && props.$isOpen ? "absolute" : "none"};
-  top: ${(props) =>
-    props.$previewWidth === "sm" && props.$isOpen ? "0" : "-100%"};
-  right: ${(props) =>
-    props.$previewWidth === "sm" && props.$isOpen ? "0" : "-100%"};
-  width: ${(props) =>
-    props.$previewWidth === "sm" && props.$isOpen ? "80%" : "0"};
-  height: ${(props) =>
-    props.$previewWidth === "sm" && props.$isOpen ? "100vh" : "0"};
-  transition: right 0.3s ease-in-out;
+    props.$previewWidth === "sm" && props.$isOpen ? "block" : "none"};
+  position: fixed;
+  top: 0;
+  right: ${(props) => {
+    if (props.$previewWidth === "sm") {
+      return "calc(50% - 212.5px)";
+    }
+    return "0";
+  }};
+  width: 85%;
+  max-width: 340px;
+  height: 100vh;
+  background-color: ${(props) =>
+    props.$data.blocks.setting?.mobileBackground || "#fff"};
+  transform: translateX(${(props) => (props.$isOpen ? "0" : "100%")});
+  opacity: 0.8; // 90% opacity برای کل element
+
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: ${(props) =>
+    props.$isOpen ? "-8px 0 32px rgba(0, 0, 0, 0.12)" : "none"};
+  z-index: 9999;
+  overflow-y: auto;
+  border-left: 1px solid #f1f5f9;
+
   @media (max-width: 768px) {
-    display: inline;
+    display: block;
     position: fixed;
-    top: 0;
-    right: ${(props) => (props.$isOpen ? "0" : "-100%")};
+    right: 0;
     width: 80%;
+    max-width: 320px;
     height: 100vh;
-    background: white;
-    transition: right 0.3s ease-in-out;
-    box-shadow: ${(props) =>
-      props.$isOpen ? "-5px 0 15px rgba(0,0,0,0.1)" : "none"};
-    z-index: 99;
+    z-index: 999;
+  }
+`;
+
+const MobileMenuHeader = styled.div<{
+  $data: HeaderSection;
+}>`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #f1f5f9;
+  background-color: ${(props) =>
+    props.$data.blocks.setting?.mobileBackground || "#ffff"};
+`;
+
+const CloseButton = styled.button`
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: #e2e8f0;
+    transform: rotate(90deg) scale(1.1);
+  }
+
+  svg {
+    color: #64748b;
+    transition: color 0.2s ease;
+  }
+
+  &:hover svg {
+    color: #475569;
   }
 `;
 
 const MobileNavList = styled.div`
-  padding: 80px 20px 20px;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 0.5rem;
+  text-align: right;
 `;
 
-const MobileNavItem = styled(NavItem)`
-  padding: 10px 0;
-  border-bottom: 1px solid #eee;
+const MobileNavItem = styled(Link)<{ $data: HeaderSection }>`
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
   font-size: 16px;
+  font-weight: 900;
   width: 100%;
   display: block;
-`;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: ${(props) => props.$data.blocks.setting?.itemColor || "#1e293b"};
+  text-decoration: none;
 
-const Overlay = styled.div<{ $isOpen: boolean }>`
-  display: none;
-  opacity: ${(props) => (props.$isOpen ? "1" : "0")};
-  @media (max-width: 768px) {
-    display: ${(props) => (props.$isOpen ? "block" : "none")};
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 98;
+  &:hover {
+    transform: translateX(-4px);
+    color: ${(props) =>
+      props.$data.blocks.setting?.itemHoverColor || "#f59e0b"};
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   }
 `;
 
+const Overlay = styled.div<{
+  $isOpen: boolean;
+  $previewWidth?: "sm" | "default";
+}>`
+  display: ${(props) => (props.$isOpen ? "block" : "none")};
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: ${(props) =>
+    props.$isOpen ? "rgba(0, 0, 0, 0.4)" : "transparent"};
+  z-index: 9998;
+  transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(4px);
+
+  @media (max-width: 768px) {
+    position: fixed;
+    height: 100vh;
+    z-index: 998;
+  }
+`;
+
+const MobileNavItemWrapper = styled.div`
+  width: 100%;
+`;
+
+const MobileNavItemButton = styled.button<{ $data: HeaderSection }>`
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+  align-items: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: ${(props) => props.$data.blocks.setting?.itemColor || "#1e293b"};
+  background: none;
+  border: none;
+  text-align: right;
+  cursor: pointer;
+
+  &:hover {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    transform: translateX(-4px);
+    color: ${(props) =>
+      props.$data.blocks.setting?.itemHoverColor || "#f59e0b"};
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  svg {
+    transition: transform 0.3s ease;
+  }
+`;
+
+const MobileDropdown = styled.div<{ $isOpen: boolean }>`
+  max-height: ${(props) => (props.$isOpen ? "600px" : "0")};
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 12px;
+  margin: 0.5rem 0;
+  border: 1px solid #e2e8f0;
+`;
+
+const MobileCategoryList = styled.div`
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+`;
+
+const MobileCategoryItem = styled(Link)<{ $data: HeaderSection }>`
+  padding: 0.875rem 1.25rem;
+  font-size: 14px;
+  font-weight: 500;
+  color: ${(props) =>
+    props.$data.blocks.setting?.categoryItemColor || "#64748b"};
+  display: block;
+  text-align: right;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+
+  &:hover {
+    background: #ffffff;
+    transform: translateX(-2px);
+    color: ${(props) =>
+      props.$data.blocks.setting?.categoryItemHoverColor || "#3b82f6"};
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+`;
+
+const MobileCategoryTitle = styled.div`
+  font-weight: 700;
+  color: #1e293b;
+  padding: 0.75rem 1.25rem;
+  font-size: 15px;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 13px;
+`;
+
+// باقی کد component همان است...
 const Header: React.FC<HeaderProps> = ({
   setSelectedComponent,
   layout,
   selectedComponent,
   previewWidth,
 }) => {
+  // ... همان logic قبلی ...
+
+  const menuRef = useRef<HTMLDivElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  // const [preview, setPreview] = useState(previewWidth);
   const [hoverd, setHoverd] = useState(0);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
 
-  // console.log("preview", preview);
+  const toggleMenu = useCallback(() => {
+    const newState = !isMenuOpen;
+    setIsMenuOpen(newState);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-    // Prevent body scroll when menu is open
-    document.body.style.overflow = !isMenuOpen ? "hidden" : "unset";
-  };
+    if (previewWidth !== "sm" && window.innerWidth <= 768) {
+      if (newState) {
+        document.body.style.overflow = "hidden";
+        document.body.style.position = "fixed";
+        document.body.style.width = "100%";
+      } else {
+        document.body.style.overflow = "";
+        document.body.style.position = "";
+        document.body.style.width = "";
+      }
+    }
+  }, [isMenuOpen, previewWidth]);
+
+  const toggleMobileDropdown = useCallback(() => {
+    setMobileDropdownOpen(!mobileDropdownOpen);
+  }, [mobileDropdownOpen]);
+
+  const handleOverlayClick = useCallback(() => {
+    if (isMenuOpen) {
+      toggleMenu();
+    }
+  }, [isMenuOpen, toggleMenu]);
+
   useEffect(() => {
     const fetchCategories = async () => {
       const token = localStorage.getItem("complexToken");
@@ -429,24 +701,38 @@ const Header: React.FC<HeaderProps> = ({
           },
         ]);
       }
-
-      // Default categories if fetch fails
     };
 
     fetchCategories();
   }, []);
 
-  // useEffect(() => {
-  //   if (window.innerWidth <= 424) {
-  //     setPreview("sm");
-  //   } else {
-  //     setPreview(previewWidth);
-  //   }
-  // }, [previewWidth]);
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isMenuOpen) {
+        toggleMenu();
+      }
+    };
+
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isMenuOpen, toggleMenu]);
+
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+    };
+  }, []);
+
   useEffect(() => {
     if (layout?.sections?.sectionHeader) {
     }
   }, [layout]);
+
+  const handleMenuClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
 
   const sectionData = layout?.sections?.sectionHeader as HeaderSection;
   const isHeaderSection = (section: SectionType): section is HeaderSection => {
@@ -454,7 +740,6 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   if (!sectionData || !isHeaderSection(sectionData)) {
-    //  ("Section data is missing or invalid.");
     return null;
   }
 
@@ -474,99 +759,350 @@ const Header: React.FC<HeaderProps> = ({
     return null;
   }
 
+  if (previewWidth === "sm") {
+    return (
+      <MobilePreviewWrapper>
+        <HeaderWrapper
+          $data={sectionData}
+          $previewWidth={previewWidth}
+          onClick={() => !isMenuOpen && setSelectedComponent("sectionHeader")}
+          className={`transition-all duration-150 w-full ease-in-out ${
+            selectedComponent === "sectionHeader"
+              ? "border-4 border-blue-500 rounded-2xl shadow-lg"
+              : ""
+          }`}
+        >
+          {selectedComponent === "sectionHeader" && (
+            <div className="absolute w-fit -top-5 -left-1 z-10 flex">
+              <div className="bg-blue-500 py-1 px-4 rounded-lg text-white text-sm font-medium">
+                sectionHeader
+              </div>
+            </div>
+          )}
+
+          <AnnouncementBar $data={sectionData}>
+            {sectionData.blocks.setting?.announcementText ||
+              "ارسال رایگان برای خرید‌های بالای ۵۰۰ هزار تومان!"}
+          </AnnouncementBar>
+
+          <MainSection>
+            <div className="flex flex-row-reverse items-center gap-6 justify-start w-full">
+              <MobileMenuButton
+                $isOpen={isMenuOpen}
+                $previewWidth={previewWidth}
+                onClick={toggleMenu}
+                aria-label="Toggle mobile menu"
+              >
+                <Menu size={20} />
+              </MobileMenuButton>
+              {/* <LogoContainer>
+                <Logo
+                  $data={sectionData}
+                  src={
+                    sectionData.blocks.imageLogo || "/assets/images/logo.webp"
+                  }
+                  alt={sectionData.blocks.imageAlt}
+                />
+              </LogoContainer> */}
+              <ActionButtons>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
+                    <ShoppingCart className="text-gray-600" size={20} />
+                  </div>
+                  <LoginButton>
+                    <User size={16} /> ورود | ثبت‌نام
+                  </LoginButton>
+                </div>
+              </ActionButtons>
+            </div>
+          </MainSection>
+
+          <NavContainer className="justify-end">
+            <NavList $previewWidth={previewWidth} $data={sectionData}>
+              {sectionData.blocks.links?.map((link, index) => (
+                <NavItemWrapper key={index}>
+                  {link.name === "دسته‌بندی کالاها" ? (
+                    <>
+                      <NavItem href="#" $data={sectionData}>
+                        <CategoryIconWrapper $data={sectionData}>
+                          {link.name}
+                        </CategoryIconWrapper>
+                      </NavItem>
+                      <MegaMenu $data={sectionData}>
+                        <div className="flex flex-col w-1/4 border-l border-gray-200 pl-4">
+                          {categories
+                            ?.filter((category) => category.children.length > 0)
+                            .map((category, idx) => (
+                              <Link
+                                href="#"
+                                key={category._id}
+                                className="block"
+                              >
+                                <div
+                                  className={`py-3 px-4 rounded-lg ml-2 cursor-pointer transition-all duration-300 ${
+                                    idx === hoverd
+                                      ? "bg-blue-50 border-l-4 border-blue-400 font-semibold text-blue-700"
+                                      : "hover:bg-gray-50"
+                                  }`}
+                                  onMouseEnter={() => setHoverd(idx)}
+                                >
+                                  <MegaMenuTitle>{category.name}</MegaMenuTitle>
+                                </div>
+                              </Link>
+                            ))}
+                        </div>
+
+                        <div className="flex-1 p-6">
+                          <div className="grid grid-cols-3 gap-6">
+                            {categories
+                              ?.filter(
+                                (category) => category.children.length > 0
+                              )
+                              [hoverd]?.children.map((child) => (
+                                <Link
+                                  href="#"
+                                  key={child._id}
+                                  className="p-3 hover:translate-x-[2px] rounded-lg transition-all duration-300 text-right group hover:bg-blue-50"
+                                >
+                                  <CategoryItem $data={sectionData}>
+                                    {child.name}
+                                  </CategoryItem>
+                                </Link>
+                              ))}
+                          </div>
+                        </div>
+                      </MegaMenu>
+                    </>
+                  ) : (
+                    <NavItem href="#" $data={sectionData}>
+                      {link.name}
+                    </NavItem>
+                  )}
+                </NavItemWrapper>
+              ))}
+            </NavList>
+          </NavContainer>
+        </HeaderWrapper>
+
+        {isMenuOpen && (
+          <Overlay
+            $isOpen={isMenuOpen}
+            onClick={handleOverlayClick}
+            $previewWidth={previewWidth}
+          />
+        )}
+
+        <MobileMenu
+          $data={sectionData}
+          ref={menuRef}
+          $previewWidth={previewWidth}
+          $isOpen={isMenuOpen}
+          onClick={handleMenuClick}
+          className="backdrop-blur-sm"
+        >
+          <MobileMenuHeader $data={sectionData}>
+            <Logo
+              $data={sectionData}
+              src={sectionData.blocks.imageLogo || "/assets/images/logo.webp"}
+              alt={sectionData.blocks.imageAlt}
+              style={{ width: "50px", height: "50px" }}
+            />
+            <CloseButton onClick={toggleMenu} aria-label="Close menu">
+              <X size={18} />
+            </CloseButton>
+          </MobileMenuHeader>
+
+          <MobileNavList>
+            {sectionData.blocks.links?.map((link, index) => (
+              <MobileNavItemWrapper key={index}>
+                {link.name === "دسته‌بندی کالاها" ? (
+                  <>
+                    <MobileNavItemButton
+                      $data={sectionData}
+                      onClick={toggleMobileDropdown}
+                    >
+                      {link.name}
+                      {mobileDropdownOpen ? (
+                        <ChevronUp size={18} />
+                      ) : (
+                        <ChevronDown size={18} />
+                      )}
+                    </MobileNavItemButton>
+
+                    <MobileDropdown $isOpen={mobileDropdownOpen}>
+                      <MobileCategoryList>
+                        {categories
+                          ?.filter((category) => category.children.length > 0)
+                          .map((category) => (
+                            <div key={category._id}>
+                              <MobileCategoryTitle>
+                                {category.name}
+                              </MobileCategoryTitle>
+                              {category.children.map((child) => (
+                                <MobileCategoryItem
+                                  key={child._id}
+                                  href="#"
+                                  $data={sectionData}
+                                  onClick={toggleMenu}
+                                >
+                                  {child.name}
+                                </MobileCategoryItem>
+                              ))}
+                            </div>
+                          ))}
+                      </MobileCategoryList>
+                    </MobileDropdown>
+                  </>
+                ) : (
+                  <MobileNavItem
+                    href="#"
+                    $data={sectionData}
+                    onClick={toggleMenu}
+                  >
+                    {link.name}
+                  </MobileNavItem>
+                )}
+              </MobileNavItemWrapper>
+            ))}
+          </MobileNavList>
+        </MobileMenu>
+      </MobilePreviewWrapper>
+    );
+  }
+
   return (
     <HeaderWrapper
       $data={sectionData}
       $previewWidth={previewWidth}
       onClick={() => setSelectedComponent("sectionHeader")}
-      className={`transition-all  duration-150 ease-in-out  ${
+      className={`transition-all duration-150 w-full ease-in-out ${
         selectedComponent === "sectionHeader"
-          ? "border-4 border-blue-500 rounded-2xl shadow-lg "
+          ? "border-4 rounded-md border-blue-500 shadow-lg"
           : ""
       }`}
     >
-      {"sectionHeader" === selectedComponent ? (
-        <div className="absolute w-fit -top-5 -left-1 z-10 flex ">
-          <div className="bg-blue-500 py-1 px-4 rounded-lg text-white">
-            {"sectionHeader"}
+      {selectedComponent === "sectionHeader" && (
+        <div className="absolute w-fit -top-5 -left-1 z-10 flex">
+          <div className="bg-blue-500 py-1 px-4 rounded-lg text-white text-sm font-medium">
+            sectionHeader
           </div>
         </div>
-      ) : null}
+      )}
+
       <AnnouncementBar $data={sectionData}>
         {sectionData.blocks.setting?.announcementText ||
           "ارسال رایگان برای خرید‌های بالای ۵۰۰ هزار تومان!"}
       </AnnouncementBar>
 
       <MainSection>
-        <div className="flex flex-row-reverse items-center gap-6 justify-end w-full">
-          <LogoContainer>
-            <Logo
-              $data={sectionData}
-              src={sectionData.blocks.imageLogo || "/assets/images/logo.webp"}
-              alt={sectionData.blocks.imageAlt}
-            />
-          </LogoContainer>
-
-          <SearchContainer className="">
-            <SearchInput placeholder="جستجو" />
-            <Search
-              style={{
-                position: "absolute",
-                left: "12px",
-                top: "50%",
-                transform: "translateY(-50%)",
-                color: "#6b7280",
-              }}
-              size={20}
-            />
-          </SearchContainer>
-        </div>
-
-        <ActionButtons>
-          <div className="flex items-center gap-2">
-            <ShoppingCart className="text-gray-400" size={24} />
-            <LoginButton>
-              <User size={18} /> ورود | ثبت‌نام
-            </LoginButton>
-          </div>
-
+        <div className="flex flex-row-reverse items-center gap-6 justify-start w-full">
           <MobileMenuButton
             $isOpen={isMenuOpen}
             $previewWidth={previewWidth}
             onClick={toggleMenu}
+            aria-label="Toggle mobile menu"
           >
-            {isMenuOpen ? (
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                className={`${isMenuOpen ? "opacity-0" : "block"}`}
-              >
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            )}
+            <Menu size={20} />
           </MobileMenuButton>
-        </ActionButtons>
+
+          <LogoContainer>
+            <Link className="ml-auto" href="#">
+              <Logo
+                $data={sectionData}
+                src={sectionData.blocks.imageLogo || "/assets/images/logo.webp"}
+                alt={sectionData.blocks.imageAlt}
+              />
+            </Link>
+          </LogoContainer>
+
+          <NavContainer>
+            <NavList $previewWidth={previewWidth} $data={sectionData}>
+              {sectionData.blocks.links?.map((link, index) => (
+                <NavItemWrapper key={index}>
+                  {link.name === "دسته‌بندی کالاها" ? (
+                    <>
+                      <NavItem
+                        className="text-nowrap"
+                        href="#"
+                        $data={sectionData}
+                      >
+                        <CategoryIconWrapper $data={sectionData}>
+                          {link.name}
+                          <MenuIcon size={16} />
+                        </CategoryIconWrapper>
+                      </NavItem>
+                      <MegaMenu $data={sectionData}>
+                        <div className="flex flex-col w-1/4 border-l border-gray-200 pl-4">
+                          {categories
+                            ?.filter((category) => category.children.length > 0)
+                            .map((category, idx) => (
+                              <Link
+                                href="#"
+                                key={category._id}
+                                className="block"
+                              >
+                                <div
+                                  className={`py-3 px-4 rounded-lg ml-2 cursor-pointer transition-all duration-300 ${
+                                    idx === hoverd
+                                      ? "bg-blue-50 border-l-4 border-blue-400 font-semibold text-blue-700"
+                                      : "hover:bg-gray-50"
+                                  }`}
+                                  onMouseEnter={() => setHoverd(idx)}
+                                >
+                                  <MegaMenuTitle>{category.name}</MegaMenuTitle>
+                                </div>
+                              </Link>
+                            ))}
+                        </div>
+
+                        <div className="flex-1 p-6">
+                          <div className="grid grid-cols-3 gap-6">
+                            {categories
+                              ?.filter(
+                                (category) => category.children.length > 0
+                              )
+                              [hoverd]?.children.map((child) => (
+                                <Link
+                                  href="#"
+                                  key={child._id}
+                                  className="p-3 hover:translate-x-[2px] rounded-lg transition-all duration-300 text-right group hover:bg-blue-50"
+                                >
+                                  <CategoryItem $data={sectionData}>
+                                    {child.name}
+                                  </CategoryItem>
+                                </Link>
+                              ))}
+                          </div>
+                        </div>
+                      </MegaMenu>
+                    </>
+                  ) : (
+                    <NavItem
+                      className="text-nowrap"
+                      href="#"
+                      $data={sectionData}
+                    >
+                      {link.name}
+                    </NavItem>
+                  )}
+                </NavItemWrapper>
+              ))}
+            </NavList>
+          </NavContainer>
+          <ActionButtons>
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
+                <ShoppingCart className="text-gray-600" size={20} />
+              </div>
+              <LoginButton>
+                <User size={16} /> ورود | ثبت‌نام
+              </LoginButton>
+            </div>
+          </ActionButtons>
+        </div>
       </MainSection>
 
-      <NavContainer className="justify-end">
-        {/* <LocationButton>
-          <MapPin size={16} /> شهر خود را انتخاب کنید
-        </LocationButton> */}
+      {/* <NavContainer className="justify-end">
         <NavList $previewWidth={previewWidth} $data={sectionData}>
           {sectionData.blocks.links?.map((link, index) => (
             <NavItemWrapper key={index}>
@@ -576,8 +1112,8 @@ const Header: React.FC<HeaderProps> = ({
                     <CategoryIconWrapper>
                       {link.name}
                       <svg
-                        width="20"
-                        height="20"
+                        width="16"
+                        height="16"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -588,14 +1124,16 @@ const Header: React.FC<HeaderProps> = ({
                     </CategoryIconWrapper>
                   </NavItem>
                   <MegaMenu $data={sectionData}>
-                    <div className="flex flex-col w-1/4 border-l border-gray-200">
+                    <div className="flex flex-col w-1/4 border-l border-gray-200 pl-4">
                       {categories
                         ?.filter((category) => category.children.length > 0)
                         .map((category, idx) => (
-                          <Link href={`#`} key={category._id} className="block">
+                          <Link href="#" key={category._id} className="block">
                             <div
-                              className={`py-3 px-4 rounded-md ml-4 cursor-pointer transition-all duration-200 ${
-                                idx === hoverd ? "bg-gray-100 font-bold" : ""
+                              className={`py-3 px-4 rounded-lg ml-2 cursor-pointer transition-all duration-300 ${
+                                idx === hoverd
+                                  ? "bg-blue-50 border-l-4 border-blue-400 font-semibold text-blue-700"
+                                  : "hover:bg-gray-50"
                               }`}
                               onMouseEnter={() => setHoverd(idx)}
                             >
@@ -605,24 +1143,21 @@ const Header: React.FC<HeaderProps> = ({
                         ))}
                     </div>
 
-                    <div className="flex-1 p-4">
-                      <div className="grid grid-cols-3 gap-4">
+                    <div className="flex-1 p-6">
+                      <div className="grid grid-cols-3 gap-6">
                         {categories
                           ?.filter((category) => category.children.length > 0)
-                          [hoverd]?.children.map((child) => {
-                            // Since child is now the full object, we can use it directly
-                            return (
-                              <Link
-                                href={`#`}
-                                key={child._id}
-                                className="p-1 hover:translate-x-[2px] rounded-md transition-all duration-200 text-right"
-                              >
-                                <CategoryItem $data={sectionData}>
-                                  {child.name}
-                                </CategoryItem>
-                              </Link>
-                            );
-                          })}
+                          [hoverd]?.children.map((child) => (
+                            <Link
+                              href="#"
+                              key={child._id}
+                              className="p-3 hover:translate-x-[2px] rounded-lg transition-all duration-300 text-right group hover:bg-blue-50"
+                            >
+                              <CategoryItem $data={sectionData}>
+                                {child.name}
+                              </CategoryItem>
+                            </Link>
+                          ))}
                       </div>
                     </div>
                   </MegaMenu>
@@ -635,33 +1170,84 @@ const Header: React.FC<HeaderProps> = ({
             </NavItemWrapper>
           ))}
         </NavList>
-      </NavContainer>
+      </NavContainer> */}
 
-      <div>
-        <MobileMenu
-          className="z-[9999] transition-all duration-300 bg-white"
-          $previewWidth={previewWidth}
-          $isOpen={isMenuOpen}
-        >
-          <MobileNavList>
-            {/* <LocationButton style={{ width: "100%", marginBottom: "20px" }}>
-              <MapPin size={16} /> شهر خود را انتخاب کنید
-            </LocationButton> */}
-            {sectionData.blocks.links?.map((link, index) => (
-              <MobileNavItem
-                key={index}
-                href="#"
-                $data={sectionData}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {link.name}
-              </MobileNavItem>
-            ))}
-          </MobileNavList>
-        </MobileMenu>
-      </div>
+      <Overlay $isOpen={isMenuOpen} onClick={handleOverlayClick} />
 
-      <Overlay $isOpen={isMenuOpen} onClick={() => setIsMenuOpen(false)} />
+      <MobileMenu
+        ref={menuRef}
+        $previewWidth={previewWidth}
+        $isOpen={isMenuOpen}
+        onClick={handleMenuClick}
+        $data={sectionData}
+        className="backdrop-blur-sm"
+      >
+        <MobileMenuHeader $data={sectionData}>
+          <Logo
+            $data={sectionData}
+            src={sectionData.blocks.imageLogo || "/assets/images/logo.webp"}
+            alt={sectionData.blocks.imageAlt}
+            style={{ width: "50px", height: "50px" }}
+          />
+          <CloseButton onClick={toggleMenu} aria-label="Close menu">
+            <X size={18} />
+          </CloseButton>
+        </MobileMenuHeader>
+
+        <MobileNavList>
+          {sectionData.blocks.links?.map((link, index) => (
+            <MobileNavItemWrapper key={index}>
+              {link.name === "دسته‌بندی کالاها" ? (
+                <>
+                  <MobileNavItemButton
+                    $data={sectionData}
+                    onClick={toggleMobileDropdown}
+                  >
+                    {link.name}
+                    {mobileDropdownOpen ? (
+                      <ChevronUp size={18} />
+                    ) : (
+                      <ChevronDown size={18} />
+                    )}
+                  </MobileNavItemButton>
+
+                  <MobileDropdown $isOpen={mobileDropdownOpen}>
+                    <MobileCategoryList>
+                      {categories
+                        ?.filter((category) => category.children.length > 0)
+                        .map((category) => (
+                          <div key={category._id}>
+                            <MobileCategoryTitle>
+                              {category.name}
+                            </MobileCategoryTitle>
+                            {category.children.map((child) => (
+                              <MobileCategoryItem
+                                key={child._id}
+                                href="#"
+                                $data={sectionData}
+                                onClick={toggleMenu}
+                              >
+                                {child.name}
+                              </MobileCategoryItem>
+                            ))}
+                          </div>
+                        ))}
+                    </MobileCategoryList>
+                  </MobileDropdown>
+                </>
+              ) : (
+                <MobileNavItem
+                  href="#"
+                  $data={sectionData}
+                  onClick={toggleMenu}
+                >
+                  {link.name}
+                </MobileNavItem>
+              )}
+            </MobileNavItemWrapper>
+          ))}
+        </MobileNavList>
+      </MobileMenu>
     </HeaderWrapper>
   );
 };

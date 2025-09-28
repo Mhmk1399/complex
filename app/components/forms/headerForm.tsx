@@ -3,6 +3,7 @@ import { Compiler } from "../compiler";
 import { Layout, Link, HeaderSection } from "@/lib/types";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
+import { ColorInput, DynamicRangeInput } from "./DynamicInputs";
 
 interface HeaderFormProps {
   layout: Layout;
@@ -16,31 +17,6 @@ interface BoxValues {
   left: number;
   right: number;
 }
-const ColorInput = ({
-  label,
-  name,
-  value,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <>
-    <label className="block mb-1">{label}</label>
-    <div className="flex flex-col rounded-md gap-3 items-center">
-      <input
-        type="color"
-        id={name}
-        name={name}
-        value={value || "#000000"}
-        onChange={onChange}
-        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
-      />
-    </div>
-  </>
-);
 
 export const HeaderForm: React.FC<HeaderFormProps> = ({
   setUserInputData,
@@ -293,112 +269,204 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
       <h2 className="text-lg font-bold mb-4">تنظیمات نو بار</h2>
 
       {/* Tabs */}
-      {/* Use the TabButtons component */}
       <TabButtons onTabChange={handleTabChange} />
 
       {/* Content Tab */}
       {isContentOpen && (
-        <div className="bg-white/20  shadow-lg rounded-lg p-4 animate-slideDown">
-          <label className="block mb-1" htmlFor="imageLogo">
-            لوگو
-          </label>
-          <input
-            type="text"
-            id="imageLogo"
-            name="imageLogo"
-            value={
-              userInputData?.blocks?.imageLogo || "/assets/images/logo.webp"
-            }
-            onChange={handleBlockChange}
-            className="w-full p-2 border rounded mb-2"
-          />
+        <div className="space-y-6 animate-slideDown">
+          {/* Logo Section */}
+          <div className="bg-white   rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
+            <div className="flex items-center gap-2 mb-4">
+              <h3 className="font-semibold text-gray-800">تنظیمات لوگو</h3>
+            </div>
 
-          <label className="block" htmlFor="imageAlt">
-            متن جایگزین تصویر
-          </label>
-          <input
-            type="text"
-            id="imageAlt"
-            name="imageAlt"
-            value={userInputData?.blocks?.imageAlt || "logo"}
-            onChange={handleBlockChange}
-            className="w-full p-2 border rounded"
-          />
-          <label className="block my-2" htmlFor="imageWidth">
-            عرض لوگو
-          </label>
-          <input
-            type="number"
-            id="imageWidth"
-            name="imageWidth"
-            value={userInputData?.blocks?.setting?.imageWidth?.toLocaleString()}
-            onChange={handleBlockSettingChange}
-            className="p-2 w-full border rounded"
-          />
-          <div className="text-gray-500 mb-4 text-sm">
-            {userInputData?.blocks?.setting?.imageWidth}px
-          </div>
-
-          <label className="block mb-1" htmlFor="imageHeight">
-            ارتفاع لوگو
-          </label>
-          <input
-            type="number"
-            id="imageHeight"
-            name="imageHeight"
-            value={userInputData?.blocks?.setting.imageHeight?.toLocaleString()}
-            onChange={handleBlockSettingChange}
-            className="p-2 w-full border rounded"
-          />
-          <div className="text-gray-500 mb-4 text-sm">
-            {userInputData?.blocks?.setting?.imageHeight}px
-          </div>
-          <div>
-            <label className="block mb-2">متن اطلاع‌رسانی</label>
-            <textarea
-              name="announcementText"
-              value={userInputData.blocks.setting?.announcementText || ""}
-              onChange={handleAnnouncementChange}
-              className="w-full p-2 border rounded"
-              rows={2}
-            />
-          </div>
-          <div className="p-4 space-y-4 animate-slideDown">
-            <h3 className="font-semibold mb-2">آیتم های سربرگ</h3>
-            <label className="block mb-1" htmlFor="linkSelect">
-              یک آیتم را انتخاب کنید
-            </label>
-            <select
-              id="linkSelect"
-              onChange={handleLinkSelect}
-              className="w-full p-2 border rounded mb-4"
-              defaultValue=""
-            >
-              <option value="">انتخاب کنید</option>
-              {linkOptions.map((link, index) => (
-                <option key={`${link.url}-${index}`} value={link.url}>
-                  {link.name}
-                </option>
-              ))}
-            </select>
-
-            <div className="space-y-1">
-              {userInputData.blocks.links.map((link, index) => (
-                <div
-                  key={`${link.url}-${index}`}
-                  className="flex items-center justify-between bg-gray-50 p-1 rounded"
+            <div className="space-y-4">
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                  htmlFor="imageLogo"
                 >
-                  <span className="text-sm">
-                    {link.name} - {link.url}
-                  </span>
-                  <button
-                    onClick={() => removeLink(link.url)}
-                    className="text-red-500 hover:text-red-700 text-sm"
-                  >
-                    حذف
-                  </button>
+                  آدرس لوگو
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    id="imageLogo"
+                    name="imageLogo"
+                    value={
+                      userInputData?.blocks?.imageLogo ||
+                      "/assets/images/logo.webp"
+                    }
+                    onChange={handleBlockChange}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                    placeholder="آدرس تصویر لوگو را وارد کنید"
+                  />
                 </div>
-              ))}
+              </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                  htmlFor="imageAlt"
+                >
+                  متن جایگزین تصویر
+                </label>
+                <input
+                  type="text"
+                  id="imageAlt"
+                  name="imageAlt"
+                  value={userInputData?.blocks?.imageAlt || "logo"}
+                  onChange={handleBlockChange}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                  placeholder="متن جایگزین برای لوگو"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Announcement Section */}
+          <div className="bg-white   rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
+            <div className="flex items-center gap-2 mb-4">
+              <h3 className="font-semibold text-gray-800">متن اطلاع‌رسانی</h3>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                پیام اطلاع‌رسانی
+              </label>
+              <textarea
+                name="announcementText"
+                value={userInputData.blocks.setting?.announcementText || ""}
+                onChange={handleAnnouncementChange}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 resize-none"
+                rows={3}
+                placeholder="پیام اطلاع‌رسانی خود را وارد کنید..."
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                این متن در بالای صفحه نمایش داده می‌شود
+              </p>
+            </div>
+          </div>
+
+          {/* Navigation Items Section */}
+          <div className="bg-white   rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
+            <div className="flex items-center gap-2 mb-4">
+              <h3 className="font-semibold text-gray-800">آیتم‌های منو</h3>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                  htmlFor="linkSelect"
+                >
+                  افزودن آیتم جدید
+                </label>
+                <div className="relative">
+                  <select
+                    id="linkSelect"
+                    onChange={handleLinkSelect}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 appearance-none bg-white"
+                    defaultValue=""
+                  >
+                    <option value="">انتخاب کنید...</option>
+                    {linkOptions.map((link, index) => (
+                      <option key={`${link.url}-${index}`} value={link.url}>
+                        {link.name}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg
+                      className="h-5 w-5 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Menu Items List */}
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <label className="text-sm font-medium text-gray-700">
+                    آیتم‌های منو ({userInputData.blocks.links.length})
+                  </label>
+                  {userInputData.blocks.links.length > 0 && (
+                    <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                      فعال
+                    </span>
+                  )}
+                </div>
+
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                  {userInputData.blocks.links.length === 0 ? (
+                    <div className="text-center py-8 text-gray-500">
+                      <svg
+                        className="w-12 h-12 mx-auto mb-2 text-gray-300"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 6h16M4 10h16M4 14h16M4 18h16"
+                        />
+                      </svg>
+                      <p className="text-sm">هیچ آیتمی اضافه نشده است</p>
+                      <p className="text-xs text-gray-400 mt-1">
+                        از منوی بالا آیتم جدید اضافه کنید
+                      </p>
+                    </div>
+                  ) : (
+                    userInputData.blocks.links.map((link, index) => (
+                      <div
+                        key={`${link.url}-${index}`}
+                        className="group flex items-center justify-between bg-gray-50 hover:bg-gray-100 p-3 rounded-lg border border-gray-200 transition-all duration-200"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                          <div>
+                            <p className="text-sm font-medium text-gray-800">
+                              {link.name}
+                            </p>
+                            <p className="text-xs text-gray-500">{link.url}</p>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => removeLink(link.url)}
+                          className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg"
+                          title="حذف آیتم"
+                        >
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -406,154 +474,157 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
 
       {/* Style Tab */}
       {isStyleSettingsOpen && (
-        <div className="bg-white rounded-lg p-4 animate-slideDown">
+        <div className="rounded-lg p-2 animate-slideDown">
           <div className="grid md:grid-cols-1 grid-cols-1 gap-2">
-            <div className="rounded-lg flex items-center justify-between ">
-              <ColorInput
-                label="رنگ پس زمینه"
-                name="bgColor"
-                value={userInputData?.blocks?.setting?.bgColor?.toLocaleString()}
-                onChange={handleBlockSettingChange}
-              />
-            </div>
-            <div className="rounded-lg flex items-center justify-between ">
-              <ColorInput
-                label="رنگ پس زمینه دسته بندی"
-                name="megaMenuBg"
-                value={userInputData?.blocks?.setting?.megaMenuBg?.toLocaleString()}
-                onChange={handleBlockSettingChange}
-              />
-            </div>
-            <div className="rounded-lg flex items-center justify-between ">
-              <ColorInput
-                label="رنگ آیتم های دسته بندی"
-                name="categoryItemColor"
-                value={
-                  userInputData?.blocks?.setting?.categoryItemColor || "#374151"
-                }
-                onChange={handleBlockSettingChange}
-              />
-            </div>
+            <h4 className="font-bold text-sky-700 mb-3">تنظیمات پس زمینه</h4>
+            <DynamicRangeInput
+              label="انحنا"
+              name="bgRadius"
+              min="0"
+              max="30"
+              value={userInputData?.blocks?.setting?.bgRadius || "25"}
+              onChange={handleBlockSettingChange}
+            />
+            <ColorInput
+              label="رنگ پس زمینه"
+              name="bgColor"
+              value={userInputData?.blocks?.setting?.bgColor?.toLocaleString()}
+              onChange={handleBlockSettingChange}
+            />
+            <h4 className="font-bold text-sky-700 my-3">تنظیمات مگامنو</h4>
+            <DynamicRangeInput
+              label="انحنا"
+              name="megaMenuRadius"
+              min="0"
+              max="70"
+              value={userInputData?.blocks?.setting?.megaMenuRadius || "25"}
+              onChange={handleBlockSettingChange}
+            />
+            <ColorInput
+              label="رنگ پس زمینه دسته بندی"
+              name="megaMenuBg"
+              value={userInputData?.blocks?.setting?.megaMenuBg?.toLocaleString()}
+              onChange={handleBlockSettingChange}
+            />
+            <ColorInput
+              label="رنگ آیتم های دسته بندی"
+              name="categoryItemColor"
+              value={
+                userInputData?.blocks?.setting?.categoryItemColor || "#374151"
+              }
+              onChange={handleBlockSettingChange}
+            />
 
-            <div className="rounded-lg flex items-center justify-between ">
-              <ColorInput
-                label="رنگ هاور آیتم های دسته بندی"
-                name="categoryItemHoverColor"
-                value={
-                  userInputData?.blocks?.setting?.categoryItemHoverColor ||
-                  "#2563eb"
-                }
-                onChange={handleBlockSettingChange}
-              />
-            </div>
-            <label htmlFor="">سایز آیتم ها</label>
-            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-              <input
-                type="range"
-                min="0"
-                max="100"
-                name="categoryItemSize"
-                value={
-                  userInputData?.blocks?.setting?.categoryItemSize || "250"
-                }
-                onChange={handleBlockSettingChange}
-              />
-              <p className="text-sm text-gray-600 text-nowrap">
-                {userInputData?.blocks.setting.categoryItemSize}px
-              </p>
-            </div>
-            <div className="rounded-lg flex items-center justify-between ">
-              <ColorInput
-                label="رنک آیتم ها"
-                name="itemColor"
-                value={userInputData?.blocks?.setting.itemColor?.toLocaleString()}
-                onChange={handleBlockSettingChange}
-              />
-            </div>
-            <div className="rounded-lg flex items-center justify-between ">
-              <ColorInput
-                label="رنگ آیتم های فعال"
-                name="itemHoverColor"
-                value={userInputData?.blocks?.setting.itemHoverColor?.toLocaleString()}
-                onChange={handleBlockSettingChange}
-              />
-            </div>
-
-            <label className="block mb-1" htmlFor="titleFontSize">
-              سایز عنوان
-            </label>
-            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-              <input
-                type="range"
-                min="0"
-                max="100"
-                name="itemFontSize"
-                value={userInputData?.blocks?.setting?.itemFontSize || "250"}
-                onChange={handleBlockSettingChange}
-              />
-              <p className="text-sm text-gray-600 text-nowrap">
-                {userInputData?.blocks.setting.itemFontSize}px
-              </p>
-            </div>
-
-            <label className="block mb-1" htmlFor="titleFontSize">
-              فاصله بین عنوان ها
-            </label>
-            <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-              <input
-                type="range"
-                min="0"
-                max="100"
-                name="gap"
-                value={userInputData?.blocks?.setting?.gap || "250"}
-                onChange={handleBlockSettingChange}
-              />
-              <p className="text-sm text-gray-600 text-nowrap">
-                {userInputData?.blocks.setting.gap}px
-              </p>
-            </div>
+            <ColorInput
+              label="رنگ هاور آیتم های دسته بندی"
+              name="categoryItemHoverColor"
+              value={
+                userInputData?.blocks?.setting?.categoryItemHoverColor ||
+                "#2563eb"
+              }
+              onChange={handleBlockSettingChange}
+            />
+            <h4 className="font-bold text-sky-700 my-3">تنظیمات منو اصلی</h4>
+            <DynamicRangeInput
+              label="فاصله بین آیتم ها"
+              name="gap"
+              min="0"
+              max="40"
+              value={userInputData?.blocks?.setting?.gap || "250"}
+              onChange={handleBlockSettingChange}
+            />
+            <ColorInput
+              label="رنگ آیتم ها"
+              name="itemColor"
+              value={userInputData?.blocks?.setting.itemColor?.toLocaleString()}
+              onChange={handleBlockSettingChange}
+            />
+            <ColorInput
+              label="رنگ آیتم های فعال"
+              name="itemHoverColor"
+              value={userInputData?.blocks?.setting.itemHoverColor?.toLocaleString()}
+              onChange={handleBlockSettingChange}
+            />
+            <ColorInput
+              label="پس زمینه موبایل"
+              name="mobileBackground"
+              value={userInputData?.blocks?.setting.mobileBackground?.toLocaleString()}
+              onChange={handleBlockSettingChange}
+            />
+            <h4 className="font-bold text-sky-700 my-3">تنظیمات اطلاع رسانی</h4>
+            <DynamicRangeInput
+              label="سایز متن"
+              name="announcementFontSize"
+              min="0"
+              max="40"
+              value={
+                userInputData?.blocks?.setting?.announcementFontSize || "250"
+              }
+              onChange={handleBlockSettingChange}
+            />
             <div className="flex flex-col  gap-2">
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنگ پس زمینه اطلاع رسانی"
-                  name="announcementBgColor"
-                  value={userInputData?.blocks?.setting.announcementBgColor?.toLocaleString()}
-                  onChange={handleBlockSettingChange}
-                />
-              </div>
+              <ColorInput
+                label="رنگ پس زمینه اطلاع رسانی"
+                name="announcementBgColor"
+                value={userInputData?.blocks?.setting.announcementBgColor?.toLocaleString()}
+                onChange={handleBlockSettingChange}
+              />
 
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنک متن اطلاع رسانی"
-                  name="announcementTextColor"
-                  value={userInputData?.blocks?.setting.announcementTextColor?.toLocaleString()}
-                  onChange={handleBlockSettingChange}
-                />
-              </div>
-              <label htmlFor="">سایز متن اطلاع رسانی</label>
-              <div className="flex items-center justify-center gap-4 p-4 rounded-lg border border-gray-300 shadow-sm">
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  name="announcementFontSize"
-                  value={
-                    userInputData?.blocks?.setting?.announcementFontSize ||
-                    "250"
-                  }
-                  onChange={handleBlockSettingChange}
-                />
-                <p className="text-sm text-gray-600 text-nowrap">
-                  {userInputData?.blocks.setting.announcementFontSize}px
-                </p>
-              </div>
+              <ColorInput
+                label="رنگ متن اطلاع رسانی"
+                name="announcementTextColor"
+                value={userInputData?.blocks?.setting.announcementTextColor?.toLocaleString()}
+                onChange={handleBlockSettingChange}
+              />
             </div>
+          </div>
+          {/* ✅ New Shadow Settings */}
+          <div className="  rounded-lg">
+            <h4 className="font-bold text-sky-700 my-3">تنظیمات سایه</h4>
+            <DynamicRangeInput
+              label="افست افقی سایه"
+              name="shadowOffsetX"
+              min="-50"
+              max="50"
+              value={userInputData?.setting?.shadowOffsetX?.toString() ?? "0"}
+              onChange={handleBlockSettingChange}
+            />
+            <DynamicRangeInput
+              label="افست عمودی سایه"
+              name="shadowOffsetY"
+              min="-50"
+              max="50"
+              value={userInputData?.setting?.shadowOffsetY?.toString() ?? "0"}
+              onChange={handleBlockSettingChange}
+            />
+            <DynamicRangeInput
+              label="میزان بلور سایه"
+              name="shadowBlur"
+              min="0"
+              max="100"
+              value={userInputData?.setting?.shadowBlur?.toString() ?? "0"}
+              onChange={handleBlockSettingChange}
+            />
+            <DynamicRangeInput
+              label="میزان گسترش سایه"
+              name="shadowSpread"
+              min="-20"
+              max="20"
+              value={userInputData?.setting?.shadowSpread?.toString() ?? "0"}
+              onChange={handleBlockSettingChange}
+            />
+            <ColorInput
+              label="رنگ سایه"
+              name="shadowColor"
+              value={userInputData?.setting?.shadowColor?.toString() ?? "0"}
+              onChange={handleBlockSettingChange}
+            />
           </div>
         </div>
       )}
 
       {isAnimationOpen && (
-        <div className="p-4  animate-slideDown">
+        <div className="animate-slideDown">
           <h3 className="text-lg font-semibold text-sky-700">
             تنظیمات انیمیشن
           </h3>
@@ -563,7 +634,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
 
       {/* Space Tab */}
       {isSpacingOpen && (
-        <div className="p-4 animate-slideDown">
+        <div className="animate-slideDown">
           <div className=" rounded-lg flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

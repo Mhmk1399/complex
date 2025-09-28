@@ -3,6 +3,11 @@ import { Compiler } from "../compiler";
 import { Layout, FooterSection } from "@/lib/types";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
+import {
+  ColorInput,
+  DynamicRangeInput,
+  DynamicSelectInput,
+} from "./DynamicInputs";
 
 interface FooterFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<FooterSection>>;
@@ -16,32 +21,6 @@ interface BoxValues {
   left: number;
   right: number;
 }
-
-const ColorInput = ({
-  label,
-  name,
-  value,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <>
-    <label className="block mb-1">{label}</label>
-    <div className="flex flex-col rounded-md gap-3 items-center">
-      <input
-        type="color"
-        id={name}
-        name={name}
-        value={value || "#000000"}
-        onChange={onChange}
-        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
-      />
-    </div>
-  </>
-);
 
 export const FooterForm: React.FC<FooterFormProps> = ({
   setUserInputData,
@@ -199,201 +178,381 @@ export const FooterForm: React.FC<FooterFormProps> = ({
 
       {/* Content Section */}
       {isContentOpen && (
-        <>
-          <div className="space-y-4 p-4 animate-slideDown">
-            <div>
-              <label className="block mb-1">متن سربرگ</label>
-              <input
-                type="text"
-                name="text"
-                value={userInputData?.blocks?.text || "متن سربلاک"}
-                onChange={handleBlockChange}
-                className="w-full p-2 border rounded"
-              />
+        <div className="space-y-4 animate-slideDown">
+          {/* Header Text Section */}
+          <div className="bg-white rounded-lg p-3">
+            <div className="flex items-center gap-2 mb-3">
+              <h4 className="font-medium text-gray-800 text-sm">محتوای متنی</h4>
             </div>
 
-            <div>
-              <label className="block mb-1">توضیحات</label>
-              <textarea
-                name="description"
-                value={
-                  userInputData?.blocks?.description ||
-                  "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد"
-                }
-                onChange={handleBlockChange}
-                className="w-full p-2 border rounded"
-                rows={3}
-              />
-            </div>
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1">
+                  متن سربرگ
+                </label>
+                <input
+                  type="text"
+                  name="text"
+                  value={userInputData?.blocks?.text || "متن سربلاک"}
+                  onChange={handleBlockChange}
+                  className="w-full p-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                  placeholder="عنوان اصلی سایت"
+                />
+              </div>
 
-            <div>
-              <label className="block mb-1">لینک اینستاگرام</label>
-              <input
-                type="text"
-                name="instagramLink"
-                value={
-                  userInputData?.blocks?.instagramLink ?? "لینک اینستاگرام"
-                }
-                onChange={handleBlockChange}
-                className="w-full p-2 border rounded"
-              />
-            </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1">
+                  توضیحات
+                </label>
+                <textarea
+                  name="description"
+                  value={
+                    userInputData?.blocks?.description ||
+                    "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است"
+                  }
+                  onChange={handleBlockChange}
+                  className="w-full p-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 resize-none"
+                  rows={3}
+                  placeholder="توضیحات کوتاه درباره سایت"
+                />
+              </div>
+              {/* Links Management */}
+              <div className="bg-white rounded-lg p-3 shadow-sm">
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <div className="flex items-center gap-2">
+                    <h4 className="font-medium text-gray-800 text-sm">
+                      لینک‌های پایین صفحه
+                    </h4>
+                  </div>
+                  <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                    {userInputData?.blocks?.links?.length || 0} آیتم
+                  </span>
+                </div>
 
-            <div>
-              <label className="block mb-1">لینک تلگرام</label>
-              <input
-                type="text"
-                name="telegramLink"
-                value={userInputData?.blocks?.telegramLink ?? "لینک  تلگرام"}
-                onChange={handleBlockChange}
-                className="w-full p-2 border rounded"
-              />
-            </div>
+                <div className="space-y-3">
+                  {userInputData?.blocks?.links?.length === 0 ? (
+                    <div className="text-center py-6 text-gray-500">
+                      <svg
+                        className="w-8 h-8 mx-auto mb-2 text-gray-300"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.102m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                        />
+                      </svg>
+                      <p className="text-sm">هیچ لینکی اضافه نشده است</p>
+                      <p className="text-xs text-gray-400 mt-1">
+                        لینک جدید اضافه کنید
+                      </p>
+                    </div>
+                  ) : (
+                    userInputData?.blocks?.links?.map((link, index) => (
+                      <div
+                        key={index}
+                        className="group bg-gray-50 border border-gray-200 rounded-lg p-3 hover:bg-gray-100 transition-colors duration-200"
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="flex-shrink-0 w-6 h-6 bg-white border border-gray-300 rounded-md flex items-center justify-center mt-1">
+                            <span className="text-xs font-medium text-gray-600">
+                              {index + 1}
+                            </span>
+                          </div>
 
-            <div>
-              <label className="block mb-1">لینک واتساپ</label>
-              <input
-                type="text"
-                name="whatsappLink"
-                value={userInputData?.blocks?.whatsappLink ?? "لینک واتساپ"}
-                onChange={handleBlockChange}
-                className="w-full p-2 border rounded"
-              />
+                          <div className="flex-1 space-y-2">
+                            <div>
+                              <label className="block text-xs font-medium text-gray-700 mb-1">
+                                عنوان لینک
+                              </label>
+                              <input
+                                type="text"
+                                value={link.label}
+                                onChange={(e) => {
+                                  setUserInputData((prev) => ({
+                                    ...prev,
+                                    blocks: {
+                                      ...prev.blocks,
+                                      links: prev.blocks.links?.map((l, i) =>
+                                        i === index
+                                          ? { ...l, label: e.target.value }
+                                          : l
+                                      ),
+                                    },
+                                  }));
+                                }}
+                                className="w-full p-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                                placeholder="مثل: درباره ما"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-xs font-medium text-gray-700 mb-1">
+                                آدرس لینک
+                              </label>
+                              <input
+                                type="text"
+                                value={link.url}
+                                onChange={(e) => {
+                                  setUserInputData((prev) => ({
+                                    ...prev,
+                                    blocks: {
+                                      ...prev.blocks,
+                                      links: prev.blocks.links?.map((l, i) =>
+                                        i === index
+                                          ? { ...l, url: e.target.value }
+                                          : l
+                                      ),
+                                    },
+                                  }));
+                                }}
+                                className="w-full p-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                                placeholder="https://example.com/about"
+                              />
+                            </div>
+                          </div>
+
+                          <button
+                            onClick={() => {
+                              setUserInputData((prev) => ({
+                                ...prev,
+                                blocks: {
+                                  ...prev.blocks,
+                                  links: prev.blocks.links?.filter(
+                                    (_, i) => i !== index
+                                  ),
+                                },
+                              }));
+                            }}
+                            className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-md mt-1"
+                            title="حذف لینک"
+                          >
+                            <svg
+                              className="w-3 h-3"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                {/* Add New Link Button */}
+                <div className="mt-3 pt-3 border-t border-gray-200">
+                  <button
+                    onClick={() => {
+                      setUserInputData((prev) => ({
+                        ...prev,
+                        blocks: {
+                          ...prev.blocks,
+                          links: [
+                            ...(prev.blocks.links || []),
+                            { label: "", url: "" },
+                          ],
+                        },
+                      }));
+                    }}
+                    className="w-full p-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 hover:border-blue-300 transition-colors duration-200 flex items-center justify-center gap-2"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                      />
+                    </svg>
+                    افزودن لینک جدید
+                  </button>
+                </div>
+
+                {/* Quick Actions */}
+                {(userInputData?.blocks?.links?.length ?? 0) > 0 && (
+                  <div className="mt-2 pt-2 border-t border-gray-100">
+                    <button
+                      onClick={() => {
+                        setUserInputData((prev) => ({
+                          ...prev,
+                          blocks: {
+                            ...prev.blocks,
+                            links: [],
+                          },
+                        }));
+                      }}
+                      className="text-xs text-gray-600 hover:text-red-600 hover:bg-red-50 px-2 py-1 rounded transition-colors duration-200"
+                    >
+                      پاک کردن همه لینک‌ها
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </>
+
+          {/* Social Links Section */}
+          <div className="bg-white  rounded-lg p-3">
+            <div className="flex items-center gap-2 mb-3">
+              <h4 className="font-medium text-gray-800 text-sm">
+                شبکه‌های اجتماعی
+              </h4>
+            </div>
+
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1">
+                  <span className="flex items-center gap-1">
+                    <div className="w-3 h-3 bg-gradient-to-br from-purple-500 to-pink-500 rounded-sm"></div>
+                    اینستاگرام
+                  </span>
+                </label>
+                <input
+                  type="text"
+                  name="instagramLink"
+                  value={userInputData?.blocks?.instagramLink ?? ""}
+                  onChange={handleBlockChange}
+                  className="w-full p-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                  placeholder="https://instagram.com/username"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1">
+                  <span className="flex items-center gap-1">
+                    <div className="w-3 h-3 bg-blue-500 rounded-sm"></div>
+                    تلگرام
+                  </span>
+                </label>
+                <input
+                  type="text"
+                  name="telegramLink"
+                  value={userInputData?.blocks?.telegramLink ?? ""}
+                  onChange={handleBlockChange}
+                  className="w-full p-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                  placeholder="https://t.me/username"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1">
+                  <span className="flex items-center gap-1">
+                    <div className="w-3 h-3 bg-green-500 rounded-sm"></div>
+                    واتساپ
+                  </span>
+                </label>
+                <input
+                  type="text"
+                  name="whatsappLink"
+                  value={userInputData?.blocks?.whatsappLink ?? ""}
+                  onChange={handleBlockChange}
+                  className="w-full p-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                  placeholder="https://wa.me/phonenumber"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Style Settings */}
       {isStyleSettingsOpen && (
         <>
-          <div className="grid md:grid-cols-1 gap-4  p-4 animate-slideDown">
-            <h4 className="font-semibold mb-2">تنظیمات سربرگ</h4>
-            <div className="rounded-lg flex items-center justify-between ">
-              <ColorInput
-                label="رنگ سربرگ"
-                name="textColor"
-                value={userInputData?.blocks?.setting?.textColor ?? "#ffffff"}
-                onChange={handleBlockSettingChange}
-              />
-            </div>
+          <div className="grid md:grid-cols-1 gap-4 py-2 animate-slideDown">
+            <h4 className="font-bold text-sky-700 mb-3">تنظیمات سربرگ</h4>
+            <ColorInput
+              label="رنگ سربرگ"
+              name="textColor"
+              value={userInputData?.blocks?.setting?.textColor ?? "#ffffff"}
+              onChange={handleBlockSettingChange}
+            />
 
-            <label>سایز متن سربرگ</label>
-            <div className="flex items-center w-full justify-center gap-4 pط-4 rounded-lg ">
-              <input
-                type="range"
-                min="0"
-                max="100"
-                name="textFontSize"
-                value={userInputData?.blocks?.setting?.textFontSize || "250"}
-                onChange={handleBlockSettingChange}
-                className="w-full"
-              />
-            </div>
-            <p className="text-sm text-gray-600 text-nowrap">
-              {userInputData?.blocks.setting.textFontSize}px
-            </p>
-            <div>
-              <label className="block mb-1">وزن متن سربرگ</label>
-              <select
-                name="textFontWeight"
-                value={userInputData?.blocks?.setting?.textFontWeight ?? "400"}
-                onChange={handleBlockSettingChange}
-                className="w-full p-2 border rounded"
-              >
-                <option value="bold">ضخیم</option>
-                <option value="normal">نرمال</option>
-              </select>
-            </div>
-            <h4 className="font-semibold mb-2">تنظیمات متن</h4>
-            <div className="rounded-lg flex items-center justify-between ">
-              <ColorInput
-                label="رنگ توضیحات"
-                name="descriptionColor"
-                value={
-                  userInputData?.blocks?.setting?.descriptionColor ?? "#ffffff"
-                }
-                onChange={handleBlockSettingChange}
-              />
-            </div>
-            <label>سایز توضیحات</label>
-            <div className="flex items-center w-full justify-center gap-4 pط-4 rounded-lg ">
-              <input
-                type="range"
-                min="0"
-                max="100"
-                name="descriptionFontSize"
-                className="w-full"
-                value={
-                  userInputData?.blocks?.setting?.descriptionFontSize || "250"
-                }
-                onChange={handleBlockSettingChange}
-              />
-            </div>
-            <p className="text-sm text-gray-600 text-nowrap">
-              {userInputData?.blocks.setting.descriptionFontSize}px
-            </p>
+            <DynamicRangeInput
+              label="سایز متن"
+              name="textFontSize"
+              min="0"
+              max="100"
+              value={userInputData?.blocks?.setting?.textFontSize || "250"}
+              onChange={handleBlockSettingChange}
+            />
+            <DynamicSelectInput
+              label="وزن  "
+              name="textFontWeight"
+              value={userInputData?.blocks?.setting?.textFontWeight ?? "400"}
+              options={[
+                { value: "normal", label: "نرمال" },
+                { value: "bold", label: "ضخیم" },
+              ]}
+              onChange={handleBlockSettingChange}
+            />
 
-            <div>
-              <label className="block mb-1">وزن متن توضیحات</label>
-              <select
-                name="descriptionFontWeight"
-                value={
-                  userInputData?.blocks?.setting?.descriptionFontWeight ?? "400"
-                }
-                onChange={handleBlockSettingChange}
-                className="w-full p-2 border rounded"
-              >
-                <option value="bold">ضخیم</option>
-                <option value="normal">نرمال</option>
-              </select>
-            </div>
-
-            <h4 className="font-semibold">تنظیمات لوگو</h4>
+            <h4 className="font-bold text-sky-700 mb-3">تنظیمات توضیحات</h4>
+            <DynamicRangeInput
+              label="سایز متن"
+              name="descriptionFontSize"
+              min="0"
+              max="100"
+              value={
+                userInputData?.blocks?.setting?.descriptionFontSize || "250"
+              }
+              onChange={handleBlockSettingChange}
+            />
+            <DynamicSelectInput
+              label="وزن  "
+              name="descriptionFontWeight"
+              value={
+                userInputData?.blocks?.setting?.descriptionFontWeight ?? "400"
+              }
+              options={[
+                { value: "normal", label: "نرمال" },
+                { value: "bold", label: "ضخیم" },
+              ]}
+              onChange={handleBlockSettingChange}
+            />
+            <ColorInput
+              label="رنگ "
+              name="descriptionColor"
+              value={
+                userInputData?.blocks?.setting?.descriptionColor ?? "#ffffff"
+              }
+              onChange={handleBlockSettingChange}
+            />
           </div>
 
-          <div className="grid md:grid-cols-1 p-4 gap-4 ">
-            <div>
-              <label className="block mb-1">عرض لوگو</label>
-              <input
-                type="number"
-                name="logoWidth"
-                value={userInputData?.blocks?.setting?.logoWidth ?? "100"}
-                onChange={handleBlockSettingChange}
-                className="w-full p-2 border rounded"
-              />
-              <div className="text-gray-500 text-sm">
-                {userInputData?.blocks?.setting?.logoWidth}px
-              </div>
-            </div>
-            <div>
-              <label className="block mb-1">ارتفاع لوگو</label>
-              <input
-                type="number"
-                name="logoHeight"
-                value={userInputData?.blocks?.setting?.logoHeight ?? "100"}
-                onChange={handleBlockSettingChange}
-                className="w-full p-2 border rounded"
-              />
-              <div className="text-gray-500 text-sm">
-                {userInputData?.blocks?.setting?.logoHeight}px
-              </div>
-            </div>
-            <h4 className="font-semibold mb-2">تنظیمات پس زمینه</h4>
-            <div className="rounded-lg flex items-center justify-between ">
-              <ColorInput
-                label="رنگ پس زمینه"
-                name="backgroundColor"
-                value={userInputData?.setting?.backgroundColor ?? "#fffffff"}
-                onChange={handleSettingChange}
-              />
-            </div>
-          </div>
-
-          {/* Spacing Settings */}
+          <h4 className="font-bold text-sky-700 mb-3">تنظیمات پس زمینه</h4>
+          <DynamicRangeInput
+            label="انحنا"
+            name="bgRadius"
+            min="0"
+            max="50"
+            value={userInputData?.blocks?.setting?.bgRadius || "250"}
+            onChange={handleBlockSettingChange}
+          />
+          <ColorInput
+            label="رنگ پس زمینه"
+            name="backgroundColor"
+            value={userInputData?.setting?.backgroundColor ?? "#fffffff"}
+            onChange={handleSettingChange}
+          />
 
           {/* Footer Links Section */}
-          <h3 className="font-semibold p-4">لینک‌های فوتر</h3>
+          <h3 className="font-bold text-sky-700 mb-3">لینک‌های فوتر</h3>
           <div className="space-y-1 flex flex-col gap-2 p-4">
             <div className="rounded-lg flex items-center justify-between ">
               <ColorInput
@@ -403,127 +562,10 @@ export const FooterForm: React.FC<FooterFormProps> = ({
                 onChange={handleBlockSettingChange}
               />
             </div>
-
-            {userInputData?.blocks?.links?.map((link, index) => (
-              <div key={index} className="flex gap-4">
-                <div className="flex-1">
-                  <label className="block mb-1">عنوان لینک {index + 1}</label>
-                  <input
-                    type="text"
-                    value={link.label}
-                    onChange={(e) => {
-                      setUserInputData((prev) => ({
-                        ...prev,
-                        blocks: {
-                          ...prev.blocks,
-                          links: prev.blocks.links?.map((l, i) =>
-                            i === index ? { ...l, label: e.target.value } : l
-                          ),
-                        },
-                      }));
-                    }}
-                    className="w-full p-2 border rounded"
-                  />
-                </div>
-                <div className="flex-1">
-                  <label className="block mb-1">آدرس لینک {index + 1}</label>
-                  <input
-                    type="text"
-                    value={link.url}
-                    onChange={(e) => {
-                      setUserInputData((prev) => ({
-                        ...prev,
-                        blocks: {
-                          ...prev.blocks,
-                          links: prev.blocks.links?.map((l, i) =>
-                            i === index ? { ...l, url: e.target.value } : l
-                          ),
-                        },
-                      }));
-                    }}
-                    className="w-full p-2 border rounded"
-                  />
-                </div>
-                <button
-                  onClick={() => {
-                    setUserInputData((prev) => ({
-                      ...prev,
-                      blocks: {
-                        ...prev.blocks,
-                        links: prev.blocks.links?.filter((_, i) => i !== index),
-                      },
-                    }));
-                  }}
-                  className="self-end p-2 bg-red-500 text-white rounded hover:bg-red-600"
-                >
-                  حذف
-                </button>
-              </div>
-            ))}
-            <button
-              onClick={() => {
-                setUserInputData((prev) => ({
-                  ...prev,
-                  blocks: {
-                    ...prev.blocks,
-                    links: [
-                      ...(prev.blocks.links || []),
-                      { label: "", url: "" },
-                    ],
-                  },
-                }));
-              }}
-              className=" px-4 py-2 transition-all duration-300 ease-in-out mx-auto bg-blue-500 text-white rounded hover:bg-green-600"
-            >
-              افزودن لینک جدید
-            </button>
           </div>
           {/* Trust Icons Settings */}
-          <h4 className="font-semibold mb-2 ">تنظیمات آیکون‌های اعتماد</h4>
+          <h4 className="font-bold text-sky-700 mb-3">تنظیمات دکمه اسکرول</h4>
           <div className="grid md:grid-cols-1 gap-4 p-4">
-            <div className="rounded-lg flex items-center justify-between ">
-              <ColorInput
-                label="رنگ پس زمینه آیکون"
-                name="trustIconBackground"
-                value={
-                  userInputData?.blocks?.setting?.trustIconBackground ??
-                  "#f8f9fa"
-                }
-                onChange={handleBlockSettingChange}
-              />
-            </div>
-            <div className="rounded-lg flex items-center justify-between ">
-              <ColorInput
-                label="رنگ آیکون"
-                name="trustIconColor"
-                value={userInputData?.blocks?.setting?.trustIconColor ?? "red"}
-                onChange={handleBlockSettingChange}
-              />
-            </div>
-            <label>سایز متن آیکون ها</label>
-
-            <div className="flex items-center w-full justify-center gap-4 pط-4 rounded-lg ">
-              <input
-                type="range"
-                min="0"
-                max="100"
-                name="trustItemSize"
-                className="w-full"
-                value={userInputData?.blocks?.setting?.trustItemSize || "16"}
-                onChange={handleBlockSettingChange}
-              />
-            </div>
-            <p className="text-sm text-gray-600 text-nowrap">
-              {userInputData?.blocks.setting.trustItemSize}px
-            </p>
-            <div className="rounded-lg flex items-center justify-between ">
-              <ColorInput
-                label="رنگ متن آیتم‌ها"
-                name="trustItemColor"
-                value={userInputData?.blocks?.setting?.trustItemColor ?? "#333"}
-                onChange={handleBlockSettingChange}
-              />
-            </div>
             <div className="rounded-lg flex items-center justify-between ">
               <ColorInput
                 label="رنگ دکمه اسکرول"
@@ -547,7 +589,9 @@ export const FooterForm: React.FC<FooterFormProps> = ({
             </div>
           </div>
           {/* End of Trust Icons Settings */}
-          <h4 className="font-semibold mb-2 ">تنظیمات لینک دسته بندی</h4>
+          <h4 className="font-bold text-sky-700 mb-3">
+            تنظیمات لینک دسته بندی
+          </h4>
           <div className="rounded-lg flex px-4 items-center justify-between ">
             <ColorInput
               label="رنگ لینک  "
@@ -564,12 +608,55 @@ export const FooterForm: React.FC<FooterFormProps> = ({
               onChange={handleBlockSettingChange}
             />
           </div>
+
+          {/* ✅ New Shadow Settings */}
+          <div className="  rounded-lg">
+            <h4 className="font-bold text-sky-700 my-3">تنظیمات سایه</h4>
+            <DynamicRangeInput
+              label="افست افقی سایه"
+              name="shadowOffsetX"
+              min="-50"
+              max="50"
+              value={userInputData?.setting?.shadowOffsetX?.toString() ?? "0"}
+              onChange={handleBlockSettingChange}
+            />
+            <DynamicRangeInput
+              label="افست عمودی سایه"
+              name="shadowOffsetY"
+              min="-50"
+              max="50"
+              value={userInputData?.setting?.shadowOffsetY?.toString() ?? "0"}
+              onChange={handleBlockSettingChange}
+            />
+            <DynamicRangeInput
+              label="میزان بلور سایه"
+              name="shadowBlur"
+              min="0"
+              max="100"
+              value={userInputData?.setting?.shadowBlur?.toString() ?? "0"}
+              onChange={handleBlockSettingChange}
+            />
+            <DynamicRangeInput
+              label="میزان گسترش سایه"
+              name="shadowSpread"
+              min="-20"
+              max="20"
+              value={userInputData?.setting?.shadowSpread?.toString() ?? "0"}
+              onChange={handleBlockSettingChange}
+            />
+            <ColorInput
+              label="رنگ سایه"
+              name="shadowColor"
+              value={userInputData?.setting?.shadowColor?.toString() ?? "0"}
+              onChange={handleBlockSettingChange}
+            />
+          </div>
         </>
       )}
 
       {/* animation */}
       {isAnimationOpen && (
-        <div className="p-4  animate-slideDown">
+        <div className="animate-slideDown">
           <h3 className="text-lg font-semibold text-sky-700">
             تنظیمات انیمیشن
           </h3>
@@ -579,7 +666,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
 
       {/* spacing */}
       {isSpacingOpen && (
-        <div className="p-4 animate-slideDown">
+        <div className="animate-slideDown">
           <div className=" rounded-lg flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}
