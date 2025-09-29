@@ -1,8 +1,8 @@
 {
   "children": {
-     "metaData":{
-      "title":"juju",
-      "description":"juju page"
+    "metaData": {
+      "title": "juju",
+      "description": "juju page"
     },
     "sections": [
       {
@@ -31,16 +31,25 @@
         ],
         "setting": {
           "gridColumns": 2,
-          "paddingTop": 70,
-          "paddingBottom": "30",
-          "marginTop": "50",
-          "marginBottom": "15",
+          "paddingTop": "10",
+          "paddingBottom": "10",
+          "marginTop": "10",
+          "marginBottom": "10",
           "backgroundColor": "#f8f9fa",
           "cardBackgroundColor": "#ffffff",
           "textColor": "#000000",
           "cardBorderRadius": 10,
           "btnBackgroundColor": "#e4e4e4",
-          "buttonColor": "#ffffff"
+          "buttonColor": "#ffffff",
+          "Radius": "30",
+          "shadowOffsetX": 0,
+          "shadowOffsetY": 8,
+          "shadowBlur": 20,
+          "shadowSpread": 2,
+          "shadowColor": "#e4e4e4",
+          "titleSize": "#e4e4e4",
+          "descriptionSize": "#e4e4e4",
+          "btnRadius": "#e4e4e4"
         }
       }
     ],

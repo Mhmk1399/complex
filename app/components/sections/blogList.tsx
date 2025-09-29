@@ -44,6 +44,13 @@ const SectionBlogList = styled.section<{
   margin-top: ${(props) => props.$data?.setting?.marginTop}px;
   margin-bottom: ${(props) => props.$data?.setting?.marginBottom}px;
   background-color: ${(props) => props.$data?.setting?.backgroundColor};
+  box-shadow: ${(props) =>
+    `${props.$data.setting?.shadowOffsetX || 0}px 
+     ${props.$data.setting?.shadowOffsetY || 4}px 
+     ${props.$data.setting?.shadowBlur || 10}px 
+     ${props.$data.setting?.shadowSpread || 0}px 
+     ${props.$data.setting?.shadowColor || "#fff"}`};
+  border-radius: ${(props) => props.$data.setting?.Radius || "20"}px;
 
   @media (max-width: 425px) {
     grid-template-columns: repeat(1, 1fr);
@@ -80,7 +87,7 @@ const BlogCard = styled.div<{
   }
 
   .title {
-    font-size: 1.25rem;
+    font-size: ${(props) => props.$data?.titleSize}px;
     font-weight: bold;
     margin-bottom: 10px;
     color: ${(props) => props.$data?.textColor};
@@ -95,7 +102,7 @@ const BlogCard = styled.div<{
   }
 
   .description {
-    color: #000000;
+    font-size: ${(props) => props.$data?.descriptionSize}px;
     margin-bottom: 15px;
     color: ${(props) => props.$data?.textColor};
   }
@@ -103,12 +110,11 @@ const BlogCard = styled.div<{
   .read-more {
     display: inline-block;
     padding: 8px 16px;
-    background: #0070f3;
     color: ${(props) => props.$data?.buttonColor};
-    border-radius: 4px;
+    border-radius: ${(props) => props.$data.btnRadius || "20"}px;
     text-decoration: none;
     transition: background 0.3s ease;
-    background: ${(props) => props.$data?.btnBackgroundColor};
+    background-color: ${(props) => props.$data?.btnBackgroundColor};
 
     &:hover {
       opacity: 0.8;
@@ -226,7 +232,7 @@ const BlogList: React.FC<BlogListProps> = ({
             />
           ) : null}
           <div className="content">
-            <h2 className="title">{blog.title}</h2>
+            <h2 className="title line-clamp-1">{blog.title}</h2>
             <div className="meta">
               <span>
                 {blog.createdAt &&
@@ -241,7 +247,7 @@ const BlogList: React.FC<BlogListProps> = ({
             <div
               className="description mb-2 text-right"
               dangerouslySetInnerHTML={{
-                __html: blog.content.slice(0, 150) + "...",
+                __html: blog.content.slice(0, 70) + "...",
               }}
             />
             <a href="#" className="read-more">

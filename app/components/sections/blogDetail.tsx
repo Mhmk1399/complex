@@ -35,50 +35,77 @@ const SectionBlogDetail = styled.div<{
   padding-right: ${(props) => props.$data?.setting?.paddingRight || 0}px;
   margin-top: ${(props) => props.$data?.setting?.marginTop || 0}px;
   margin-bottom: ${(props) => props.$data?.setting?.marginBottom || 0}px;
+  margin-right: ${(props) => props.$data?.setting?.marginRight || 0}px;
+  margin-left: ${(props) => props.$data?.setting?.marginLeft || 0}px;
   background-color: ${(props) =>
     props.$data?.setting?.backgroundColor || "#ffffff"};
+  box-shadow: ${(props) =>
+    `${props.$data.setting?.shadowOffsetX || 0}px 
+     ${props.$data.setting?.shadowOffsetY || 4}px 
+     ${props.$data.setting?.shadowBlur || 10}px 
+     ${props.$data.setting?.shadowSpread || 0}px 
+     ${props.$data.setting?.shadowColor || "#fff"}`};
+  border-radius: ${(props) => props.$data.setting?.Radius || "20"}px;
 
   .blog-title {
     color: ${(props) => props.$data?.setting?.titleColor || "#1A1A1A"};
-    font-size: ${(props) => 
-      props.$preview === "sm" 
-        ? Math.max(18, (parseInt(props.$data?.setting?.titleFontSize || "36") * 0.6)) 
+    font-size: ${(props) =>
+      props.$preview === "sm"
+        ? Math.max(
+            18,
+            parseInt(props.$data?.setting?.titleFontSize || "36") * 0.6
+          )
         : props.$data?.setting?.titleFontSize || 36}px;
     font-weight: bold;
     margin-bottom: 16px;
-    
+
     @media (max-width: 768px) {
-      font-size: ${(props) => 
-        Math.max(16, (parseInt(props.$data?.setting?.titleFontSize || "36") * 0.5))}px;
+      font-size: ${(props) =>
+        Math.max(
+          16,
+          parseInt(props.$data?.setting?.titleFontSize || "36") * 0.5
+        )}px;
     }
   }
 
   .blog-content {
     color: ${(props) => props.$data?.setting?.contentColor || "#2C2C2C"};
-    font-size: ${(props) => 
-      props.$preview === "sm" 
-        ? Math.max(14, (parseInt(props.$data?.setting?.contentFontSize || "18") * 0.8)) 
+    font-size: ${(props) =>
+      props.$preview === "sm"
+        ? Math.max(
+            14,
+            parseInt(props.$data?.setting?.contentFontSize || "18") * 0.8
+          )
         : props.$data?.setting?.contentFontSize || 18}px;
     line-height: 1.8;
     margin-top: 24px;
-    
+
     @media (max-width: 768px) {
-      font-size: ${(props) => 
-        Math.max(12, (parseInt(props.$data?.setting?.contentFontSize || "18") * 0.7))}px;
+      font-size: ${(props) =>
+        Math.max(
+          12,
+          parseInt(props.$data?.setting?.contentFontSize || "18") * 0.7
+        )}px;
     }
   }
 
   .blog-meta {
     color: ${(props) => props.$data?.setting?.metaColor || "#666666"};
-    font-size: ${(props) => 
-      props.$preview === "sm" 
-        ? Math.max(12, (parseInt(props.$data?.setting?.metaFontSize || "14") * 0.9)) 
+    font-size: ${(props) =>
+      props.$preview === "sm"
+        ? Math.max(
+            12,
+            parseInt(props.$data?.setting?.metaFontSize || "14") * 0.9
+          )
         : props.$data?.setting?.metaFontSize || 14}px;
     margin-bottom: 20px;
-    
+
     @media (max-width: 768px) {
-      font-size: ${(props) => 
-        Math.max(10, (parseInt(props.$data?.setting?.metaFontSize || "14") * 0.8))}px;
+      font-size: ${(props) =>
+        Math.max(
+          10,
+          parseInt(props.$data?.setting?.metaFontSize || "14") * 0.8
+        )}px;
     }
   }
 `;
@@ -88,13 +115,13 @@ const CoverImageContainer = styled.div<{
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
-  width: ${(props) => 
-    props.$preview === "sm" 
-      ? Math.min(300, parseInt(props.$data?.setting?.coverImageWidth || "600")) 
+  width: ${(props) =>
+    props.$preview === "sm"
+      ? Math.min(300, parseInt(props.$data?.setting?.coverImageWidth || "600"))
       : props.$data?.setting?.coverImageWidth || 600}px;
-  height: ${(props) => 
-    props.$preview === "sm" 
-      ? Math.min(200, parseInt(props.$data?.setting?.coverImageHeight || "400")) 
+  height: ${(props) =>
+    props.$preview === "sm"
+      ? Math.min(200, parseInt(props.$data?.setting?.coverImageHeight || "400"))
       : props.$data?.setting?.coverImageHeight || 400}px;
   position: relative;
   border-radius: ${(props) => props.$data?.setting?.imageRadius || 10}px;
@@ -106,16 +133,18 @@ const CoverImageContainer = styled.div<{
   /* Apply animations using CSS filters and properties that don't affect positioning */
   ${(props) => {
     const animation = props.$data.setting.animation;
-    if (!animation) return '';
-    
+    if (!animation) return "";
+
     const { type, animation: animConfig } = animation;
-    const selector = type === 'hover' ? '&:hover' : '&:active';
-    
+    const selector = type === "hover" ? "&:hover" : "&:active";
+
     // Generate animation CSS based on type
-    if (animConfig.type === 'pulse') {
+    if (animConfig.type === "pulse") {
       return `
         ${selector} {
-          animation: blogImagePulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: blogImagePulse ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes blogImagePulse {
@@ -129,10 +158,12 @@ const CoverImageContainer = styled.div<{
           }
         }
       `;
-    } else if (animConfig.type === 'ping') {
+    } else if (animConfig.type === "ping") {
       return `
         ${selector} {
-          animation: blogImagePing ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: blogImagePing ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes blogImagePing {
@@ -146,10 +177,12 @@ const CoverImageContainer = styled.div<{
           }
         }
       `;
-    } else if (animConfig.type === 'bgOpacity') {
+    } else if (animConfig.type === "bgOpacity") {
       return `
         ${selector} {
-          animation: blogImageBgOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: blogImageBgOpacity ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes blogImageBgOpacity {
@@ -161,10 +194,12 @@ const CoverImageContainer = styled.div<{
           }
         }
       `;
-    } else if (animConfig.type === 'scaleup') {
+    } else if (animConfig.type === "scaleup") {
       return `
         ${selector} {
-          animation: blogImageScaleup ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: blogImageScaleup ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes blogImageScaleup {
@@ -176,10 +211,12 @@ const CoverImageContainer = styled.div<{
           }
         }
       `;
-    } else if (animConfig.type === 'scaledown') {
+    } else if (animConfig.type === "scaledown") {
       return `
         ${selector} {
-          animation: blogImageScaledown ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: blogImageScaledown ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes blogImageScaledown {
@@ -192,15 +229,21 @@ const CoverImageContainer = styled.div<{
         }
       `;
     }
-    
-    return '';
+
+    return "";
   }}
 
   @media (max-width: 768px) {
-    width: ${(props) => 
-      Math.min(280, parseInt(props.$data?.setting?.coverImageWidth || "600"))}px;
-    height: ${(props) => 
-      Math.min(180, parseInt(props.$data?.setting?.coverImageHeight || "400"))}px;
+    width: ${(props) =>
+      Math.min(
+        280,
+        parseInt(props.$data?.setting?.coverImageWidth || "600")
+      )}px;
+    height: ${(props) =>
+      Math.min(
+        180,
+        parseInt(props.$data?.setting?.coverImageHeight || "400")
+      )}px;
   }
 `;
 
@@ -233,20 +276,20 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
     };
 
     handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [previewWidth]);
 
   const api = createApiService({
-    baseUrl: '/api',
+    baseUrl: "/api",
     headers: {
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json",
+    },
   });
 
-  const { data: blogData, error } = api.useGet('/blogs', {
+  const { data: blogData, error } = api.useGet("/blogs", {
     revalidateOnFocus: false,
-    refreshInterval: 60000
+    refreshInterval: 60000,
   });
 
   useEffect(() => {
@@ -267,7 +310,8 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
     return null;
   }
 
-  if (loading) return <div className="text-center py-8">در حال بارگذاری...</div>;
+  if (loading)
+    return <div className="text-center py-8">در حال بارگذاری...</div>;
   if (!blog) return <div className="text-center py-8">بلاگ یافت نشد</div>;
 
   return (
@@ -333,7 +377,11 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
         $preview={preview}
       >
         <Image
-          src={sectionData.setting.coverImage || blog.coverImage || "/assets/images/pro3.jpg"}
+          src={
+            sectionData.setting.coverImage ||
+            blog.coverImage ||
+            "/assets/images/pro3.jpg"
+          }
           alt={blog.title}
           fill
           className="object-cover"
@@ -360,8 +408,8 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
 
       <div
         className="blog-content text-right"
-        dangerouslySetInnerHTML={{ 
-          __html: blog.content || "محتوای بلاگ در اینجا نمایش داده می‌شود..." 
+        dangerouslySetInnerHTML={{
+          __html: blog.content || "محتوای بلاگ در اینجا نمایش داده می‌شود...",
         }}
       />
     </SectionBlogDetail>

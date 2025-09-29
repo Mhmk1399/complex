@@ -3,6 +3,7 @@ import { Compiler } from "../compiler";
 import { BlogSection, BlogListFormProps } from "@/lib/types";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
+import { ColorInput, DynamicRangeInput } from "./DynamicInputs";
 
 interface BoxValues {
   top: number;
@@ -11,38 +12,13 @@ interface BoxValues {
   right: number;
 }
 
-const ColorInput = ({
-  label,
-  name,
-  value,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <>
-    <label className="block mb-1">{label}</label>
-    <div className="flex flex-col rounded-md gap-3 items-center">
-      <input
-        type="color"
-        id={name}
-        name={name}
-        value={value || "#000000"}
-        onChange={onChange}
-        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
-      />
-    </div>
-  </>
-);
-
 export const BlogListForm: React.FC<BlogListFormProps> = ({
   setUserInputData,
   userInputData,
   layout,
   selectedComponent,
 }) => {
+  const [isContentOpen, setIsContentOpen] = useState(false);
   const [isStyleSettingsOpen, setIsStyleSettingsOpen] = useState(false);
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
   const [isAnimationOpen, setIsAnimationOpen] = useState(false);
@@ -72,8 +48,9 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
         setting: {
           ...prev.setting,
           marginTop: updatedValues.top.toString(),
-
           marginBottom: updatedValues.bottom.toString(),
+          marginLeft: updatedValues.left.toString(),
+          marginRight: updatedValues.right.toString(),
         },
       }));
     } else {
@@ -130,6 +107,7 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
   const handleTabChange = (
     tab: "content" | "style" | "spacing" | "animation"
   ) => {
+    setIsContentOpen(tab === "content");
     setIsStyleSettingsOpen(tab === "style");
     setIsSpacingOpen(tab === "spacing");
     setIsAnimationOpen(tab === "animation");
@@ -141,24 +119,44 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
 
       {/* Tabs */}
       <TabButtons onTabChange={handleTabChange} />
+
+      {isContentOpen && (
+        <div className="p-4  animate-slideDown">
+          <h3 className="text-lg font-semibold text-sky-700">تنظیمات محتوا</h3>
+          <small>
+            در صورت نیاز به افزودن محصولات، لطفاً از طریق تنظیمات فروشگاه در
+            داشبورد اقدام کنید.
+          </small>
+        </div>
+      )}
+
       {isStyleSettingsOpen && (
         <>
-          <div className="grid grid-cols-1 gap-4 p-4 animate-slideDown">
-            <h3 className="text-lg font-semibold text-sky-700">تنظیمات بلاگ</h3>
-
-            <label htmlFor="gridColumns" className="block mb-2">
-              تعداد ستون‌ها
-            </label>
-            <input
-              type="number"
-              name="gridColumns"
-              value={userInputData.setting.gridColumns || 1}
-              onChange={handleSettingChange}
-              min="1"
-              max="4"
-              className="border p-2 rounded"
-            />
-            <div className="rounded-lg flex items-center justify-between ">
+          <div className="grid grid-cols-1  animate-slideDown">
+            <h3 className="font-bold text-sky-700 my-3">تنظیمات پس زمینه</h3>
+            {/* background */}
+            <div>
+              {" "}
+              <label htmlFor="gridColumns" className="block mb-2">
+                تعداد ستون‌ها
+              </label>
+              <input
+                type="number"
+                name="gridColumns"
+                value={userInputData.setting.gridColumns || 1}
+                onChange={handleSettingChange}
+                min="1"
+                max="4"
+                className="border w-full mb-2 p-2 rounded"
+              />
+              <DynamicRangeInput
+                label="انحنا"
+                name="Radius"
+                min="0"
+                max="100"
+                value={userInputData?.setting?.Radius?.toString() ?? "0"}
+                onChange={handleSettingChange}
+              />
               <ColorInput
                 label="رنگ پس‌زمینه"
                 name="backgroundColor"
@@ -168,8 +166,18 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
                 onChange={handleSettingChange}
               />
             </div>
-            <div className="rounded-lg flex items-center justify-between ">
-              {" "}
+
+            {/* card */}
+            <div>
+              <h3 className="font-bold text-sky-700 my-3">تنظیمات کارت</h3>
+              <DynamicRangeInput
+                label="انحنا"
+                name="cardBorderRadius"
+                min="0"
+                max="100"
+                value={userInputData.setting.cardBorderRadius || 0}
+                onChange={handleSettingChange}
+              />
               <ColorInput
                 label="  رنگ پس‌زمینه کارت"
                 name="cardBackgroundColor"
@@ -179,8 +187,6 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
                 }
                 onChange={handleSettingChange}
               />
-            </div>
-            <div className="rounded-lg flex items-center justify-between ">
               <ColorInput
                 label="رنگ متن"
                 name="textColor"
@@ -189,7 +195,8 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
               />
             </div>
 
-            <div className="rounded-lg flex items-center justify-between ">
+            <div>
+              <h3 className="font-bold text-sky-700 my-3">تنظیمات دکمه</h3>
               <ColorInput
                 label="رنگ پس‌زمینه دکمه"
                 name="btnBackgroundColor"
@@ -198,10 +205,7 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
                   "#000000"
                 }
                 onChange={handleSettingChange}
-              />
-            </div>
-            <div className="rounded-lg flex items-center justify-between ">
-              {" "}
+              />{" "}
               <ColorInput
                 label="رنگ دکمه"
                 name="buttonColor"
@@ -210,22 +214,56 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
                 }
                 onChange={handleSettingChange}
               />
+              <DynamicRangeInput
+                label="انحنا"
+                name="btnRadius"
+                min="0"
+                max="30"
+                value={userInputData.setting.btnRadius || 0}
+                onChange={handleSettingChange}
+              />
             </div>
-
-            <label htmlFor="borderRadius" className="block mb-2">
-              گردی گوشه‌ها
-            </label>
-            <input
-              type="range"
-              name="cardBorderRadius"
-              min="0"
-              max="100"
-              value={userInputData.setting.cardBorderRadius || 0}
-              onChange={handleSettingChange}
-              className="w-full"
-            />
-            <div className="text-sm text-gray-500">
-              {userInputData.setting.cardBorderRadius}px
+            {/* ✅ New Shadow Settings */}
+            <div className="space-y-4 rounded-lg">
+              <h4 className="font-bold text-sky-700 my-3">تنظیمات سایه</h4>
+              <DynamicRangeInput
+                label="افست افقی سایه"
+                name="shadowOffsetX"
+                min="-50"
+                max="50"
+                value={userInputData?.setting?.shadowOffsetX?.toString() ?? "0"}
+                onChange={handleSettingChange}
+              />
+              <DynamicRangeInput
+                label="افست عمودی سایه"
+                name="shadowOffsetY"
+                min="-50"
+                max="50"
+                value={userInputData?.setting?.shadowOffsetY?.toString() ?? "0"}
+                onChange={handleSettingChange}
+              />
+              <DynamicRangeInput
+                label="میزان بلور سایه"
+                name="shadowBlur"
+                min="0"
+                max="100"
+                value={userInputData?.setting?.shadowBlur?.toString() ?? "0"}
+                onChange={handleSettingChange}
+              />
+              <DynamicRangeInput
+                label="میزان گسترش سایه"
+                name="shadowSpread"
+                min="-20"
+                max="20"
+                value={userInputData?.setting?.shadowSpread?.toString() ?? "0"}
+                onChange={handleSettingChange}
+              />
+              <ColorInput
+                label="رنگ سایه"
+                name="shadowColor"
+                value={userInputData?.setting?.shadowColor?.toString() ?? "0"}
+                onChange={handleSettingChange}
+              />
             </div>
           </div>
         </>
