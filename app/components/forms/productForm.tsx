@@ -3,6 +3,7 @@ import { Compiler } from "../compiler";
 import { ProductSection, Layout } from "@/lib/types";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
+import { ColorInput, DynamicRangeInput } from "./DynamicInputs";
 
 interface ProductListProps {
   setUserInputData: React.Dispatch<React.SetStateAction<ProductSection>>;
@@ -16,32 +17,6 @@ interface BoxValues {
   left: number;
   right: number;
 }
-
-const ColorInput = ({
-  label,
-  name,
-  value,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <>
-    <label className="block mb-1">{label}</label>
-    <div className="flex flex-col rounded-md gap-3 items-center">
-      <input
-        type="color"
-        id={name}
-        name={name}
-        value={value || "#000000"}
-        onChange={onChange}
-        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
-      />
-    </div>
-  </>
-);
 
 export const ProductListForm: React.FC<ProductListProps> = ({
   setUserInputData,
@@ -80,6 +55,8 @@ export const ProductListForm: React.FC<ProductListProps> = ({
           ...prev.setting,
           marginTop: updatedValues.top.toString(),
           marginBottom: updatedValues.bottom.toString(),
+          marginLeft: updatedValues.left.toString(),
+          marginRight: updatedValues.right.toString(),
         },
       }));
     } else {
@@ -161,7 +138,10 @@ export const ProductListForm: React.FC<ProductListProps> = ({
       {isContentOpen && (
         <div className="p-4  animate-slideDown">
           <h3 className="text-lg font-semibold text-sky-700">تنظیمات محتوا</h3>
-          <p>تنظیماتی برای انیمیشن وجود ندارد.</p>
+          <small>
+            در صورت نیاز به افزودن محصولات، لطفاً از طریق تنظیمات فروشگاه در
+            داشبورد اقدام کنید.
+          </small>
         </div>
       )}
 
@@ -169,6 +149,14 @@ export const ProductListForm: React.FC<ProductListProps> = ({
         <>
           <div className="grid grid-cols-1 gap-4 p-4 animate-slideDown">
             <h3 className="font-semibold text-sky-700">تنظیمات عمومی</h3>
+            <DynamicRangeInput
+              label="انحنا"
+              name="Radius"
+              min="0"
+              max="50"
+              value={userInputData?.setting?.Radius?.toString() ?? "0"}
+              onChange={handleSettingChange}
+            />
 
             <label htmlFor="gridColumns" className="block mb-2">
               تعداد ستون‌ها
@@ -255,6 +243,48 @@ export const ProductListForm: React.FC<ProductListProps> = ({
                 onChange={handleSettingChange}
               />
             </div>
+            {/* ✅ New Shadow Settings */}
+            <div className="space-y-4 rounded-lg">
+              <h4 className="font-bold text-sky-700 my-3">تنظیمات سایه</h4>
+              <DynamicRangeInput
+                label="افست افقی سایه"
+                name="shadowOffsetX"
+                min="-50"
+                max="50"
+                value={userInputData?.setting?.shadowOffsetX?.toString() ?? "0"}
+                onChange={handleSettingChange}
+              />
+              <DynamicRangeInput
+                label="افست عمودی سایه"
+                name="shadowOffsetY"
+                min="-50"
+                max="50"
+                value={userInputData?.setting?.shadowOffsetY?.toString() ?? "0"}
+                onChange={handleSettingChange}
+              />
+              <DynamicRangeInput
+                label="میزان بلور سایه"
+                name="shadowBlur"
+                min="0"
+                max="100"
+                value={userInputData?.setting?.shadowBlur?.toString() ?? "0"}
+                onChange={handleSettingChange}
+              />
+              <DynamicRangeInput
+                label="میزان گسترش سایه"
+                name="shadowSpread"
+                min="-20"
+                max="20"
+                value={userInputData?.setting?.shadowSpread?.toString() ?? "0"}
+                onChange={handleSettingChange}
+              />
+              <ColorInput
+                label="رنگ سایه"
+                name="shadowColor"
+                value={userInputData?.setting?.shadowColor?.toString() ?? "0"}
+                onChange={handleSettingChange}
+              />
+            </div>
           </div>
         </>
       )}
@@ -263,13 +293,13 @@ export const ProductListForm: React.FC<ProductListProps> = ({
           <h3 className="text-lg font-semibold text-sky-700">
             تنظیمات انیمیشن
           </h3>
-          <p>تنظیماتی برای انیمیشن وجود ندارد.</p>
+          <small>تنظیماتی برای انیمیشن وجود ندارد.</small>
         </div>
       )}
 
       {/* Spacing Tab */}
       {isSpacingOpen && (
-        <div className="p-4  animate-slideDown">
+        <div className="animate-slideDown">
           <div className="bg-gray-50 rounded-lg p-2 flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

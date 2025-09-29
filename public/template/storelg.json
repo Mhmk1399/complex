@@ -1,9 +1,9 @@
 {
   "type": "store",
   "children": {
-     "metaData":{
-      "title":"juju",
-      "description":"juju page"
+    "metaData": {
+      "title": "juju",
+      "description": "juju page"
     },
     "sections": [
       {
@@ -67,7 +67,13 @@
           "filterButtonTextColor": "#ffffff",
           "filterRowBg": "#adb5bd",
           "filterNameColor": "#333333",
-          "filterCardBg": "#ffffff"
+          "filterCardBg": "#ffffff",
+          "shadowOffsetX": 0,
+          "shadowOffsetY": 8,
+          "shadowBlur": 20,
+          "shadowSpread": 2,
+          "shadowColor": "#e4e4e4",
+          "Radius": "2"
         }
       }
     ],

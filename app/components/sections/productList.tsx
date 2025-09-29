@@ -35,6 +35,54 @@ type SortOption = "newest" | "price-asc" | "price-desc" | "name";
 //   price: "0",
 //   id: "0",
 // };
+const SectionProductList = styled.section<{
+  $data: ProductSection;
+  $previewWidth: "sm" | "default";
+}>`
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  width: 100%;
+  direction: rtl;
+  padding-top: ${(props) => props.$data?.setting?.paddingTop}px;
+  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom}px;
+  padding-left: ${(props) => props.$data?.setting?.paddingLeft}px;
+  padding-right: ${(props) => props.$data?.setting?.paddingRight}px;
+  margin-top: ${(props) => props.$data?.setting?.marginTop}px;
+  margin-bottom: ${(props) => props.$data?.setting?.marginBottom}px;
+  margin-left: ${(props) => props.$data?.setting?.marginLeft}px;
+  margin-right: ${(props) => props.$data?.setting?.marginRight}px;
+  background-color: ${(props) => props.$data?.setting?.backgroundColor};
+  box-shadow: ${(props) =>
+    `${props.$data.setting?.shadowOffsetX || 0}px 
+     ${props.$data.setting?.shadowOffsetY || 4}px 
+     ${props.$data.setting?.shadowBlur || 10}px 
+     ${props.$data.setting?.shadowSpread || 0}px 
+     ${props.$data.setting?.shadowColor || "#fff"}`};
+  border-radius: ${(props) => props.$data.setting?.Radius || "10"}px;
+
+  ${(props) =>
+    props.$previewWidth === "default" &&
+    `
+    display: grid;
+    grid-template-columns: repeat(${props.$data.setting?.gridColumns}, 1fr);
+    overflow-x: hidden;
+  `}
+
+  @media (max-width: 426px) {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+
+    & > div {
+      flex: 0 0 auto;
+      width: 80%;
+      scroll-snap-align: start;
+    }
+  }
+`;
 const ColorBox = styled.div<{ $color: string; $selected: boolean }>`
   width: 30px;
   height: 30px;
@@ -64,6 +112,7 @@ const FilterCardBg = styled.div<{
 }>`
   background-color: ${(props) => props.$data?.filterCardBg};
   border-radius: 10px;
+  width: 180px;
   display: ${(props) => (props.$previewWidth === "sm" ? "none" : "block")};
   @media (max-width: 426px) {
     display: none;
@@ -101,46 +150,6 @@ const RangeSlider = styled.input`
   }
 `;
 
-const SectionProductList = styled.section<{
-  $data: ProductSection;
-  $previewWidth: "sm" | "default";
-}>`
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  width: 100%;
-  direction: rtl;
-  padding-top: ${(props) => props.$data?.setting?.paddingTop}px;
-  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom}px;
-  padding-left: ${(props) => props.$data?.setting?.paddingLeft}px;
-  padding-right: ${(props) => props.$data?.setting?.paddingRight}px;
-  margin-top: ${(props) => props.$data?.setting?.marginTop}px;
-  margin-bottom: ${(props) => props.$data?.setting?.marginBottom}px;
-  background-color: ${(props) => props.$data?.setting?.backgroundColor};
-
-  ${(props) =>
-    props.$previewWidth === "default" &&
-    `
-    display: grid;
-    grid-template-columns: repeat(${props.$data.setting?.gridColumns}, 1fr);
-    overflow-x: hidden;
-  `}
-
-  @media (max-width: 426px) {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-
-    & > div {
-      flex: 0 0 auto;
-      width: 80%;
-      scroll-snap-align: start;
-    }
-  }
-`;
-
 const ProductList: React.FC<ProductListProps> = ({
   setSelectedComponent,
   layout,
@@ -154,22 +163,28 @@ const ProductList: React.FC<ProductListProps> = ({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const api = createApiService({
-    baseUrl: '/api',
+    baseUrl: "/api",
     headers: {
-      'Content-Type': 'application/json',
-      Authorization: typeof window !== 'undefined' ? `Bearer ${localStorage.getItem('complexToken')}` : ''
+      "Content-Type": "application/json",
+      Authorization:
+        typeof window !== "undefined"
+          ? `Bearer ${localStorage.getItem("complexToken")}`
+          : "",
+    },
+  });
+
+  const { data: productsData, error: productsError } = api.useGet("/products", {
+    revalidateOnFocus: false,
+    refreshInterval: 60000,
+  });
+
+  const { data: categoriesData, error: categoriesError } = api.useGet(
+    "/category",
+    {
+      revalidateOnFocus: false,
+      refreshInterval: 60000,
     }
-  });
-
-  const { data: productsData, error: productsError } = api.useGet('/products', {
-    revalidateOnFocus: false,
-    refreshInterval: 60000
-  });
-
-  const { data: categoriesData, error: categoriesError } = api.useGet('/category', {
-    revalidateOnFocus: false,
-    refreshInterval: 60000
-  });
+  );
 
   const productData = productsData?.products || [];
   const categoriesDataList = categoriesData || [];
@@ -217,11 +232,14 @@ const ProductList: React.FC<ProductListProps> = ({
     }
   };
   console.log(preview);
+
   useEffect(() => {
     if (productData.length > 0) {
       // Extract unique categories
       const uniqueCategories = [
-        ...new Set(productData.map((product) => product.category?.name)),
+        ...new Set(
+          productData.map((product: ProductCardData) => product.category?.name)
+        ),
       ].filter((category): category is string => category !== undefined);
 
       console.log(uniqueCategories);
@@ -229,14 +247,16 @@ const ProductList: React.FC<ProductListProps> = ({
       // Extract unique color codes from all products
       const uniqueColors = [
         ...new Set(
-          productData.flatMap((product) =>
+          productData.flatMap((product: ProductCardData) =>
             product.colors.map((color) => color.code)
           )
         ),
-      ];
+      ] as string[];
       setColors(uniqueColors);
 
-      const prices = productData.map((product) => parseInt(product.price));
+      const prices = productData.map((product: ProductCardData) =>
+        parseInt(product.price)
+      );
       const minPrice = Math.min(...prices);
       const maxPrice = Math.max(...prices);
 
@@ -250,6 +270,7 @@ const ProductList: React.FC<ProductListProps> = ({
       setFilteredProducts(productData);
     }
   }, [productData]);
+
   useEffect(() => {
     if (window.innerWidth <= 426) {
       setPreview("sm");
@@ -273,27 +294,28 @@ const ProductList: React.FC<ProductListProps> = ({
 
         // Filter products that match  of the relevant categories
         filtered = filtered.filter(
-          (product) =>
+          (product: ProductCardData) =>
             product.category &&
             relevantCategories.includes(product.category.name)
         );
       } else {
         // If not found in main categories, it might be a child category
         filtered = filtered.filter(
-          (product) => product.category?.name === selectedFilters.category
+          (product: ProductCardData) =>
+            product.category?.name === selectedFilters.category
         );
       }
     }
 
     // Keep existing color filter
     if (selectedColors.length > 0) {
-      filtered = filtered.filter((product) =>
+      filtered = filtered.filter((product: ProductCardData) =>
         product.colors.some((color) => selectedColors.includes(color.code))
       );
     }
 
     // Keep existing price filter
-    filtered = filtered.filter((product) => {
+    filtered = filtered.filter((product: ProductCardData) => {
       const price = parseInt(product.price);
       return (
         price >= selectedFilters.priceMin && price <= selectedFilters.priceMax
@@ -312,9 +334,6 @@ const ProductList: React.FC<ProductListProps> = ({
     return categories;
   };
 
-
-
-
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
   ) as ProductSection;
@@ -324,7 +343,10 @@ const ProductList: React.FC<ProductListProps> = ({
   }
 
   return (
-    <div
+    <SectionProductList
+      $data={sectionData}
+      $previewWidth={previewWidth}
+      onClick={() => setSelectedComponent(actualName)}
       className={`transition-all duration-150 ease-in-out relative flex bg-gray-100 ${
         selectedComponent === actualName
           ? "border-4 border-blue-500 rounded-lg shadow-lg "
@@ -344,7 +366,7 @@ const ProductList: React.FC<ProductListProps> = ({
       {preview === "sm" && isMobileFilterOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
           <div
-            className="bg-white/60 backdrop-blur-sm border lg:p-10 rounded-lg max-w-fit  overflow-x-hidden"
+            className="bg-white/60 backdrop-blur-sm border p-10  rounded-lg max-w-4xl  "
             dir="rtl"
           >
             <div className="flex justify-between items-center mb-4">
@@ -503,7 +525,6 @@ const ProductList: React.FC<ProductListProps> = ({
               </div>
             </div>
             <div className="mt-4 flex justify-start gap-2">
-           
               <button
                 onClick={() => {
                   handleFilter();
@@ -516,100 +537,95 @@ const ProductList: React.FC<ProductListProps> = ({
           </div>
         </div>
       )}
-      <SectionProductList
-        $data={sectionData}
-        $previewWidth={previewWidth}
-        onClick={() => setSelectedComponent(actualName)}
+
+      {showDeleteModal && (
+        <div className="fixed inset-0  bg-black bg-opacity-70 z-50 flex items-center justify-center ">
+          <div className="bg-white p-8 rounded-lg">
+            <h3 className="text-lg font-bold mb-4">
+              آیا از حذف
+              <span className="text-blue-400 font-bold mx-1">
+                {actualName}
+              </span>{" "}
+              مطمئن هستید؟
+            </h3>
+            <div className="flex gap-4 justify-start">
+              <button
+                className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                انصراف
+              </button>
+              <button
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 "
+                onClick={() => {
+                  Delete(actualName, layout, setLayout);
+                  setShowDeleteModal(false);
+                }}
+              >
+                حذف
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {actualName === selectedComponent ? (
+        <div className="absolute w-fit -top-8 -left-1 z-10 flex">
+          <button
+            className="font-extrabold text-xl hover:bg-blue-500 bg-red-500 pb-1 rounded-r-lg px-3 text-white transform transition-all ease-in-out duration-300"
+            onClick={() => setShowDeleteModal(true)}
+          >
+            x
+          </button>
+          <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
+            {actualName}
+          </div>
+        </div>
+      ) : null}
+
+      <FilterBgRow
+        $data={sectionData.setting}
+        className="absolute min-w-full top-0 text-white mx-0  right-0 z-20 shadow-sm"
       >
-        {showDeleteModal && (
-          <div className="fixed inset-0  bg-black bg-opacity-70 z-50 flex items-center justify-center ">
-            <div className="bg-white p-8 rounded-lg">
-              <h3 className="text-lg font-bold mb-4">
-                آیا از حذف
-                <span className="text-blue-400 font-bold mx-1">
-                  {actualName}
-                </span>{" "}
-                مطمئن هستید؟
-              </h3>
-              <div className="flex gap-4 justify-start">
-                <button
-                  className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
-                  onClick={() => setShowDeleteModal(false)}
-                >
-                  انصراف
-                </button>
-                <button
-                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 "
-                  onClick={() => {
-                    Delete(actualName, layout, setLayout);
-                    setShowDeleteModal(false);
-                  }}
-                >
-                  حذف
-                </button>
-              </div>
-            </div>
+        <div className="flex w-[100%] items-center gap-6 p-4 border-b">
+          <FilteNameRow
+            $previewWidth={previewWidth}
+            $data={sectionData.setting}
+            className="opacity-70 font-semibold"
+          >
+            {" "}
+            مرتب‌سازی بر اساس :
+          </FilteNameRow>
+          <div className="flex gap-6">
+            {sortOptions.map((option) => (
+              <FilteNameRow
+                $previewWidth={previewWidth}
+                $data={sectionData.setting}
+                key={option.value}
+                onClick={() => setSortBy(option.value as SortOption)}
+                className={`pb-1 relative cursor-pointer transition-all duration-200 ease-in-out ${
+                  sortBy === option.value
+                    ? 'text-blue-500   after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-500'
+                    : "text-gray-50 hover:text-blue-500"
+                }`}
+              >
+                {option.label}
+              </FilteNameRow>
+            ))}
           </div>
-        )}
+        </div>
+      </FilterBgRow>
 
-        {actualName === selectedComponent ? (
-          <div className="absolute w-fit -top-8 -left-1 z-10 flex">
-            <button
-              className="font-extrabold text-xl hover:bg-blue-500 bg-red-500 pb-1 rounded-r-lg px-3 text-white transform transition-all ease-in-out duration-300"
-              onClick={() => setShowDeleteModal(true)}
-            >
-              x
-            </button>
-            <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
-              {actualName}
-            </div>
-          </div>
-        ) : null}
-
-        <FilterBgRow
-          $data={sectionData.setting}
-          className="absolute min-w-full top-0 text-white mx-0  right-0 z-20 shadow-sm"
-        >
-          <div className="flex w-[100%] items-center gap-6 p-4 border-b">
-            <FilteNameRow
-              $previewWidth={previewWidth}
-              $data={sectionData.setting}
-              className="opacity-70 font-semibold"
-            >
-              {" "}
-              مرتب‌سازی بر اساس :
-            </FilteNameRow>
-            <div className="flex gap-6">
-              {sortOptions.map((option) => (
-                <FilteNameRow
-                  $previewWidth={previewWidth}
-                  $data={sectionData.setting}
-                  key={option.value}
-                  onClick={() => setSortBy(option.value as SortOption)}
-                  className={`pb-1 relative cursor-pointer transition-all duration-200 ease-in-out ${
-                    sortBy === option.value
-                      ? 'text-blue-500   after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-500'
-                      : "text-gray-50 hover:text-blue-500"
-                  }`}
-                >
-                  {option.label}
-                </FilteNameRow>
-              ))}
-            </div>
-          </div>
-        </FilterBgRow>
-
-        {getSortedProducts(filteredProducts).map((block, index) => (
-          <div className="p-0 m-0" key={`${block.id}-${index}`}>
-            <ProductCard productData={block} />
-          </div>
-        ))}
-      </SectionProductList>
+      {getSortedProducts(filteredProducts).map((block, index) => (
+        <div className="p-0 m-0" key={`${block.id}-${index}`}>
+          <ProductCard productData={block} />
+        </div>
+      ))}
 
       <FilterCardBg
         $previewWidth={previewWidth}
         $data={sectionData.setting}
-        className=" p-6 h-fit rounded-lg shadow-sm mb-4 sticky top-0 mt-28 right-0 "
+        className=" p-4 h-fit rounded-lg shadow-sm mb-4 sticky top-0 mt-28 right-0 "
         dir="rtl"
       >
         <div className="grid grid-cols-1 md:grid-cols-1 gap-4 justify-start">
@@ -831,7 +847,7 @@ const ProductList: React.FC<ProductListProps> = ({
           </div>
         </div>
       )}
-    </div>
+    </SectionProductList>
   );
 };
 

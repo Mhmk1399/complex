@@ -30,10 +30,11 @@ export async function GET(request: NextRequest) {
 
     // Resolve the path to the JSON files in the public/template directory
     const basePath = path.join(process.cwd(), "public", "template");
+    console.log(basePath , "//////////////")
     console.log(getFilename("home"), " filename");
 
     if (routeName === "home") {
-      const filePath = path.join(basePath, `home${activeMode}.json`);
+      const filePath = path.join(basePath, `store${activeMode}.json`);
       try {
         const homeContent = JSON.parse(await fs.readFile(filePath, "utf-8"));
         return NextResponse.json(homeContent, { status: 200 });

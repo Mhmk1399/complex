@@ -3,6 +3,11 @@ import { Compiler } from "../compiler";
 import { Layout, DetailPageSection } from "@/lib/types";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
+import {
+  ColorInput,
+  DynamicRangeInput,
+  DynamicSelectInput,
+} from "./DynamicInputs";
 //
 
 interface DetailFormProps {
@@ -17,32 +22,6 @@ interface BoxValues {
   left: number;
   right: number;
 }
-
-const ColorInput = ({
-  label,
-  name,
-  value,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <>
-    <label className="block mb-1">{label}</label>
-    <div className="flex flex-col rounded-md gap-3 items-center">
-      <input
-        type="color"
-        id={name}
-        name={name}
-        value={value || "#000000"}
-        onChange={onChange}
-        className=" p-0.5 border rounded-md border-gray-200 w-8 h-8 bg-transparent "
-      />
-    </div>
-  </>
-);
 
 export const DetailForm: React.FC<DetailFormProps> = ({
   setUserInputData,
@@ -66,6 +45,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
   const [isAnimationOpen, setIsAnimationOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isContentOpen, setIsContentOpen] = useState(false);
 
   const handleUpdate = (
     type: "margin" | "padding",
@@ -78,8 +58,9 @@ export const DetailForm: React.FC<DetailFormProps> = ({
         setting: {
           ...prev.setting,
           marginTop: updatedValues.top.toString(),
-
           marginBottom: updatedValues.bottom.toString(),
+          marginLeft: updatedValues.left.toString(),
+          marginRight: updatedValues.right.toString(),
         },
       }));
     } else {
@@ -137,6 +118,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
   const handleTabChange = (
     tab: "content" | "style" | "spacing" | "animation"
   ) => {
+    setIsContentOpen(tab === "content");
     setIsStyleSettingsOpen(tab === "style");
     setIsSpacingOpen(tab === "spacing");
     setIsAnimationOpen(tab === "animation");
@@ -148,236 +130,170 @@ export const DetailForm: React.FC<DetailFormProps> = ({
 
       {/* Tabs */}
       <TabButtons onTabChange={handleTabChange} />
-
+      {isContentOpen && (
+        <div className="p-4  animate-slideDown">
+          <h3 className="text-lg font-semibold text-sky-700">تنظیمات محتوا</h3>
+          <small>تنظیماتی برای محتوا وجود ندارد</small>
+        </div>
+      )}
       {isStyleSettingsOpen && (
         <>
+          {/* image setting */}
           <div className="mb-6  rounded-lg animate-slideDown ">
             <h3 className="font-semibold mb-3 text-sky-700">تنظیمات تصویر</h3>
-            <div className="grid grid-cols-1 gap-4">
-              <div>
-                <label className="block mb-1">عرض تصویر</label>
-                <input
-                  type="range"
-                  min={100}
-                  max={2000}
-                  name="imageWidth"
-                  value={userInputData?.setting?.imageWidth || "400"}
-                  onChange={handleSettingChange}
-                  className="w-full p-1 border rounded"
-                />
-                <div className="text-sm text-gray-700">
-                  {userInputData?.setting?.imageWidth}px
-                </div>
-              </div>
-              <div>
-                <label className="block mb-1">ارتفاع تصویر</label>
-                <input
-                  type="range"
-                  name="imageHeight"
-                  min={100}
-                  max={2000}
-                  value={userInputData?.setting?.imageHeight || "500"}
-                  onChange={handleSettingChange}
-                  className="w-full p-1 border rounded"
-                />
-                <div className="text-sm text-gray-700">
-                  {userInputData?.setting?.imageHeight}px
-                </div>
-              </div>
-              <div>
-                <label className="block mb-1">گردی گوشه‌های تصویر</label>
-                <input
-                  type="range"
-                  name="imageRadius"
-                  min={0}
-                  max={300}
-                  value={userInputData?.setting?.imageRadius || "40"}
-                  onChange={handleSettingChange}
-                  className="w-full p-1 border rounded"
-                />
-                <div className="text-sm text-gray-700">
-                  {userInputData?.setting?.imageRadius}px
-                </div>
-              </div>
-            </div>
+            <DynamicRangeInput
+              label="انحنا"
+              name="imageRadius"
+              min="0"
+              max="50"
+              value={userInputData?.setting?.imageRadius || "40"}
+              onChange={handleSettingChange}
+            />
           </div>
 
-          {/* Product Name Settings */}
-          <div className="mb-6  rounded-lg animate-slideDown ">
-            <h3 className="font-semibold mb-3 text-sky-700">
+          {/* Product and description Settings */}
+          <div className="mb-6 rounded-lg animate-slideDown ">
+            <h3 className="font-semibold my-3 text-sky-700">
               تنظیمات نام محصول
             </h3>
-            <div className="grid grid-cols-1 gap-4">
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنگ نام محصول"
-                  name="productNameColor"
-                  value={userInputData?.setting?.productNameColor || "#000"}
-                  onChange={handleSettingChange}
-                />
-              </div>
-              <div>
-                <label className="block mb-1">اندازه فونت نام محصول</label>
-                <input
-                  type="range"
-                  name="productNameFontSize"
-                  value={userInputData?.setting?.productNameFontSize || "30"}
-                  onChange={handleSettingChange}
-                  className="w-full p-1 border rounded"
-                />
-                <div className="text-sm text-gray-700">
-                  {userInputData?.setting?.productNameFontSize}px
-                </div>
-              </div>
-              <div>
-                <label className="block mb-1">وزن فونت نام محصول</label>
-                <select
-                  name="productNameFontWeight"
-                  value={
-                    userInputData?.setting?.productNameFontWeight || "bold"
-                  }
-                  onChange={handleSettingChange}
-                  className="w-full p-2 border rounded"
-                >
-                  <option value="normal">معمولی</option>
-                  <option value="bold">ضخیم</option>
-                  <option value="600">نیمه ضخیم</option>
-                </select>
-              </div>
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنگ  توضیحات محصول"
-                  name="descriptionColor"
-                  value={userInputData?.setting?.descriptionColor || "#FCA311"}
-                  onChange={handleSettingChange}
-                />
-              </div>
-              <div>
-                <label className="block mb-1">اندازه فونت توضیحات محصول</label>
-                <input
-                  type="range"
-                  name="descriptionFontSize"
-                  value={userInputData?.setting?.descriptionFontSize || "30"}
-                  onChange={handleSettingChange}
-                  className="w-full p-1 border rounded"
-                />
-                <div className="text-sm text-gray-700">
-                  {userInputData?.setting?.descriptionFontSize}px
-                </div>
-              </div>
+            <div className="grid grid-cols-1 ">
+              <DynamicRangeInput
+                label="سایز"
+                name="productNameFontSize"
+                min="0"
+                max="50"
+                value={userInputData?.setting?.productNameFontSize || "40"}
+                onChange={handleSettingChange}
+              />
+              <DynamicSelectInput
+                label="وزن توضیحات"
+                name="productNameFontWeight"
+                value={userInputData?.setting?.productNameFontWeight || "bold"}
+                options={[
+                  { value: "bold", label: "ضخیم" },
+                  { value: "normal", label: "نرمال" },
+                ]}
+                onChange={handleSettingChange}
+              />
+              <ColorInput
+                label="رنگ"
+                name="productNameColor"
+                value={userInputData?.setting?.productNameColor || "#000"}
+                onChange={handleSettingChange}
+              />
+
+              <h3 className="font-semibold my-3 text-sky-700">
+                تنظیمات توضیحات محصول
+              </h3>
+              <DynamicRangeInput
+                label="سایز"
+                name="descriptionFontSize"
+                min="0"
+                max="50"
+                value={userInputData?.setting?.descriptionFontSize || "40"}
+                onChange={handleSettingChange}
+              />
+              <DynamicSelectInput
+                label="وزن توضیحات"
+                name="descriptionFontWeight"
+                value={userInputData?.setting?.descriptionFontWeight || "bold"}
+                options={[
+                  { value: "bold", label: "ضخیم" },
+                  { value: "normal", label: "نرمال" },
+                ]}
+                onChange={handleSettingChange}
+              />
+              <ColorInput
+                label="رنگ"
+                name="descriptionColor"
+                value={userInputData?.setting?.descriptionColor || "#000"}
+                onChange={handleSettingChange}
+              />
             </div>
           </div>
 
           {/* Price Settings */}
           <div className="mb-6 rounded-lg">
             <h3 className="font-semibold mb-3 text-sky-700">تنظیمات قیمت</h3>
-            <div className="grid grid-cols-1 gap-4">
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنگ متن قیمت"
-                  name="priceColor"
-                  value={userInputData?.setting?.priceColor || "#FCA311"}
-                  onChange={handleSettingChange}
-                />
-              </div>
-              <div>
-                <label className="block mb-1">اندازه فونت قیمت</label>
-                <input
-                  type="range"
-                  name="priceFontSize"
-                  value={userInputData?.setting?.priceFontSize || "24"}
-                  onChange={handleSettingChange}
-                  className="w-full p-1 border rounded"
-                />
-                <div className="text-sm text-gray-700">
-                  {userInputData?.setting?.priceFontSize}px
-                </div>
-              </div>
-            </div>
+            <DynamicRangeInput
+              label="سایز"
+              name="priceFontSize"
+              min="0"
+              max="50"
+              value={userInputData?.setting?.priceFontSize || "40"}
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ متن قیمت"
+              name="priceColor"
+              value={userInputData?.setting?.priceColor || "#FCA311"}
+              onChange={handleSettingChange}
+            />
           </div>
 
           {/* STATUS Settings */}
-
-          <div className="mb-6  rounded-lg">
+          <div className="mb-6 rounded-lg">
             <h3 className="font-semibold mb-3 text-sky-700">تنظیمات وضعیت</h3>
-            <div className="grid grid-cols-1 gap-4">
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنگ متن وضعیت"
-                  name="statusColor"
-                  value={userInputData?.setting?.statusColor || "#FCA311"}
-                  onChange={handleSettingChange}
-                />
-              </div>
-              <div>
-                <label className="block mb-1">اندازه فونت وضعیت</label>
-                <input
-                  type="range"
-                  name="statusFontSize"
-                  value={userInputData?.setting?.statusFontSize || "24"}
-                  onChange={handleSettingChange}
-                  className="w-full p-1 border rounded"
-                />
-                <div className="text-sm text-gray-700">
-                  {userInputData?.setting?.statusFontSize}px
-                </div>
-              </div>
-            </div>
+            <DynamicRangeInput
+              label="سایز"
+              name="statusFontSize"
+              min="0"
+              max="50"
+              value={userInputData?.setting?.statusFontSize || "40"}
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ متن وضعیت"
+              name="statusColor"
+              value={userInputData?.setting?.statusColor || "#FCA311"}
+              onChange={handleSettingChange}
+            />
           </div>
-          {/* /* {category setting} */}
 
+          {/* /* {category setting} */}
           <div className="mb-6  rounded-lg">
             <h3 className="font-semibold mb-3 text-sky-700">
               تنظیمات دسته بندی
             </h3>
-            <div className="grid grid-cols-1 gap-4">
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="رنگ متن دسته بندی"
-                  name="categoryColor"
-                  value={userInputData?.setting?.categoryColor || "#FCA311"}
-                  onChange={handleSettingChange}
-                />
-              </div>
-              <div>
-                <label className="block mb-1">اندازه فونت دسته بندی</label>
-                <input
-                  type="range"
-                  name="categoryFontSize"
-                  value={userInputData?.setting?.categoryFontSize || "24"}
-                  onChange={handleSettingChange}
-                  className="w-full p-1 border rounded"
-                />
-                <div className="text-sm text-gray-700">
-                  {userInputData?.setting?.categoryFontSize}px
-                </div>
-              </div>
-            </div>
+            <DynamicRangeInput
+              label="سایز"
+              name="categoryFontSize"
+              min="0"
+              max="50"
+              value={userInputData?.setting?.categoryFontSize || "40"}
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ متن دسته بندی"
+              name="categoryColor"
+              value={userInputData?.setting?.categoryColor || "#FCA311"}
+              onChange={handleSettingChange}
+            />
           </div>
 
           {/* Button Settings */}
-          <div className="mb-6  rounded-lg">
+          <div className="mb-6 rounded-lg">
             <h3 className="font-semibold mb-3 text-sky-700">تنظیمات دکمه</h3>
-            <div className="grid grid-cols-1 gap-4">
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="  رنگ پس زمینه دکمه"
-                  name="btnBackgroundColor"
-                  value={
-                    userInputData?.setting?.btnBackgroundColor || "#FCA311"
-                  }
-                  onChange={handleSettingChange}
-                />
-              </div>
-              <div className="rounded-lg flex items-center justify-between ">
-                <ColorInput
-                  label="  رنگ  متن دکمه"
-                  name="btnTextColor"
-                  value={userInputData?.setting?.btnTextColor || "#FCA311"}
-                  onChange={handleSettingChange}
-                />
-              </div>
-            </div>
+            <DynamicRangeInput
+              label="انحنا"
+              name="btnRadius"
+              min="0"
+              max="30"
+              value={userInputData?.setting?.btnRadius || "40"}
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ پس زمینه"
+              name="btnBackgroundColor"
+              value={userInputData?.setting?.btnBackgroundColor || "#FCA311"}
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ متن"
+              name="btnTextColor"
+              value={userInputData?.setting?.btnTextColor || "#FCA311"}
+              onChange={handleSettingChange}
+            />
           </div>
 
           {/* Background Settings */}
@@ -385,69 +301,72 @@ export const DetailForm: React.FC<DetailFormProps> = ({
             <h3 className="font-semibold mb-3 text-sky-700">
               تنظیمات پس‌زمینه
             </h3>
-            <div className="rounded-lg flex items-center justify-between ">
-              <ColorInput
-                label="رنگ   پس زمینه"
-                name="backgroundColor"
-                value={userInputData?.setting?.backgroundColor || "#FCA311"}
-                onChange={handleSettingChange}
-              />
-            </div>
+            <DynamicRangeInput
+              label="انحنا"
+              name="Radius"
+              min="0"
+              max="100"
+              value={userInputData?.setting?.Radius || "40"}
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ   پس زمینه"
+              name="backgroundColor"
+              value={userInputData?.setting?.backgroundColor || "#FCA311"}
+              onChange={handleSettingChange}
+            />
           </div>
+
+          {/* Box Settings */}
           <div className="mb-6 rounded-lg">
             <h4 className="font-semibold mb-3 text-sky-700">تنظیمات باکس</h4>
-            <div className="rounded-lg flex items-center justify-between ">
-              <ColorInput
-                label="رنگ پس زمینه باکس"
-                name="backgroundColorBox"
-                value={userInputData?.setting?.backgroundColorBox || "#FCA311"}
-                onChange={handleSettingChange}
-              />
-            </div>
-            <div>
-              <label className="block mb-1">گردی گوشه‌های باکس</label>
-              <input
-                type="range"
-                name="boxRadius"
-                min={0}
-                max={300}
-                value={userInputData?.setting?.boxRadius || "40"}
-                onChange={handleSettingChange}
-                className="w-full p-1 border rounded"
-              />
-              <div className="text-sm text-gray-700">
-                {userInputData?.setting?.imageRadius}px
-              </div>
-            </div>
+            <DynamicRangeInput
+              label="انحنا"
+              name="boxRadius"
+              min="0"
+              max="50"
+              value={userInputData?.setting?.boxRadius || "40"}
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ پس زمینه باکس"
+              name="backgroundColorBox"
+              value={userInputData?.setting?.backgroundColorBox || "#FCA311"}
+              onChange={handleSettingChange}
+            />
           </div>
+
+          {/* properties settings */}
           <div className="mb-6 rounded-lg">
             <h4 className="font-semibold mb-3 text-sky-700">
               تنظیمات ویژگی ها
             </h4>
-            <div className="rounded-lg flex items-center justify-between ">
-              <ColorInput
-                label="رنگ عنوان ویژگی"
-                name="propertyKeyColor"
-                value={userInputData?.setting?.propertyKeyColor || "#FCA311"}
-                onChange={handleSettingChange}
-              />
-            </div>
-            <div className="rounded-lg flex items-center justify-between ">
-              <ColorInput
-                label="رنگ متن ویژگی"
-                name="propertyValueColor"
-                value={userInputData?.setting?.propertyValueColor || "#FCA311"}
-                onChange={handleSettingChange}
-              />
-            </div>
-            <div className="rounded-lg flex items-center justify-between ">
-              <ColorInput
-                label="رنگ پس زمینه ویژگی"
-                name="propertyBg"
-                value={userInputData?.setting?.propertyBg || "#FCA311"}
-                onChange={handleSettingChange}
-              />
-            </div>
+            <DynamicRangeInput
+              label="انحنا"
+              name="propertyRadius"
+              min="0"
+              max="50"
+              value={userInputData?.setting?.propertyRadius || "40"}
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ عنوان ویژگی"
+              name="propertyKeyColor"
+              value={userInputData?.setting?.propertyKeyColor || "#FCA311"}
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ متن ویژگی"
+              name="propertyValueColor"
+              value={userInputData?.setting?.propertyValueColor || "#FCA311"}
+              onChange={handleSettingChange}
+            />
+            <ColorInput
+              label="رنگ پس زمینه ویژگی"
+              name="propertyBg"
+              value={userInputData?.setting?.propertyBg || "#FCA311"}
+              onChange={handleSettingChange}
+            />
           </div>
         </>
       )}
@@ -463,7 +382,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
 
       {/* Spacing Settings */}
       {isSpacingOpen && (
-        <div className="p-4  animate-slideDown">
+        <div className="animate-slideDown">
           <div className="rounded-lg p-2 flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

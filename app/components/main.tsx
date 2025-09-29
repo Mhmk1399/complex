@@ -55,39 +55,41 @@ export const Main = () => {
   } = useSharedContext();
 
   // Frontend cache
-  const [cache, setCache] = useState<Record<string, { data: any; timestamp: number }>>({});
+  const [cache, setCache] = useState<
+    Record<string, { data: any; timestamp: number }>
+  >({});
   const CACHE_DURATION = 60000; // 1 minute
 
   // Get storeId from subdomain in production or env in development
   const getStoreId = () => {
-    const isDev = process.env.NODE_ENV === 'development';
-    
+    const isDev = process.env.NODE_ENV === "development";
+
     if (isDev) {
       return process.env.NEXT_PUBLIC_DEV_STORE_ID;
     }
-    
-    if (typeof window !== 'undefined') {
+
+    if (typeof window !== "undefined") {
       const hostname = window.location.hostname;
-      const subdomain = hostname.split('.')[0];
+      const subdomain = hostname.split(".")[0];
       return subdomain;
     }
     return null;
   };
-  
+
   const getAuthToken = () => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get('token') || localStorage.getItem('authToken');
+      return urlParams.get("token") || localStorage.getItem("authToken");
     }
     return null;
   };
-  
+
   const api = createApiService({
-    baseUrl: '/api',
+    baseUrl: "/api",
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${getAuthToken()}`
-    }
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getAuthToken()}`,
+    },
   });
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -121,18 +123,18 @@ export const Main = () => {
       toast.error("توکن یافت نشد");
       return;
     }
-    
+
     try {
       const decoded = jwt.decode(token) as any;
       const storeId = decoded?.storeId;
-      
+
       if (!storeId) {
         toast.error("شناسه فروشگاه یافت نشد");
         return;
       }
-      
-      const isDev = process.env.NODE_ENV === 'development';
-      const siteUrl = isDev 
+
+      const isDev = process.env.NODE_ENV === "development";
+      const siteUrl = isDev
         ? `http://localhost:3001` // Development URL
         : `https://${storeId}.yourdomain.com`; // Production URL
       window.open(siteUrl, "_blank", "noopener,noreferrer");
@@ -143,29 +145,28 @@ export const Main = () => {
   };
 
   // add new route
-const handleAddRoute = async ({ name }: { name: string }) => {
-  if (routes.includes(name)) {
-    toast.error("این مسیر در حال حاظر موجود است", { autoClose: 3000 });
-    return;
-  }
+  const handleAddRoute = async ({ name }: { name: string }) => {
+    if (routes.includes(name)) {
+      toast.error("این مسیر در حال حاظر موجود است", { autoClose: 3000 });
+      return;
+    }
 
-  try {
-    await api.endpoint('/route-handler').post(null, {
-      headers: { filename: name }
-    });
+    try {
+      await api.endpoint("/route-handler").post(null, {
+        headers: { filename: name },
+      });
 
-    fetchRoutes();
-    toast.success("مسیر جدید ساخته شد", {
-      autoClose: 3000,
-    });
-  } catch (error) {
-    console.log("Error adding route:", error);
-    toast.error("مشکل در ساخت مسیر", {
-      autoClose: 3000,
-    });
-  }
-};
-
+      fetchRoutes();
+      toast.success("مسیر جدید ساخته شد", {
+        autoClose: 3000,
+      });
+    } catch (error) {
+      console.log("Error adding route:", error);
+      toast.error("مشکل در ساخت مسیر", {
+        autoClose: 3000,
+      });
+    }
+  };
 
   useEffect(() => {
     fetchRoutes();
@@ -175,21 +176,24 @@ const handleAddRoute = async ({ name }: { name: string }) => {
   const sendTokenToServer = async () => {
     const cacheKey = `layout-${selectedRoute}-${activeMode}`;
     const cached = cache[cacheKey];
-    
+
     if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
       const data = cached.data;
       setLayout(data);
       return data;
     }
-    
+
     try {
-      const data = await api.endpoint('/layout-jason').get({
+      const data = await api.endpoint("/layout-jason").get({
         headers: {
           selectedRoute: selectedRoute.split(".")[0],
           activeMode: activeMode,
-        }
+        },
       });
-      setCache(prev => ({ ...prev, [cacheKey]: { data, timestamp: Date.now() } }));
+      setCache((prev) => ({
+        ...prev,
+        [cacheKey]: { data, timestamp: Date.now() },
+      }));
       setLayout(data);
       return data;
     } catch (error) {
@@ -229,17 +233,15 @@ const handleAddRoute = async ({ name }: { name: string }) => {
   //   }
   // }, [selectedRoute, activeMode]);
 
-
-  
   const handleSave = async () => {
     setSaveStatus("saving");
-    
+
     try {
-      const result = await api.endpoint('/layout-jason').post(layout, {
+      const result = await api.endpoint("/layout-jason").post(layout, {
         headers: {
           selectedRoute: selectedRoute,
           activeMode: activeMode,
-        }
+        },
       });
       console.log("Save response:", result);
       setSaveStatus("saved");
@@ -256,20 +258,24 @@ const handleAddRoute = async ({ name }: { name: string }) => {
   };
 
   const fetchRoutes = async () => {
-    const cacheKey = 'routes';
+    const cacheKey = "routes";
     const cached = cache[cacheKey];
-    
+
     if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
       const cleanedRoutes = cleanRouteNames(cached.data.files as string[]);
       setRoutes(cleanedRoutes as string[]);
       setActiveRoutes(cleanedRoutes as string[]);
       return;
     }
-    
+
     try {
-      const result = await api.endpoint('/route-handler').get();
-      setCache(prev => ({ ...prev, [cacheKey]: { data: result, timestamp: Date.now() } }));
+      const result = await api.endpoint("/route-handler").get();
+      setCache((prev) => ({
+        ...prev,
+        [cacheKey]: { data: result, timestamp: Date.now() },
+      }));
       const cleanedRoutes = cleanRouteNames(result.files as string[]);
+      console.log(cleanedRoutes , ",,,,,,,,,,,,,,,")
       setRoutes(cleanedRoutes as string[]);
       setActiveRoutes(cleanedRoutes as string[]);
     } catch (error: any) {
@@ -279,8 +285,8 @@ const handleAddRoute = async ({ name }: { name: string }) => {
 
   const handleDeleteRoute = async () => {
     try {
-      await api.endpoint('/route-handler').delete({
-        headers: { filename: selectedRoute }
+      await api.endpoint("/route-handler").delete({
+        headers: { filename: selectedRoute },
       });
 
       fetchRoutes();
@@ -307,7 +313,6 @@ const handleAddRoute = async ({ name }: { name: string }) => {
   useEffect(() => {
     fetchRoutes();
   }, []);
-
 
   // Add this useEffect to control the guide flow
   const handleMetaDataSave = () => {

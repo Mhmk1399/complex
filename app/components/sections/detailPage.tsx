@@ -31,15 +31,24 @@ const SectionDetailPage = styled.div<{
   $data: DetailPageSection;
   $preview: "sm" | "default";
 }>`
-  padding-top: ${(props) => props.$data?.setting?.paddingTop || 0}px;
-  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom || 0}px;
-  padding-left: ${(props) => props.$data?.setting?.paddingLeft || 20}px;
-  padding-right: ${(props) => props.$data?.setting?.paddingRight || 20}px;
-  margin-top: ${(props) => props.$data?.setting?.marginTop || 0}px;
-  margin-bottom: ${(props) => props.$data?.setting?.marginBottom || 0}px;
+  max-width: 100%;
+  padding-top: ${(props) => props.$data?.setting?.paddingTop}px;
+  padding-bottom: ${(props) => props.$data?.setting?.paddingBottom}px;
+  padding-left: ${(props) => props.$data?.setting?.paddingLeft}px;
+  padding-right: ${(props) => props.$data?.setting?.paddingRight}px;
+  margin-top: ${(props) => props.$data?.setting?.marginTop}px;
+  margin-bottom: ${(props) => props.$data?.setting?.marginBottom}px;
+  margin-left: ${(props) => props.$data?.setting?.marginLeft}px;
+  margin-right: ${(props) => props.$data?.setting?.marginRight}px;
   background-color: ${(props) =>
     props.$data?.setting?.backgroundColor || "#ffffff"};
-  height: ${(props) => (props.$preview === "sm" ? "50rem" : "full")};
+  box-shadow: ${(props) =>
+    `${props.$data.setting?.shadowOffsetX || 0}px 
+     ${props.$data.setting?.shadowOffsetY || 4}px 
+     ${props.$data.setting?.shadowBlur || 10}px 
+     ${props.$data.setting?.shadowSpread || 0}px 
+     ${props.$data.setting?.shadowColor || "#fff"}`};
+  border-radius: ${(props) => props.$data.setting?.Radius || "10"}px;
 
   .product-name {
     color: ${(props) => props.$data?.setting?.productNameColor || "#000000"};
@@ -63,6 +72,8 @@ const SectionDetailPage = styled.div<{
   .product-description {
     color: ${(props) => props.$data?.setting?.descriptionColor || "#000000"};
     font-size: ${(props) => props.$data?.setting?.descriptionFontSize || 16}px;
+    font-weight: ${(props) =>
+      props.$data?.setting?.descriptionFontWeight || "bold"};
     @media (max-width: 768px) {
       font-size: 20px;
     }
@@ -79,6 +90,7 @@ const SectionDetailPage = styled.div<{
     background-color: ${(props) =>
       props.$data?.setting?.btnBackgroundColor || "#3498DB"};
     color: ${(props) => props.$data?.setting?.btnTextColor || "#000000"};
+    border-radius: ${(props) => props.$data?.setting?.btnRadius || 10}px;
     transition: transform 0.5s ease;
     &:hover {
       transform: translateY(-2px);
@@ -100,12 +112,13 @@ const SectionDetailPage = styled.div<{
   .property-bg {
     background-color: ${(props) =>
       props.$data?.setting?.propertyBg || "#ffffff"};
+    border-radius: ${(props) => props.$data?.setting?.propertyRadius || 10}px;
   }
 
   .product-image {
-    width: ${(props) => props.$data?.setting?.imageWidth || 300}px;
-    height: ${(props) => props.$data?.setting?.imageHeight || 200}px;
-    border-radius: ${(props) => props.$data?.setting?.imageRadius || 10}px;
+    width: 375px;
+    height: 250px;
+    border-radius: ${(props) => props.$data?.setting?.imageRadius || 2}px;
     object-fit: cover;
     overflow: hidden;
     position: relative;
@@ -162,20 +175,20 @@ const DetailPage: React.FC<DetailPageProps> = ({
     createdAt: "",
     updatedAt: "",
   });
-  
+
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
   const api = createApiService({
-    baseUrl: '/api',
+    baseUrl: "/api",
     headers: {
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json",
+    },
   });
 
   const { data: productData, error } = api.useGet(`/products/${productId}`, {
     revalidateOnFocus: false,
-    refreshInterval: 60000
+    refreshInterval: 60000,
   });
 
   useEffect(() => {
@@ -277,7 +290,7 @@ const DetailPage: React.FC<DetailPageProps> = ({
             <Image
               src={selectedImage || "/assets/images/pro2.jpg"}
               alt={product.name}
-              width={1000}
+              width={2000}
               height={1000}
               className="transition-transform duration-300 ease-in-out hover:scale-150"
             />
@@ -319,7 +332,7 @@ const DetailPage: React.FC<DetailPageProps> = ({
                   ].map((defaultImage, index) => (
                     <div
                       key={index}
-                      className={`relative min-w-[120px] h-[80px] cursor-pointer 
+                      className={`relative min-w-[94px] h-[80px] cursor-pointer 
               transition-all duration-300 ease-in-out hover:shadow-lg
               ${
                 selectedImage === defaultImage
@@ -352,7 +365,7 @@ const DetailPage: React.FC<DetailPageProps> = ({
             {product.description ||
               "توضیحات محصول در ابن قسمت نمایش داده می شود."}
           </p>
-          <div className="border border-gray-300 max-w-sm rounded-lg p-4 ">
+          <div className=" max-w-sm rounded-lg p-4 ">
             <div className="text-sm font-bold mb-3">ویژگی‌های محصول</div>
             <div className=" flex flex-wrap gap-2">
               {(Array.isArray(product.properties) &&
@@ -444,7 +457,7 @@ const DetailPage: React.FC<DetailPageProps> = ({
               </div>
 
               {/* Inventory Status */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center product-status gap-2">
                 <div
                   className={`w-3 h-3 rounded-full ${
                     product.inventory && Number(product.inventory) > 0
@@ -452,7 +465,7 @@ const DetailPage: React.FC<DetailPageProps> = ({
                       : "bg-red-500"
                   }`}
                 ></div>
-                <span className="text-sm">
+                <span className=" product-status">
                   {product.inventory && Number(product.inventory) > 0
                     ? "موجود در انبار"
                     : "ناموجود"}
@@ -468,10 +481,6 @@ const DetailPage: React.FC<DetailPageProps> = ({
 
               {/* Additional Product Info */}
               <div className="text-sm space-y-2 text-gray-600">
-                <div className="flex product-category justify-between">
-                  <span>کد محصول:</span>
-                  <span>{product.id || "N/A"}</span>
-                </div>
                 <div className="flex product-category justify-between">
                   <span>دسته‌بندی:</span>
                   <span>{product.category?.name}</span>
