@@ -275,7 +275,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
       {isContentOpen && (
         <div className="space-y-6 animate-slideDown">
           {/* Logo Section */}
-          <div className="bg-white   rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
+          <div className=" rounded-xl p-4  transition-shadow duration-200">
             <div className="flex items-center gap-2 mb-4">
               <h3 className="font-semibold text-gray-800">تنظیمات لوگو</h3>
             </div>
@@ -325,7 +325,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
           </div>
 
           {/* Announcement Section */}
-          <div className="bg-white   rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
+          <div className=" rounded-xl p-4  transition-shadow duration-200">
             <div className="flex items-center gap-2 mb-4">
               <h3 className="font-semibold text-gray-800">متن اطلاع‌رسانی</h3>
             </div>
@@ -342,14 +342,14 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
                 rows={3}
                 placeholder="پیام اطلاع‌رسانی خود را وارد کنید..."
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-blue-500 mt-1">
                 این متن در بالای صفحه نمایش داده می‌شود
               </p>
             </div>
           </div>
 
           {/* Navigation Items Section */}
-          <div className="bg-white   rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
+          <div className="   rounded-xl p-4   transition-shadow duration-200">
             <div className="flex items-center gap-2 mb-4">
               <h3 className="font-semibold text-gray-800">آیتم‌های منو</h3>
             </div>

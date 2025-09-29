@@ -241,6 +241,7 @@ export const Main = () => {
         headers: {
           selectedRoute: selectedRoute,
           activeMode: activeMode,
+          authorization: localStorage.getItem("token"),
         },
       });
       console.log("Save response:", result);
@@ -275,7 +276,7 @@ export const Main = () => {
         [cacheKey]: { data: result, timestamp: Date.now() },
       }));
       const cleanedRoutes = cleanRouteNames(result.files as string[]);
-      console.log(cleanedRoutes , ",,,,,,,,,,,,,,,")
+      console.log(cleanedRoutes, ",,,,,,,,,,,,,,,");
       setRoutes(cleanedRoutes as string[]);
       setActiveRoutes(cleanedRoutes as string[]);
     } catch (error: any) {

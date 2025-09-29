@@ -247,7 +247,7 @@ const BlogList: React.FC<BlogListProps> = ({
             <div
               className="description mb-2 text-right"
               dangerouslySetInnerHTML={{
-                __html: blog.content.slice(0, 70) + "...",
+                __html: blog.content.slice(0, 50) + "...",
               }}
             />
             <a href="#" className="read-more">

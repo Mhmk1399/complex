@@ -4,10 +4,10 @@ import Jsons from "@/models/jsons";
 
 export async function POST(request: NextRequest) {
   await connect();
-  
+
   try {
     const data = await request.json();
-    
+
     const result = await Jsons.findOneAndUpdate(
       { storeId: data.storeId, route: data.route },
       {
@@ -15,22 +15,18 @@ export async function POST(request: NextRequest) {
         route: data.route,
         lgContent: data.lgContent,
         smContent: data.smContent,
-        version: data.version || "1"
+        version: data.version || "1",
       },
       { upsert: true, new: true }
     );
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       id: result._id,
-      message: "Data saved successfully" 
+      message: "Data saved successfully",
     });
-    
   } catch (error) {
     console.error("Error saving to MongoDB:", error);
-    return NextResponse.json(
-      { error: "Failed to save data" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to save data" }, { status: 500 });
   }
 }
