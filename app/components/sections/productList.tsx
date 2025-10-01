@@ -168,7 +168,7 @@ const ProductList: React.FC<ProductListProps> = ({
       "Content-Type": "application/json",
       Authorization:
         typeof window !== "undefined"
-          ? `Bearer ${localStorage.getItem("complexToken")}`
+          ? `Bearer ${localStorage.getItem("token")}`
           : "",
     },
   });

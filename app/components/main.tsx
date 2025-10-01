@@ -31,6 +31,7 @@ import TourGuide from "./sections/guideTour";
 import { useSharedContext } from "@/app/contexts/SharedContext";
 import { CanvasProvider } from "../contexts/CanvasContext";
 import { createApiService } from "@/lib/api-factory";
+import { method } from "lodash";
 
 const routeIcons = {
   home: FaHome,
@@ -152,8 +153,12 @@ export const Main = () => {
     }
 
     try {
-      await api.endpoint("/route-handler").post(null, {
-        headers: { filename: name },
+      await fetch("/api/route-handler", {
+        method: "POST",
+        headers: {
+          filename: name,
+          token: localStorage.getItem("token") || "",
+        },
       });
 
       fetchRoutes();
@@ -188,6 +193,7 @@ export const Main = () => {
         headers: {
           selectedRoute: selectedRoute.split(".")[0],
           activeMode: activeMode,
+          token: localStorage.getItem("token"),
         },
       });
       setCache((prev) => ({
@@ -241,7 +247,7 @@ export const Main = () => {
         headers: {
           selectedRoute: selectedRoute,
           activeMode: activeMode,
-          authorization: localStorage.getItem("token"),
+          token: localStorage.getItem("token"),
         },
       });
       console.log("Save response:", result);
@@ -270,7 +276,13 @@ export const Main = () => {
     }
 
     try {
-      const result = await api.endpoint("/route-handler").get();
+      const res = await fetch("/api/route-handler", {
+        method: "GET",
+        headers: {
+          token: localStorage.getItem("token") || "",
+        },
+      });
+      const result = await res.json();
       setCache((prev) => ({
         ...prev,
         [cacheKey]: { data: result, timestamp: Date.now() },

@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
     const routeName = request.headers.get("selectedRoute");
     const activeMode = request.headers.get("activeMode") || "lg";
     const storeId = getStoreIdFromRequest(request);
-    console.log(storeId , "..........................")
+    console.log(storeId, "..........................");
 
     if (!routeName || !activeMode) {
       return NextResponse.json(
@@ -129,13 +129,13 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   await connect();
 
   try {
     const routeName = request.headers.get("selectedRoute");
     const activeMode = request.headers.get("activeMode") || "lg";
-    const storeId = request.headers.get("storeId");
+    const storeId = getStoreIdFromRequest(request);
 
     if (!routeName || !activeMode) {
       return NextResponse.json(
@@ -146,10 +146,10 @@ export async function GET(request: Request) {
 
     const getFilename = (routeName: string) => `${routeName}${activeMode}`;
 
-    console.log(routeName, "routename")
+    console.log(routeName, "routename");
     console.log(activeMode, "activeMode");
 
-    console.log(getFilename("home")," filename")
+    console.log(getFilename("home"), " filename");
 
     if (routeName === "home") {
       const homeContent = JSON.parse(
