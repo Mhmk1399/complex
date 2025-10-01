@@ -4,6 +4,8 @@ import type { ProductCard, ProductCardData } from "@/lib/types";
 interface ProductCardProps {
   productData: ProductCardData;
 }
+
+
 const defaultSetting = {
   cardBorderRadius: "10px",
   cardBackground: "#fff",
@@ -33,10 +35,10 @@ const Card = styled.div<{
   background: ${(props) =>
     props.$setting?.cardBackground || defaultSetting.cardBackground};
   margin: 10px;
-  padding: 10px;
+  padding: 15px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  height: 320px;
-min-width: 250px;
+  height: 340px;
+  min-width: 250px;
   @media (max-width: 425px) {
     margin: 10px 5px;
     height: 320px;
@@ -98,40 +100,16 @@ const ProductPrice = styled.span<{
   margin: 8px 0;
 `;
 
-// const BuyButton = styled.a<{
-//   $settings?: ProductCard;
-//   $productData?: ProductCardData;
-// }>`
-//   display: inline-block;
-//   padding: 10px 20px;
-//   background-color: ${(props) =>
-//     props.$settings?.btnBackgroundColor || defaultSetting.btnBackgroundColor};
-//   color: ${(props) => props.$settings?.btnColor || defaultSetting.btnColor};
-//   border-radius: 4px;
-//   font-size: 0.9rem;
-//   font-weight: bold;
-//   margin-top: auto;
-//   text-align: center;
-//   transition: all 0.3s ease;
-
-//   &:hover {
-//     background-color: #d5d5d5;
-//     transform: translateY(-2px);
-//   }
-// `;
-
 const ProductCard: React.FC<ProductCardProps> = ({ productData }) => {
-  const currentImageIndex=0;
-console.log(productData.images);
+  const currentImageIndex = 0;
+  console.log(productData.images);
 
   const currentImage = productData.images[currentImageIndex] || {
     imageSrc: "",
     imageAlt: "",
   };
-  
 
   return (
-    
     <Card dir="rtl">
       <ProductImage
         $productData={productData}
@@ -142,17 +120,11 @@ console.log(productData.images);
       />
       <ProductName $productData={productData}>{productData.name}</ProductName>
       <ProductDescription $productData={productData}>
-        {productData.description}
+        {productData.description.slice(0, 30)}...
       </ProductDescription>
       <ProductPrice $productData={productData}>
         {productData.price}
-
-        
       </ProductPrice>
-      
-      
-      
-      
     </Card>
   );
 };

@@ -142,6 +142,10 @@ export const ProductListForm: React.FC<ProductListProps> = ({
             در صورت نیاز به افزودن محصولات، لطفاً از طریق تنظیمات فروشگاه در
             داشبورد اقدام کنید.
           </small>
+          <br />
+          <small  className="text-red-600">
+            در این قسمت فقط 7-8 عدد از محصولات نشون داده میشوند
+          </small>
         </div>
       )}
 
@@ -164,6 +168,7 @@ export const ProductListForm: React.FC<ProductListProps> = ({
             <input
               type="number"
               name="gridColumns"
+              max={6}
               value={userInputData.setting.gridColumns || 1}
               onChange={handleSettingChange}
               placeholder="Grid Columns"

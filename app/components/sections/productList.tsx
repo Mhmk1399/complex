@@ -28,22 +28,14 @@ interface CategoryWithChildren {
 }
 type SortOption = "newest" | "price-asc" | "price-desc" | "name";
 
-// const defaultProduct: ProductCardData = {
-//   images: [{ imageSrc: "/assets/images/pro2.jpg", imageAlt: "Default Image" }],
-//   name: "محصول پیش‌فرض",
-//   description: "توضیحات پیش‌فرض محصول",
-//   price: "0",
-//   id: "0",
-// };
 const SectionProductList = styled.section<{
   $data: ProductSection;
   $previewWidth: "sm" | "default";
 }>`
   display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
   width: 100%;
   direction: rtl;
+  gap: 2rem;
   padding-top: ${(props) => props.$data?.setting?.paddingTop}px;
   padding-bottom: ${(props) => props.$data?.setting?.paddingBottom}px;
   padding-left: ${(props) => props.$data?.setting?.paddingLeft}px;
@@ -61,13 +53,33 @@ const SectionProductList = styled.section<{
      ${props.$data.setting?.shadowColor || "#fff"}`};
   border-radius: ${(props) => props.$data.setting?.Radius || "10"}px;
 
+  @media (max-width: 426px) {
+    flex-direction: column;
+  }
+`;
+
+const ProductGrid = styled.div<{
+  $data: ProductSection;
+  $previewWidth: "sm" | "default";
+}>`
+  flex: 1;
+  display: ${(props) => (props.$previewWidth === "sm" ? "flex" : "grid")};
   ${(props) =>
-    props.$previewWidth === "default" &&
-    `
-    display: grid;
-    grid-template-columns: repeat(${props.$data.setting?.gridColumns}, 1fr);
-    overflow-x: hidden;
-  `}
+    props.$previewWidth === "sm"
+      ? `flex-wrap: nowrap;
+     overflow-x: auto;
+     scroll-snap-type: x mandatory;
+     -webkit-overflow-scrolling: touch;
+     
+     & > div {
+       flex: 0 0 auto;
+       width: 80%;
+       scroll-snap-align: start;
+     }`
+      : `grid-template-columns: repeat(${
+          props.$data.setting?.gridColumns || 3
+        }, 1fr);
+     gap: 16px;`}
 
   @media (max-width: 426px) {
     display: flex;
@@ -112,7 +124,12 @@ const FilterCardBg = styled.div<{
 }>`
   background-color: ${(props) => props.$data?.filterCardBg};
   border-radius: 10px;
-  width: 180px;
+  width: 356px;
+  flex-shrink: 0;
+  height: fit-content;
+  position: sticky;
+  top: 80px;
+  right: 5px;
   display: ${(props) => (props.$previewWidth === "sm" ? "none" : "block")};
   @media (max-width: 426px) {
     display: none;
@@ -123,30 +140,53 @@ const FilterBtn = styled.div<{ $data: ProductBlockSetting }>`
   color: ${(props) => props.$data?.filterButtonTextColor};
 `;
 
-const RangeSliderContainer = styled.div`
-  position: relative;
-  width: 100%;
-  height: 40px;
+const PriceInputContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  justify-content: space-between;
 `;
 
-const RangeSlider = styled.input`
-  position: absolute;
-  width: 100%;
-  pointer-events: none;
-  appearance: none;
-  height: 2px;
-  background: none;
+const PriceInput = styled.input`
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  text-align: center;
+  font-size: 0.875rem;
+  transition: all 0.2s;
 
-  &::-webkit-slider-thumb {
-    pointer-events: all;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: #2563eb;
-    cursor: pointer;
-    appearance: none;
-    z-index: 3;
-    position: relative;
+  &:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+`;
+
+const ApplyButton = styled.button<{
+  $data: ProductBlockSetting;
+}>`
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 1rem;
+  background-color: ${(props) => props.$data?.filterButtonBg};
+  color: ${(props) => props.$data?.filterButtonTextColor};
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #1d4ed8;
+  }
+
+  &:active {
+    transform: scale(0.98);
   }
 `;
 
@@ -342,12 +382,33 @@ const ProductList: React.FC<ProductListProps> = ({
     return null;
   }
 
+  const renderPriceFilter = () => (
+    <div className="price-filter-container">
+      <h3 className="text-lg font-bold text-gray-800 pb-3">فیلتر قیمت</h3>
+      <PriceInputContainer>
+        <div className="flex flex-col items-center flex-1">
+          <label className="text-sm font-medium text-gray-700 mb-1">
+            از (تومان)
+          </label>
+          <PriceInput type="number" placeholder="0" />
+        </div>
+        <div className="flex flex-col items-center flex-1">
+          <label className="text-sm font-medium text-gray-700 mb-1">
+            تا (تومان)
+          </label>
+          <PriceInput type="number" placeholder="بدون محدودیت" />
+        </div>
+      </PriceInputContainer>
+      <ApplyButton $data={sectionData.setting}>اعمال فیلتر</ApplyButton>
+    </div>
+  );
+
   return (
     <SectionProductList
       $data={sectionData}
       $previewWidth={previewWidth}
       onClick={() => setSelectedComponent(actualName)}
-      className={`transition-all duration-150 ease-in-out relative flex bg-gray-100 ${
+      className={`transition-all flex-row-reverse duration-150 ease-in-out relative flex bg-gray-100 ${
         selectedComponent === actualName
           ? "border-4 border-blue-500 rounded-lg shadow-lg "
           : ""
@@ -483,46 +544,7 @@ const ProductList: React.FC<ProductListProps> = ({
                 </div>
               )}
               {/** Include additional filters like color and price as needed */}
-              <div className="price-range-container">
-                <h3 className="text-lg pb-2">فیلتر قیمت</h3>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  قیمت از: {selectedFilters.priceMin.toLocaleString()} تا:{" "}
-                  {selectedFilters.priceMax.toLocaleString()} تومان
-                </label>
-
-                <RangeSliderContainer>
-                  <RangeSlider
-                    type="range"
-                    min={priceRange.min}
-                    max={priceRange.max}
-                    value={selectedFilters.priceMin}
-                    onChange={(e) =>
-                      setSelectedFilters((prev) => ({
-                        ...prev,
-                        priceMin: Math.min(
-                          parseInt(e.target.value),
-                          selectedFilters.priceMax
-                        ),
-                      }))
-                    }
-                  />
-                  <RangeSlider
-                    type="range"
-                    min={priceRange.min}
-                    max={priceRange.max}
-                    value={selectedFilters.priceMax}
-                    onChange={(e) =>
-                      setSelectedFilters((prev) => ({
-                        ...prev,
-                        priceMax: Math.max(
-                          parseInt(e.target.value),
-                          selectedFilters.priceMin
-                        ),
-                      }))
-                    }
-                  />
-                </RangeSliderContainer>
-              </div>
+              {renderPriceFilter()}
             </div>
             <div className="mt-4 flex justify-start gap-2">
               <button
@@ -616,16 +638,24 @@ const ProductList: React.FC<ProductListProps> = ({
         </div>
       </FilterBgRow>
 
-      {getSortedProducts(filteredProducts).map((block, index) => (
-        <div className="p-0 m-0" key={`${block.id}-${index}`}>
-          <ProductCard productData={block} />
-        </div>
-      ))}
+      <ProductGrid
+        $data={sectionData}
+        $previewWidth={previewWidth}
+        className="mt-20"
+      >
+        {getSortedProducts(filteredProducts)
+          .slice(0, 7)
+          .map((block, index) => (
+            <div key={`${block.id}-${index}`}>
+              <ProductCard productData={block} />
+            </div>
+          ))}
+      </ProductGrid>
 
       <FilterCardBg
         $previewWidth={previewWidth}
         $data={sectionData.setting}
-        className=" p-4 h-fit rounded-lg shadow-sm mb-4 sticky top-0 mt-28 right-0 "
+        className="p-4 rounded-lg shadow-sm"
         dir="rtl"
       >
         <div className="grid grid-cols-1 md:grid-cols-1 gap-4 justify-start">
@@ -676,46 +706,7 @@ const ProductList: React.FC<ProductListProps> = ({
           </div>
           {/* Price Range Filter */}
 
-          <div className="price-range-container">
-            <h3 className="text-lg pb-2">فیلتر قیمت</h3>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              قیمت از: {selectedFilters.priceMin.toLocaleString()} تا:{" "}
-              {selectedFilters.priceMax.toLocaleString()} تومان
-            </label>
-
-            <RangeSliderContainer>
-              <RangeSlider
-                type="range"
-                min={priceRange.min}
-                max={priceRange.max}
-                value={selectedFilters.priceMin}
-                onChange={(e) =>
-                  setSelectedFilters((prev) => ({
-                    ...prev,
-                    priceMin: Math.min(
-                      parseInt(e.target.value),
-                      selectedFilters.priceMax
-                    ),
-                  }))
-                }
-              />
-              <RangeSlider
-                type="range"
-                min={priceRange.min}
-                max={priceRange.max}
-                value={selectedFilters.priceMax}
-                onChange={(e) =>
-                  setSelectedFilters((prev) => ({
-                    ...prev,
-                    priceMax: Math.max(
-                      parseInt(e.target.value),
-                      selectedFilters.priceMin
-                    ),
-                  }))
-                }
-              />
-            </RangeSliderContainer>
-          </div>
+          {renderPriceFilter()}
 
           {showColorModal && (
             <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
@@ -778,13 +769,6 @@ const ProductList: React.FC<ProductListProps> = ({
             </div>
           )}
         </div>
-        <FilterBtn
-          $data={sectionData.setting}
-          className="mt-4  px-4 py-2 rounded-md text-center cursor-pointer hover:opacity-80"
-          onClick={handleFilter}
-        >
-          اعمال فیلتر
-        </FilterBtn>
       </FilterCardBg>
 
       {showColorModal && (
