@@ -65,8 +65,8 @@ const MarginBox = styled.div`
 `;
 
 const PaddingBox = styled.div`
-  width: 70%;
-  height: 70%;
+  width: 75%;
+  height: 68%;
   border: 2px solid #60a5fa;
   border-radius: 8px;
   background: #eff6ff;
@@ -88,16 +88,6 @@ const ContentBox = styled.div`
   font-weight: 500;
   color: #1f2937;
   border: 1px solid #cbd5e1;
-`;
-
-const SmallLabel = styled.span`
-  font-size: 12px;
-  color: #374151;
-  font-weight: 600;
-  position: absolute;
-  background: #ffffff;
-  padding: 0 6px;
-  border-radius: 4px;
 `;
 
 const PreviewBox = styled.div<{ margin: BoxValues; padding: BoxValues }>`
@@ -228,7 +218,7 @@ const MarginPaddingEditor: React.FC<MarginPaddingEditorProps> = ({
               onChange={(e) => handleChange("padding", "top", e.target.value)}
               style={{
                 position: "absolute",
-                top: "0px",
+                top: "4px",
                 left: "50%",
                 transform: "translateX(-50%)",
               }}
@@ -243,7 +233,7 @@ const MarginPaddingEditor: React.FC<MarginPaddingEditorProps> = ({
               }
               style={{
                 position: "absolute",
-                bottom: "0px",
+                bottom: "4px",
                 left: "50%",
                 transform: "translateX(-50%)",
               }}
@@ -254,9 +244,9 @@ const MarginPaddingEditor: React.FC<MarginPaddingEditorProps> = ({
               type="number"
               value={padding.left || 0}
               onChange={(e) => handleChange("padding", "left", e.target.value)}
-              style={{
+              style={{ 
                 position: "absolute",
-                left: "-2px",
+                left: "1px",
                 top: "50%",
                 transform: "translateY(-50%)",
               }}
@@ -269,7 +259,7 @@ const MarginPaddingEditor: React.FC<MarginPaddingEditorProps> = ({
               onChange={(e) => handleChange("padding", "right", e.target.value)}
               style={{
                 position: "absolute",
-                right: "-2px",
+                right: "1px",
                 top: "50%",
                 transform: "translateY(-50%)",
               }}

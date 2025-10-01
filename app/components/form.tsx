@@ -4,7 +4,8 @@ import { AnimatePresence } from "framer-motion";
 import { DragEndEvent } from "@dnd-kit/core";
 import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
-import { FaBars, FaExchangeAlt, FaPuzzlePiece, FaRobot } from "react-icons/fa";
+import { FaBars, FaExchangeAlt, FaPuzzlePiece } from "react-icons/fa";
+import { RiRobot3Line } from "react-icons/ri";
 import richtextImage from "@/public/assets/images/richtext.png";
 import ImageTextImage from "@/public/assets/images/imagetext.png";
 import bannerImage from "@/public/assets/images/banner.jpg";
@@ -142,82 +143,143 @@ const sections = [
     label: "پیشنهاد شگفت انگیز",
     image: offer,
     bgSize: "cover",
+    bgPosition: "center",
   },
   {
     id: "OfferRow",
     label: "پیشنهاد های هفتگی",
     image: market,
-    bgSize: "contain",
+    bgSize: "cover",
+    bgPosition: "center",
   },
-  { id: "ProductsRow", label: "محصولات", image: newproduct, bgSize: "cover" },
-  { id: "Brands", label: "برند", image: brand, bgSize: "cover" },
-  { id: "Gallery", label: "گالری", image: gallery, bgSize: "cover" },
-  { id: "SlideBanner", label: "بنر", image: slidebanner, bgSize: "cover" },
-  { id: "Story", label: "استوری", image: story, bgSize: "cover" },
-  { id: "RichText", label: "متن غنی", image: richtextImage, bgSize: "cover" },
+  {
+    id: "ProductsRow",
+    label: "محصولات",
+    image: newproduct,
+    bgSize: "cover",
+    bgPosition: "center",
+  },
+  {
+    id: "Brands",
+    label: "برند",
+    image: brand,
+    bgSize: "cover",
+    bgPosition: "center",
+  },
+  {
+    id: "Gallery",
+    label: "گالری",
+    image: gallery,
+    bgSize: "cover",
+    bgPosition: "center",
+  },
+  {
+    id: "SlideBanner",
+    label: "بنر",
+    image: slidebanner,
+    bgSize: "cover",
+    bgPosition: "center",
+  },
+  {
+    id: "Story",
+    label: "استوری",
+    image: story,
+    bgSize: "cover",
+    bgPosition: "center",
+  },
+  {
+    id: "RichText",
+    label: "متن غنی",
+    image: richtextImage,
+    bgSize: "cover",
+    bgPosition: "center",
+  },
   {
     id: "ImageText",
     label: "عکس نوشته",
     image: ImageTextImage,
     bgSize: "cover",
+    bgPosition: "center",
   },
-  { id: "Banner", label: "بنر", image: bannerImage, bgSize: "cover" },
+  {
+    id: "Banner",
+    label: "بنر",
+    image: bannerImage,
+    bgSize: "cover",
+    bgPosition: "center",
+  },
   {
     id: "CollapseFaq",
     label: "سوالات متداول",
     image: CollapseFaqImage,
     bgSize: "cover",
-    bgPosition: "top",
+    bgPosition: "center",
   },
   {
     id: "ContactForm",
     label: "ارتباط با ما",
     image: contactImage,
     bgSize: "cover",
-    bgPosition: "top",
+    bgPosition: "center",
   },
   {
     id: "NewsLetter",
-    label: " خبرنامه",
+    label: "خبرنامه",
     image: newsLetterImage,
     bgSize: "cover",
-    bgPosition: "top",
+    bgPosition: "center",
   },
   {
     id: "MultiColumn",
     label: "ستون ها",
     image: multiColumnImage,
     bgSize: "cover",
+    bgPosition: "center",
   },
   {
     id: "SlideShow",
-    label: " اسلاید شو",
+    label: "اسلاید شو",
     image: slideShowImage,
     bgSize: "cover",
-    bgPosition: "top",
+    bgPosition: "center",
   },
   {
     id: "MultiRow",
-    label: "  ردیف ها",
+    label: "ردیف ها",
     image: multiRowImage,
     bgSize: "cover",
-    bgPosition: "top",
+    bgPosition: "center",
   },
-  { id: "Video", label: "   ویدیو", image: video, bgSize: "contain" },
+  {
+    id: "Video",
+    label: "ویدیو",
+    image: video,
+    bgSize: "cover",
+    bgPosition: "center",
+  },
   {
     id: "CanvasEditor",
     label: "ویرایشگر کانوا",
     image: canvasEditorImage,
     bgSize: "cover",
+    bgPosition: "center",
   },
-  { id: "Collection", label: "کالکشن", image: collection, bgSize: "contain" },
+  {
+    id: "Collection",
+    label: "کالکشن",
+    image: collection,
+    bgSize: "cover",
+    bgPosition: "center",
+  },
 ];
+
+// Updated smSections array
 const smSections = [
   {
     name: "RichText",
     title: "متن غنی",
     image: richtextSm.src,
-    height: "12rem",
+    height: "10rem",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
@@ -225,7 +287,7 @@ const smSections = [
     name: "ImageText",
     title: "عکس نوشته",
     image: imagetextSm.src,
-    height: "12rem",
+    height: "10rem",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
@@ -233,15 +295,15 @@ const smSections = [
     name: "Banner",
     title: "بنر",
     image: bannerSm.src,
-    height: "12rem",
-    backgroundSize: "contain",
+    height: "10rem",
+    backgroundSize: "cover",
     backgroundPosition: "center",
   },
   {
     name: "CollapseFaq",
     title: "سوالات متداول",
     image: collapseSm.src,
-    height: "30rem",
+    height: "10rem",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
@@ -249,7 +311,7 @@ const smSections = [
     name: "ContactForm",
     title: "ارتباط با ما",
     image: contactSm.src,
-    height: "20rem",
+    height: "10rem",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
@@ -257,7 +319,7 @@ const smSections = [
     name: "NewsLetter",
     title: "خبرنامه",
     image: newsletterSm.src,
-    height: "12rem",
+    height: "10rem",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
@@ -265,7 +327,7 @@ const smSections = [
     name: "MultiColumn",
     title: "ستون ها",
     image: columnSm.src,
-    height: "30rem",
+    height: "10rem",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
@@ -273,23 +335,23 @@ const smSections = [
     name: "SlideShow",
     title: "اسلاید شو",
     image: slideSm.src,
-    height: "27rem",
-    backgroundSize: "contain",
-    backgroundPosition: "top",
+    height: "10rem",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
   },
   {
     name: "MultiRow",
     title: "ردیف ها",
     image: rowSm.src,
-    height: "30rem",
-    backgroundSize: "contain",
-    backgroundPosition: "top",
+    height: "10rem",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
   },
   {
     name: "Video",
     title: "ویدیو",
     image: videoSm.src,
-    height: "20rem",
+    height: "10rem",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
@@ -297,7 +359,7 @@ const smSections = [
     name: "CanvasEditor",
     title: "ویرایشگر کانوا",
     image: canvasEditorImage?.src,
-    height: "12rem",
+    height: "10rem",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
@@ -305,108 +367,110 @@ const smSections = [
     name: "Collection",
     title: "کالکشن",
     image: collectionSm.src,
-    height: "20rem",
+    height: "10rem",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
   {
     name: "SliderCard",
     title: "اسلایدر کارت",
-    // image: slidercardSm.src,
-    height: "20rem",
+    image: "", // Add placeholder or default image if missing
+    height: "10rem",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
   {
     name: "CategoryBox",
     title: "دسته بندی",
-    // image: categoryboxSm.src,
-    height: "12rem",
+    image: "", // Add placeholder or default image if missing
+    height: "10rem",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
   {
     name: "BlogCard",
     title: "مقالات",
-    // image: blogcardSm.src,
-    height: "20rem",
+    image: "", // Add placeholder or default image if missing
+    height: "10rem",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
   {
     name: "FloatingCard",
     title: "کارت شناور",
-    // image: floatingcardSm.src,
-    height: "15rem",
+    image: "", // Add placeholder or default image if missing
+    height: "10rem",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
   {
     name: "Timeline",
     title: "تایملاین",
-    // image: timelineSm.src,
-    height: "30rem",
+    image: "", // Add placeholder or default image if missing
+    height: "10rem",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
   {
     name: "FeatureBox",
     title: "فیچر باکس",
-    // image: featureboxSm.src,
-    height: "15rem",
+    image: "", // Add placeholder or default image if missing
+    height: "10rem",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
   {
     name: "PriceTable",
     title: "جدول قیمت",
-    // image: pricetableSm.src,
-    height: "20rem",
+    image: "", // Add placeholder or default image if missing
+    height: "10rem",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
 ];
 
+const themeStyles = `
+  --card-border-radius: 12px;
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --card-hover-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  --primary-color: #3b82f6;
+  --text-color: #1f2937;
+  --overlay-bg: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.2));
+`;
+
 // Start scrollbar styles for webkit browsers
 const scrollbarStyles = `
-  /* Scrollbar Track */
   ::-webkit-scrollbar {
-    width: 2px; /* Smaller width for the scrollbar */
-    height: 6px; /* Smaller height for horizontal scrollbar */
+    width: 6px;
+    height: 6px;
   }
-
-  /* Scrollbar Thumb */
   ::-webkit-scrollbar-thumb {
-    background: #adb5bd; /* Color of the scrollbar thumb */
-    border-radius: 3px; /* Rounded corners */
+    background: #9ca3af;
+    border-radius: 3px;
   }
-
-  /* Scrollbar Thumb on Hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: #6c757d; /* Darker color on hover */
+    background: #6b7280;
   }
-
-  /* Scrollbar Track */
   ::-webkit-scrollbar-track {
-    background: #f1f1f1; /* Color of the scrollbar track */
-    border-radius: 3px; /* Rounded corners */
+    background: #f3f4f6;
+    border-radius: 3px;
   }
-
-  /* Scrollbar Track on Hover */
   ::-webkit-scrollbar-track:hover {
-    background: #ddd; /* Lighter color on hover */
+    background: #e5e7eb;
   }
 `;
 
 const FormContainer = styled.div`
-  /* Remove scrollbar styles from here */
+  ${themeStyles}
+  width: 100%;
+  height: 100%;
 `;
 
 const ScrollableFormContent = styled.div`
   ${scrollbarStyles}
   position: relative;
   height: 100%;
-  overflow-y: scroll; /* Always show vertical scrollbar */
+  overflow-y: auto;
   overflow-x: hidden;
 `;
 
@@ -459,9 +523,13 @@ export const Form = () => {
     }
   }, [selectedComponent]);
 
-  // Setup sensors for dnd-kit
+  // Setup sensors for dnd-kit with better performance
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8, // Require 8px movement before drag starts
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -523,13 +591,19 @@ export const Form = () => {
     }
   }, [userInputData]);
 
-  const SortableItem = ({ id }: { id: string }) => {
-    const { attributes, listeners, setNodeRef, transform, transition } =
-      useSortable({ id });
+  const SortableItem = React.memo(({ id }: { id: string }) => {
+    const {
+      attributes,
+      listeners,
+      setNodeRef,
+      transform,
+      transition,
+      isDragging,
+    } = useSortable({ id });
 
     const style = {
       transform: CSS.Transform.toString(transform),
-      transition,
+      transition: isDragging ? "none" : transition, // Disable transition during drag
     };
 
     return (
@@ -538,13 +612,30 @@ export const Form = () => {
         style={style}
         {...attributes}
         {...listeners}
-        className="p-2 bg-white border focus:bg-blue-300 group focus:text-white  rounded-2xl flex items-center gap-1 cursor-grab mb-2"
+        className={`
+          p-3 bg-white border-2 border-gray-200 
+          hover:border-blue-300 hover:shadow-sm
+          rounded-lg flex items-center gap-3 cursor-grab 
+          transition-colors duration-150
+          ${isDragging ? "shadow-lg border-blue-400 bg-blue-50 z-50" : ""}
+        `}
       >
-        <span className="text-gray-400 group-focus:text-white">☰</span>
-        <span className="text-sm group-focus:text-white ">{id}</span>
+        <div className="flex items-center justify-center w-5 h-5 bg-gray-100 rounded">
+          <svg
+            className="w-3 h-3 text-gray-500"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M3 15h18v-2H3v2zm0 4h18v-2H3v2zm0-8h18V9H3v2zm0-6v2h18V5H3z" />
+          </svg>
+        </div>
+        <span className="text-sm font-medium text-gray-700 flex-1">{id}</span>
+        <div className="w-1 h-6 bg-gray-300 rounded-full opacity-50" />
       </div>
     );
-  };
+  });
+
+  SortableItem.displayName = "SortableItem";
 
   useEffect(() => {
     if (layout?.sections?.children?.order) {
@@ -552,29 +643,36 @@ export const Form = () => {
     }
   }, [layout?.sections?.children?.order]);
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
+  const handleDragEnd = React.useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
 
-    if (active.id !== over?.id) {
-      const oldIndex = orders.indexOf(active.id as string);
-      const newIndex = orders.indexOf(over?.id as string);
-      const newOrders = arrayMove(orders, oldIndex, newIndex);
+      if (active.id !== over?.id && over) {
+        const oldIndex = orders.indexOf(active.id as string);
+        const newIndex = orders.indexOf(over.id as string);
 
-      setOrders(newOrders);
-      if (layout?.sections?.children) {
-        setLayout({
-          ...layout,
-          sections: {
-            ...layout.sections,
-            children: {
-              ...layout.sections.children,
-              order: newOrders,
-            },
-          },
-        });
+        if (oldIndex !== -1 && newIndex !== -1) {
+          const newOrders = arrayMove(orders, oldIndex, newIndex);
+
+          // Batch state updates
+          setOrders(newOrders);
+          if (layout?.sections?.children) {
+            setLayout((prevLayout) => ({
+              ...prevLayout,
+              sections: {
+                ...prevLayout.sections,
+                children: {
+                  ...prevLayout.sections.children,
+                  order: newOrders,
+                },
+              },
+            }));
+          }
+        }
       }
-    }
-  };
+    },
+    [orders, layout, setOrders, setLayout]
+  );
 
   const renderFormContent = (
     setUserInputData: React.Dispatch<React.SetStateAction<FormData>>,
@@ -911,50 +1009,61 @@ export const Form = () => {
   };
 
   const ordersButton = (
-    <div
-      className="flex bg-transparent flex-row mr-4  rounded-2xl mx-2 justify-end items-end mt-9  
-    transition-all duration-300"
-    >
-      <button
+    <div className="flex items-center justify-between p-4 mt-6 bg-gradient-to-r from-gray-50 to-white border-b border-gray-100">
+      {/* Toggle Button */}
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
         onClick={() => setShowOrdersMenu(!showOrdersMenu)}
         className={`
-      flex items-center gap-2 m-2 px-2 py-1 text-sm font-medium
-      ${!showOrdersMenu ? "bg-blue-500 text-white" : " text-gray-700"} 
-      rounded-full transition-all duration-300 transform
-    `}
+          flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-xs transition-all duration-300 shadow-sm
+          ${
+            !showOrdersMenu
+              ? "bg-blue-500 hover:bg-blue-600 text-white shadow-blue-500/25"
+              : "bg-amber-500 hover:bg-amber-600 text-white shadow-amber-500/25"
+          }
+        `}
       >
         {!showOrdersMenu ? (
           <>
-            جابجایی
-            <FaExchangeAlt className="w-4 h-4 text-gray-100" />
+            <FaExchangeAlt className="w-4 h-4" />
+            جابجایی و سکشن ها
           </>
         ) : (
           <>
-            منو
-            <FaBars className="w-4 h-4 text-blue-400" />
+            <FaBars className="w-4 h-4" />
+            بازگشت
           </>
         )}
-      </button>
-      <motion.button
-        id="aiAssistant"
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => setIsAIModalOpen(true)}
-        className={` lg:w-auto text-xs font-semibold  mb-2 justify-start border-gray-400  px-3 md:mt-0 
-          transition-all duration-300 transform`}
-      >
-        <FaRobot className="w-8 h-8" />
       </motion.button>
 
-      {showOrdersMenu && (
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center text-nowrap gap-2 m-2 px-2 py-1 text-sm font-medium text-gray-700 rounded-full transition-all duration-300 transform"
+      {/* Right Side Buttons */}
+      <div className="flex items-center gap-2">
+        {/* AI Assistant Button */}
+        <motion.button
+          whileHover={{ scale: 1.1, rotate: 5 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => setIsAIModalOpen(true)}
+          className="p-1.5 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white rounded-lg shadow-lg transition-all duration-300"
         >
-          انتخاب سکشن
-          <FaPuzzlePiece className="w-4 h-4 text-blue-400" />
-        </button>
-      )}
+          <RiRobot3Line className="w-5 h-5" />
+        </motion.button>
+
+        {/* Add Section Button */}
+        <AnimatePresence mode="wait">
+          {showOrdersMenu && (
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsModalOpen(true)}
+              className="flex items-center gap-2 px-3 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-medium text-xs shadow-lg shadow-emerald-500/25 transition-all duration-300"
+            >
+              <FaPuzzlePiece className="w-4 h-4" />
+              انتخاب سکشن
+            </motion.button>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 
@@ -963,33 +1072,40 @@ export const Form = () => {
       <Toaster />
       <div>
         <motion.button
-          className=" absolute top-1 right-4 z-[9999] hidden text-lg animate-pulse lg:block py-1 text-black rounded-lg hover:bg-slate-100 transition-colors hover:bg-gray-100/10 backdrop-blur-sm"
+          className="absolute top-1 right-4 z-[9999] hidden lg:block p-2 text-black rounded-lg hover:bg-gray-100 transition-colors backdrop-blur-sm"
           onClick={() => setIsFormOpen(!isFormOpen)}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
-          <motion.div
-            animate={isFormOpen ? "open" : "closed"}
-            variants={{
-              open: { rotate: 90 },
-              closed: { rotate: 0 },
-            }}
-            transition={{ duration: 0.45 }}
-          >
-            {isFormOpen ? (
-              // Horizontal dots for close
-              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                <circle cx="4" cy="12" r="2" />
-                <circle cx="12" cy="12" r="2" />
-                <circle cx="20" cy="12" r="2" />
-              </svg>
-            ) : (
-              // Vertical dots for open
-              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                <circle cx="12" cy="4" r="2" />
-                <circle cx="12" cy="12" r="2" />
-                <circle cx="12" cy="20" r="2" />
-              </svg>
-            )}
-          </motion.div>
+          <div className="w-4 h-4 flex flex-col justify-center items-center">
+            <motion.span
+              animate={isFormOpen ? "open" : "closed"}
+              variants={{
+                closed: { rotate: 0, y: 0 },
+                open: { rotate: 45, y: 6 },
+              }}
+              transition={{ duration: 0.3 }}
+              className="w-5 h-0.5 bg-current block transform origin-center"
+            />
+            <motion.span
+              animate={isFormOpen ? "open" : "closed"}
+              variants={{
+                closed: { opacity: 1 },
+                open: { opacity: 0 },
+              }}
+              transition={{ duration: 0.3 }}
+              className="w-5 h-0.5 bg-current block transform origin-center mt-1"
+            />
+            <motion.span
+              animate={isFormOpen ? "open" : "closed"}
+              variants={{
+                closed: { rotate: 0, y: 0 },
+                open: { rotate: -45, y: -6 },
+              }}
+              transition={{ duration: 0.3 }}
+              className="w-5 h-0.5 bg-current block transform origin-center mt-1"
+            />
+          </div>
         </motion.button>
         {isFormOpen && (
           <>
@@ -997,26 +1113,26 @@ export const Form = () => {
               <motion.div
                 dir="rtl"
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 0.91 }}
-                className="fixed inset-0 hidden backdrop-blur-md  bg-black bg-opacity-80 lg:flex items-center justify-center z-[9999] overflow-y-auto"
+                animate={{ opacity: 0.95 }}
+                className="fixed inset-0 hidden backdrop-blur-md bg-black bg-opacity-70 lg:flex items-center justify-center z-[9999] overflow-y-auto"
               >
                 <motion.div
                   initial={{ y: "100%" }}
                   animate={{ y: 0 }}
                   transition={{
                     type: "spring",
-                    damping: 15,
-                    stiffness: 300,
-                    duration: 0.8,
+                    damping: 20,
+                    stiffness: 200,
+                    duration: 0.6,
                   }}
-                  className="bg-white/40 backdrop-blur-xl border-2 border-gray-300 p-6 rounded-xl w-[100%] max-h-[60vh] max-w-5xl overflow-auto shadow-lg relative"
+                  className="bg-white/50 backdrop-blur-lg border border-gray-200 p-8 rounded-2xl w-full max-w-6xl max-h-[80vh] overflow-auto shadow-xl relative"
                 >
-                  <div className=" -mr-7 -mt-8 sticky -top-8 right-0">
+                  <div className="sticky top-0 right-0 flex justify-end">
                     <motion.button
-                      whileHover={{ scale: 1.3 }}
+                      whileHover={{ scale: 1.2 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => setIsModalOpen(false)}
-                      className="text-gray-100 hover:text-gray-300 text-lg font-semibold m-4 transition-all duration-150 ease-in-out"
+                      className="text-gray-700 hover:text-gray-900 text-lg font-semibold transition-all duration-200"
                     >
                       ✕
                     </motion.button>
@@ -1025,28 +1141,37 @@ export const Form = () => {
                   <motion.div
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.4 }}
-                    className="modal-content flex flex-col items-center justify-center gap-12"
+                    transition={{ delay: 0.2, duration: 0.4 }}
+                    className="grid grid-cols-1  gap-2"
                   >
                     {sections.map(
                       ({ id, label, image, bgSize, bgPosition = "center" }) => (
-                        <div
+                        <motion.div
                           key={id}
                           onClick={() => addSection(id)}
-                          className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                          style={{
-                            ...imageContainerStyle,
-                            backgroundImage: `url(${image?.src})`,
-                            backgroundSize: bgSize,
-                            backgroundPosition: bgPosition,
-                            backgroundRepeat: "no-repeat",
+                          whileHover={{
+                            scale: 1.03,
+                            boxShadow: "var(--card-hover-shadow)",
                           }}
+                          whileTap={{ scale: 0.98 }}
+                          className="relative cursor-pointer group"
+                          style={imageContainerStyle}
+                          role="button"
+                          aria-label={`Add ${label} section`}
                         >
-                          <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                          <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <div
+                            className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-300"
+                            style={{
+                              backgroundImage: `url(${image?.src})`,
+                              backgroundSize: bgSize,
+                              backgroundPosition: bgPosition,
+                            }}
+                          />
+                          <div className="absolute inset-0 bg-[var(--overlay-bg)] group-hover:opacity-70 transition-opacity duration-300" />
+                          <span className="absolute inset-0 flex items-center justify-center text-white text-lg font-semibold text-center px-4 drop-shadow-md group-hover:scale-105 transition-transform duration-300">
                             {label}
                           </span>
-                        </div>
+                        </motion.div>
                       )
                     )}
                   </motion.div>
@@ -1071,7 +1196,7 @@ export const Form = () => {
                 >
                   {/* Scrollable Container with custom scrollbar */}
                   <ScrollableFormContent>
-                     {/* <motion.div
+                    {/* <motion.div
                       className="absolute top-0 left-0 right-0 bg-white backdrop-blur-sm"
                       style={{
                         height: `${Math.max(
@@ -1105,7 +1230,7 @@ export const Form = () => {
                             className="text-xl mb-2 border-b-2 text-right pb-2 w-fit border-blue-500 font-bold text-[#343a40] ml-auto"
                             dir="rtl"
                           >
-                            {showOrdersMenu ? "ترتیب سکشن" : "تنظیمات سکشن"}
+                            {showOrdersMenu ? "جابجایی سکشن" : "تنظیمات سکشن"}
                           </h2>
                           {showOrdersMenu ? (
                             <div
@@ -1121,9 +1246,11 @@ export const Form = () => {
                                   items={orders}
                                   strategy={verticalListSortingStrategy}
                                 >
-                                  {orders.map((id: string) => (
-                                    <SortableItem key={id} id={id} />
-                                  ))}
+                                  <div className="space-y-2">
+                                    {orders.map((id: string) => (
+                                      <SortableItem key={id} id={id} />
+                                    ))}
+                                  </div>
                                 </SortableContext>
                               </DndContext>
                             </div>
@@ -1147,47 +1274,91 @@ export const Form = () => {
             {/* Mobile/Tablet Bottom Sheet */}
             <AnimatePresence mode="wait">
               {showOrdersMenu && (
-                <motion.div
-                  initial={{ opacity: 0, x: "-100%" }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: "100%" }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 80,
-                    damping: 20,
-                    duration: 0.5,
-                  }}
-                  className="fixed lg:hidden inset-0 h-screen w-80 bg-white/70 shadow-lg overflow-y-auto z-[9999] rounded-xl"
-                >
-                  <span
-                    className=" ml-2 top-3 border border-gray-400 absolute text-2xl text-gray-600 hover:bg-gray-200 rounded-full cursor-pointer pb-1 px-3 z-[10000]"
-                    onClick={() => setShowOrdersMenu(!showOrdersMenu)}
+                <>
+                  {/* Backdrop */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed lg:hidden inset-0 bg-black/50 backdrop-blur-sm z-[9998]"
+                    onClick={() => setShowOrdersMenu(false)}
+                  />
+
+                  {/* Bottom Sheet */}
+                  <motion.div
+                    initial={{ opacity: 0, y: "100%" }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: "100%" }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 30,
+                      duration: 0.4,
+                    }}
+                    className="fixed lg:hidden bottom-0 left-0 right-0 max-h-[85vh] bg-white/95 backdrop-blur-xl shadow-2xl overflow-hidden z-[9999] rounded-t-3xl border-t border-gray-200"
                   >
-                    x
-                  </span>
-                  <div
-                    className="bg-white/20 p-4 my-5 rounded-lg backdrop-blur-md shadow-md"
-                    dir="rtl"
-                  >
-                    <h3 className="text-2xl text-black font-semibold mb-4 border-b border-gray-400 pb-2">
-                      جابجایی سکشن
-                    </h3>
-                    <DndContext
-                      sensors={sensors}
-                      collisionDetection={closestCenter}
-                      onDragEnd={handleDragEnd}
+                    {/* Handle Bar */}
+                    <div className="flex justify-center py-3 bg-gradient-to-b from-gray-50 to-transparent">
+                      <div className="w-12 h-1.5 bg-gray-300 rounded-full" />
+                    </div>
+
+                    {/* Close Button */}
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="absolute top-4 left-4 w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors z-[10000]"
+                      onClick={() => setShowOrdersMenu(false)}
                     >
-                      <SortableContext
-                        items={orders}
-                        strategy={verticalListSortingStrategy}
+                      <svg
+                        className="w-5 h-5 text-gray-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
                       >
-                        {orders.map((id: string) => (
-                          <SortableItem key={id} id={id} />
-                        ))}
-                      </SortableContext>
-                    </DndContext>
-                  </div>
-                </motion.div>
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </motion.button>
+
+                    {/* Content */}
+                    <div
+                      className="px-6 pb-8 overflow-y-auto max-h-[calc(85vh-80px)]"
+                      dir="rtl"
+                    >
+                      <div className="mb-6">
+                        <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                          جابجایی سکشن
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          برای تغییر ترتیب، آیتم‌ها را بکشید و رها کنید
+                        </p>
+                      </div>
+
+                      <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-gray-100">
+                        <DndContext
+                          sensors={sensors}
+                          collisionDetection={closestCenter}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <SortableContext
+                            items={orders}
+                            strategy={verticalListSortingStrategy}
+                          >
+                            <div className="space-y-2">
+                              {orders.map((id: string) => (
+                                <SortableItem key={id} id={id} />
+                              ))}
+                            </div>
+                          </SortableContext>
+                        </DndContext>
+                      </div>
+                    </div>
+                  </motion.div>
+                </>
               )}
             </AnimatePresence>
 
@@ -1208,96 +1379,168 @@ export const Form = () => {
               </div>
 
               {/* Add the orders button here */}
-              <div className="flex justify-between items-center px-4">
+              <div className="flex justify-between items-center gap-2 px-4">
                 <button
                   onClick={() => setShowOrdersMenu(!showOrdersMenu)}
                   className={
                     !showOrdersMenu
-                      ? `w-fit m-2 px-4 py-2 bg-blue-500 text-white rounded-full  transition-colors`
-                      : "w-fit m-2 px-4 py-2 bg-yellow-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                      ? `w-fit  px-4 py-2 bg-blue-500 text-white rounded-xl  transition-colors`
+                      : "w-fit  px-4 py-2 bg-yellow-500 text-white rounded-xl hover:bg-red-600 transition-colors"
                   }
                 >
                   {!showOrdersMenu ? "جابجایی" : "منو"}
                 </button>
+                <motion.button
+                  id="aiAssistant"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setIsAIModalOpen(true)}
+                  className={`   text-xs font-semibold px-4 py-2 bg-purple-600 rounded-xl justify-start border-gray-400   
+                   transition-all duration-300 transform`}
+                >
+                  <RiRobot3Line className="w-5 h-5 text-white" />
+                </motion.button>
                 {!showOrdersMenu && (
                   <button
                     onClick={() => setIsModalOpen(true)}
-                    className="m-2 px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors"
+                    className=" px-4 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-colors"
                   >
                     {!isModalOpen ? "انتخاب سکشن" : "بازگشت به تنظیمات"}
                   </button>
                 )}
                 <AnimatePresence>
                   {isModalOpen && (
-                    <motion.div
-                      dir="rtl"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="fixed inset-0 bg-black bg-opacity-50 min-h-screen overflow-y-auto flex items-center justify-center z-[9999]"
-                    >
+                    <>
+                      {/* Backdrop */}
                       <motion.div
-                        initial={{ y: "100%" }}
-                        animate={{ y: 0 }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9998]"
+                        onClick={() => setIsModalOpen(false)}
+                      />
+
+                      {/* Modal */}
+                      <motion.div
+                        dir="rtl"
+                        initial={{ opacity: 0, y: "100%" }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: "100%" }}
                         transition={{
                           type: "spring",
-                          damping: 30,
                           stiffness: 300,
-                          duration: 0.6,
+                          damping: 30,
+                          duration: 0.4,
                         }}
-                        className="bg-white/60 relative backdrop-blur-sm h-[100vh] rounded-2xl  w-full overflow-y-auto shadow-lg"
+                        className="fixed bottom-0 left-0 right-0 max-h-[85vh] bg-white/95 backdrop-blur-xl shadow-2xl overflow-hidden z-[9999] rounded-t-3xl border-t border-gray-200"
                       >
-                        <div className="mb-4 absolute top-2 right-2 z-10">
-                          <motion.button
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            onClick={() => setIsModalOpen(false)}
-                            className="text-white hover:text-gray-700 text-2xl p-1 font-bold"
-                          >
-                            ✕
-                          </motion.button>
+                        {/* Handle Bar */}
+                        <div className="flex justify-center py-3 bg-gradient-to-b from-gray-50 to-transparent">
+                          <div className="w-12 h-1.5 bg-gray-300 rounded-full" />
                         </div>
-                        {/* Modal content will go here */}
-                        <motion.div
-                          initial={{ y: 0, opacity: 0 }}
-                          animate={{ y: 20, opacity: 1 }}
-                          transition={{ delay: 0.3 }}
-                          className="p-2 overflow-y-visible w-[80%] mx-auto mb-72 z-50 flex flex-col items-center gap-2"
+
+                        {/* Close Button */}
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          className="absolute top-4 left-4 w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors z-[10000]"
+                          onClick={() => setIsModalOpen(false)}
                         >
-                          {smSections.map(
-                            ({
-                              name,
-                              title,
-                              image,
-                              height = "12rem",
-                              backgroundSize = "cover",
-                              backgroundPosition = "center",
-                            }) => (
-                              <div
-                                key={name}
-                                onClick={() => addSection(name)}
-                                className="flex flex-col cursor-pointer items-center w-full h-48 bg-cover bg-center bg-no-repeat hover:scale-95 transition-all duration-300 relative group"
-                                style={{
-                                  ...imageContainerStyle,
-                                  backgroundImage: `url(${image})`,
-                                  backgroundSize,
-                                  backgroundPosition,
-                                  backgroundRepeat: "no-repeat",
-                                  maxWidth: "100%",
-                                  height,
-                                }}
-                              >
-                                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                                <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                  {title}
-                                </span>
-                              </div>
-                            )
-                          )}
-                        </motion.div>
+                          <svg
+                            className="w-5 h-5 text-gray-600"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </motion.button>
+
+                        {/* Content */}
+                        <div className="px-6 pb-8 overflow-y-auto max-h-[calc(85vh-80px)]">
+                          <div className="mb-6">
+                            <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                              انتخاب سکشن
+                            </h3>
+                            <p className="text-sm text-gray-600">
+                              سکشن مورد نظر خود را انتخاب کنید
+                            </p>
+                          </div>
+
+                          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-gray-100">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                              {smSections.map(
+                                ({
+                                  name,
+                                  title,
+                                  image,
+                                  height = "160px",
+                                  backgroundSize = "cover",
+                                  backgroundPosition = "center",
+                                }) => (
+                                  <motion.div
+                                    key={name}
+                                    whileHover={{ scale: 1.02, y: -2 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    onClick={() => addSection(name)}
+                                    className="relative cursor-pointer rounded-2xl overflow-hidden shadow-lg border-2 border-gray-200 hover:border-blue-300 transition-all duration-300 group bg-white"
+                                    style={{ height }}
+                                  >
+                                    {/* Background Image */}
+                                    {image && (
+                                      <div
+                                        className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-110"
+                                        style={{
+                                          backgroundImage: `url(${image})`,
+                                          backgroundSize,
+                                          backgroundPosition,
+                                          backgroundRepeat: "no-repeat",
+                                        }}
+                                      />
+                                    )}
+
+                                    {/* Overlay */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
+
+                                    {/* Content */}
+                                    <div className="absolute inset-0 flex flex-col justify-end p-4">
+                                      <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                                        <h3 className="text-white text-lg font-bold mb-2 drop-shadow-lg">
+                                          {title}
+                                        </h3>
+                                        <div className="w-12 h-1 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                      </div>
+                                    </div>
+
+                                    {/* Add Icon */}
+                                    <div className="absolute top-4 left-4 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                      <svg
+                                        className="w-5 h-5 text-blue-600"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth={2}
+                                          d="M12 4v16m8-8H4"
+                                        />
+                                      </svg>
+                                    </div>
+                                  </motion.div>
+                                )
+                              )}
+                            </div>
+                          </div>
+                        </div>
                       </motion.div>
-                    </motion.div>
+                    </>
                   )}
                 </AnimatePresence>
               </div>

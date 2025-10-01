@@ -309,26 +309,17 @@ const ActionButtons = styled.div`
   }
 `;
 
-const LoginButton = styled.button`
+const LoginButton = styled.button<{ $data: HeaderSection }>`
   display: flex;
+  color: ${(props) => props.$data.blocks.setting?.itemColor || "#1f2937"};
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.25rem;
-  color: #64748b;
   text-wrap: nowrap;
   font-weight: 500;
   font-size: 14px;
-  background: #ffffff;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
-
-  &:hover {
-    border-color: #cbd5e1;
-    background: #f8fafc;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    color: #475569;
-  }
 
   &:active {
     transform: translateY(0);
@@ -346,7 +337,7 @@ const MobileMenuButton = styled.button<{
   border: 1px solid #e2e8f0;
   border-radius: 12px;
   padding: 0.5rem;
-  z-index: 90;
+  z-index: 30;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -724,7 +715,7 @@ const Header: React.FC<HeaderProps> = ({
       document.body.style.width = "";
     };
   }, []);
-
+ 
   useEffect(() => {
     if (layout?.sections?.sectionHeader) {
     }
@@ -806,11 +797,18 @@ const Header: React.FC<HeaderProps> = ({
               </LogoContainer> */}
               <ActionButtons>
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
-                    <ShoppingCart className="text-gray-600" size={20} />
+                  <div className="p-2 transition-colors duration-200">
+                    <ShoppingCart
+                      className={`text-[${sectionData.blocks.setting?.itemColor}]`}
+                      size={20}
+                    />{" "}
                   </div>
-                  <LoginButton>
-                    <User size={16} /> ورود | ثبت‌نام
+                  <LoginButton $data={sectionData}>
+                    <User
+                      className={`text-[${sectionData.blocks.setting?.itemColor}]`}
+                      size={16}
+                    />{" "}
+                    ورود | ثبت‌نام
                   </LoginButton>
                 </div>
               </ActionButtons>
@@ -1091,11 +1089,18 @@ const Header: React.FC<HeaderProps> = ({
           </NavContainer>
           <ActionButtons>
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
-                <ShoppingCart className="text-gray-600" size={20} />
+              <div className="p-2 rounded-lg   transition-colors duration-200">
+                <ShoppingCart
+                  className={`text-[${sectionData.blocks.setting?.itemColor}]`}
+                  size={20}
+                />
               </div>
-              <LoginButton>
-                <User size={16} /> ورود | ثبت‌نام
+              <LoginButton $data={sectionData}>
+                <User
+                  className={`text-[${sectionData.blocks.setting?.itemColor}]`}
+                  size={16}
+                />{" "}
+                ورود | ثبت‌نام
               </LoginButton>
             </div>
           </ActionButtons>
