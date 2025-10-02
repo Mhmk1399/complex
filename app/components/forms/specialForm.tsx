@@ -45,7 +45,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
       "Content-Type": "application/json",
       Authorization:
         typeof window !== "undefined"
-          ? localStorage.getItem("complexToken") || ""
+          ? localStorage.getItem("token") || ""
           : "",
     },
   });

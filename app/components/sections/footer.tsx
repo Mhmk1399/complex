@@ -334,7 +334,7 @@ const Footer: React.FC<FooterProps> = ({
     const fetchCategories = async () => {
       try {
         const headers: HeadersInit = {
-          Authorization: `Bearer ${localStorage.getItem("complexToken")}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
         };
 

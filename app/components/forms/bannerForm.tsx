@@ -3,6 +3,7 @@ import { Compiler } from "../compiler";
 import { Layout, BannerSection, AnimationEffect } from "@/lib/types";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
+import ImageSelectorModal from "../sections/ImageSelectorModal";
 import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
 import { HiSparkles, HiChevronDown } from "react-icons/hi";
@@ -49,6 +50,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
   const [isAnimationOpen, setIsAnimationOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isImageSelectorOpen, setIsImageSelectorOpen] = useState(false);
 
   const handleUpdate = (
     type: "margin" | "padding",
@@ -275,13 +277,23 @@ export const BannerForm: React.FC<BannerFormProps> = ({
             <label className="block mb-2 text-sm font-bold text-gray-700">
               آپلود عکس
             </label>
-            <input
-              type="text"
-              name="imageSrc"
-              value={userInputData?.blocks?.imageSrc ?? ""}
-              onChange={handleBlockChange}
-              className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-            />
+            <div className="flex flex-col gap-2">
+              <input
+                type="text"
+                name="imageSrc"
+                value={userInputData?.blocks?.imageSrc ?? ""}
+                onChange={handleBlockChange}
+                className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                placeholder="آدرس تصویر"
+              />
+              <button
+                onClick={() => setIsImageSelectorOpen(true)}
+                className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+                type="button"
+              >
+                انتخاب تصویر
+              </button>
+            </div>
           </div>
           <div className="rounded-lg">
             <label className="block mb-2 text-sm font-bold text-gray-700">
@@ -809,6 +821,21 @@ export const BannerForm: React.FC<BannerFormProps> = ({
           </div>
         </div>
       )}
+
+      <ImageSelectorModal
+        isOpen={isImageSelectorOpen}
+        onClose={() => setIsImageSelectorOpen(false)}
+        onSelectImage={(image) => {
+          setUserInputData((prev: BannerSection) => ({
+            ...prev,
+            blocks: {
+              ...prev.blocks,
+              imageSrc: image.url,
+            },
+          }));
+          setIsImageSelectorOpen(false);
+        }}
+      />
     </div>
   );
 };

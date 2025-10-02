@@ -629,7 +629,7 @@ const Header: React.FC<HeaderProps> = ({
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const token = localStorage.getItem("complexToken");
+      const token = localStorage.getItem("token");
       console.log("token", token);
       if (!token) {
         return NextResponse.json(

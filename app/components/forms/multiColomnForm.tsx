@@ -1493,7 +1493,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
               ...prev.blocks,
               [currentEditingIndex]: {
                 ...prev.blocks[currentEditingIndex],
-                [`imageSrc${columnNum}`]: image.fileUrl,
+                [`imageSrc${columnNum}`]: image.url,
                 [`imageAlt${columnNum}`]: image.filename,
               },
             },
