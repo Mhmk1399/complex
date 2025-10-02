@@ -271,9 +271,10 @@ const CategoryItem = styled.span<{ $data: HeaderSection }>`
   }
 `;
 
-const MegaMenuTitle = styled.h3`
+const MegaMenuTitle = styled.h3<{ $data: HeaderSection }>`
   font-size: 1rem;
-  color: #1e293b;
+  color: ${(props) =>
+    props.$data.blocks.setting?.categoryItemColor || "#64748b"};
   text-wrap: nowrap;
   text-align: right;
   font-weight: 600;
@@ -837,14 +838,16 @@ const Header: React.FC<HeaderProps> = ({
                                 className="block"
                               >
                                 <div
-                                  className={`py-3 px-4 rounded-lg ml-2 cursor-pointer transition-all duration-300 ${
+                                  className={`py-3 px-4 rounded-lg ml-2 cursor-pointer  ${
                                     idx === hoverd
-                                      ? "bg-blue-50 border-l-4 border-blue-400 font-semibold text-blue-700"
+                                      ? "bg-blue-50 border-r border-blue-400 font-semibold text-blue-700"
                                       : "hover:bg-gray-50"
                                   }`}
                                   onMouseEnter={() => setHoverd(idx)}
                                 >
-                                  <MegaMenuTitle>{category.name}</MegaMenuTitle>
+                                  <MegaMenuTitle $data={sectionData}>
+                                    {category.name}
+                                  </MegaMenuTitle>
                                 </div>
                               </Link>
                             ))}
@@ -1040,14 +1043,16 @@ const Header: React.FC<HeaderProps> = ({
                                 className="block"
                               >
                                 <div
-                                  className={`py-3 px-4 rounded-lg ml-2 cursor-pointer transition-all duration-300 ${
+                                  className={`py-3 px-4 ml-2 cursor-pointer ${
                                     idx === hoverd
-                                      ? "bg-blue-50 border-l-4 border-blue-400 font-semibold text-blue-700"
-                                      : "hover:bg-gray-50"
+                                      ? " border-r-2 font-semibold  "
+                                      : ""
                                   }`}
                                   onMouseEnter={() => setHoverd(idx)}
                                 >
-                                  <MegaMenuTitle>{category.name}</MegaMenuTitle>
+                                  <MegaMenuTitle $data={sectionData}>
+                                    {category.name}
+                                  </MegaMenuTitle>
                                 </div>
                               </Link>
                             ))}
@@ -1063,7 +1068,7 @@ const Header: React.FC<HeaderProps> = ({
                                 <Link
                                   href="#"
                                   key={child._id}
-                                  className="p-3 hover:translate-x-[2px] rounded-lg transition-all duration-300 text-right group hover:bg-blue-50"
+                                  className="p-3 hover:translate-x-[2px] rounded-lg transition-all duration-300 text-right group  "
                                 >
                                   <CategoryItem $data={sectionData}>
                                     {child.name}
@@ -1089,15 +1094,15 @@ const Header: React.FC<HeaderProps> = ({
           </NavContainer>
           <ActionButtons>
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg   transition-colors duration-200">
+              <div className="p-2 rounded-lg transition-colors duration-200">
                 <ShoppingCart
-                  className={`text-[${sectionData.blocks.setting?.itemColor}]`}
+                  style={{ color: sectionData.blocks.setting?.itemColor }}
                   size={20}
                 />
               </div>
               <LoginButton $data={sectionData}>
                 <User
-                  className={`text-[${sectionData.blocks.setting?.itemColor}]`}
+                  style={{ color: sectionData.blocks.setting?.itemColor }}
                   size={16}
                 />{" "}
                 ورود | ثبت‌نام
@@ -1106,76 +1111,6 @@ const Header: React.FC<HeaderProps> = ({
           </ActionButtons>
         </div>
       </MainSection>
-
-      {/* <NavContainer className="justify-end">
-        <NavList $previewWidth={previewWidth} $data={sectionData}>
-          {sectionData.blocks.links?.map((link, index) => (
-            <NavItemWrapper key={index}>
-              {link.name === "دسته‌بندی کالاها" ? (
-                <>
-                  <NavItem href="#" $data={sectionData}>
-                    <CategoryIconWrapper>
-                      {link.name}
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      >
-                        <path d="M4 6h16M4 12h16M4 18h16" />
-                      </svg>
-                    </CategoryIconWrapper>
-                  </NavItem>
-                  <MegaMenu $data={sectionData}>
-                    <div className="flex flex-col w-1/4 border-l border-gray-200 pl-4">
-                      {categories
-                        ?.filter((category) => category.children.length > 0)
-                        .map((category, idx) => (
-                          <Link href="#" key={category._id} className="block">
-                            <div
-                              className={`py-3 px-4 rounded-lg ml-2 cursor-pointer transition-all duration-300 ${
-                                idx === hoverd
-                                  ? "bg-blue-50 border-l-4 border-blue-400 font-semibold text-blue-700"
-                                  : "hover:bg-gray-50"
-                              }`}
-                              onMouseEnter={() => setHoverd(idx)}
-                            >
-                              <MegaMenuTitle>{category.name}</MegaMenuTitle>
-                            </div>
-                          </Link>
-                        ))}
-                    </div>
-
-                    <div className="flex-1 p-6">
-                      <div className="grid grid-cols-3 gap-6">
-                        {categories
-                          ?.filter((category) => category.children.length > 0)
-                          [hoverd]?.children.map((child) => (
-                            <Link
-                              href="#"
-                              key={child._id}
-                              className="p-3 hover:translate-x-[2px] rounded-lg transition-all duration-300 text-right group hover:bg-blue-50"
-                            >
-                              <CategoryItem $data={sectionData}>
-                                {child.name}
-                              </CategoryItem>
-                            </Link>
-                          ))}
-                      </div>
-                    </div>
-                  </MegaMenu>
-                </>
-              ) : (
-                <NavItem href="#" $data={sectionData}>
-                  {link.name}
-                </NavItem>
-              )}
-            </NavItemWrapper>
-          ))}
-        </NavList>
-      </NavContainer> */}
 
       <Overlay $isOpen={isMenuOpen} onClick={handleOverlayClick} />
 

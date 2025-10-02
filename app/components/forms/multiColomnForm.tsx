@@ -875,7 +875,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
                 onChange={handleSettingChange}
               />
               <ColorInput
-                label="رنگ سربرگ"
+                label="رنگ  "
                 name="descriptionColor"
                 value={userInputData?.setting?.descriptionColor ?? "#ffffff"}
                 onChange={handleSettingChange}

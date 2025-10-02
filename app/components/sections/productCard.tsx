@@ -140,7 +140,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const currentImageIndex = 0;
   console.log(productData.images);
 
-  const currentImage = productData.images[currentImageIndex] || {
+  const currentImage = productData.images?.[currentImageIndex] || {
     imageSrc: "",
     imageAlt: "",
   };
