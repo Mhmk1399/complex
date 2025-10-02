@@ -35,7 +35,8 @@ const Card = styled.div<{
   background: ${(props) => props.$setting?.cardBackground};
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   height: 380px;
-  min-width: 250px;
+  min-width: 320px;
+
 
   margin: ${(props) => (props.$previewWidth === "sm" ? "10px" : "")};
   @media (max-width: 768px) {
@@ -50,6 +51,7 @@ const ProductImage = styled(Image)<{
 }>`
   object-fit: cover;
   width: 100%;
+  max-width: 320px;
   padding: ${(props) => props.$settings?.imagePadding}px;
   height: 200px;
   border-radius: ${(props) => props.$settings?.imageRadius}px;
@@ -140,9 +142,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const currentImageIndex = 0;
   console.log(productData.images);
 
-  const currentImage = productData.images[currentImageIndex] || {
-    imageSrc: "",
-    imageAlt: "",
+  const currentImage = (productData.images && productData.images[currentImageIndex]) || {
+    imageSrc: "/assets/images/pro2.jpg",
+    imageAlt: "Product Image",
   };
 
   return (
@@ -160,7 +162,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         {productData.name}
       </ProductName>
       <ProductDescription $settings={settings} $productData={productData}>
-        {productData.description.slice(0, 30)}...
+        {productData.description ? productData.description.slice(0, 30) + "..." : "توضیحات محصول"}
       </ProductDescription>
       <ProductPrice $settings={settings} $productData={productData}>
         {productData.price}

@@ -286,21 +286,39 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
     baseUrl: "/api",
     headers: {
       "Content-Type": "application/json",
+      Authorization:
+        typeof window !== "undefined"
+          ? localStorage.getItem("token") || ""
+          : "",
     },
   });
 
   const collectionId = sectionData?.blocks?.setting?.selectedCollection;
-  const { data: collectionsData, error: collectionsError } = api.useGet(
-    collectionId ? "/collections/id" : null,
+  const [specialOfferProducts, setSpecialOfferProducts] = useState<ProductCardType[]>([]);
+  
+  const { data: collectionsData } = api.useGet(
+    "/collections",
     {
-      headers: { collectionId },
       revalidateOnFocus: false,
       refreshInterval: 60000,
     }
   );
 
-  const specialOfferProducts =
-    collectionsData?.collections?.[0]?.products || [];
+  useEffect(() => {
+    if (collectionId && collectionsData?.product) {
+      const selectedCollection = collectionsData.product.find(
+        (col: any) => col._id === collectionId
+      );
+      
+      if (selectedCollection?.products) {
+        setSpecialOfferProducts(selectedCollection.products);
+      } else {
+        setSpecialOfferProducts([]);
+      }
+    } else {
+      setSpecialOfferProducts([]);
+    }
+  }, [collectionId, collectionsData]);
 
   useEffect(() => {
     const handleResize = () => {

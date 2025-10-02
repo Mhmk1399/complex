@@ -29,10 +29,10 @@ const ScrollContainer = styled.div<{
   padding-bottom: ${(props) => props.$data.setting.paddingBottom}px;
   padding-left: ${(props) => props.$data.setting.paddingLeft}px;
   padding-right: ${(props) => props.$data.setting.paddingRight}px;
-  height: ${(props) => props.$data.blocks.setting.height || 200}px;
   background-color: ${(props) =>
     props.$data.setting?.backgroundColor || "#ffffff"};
-  border-radius: ${(props) => props.$data.blocks?.setting?.Radius || "5"}px;
+  min-height: ${(props) => props.$data.blocks.setting.height}px;
+
   box-shadow: ${(props) =>
     `${props.$data.blocks.setting?.shadowOffsetX || 0}px 
      ${props.$data.blocks.setting?.shadowOffsetY || 4}px 
@@ -47,7 +47,7 @@ const ProductsRowSection = styled.section<{
 }>`
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   height: auto;
@@ -78,38 +78,36 @@ const Heading = styled.h2<{
     `${props.$data.blocks?.setting?.headingFontSize || "32"}px`};
   font-weight: ${(props) =>
     props.$data.blocks?.setting?.headingFontWeight || "bold"};
-  text-align: right;
-  margin-bottom: 20px;
-  padding-top: 5px;
-  border-bottom: 1px solid
-    ${(props) => props.$data.blocks?.setting?.headingColor || "#000000"};
+  text-align: center;
 `;
 
 const ScrollButton = styled.button<{
   $data: ProductRowSection;
-  $position: "left" | "right";
 }>`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  ${(props) => props.$position}: 10px;
   background-color: ${(props) =>
-    props.$data.blocks?.setting?.btnBackgroundColor || "#fff"};
-  color: ${(props) => props.$data.blocks?.setting?.btnColor || "#000"};
+    props.$data.blocks?.setting?.btnBackgroundColor || "#000000"};
+  color: ${(props) => props.$data.blocks?.setting?.btnColor || "#000000"};
   border: none;
   border-radius: ${(props) => props.$data.blocks?.setting?.btnRadius || "5"}px;
   width: 40px;
+  opacity: 0.8;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 10;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
 
-  &:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  &.left {
+    left: 10px;
+  }
+
+  &.right {
+    right: 10px;
   }
 
   /* Apply navigation button animations */
@@ -288,20 +286,39 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
     baseUrl: "/api",
     headers: {
       "Content-Type": "application/json",
+      Authorization:
+        typeof window !== "undefined"
+          ? localStorage.getItem("token") || ""
+          : "",
     },
   });
 
   const collectionId = sectionData?.blocks?.setting?.selectedCollection;
-  const { data: collectionsData, error: collectionsError } = api.useGet(
-    collectionId ? "/collections/id" : null,
+  const [collectionProducts, setCollectionProducts] = useState<any[]>([]);
+  
+  const { data: collectionsData } = api.useGet(
+    "/collections",
     {
-      headers: { collectionId },
       revalidateOnFocus: false,
       refreshInterval: 60000,
     }
   );
 
-  const collectionProducts = collectionsData?.collections?.[0]?.products || [];
+  useEffect(() => {
+    if (collectionId && collectionsData?.product) {
+      const selectedCollection = collectionsData.product.find(
+        (col: any) => col._id === collectionId
+      );
+      
+      if (selectedCollection?.products) {
+        setCollectionProducts(selectedCollection.products);
+      } else {
+        setCollectionProducts([]);
+      }
+    } else {
+      setCollectionProducts([]);
+    }
+  }, [collectionId, collectionsData]);
 
   // Move both useEffect hooks here, before  returns
   useEffect(() => {
@@ -389,27 +406,37 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
           </div>
         )}
 
-        <Heading
-          dir="rtl"
-          $data={sectionData}
-          $isMobile={preview === "sm"}
-          className="w-fit ml-auto mr-3 text-center"
-        >
-          {sectionData.blocks?.textHeading}
-        </Heading>
-
         <ProductsRowSection
           ref={containerRef}
           $data={sectionData}
           $isMobile={preview === "sm"}
         >
-          {collectionProducts.length > 0 ? (
+          <div className="flex flex-col items-center justify-center gap-y-10 px-10">
+            <Heading $data={sectionData} $isMobile={preview === "sm"}>
+              {sectionData.blocks?.textHeading}
+            </Heading>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="50px"
+              viewBox="0 -960 960 960"
+              width="50px"
+              fill={sectionData.blocks?.setting.headingColor}
+            >
+              <path d="M300-520q-58 0-99-41t-41-99q0-58 41-99t99-41q58 0 99 41t41 99q0 58-41 99t-99 41Zm0-80q25 0 42.5-17.5T360-660q0-25-17.5-42.5T300-720q-25 0-42.5 17.5T240-660q0 25 17.5 42.5T300-600Zm360 440q-58 0-99-41t-41-99q0-58 41-99t99-41q58 0 99 41t41 99q0 58-41 99t-99 41Zm0-80q25 0 42.5-17.5T720-300q0-25-17.5-42.5T660-360q-25 0-42.5 17.5T600-300q0 25 17.5 42.5T660-240Zm-444 80-56-56 584-584 56 56-584 584Z" />
+            </svg>
+          </div>
+
+          {collectionProducts.length > 0 &&
             collectionProducts.map((product: any, idx: number) => (
               <ProductCard key={idx} productData={product} />
-            ))
-          ) : (
+            ))}
+          {collectionProducts.length === 0 && (
             <div className="flex flex-row items-center justify-start lg:justify-end w-full">
-              <span className="text-gray-500 text-xl justify-center text-center w-full flex lg:gap-5">
+              <span
+                className={`text-gray-500 ${
+                  preview === "sm" ? "text-base" : "text-xl"
+                } justify-center text-center w-full flex lg:gap-5`}
+              >
                 لطفا یک مجموعه را انتخاب کنید
               </span>
             </div>
@@ -418,17 +445,17 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
 
         {/* Navigation Buttons with Animation */}
         <ScrollButton
-          $data={sectionData}
-          $position="left"
+          className="left"
           onClick={() => handleScroll("left")}
+          $data={sectionData}
         >
           <BiChevronLeft size={24} />
         </ScrollButton>
 
         <ScrollButton
-          $data={sectionData}
-          $position="right"
+          className="right"
           onClick={() => handleScroll("right")}
+          $data={sectionData}
         >
           <BiChevronRight size={24} />
         </ScrollButton>

@@ -162,7 +162,44 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
       },
     }));
 
+    // If collection is selected, fetch its products
+    if (name === "selectedCollection" && value) {
+      fetchCollectionProducts(value);
+    }
+
     setTimeout(() => setIsUpdating(false), 100);
+  };
+
+  const fetchCollectionProducts = async (collectionId: string) => {
+    try {
+      const response = await fetch(`/api/collections`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: localStorage.getItem("token") || "",
+        },
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        const selectedCollection = data.product?.find(
+          (col: any) => col._id === collectionId
+        );
+        
+        if (selectedCollection?.products) {
+          const collectionData = {
+            collectionId,
+            products: selectedCollection.products,
+            timestamp: Date.now(),
+          };
+          localStorage.setItem(
+            `collection_${collectionId}`,
+            JSON.stringify(collectionData)
+          );
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching collection products:", error);
+    }
   };
 
   const handleSettingChange = (

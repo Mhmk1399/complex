@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import collections from "@/models/collections";
 import products from "@/models/products";
+import category from "@/models/category";
 
 export async function GET(request: NextRequest) {
   // Establish database connection
@@ -83,28 +84,46 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  // Fetch products
+  // Fetch collections and populate products from Products collection
   try {
-    const product = await collections.find({ storeId }).populate({
-      path: "products",
-    model:products
-    });
-
-    if (!products || products.length === 0) {
-      console.warn(`No products found for storeId: ${storeId}`);
+    const collectionsData = await collections.find({ storeId });
+    
+    if (!collectionsData || collectionsData.length === 0) {
       return NextResponse.json(
-        { 
-          message: "No products found", 
-          storeId: storeId 
-        }, 
+        { message: "No collections found" },
         { status: 404 }
       );
     }
 
+    // For each collection, get the actual product data from Products collection
+    const collectionsWithProducts = await Promise.all(
+      collectionsData.map(async (collection) => {
+        const productIds = collection.products.map((p: any) => p._id).filter(Boolean);
+        
+        if (productIds.length > 0) {
+          const actualProducts = await products.find({
+            _id: { $in: productIds },
+            storeId: storeId
+          }).populate({
+            path: "category",
+            model: category
+          });
+          
+          return {
+            ...collection.toObject(),
+            products: actualProducts
+          };
+        }
+        
+        return {
+          ...collection.toObject(),
+          products: []
+        };
+      })
+    );
+
     return NextResponse.json(
-      { 
-        product, 
-      }, 
+      { product: collectionsWithProducts },
       { status: 200 }
     );
   } catch (fetchError) {
