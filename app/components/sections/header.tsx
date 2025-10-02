@@ -18,6 +18,7 @@ import {
   X,
 } from "lucide-react";
 import { NextResponse } from "next/server";
+import { useUserInfo } from "@/hooks/useUserInfo";
 
 interface HeaderProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
@@ -600,6 +601,7 @@ const Header: React.FC<HeaderProps> = ({
   const [hoverd, setHoverd] = useState(0);
   const [categories, setCategories] = useState<Category[]>([]);
   const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
+  const { basic } = useUserInfo();
 
   const toggleMenu = useCallback(() => {
     const newState = !isMenuOpen;
@@ -904,7 +906,11 @@ const Header: React.FC<HeaderProps> = ({
           <MobileMenuHeader $data={sectionData}>
             <Logo
               $data={sectionData}
-              src={sectionData.blocks.imageLogo || "/assets/images/logo.webp"}
+              src={
+                basic?.logo ||
+                sectionData.blocks.imageLogo ||
+                "/assets/images/logo.webp"
+              }
               alt={sectionData.blocks.imageAlt}
               style={{ width: "50px", height: "50px" }}
             />
@@ -1010,8 +1016,8 @@ const Header: React.FC<HeaderProps> = ({
             <Link className="ml-auto" href="#">
               <Logo
                 $data={sectionData}
-                src={sectionData.blocks.imageLogo || "/assets/images/logo.webp"}
-                alt={sectionData.blocks.imageAlt}
+                src={basic?.logo || "/assets/images/logo.webp"}
+                alt="لوگو"
               />
             </Link>
           </LogoContainer>
@@ -1125,7 +1131,11 @@ const Header: React.FC<HeaderProps> = ({
         <MobileMenuHeader $data={sectionData}>
           <Logo
             $data={sectionData}
-            src={sectionData.blocks.imageLogo || "/assets/images/logo.webp"}
+            src={
+              basic?.logo ||
+              sectionData.blocks.imageLogo ||
+              "/assets/images/logo.webp"
+            }
             alt={sectionData.blocks.imageAlt}
             style={{ width: "50px", height: "50px" }}
           />

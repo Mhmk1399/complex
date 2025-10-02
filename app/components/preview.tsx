@@ -23,6 +23,7 @@ import { Brands } from "./sections/brands";
 import { ProductsRow } from "./sections/productsRow";
 import { useSharedContext } from "@/app/contexts/SharedContext";
 import CanvasEditor from "./sections/canvasEditor";
+import ClientWrapper from "./ClientWrapper";
 
 export const Preview: React.FC = () => {
   const {
@@ -34,8 +35,6 @@ export const Preview: React.FC = () => {
     previewWidth,
     isFormOpen,
   } = useSharedContext();
-
-  console.log(layout, "llllllllllll");
 
   const componentMap = {
     Header,
@@ -65,58 +64,60 @@ export const Preview: React.FC = () => {
 
   return (
     <div>
-      <div
-        className={`flex relative justify-center pt-5 ${
-          previewWidth === "default" ? "flex-col" : ""
-        }`}
-      >
+      <ClientWrapper>
         <div
-          data-preview-container="true"
-          className={`h-[85vh] relative border border-gray-200 rounded-lg overflow-y-auto mx-2 scrollbar-hide  ${
-            previewWidth === "sm" && "w-[425px]"
-          } ${previewWidth === "default" && isFormOpen && ""} `}
+          className={`flex relative justify-center pt-5 ${
+            previewWidth === "default" ? "flex-col" : ""
+          }`}
         >
-          <Header
-            setSelectedComponent={setSelectedComponent}
-            layout={layout}
-            selectedComponent={selectedComponent}
-            previewWidth={previewWidth}
-          />
+          <div
+            data-preview-container="true"
+            className={`h-[85vh] relative border border-gray-200 rounded-lg overflow-y-auto mx-2 scrollbar-hide  ${
+              previewWidth === "sm" && "w-[425px]"
+            } ${previewWidth === "default" && isFormOpen && ""} `}
+          >
+            <Header
+              setSelectedComponent={setSelectedComponent}
+              layout={layout}
+              selectedComponent={selectedComponent}
+              previewWidth={previewWidth}
+            />
 
-          <div className="grid grid-cols-1">
-            {orders.map((componentName, index) => {
-              const baseComponentName = componentName.split("-")[0];
-              const Component =
-                componentMap[baseComponentName as keyof typeof componentMap];
+            <div className="grid grid-cols-1">
+              {orders.map((componentName, index) => {
+                const baseComponentName = componentName.split("-")[0];
+                const Component =
+                  componentMap[baseComponentName as keyof typeof componentMap];
 
-              return Component ? (
-                <div
-                  key={componentName}
-                  style={{ order: index }}
-                  className="w-full"
-                >
-                  <Component
-                    setSelectedComponent={setSelectedComponent}
-                    layout={layout}
-                    actualName={componentName}
-                    selectedComponent={selectedComponent}
-                    setLayout={setLayout}
-                    productId={"674c044a7e265babdd061919"}
-                    blogId={"674dc8d6cf4d515adfa1a31f"}
-                    previewWidth={previewWidth}
-                  />
-                </div>
-              ) : null;
-            })}
+                return Component ? (
+                  <div
+                    key={componentName}
+                    style={{ order: index }}
+                    className="w-full"
+                  >
+                    <Component
+                      setSelectedComponent={setSelectedComponent}
+                      layout={layout}
+                      actualName={componentName}
+                      selectedComponent={selectedComponent}
+                      setLayout={setLayout}
+                      productId={"674c044a7e265babdd061919"}
+                      blogId={"674dc8d6cf4d515adfa1a31f"}
+                      previewWidth={previewWidth}
+                    />
+                  </div>
+                ) : null;
+              })}
+            </div>
+            <Footer
+              setSelectedComponent={setSelectedComponent}
+              layout={layout}
+              selectedComponent={selectedComponent}
+              previewWidth={previewWidth}
+            />
           </div>
-          <Footer
-            setSelectedComponent={setSelectedComponent}
-            layout={layout}
-            selectedComponent={selectedComponent}
-            previewWidth={previewWidth}
-          />
         </div>
-      </div>
+      </ClientWrapper>
     </div>
   );
 };
