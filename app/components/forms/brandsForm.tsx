@@ -230,7 +230,7 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
   };
 
   const handleImageSelect = (image: any) => {
-    handleBrandChange(currentSlideIndex, "logo", image.fileUrl);
+    handleBrandChange(currentSlideIndex, "logo", image.url);
     setIsImageSelectorOpen(false);
   };
   const handleTabChange = (

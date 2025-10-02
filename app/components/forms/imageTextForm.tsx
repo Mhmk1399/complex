@@ -319,7 +319,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
   }, []);
 
   const handleImageSelect = (image: any) => {
-    handleContentChange("imageSrc", image.fileUrl);
+    handleContentChange("imageSrc", image.url);
     setIsImageSelectorOpen(false);
   };
 

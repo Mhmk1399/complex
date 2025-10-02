@@ -1515,7 +1515,7 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                 ...prev.blocks,
                 [currentEditingIndex]: {
                   ...prev.blocks[currentEditingIndex],
-                  imageSrc: image.fileUrl,
+                  imageSrc: image.url,
                 },
               },
             }));

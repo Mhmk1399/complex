@@ -272,7 +272,7 @@ export const Story: React.FC<StoryProps> = ({
       "Content-Type": "application/json",
       Authorization:
         typeof window !== "undefined"
-          ? localStorage.getItem("complexToken") || ""
+          ? localStorage.getItem("token") || ""
           : "",
     },
   });

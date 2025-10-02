@@ -296,8 +296,8 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
   }, []);
 
   const handleImageSelect = (image: any) => {
-    handleImageChange(currentSlideIndex, "imageSrc", image.fileUrl);
-    handleImageChange(currentSlideIndex, "imageAlt", image.fileName);
+    handleImageChange(currentSlideIndex, "imageSrc", image.url || image.fileUrl);
+    handleImageChange(currentSlideIndex, "imageAlt", image.filename || image.fileName);
     setIsImageSelectorOpen(false);
   };
 

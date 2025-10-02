@@ -4,6 +4,7 @@ import { Layout, SlideSection, SlideBlock, AnimationEffect } from "@/lib/types";
 import React from "react";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
+import ImageSelectorModal from "../sections/ImageSelectorModal";
 import { animationService } from "@/services/animationService";
 import { AnimationPreview } from "../animationPreview";
 import { HiChevronDown, HiSparkles } from "react-icons/hi";
@@ -38,6 +39,8 @@ export const SlideForm: React.FC<SlideFormProps> = ({
   const [isContentOpen, setIsContentOpen] = useState({});
   const [isAnimationOpen, setIsAnimationOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isImageSelectorOpen, setIsImageSelectorOpen] = useState(false);
+  const [currentEditingIndex, setCurrentEditingIndex] = useState<number>(0);
   const { activeRoutes } = useSharedContext();
   const [useRouteSelectBtn, setUseRouteSelectBtn] = useState(false);
   const [margin, setMargin] = useState<BoxValues>({
@@ -534,14 +537,27 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                         <label className="block mb-2 text-sm font-bold text-gray-700">
                           تصویر
                         </label>
-                        <input
-                          type="text"
-                          value={block.imageSrc || ""}
-                          onChange={(e) =>
-                            handleBlockChange(e, index, "imageSrc")
-                          }
-                          className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                        />
+                        <div className="flex flex-col gap-2">
+                          <input
+                            type="text"
+                            value={block.imageSrc || ""}
+                            onChange={(e) =>
+                              handleBlockChange(e, index, "imageSrc")
+                            }
+                            className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                            placeholder="آدرس تصویر"
+                          />
+                          <button
+                            onClick={() => {
+                              setCurrentEditingIndex(index);
+                              setIsImageSelectorOpen(true);
+                            }}
+                            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+                            type="button"
+                          >
+                            انتخاب تصویر
+                          </button>
+                        </div>
                       </div>
                       <div className="p-3  rounded-lg">
                         <label className="block mb-2 text-sm font-bold text-gray-700">
@@ -1573,6 +1589,25 @@ export const SlideForm: React.FC<SlideFormProps> = ({
             </div>
           </div>
         )}
+
+        <ImageSelectorModal
+          isOpen={isImageSelectorOpen}
+          onClose={() => setIsImageSelectorOpen(false)}
+          onSelectImage={(image) => {
+            setUserInputData((prev: SlideSection) => {
+              const blocks = [...prev.blocks];
+              blocks[currentEditingIndex] = {
+                ...blocks[currentEditingIndex],
+                imageSrc: image.url,
+              };
+              return {
+                ...prev,
+                blocks,
+              };
+            });
+            setIsImageSelectorOpen(false);
+          }}
+        />
       </div>
     </>
   );

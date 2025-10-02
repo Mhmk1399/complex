@@ -80,7 +80,7 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
       "Content-Type": "application/json",
       Authorization:
         typeof window !== "undefined"
-          ? localStorage.getItem("complexToken") || ""
+          ? localStorage.getItem("token") || ""
           : "",
     },
   });

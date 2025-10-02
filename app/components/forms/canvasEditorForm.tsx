@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Layout, AnimationEffect } from "@/lib/types"; // Add AnimationEffect import
 import { useCanvas } from "@/app/contexts/CanvasContext";
 import { animationService } from "@/services/animationService";
+import ImageSelectorModal from "../sections/ImageSelectorModal";
 
 // Import the types from the canvas editor component
 import { CanvasEditorSection, CanvasElement } from "@/lib/types"; // Import from types instead
@@ -79,6 +80,7 @@ const CanvasEditorForm: React.FC<CanvasEditorFormProps> = ({
   const [animationIntensity, setAnimationIntensity] = useState<
     "light" | "normal" | "strong"
   >("normal");
+  const [isImageSelectorOpen, setIsImageSelectorOpen] = useState(false);
 
   // Get the base component name without element ID
   const baseComponentName = selectedComponent.split(":element:")[0];
@@ -1176,14 +1178,23 @@ const CanvasEditorForm: React.FC<CanvasEditorFormProps> = ({
                     <label className="block text-sm font-medium text-gray-700">
                       آدرس تصویر
                     </label>
-                    <input
-                      type="text"
-                      name="src"
-                      value={selectedElement.src || ""}
-                      onChange={handleElementChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                      placeholder="/assets/images/example.jpg"
-                    />
+                    <div className="flex flex-col gap-2">
+                      <input
+                        type="text"
+                        name="src"
+                        value={selectedElement.src || ""}
+                        onChange={handleElementChange}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                        placeholder="/assets/images/example.jpg"
+                      />
+                      <button
+                        onClick={() => setIsImageSelectorOpen(true)}
+                        className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+                        type="button"
+                      >
+                        انتخاب تصویر
+                      </button>
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <label className="block text-sm font-medium text-gray-700">
@@ -1659,6 +1670,20 @@ const CanvasEditorForm: React.FC<CanvasEditorFormProps> = ({
           </div>
         </div>
       )}
+      
+      {/* Image Selector Modal */}
+      <ImageSelectorModal
+        isOpen={isImageSelectorOpen}
+        onClose={() => setIsImageSelectorOpen(false)}
+        onSelectImage={(image) => {
+          if (selectedElementId) {
+            handleElementChange({
+              target: { name: "src", value: image.url }
+            } as React.ChangeEvent<HTMLInputElement>);
+          }
+          setIsImageSelectorOpen(false);
+        }}
+      />
     </div>
   );
 };
