@@ -145,13 +145,13 @@ const sections = [
     bgSize: "cover",
     bgPosition: "center",
   },
-  {
-    id: "OfferRow",
-    label: "پیشنهاد های هفتگی",
-    image: market,
-    bgSize: "cover",
-    bgPosition: "center",
-  },
+  // {
+  //   id: "OfferRow",
+  //   label: "پیشنهاد های هفتگی",
+  //   image: market,
+  //   bgSize: "cover",
+  //   bgPosition: "center",
+  // },
   {
     id: "ProductsRow",
     label: "محصولات",
@@ -250,13 +250,13 @@ const sections = [
     bgSize: "cover",
     bgPosition: "center",
   },
-  {
-    id: "Video",
-    label: "ویدیو",
-    image: video,
-    bgSize: "cover",
-    bgPosition: "center",
-  },
+  // {
+  //   id: "Video",
+  //   label: "ویدیو",
+  //   image: video,
+  //   bgSize: "cover",
+  //   bgPosition: "center",
+  // },
   {
     id: "CanvasEditor",
     label: "ویرایشگر کانوا",
@@ -264,13 +264,13 @@ const sections = [
     bgSize: "cover",
     bgPosition: "center",
   },
-  {
-    id: "Collection",
-    label: "کالکشن",
-    image: collection,
-    bgSize: "cover",
-    bgPosition: "center",
-  },
+  // {
+  //   id: "Collection",
+  //   label: "کالکشن",
+  //   image: collection,
+  //   bgSize: "cover",
+  //   bgPosition: "center",
+  // },
 ];
 
 // Updated smSections array
@@ -347,14 +347,14 @@ const smSections = [
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
-  {
-    name: "Video",
-    title: "ویدیو",
-    image: videoSm.src,
-    height: "10rem",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  },
+  // {
+  //   name: "Video",
+  //   title: "ویدیو",
+  //   image: videoSm.src,
+  //   height: "10rem",
+  //   backgroundSize: "cover",
+  //   backgroundPosition: "center",
+  // },
   {
     name: "CanvasEditor",
     title: "ویرایشگر کانوا",
@@ -363,70 +363,19 @@ const smSections = [
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
-  {
-    name: "Collection",
-    title: "کالکشن",
-    image: collectionSm.src,
-    height: "10rem",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  },
-  {
-    name: "SliderCard",
-    title: "اسلایدر کارت",
-    image: "", // Add placeholder or default image if missing
-    height: "10rem",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  },
-  {
-    name: "CategoryBox",
-    title: "دسته بندی",
-    image: "", // Add placeholder or default image if missing
-    height: "10rem",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  },
-  {
-    name: "BlogCard",
-    title: "مقالات",
-    image: "", // Add placeholder or default image if missing
-    height: "10rem",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  },
-  {
-    name: "FloatingCard",
-    title: "کارت شناور",
-    image: "", // Add placeholder or default image if missing
-    height: "10rem",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  },
-  {
-    name: "Timeline",
-    title: "تایملاین",
-    image: "", // Add placeholder or default image if missing
-    height: "10rem",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  },
-  {
-    name: "FeatureBox",
-    title: "فیچر باکس",
-    image: "", // Add placeholder or default image if missing
-    height: "10rem",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  },
-  {
-    name: "PriceTable",
-    title: "جدول قیمت",
-    image: "", // Add placeholder or default image if missing
-    height: "10rem",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  },
+  // {
+  //   name: "Collection",
+  //   title: "کالکشن",
+  //   image: collectionSm.src,
+  //   height: "10rem",
+  //   backgroundSize: "cover",
+  //   backgroundPosition: "center",
+  // },
+  
+ 
+ 
+ 
+ 
 ];
 
 const themeStyles = `

@@ -3,6 +3,7 @@ import StyledComponentsRegistry from "@/lib/registry";
 import "./globals.css";
 import { hezare } from "../next-persian-fonts/dohezar";
 import { SharedProvider } from "./contexts/SharedContext";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "سایت ساز تومک",
@@ -17,6 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${hezare.variable}`}>
+        <Toaster position="top-center"  containerClassName="text-right" />
         <SharedProvider>
           <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
         </SharedProvider>
