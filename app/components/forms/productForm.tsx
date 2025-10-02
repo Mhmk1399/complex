@@ -3,7 +3,11 @@ import { Compiler } from "../compiler";
 import { ProductSection, Layout } from "@/lib/types";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
-import { ColorInput, DynamicRangeInput } from "./DynamicInputs";
+import {
+  ColorInput,
+  DynamicRangeInput,
+  DynamicSelectInput,
+} from "./DynamicInputs";
 
 interface ProductListProps {
   setUserInputData: React.Dispatch<React.SetStateAction<ProductSection>>;
@@ -143,7 +147,7 @@ export const ProductListForm: React.FC<ProductListProps> = ({
             داشبورد اقدام کنید.
           </small>
           <br />
-          <small  className="text-red-600">
+          <small className="text-red-600">
             در این قسمت فقط 7-8 عدد از محصولات نشون داده میشوند
           </small>
         </div>
@@ -153,14 +157,6 @@ export const ProductListForm: React.FC<ProductListProps> = ({
         <>
           <div className="grid grid-cols-1 gap-4 p-4 animate-slideDown">
             <h3 className="font-semibold text-sky-700">تنظیمات عمومی</h3>
-            <DynamicRangeInput
-              label="انحنا"
-              name="Radius"
-              min="0"
-              max="50"
-              value={userInputData?.setting?.Radius?.toString() ?? "0"}
-              onChange={handleSettingChange}
-            />
 
             <label htmlFor="gridColumns" className="block mb-2">
               تعداد ستون‌ها
@@ -185,11 +181,12 @@ export const ProductListForm: React.FC<ProductListProps> = ({
                 onChange={handleSettingChange}
               />
             </div>
+            <h3 className="font-semibold text-sky-700">تنظیمات مرتب سازی</h3>
 
             <div className="rounded-lg flex items-center justify-between ">
               {" "}
               <ColorInput
-                label="رنگ فیلتر"
+                label="رنگ پس زمینه"
                 name="filterRowBg"
                 value={
                   userInputData?.setting?.filterRowBg?.toString() || "#000000"
@@ -210,11 +207,12 @@ export const ProductListForm: React.FC<ProductListProps> = ({
                 onChange={handleSettingChange}
               />
             </div>
+            <h3 className="font-semibold text-sky-700">تنظیمات فیلتر کارت</h3>
 
             <div className="rounded-lg flex items-center justify-between ">
               {" "}
               <ColorInput
-                label=" رنگ پس زمینه فیلتر کارت"
+                label=" رنگ پس زمینه"
                 name="filterCardBg"
                 value={
                   userInputData?.setting?.filterCardBg?.toString() || "#000000"
@@ -248,6 +246,159 @@ export const ProductListForm: React.FC<ProductListProps> = ({
                 onChange={handleSettingChange}
               />
             </div>
+
+            {/* Product Card Settings */}
+            <div className="space-y-4 rounded-lg  ">
+              <h4 className="font-bold text-sky-700 my-3">
+                تنظیمات کارت محصول
+              </h4>
+
+              <DynamicRangeInput
+                label="انحنای کارت"
+                name="cardBorderRadius"
+                min="0"
+                max="50"
+                value={
+                  userInputData?.setting?.cardBorderRadius?.toString() ?? "10"
+                }
+                onChange={handleSettingChange}
+              />
+
+              <ColorInput
+                label="رنگ پس‌زمینه  "
+                name="cardBackground"
+                value={
+                  userInputData?.setting?.cardBackground?.toString() ??
+                  "#ffffff"
+                }
+                onChange={handleSettingChange}
+              />
+
+              <DynamicRangeInput
+                label="انحنای تصویر"
+                name="imageRadius"
+                min="0"
+                max="50"
+                value={userInputData?.setting?.imageRadius?.toString() ?? "8"}
+                onChange={handleSettingChange}
+              />
+              <DynamicRangeInput
+                label="فاصله داخلی تصویر"
+                name="imagePadding"
+                min="0"
+                max="20"
+                value={userInputData?.setting?.imagePadding?.toString() ?? "8"}
+                onChange={handleSettingChange}
+              />
+
+              <DynamicRangeInput
+                label="اندازه فونت نام"
+                name="nameFontSize"
+                min="10"
+                max="30"
+                value={userInputData?.setting?.nameFontSize?.toString() ?? "18"}
+                onChange={handleSettingChange}
+              />
+              <DynamicSelectInput
+                label="وزن"
+                name="nameFontWeight"
+                value={userInputData?.setting?.nameFontWeight ?? "normal"}
+                options={[
+                  { value: "normal", label: "نرمال" },
+                  { value: "bold", label: "ضخیم" },
+                ]}
+                onChange={handleSettingChange}
+              />
+
+              <ColorInput
+                label="رنگ نام محصول"
+                name="nameColor"
+                value={
+                  userInputData?.setting?.nameColor?.toString() ?? "#000000"
+                }
+                onChange={handleSettingChange}
+              />
+
+              <DynamicRangeInput
+                label="اندازه فونت توضیحات"
+                name="descriptionFontSize"
+                min="8"
+                max="40"
+                value={
+                  userInputData?.setting?.descriptionFontSize?.toString() ??
+                  "14"
+                }
+                onChange={handleSettingChange}
+              />
+              <DynamicSelectInput
+                label="وزن"
+                name="descriptionFontWeight"
+                value={
+                  userInputData?.setting?.descriptionFontWeight ?? "normal"
+                }
+                options={[
+                  { value: "normal", label: "نرمال" },
+                  { value: "bold", label: "ضخیم" },
+                ]}
+                onChange={handleSettingChange}
+              />
+
+              <ColorInput
+                label="رنگ توضیحات"
+                name="descriptionColor"
+                value={
+                  userInputData?.setting?.descriptionColor?.toString() ??
+                  "#666666"
+                }
+                onChange={handleSettingChange}
+              />
+
+              <DynamicRangeInput
+                label="اندازه فونت قیمت"
+                name="priceFontSize"
+                min="10"
+                max="25"
+                value={
+                  userInputData?.setting?.priceFontSize?.toString() ?? "16"
+                }
+                onChange={handleSettingChange}
+              />
+
+              <ColorInput
+                label="رنگ قیمت"
+                name="priceColor"
+                value={
+                  userInputData?.setting?.priceColor?.toString() ?? "#000000"
+                }
+                onChange={handleSettingChange}
+              />
+
+              <DynamicRangeInput
+                label="انحنا دکمه سبد خرید"
+                name="cartRadius"
+                min="0"
+                max="30"
+                value={userInputData?.setting?.cartRadius?.toString() ?? "16"}
+                onChange={handleSettingChange}
+              />
+              <ColorInput
+                label="رنگ پس زمینه دکمه کارت"
+                name="cartBakground"
+                value={
+                  userInputData?.setting?.cartBakground?.toString() ?? "#000000"
+                }
+                onChange={handleSettingChange}
+              />
+              <ColorInput
+                label="رنگ متن دکمه کارت"
+                name="cartColor"
+                value={
+                  userInputData?.setting?.cartColor?.toString() ?? "#000000"
+                }
+                onChange={handleSettingChange}
+              />
+            </div>
+
             {/* ✅ New Shadow Settings */}
             <div className="space-y-4 rounded-lg">
               <h4 className="font-bold text-sky-700 my-3">تنظیمات سایه</h4>

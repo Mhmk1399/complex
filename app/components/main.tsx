@@ -624,11 +624,18 @@ export const Main = () => {
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="bg-white/20 p-6 border border-gray-300 backdrop-blur-sm rounded-xl shadow-lg w-96"
+              className="bg-white/20  p-6 border border-gray-300 backdrop-blur-sm rounded-xl shadow-lg w-96"
             >
-              <h3 className="text-lg font-bold text-white mb-4 text-right">
-                افزودن مسیر جدید
-              </h3>
+              <div className="flex    flex-col mb-4 gap-2">
+                {" "}
+                <h3 className="text-lg font-bold text-white text-right">
+                  افزودن مسیر جدید
+                </h3>
+                <p className="text-right mt-1 text-sm text-blue-600 ">
+                  لطفا فقط از حروف لاتین استفاده شود *
+                </p>
+              </div>
+
               <div className="space-y-4">
                 <input
                   type="text"

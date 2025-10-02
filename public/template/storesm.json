@@ -62,7 +62,6 @@
           "marginRight": "10",
           "backgroundColor": "#f5f5f5",
           "cardBackgroundColor": "#ffffff",
-          "cardBorderRadius": "8",
           "filterButtonBg": "#3498DB",
           "filterButtonTextColor": "#ffffff",
           "filterRowBg": "#adb5bd",
@@ -73,7 +72,17 @@
           "shadowBlur": 20,
           "shadowSpread": 2,
           "shadowColor": "#e4e4e4",
-          "Radius": "2"
+          "Radius": "2",
+          "cardBorderRadius": "0",
+          "cardBackground": "#fff",
+          "nameFontSize": "20",
+          "nameFontWeight": "bold",
+          "nameColor": "#000000",
+          "descriptionFontSize": "12",
+          "descriptionFontWeight": "normal",
+          "descriptionColor": "#666",
+          "priceFontSize": "8",
+          "pricecolor": "#000000"
         }
       }
     ],

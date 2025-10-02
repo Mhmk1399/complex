@@ -1,17 +1,19 @@
 import Image from "next/image";
 import styled from "styled-components";
-import type { ProductCard, ProductCardData } from "@/lib/types";
+import type {
+  ProductBlockSetting,
+  ProductCard,
+  ProductCardData,
+} from "@/lib/types";
 interface ProductCardProps {
   productData: ProductCardData;
+  settings?: ProductBlockSetting;
+  previewWidth?: "sm" | "default";
 }
 
-
 const defaultSetting = {
-  cardBorderRadius: "10px",
+  cardBorderRadius: "0px",
   cardBackground: "#fff",
-  imageWidth: "100%",
-  imageheight: "200px",
-  imageRadius: "8px",
   nameFontSize: "1.2rem",
   nameFontWeight: "bold",
   nameColor: "#000000",
@@ -20,53 +22,52 @@ const defaultSetting = {
   descriptionColor: "#666",
   priceFontSize: "1rem",
   pricecolor: "#000000",
-  btnBackgroundColor: "#e5e5e5",
-  btnColor: "#000000",
 };
 
 const Card = styled.div<{
-  $setting?: ProductCard;
+  $setting?: ProductBlockSetting;
+  $previewWidth: "sm" | "default";
 }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-radius: ${(props) =>
-    props.$setting?.cardBorderRadius || defaultSetting.cardBorderRadius};
-  background: ${(props) =>
-    props.$setting?.cardBackground || defaultSetting.cardBackground};
-  margin: 10px;
-  padding: 15px;
+  border-radius: ${(props) => props.$setting?.cardBorderRadius}px;
+  background: ${(props) => props.$setting?.cardBackground};
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  height: 340px;
+  height: 380px;
   min-width: 250px;
-  @media (max-width: 425px) {
+
+  margin: ${(props) => (props.$previewWidth === "sm" ? "10px" : "")};
+  @media (max-width: 768px) {
     margin: 10px 5px;
-    height: 320px;
+    height: 380px;
   }
 `;
 
 const ProductImage = styled(Image)<{
-  $settings?: ProductCard;
+  $settings?: ProductBlockSetting;
   $productData?: ProductCardData;
 }>`
   object-fit: cover;
-  width: ${(props) => props.$settings?.imageWidth || defaultSetting.imageWidth};
-  height: ${(props) =>
-    props.$settings?.imageHeight || defaultSetting.imageheight};
-  border-radius: ${(props) =>
-    props.$settings?.imageRadius || defaultSetting.imageRadius};
+  width: 100%;
+  padding: ${(props) => props.$settings?.imagePadding}px;
+  height: 200px;
+  border-radius: ${(props) => props.$settings?.imageRadius}px;
   transition: all 0.3s ease;
   &:hover {
-    transform: scale(1.03);
+    opacity: 0.8;
+  }
+  if (props.$setting?.cardBorderRadius > 0) {
+    border-radius-top: ${(props) => props.$settings?.imageRadius}px 0;
   }
 `;
 
 const ProductName = styled.h3<{
-  $settings?: ProductCard;
+  $settings?: ProductBlockSetting;
   $productData?: ProductCardData;
 }>`
   font-size: ${(props) =>
-    props.$settings?.nameFontSize || defaultSetting.nameFontSize};
+    props.$settings?.nameFontSize || defaultSetting.nameFontSize}px;
   font-weight: ${(props) =>
     props.$settings?.nameFontWeight || defaultSetting.nameFontWeight};
   color: ${(props) => props.$settings?.nameColor || defaultSetting.nameColor};
@@ -75,11 +76,12 @@ const ProductName = styled.h3<{
 `;
 
 const ProductDescription = styled.p<{
-  $settings?: ProductCard;
+  $settings?: ProductBlockSetting;
   $productData?: ProductCardData;
 }>`
   font-size: ${(props) =>
-    props.$settings?.descriptionFontSize || defaultSetting.descriptionFontSize};
+    props.$settings?.descriptionFontSize ||
+    defaultSetting.descriptionFontSize}px;
   color: ${(props) =>
     props.$settings?.descriptionColor || defaultSetting.descriptionColor};
   font-weight: ${(props) =>
@@ -90,17 +92,51 @@ const ProductDescription = styled.p<{
 `;
 
 const ProductPrice = styled.span<{
-  $settings?: ProductCard;
+  $settings?: ProductBlockSetting;
   $productData?: ProductCardData;
 }>`
   font-size: ${(props) =>
-    props.$settings?.priceFontSize || defaultSetting.priceFontSize};
-  font-weight: ${(props) =>
-    props.$settings?.priceColor || defaultSetting.pricecolor};
+    props.$settings?.priceFontSize || defaultSetting.priceFontSize}px;
+  color: ${(props) => props.$settings?.priceColor};
+  font-weight: 700;
   margin: 8px 0;
 `;
 
-const ProductCard: React.FC<ProductCardProps> = ({ productData }) => {
+const AddToCartButton = styled.button<{
+  $settings?: ProductBlockSetting;
+  $productData?: ProductCardData;
+}>`
+  background-color: ${(props) => props.$settings?.cartBakground};
+  color: ${(props) => props.$settings?.cartColor};
+  border: none;
+  padding: 8px 20px;
+  border-radius: ${(props) => props.$settings?.cartRadius}px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px ${(props) => props.$settings?.cartBakground};
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+    margin-top: 6px;
+  }
+`;
+
+const ProductCard: React.FC<ProductCardProps> = ({
+  productData,
+  settings,
+  previewWidth = "default",
+}) => {
   const currentImageIndex = 0;
   console.log(productData.images);
 
@@ -110,21 +146,28 @@ const ProductCard: React.FC<ProductCardProps> = ({ productData }) => {
   };
 
   return (
-    <Card dir="rtl">
+    <Card dir="rtl" $setting={settings} $previewWidth={previewWidth}>
       <ProductImage
+        $settings={settings}
         $productData={productData}
         src={currentImage.imageSrc || "/assets/images/pro2.jpg"}
         alt={currentImage.imageAlt || "Product Image"}
         width={2000}
         height={2000}
+        className=" "
       />
-      <ProductName $productData={productData}>{productData.name}</ProductName>
-      <ProductDescription $productData={productData}>
+      <ProductName $settings={settings} $productData={productData}>
+        {productData.name}
+      </ProductName>
+      <ProductDescription $settings={settings} $productData={productData}>
         {productData.description.slice(0, 30)}...
       </ProductDescription>
-      <ProductPrice $productData={productData}>
+      <ProductPrice $settings={settings} $productData={productData}>
         {productData.price}
       </ProductPrice>
+      <AddToCartButton $settings={settings} $productData={productData}>
+        افزودن به سبد خرید
+      </AddToCartButton>
     </Card>
   );
 };

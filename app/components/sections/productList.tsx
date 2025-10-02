@@ -1,6 +1,5 @@
 "use client";
 import styled from "styled-components";
-import { Delete } from "../C-D";
 import {
   ProductSection,
   Layout,
@@ -18,7 +17,6 @@ interface ProductListProps {
   layout: Layout;
   actualName: string;
   selectedComponent: string;
-  setLayout: React.Dispatch<React.SetStateAction<Layout>>;
   previewWidth: "sm" | "default";
 }
 interface CategoryWithChildren {
@@ -33,7 +31,7 @@ const SectionProductList = styled.section<{
   $previewWidth: "sm" | "default";
 }>`
   display: flex;
-  width: 100%;
+  max-width: 100%;
   direction: rtl;
   gap: 2rem;
   padding-top: ${(props) => props.$data?.setting?.paddingTop}px;
@@ -135,10 +133,6 @@ const FilterCardBg = styled.div<{
     display: none;
   }
 `;
-const FilterBtn = styled.div<{ $data: ProductBlockSetting }>`
-  background-color: ${(props) => props.$data?.filterButtonBg};
-  color: ${(props) => props.$data?.filterButtonTextColor};
-`;
 
 const PriceInputContainer = styled.div`
   display: flex;
@@ -182,7 +176,7 @@ const ApplyButton = styled.button<{
   transition: all 0.2s;
 
   &:hover {
-    background-color: #1d4ed8;
+    opacity: 0.8;
   }
 
   &:active {
@@ -195,12 +189,10 @@ const ProductList: React.FC<ProductListProps> = ({
   layout,
   actualName,
   selectedComponent,
-  setLayout,
   previewWidth,
 }) => {
   const [preview, setPreview] = useState(previewWidth);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const api = createApiService({
     baseUrl: "/api",
@@ -232,7 +224,6 @@ const ProductList: React.FC<ProductListProps> = ({
     []
   );
   const [colors, setColors] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 0 });
   const [showColorModal, setShowColorModal] = useState(false);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
 
@@ -300,7 +291,6 @@ const ProductList: React.FC<ProductListProps> = ({
       const minPrice = Math.min(...prices);
       const maxPrice = Math.max(...prices);
 
-      setPriceRange({ min: minPrice, max: maxPrice });
       setSelectedFilters((prev) => ({
         ...prev,
         priceMin: minPrice,
@@ -560,46 +550,9 @@ const ProductList: React.FC<ProductListProps> = ({
         </div>
       )}
 
-      {showDeleteModal && (
-        <div className="fixed inset-0  bg-black bg-opacity-70 z-50 flex items-center justify-center ">
-          <div className="bg-white p-8 rounded-lg">
-            <h3 className="text-lg font-bold mb-4">
-              آیا از حذف
-              <span className="text-blue-400 font-bold mx-1">
-                {actualName}
-              </span>{" "}
-              مطمئن هستید؟
-            </h3>
-            <div className="flex gap-4 justify-start">
-              <button
-                className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
-                onClick={() => setShowDeleteModal(false)}
-              >
-                انصراف
-              </button>
-              <button
-                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 "
-                onClick={() => {
-                  Delete(actualName, layout, setLayout);
-                  setShowDeleteModal(false);
-                }}
-              >
-                حذف
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {actualName === selectedComponent ? (
         <div className="absolute w-fit -top-8 -left-1 z-10 flex">
-          <button
-            className="font-extrabold text-xl hover:bg-blue-500 bg-red-500 pb-1 rounded-r-lg px-3 text-white transform transition-all ease-in-out duration-300"
-            onClick={() => setShowDeleteModal(true)}
-          >
-            x
-          </button>
-          <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
+          <div className="bg-blue-500 py-1 px-4 rounded-lg text-white">
             {actualName}
           </div>
         </div>
@@ -627,8 +580,8 @@ const ProductList: React.FC<ProductListProps> = ({
                 onClick={() => setSortBy(option.value as SortOption)}
                 className={`pb-1 relative cursor-pointer transition-all duration-200 ease-in-out ${
                   sortBy === option.value
-                    ? 'text-blue-500   after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-500'
-                    : "text-gray-50 hover:text-blue-500"
+                    ? '   after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-500'
+                    : "text-gray-50  "
                 }`}
               >
                 {option.label}
@@ -647,7 +600,11 @@ const ProductList: React.FC<ProductListProps> = ({
           .slice(0, 7)
           .map((block, index) => (
             <div key={`${block.id}-${index}`}>
-              <ProductCard productData={block} />
+              <ProductCard
+                productData={block}
+                settings={sectionData.setting}
+                previewWidth={previewWidth}
+              />
             </div>
           ))}
       </ProductGrid>
@@ -665,7 +622,7 @@ const ProductList: React.FC<ProductListProps> = ({
               دسته‌بندی
             </label>
             <select
-              className="w-full border rounded-md p-2"
+              className="w-full border rounded-md p-2 "
               onChange={(e) =>
                 setSelectedFilters((prev) => ({
                   ...prev,
@@ -694,7 +651,7 @@ const ProductList: React.FC<ProductListProps> = ({
             </label>
             <button
               onClick={() => setShowColorModal(true)}
-              className="px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200 flex items-center gap-2"
+              className="px-4 py-2 w-full bg-gray-100 rounded-md hover:bg-gray-200 flex items-center gap-2"
             >
               انتخاب رنگ
               {selectedColors.length > 0 && (

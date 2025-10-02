@@ -133,7 +133,7 @@ const MainSection = styled.div`
   align-items: center;
   justify-content: space-between;
   flex-direction: row-reverse;
-  padding: 0rem 2rem;
+  padding: 0px 2rem;
   gap: 1rem;
   transition: padding 0.3s ease;
   @media (max-width: 768px) {
@@ -715,7 +715,7 @@ const Header: React.FC<HeaderProps> = ({
       document.body.style.width = "";
     };
   }, []);
- 
+
   useEffect(() => {
     if (layout?.sections?.sectionHeader) {
     }

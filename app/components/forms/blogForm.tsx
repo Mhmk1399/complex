@@ -124,7 +124,7 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
         <div className="p-4  animate-slideDown">
           <h3 className="text-lg font-semibold text-sky-700">تنظیمات محتوا</h3>
           <small>
-            در صورت نیاز به افزودن محصولات، لطفاً از طریق تنظیمات فروشگاه در
+            در صورت نیاز به افزودن بلاگ لطفاً از طریق تنظیمات بلاگ در
             داشبورد اقدام کنید.
           </small>
         </div>

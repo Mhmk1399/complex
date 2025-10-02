@@ -4,6 +4,8 @@ import { Layout, Link, HeaderSection } from "@/lib/types";
 import MarginPaddingEditor from "../sections/editor";
 import { TabButtons } from "../tabButtons";
 import { ColorInput, DynamicRangeInput } from "./DynamicInputs";
+import { useSharedContext } from "@/app/contexts/SharedContext";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 interface HeaderFormProps {
   layout: Layout;
@@ -24,6 +26,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
   layout,
   selectedComponent,
 }) => {
+  const { activeRoutes, setActiveRoutes } = useSharedContext();
   // Add default values to prevent undefined values
   const defaultValues = {
     blocks: {
@@ -67,6 +70,11 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
   const [isSpacingOpen, setIsSpacingOpen] = useState(false);
   const [isAnimationOpen, setIsAnimationOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [customLinkName, setCustomLinkName] = useState("");
+  const [customLinkUrl, setCustomLinkUrl] = useState("");
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingLinkIndex, setEditingLinkIndex] = useState<number | null>(null);
+  const [editingLinkName, setEditingLinkName] = useState("");
 
   useEffect(() => {
     setIsContentOpen(true);
@@ -149,24 +157,31 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
 
   // First, add this helper function at the top with the other interfaces
 
+  const staticRoutes = [
+    { name: "درباره ما", url: "/about" },
+    { name: "ارتباط با ما", url: "/contact" },
+    { name: "بلاگ", url: "/blog" },
+    { name: "فروشگاه", url: "/shop" },
+    { name: "دستهبندی کالاها", url: "/categories" },
+  ];
+
   const urlToPersianNameMap: { [key: string]: string } = {
     "/": "خانه",
-    "/about": "درباره ",
-    "/contact": "ارتباط  ",
+    "/about": "درباره ما",
+    "/contact": "ارتباط با ما",
     "/blog": "بلاگ",
     "/shop": "فروشگاه",
     "/login": "ورود",
-
-    // Add more mappings as needed
   };
 
   const handleLinkSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedUrl = e.target.value;
+    if (!selectedUrl) return;
 
     const newLink: Link = {
-      name: urlToPersianNameMap[selectedUrl] || "نامشخص", // Default to "نامشخص" if no mapping is found
+      name: urlToPersianNameMap[selectedUrl] || "نامشخص",
       url: selectedUrl,
-      megaMenu: [], // or provide a default value for megaMenu
+      megaMenu: [],
     };
 
     setUserInputData((prev: HeaderSection) => ({
@@ -176,17 +191,45 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
         links: [...prev.blocks.links, newLink],
       },
     }));
+
+    e.target.value = "";
   };
 
-  const linkOptions = [
-    { name: " خانه ", url: "/" },
-    { name: " درباره  ", url: "/about" },
-    { name: " ارتباط    ", url: "/contact" },
-    { name: " بلاگ ", url: "/blog" },
-    { name: " فروشگاه  ", url: "/shop" },
-    { name: " ورود/عضویت  ", url: "/login" },
+  const addCustomLink = () => {
+    if (!customLinkName.trim() || !customLinkUrl.trim()) return;
+
+    const newLink: Link = {
+      name: customLinkName.trim(),
+      url: customLinkUrl.trim(),
+      megaMenu: [],
+    };
+
+    setUserInputData((prev: HeaderSection) => ({
+      ...prev,
+      blocks: {
+        ...prev.blocks,
+        links: [...prev.blocks.links, newLink],
+      },
+    }));
+
+    setActiveRoutes((prev) => [...prev, customLinkUrl.trim()]);
+    setCustomLinkName("");
+    setCustomLinkUrl("");
+  };
+
+  const availableRoutes = [
+    ...staticRoutes,
+    ...activeRoutes
+      .filter((route) => !staticRoutes.some((sr) => sr.url === route))
+      .map((route) => ({ name: route, url: route })),
   ];
+
+  const isStaticRoute = (url: string) => {
+    return staticRoutes.some((route) => route.url === url);
+  };
   const removeLink = (urlToRemove: string) => {
+    if (isStaticRoute(urlToRemove)) return;
+
     setUserInputData((prev: HeaderSection) => {
       const indexToRemove = prev.blocks.links.findIndex(
         (link: Link) => link.url === urlToRemove
@@ -206,7 +249,10 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
 
       return prev;
     });
+
+    setActiveRoutes((prev) => prev.filter((route) => route !== urlToRemove));
   };
+
   const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (isUpdating) return;
     setIsUpdating(true);
@@ -237,6 +283,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
     }));
     setTimeout(() => setIsUpdating(false), 100);
   };
+
   const handleAnnouncementChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -255,6 +302,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
     }));
     setTimeout(() => setIsUpdating(false), 100);
   };
+
   const handleTabChange = (
     tab: "content" | "style" | "spacing" | "animation"
   ) => {
@@ -262,6 +310,41 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
     setIsStyleSettingsOpen(tab === "style");
     setIsSpacingOpen(tab === "spacing");
     setIsAnimationOpen(tab === "animation");
+  };
+
+  const startEditingLink = (index: number, currentName: string) => {
+    setEditingLinkIndex(index);
+    setEditingLinkName(currentName);
+    setShowEditModal(true);
+  };
+
+  const saveEditedLinkName = () => {
+    if (!editingLinkName.trim() || editingLinkIndex === null) return;
+
+    setUserInputData((prev: HeaderSection) => {
+      const updatedLinks = [...prev.blocks.links];
+      updatedLinks[editingLinkIndex] = {
+        ...updatedLinks[editingLinkIndex],
+        name: editingLinkName.trim(),
+      };
+      return {
+        ...prev,
+        blocks: {
+          ...prev.blocks,
+          links: updatedLinks,
+        },
+      };
+    });
+
+    setShowEditModal(false);
+    setEditingLinkIndex(null);
+    setEditingLinkName("");
+  };
+
+  const cancelEditingLink = () => {
+    setShowEditModal(false);
+    setEditingLinkIndex(null);
+    setEditingLinkName("");
   };
 
   return (
@@ -367,14 +450,21 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
                     id="linkSelect"
                     onChange={handleLinkSelect}
                     className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 appearance-none bg-white"
-                    defaultValue=""
+                    value=""
                   >
                     <option value="">انتخاب کنید...</option>
-                    {linkOptions.map((link, index) => (
-                      <option key={`${link.url}-${index}`} value={link.url}>
-                        {link.name}
-                      </option>
-                    ))}
+                    {availableRoutes
+                      .filter(
+                        (route) =>
+                          !userInputData.blocks.links.some(
+                            (link) => link.url === route.url
+                          )
+                      )
+                      .map((route, index) => (
+                        <option key={`${route.url}-${index}`} value={route.url}>
+                          {route.name}
+                        </option>
+                      ))}
                   </select>
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg
@@ -394,6 +484,46 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
                 </div>
               </div>
 
+              {/* Custom Link Section */}
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                <h4 className="text-sm font-medium text-blue-800 mb-3">
+                  افزودن لینک سفارشی
+                </h4>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-medium text-blue-700 mb-1">
+                      نام لینک
+                    </label>
+                    <input
+                      type="text"
+                      value={customLinkName}
+                      onChange={(e) => setCustomLinkName(e.target.value)}
+                      className="w-full p-2 text-sm border border-blue-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="مثال: خدمات"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-blue-700 mb-1">
+                      آدرس URL
+                    </label>
+                    <input
+                      type="text"
+                      value={customLinkUrl}
+                      onChange={(e) => setCustomLinkUrl(e.target.value)}
+                      className="w-full p-2 text-sm border border-blue-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="مثال: /services"
+                    />
+                  </div>
+                  <button
+                    onClick={addCustomLink}
+                    disabled={!customLinkName.trim() || !customLinkUrl.trim()}
+                    className="w-full p-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                  >
+                    افزودن لینک
+                  </button>
+                </div>
+              </div>
+
               {/* Menu Items List */}
               <div>
                 <div className="flex items-center justify-between mb-3">
@@ -407,61 +537,71 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
                   )}
                 </div>
 
-                <div className="space-y-2 max-h-64 overflow-y-auto">
+                <div className="space-y-1 max-h-48 overflow-y-auto">
                   {userInputData.blocks.links.length === 0 ? (
-                    <div className="text-center py-8 text-gray-500">
-                      <svg
-                        className="w-12 h-12 mx-auto mb-2 text-gray-300"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M4 6h16M4 10h16M4 14h16M4 18h16"
-                        />
-                      </svg>
-                      <p className="text-sm">هیچ آیتمی اضافه نشده است</p>
-                      <p className="text-xs text-gray-400 mt-1">
-                        از منوی بالا آیتم جدید اضافه کنید
-                      </p>
+                    <div className="text-center py-4 text-gray-500">
+                      <div className="text-2xl mb-1">📄</div>
+                      <p className="text-xs">هیچ آیتمی ندارید</p>
                     </div>
                   ) : (
                     userInputData.blocks.links.map((link, index) => (
                       <div
                         key={`${link.url}-${index}`}
-                        className="group flex items-center justify-between bg-gray-50 hover:bg-gray-100 p-3 rounded-lg border border-gray-200 transition-all duration-200"
+                        className="group flex items-center bg-white hover:bg-gray-50 p-2 rounded border transition-colors"
                       >
-                        <div className="flex items-center gap-3">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                          <div>
-                            <p className="text-sm font-medium text-gray-800">
-                              {link.name}
+                        <div className="flex items-center gap-2 flex-1 min-w-0">
+                          <div
+                            className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+                              isStaticRoute(link.url)
+                                ? "bg-blue-500"
+                                : "bg-green-500"
+                            }`}
+                          ></div>
+
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-1">
+                              <p
+                                className="text-xs font-medium text-gray-800 truncate flex-1 cursor-pointer hover:text-blue-600"
+                                onClick={() =>
+                                  startEditingLink(index, link.name)
+                                }
+                                title={link.name}
+                              >
+                                {link.name}
+                              </p>
+                            </div>
+                            <p
+                              className="text-xs text-gray-500 truncate"
+                              title={link.url}
+                            >
+                              {link.url}
                             </p>
-                            <p className="text-xs text-gray-500">{link.url}</p>
                           </div>
                         </div>
-                        <button
-                          onClick={() => removeLink(link.url)}
-                          className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg"
-                          title="حذف آیتم"
-                        >
-                          <svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+
+                        <div className="flex items-center gap-1   transition-opacity">
+                          <button
+                            onClick={() => startEditingLink(index, link.name)}
+                            className="text-blue-500 hover:text-blue-700 p-1 text-xs"
+                            title="ویرایش"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                            />
-                          </svg>
-                        </button>
+                            <FaEdit className="w-3" />
+                          </button>
+                          <button
+                            onClick={() => removeLink(link.url)}
+                            disabled={isStaticRoute(link.url)}
+                            className={`p-1 text-xs ${
+                              isStaticRoute(link.url)
+                                ? "text-gray-400 cursor-not-allowed"
+                                : "text-red-500 hover:text-red-700"
+                            }`}
+                            title={
+                              isStaticRoute(link.url) ? "قابل حذف نیست" : "حذف"
+                            }
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
                       </div>
                     ))
                   )}
@@ -641,6 +781,59 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
               padding={padding}
               onChange={handleUpdate}
             />
+          </div>
+        </div>
+      )}
+
+      {/* Edit Link Modal */}
+      {showEditModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg w-96 mx-4" dir="rtl">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-bold">ویرایش نام لینک</h3>
+              <button
+                onClick={cancelEditingLink}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  نام جدید لینک
+                </label>
+                <input
+                  type="text"
+                  value={editingLinkName}
+                  onChange={(e) => setEditingLinkName(e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="نام مورد نظر را وارد کنید"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") saveEditedLinkName();
+                    if (e.key === "Escape") cancelEditingLink();
+                  }}
+                  autoFocus
+                />
+              </div>
+
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={cancelEditingLink}
+                  className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  لغو
+                </button>
+                <button
+                  onClick={saveEditedLinkName}
+                  disabled={!editingLinkName.trim()}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                >
+                  ذخیره
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
