@@ -142,9 +142,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const currentImageIndex = 0;
   console.log(productData.images);
 
-  const currentImage = (productData.images && productData.images[currentImageIndex]) || {
-    imageSrc: "/assets/images/pro2.jpg",
-    imageAlt: "Product Image",
+  const currentImage = productData.images?.[currentImageIndex] || {
+    imageSrc: "",
+    imageAlt: "",
   };
 
   return (

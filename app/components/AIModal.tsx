@@ -181,7 +181,7 @@ export const AIModal: React.FC<AIModalProps> = ({
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && e.ctrlKey && !isLoading) {
+    if (e.key === "Enter" && !isLoading) {
       e.preventDefault();
       handleSubmit();
     }
@@ -257,7 +257,7 @@ export const AIModal: React.FC<AIModalProps> = ({
               <span>
                 نکته: برای ارسال سریع از{" "}
                 <kbd className="px-1 py-0.5 bg-gray-200 rounded text-xs">
-                  Ctrl + Enter
+                  Enter
                 </kbd>{" "}
                 استفاده کنید
               </span>

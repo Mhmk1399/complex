@@ -357,56 +357,6 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
       {/* Content Tab */}
       {isContentOpen && (
         <div className="space-y-6 animate-slideDown">
-          {/* Logo Section */}
-          <div className=" rounded-xl p-4  transition-shadow duration-200">
-            <div className="flex items-center gap-2 mb-4">
-              <h3 className="font-semibold text-gray-800">تنظیمات لوگو</h3>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                  htmlFor="imageLogo"
-                >
-                  آدرس لوگو
-                </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    id="imageLogo"
-                    name="imageLogo"
-                    value={
-                      userInputData?.blocks?.imageLogo ||
-                      "/assets/images/logo.webp"
-                    }
-                    onChange={handleBlockChange}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
-                    placeholder="آدرس تصویر لوگو را وارد کنید"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                  htmlFor="imageAlt"
-                >
-                  متن جایگزین تصویر
-                </label>
-                <input
-                  type="text"
-                  id="imageAlt"
-                  name="imageAlt"
-                  value={userInputData?.blocks?.imageAlt || "logo"}
-                  onChange={handleBlockChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
-                  placeholder="متن جایگزین برای لوگو"
-                />
-              </div>
-            </div>
-          </div>
-
           {/* Announcement Section */}
           <div className=" rounded-xl p-4  transition-shadow duration-200">
             <div className="flex items-center gap-2 mb-4">

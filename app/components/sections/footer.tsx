@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Layout, FooterSection } from "@/lib/types";
 import { useState, useEffect } from "react";
 import { FaArrowUp } from "react-icons/fa";
+import { useUserInfo } from "@/hooks/useUserInfo";
 
 interface Category {
   _id: string;
@@ -320,6 +321,7 @@ const Footer: React.FC<FooterProps> = ({
   const [enamadExists] = useState(false);
   const [enamad] = useState({});
   const [categories, setCategories] = useState<Category[]>([]);
+  const { basic, userInfo } = useUserInfo();
 
   const scrollToTop = () => {
     if (typeof window !== "undefined") {
@@ -459,7 +461,7 @@ const Footer: React.FC<FooterProps> = ({
         $preview={preview}
         $previewWidth={previewWidth}
         $data={sectionData}
-        src={logo || "/assets/images/logo.webp"}
+        src={basic?.logo || logo || "/assets/images/logo.webp"}
         width={preview === "sm" ? 60 : 80}
         height={preview === "sm" ? 60 : 80}
         alt="Logo"
@@ -470,7 +472,11 @@ const Footer: React.FC<FooterProps> = ({
         $preview={preview}
         $previewWidth={previewWidth}
       >
-        <Link href={`tel:${phoneNumber || "123123123"}`}>{phoneNumber}</Link>
+        <Link
+          href={`tel:${userInfo?.contact?.phone || phoneNumber || "123123123"}`}
+        >
+          {userInfo?.contact?.phone || phoneNumber} |{" "}
+        </Link>{" "}
         {textNumber && (
           <span className="text-xs opacity-70 mr-2">{textNumber}</span>
         )}
