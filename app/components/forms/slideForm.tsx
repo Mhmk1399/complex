@@ -720,9 +720,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                   <ColorInput
                     label="رنگ سربرگ"
                     name="textColor"
-                    value={
-                      userInputData?.setting?.textColor?.toString() ?? "#ffffff"
-                    }
+                    value={userInputData?.setting?.textColor?.toString() ?? "#ffffff"}
                     onChange={handleSettingChange}
                   />
                 </div>
@@ -738,7 +736,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                     min={10}
                     max={100}
                     step={1}
-                    value={userInputData?.setting?.descriptionFontSize || 15}
+                    value={userInputData?.descriptionFontSize || 15}
                     onChange={handleSettingChange}
                     displayUnit="px"
                   />
@@ -746,9 +744,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                   <DynamicSelectInput
                     label="وزن متن"
                     name="descriptionFontWeight"
-                    value={
-                      userInputData?.setting?.descriptionFontWeight ?? "400"
-                    }
+                    value={userInputData?.descriptionFontWeight ?? "400"}
                     options={[
                       { value: "bold", label: "ضخیم" },
                       { value: "normal", label: "نرمال" },
@@ -760,8 +756,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                     label="رنگ سربرگ"
                     name="descriptionColor"
                     value={
-                      userInputData?.setting?.descriptionColor?.toString() ??
-                      "#ffffff"
+                      userInputData?.descriptionColor?.toString() ?? "#ffffff"
                     }
                     onChange={handleSettingChange}
                   />
@@ -886,18 +881,14 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                   <ColorInput
                     label="رنگ دکمه"
                     name="navColor"
-                    value={
-                      userInputData?.setting?.navColor?.toString() ?? "#ffffff"
-                    }
+                    value={userInputData?.navColor?.toString() ?? "#ffffff"}
                     onChange={handleSettingChange}
                   />
 
                   <ColorInput
                     label="رنگ پس زمینه دکمه"
                     name="navBg"
-                    value={
-                      userInputData?.setting?.navBg?.toString() ?? "#ffffff"
-                    }
+                    value={userInputData?.navBg?.toString() ?? "#ffffff"}
                     onChange={handleSettingChange}
                   />
                   <DynamicRangeInput
@@ -906,7 +897,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                     min={0}
                     max={20}
                     step={1}
-                    value={userInputData?.setting?.navRadius || 100}
+                    value={userInputData?.navRadius || 100}
                     onChange={handleSettingChange}
                     displayUnit="px"
                   />
@@ -938,7 +929,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                   name="shadowOffsetX"
                   min="-50"
                   max="50"
-                  value={userInputData?.setting?.shadowOffsetX?.toString() ?? "0"}
+                  value={userInputData?.shadowOffsetX?.toString() ?? "0"}
                   onChange={handleSettingChange}
                 />
                 <DynamicRangeInput
@@ -946,7 +937,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                   name="shadowOffsetY"
                   min="-50"
                   max="50"
-                  value={userInputData?.setting?.shadowOffsetY?.toString() ?? "0"}
+                  value={userInputData?.shadowOffsetY?.toString() ?? "0"}
                   onChange={handleSettingChange}
                 />
                 <DynamicRangeInput
@@ -954,7 +945,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                   name="shadowBlur"
                   min="0"
                   max="100"
-                  value={userInputData?.setting?.shadowBlur?.toString() ?? "0"}
+                  value={userInputData?.shadowBlur?.toString() ?? "0"}
                   onChange={handleSettingChange}
                 />
                 <DynamicRangeInput
@@ -962,13 +953,13 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                   name="shadowSpread"
                   min="-20"
                   max="20"
-                  value={userInputData?.setting?.shadowSpread?.toString() ?? "0"}
+                  value={userInputData?.shadowSpread?.toString() ?? "0"}
                   onChange={handleSettingChange}
                 />
                 <ColorInput
                   label="رنگ سایه"
                   name="shadowColor"
-                  value={userInputData?.setting?.shadowColor?.toString() ?? "0"}
+                  value={userInputData?.shadowColor?.toString() ?? "0"}
                   onChange={handleSettingChange}
                 />
               </div>

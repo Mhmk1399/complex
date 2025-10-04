@@ -41,11 +41,11 @@ const SectionSlideShow = styled.section<{
   transition: background-color 0.3s ease;
   position: relative;
   box-shadow: ${(props) =>
-    `${props.$data.setting.shadowOffsetX || 0}px 
-     ${props.$data.setting.shadowOffsetY || 4}px 
-     ${props.$data.setting.shadowBlur || 10}px 
-     ${props.$data.setting.shadowSpread || 0}px 
-     ${props.$data.setting.shadowColor || "#fff"}`};
+    `${props.$data.shadowOffsetX || 0}px 
+     ${props.$data.shadowOffsetY || 4}px 
+     ${props.$data.shadowBlur || 10}px 
+     ${props.$data.shadowSpread || 0}px 
+     ${props.$data.shadowColor || "#fff"}`};
 `;
 
 const SlideContainer = styled.div<{
@@ -268,25 +268,25 @@ const SlideTextBox = styled.div`
 `;
 
 const SlideHeading = styled.h3<{
-  $data: SlideSection["setting"];
+  $data: SlideSection;
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
-  color: ${(props) => props.$data.textColor || "#111"};
-  font-size: ${(props) => props.$data?.textFontSize || "22"}px;
-  font-weight: ${(props) => props.$data.textFontWeight || "600"};
+  color: ${(props) => props.$data.setting.textColor || "#111"};
+  font-size: ${(props) => props.$data?.setting.textFontSize || "22"}px;
+  font-weight: ${(props) => props.$data.setting.textFontWeight || "600"};
   margin: 8px 0;
   letter-spacing: 0.3px;
 `;
 
 const SlideDescription = styled.p<{
-  $data: SlideSection["setting"];
+  $data: SlideSection;
   $previewWidth: "sm" | "default";
   $preview: "sm" | "default";
 }>`
-  color: ${(props) => props.$data.descriptionColor || "#555"};
-  font-size: ${(props) => props.$data?.descriptionFontSize || "18"}px;
-  font-weight: ${(props) => props.$data.descriptionFontWeight || "400"};
+  color: ${(props) => props.$data.setting.descriptionColor || "#555"};
+  font-size: ${(props) => props.$data?.setting.descriptionFontSize || "18"}px;
+  font-weight: ${(props) => props.$data.setting.descriptionFontWeight || "400"};
   line-height: 1.6;
   margin-top: 5px;
 `;
@@ -299,13 +299,13 @@ const NavButton = styled.button<{
   top: 50%;
   transform: translateY(-50%);
   background-color: ${(props) =>
-    props.$data.setting.navBg
-      ? props.$data.setting.navBg + "B3" // HEX + alpha (B3 = ~70%)
+    props.$data.navBg
+      ? props.$data.navBg + "B3" // HEX + alpha (B3 = ~70%)
       : "rgba(85,85,85,0.7)"};
-  color: ${(props) => props.$data.setting.navColor || "#fff"};
+  color: ${(props) => props.$data.navColor || "#fff"};
   padding: 10px;
   border: none;
-  border-radius: ${(props) => props.$data.setting.navRadius || "2"}px;
+  border-radius: ${(props) => props.$data.navRadius || "2"}px;
   cursor: pointer;
   z-index: 10;
 
@@ -673,7 +673,7 @@ const SlideShow: React.FC<SlideShowProps> = ({
 
   const sectionData = layout?.sections?.children?.sections.find(
     (section) => section.type === actualName
-  ) as SlideSection;
+  ) as unknown as SlideSection;
 
   // Also add an early return if layout is not properly initialized
   if (!layout || !layout.sections) {
@@ -771,7 +771,7 @@ const SlideShow: React.FC<SlideShowProps> = ({
                 <SlideHeading
                   dir="rtl"
                   $preview={preview}
-                  $data={sectionData.setting}
+                  $data={sectionData}
                   $previewWidth={previewWidth}
                 >
                   {slide.text}
@@ -779,7 +779,7 @@ const SlideShow: React.FC<SlideShowProps> = ({
                 <SlideDescription
                   dir="rtl"
                   $preview={preview}
-                  $data={sectionData.setting}
+                  $data={sectionData}
                   $previewWidth={previewWidth}
                 >
                   {slide.description}
