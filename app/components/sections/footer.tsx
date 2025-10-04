@@ -553,47 +553,49 @@ const Footer: React.FC<FooterProps> = ({
       </SocialLinks>
 
       <CategoryGrid $preview={preview} $previewWidth={previewWidth}>
-        {categories
-          .filter((category) => category.children.length > 0)
-          .map((category) => (
-            <CategorySection key={category._id}>
-              <ParentContainer>
-                <ParentCategoryLink
-                  href={`/store?categoryId=${category._id}`}
-                  $data={sectionData}
-                >
-                  {category.name}
-                </ParentCategoryLink>
-              </ParentContainer>
-
-              <ChildrenContainer>
-                {category.children.map((child, index) => (
-                  <ChildCategoryLink
-                    key={`${category._id}-${child._id}-${index}`}
-                    href={`/category/${child.name}`}
+        {categories.length > 0 &&
+          categories
+            .filter((category) => category.children.length > 0)
+            .map((category) => (
+              <CategorySection key={category._id}>
+                <ParentContainer>
+                  <ParentCategoryLink
+                    href={`/store?categoryId=${category._id}`}
                     $data={sectionData}
                   >
-                    {child.name}
-                  </ChildCategoryLink>
-                ))}
-              </ChildrenContainer>
-            </CategorySection>
-          ))}
+                    {category.name}
+                  </ParentCategoryLink>
+                </ParentContainer>
+
+                <ChildrenContainer>
+                  {category.children.map((child, index) => (
+                    <ChildCategoryLink
+                      key={`${category._id}-${child._id}-${index}`}
+                      href={`/category/${child.name}`}
+                      $data={sectionData}
+                    >
+                      {child.name}
+                    </ChildCategoryLink>
+                  ))}
+                </ChildrenContainer>
+              </CategorySection>
+            ))}
       </CategoryGrid>
 
       {links && Array.isArray(links) && links.length > 0 && (
         <FooterLinks $previewWidth={previewWidth} $preview={preview}>
-          {links.map((link, index) => (
-            <FooterLink
-              key={index}
-              href={link?.url || "#"}
-              $data={sectionData}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {link?.label || "Link"}
-            </FooterLink>
-          ))}
+          {links.length > 0 &&
+            links.map((link, index) => (
+              <FooterLink
+                key={index}
+                href={link?.url || "#"}
+                $data={sectionData}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {link?.label || "Link"}
+              </FooterLink>
+            ))}
         </FooterLinks>
       )}
 

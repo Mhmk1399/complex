@@ -160,8 +160,8 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
   const staticRoutes = [
     { name: "درباره ما", url: "/about" },
     { name: "ارتباط با ما", url: "/contact" },
-    { name: "بلاگ", url: "/blog" },
-    { name: "فروشگاه", url: "/shop" },
+    { name: "بلاگ", url: "/blogs" },
+    { name: "فروشگاه", url: "/store" },
     { name: "دستهبندی کالاها", url: "/categories" },
   ];
 
@@ -169,8 +169,8 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
     "/": "خانه",
     "/about": "درباره ما",
     "/contact": "ارتباط با ما",
-    "/blog": "بلاگ",
-    "/shop": "فروشگاه",
+    "/blogs": "بلاگ",
+    "/store": "فروشگاه",
     "/login": "ورود",
   };
 

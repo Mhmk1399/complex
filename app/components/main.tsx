@@ -591,7 +591,7 @@ export const Main = () => {
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -10 }}
-                          className="absolute mt-2 w-20 bg-white/90 flex flex-col backdrop-blur-xl rounded-xl shadow-xl border border-white/80 z-50"
+                          className="absolute mt-2 w-24 bg-white/90 max-h-64 overflow-auto flex flex-col backdrop-blur-xl rounded-xl shadow-xl border border-white/80 z-50"
                           dir="rtl"
                         >
                           {activeRoutes.map((route) => (

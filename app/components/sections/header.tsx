@@ -831,47 +831,51 @@ const Header: React.FC<HeaderProps> = ({
                       </NavItem>
                       <MegaMenu $data={sectionData}>
                         <div className="flex flex-col w-1/4 border-l border-gray-200 pl-4">
-                          {categories
-                            ?.filter((category) => category.children.length > 0)
-                            .map((category, idx) => (
-                              <Link
-                                href="#"
-                                key={category._id}
-                                className="block"
-                              >
-                                <div
-                                  className={`py-3 px-4 rounded-lg ml-2 cursor-pointer  ${
-                                    idx === hoverd
-                                      ? "bg-blue-50 border-r border-blue-400 font-semibold text-blue-700"
-                                      : "hover:bg-gray-50"
-                                  }`}
-                                  onMouseEnter={() => setHoverd(idx)}
+                          {categories.length > 0 &&
+                            categories
+                              ?.filter(
+                                (category) => category.children.length > 0
+                              )
+                              .map((category, idx) => (
+                                <Link
+                                  href="#"
+                                  key={category._id}
+                                  className="block"
                                 >
-                                  <MegaMenuTitle $data={sectionData}>
-                                    {category.name}
-                                  </MegaMenuTitle>
-                                </div>
-                              </Link>
-                            ))}
+                                  <div
+                                    className={`py-3 px-4 rounded-lg ml-2 cursor-pointer  ${
+                                      idx === hoverd
+                                        ? "bg-blue-50 border-r border-blue-400 font-semibold text-blue-700"
+                                        : "hover:bg-gray-50"
+                                    }`}
+                                    onMouseEnter={() => setHoverd(idx)}
+                                  >
+                                    <MegaMenuTitle $data={sectionData}>
+                                      {category.name}
+                                    </MegaMenuTitle>
+                                  </div>
+                                </Link>
+                              ))}
                         </div>
 
                         <div className="flex-1 p-6">
                           <div className="grid grid-cols-3 gap-6">
-                            {categories
-                              ?.filter(
-                                (category) => category.children.length > 0
-                              )
-                              [hoverd]?.children.map((child) => (
-                                <Link
-                                  href="#"
-                                  key={child._id}
-                                  className="p-3 hover:translate-x-[2px] rounded-lg transition-all duration-300 text-right group hover:bg-blue-50"
-                                >
-                                  <CategoryItem $data={sectionData}>
-                                    {child.name}
-                                  </CategoryItem>
-                                </Link>
-                              ))}
+                            {categories.length > 0 &&
+                              categories
+                                ?.filter(
+                                  (category) => category.children.length > 0
+                                )
+                                [hoverd]?.children.map((child) => (
+                                  <Link
+                                    href="#"
+                                    key={child._id}
+                                    className="p-3 hover:translate-x-[2px] rounded-lg transition-all duration-300 text-right group hover:bg-blue-50"
+                                  >
+                                    <CategoryItem $data={sectionData}>
+                                      {child.name}
+                                    </CategoryItem>
+                                  </Link>
+                                ))}
                           </div>
                         </div>
                       </MegaMenu>
@@ -938,25 +942,26 @@ const Header: React.FC<HeaderProps> = ({
 
                     <MobileDropdown $isOpen={mobileDropdownOpen}>
                       <MobileCategoryList>
-                        {categories
-                          ?.filter((category) => category.children.length > 0)
-                          .map((category) => (
-                            <div key={category._id}>
-                              <MobileCategoryTitle>
-                                {category.name}
-                              </MobileCategoryTitle>
-                              {category.children.map((child) => (
-                                <MobileCategoryItem
-                                  key={child._id}
-                                  href="#"
-                                  $data={sectionData}
-                                  onClick={toggleMenu}
-                                >
-                                  {child.name}
-                                </MobileCategoryItem>
-                              ))}
-                            </div>
-                          ))}
+                        {categories.length > 0 &&
+                          categories
+                            ?.filter((category) => category.children.length > 0)
+                            .map((category) => (
+                              <div key={category._id}>
+                                <MobileCategoryTitle>
+                                  {category.name}
+                                </MobileCategoryTitle>
+                                {category.children.map((child) => (
+                                  <MobileCategoryItem
+                                    key={child._id}
+                                    href="#"
+                                    $data={sectionData}
+                                    onClick={toggleMenu}
+                                  >
+                                    {child.name}
+                                  </MobileCategoryItem>
+                                ))}
+                              </div>
+                            ))}
                       </MobileCategoryList>
                     </MobileDropdown>
                   </>
@@ -1040,47 +1045,51 @@ const Header: React.FC<HeaderProps> = ({
                       </NavItem>
                       <MegaMenu $data={sectionData}>
                         <div className="flex flex-col w-1/4 border-l border-gray-200 pl-4">
-                          {categories
-                            ?.filter((category) => category.children.length > 0)
-                            .map((category, idx) => (
-                              <Link
-                                href="#"
-                                key={category._id}
-                                className="block"
-                              >
-                                <div
-                                  className={`py-3 px-4 ml-2 cursor-pointer ${
-                                    idx === hoverd
-                                      ? " border-r-2 font-semibold  "
-                                      : ""
-                                  }`}
-                                  onMouseEnter={() => setHoverd(idx)}
+                          {categories.length > 0 &&
+                            categories
+                              ?.filter(
+                                (category) => category.children.length > 0
+                              )
+                              .map((category, idx) => (
+                                <Link
+                                  href="#"
+                                  key={category._id}
+                                  className="block"
                                 >
-                                  <MegaMenuTitle $data={sectionData}>
-                                    {category.name}
-                                  </MegaMenuTitle>
-                                </div>
-                              </Link>
-                            ))}
+                                  <div
+                                    className={`py-3 px-4 ml-2 cursor-pointer ${
+                                      idx === hoverd
+                                        ? " border-r-2 font-semibold  "
+                                        : ""
+                                    }`}
+                                    onMouseEnter={() => setHoverd(idx)}
+                                  >
+                                    <MegaMenuTitle $data={sectionData}>
+                                      {category.name}
+                                    </MegaMenuTitle>
+                                  </div>
+                                </Link>
+                              ))}
                         </div>
 
                         <div className="flex-1 p-6">
                           <div className="grid grid-cols-3 gap-6">
-                            {categories
-                              ?.filter(
-                                (category) => category.children.length > 0
-                              )
-                              [hoverd]?.children.map((child) => (
-                                <Link
-                                  href="#"
-                                  key={child._id}
-                                  className="p-3 hover:translate-x-[2px] rounded-lg transition-all duration-300 text-right group  "
-                                >
-                                  <CategoryItem $data={sectionData}>
-                                    {child.name}
-                                  </CategoryItem>
-                                </Link>
-                              ))}
+                            {categories.length > 0 &&
+                              categories
+                                ?.filter(
+                                  (category) => category.children.length > 0
+                                )
+                                [hoverd]?.children.map((child) => (
+                                  <Link
+                                    href="#"
+                                    key={child._id}
+                                    className="p-3 hover:translate-x-[2px] rounded-lg transition-all duration-300 text-right group  "
+                                  >
+                                    <CategoryItem $data={sectionData}>
+                                      {child.name}
+                                    </CategoryItem>
+                                  </Link>
+                                ))}
                           </div>
                         </div>
                       </MegaMenu>
@@ -1163,25 +1172,26 @@ const Header: React.FC<HeaderProps> = ({
 
                   <MobileDropdown $isOpen={mobileDropdownOpen}>
                     <MobileCategoryList>
-                      {categories
-                        ?.filter((category) => category.children.length > 0)
-                        .map((category) => (
-                          <div key={category._id}>
-                            <MobileCategoryTitle>
-                              {category.name}
-                            </MobileCategoryTitle>
-                            {category.children.map((child) => (
-                              <MobileCategoryItem
-                                key={child._id}
-                                href="#"
-                                $data={sectionData}
-                                onClick={toggleMenu}
-                              >
-                                {child.name}
-                              </MobileCategoryItem>
-                            ))}
-                          </div>
-                        ))}
+                      {categories.length > 0 &&
+                        categories
+                          ?.filter((category) => category.children.length > 0)
+                          .map((category) => (
+                            <div key={category._id}>
+                              <MobileCategoryTitle>
+                                {category.name}
+                              </MobileCategoryTitle>
+                              {category.children.map((child) => (
+                                <MobileCategoryItem
+                                  key={child._id}
+                                  href="#"
+                                  $data={sectionData}
+                                  onClick={toggleMenu}
+                                >
+                                  {child.name}
+                                </MobileCategoryItem>
+                              ))}
+                            </div>
+                          ))}
                     </MobileCategoryList>
                   </MobileDropdown>
                 </>
