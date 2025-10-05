@@ -703,7 +703,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
                 <DynamicRangeInput
                   label="انحنا "
                   name="boxRadiuos"
-                  min="10"
+                  min="0"
                   max="200"
                   value={userInputData?.blocks?.setting?.boxRadiuos || "16"}
                   onChange={handleSettingChange}
