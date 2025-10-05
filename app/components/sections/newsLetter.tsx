@@ -364,16 +364,18 @@ const NewsLetter: React.FC<NewsLetterProps> = ({
 
       <Description dir="rtl" $data={sectionData} $previewWidth={previewWidth}>
         {sectionData.blocks.description ||
-          "برای دریافت آخرین اخبار ایمیل خود را وارد کنید"}
+          "برای دریافت آخرین اخبار شماره خود را وارد کنید"}
       </Description>
 
       <Form $previewWidth={previewWidth} onSubmit={(e) => e.preventDefault()}>
         <Input
           $data={sectionData}
           $previewWidth={previewWidth}
-          type="email"
-          placeholder="ایمیل خود را وارد کنید"
+          type="tel"
+          placeholder="09120000000"
           required
+          dir="rtl"
+          className="text-center"
         />
         <Button
           $data={sectionData}
