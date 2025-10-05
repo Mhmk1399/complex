@@ -164,7 +164,7 @@ export const ProductListForm: React.FC<ProductListProps> = ({
             <input
               type="number"
               name="gridColumns"
-              max={6}
+              max={4}
               value={userInputData.setting.gridColumns || 1}
               onChange={handleSettingChange}
               placeholder="Grid Columns"
@@ -282,14 +282,7 @@ export const ProductListForm: React.FC<ProductListProps> = ({
                 value={userInputData?.setting?.imageRadius?.toString() ?? "8"}
                 onChange={handleSettingChange}
               />
-              <DynamicRangeInput
-                label="فاصله داخلی تصویر"
-                name="imagePadding"
-                min="0"
-                max="20"
-                value={userInputData?.setting?.imagePadding?.toString() ?? "8"}
-                onChange={handleSettingChange}
-              />
+              
 
               <DynamicRangeInput
                 label="اندازه فونت نام"

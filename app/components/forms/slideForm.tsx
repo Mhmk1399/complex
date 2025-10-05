@@ -720,7 +720,9 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                   <ColorInput
                     label="رنگ سربرگ"
                     name="textColor"
-                    value={userInputData?.setting?.textColor?.toString() ?? "#ffffff"}
+                    value={
+                      userInputData?.setting?.textColor?.toString() ?? "#ffffff"
+                    }
                     onChange={handleSettingChange}
                   />
                 </div>
