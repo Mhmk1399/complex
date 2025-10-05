@@ -2,7 +2,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Preview } from "./preview";
 import { Form } from "./form";
-import smData from "../../public/template/homesm.json";
 import Image from "next/image";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import {
@@ -15,15 +14,6 @@ import {
   FaRobot,
 } from "react-icons/fa";
 
-import {
-  AboutChildren,
-  BlogChildren,
-  BlogDetailChildren,
-  DetailPageChildren,
-  Layout,
-  StoreChildren,
-} from "../../lib/types";
-
 import { AnimatePresence, motion } from "framer-motion";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -31,7 +21,7 @@ import TourGuide from "./sections/guideTour";
 import { useSharedContext } from "@/app/contexts/SharedContext";
 import { CanvasProvider } from "../contexts/CanvasContext";
 import { createApiService } from "@/lib/api-factory";
-import { method } from "lodash";
+import { Layout } from "@/lib/types";
 
 const routeIcons = {
   home: FaHome,
@@ -56,26 +46,13 @@ export const Main = () => {
   } = useSharedContext();
 
   // Frontend cache
-  const [cache, setCache] = useState<
-    Record<string, { data: any; timestamp: number }>
-  >({});
+  interface CacheData {
+    data: unknown;
+    timestamp: number;
+  }
+
+  const [cache, setCache] = useState<Record<string, CacheData>>({});
   const CACHE_DURATION = 60000; // 1 minute
-
-  // Get storeId from subdomain in production or env in development
-  const getStoreId = () => {
-    const isDev = process.env.NODE_ENV === "development";
-
-    if (isDev) {
-      return process.env.NEXT_PUBLIC_DEV_STORE_ID;
-    }
-
-    if (typeof window !== "undefined") {
-      const hostname = window.location.hostname;
-      const subdomain = hostname.split(".")[0];
-      return subdomain;
-    }
-    return null;
-  };
 
   const getAuthToken = () => {
     if (typeof window !== "undefined") {
@@ -126,7 +103,7 @@ export const Main = () => {
     }
 
     try {
-      const decoded = jwt.decode(token) as any;
+      const decoded = jwt.decode(token) as JwtPayload;
       const storeId = decoded?.storeId;
 
       if (!storeId) {
@@ -183,7 +160,7 @@ export const Main = () => {
     const cached = cache[cacheKey];
 
     if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
-      const data = cached.data;
+      const data = cached.data as Layout;
       setLayout(data);
       return data;
     }
@@ -193,14 +170,14 @@ export const Main = () => {
         headers: {
           selectedRoute: selectedRoute.split(".")[0],
           activeMode: activeMode,
-          token: localStorage.getItem("token"),
+          token: localStorage.getItem("token") || "",
         },
       });
       setCache((prev) => ({
         ...prev,
         [cacheKey]: { data, timestamp: Date.now() },
       }));
-      setLayout(data);
+      setLayout(data as Layout);
       return data;
     } catch (error) {
       console.log("Error in data fetch:", error);
@@ -247,7 +224,7 @@ export const Main = () => {
         headers: {
           selectedRoute: selectedRoute,
           activeMode: activeMode,
-          token: localStorage.getItem("token"),
+          token: localStorage.getItem("token") || "",
         },
       });
       console.log("Save response:", result);
@@ -269,9 +246,10 @@ export const Main = () => {
     const cached = cache[cacheKey];
 
     if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
-      const cleanedRoutes = cleanRouteNames(cached.data.files as string[]);
-      setRoutes(cleanedRoutes as string[]);
-      setActiveRoutes(cleanedRoutes as string[]);
+      const cachedData = cached.data as { files: string[] };
+      const cleanedRoutes = cleanRouteNames(cachedData.files);
+      setRoutes(cleanedRoutes);
+      setActiveRoutes(cleanedRoutes);
       return;
     }
 
@@ -291,8 +269,8 @@ export const Main = () => {
       console.log(cleanedRoutes, ",,,,,,,,,,,,,,,");
       setRoutes(cleanedRoutes as string[]);
       setActiveRoutes(cleanedRoutes as string[]);
-    } catch (error: any) {
-      console.log("Error fetching routes:", error);
+    } catch {
+      console.log("Error fetching routes:");
     }
   };
 

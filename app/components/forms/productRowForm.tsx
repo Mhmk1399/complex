@@ -28,6 +28,12 @@ interface BoxValues {
   right: number;
 }
 
+interface Collection {
+  _id: string;
+  name: string;
+  products?: unknown[];
+}
+
 export const ProductRowForm: React.FC<ProductRowFormProps> = ({
   setUserInputData,
   userInputData,
@@ -89,7 +95,6 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
     "/collections",
     {
       revalidateOnFocus: false,
-      refreshInterval: 60000,
     }
   );
 
@@ -178,13 +183,13 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
           Authorization: localStorage.getItem("token") || "",
         },
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         const selectedCollection = data.product?.find(
-          (col: any) => col._id === collectionId
+          (col: Collection) => col._id === collectionId
         );
-        
+
         if (selectedCollection?.products) {
           const collectionData = {
             collectionId,

@@ -141,7 +141,6 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
     "/collections",
     {
       revalidateOnFocus: false,
-      refreshInterval: 60000,
     }
   );
 

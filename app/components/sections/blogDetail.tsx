@@ -289,8 +289,7 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
 
   const { data: blogData, error } = api.useGet("/blogs", {
     revalidateOnFocus: false,
-    refreshInterval: 60000,
-  });
+   });
 
   useEffect(() => {
     if (blogData) {

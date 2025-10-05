@@ -23,14 +23,13 @@ interface GalleryFormProps {
   selectedComponent: string;
 }
 
-// interface ImageFile {
-//   _id: string;
-//   fileName: string;
-//   fileUrl: string;
-//   fileType: string;
-//   fileSize: number;
-//   storeId: string;
-// }
+interface ImageData {
+  id: string;
+  filename: string;
+  url: string;
+  uploadedAt: string;
+  size: number;
+}
 
 interface BoxValues {
   top: number;
@@ -295,9 +294,9 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
     setIsContentOpen(true);
   }, []);
 
-  const handleImageSelect = (image: any) => {
-    handleImageChange(currentSlideIndex, "imageSrc", image.url || image.fileUrl);
-    handleImageChange(currentSlideIndex, "imageAlt", image.filename || image.fileName);
+  const handleImageSelect = (image: ImageData) => {
+    handleImageChange(currentSlideIndex, "imageSrc", image.url);
+    handleImageChange(currentSlideIndex, "imageAlt", image.filename);
     setIsImageSelectorOpen(false);
   };
 

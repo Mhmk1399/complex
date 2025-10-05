@@ -71,7 +71,8 @@ Just return the raw JSON object.
 const getErrorMessage = (error: unknown): string => {
   if (error instanceof Error) {
     // Check for known error messages
-    if (Object.values(ERROR_MESSAGES).includes(error.message as any)) {
+    const errorValues = Object.values(ERROR_MESSAGES) as string[];
+    if (errorValues.includes(error.message)) {
       return error.message;
     }
 

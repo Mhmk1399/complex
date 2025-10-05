@@ -253,20 +253,6 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
     setActiveRoutes((prev) => prev.filter((route) => route !== urlToRemove));
   };
 
-  const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (isUpdating) return;
-    setIsUpdating(true);
-    const { name, value } = e.target;
-    setUserInputData((prev: HeaderSection) => ({
-      ...prev,
-      blocks: {
-        ...prev.blocks,
-        [name]: value,
-      },
-    }));
-    setTimeout(() => setIsUpdating(false), 100);
-  };
-
   const handleBlockSettingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (isUpdating) return;
     setIsUpdating(true);

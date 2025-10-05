@@ -1,8 +1,15 @@
-import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { roleMiddleware } from "@/middlewares/decodeToken";
 import images from "@/models/uploads";
 import connect from "@/lib/data";
+
+interface ImageData {
+  id: string;
+  filename: string;
+  url: string;
+  uploadedAt: Date;
+  size: number;
+}
 
 interface UploadResponse {
   success: boolean;
@@ -10,7 +17,7 @@ interface UploadResponse {
   message?: string;
   error?: string;
   status?: number;
-  images?: any[];
+  images?: ImageData[];
 }
 
 export async function GET(
@@ -35,15 +42,15 @@ export async function GET(
     }
 
     await connect();
-    
+
     const imagesList = await images.find({ storeId }).sort({ uploadDate: -1 });
-    
-    const formattedImages = imagesList.map(img => ({
+
+    const formattedImages = imagesList.map((img) => ({
       id: img._id.toString(),
       filename: img.imagesName,
       url: img.imagesUrl,
       uploadedAt: img.uploadDate,
-      size: img.imagesize
+      size: img.imagesize,
     }));
 
     return NextResponse.json({
@@ -81,7 +88,7 @@ export async function GET(
 //     }
 
 //     const { fileId } = await request.json();
-    
+
 //     if (!fileId) {
 //       return NextResponse.json(
 //         { success: false, error: "File ID required" },
@@ -90,10 +97,10 @@ export async function GET(
 //     }
 
 //     await connect();
-    
+
 //     // Find the file record
 //     const fileRecord = await images.findOne({ _id: fileId, storeId });
-    
+
 //     if (!fileRecord) {
 //       return NextResponse.json(
 //         { success: false, error: "File not found" },
@@ -104,7 +111,7 @@ export async function GET(
 //     // Extract object name from URL for bucket deletion
 //     const url = fileRecord.imagesUrl;
 //     const objectName = url.split('/').slice(-2).join('/'); // gets "uploads/filename"
-    
+
 //     const accessKey = process.env.ARVAN_ACCESS_KEY;
 //     const secretKey = process.env.ARVAN_SECRET_KEY;
 //     const bucketName = process.env.ARVAN_BUCKET_NAME || "mamad";
@@ -120,14 +127,14 @@ export async function GET(
 //     const dateValue = new Date().toUTCString();
 //     const resource = `/${bucketName}/${objectName}`;
 //     const stringToSign = `DELETE\n\n\n${dateValue}\n${resource}`;
-    
+
 //     const signature = crypto
 //       .createHmac("sha1", secretKey)
 //       .update(stringToSign)
 //       .digest("base64");
 
 //     const deleteUrl = `https://${bucketName}.s3.ir-thr-at1.arvanstorage.ir/${objectName}`;
-    
+
 //     const response = await fetch(deleteUrl, {
 //       method: "DELETE",
 //       headers: {

@@ -31,8 +31,8 @@ export async function POST(request: NextRequest) {
       user: decoded,
       message: "Token verified successfully",
     });
-  } catch (error: any) {
-    console.error("JWT verification failed:", error.message);
+  } catch {
+    console.error("JWT verification failed:");
     return NextResponse.json(
       { valid: false, message: "Invalid or expired token" },
       { status: 401 }

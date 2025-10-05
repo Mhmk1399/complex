@@ -1,12 +1,16 @@
 "use client";
 import styled from "styled-components";
-import type { Layout, ProductCardType, SpecialOfferSection } from "@/lib/types";
+import type { Layout, ProductCardData, SpecialOfferSection } from "@/lib/types";
 import ProductCard from "./productCard";
 import { useEffect, useState, useRef } from "react";
 import { Delete } from "../C-D";
 import { createApiService } from "@/lib/api-factory";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
-
+interface Collection {
+  _id: string;
+  name: string;
+  products?: unknown[];
+}
 interface SpecialOfferProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
@@ -294,22 +298,20 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
   });
 
   const collectionId = sectionData?.blocks?.setting?.selectedCollection;
-  const [specialOfferProducts, setSpecialOfferProducts] = useState<ProductCardType[]>([]);
-  
-  const { data: collectionsData } = api.useGet(
-    "/collections",
-    {
-      revalidateOnFocus: false,
-      refreshInterval: 60000,
-    }
-  );
+  const [specialOfferProducts, setSpecialOfferProducts] = useState<
+    ProductCardData[]
+  >([]);
+
+  const { data: collectionsData } = api.useGet("/collections", {
+    revalidateOnFocus: false,
+   });
 
   useEffect(() => {
     if (collectionId && collectionsData?.product) {
       const selectedCollection = collectionsData.product.find(
-        (col: any) => col._id === collectionId
+        (col: Collection) => col._id === collectionId
       );
-      
+
       if (selectedCollection?.products) {
         setSpecialOfferProducts(selectedCollection.products);
       } else {
@@ -424,7 +426,7 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
         </div>
 
         {specialOfferProducts.length > 0 &&
-          specialOfferProducts.map((product: ProductCardType) => (
+          specialOfferProducts.map((product: ProductCardData) => (
             <ProductCard key={product._id} productData={product} />
           ))}
         {specialOfferProducts.length === 0 && (

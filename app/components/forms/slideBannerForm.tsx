@@ -22,6 +22,13 @@ interface BoxValues {
   left: number;
   right: number;
 }
+interface ImageData {
+  id: string;
+  filename: string;
+  url: string;
+  uploadedAt: string;
+  size: number;
+}
 
 export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
   setUserInputData,
@@ -230,17 +237,9 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
     setIsContentOpen(true);
   }, []);
 
-  const handleImageSelect = (image: any) => {
-    handleSlideChange(
-      currentSlideIndex,
-      "imageSrc",
-      image.url || image.fileUrl
-    );
-    handleSlideChange(
-      currentSlideIndex,
-      "imageAlt",
-      image.filename || image.fileName
-    );
+  const handleImageSelect = (image: ImageData) => {
+    handleSlideChange(currentSlideIndex, "imageSrc", image.url);
+    handleSlideChange(currentSlideIndex, "imageAlt", image.filename);
     setIsImageSelectorOpen(false);
   };
 
@@ -298,7 +297,7 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
       )}
 
       {/* Style Settings */}
-       {isStyleSettingsOpen && (
+      {isStyleSettingsOpen && (
         <div className="p-4 border-gray-100 animate-slideDown">
           <div className="space-y-4 rounded-lg">
             <h4 className="font-bold text-sky-700 mb-3">تنظیمات ارتفاع بنر</h4>

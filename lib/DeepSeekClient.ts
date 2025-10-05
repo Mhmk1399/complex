@@ -153,11 +153,7 @@ const buildRequestPayload = (prompt: string): DeepSeekRequest => ({
   top_p: CONFIG.TOP_P,
 });
 
-// ✅ تابع کمکی برای فشرده‌سازی JSON
-const compressJSON = (obj: any): string => {
-  // حذف فضاهای خالی و فرمت‌بندی
-  return JSON.stringify(obj);
-};
+ 
 
 // Main Client Class
 export class DeepSeekClient {

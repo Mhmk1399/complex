@@ -1,6 +1,6 @@
 "use client";
 import styled from "styled-components";
-import { Layout, OfferRowSection, SpecialOfferSection } from "@/lib/types";
+import { Layout, OfferRowSection } from "@/lib/types";
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { Delete } from "../C-D";
@@ -59,20 +59,22 @@ const OfferItem = styled.div<{
     width: 80px;
     height: 80px;
     object-fit: cover;
-    
+
     /* Apply image animations */
     ${(props) => {
       const imageAnimation = props.$data.blocks?.setting?.imageAnimation;
-      if (!imageAnimation) return '';
-      
+      if (!imageAnimation) return "";
+
       const { type, animation: animConfig } = imageAnimation;
-      const selector = type === 'hover' ? '&:hover' : '&:active';
-      
+      const selector = type === "hover" ? "&:hover" : "&:active";
+
       // Generate animation CSS based on type
-      if (animConfig.type === 'pulse') {
+      if (animConfig.type === "pulse") {
         return `
           ${selector} {
-            animation: offerImagePulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: offerImagePulse ${animConfig.duration} ${
+          animConfig.timing
+        } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes offerImagePulse {
@@ -86,10 +88,12 @@ const OfferItem = styled.div<{
             }
           }
         `;
-      } else if (animConfig.type === 'glow') {
+      } else if (animConfig.type === "glow") {
         return `
           ${selector} {
-            animation: offerImageGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: offerImageGlow ${animConfig.duration} ${
+          animConfig.timing
+        } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes offerImageGlow {
@@ -101,10 +105,12 @@ const OfferItem = styled.div<{
             }
           }
         `;
-      } else if (animConfig.type === 'brightness') {
+      } else if (animConfig.type === "brightness") {
         return `
           ${selector} {
-            animation: offerImageBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: offerImageBrightness ${animConfig.duration} ${
+          animConfig.timing
+        } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes offerImageBrightness {
@@ -116,10 +122,12 @@ const OfferItem = styled.div<{
             }
           }
         `;
-      } else if (animConfig.type === 'blur') {
+      } else if (animConfig.type === "blur") {
         return `
           ${selector} {
-            animation: offerImageBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: offerImageBlur ${animConfig.duration} ${
+          animConfig.timing
+        } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes offerImageBlur {
@@ -131,10 +139,12 @@ const OfferItem = styled.div<{
             }
           }
         `;
-      } else if (animConfig.type === 'saturate') {
+      } else if (animConfig.type === "saturate") {
         return `
           ${selector} {
-            animation: offerImageSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: offerImageSaturate ${animConfig.duration} ${
+          animConfig.timing
+        } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes offerImageSaturate {
@@ -146,10 +156,12 @@ const OfferItem = styled.div<{
             }
           }
         `;
-      } else if (animConfig.type === 'contrast') {
+      } else if (animConfig.type === "contrast") {
         return `
           ${selector} {
-            animation: offerImageContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: offerImageContrast ${animConfig.duration} ${
+          animConfig.timing
+        } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes offerImageContrast {
@@ -161,10 +173,12 @@ const OfferItem = styled.div<{
             }
           }
         `;
-      } else if (animConfig.type === 'opacity') {
+      } else if (animConfig.type === "opacity") {
         return `
           ${selector} {
-            animation: offerImageOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: offerImageOpacity ${animConfig.duration} ${
+          animConfig.timing
+        } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes offerImageOpacity {
@@ -179,10 +193,12 @@ const OfferItem = styled.div<{
             }
           }
         `;
-      } else if (animConfig.type === 'shadow') {
+      } else if (animConfig.type === "shadow") {
         return `
           ${selector} {
-            animation: offerImageShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+            animation: offerImageShadow ${animConfig.duration} ${
+          animConfig.timing
+        } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
           }
           
           @keyframes offerImageShadow {
@@ -195,8 +211,8 @@ const OfferItem = styled.div<{
           }
         `;
       }
-      
-      return '';
+
+      return "";
     }}
   }
 
@@ -219,11 +235,11 @@ const ViewAllButton = styled.button<{
   margin-right: auto;
   font-weight: 600;
   display: none;
-  
+
   &:hover {
     opacity: 0.65;
   }
-  
+
   @media (min-width: 1024px) {
     display: flex;
     flex-direction: row-reverse;
@@ -234,16 +250,18 @@ const ViewAllButton = styled.button<{
   /* Apply button animations */
   ${(props) => {
     const buttonAnimation = props.$data.blocks?.setting?.buttonAnimation;
-    if (!buttonAnimation) return '';
-    
+    if (!buttonAnimation) return "";
+
     const { type, animation: animConfig } = buttonAnimation;
-    const selector = type === 'hover' ? '&:hover' : '&:active';
-    
+    const selector = type === "hover" ? "&:hover" : "&:active";
+
     // Generate animation CSS based on type
-    if (animConfig.type === 'pulse') {
+    if (animConfig.type === "pulse") {
       return `
         ${selector} {
-          animation: offerButtonPulse ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: offerButtonPulse ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes offerButtonPulse {
@@ -257,10 +275,12 @@ const ViewAllButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'glow') {
+    } else if (animConfig.type === "glow") {
       return `
         ${selector} {
-          animation: offerButtonGlow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: offerButtonGlow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes offerButtonGlow {
@@ -272,10 +292,12 @@ const ViewAllButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'brightness') {
+    } else if (animConfig.type === "brightness") {
       return `
         ${selector} {
-          animation: offerButtonBrightness ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: offerButtonBrightness ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes offerButtonBrightness {
@@ -287,10 +309,12 @@ const ViewAllButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'blur') {
+    } else if (animConfig.type === "blur") {
       return `
         ${selector} {
-          animation: offerButtonBlur ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: offerButtonBlur ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes offerButtonBlur {
@@ -302,10 +326,12 @@ const ViewAllButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'saturate') {
+    } else if (animConfig.type === "saturate") {
       return `
         ${selector} {
-          animation: offerButtonSaturate ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: offerButtonSaturate ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes offerButtonSaturate {
@@ -317,10 +343,12 @@ const ViewAllButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'contrast') {
+    } else if (animConfig.type === "contrast") {
       return `
         ${selector} {
-          animation: offerButtonContrast ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: offerButtonContrast ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes offerButtonContrast {
@@ -332,10 +360,12 @@ const ViewAllButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'opacity') {
+    } else if (animConfig.type === "opacity") {
       return `
         ${selector} {
-          animation: offerButtonOpacity ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: offerButtonOpacity ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes offerButtonOpacity {
@@ -350,10 +380,12 @@ const ViewAllButton = styled.button<{
           }
         }
       `;
-    } else if (animConfig.type === 'shadow') {
+    } else if (animConfig.type === "shadow") {
       return `
         ${selector} {
-          animation: offerButtonShadow ${animConfig.duration} ${animConfig.timing} ${animConfig.delay || '0s'} ${animConfig.iterationCount || '1'};
+          animation: offerButtonShadow ${animConfig.duration} ${
+        animConfig.timing
+      } ${animConfig.delay || "0s"} ${animConfig.iterationCount || "1"};
         }
         
         @keyframes offerButtonShadow {
@@ -366,8 +398,8 @@ const ViewAllButton = styled.button<{
         }
       `;
     }
-    
-    return '';
+
+    return "";
   }}
 `;
 
@@ -387,19 +419,18 @@ export const OfferRow: React.FC<OfferRowProps> = ({
   ) as OfferRowSection;
 
   const api = createApiService({
-    baseUrl: '/api',
+    baseUrl: "/api",
     headers: {
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json",
+    },
   });
 
   const collectionId = sectionData?.blocks?.setting?.selectedCollection;
-  const { data: collectionsData, error: collectionsError } = api.useGet(
-    collectionId ? '/collections/id' : null,
+  const { data: collectionsData } = api.useGet(
+    collectionId ? "/collections/id" : "/collections",
     {
       headers: { collectionId },
       revalidateOnFocus: false,
-      refreshInterval: 60000
     }
   );
 
@@ -503,7 +534,11 @@ export const OfferRow: React.FC<OfferRowProps> = ({
                 title: string;
                 discount?: number;
               }) => (
-                <OfferItem key={category._id} className="relative" $data={sectionData}>
+                <OfferItem
+                  key={category._id}
+                  className="relative"
+                  $data={sectionData}
+                >
                   <Image
                     src={category.images.imageSrc}
                     alt={category.images.imageAlt}

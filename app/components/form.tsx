@@ -15,8 +15,8 @@ import newsLetterImage from "@/public/assets/images/newsletter.png";
 import multiColumnImage from "@/public/assets/images/multicolumn.png";
 import slideShowImage from "@/public/assets/images/slideShow.png";
 import multiRowImage from "@/public/assets/images/multirow.png";
-import video from "@/public/assets/images/video.png";
-import videoSm from "@/public/assets/images/videoSm.png";
+// import video from "@/public/assets/images/video.png";
+// import videoSm from "@/public/assets/images/videoSm.png";
 import rowSm from "@/public/assets/images/rowSm.png";
 import slideSm from "@/public/assets/images/slideSm.png";
 import columnSm from "@/public/assets/images/columnSm.png";
@@ -26,11 +26,11 @@ import collapseSm from "@/public/assets/images/collapseSm.png";
 import bannerSm from "@/public/assets/images/BannerSm.png";
 import imagetextSm from "@/public/assets/images/imagetextSm.png";
 import richtextSm from "@/public/assets/images/richtextSm.png";
-import collectionSm from "@/public/assets/images/collectionsm.png";
-import collection from "@/public/assets/images/collection.png";
+// import collectionSm from "@/public/assets/images/collectionsm.png";
+// import collection from "@/public/assets/images/collection.png";
 import brand from "@/public/assets/images/brand.png";
 import gallery from "@/public/assets/images/gallery.png";
-import market from "@/public/assets/images/market.png";
+// import market from "@/public/assets/images/market.png";
 import newproduct from "@/public/assets/images/newproduct.png";
 import offer from "@/public/assets/images/offer.png";
 import slidebanner from "@/public/assets/images/slidebanner.png";
@@ -371,11 +371,6 @@ const smSections = [
   //   backgroundSize: "cover",
   //   backgroundPosition: "center",
   // },
-  
- 
- 
- 
- 
 ];
 
 const themeStyles = `
@@ -445,7 +440,7 @@ export const Form = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [contentHeight, setContentHeight] = useState<number>(0);
   const contentRef = useRef<HTMLDivElement>(null);
-  console.log(selectedComponent, "selectedComponent");
+  console.log(selectedComponent, contentHeight);
   // for get the height of form
   useEffect(() => {
     const updateHeight = () => {

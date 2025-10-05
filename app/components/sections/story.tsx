@@ -15,7 +15,14 @@ interface StoryProps {
   setLayout: React.Dispatch<React.SetStateAction<Layout>>;
   previewWidth: "sm" | "default";
 }
-
+interface StoryData {
+  id: string;
+  imageUrl: string;
+  title: string;
+  link: string;
+  _id?: string;
+  image?: string;
+}
 interface Story {
   _id: string;
   title: string;
@@ -277,9 +284,8 @@ export const Story: React.FC<StoryProps> = ({
     },
   });
 
-  const { data: storiesData, error: storiesError } = api.useGet("/story", {
+  const { data: storiesData } = api.useGet("/story", {
     revalidateOnFocus: false,
-    refreshInterval: 60000,
   });
 
   const stories: Story[] = storiesData || [];
@@ -365,24 +371,29 @@ export const Story: React.FC<StoryProps> = ({
           className="overflow-x-auto"
         >
           {(stories.length > 0 ? stories : sectionData.blocks.stories).map(
-            (story: any, idx: number) => (
-              <StoryItem
-                key={"_id" in story ? story._id + idx : idx}
-                $data={sectionData}
-                onClick={() => setSelectedStory(story.image || story.imageUrl)}
-              >
-                <div className="story-ring">
-                  <Image
-                    src={story.image || story.imageUrl}
-                    alt={story.title}
-                    className="story-image h-[100px] object-cover"
-                    width={800}
-                    height={800}
-                  />
-                </div>
-                <span className="story-title">{story.title}</span>
-              </StoryItem>
-            )
+            (story, idx: number) => {
+              const storyData = story as Story & StoryData;
+              return (
+                <StoryItem
+                  key={storyData._id ? storyData._id + idx : storyData.id + idx}
+                  $data={sectionData}
+                  onClick={() =>
+                    setSelectedStory(storyData.image || storyData.imageUrl)
+                  }
+                >
+                  <div className="story-ring">
+                    <Image
+                      src={storyData.image || storyData.imageUrl}
+                      alt={storyData.title}
+                      className="story-image h-[100px] object-cover"
+                      width={800}
+                      height={800}
+                    />
+                  </div>
+                  <span className="story-title">{storyData.title}</span>
+                </StoryItem>
+              );
+            }
           )}
         </StoriesWrapper>
       </StoryContainer>

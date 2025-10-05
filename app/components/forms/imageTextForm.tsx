@@ -27,6 +27,13 @@ interface BoxValues {
   left: number;
   right: number;
 }
+interface ImageData {
+  id: string;
+  filename: string;
+  url: string;
+  uploadedAt: string;
+  size: number;
+}
 
 export const ImageTextForm: React.FC<ImageTextFormProps> = ({
   setUserInputData,
@@ -318,7 +325,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
     setIsContentOpen(true);
   }, []);
 
-  const handleImageSelect = (image: any) => {
+  const handleImageSelect = (image: ImageData) => {
     handleContentChange("imageSrc", image.url);
     setIsImageSelectorOpen(false);
   };
@@ -772,7 +779,9 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
               name="shadowOffsetX"
               min="-50"
               max="50"
-              value={userInputData?.blocks?.setting?.shadowOffsetX?.toString() ?? "0"}
+              value={
+                userInputData?.blocks?.setting?.shadowOffsetX?.toString() ?? "0"
+              }
               onChange={handleSettingChange}
             />
             <DynamicRangeInput
@@ -780,7 +789,9 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
               name="shadowOffsetY"
               min="-50"
               max="50"
-              value={userInputData?.blocks?.setting?.shadowOffsetY?.toString() ?? "0"}
+              value={
+                userInputData?.blocks?.setting?.shadowOffsetY?.toString() ?? "0"
+              }
               onChange={handleSettingChange}
             />
             <DynamicRangeInput
@@ -788,7 +799,9 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
               name="shadowBlur"
               min="0"
               max="100"
-              value={userInputData?.blocks?.setting?.shadowBlur?.toString() ?? "0"}
+              value={
+                userInputData?.blocks?.setting?.shadowBlur?.toString() ?? "0"
+              }
               onChange={handleSettingChange}
             />
             <DynamicRangeInput
@@ -796,13 +809,17 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
               name="shadowSpread"
               min="-20"
               max="20"
-              value={userInputData?.blocks?.setting?.shadowSpread?.toString() ?? "0"}
+              value={
+                userInputData?.blocks?.setting?.shadowSpread?.toString() ?? "0"
+              }
               onChange={handleSettingChange}
             />
             <ColorInput
               label="رنگ سایه"
               name="shadowColor"
-              value={userInputData?.blocks?.setting?.shadowColor?.toString() ?? "0"}
+              value={
+                userInputData?.blocks?.setting?.shadowColor?.toString() ?? "0"
+              }
               onChange={handleSettingChange}
             />
           </div>

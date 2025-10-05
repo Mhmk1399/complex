@@ -410,13 +410,15 @@ const ContactForm: React.FC<ContactFormProps> = ({
             شماره تماس
           </Label>
           <Input
+            dir="rtl"
             $data={sectionData}
             type="tel"
             id="phone"
             name="phone"
             value={formData.phone}
             onChange={handleInputChange}
-            placeholder="شماره تماس خود را وارد کنید"
+            className="text-right"
+            placeholder="09120000000"
           />
         </FormGroup>
 

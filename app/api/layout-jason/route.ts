@@ -1,10 +1,10 @@
 import connect from "@/lib/data";
 import { NextRequest, NextResponse } from "next/server";
 import { fetchFromMongoDB, saveToMongoDB } from "@/services/mongodb";
-import homelg from "@/public/template/homelg.json";
-import homesm from "@/public/template/homesm.json";
-import fs from "fs/promises";
-import path from "path";
+// import homelg from "@/public/template/homelg.json";
+// import homesm from "@/public/template/homesm.json";
+// import fs from "fs/promises";
+// import path from "path";
 import { getStoreIdFromRequest } from "@/utilities/getStoreId";
 
 // export async function GET(request: NextRequest) {

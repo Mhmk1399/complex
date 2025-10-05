@@ -188,8 +188,7 @@ const DetailPage: React.FC<DetailPageProps> = ({
 
   const { data: productData, error } = api.useGet(`/products/${productId}`, {
     revalidateOnFocus: false,
-    refreshInterval: 60000,
-  });
+   });
 
   useEffect(() => {
     if (productData) {

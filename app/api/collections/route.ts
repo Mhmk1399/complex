@@ -4,6 +4,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import collections from "@/models/collections";
 import products from "@/models/products";
 import category from "@/models/category";
+import { ProductCardData } from "@/lib/types";
 
 export async function GET(request: NextRequest) {
   // Establish database connection
@@ -98,7 +99,7 @@ export async function GET(request: NextRequest) {
     // For each collection, get the actual product data from Products collection
     const collectionsWithProducts = await Promise.all(
       collectionsData.map(async (collection) => {
-        const productIds = collection.products.map((p: any) => p._id).filter(Boolean);
+        const productIds = collection.products.map((p: ProductCardData) => p._id).filter(Boolean);
         
         if (productIds.length > 0) {
           const actualProducts = await products.find({

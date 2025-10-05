@@ -1,12 +1,16 @@
 "use client";
 import styled from "styled-components";
-import type { Layout, ProductRowSection } from "@/lib/types";
+import type { Layout, ProductCardData, ProductRowSection } from "@/lib/types";
 import ProductCard from "./productCard";
 import { useEffect, useState, useRef } from "react";
 import { Delete } from "../C-D";
 import { createApiService } from "@/lib/api-factory";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
-
+interface Collection {
+  _id: string;
+  name: string;
+  products?: unknown[];
+}
 interface ProductsRowProps {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>;
   layout: Layout;
@@ -294,22 +298,20 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
   });
 
   const collectionId = sectionData?.blocks?.setting?.selectedCollection;
-  const [collectionProducts, setCollectionProducts] = useState<any[]>([]);
-  
-  const { data: collectionsData } = api.useGet(
-    "/collections",
-    {
-      revalidateOnFocus: false,
-      refreshInterval: 60000,
-    }
-  );
+  const [collectionProducts, setCollectionProducts] = useState<
+    ProductCardData[]
+  >([]);
+
+  const { data: collectionsData } = api.useGet("/collections", {
+    revalidateOnFocus: false,
+  });
 
   useEffect(() => {
     if (collectionId && collectionsData?.product) {
       const selectedCollection = collectionsData.product.find(
-        (col: any) => col._id === collectionId
+        (col: Collection) => col._id === collectionId
       );
-      
+
       if (selectedCollection?.products) {
         setCollectionProducts(selectedCollection.products);
       } else {
@@ -427,7 +429,7 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
           </div>
 
           {collectionProducts.length > 0 &&
-            collectionProducts.map((product: any, idx: number) => (
+            collectionProducts.map((product: ProductCardData, idx: number) => (
               <ProductCard key={idx} productData={product} />
             ))}
           {collectionProducts.length === 0 && (

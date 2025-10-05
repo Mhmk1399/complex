@@ -19,20 +19,19 @@ interface BrandsFormProps {
   selectedComponent: string;
 }
 
-// interface ImageFile {
-//   _id: string;
-//   fileName: string;
-//   fileUrl: string;
-//   fileType: string;
-//   fileSize: number;
-//   storeId: string;
-// }
-
 interface BoxValues {
   top: number;
   bottom: number;
   left: number;
   right: number;
+}
+
+interface ImageData {
+  id: string;
+  filename: string;
+  url: string;
+  uploadedAt: string;
+  size: number;
 }
 
 export const BrandsForm: React.FC<BrandsFormProps> = ({
@@ -229,7 +228,7 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
     });
   };
 
-  const handleImageSelect = (image: any) => {
+  const handleImageSelect = (image: ImageData) => {
     handleBrandChange(currentSlideIndex, "logo", image.url);
     setIsImageSelectorOpen(false);
   };

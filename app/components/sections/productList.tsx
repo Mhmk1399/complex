@@ -205,18 +205,13 @@ const ProductList: React.FC<ProductListProps> = ({
     },
   });
 
-  const { data: productsData, error: productsError } = api.useGet("/products", {
+  const { data: productsData } = api.useGet("/products", {
     revalidateOnFocus: false,
-    refreshInterval: 60000,
-  });
+   });
 
-  const { data: categoriesData, error: categoriesError } = api.useGet(
-    "/category",
-    {
-      revalidateOnFocus: false,
-      refreshInterval: 60000,
-    }
-  );
+  const { data: categoriesData } = api.useGet("/category", {
+    revalidateOnFocus: false,
+   });
 
   const productData = productsData?.products || [];
   const categoriesDataList = categoriesData || [];

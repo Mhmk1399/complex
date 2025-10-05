@@ -13,7 +13,11 @@ import {
   DynamicSelectInput,
 } from "./DynamicInputs";
 import { MdDangerous } from "react-icons/md";
-
+interface Collection {
+  _id: string;
+  name: string;
+  products?: unknown[];
+}
 interface SpecialFormProps {
   setUserInputData: React.Dispatch<React.SetStateAction<SpecialOfferSection>>;
   userInputData: SpecialOfferSection;
@@ -54,8 +58,7 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
     "/collections",
     {
       revalidateOnFocus: false,
-      refreshInterval: 60000,
-    }
+     }
   );
 
   const collections = collectionsData?.product || [];
@@ -177,13 +180,13 @@ export const SpecialForm: React.FC<SpecialFormProps> = ({
           Authorization: localStorage.getItem("token") || "",
         },
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         const selectedCollection = data.product?.find(
-          (col: any) => col._id === collectionId
+          (col: Collection) => col._id === collectionId
         );
-        
+
         if (selectedCollection?.products) {
           // Save collection data to localStorage or state management
           const collectionData = {
