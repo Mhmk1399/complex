@@ -66,7 +66,7 @@ export const Preview: React.FC = () => {
     <div>
       <ClientWrapper>
         <div
-          className={`flex relative justify-center pt-5 ${
+          className={`flex relative justify-center ${
             previewWidth === "default" ? "flex-col" : ""
           }`}
         >

@@ -18,7 +18,7 @@
 //     const enamads = await Enamad.find({ storeId: storeId });
 //     return NextResponse.json(enamads);
 //   } catch (error) {
-//     console.error("Error fetching enamads:", error);
+//     console.log("Error fetching enamads:", error);
 //     return NextResponse.json({ error: "Failed to fetch enamads" });
 //   }
 // }

@@ -174,8 +174,6 @@ const ScrollTopButton = styled.button<{
   gap: 6px;
 
   &:hover {
-    background: #f9fafb;
-    border-color: #d1d5db;
     transform: translateY(-1px);
   }
 `;
@@ -319,7 +317,6 @@ const Footer: React.FC<FooterProps> = ({
 }) => {
   const [preview, setPreview] = useState(previewWidth);
   const [enamadExists] = useState(false);
-  const [enamad] = useState({});
   const [categories, setCategories] = useState<Category[]>([]);
   const { basic, userInfo } = useUserInfo();
 
@@ -428,9 +425,9 @@ const Footer: React.FC<FooterProps> = ({
     text,
     links,
     description,
-    instagramLink,
-    telegramLink,
-    whatsappLink,
+    // instagramLink,
+    // telegramLink,
+    // whatsappLink,
     logo,
     phoneNumber,
     textNumber,
@@ -472,11 +469,7 @@ const Footer: React.FC<FooterProps> = ({
         $preview={preview}
         $previewWidth={previewWidth}
       >
-        <Link
-          href={`tel:${userInfo?.contact?.phone || phoneNumber || "123123123"}`}
-        >
-          {userInfo?.contact?.phone || phoneNumber} |{" "}
-        </Link>{" "}
+        <Link href={`#`}>{userInfo?.contact?.phone || phoneNumber} | </Link>{" "}
         {textNumber && (
           <span className="text-xs opacity-70 mr-2">{textNumber}</span>
         )}
@@ -514,11 +507,7 @@ const Footer: React.FC<FooterProps> = ({
         $preview={preview}
         $previewWidth={previewWidth}
       >
-        <SocialLinkItem
-          href={instagramLink ? instagramLink : "/"}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <SocialLinkItem href={`#`} target="_blank" rel="noopener noreferrer">
           <Image
             src="/assets/images/instagram.png"
             alt="Instagram"
@@ -526,11 +515,7 @@ const Footer: React.FC<FooterProps> = ({
             height={preview === "sm" ? 24 : 28}
           />
         </SocialLinkItem>
-        <SocialLinkItem
-          href={whatsappLink ? whatsappLink : "/"}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <SocialLinkItem href={`#`} target="_blank" rel="noopener noreferrer">
           <Image
             src="/assets/images/whatsapp.png"
             alt="Whatsapp"
@@ -538,11 +523,7 @@ const Footer: React.FC<FooterProps> = ({
             height={preview === "sm" ? 24 : 28}
           />
         </SocialLinkItem>
-        <SocialLinkItem
-          href={telegramLink ? telegramLink : "/"}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <SocialLinkItem href={`#`} target="_blank" rel="noopener noreferrer">
           <Image
             src="/assets/images/telegram.png"
             alt="Telegram"
@@ -559,10 +540,7 @@ const Footer: React.FC<FooterProps> = ({
             .map((category) => (
               <CategorySection key={category._id}>
                 <ParentContainer>
-                  <ParentCategoryLink
-                    href={`/store?categoryId=${category._id}`}
-                    $data={sectionData}
-                  >
+                  <ParentCategoryLink href={`#`} $data={sectionData}>
                     {category.name}
                   </ParentCategoryLink>
                 </ParentContainer>
@@ -601,7 +579,7 @@ const Footer: React.FC<FooterProps> = ({
 
       {enamadExists && (
         <div className="hover:scale-105 transition-transform duration-200">
-          <Link href={enamad} target="_blank">
+          <Link href={"#"} target="_blank">
             <Image
               src="/assets/images/enamad.jpg"
               alt="Enamad Certification"

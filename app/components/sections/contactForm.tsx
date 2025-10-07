@@ -350,7 +350,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
         message: "",
       });
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.log("Error submitting form:", error);
       alert("خطا در ارسال پیام. لطفاً دوباره تلاش کنید.");
     }
   };

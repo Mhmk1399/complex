@@ -749,7 +749,7 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   if (!isHeaderBlock(blocks)) {
-    console.error("Blocks data is missing or invalid.");
+    console.log("Blocks data is missing or invalid.");
     return null;
   }
 

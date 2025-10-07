@@ -125,13 +125,15 @@ export const DetailForm: React.FC<DetailFormProps> = ({
   };
 
   return (
-    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+    <div className="p-2 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-lg font-bold mb-4">تنظیمات صفحه محصول</h2>
 
       {/* Tabs */}
       <TabButtons onTabChange={handleTabChange} />
+
+
       {isContentOpen && (
-        <div className="p-4  animate-slideDown">
+        <div className="p-2  animate-slideDown">
           <h3 className="text-lg font-semibold text-sky-700">تنظیمات محتوا</h3>
           <small>تنظیماتی برای محتوا وجود ندارد</small>
         </div>
@@ -372,7 +374,7 @@ export const DetailForm: React.FC<DetailFormProps> = ({
       )}
 
       {isAnimationOpen && (
-        <div className="p-4  animate-slideDown">
+        <div className="animate-slideDown">
           <h3 className="text-lg font-semibold text-sky-700">
             تنظیمات انیمیشن
           </h3>

@@ -250,7 +250,7 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
   const hasAnimation = !!currentAnimation;
 
   return (
-    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+    <div className="p-2 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-lg font-bold mb-4">تنظیمات برندها</h2>
 
       {/* Tabs */}
@@ -258,7 +258,7 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
 
       {/* Content Section */}
       {isContentOpen && (
-        <div className="p-4  animate-slideDown">
+        <div className="p-2  animate-slideDown">
           <label htmlFor="">عنوان</label>
           <input
             type="text"
@@ -304,6 +304,7 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
               />
               <input
                 type="text"
+                readOnly
                 placeholder="آدرس تصویر"
                 value={brand.logo}
                 onChange={(e) =>
@@ -327,7 +328,7 @@ export const BrandsForm: React.FC<BrandsFormProps> = ({
 
       {/* Style Settings */}
       {isStyleSettingsOpen && (
-        <div className="p-4  animate-slideDown">
+        <div className="  animate-slideDown">
           <div className="rounded-lg">
             <h4 className="font-bold text-sky-700 my-3">تنظیمات عنوان</h4>
             <ColorInput

@@ -6,10 +6,12 @@ interface TourGuideProps {
   deleteRouteButtonRef: React.RefObject<HTMLButtonElement>;
   previewToggleRef: React.RefObject<HTMLDivElement>;
   sitePreviewRef: React.RefObject<HTMLButtonElement>;
-  changeRouteRef: React.RefObject<HTMLSelectElement>;
+  changeRouteRef: React.RefObject<HTMLLabelElement>;
+  seoButtonRef: React.RefObject<HTMLButtonElement>;
+  routeNameRef: React.RefObject<HTMLSpanElement>;
   setActiveElement: React.Dispatch<
     React.SetStateAction<
-      "save" | "delete" | "preview" | "sitePreview" | "addRoute" | "changeRoute"
+      "save" | "delete" | "preview" | "sitePreview" | "addRoute" | "changeRoute" | "seo" | "routeName"
     >
   >;
 }
@@ -21,6 +23,8 @@ const TourGuide: React.FC<TourGuideProps> = ({
   previewToggleRef,
   sitePreviewRef,
   changeRouteRef,
+  seoButtonRef,
+  routeNameRef,
   setActiveElement,
 }) => {
   const idArray = [
@@ -30,10 +34,13 @@ const TourGuide: React.FC<TourGuideProps> = ({
     "preview",
     "sitePreview",
     "changeRoute",
+    "seo",
+    "routeName",
   ];
 
   const [isTourVisible, setIsTourVisible] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+  const [highlightedElements, setHighlightedElements] = useState<HTMLElement[]>([]);
 
   const [tooltipPosition, setTooltipPosition] = useState({
     top: 10,
@@ -143,6 +150,43 @@ const TourGuide: React.FC<TourGuideProps> = ({
           />
         </svg>
       ),
+      seo: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="white"
+          className="w-6 h-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+          />
+        </svg>
+      ),
+      routeName: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="white"
+          className="w-6 h-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z"
+          />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6 6h.008v.008H6V6z"
+          />
+        </svg>
+      ),
     }),
     []
   );
@@ -186,6 +230,18 @@ const TourGuide: React.FC<TourGuideProps> = ({
         title: "تغییر مسیر",
         icon: StepIcons.changeRoutePath,
       },
+      {
+        ref: seoButtonRef,
+        content: "برای تنظیم عنوان و توضیحات سئو صفحه از این دکمه استفاده کنید.",
+        title: "تنظیمات سئو",
+        icon: StepIcons.seo,
+      },
+      {
+        ref: routeNameRef,
+        content: "این قسمت نام مسیر فعال را نمایش میدهد.",
+        title: "نمایش نام مسیر",
+        icon: StepIcons.routeName,
+      },
     ],
     [
       saveButtonRef,
@@ -194,6 +250,8 @@ const TourGuide: React.FC<TourGuideProps> = ({
       previewToggleRef,
       sitePreviewRef,
       changeRouteRef,
+      seoButtonRef,
+      routeNameRef,
       StepIcons,
     ]
   );
@@ -205,27 +263,92 @@ const TourGuide: React.FC<TourGuideProps> = ({
     }
   }, []);
 
+  const clearAllHighlights = () => {
+    highlightedElements.forEach(element => {
+      if (element) {
+        element.style.boxShadow = '';
+        element.style.zIndex = '';
+        element.style.position = '';
+        element.style.backgroundColor = '';
+        element.style.border = '';
+        element.style.outline = '';
+        element.style.transform = '';
+        element.style.filter = '';
+        element.style.removeProperty('box-shadow');
+        element.style.removeProperty('z-index');
+        element.style.removeProperty('position');
+        element.style.removeProperty('background-color');
+        element.style.removeProperty('border');
+        element.style.removeProperty('outline');
+        element.style.removeProperty('transform');
+        element.style.removeProperty('filter');
+      }
+    });
+    setHighlightedElements([]);
+  };
+
   useEffect(() => {
     const currentRef = steps[currentStep]?.ref?.current;
     if (isTourVisible && currentRef) {
+      // Clear previous highlights
+      clearAllHighlights();
+      
       currentRef.focus();
       currentRef.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
-      const rect = currentRef.getBoundingClientRect();
-      setTooltipPosition({
-        top: rect.bottom + 30,
-        right: rect.left,
-      });
+      
+      // Add highlight to current element
+      const elementToHighlight = currentRef.closest('label') || currentRef;
+      elementToHighlight.style.position = 'relative';
+      elementToHighlight.style.zIndex = '9998';
+      elementToHighlight.style.boxShadow = '0 0 0 3px #3b82f6, 0 0 20px rgba(59, 130, 246, 0.5)';
+      elementToHighlight.style.borderRadius = '8px';
+      
+      setHighlightedElements([elementToHighlight]);
+      
+      const updatePosition = () => {
+        const rect = currentRef.getBoundingClientRect();
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        const tooltipWidth = 320;
+        const tooltipHeight = 200;
+        
+        let top = rect.bottom + 20;
+        let left = rect.left;
+        
+        if (left + tooltipWidth > viewportWidth) {
+          left = viewportWidth - tooltipWidth - 20;
+        }
+        
+        if (left < 20) {
+          left = 20;
+        }
+        
+        if (top + tooltipHeight > viewportHeight) {
+          top = rect.top - tooltipHeight - 20;
+        }
+        
+        if (top < 20) {
+          top = 20;
+        }
+        
+        setTooltipPosition({ top, right: left });
+      };
+      
+      updatePosition();
+      window.addEventListener('resize', updatePosition);
+      
+      return () => {
+        window.removeEventListener('resize', updatePosition);
+      };
     }
   }, [currentStep, isTourVisible, steps]);
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep((prev) => prev + 1);
-      // Get the next element and update position
-      const nextElement = steps[currentStep + 1].ref.current;
       setActiveElement(
         idArray[currentStep + 1] as
           | "save"
@@ -234,23 +357,26 @@ const TourGuide: React.FC<TourGuideProps> = ({
           | "sitePreview"
           | "addRoute"
           | "changeRoute"
+          | "seo"
+          | "routeName"
       );
-      if (nextElement) {
-        const rect = nextElement.getBoundingClientRect();
-        setTooltipPosition({
-          top: rect.bottom + 20,
-          right: rect.left,
-        });
-      }
     } else {
       handleCloseTour();
     }
   };
 
   const handleCloseTour = () => {
+    clearAllHighlights();
     setIsTourVisible(false);
     localStorage.setItem("hasSeenTour", "true");
   };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      clearAllHighlights();
+    };
+  }, []);
 
   return (
     isTourVisible && (
@@ -258,11 +384,11 @@ const TourGuide: React.FC<TourGuideProps> = ({
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-30 z-40" />
         <div
           dir="rtl"
-          className="absolute z-[9999] bg-indigo-700 border-2 border-gray-300 bg-opacity-70 backdrop-blur-md py-4 px-5 rounded-lg shadow-lg max-w-xs transition-all duration-500 ease-in-out"
+          className="fixed z-[9999] bg-indigo-700 border-2 border-gray-300 bg-opacity-90 backdrop-blur-md py-4 px-5 rounded-xl shadow-2xl w-80 transition-all duration-300 ease-in-out"
           style={{
             top: `${tooltipPosition.top}px`,
             left: `${tooltipPosition.right}px`,
-            transform: "translate3d(0, 0, 0)", // Enable hardware acceleration
+            transform: "translate3d(0, 0, 0)",
           }}
         >
           <div className="flex items-center gap-2 mb-4">

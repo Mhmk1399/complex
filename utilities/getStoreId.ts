@@ -14,7 +14,7 @@ export async function getStoreIdFromToken(): Promise<string | null> {
       const decoded = jwt.decode(urlToken) as any;
       return decoded?.storeId || null;
     } catch (error) {
-      console.error("Error decoding URL token:", error);
+      console.log("Error decoding URL token:", error);
     }
   }
 
@@ -36,7 +36,7 @@ export function getStoreIdFromRequest(request: NextRequest): string {
       console.log(decoded, "ddddddddddddddddddddddddddddddddddddd");
       return decoded?.storeId;
     } catch (error) {
-      console.error("Error decoding token:", error);
+      console.log("Error decoding token:", error);
     }
   }
 

@@ -236,7 +236,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
   const hasAnimation = !!currentAnimation;
 
   return (
-    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+    <div className="p-2 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-lg font-bold mb-4">تنظیمات بنر</h2>
 
       {/* Tabs */}
@@ -244,7 +244,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
 
       {/* Content Section */}
       {isContentOpen && (
-        <div className="p-4 space-y-4 animate-slideDown">
+        <div className="p-2 space-y-4 animate-slideDown">
           {/* Image Input */}
           {/* Header Input */}
           <div className="rounded-lg">
@@ -283,6 +283,7 @@ export const BannerForm: React.FC<BannerFormProps> = ({
                 name="imageSrc"
                 value={userInputData?.blocks?.imageSrc ?? ""}
                 onChange={handleBlockChange}
+                readOnly
                 className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 placeholder="آدرس تصویر"
               />

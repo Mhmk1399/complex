@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
       const decodedToken = jwt.verify(token.replace('Bearer ', ''), secret || "");
       storeId = (decodedToken as JwtPayload).storeId;
     } catch (error) {
-      console.error("Token Verification Error:", error);
+      console.log("Token Verification Error:", error);
       return NextResponse.json({ 
         error: "Invalid token", 
         details: (error as Error).message 

@@ -58,7 +58,7 @@ export async function GET(
       images: formattedImages,
     });
   } catch (error) {
-    console.error("Fetch images error:", error);
+    console.log("Fetch images error:", error);
     return NextResponse.json(
       { success: false, error: "Internal server error" },
       { status: 500 }
@@ -152,7 +152,7 @@ export async function GET(
 //       message: "File deleted successfully",
 //     });
 //   } catch (error) {
-//     console.error("Delete error:", error);
+//     console.log("Delete error:", error);
 //     return NextResponse.json(
 //       { success: false, error: "Internal server error" },
 //       { status: 500 }

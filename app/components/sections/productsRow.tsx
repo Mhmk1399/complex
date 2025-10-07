@@ -1,11 +1,11 @@
 "use client";
 import styled from "styled-components";
 import type { Layout, ProductCardData, ProductRowSection } from "@/lib/types";
-import ProductCard from "./productCard";
 import { useEffect, useState, useRef } from "react";
 import { Delete } from "../C-D";
 import { createApiService } from "@/lib/api-factory";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
+import ProductCardCollection from "./productCardCollection";
 interface Collection {
   _id: string;
   name: string;
@@ -36,6 +36,7 @@ const ScrollContainer = styled.div<{
   background-color: ${(props) =>
     props.$data.setting?.backgroundColor || "#ffffff"};
   min-height: ${(props) => props.$data.blocks.setting.height}px;
+  border-radius: ${(props) => props.$data.blocks?.setting?.Radius || "0"}px;
 
   box-shadow: ${(props) =>
     `${props.$data.blocks.setting?.shadowOffsetX || 0}px 
@@ -417,20 +418,11 @@ export const ProductsRow: React.FC<ProductsRowProps> = ({
             <Heading $data={sectionData} $isMobile={preview === "sm"}>
               {sectionData.blocks?.textHeading}
             </Heading>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="50px"
-              viewBox="0 -960 960 960"
-              width="50px"
-              fill={sectionData.blocks?.setting.headingColor}
-            >
-              <path d="M300-520q-58 0-99-41t-41-99q0-58 41-99t99-41q58 0 99 41t41 99q0 58-41 99t-99 41Zm0-80q25 0 42.5-17.5T360-660q0-25-17.5-42.5T300-720q-25 0-42.5 17.5T240-660q0 25 17.5 42.5T300-600Zm360 440q-58 0-99-41t-41-99q0-58 41-99t99-41q58 0 99 41t41 99q0 58-41 99t-99 41Zm0-80q25 0 42.5-17.5T720-300q0-25-17.5-42.5T660-360q-25 0-42.5 17.5T600-300q0 25 17.5 42.5T660-240Zm-444 80-56-56 584-584 56 56-584 584Z" />
-            </svg>
           </div>
 
           {collectionProducts.length > 0 &&
             collectionProducts.map((product: ProductCardData, idx: number) => (
-              <ProductCard key={idx} productData={product} />
+              <ProductCardCollection key={idx} productData={product} />
             ))}
           {collectionProducts.length === 0 && (
             <div className="flex flex-row items-center justify-start lg:justify-end w-full">

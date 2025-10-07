@@ -296,7 +296,7 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
       setBlog(blogData.blogs[0]);
       setLoading(false);
     } else if (error) {
-      console.error("Error fetching blog:", error);
+      console.log("Error fetching blog:", error);
       setLoading(false);
     }
   }, [blogData, error]);

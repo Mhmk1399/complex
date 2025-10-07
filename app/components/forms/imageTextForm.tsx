@@ -358,7 +358,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
       {isContentOpen && (
         <div className="p-2 animate-slideDown">
           {/* Main Content Section */}
-          <div className="mb-6 p-4 ">
+          <div className="mb-6 ">
             <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4">
               محتوای اصلی
             </h3>
@@ -577,7 +577,7 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
 
       {/* Style Settings */}
       {isStyleSettingsOpen && (
-        <div className="p-4 animate-slideDown w-full">
+        <div className="animate-slideDown w-full">
           <div className="grid gap-6">
             {/* Text Styling */}
             <div className="space-y-4 ">
@@ -1211,24 +1211,8 @@ export const ImageTextForm: React.FC<ImageTextFormProps> = ({
 
       {/* Spacing Settings */}
       {isSpacingOpen && (
-        <div className="p-4 animate-slideDown">
-          <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-4 border border-gray-200">
-            <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4">
-              <svg
-                className="w-5 h-5 text-gray-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-                />
-              </svg>
-              تنظیمات فاصله‌گذاری
-            </h3>
+        <div className="animate-slideDown">
+          <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl  border border-gray-200">
             <MarginPaddingEditor
               margin={margin}
               padding={padding}

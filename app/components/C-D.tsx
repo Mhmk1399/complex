@@ -170,7 +170,7 @@ export const Delete = (
       setLayout(updatedLayout);
     }
   } catch (error) {
-    console.error("Error deleting component:", error);
+    console.log("Error deleting component:", error);
   }
 };
 

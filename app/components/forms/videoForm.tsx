@@ -144,7 +144,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({
   }, []);
 
   return (
-    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+    <div className="p-2 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-lg font-bold mb-4">تنظیمات ویدیو</h2>
 
       {/* Tabs */}
@@ -153,7 +153,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({
       {/* Content Settings */}
 
       {isContentOpen && (
-        <div className="p-4 space-y-4 animate-slideDown">
+        <div className="p-2 space-y-4 animate-slideDown">
           <div className=" rounded-lg">
             <label className="block mb-2 text-sm font-bold text-gray-700">
               سربرگ
@@ -211,7 +211,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({
       {/* Style Settings */}
 
       {isStyleSettingsOpen && (
-        <div className="p-4  space-y-6 animate-slideDown">
+        <div className="space-y-6 animate-slideDown">
           {/* Heading Settings */}
           <div className=" rounded-lg flex flex-col gap-3">
             <h4 className="text-base font-bold text-sky-700">تنظیمات سربرگ</h4>
@@ -430,7 +430,7 @@ export const VideoForm: React.FC<VideoFormProps> = ({
       {/* animation settings */}
 
       {isAnimationOpen && (
-        <div className="p-4  animate-slideDown">
+        <div className="animate-slideDown">
           <h3 className="text-lg font-semibold text-sky-700">
             تنظیمات انیمیشن
           </h3>

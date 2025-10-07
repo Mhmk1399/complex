@@ -327,22 +327,22 @@ const SlideBanner: React.FC<props> = ({
       dir="rtl"
     >
       {showDeleteModal && (
-        <div className="fixed inset-0  bg-black bg-opacity-70 z-50 flex items-center justify-center">
-          <div className="bg-white p-8 rounded-lg">
-            <h3 className="text-lg font-bold mb-4">
+        <div className="fixed inset-0 bg-black bg-opacity-70 z-[9999] flex items-center justify-center">
+          <div className="bg-white p-8 rounded-lg shadow-2xl max-w-md mx-4">
+            <h3 className="text-lg font-bold mb-4 text-center">
               آیا از حذف
               <span className="text-blue-400 font-bold mx-1">{actualName}</span>
               مطمئن هستید؟
             </h3>
-            <div className="flex flex-row-reverse gap-4 justify-end">
+            <div className="flex flex-row-reverse gap-4 justify-center">
               <button
-                className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+                className="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors"
                 onClick={() => setShowDeleteModal(false)}
               >
                 انصراف
               </button>
               <button
-                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 "
+                className="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
                 onClick={() => {
                   Delete(actualName, layout, setLayout);
                   setShowDeleteModal(false);
@@ -355,19 +355,19 @@ const SlideBanner: React.FC<props> = ({
         </div>
       )}
 
-      {actualName === selectedComponent ? (
-        <div className="absolute w-fit -top-5 -left-1 z-[2000] flex flex-row-reverse">
-          <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white">
+      {actualName === selectedComponent && (
+        <div className="absolute w-fit -top-50 -left-1 z-[1000] flex flex-row-reverse">
+          <div className="bg-blue-500 py-1 px-4 rounded-l-lg text-white text-sm font-medium">
             {actualName}
           </div>
           <button
             className="font-extrabold text-xl hover:bg-blue-500 bg-red-500 pb-1 rounded-r-lg px-3 text-white transform transition-all ease-in-out duration-300"
             onClick={() => setShowDeleteModal(true)}
           >
-            x
+            ×
           </button>
         </div>
-      ) : null}
+      )}
 
       <SlideContainer $previewWidth={preview}>
         {sectionData.blocks.slides.map((slide, index) => (

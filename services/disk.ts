@@ -49,7 +49,7 @@ export async function deleteDiskFile(
       }
     });
   } catch (error: any) {
-    console.error(
+    console.log(
       "Error deleting file from disk:",
       error.response?.data || error.message
     );
@@ -126,7 +126,7 @@ export async function createNewJson(
       );
     }
   } catch (error) {
-    console.error("Error saving to store:", error);
+    console.log("Error saving to store:", error);
   }
 }
 
@@ -194,6 +194,6 @@ export async function saveToStore(
     }
   } catch (error) {
     console.log(error)
-    console.error("Error saving to store:", error);
+    console.log("Error saving to store:", error);
   }
 }

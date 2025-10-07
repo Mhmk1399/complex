@@ -223,7 +223,7 @@ export const StoryForm: React.FC<StoryFormProps> = ({
   const hasAnimation = !!currentAnimation;
 
   return (
-    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+    <div className="p-2 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-lg font-bold mb-4">تنظیمات استوری</h2>
 
       {/* Tabs */}
@@ -231,7 +231,7 @@ export const StoryForm: React.FC<StoryFormProps> = ({
 
       {/* Content Settings */}
       {isContentOpen && (
-        <div className=" rounded-lg p-4 animate-slideDown gap-2 flex flex-col">
+        <div className=" rounded-lg p-2 animate-slideDown gap-2 flex flex-col">
           <p className="text-sm text-gray-500">
             محتوای این بخش از طریق پنل مدیریت سایت تعریف میشود.
           </p>
@@ -245,7 +245,7 @@ export const StoryForm: React.FC<StoryFormProps> = ({
 
       {/* Style Tab */}
       {isStyleSettingsOpen && (
-        <div className=" rounded-lg p-4 animate-slideDown">
+        <div className="animate-slideDown">
           <h4 className="font-bold text-sky-700 my-3">تنظیمات استایل</h4>
 
           <div className="flex flex-col gap-4">

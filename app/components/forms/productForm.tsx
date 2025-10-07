@@ -134,13 +134,14 @@ export const ProductListForm: React.FC<ProductListProps> = ({
   }, []);
 
   return (
-    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+    <div className="p-2 max-w-4xl space-y-2 rounded" dir="rtl">
       <h3 className="text-lg font-bold mb-4">تنظیمات فروشگاه</h3>
 
       {/* Tabs */}
       <TabButtons onTabChange={handleTabChange} />
+
       {isContentOpen && (
-        <div className="p-4  animate-slideDown">
+        <div className="p-2 animate-slideDown">
           <h3 className="text-lg font-semibold text-sky-700">تنظیمات محتوا</h3>
           <small>
             در صورت نیاز به افزودن محصولات، لطفاً از طریق تنظیمات فروشگاه در
@@ -155,7 +156,7 @@ export const ProductListForm: React.FC<ProductListProps> = ({
 
       {isStyleSettingsOpen && (
         <>
-          <div className="grid grid-cols-1 gap-4 p-4 animate-slideDown">
+          <div className="grid grid-cols-1 gap-4 animate-slideDown">
             <h3 className="font-semibold text-sky-700">تنظیمات عمومی</h3>
 
             <label htmlFor="gridColumns" className="block mb-2">
@@ -282,7 +283,6 @@ export const ProductListForm: React.FC<ProductListProps> = ({
                 value={userInputData?.setting?.imageRadius?.toString() ?? "8"}
                 onChange={handleSettingChange}
               />
-              
 
               <DynamicRangeInput
                 label="اندازه فونت نام"
@@ -437,8 +437,9 @@ export const ProductListForm: React.FC<ProductListProps> = ({
           </div>
         </>
       )}
+
       {isAnimationOpen && (
-        <div className="p-4  animate-slideDown">
+        <div className="animate-slideDown">
           <h3 className="text-lg font-semibold text-sky-700">
             تنظیمات انیمیشن
           </h3>
@@ -449,7 +450,7 @@ export const ProductListForm: React.FC<ProductListProps> = ({
       {/* Spacing Tab */}
       {isSpacingOpen && (
         <div className="animate-slideDown">
-          <div className="bg-gray-50 rounded-lg p-2 flex items-center justify-center">
+          <div className="bg-gray-50 rounded-lg  flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}
               padding={padding}

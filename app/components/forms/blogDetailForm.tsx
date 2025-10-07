@@ -204,7 +204,7 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
   const effectTypes = ["hover", "click"];
 
   return (
-    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+    <div className="p-2 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-lg font-bold mb-4">تنظیمات جزئیات بلاگ</h2>
 
       {/* Tabs */}
@@ -212,7 +212,7 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
 
       {/* Content Settings */}
       {isContentOpen && (
-        <div className="p-4 space-y-4 animate-slideDown">
+        <div className="p-2 space-y-4 animate-slideDown">
           <div className="rounded-lg">
             <label className="block mb-2 text-sm font-bold text-gray-700">
               آپلود تصویر کاور
@@ -594,7 +594,7 @@ export const BlogDetailForm: React.FC<BlogDetailFormProps> = ({
       {/* Spacing Settings */}
       {isSpacingOpen && (
         <div className="animate-slideDown">
-          <div className="rounded-lg p-2 flex items-center justify-center">
+          <div className="rounded-lg  flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}
               padding={padding}

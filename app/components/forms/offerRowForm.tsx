@@ -356,12 +356,12 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
   const hasButtonAnimation = !!currentButtonAnimation;
 
   return (
-    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+    <div className="p-2 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-lg font-bold mb-4">تنظیمات پیشنهاد ویژه</h2>
       <TabButtons onTabChange={handleTabChange} />
 
       {isContentOpen && (
-        <div className="p-4 ">
+        <div className="p-2">
           <div className="space-y-4">
             <div>
               <label className="block mb-2 text-sm font-bold text-gray-700">
@@ -399,17 +399,19 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
                   <option disabled>هیچ کالکشنی موجود نیست</option>
                 )}
               </select>
-              <p className="mt-2 text-xs inline-block border border-red-500 p-3 rounded-xl text-red-600">
-                {collectionsErrorMessage}
-                <MdDangerous />
-              </p>
+              {collectionsErrorMessage && (
+                <p className="mt-2 text-xs inline-block border border-red-500 p-3 rounded-xl text-red-600">
+                  {collectionsErrorMessage}
+                  <MdDangerous />
+                </p>
+              )}
             </div>
           </div>
         </div>
       )}
 
       {isStyleSettingsOpen && (
-        <div className="p-4">
+        <div className="">
           <div className="grid grid-cols-1 gap-4">
             <div className="rounded-lg pr-3 inline-flex items-center justify-between gap-24">
               <ColorInput
@@ -894,7 +896,7 @@ export const OfferRowForm: React.FC<OfferRowFormProps> = ({
       )}
 
       {isSpacingOpen && (
-        <div className="p-4 animate-slideDown">
+        <div className="animate-slideDown">
           <div className=" rounded-lg flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

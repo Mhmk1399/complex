@@ -46,7 +46,7 @@ export const SharedProvider: React.FC<SharedProviderProps> = ({ children }) => {
     try {
       return nullJson as unknown as Layout;
     } catch (error) {
-      console.error("Error initializing layout:", error);
+      console.log("Error initializing layout:", error);
       return {} as Layout;
     }
   });

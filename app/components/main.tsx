@@ -4,34 +4,14 @@ import { Preview } from "./preview";
 import { Form } from "./form";
 import Image from "next/image";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import {
-  FaHome,
-  FaInfoCircle,
-  FaEnvelope,
-  FaStore,
-  FaBlog,
-  FaNewspaper,
-  FaRobot,
-} from "react-icons/fa";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ToastContainer, toast, Slide } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import TourGuide from "./sections/guideTour";
 import { useSharedContext } from "@/app/contexts/SharedContext";
 import { CanvasProvider } from "../contexts/CanvasContext";
 import { createApiService } from "@/lib/api-factory";
 import { Layout } from "@/lib/types";
-
-const routeIcons = {
-  home: FaHome,
-  about: FaInfoCircle,
-  contact: FaEnvelope,
-  store: FaStore,
-  blog: FaBlog,
-  news: FaNewspaper,
-  ai: FaRobot,
-};
+import toast from "react-hot-toast";
 
 export const Main = () => {
   // Get shared state from context
@@ -72,11 +52,17 @@ export const Main = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [routes, setRoutes] = useState<string[]>([]);
-  // const [isAIModalOpen, setIsAIModalOpen] = useState(false);
   const [activeMode, setActiveMode] = useState<"sm" | "lg">("sm");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeElement, setActiveElement] = useState<
-    "save" | "delete" | "preview" | "sitePreview" | "addRoute" | "changeRoute"
+    | "save"
+    | "delete"
+    | "preview"
+    | "sitePreview"
+    | "addRoute"
+    | "changeRoute"
+    | "seo"
+    | "routeName"
   >("save");
   // Removed isFormOpen state - now using context
   const [newRouteName, setNewRouteName] = useState("");
@@ -116,7 +102,7 @@ export const Main = () => {
         : `https://${storeId}.tomakdigitalagency.ir`; // Production URL
       window.open(siteUrl, "_blank", "noopener,noreferrer");
     } catch (error) {
-      console.error("Error decoding token:", error);
+      console.log("Error decoding token:", error);
       toast.error("مشکل در خواندن توکن");
     }
   };
@@ -124,7 +110,7 @@ export const Main = () => {
   // add new route
   const handleAddRoute = async ({ name }: { name: string }) => {
     if (routes.includes(name)) {
-      toast.error("این مسیر در حال حاظر موجود است", { autoClose: 3000 });
+      toast.error("این مسیر در حال حاظر موجود است");
       return;
     }
 
@@ -138,14 +124,10 @@ export const Main = () => {
       });
 
       fetchRoutes();
-      toast.success("مسیر جدید ساخته شد", {
-        autoClose: 3000,
-      });
+      toast.success("مسیر جدید ساخته شد");
     } catch (error) {
       console.log("Error adding route:", error);
-      toast.error("مشکل در ساخت مسیر", {
-        autoClose: 3000,
-      });
+      toast.error("مشکل در ساخت مسیر");
     }
   };
 
@@ -194,8 +176,8 @@ export const Main = () => {
     sendTokenToServer();
   }, [activeMode, selectedRoute]);
 
-
   const handleSave = async () => {
+    const loadingToast = toast.loading("در حال ذخیره سازی");
     setSaveStatus("saving");
 
     try {
@@ -207,6 +189,8 @@ export const Main = () => {
         },
       });
       console.log("Save response:", result);
+      toast.dismiss(loadingToast);
+      toast.success("!ذخیره شد");
       setSaveStatus("saved");
       setTimeout(() => setSaveStatus("idle"), 2000);
     } catch (error: any) {
@@ -279,14 +263,10 @@ export const Main = () => {
 
       fetchRoutes();
       setSelectedRoute("home");
-      toast.success(" حذف مسیر انجام شد! ", {
-        autoClose: 3000,
-      });
+      toast.success(" !حذف مسیر انجام شد");
     } catch (error) {
       console.log("Error deleting route:", error);
-      toast.error("مشکل در حذف مسیر", {
-        autoClose: 3000,
-      });
+      toast.error("مشکل در حذف مسیر");
     }
     sendTokenToServer();
   };
@@ -324,9 +304,11 @@ export const Main = () => {
   const saveButtonRef = useRef<HTMLButtonElement>(null);
   const addRouteButtonRef = useRef<HTMLButtonElement>(null);
   const deleteRouteButtonRef = useRef<HTMLButtonElement>(null);
-  const changeRouteRef = useRef<HTMLSelectElement>(null);
+  const changeRouteRef = useRef<HTMLLabelElement>(null);
   const previewToggleRef = useRef<HTMLDivElement>(null);
   const sitePreviewRef = useRef<HTMLButtonElement>(null);
+  const seoButtonRef = useRef<HTMLButtonElement>(null);
+  const routeNameRef = useRef<HTMLSpanElement>(null);
 
   const getHighlightClass = (
     ref: React.RefObject<HTMLButtonElement | HTMLDivElement | HTMLSelectElement>
@@ -346,28 +328,43 @@ export const Main = () => {
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
               <div className="bg-white/20 p-6 border border-gray-300 backdrop-blur-sm rounded-xl shadow-lg w-96">
                 <h3 className="text-lg font-bold text-white mb-4 text-right">
-                  ویرایش متا دیتا
+                  (سئو) ویرایش متا دیتا
                 </h3>
                 <div className="space-y-4">
-                  <input
-                    type="text"
-                    placeholder="عنوان"
-                    value={metaData.title}
-                    onChange={(e) =>
-                      setMetaData({ ...metaData, title: e.target.value })
-                    }
-                    className="w-full p-2 border rounded-lg"
-                    dir="rtl"
-                  />
-                  <textarea
-                    placeholder="توضیحات"
-                    value={metaData.description}
-                    onChange={(e) =>
-                      setMetaData({ ...metaData, description: e.target.value })
-                    }
-                    className="w-full p-2 border rounded-lg"
-                    dir="rtl"
-                  />
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="عنوان"
+                      value={metaData.title}
+                      onChange={(e) =>
+                        setMetaData({ ...metaData, title: e.target.value })
+                      }
+                      className="w-full p-2 border rounded-lg"
+                      dir="rtl"
+                    />
+                    <div className="text-xs text-gray-300 text-right mt-1">
+                      عنوان صفحه که در نتایج جستجو و تب مرورگر نمایش داده می‌شود
+                    </div>
+                  </div>
+                  <div>
+                    <textarea
+                      placeholder="توضیحات (حداکثر 160 کاراکتر برای سئو)"
+                      value={metaData.description}
+                      onChange={(e) =>
+                        setMetaData({
+                          ...metaData,
+                          description: e.target.value.slice(0, 160),
+                        })
+                      }
+                      className="w-full p-2 border rounded-lg"
+                      dir="rtl"
+                      maxLength={160}
+                    />
+                    <div className="text-xs text-gray-300 text-right mt-1">
+                      توضیح کوتاه صفحه برای نمایش در نتایج جستجو -{" "}
+                      {metaData.description.length}/160 کاراکتر
+                    </div>
+                  </div>
                   <div className="flex justify-end space-x-2 space-x-reverse">
                     <button
                       onClick={handleMetaDataSave}
@@ -386,6 +383,7 @@ export const Main = () => {
               </div>
             </div>
           )}
+
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -396,25 +394,28 @@ export const Main = () => {
               e.currentTarget.style.setProperty("--x", `${x}%`);
               e.currentTarget.style.setProperty("--y", `${y}%`);
             }}
-            className="sticky  top-0 z-50 backdrop-blur-2xl bg-gradient-to-br py-2 lg:py-0.5  from-[#e4e4e4]/60 to-[#fff]
+            className="sticky  top-0 z-50 backdrop-blur-2xl bg-gradient-to-br py-2 lg:py-0  from-[#e4e4e4]/60 to-[#fff]
              shadow-sm cursor-pointer"
           >
             <div className=" mx-auto px-4 sm:px-6 lg:px-8 ">
               <div className="flex lg:flex-row flex-wrap items-center  md:mt-0 justify-center gap-x-0 md:gap-x-1 lg:py-0  sm:space-y-0">
                 <motion.div className="md:flex hidden  items-center border-r pr-2 border-gray-300 absolute left-2 gap-2 px-3 py-0.5">
-                  <span className="text-sm font-medium">{selectedRoute}</span>
-                  {routeIcons[selectedRoute as keyof typeof routeIcons] &&
+                  <span ref={routeNameRef} className="text-sm font-medium">
+                    {selectedRoute}
+                  </span>
+                  {/* {routeIcons[selectedRoute as keyof typeof routeIcons] &&
                     React.createElement(
                       routeIcons[selectedRoute as keyof typeof routeIcons],
                       {
                         className: "w-4 h-4",
                       }
-                    )}
+                    )} */}
                   <button
-                    className="hover:bg-gray-200 rounded-full p-1"
+                    ref={seoButtonRef}
+                    className=" font-semibold border-l text-xs"
                     onClick={() => setIsMetaDataModalOpen(true)}
                   >
-                    افزودن متا دیتا
+                    سئو صفحه
                   </button>
                 </motion.div>
 
@@ -440,25 +441,9 @@ export const Main = () => {
                   disabled={saveStatus === "saving"}
                   className={`w-fulllg:-ml-12 ${getHighlightClass(
                     saveButtonRef
-                  )} px-1  text-xs font-semibold border-r pr-2 border-gray-800 transition-all duration-300 transform
-                  ${
-                    saveStatus === "saving"
-                      ? "bg-blue-400 px-2 pl-2 py-1 rounded-xl text-white border-none"
-                      : saveStatus === "saved"
-                      ? "bg-green-400 px-2 pl-2 py-1 rounded-xl text-white border-none"
-                      : saveStatus === "error"
-                      ? "bg-red-400 pl-2 py-1 rounded-xl text-white border-none"
-                      : ""
-                  }
-                  text-black`}
+                  )} px-1  text-xs font-semibold border-r pr-2 border-gray-800 transition-all duration-300 transform text-black`}
                 >
-                  {saveStatus === "saving"
-                    ? "در حال ذخیره"
-                    : saveStatus === "saved"
-                    ? "ذخیره شد"
-                    : saveStatus === "error"
-                    ? "ناموفق"
-                    : "ذخیره تنظیمات"}
+                  ذخیره تنظیمات
                 </motion.button>
 
                 {/* View Mode Toggles */}
@@ -524,14 +509,17 @@ export const Main = () => {
                 >
                   حذف مسیر
                 </motion.button>
-                <motion.label className="relative my-2 md:my-0 text-xs font-semibold inline-flex items-center cursor-pointer">
+                <motion.label
+                  ref={changeRouteRef}
+                  className="relative my-2 md:my-0 text-xs font-semibold inline-flex items-center cursor-pointer"
+                >
                   <motion.div className="relative">
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                       className="flex items-center gap-2 px-3 py-0.5  backdrop-blur-xl rounded-md"
                     >
-                      <span className="text-sm font-medium">
+                      <span className="text-xs font-medium">
                         {selectedRoute}
                       </span>
                       <motion.svg
@@ -560,7 +548,7 @@ export const Main = () => {
                                 setSelectedRoute(route);
                                 setIsDropdownOpen(false);
                               }}
-                              className=" px-2 py-2 text-right rounded-lg text-sm transition-colors hover:text-red-500"
+                              className=" px-2 py-2 text-right rounded-lg text-xs transition-colors hover:text-red-500"
                             >
                               {route}
                             </motion.button>
@@ -574,10 +562,12 @@ export const Main = () => {
               </div>
             </div>
           </motion.div>
+
           <Preview />
+
           <Form />
         </div>
-        {/* )} */}
+
         {isModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <motion.div
@@ -629,6 +619,7 @@ export const Main = () => {
             </motion.div>
           </div>
         )}
+
         {isDeleteModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <motion.div
@@ -679,7 +670,7 @@ export const Main = () => {
             </motion.div>
           </div>
         )}
-        <ToastContainer position="top-right" transition={Slide} />
+
         <TourGuide
           saveButtonRef={saveButtonRef}
           addRouteButtonRef={addRouteButtonRef}
@@ -687,6 +678,8 @@ export const Main = () => {
           previewToggleRef={previewToggleRef}
           sitePreviewRef={sitePreviewRef}
           changeRouteRef={changeRouteRef}
+          seoButtonRef={seoButtonRef}
+          routeNameRef={routeNameRef}
           setActiveElement={setActiveElement}
         />
       </CanvasProvider>
