@@ -960,7 +960,7 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                   onChange={handleSettingChange}
                 />{" "}
                 <DynamicSelectInput
-                  label="وزن"
+                  label="جایگاه"
                   name="imageAlign"
                   value={userInputData?.setting?.imageAlign ?? "row"}
                   options={[

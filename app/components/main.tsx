@@ -13,16 +13,6 @@ import { createApiService } from "@/lib/api-factory";
 import { Layout } from "@/lib/types";
 import toast from "react-hot-toast";
 
-// const routeIcons = {
-//   home: FaHome,
-//   about: FaInfoCircle,
-//   contact: FaEnvelope,
-//   store: FaStore,
-//   blog: FaBlog,
-//   news: FaNewspaper,
-//   ai: FaRobot,
-// };
-
 export const Main = () => {
   // Get shared state from context
   const {
@@ -63,11 +53,17 @@ export const Main = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [routes, setRoutes] = useState<string[]>([]);
-  // const [isAIModalOpen, setIsAIModalOpen] = useState(false);
   const [activeMode, setActiveMode] = useState<"sm" | "lg">("sm");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeElement, setActiveElement] = useState<
-    "save" | "delete" | "preview" | "sitePreview" | "addRoute" | "changeRoute"
+    | "save"
+    | "delete"
+    | "preview"
+    | "sitePreview"
+    | "addRoute"
+    | "changeRoute"
+    | "seo"
+    | "routeName"
   >("save");
   // Removed isFormOpen state - now using context
   const [newRouteName, setNewRouteName] = useState("");
@@ -173,34 +169,6 @@ export const Main = () => {
   useEffect(() => {
     sendTokenToServer();
   }, [activeMode, selectedRoute]);
-
-  // useEffect(() => {
-  //   if (activeMode === "sm") {
-  //     const routeConfigs = {
-  //       about: About.children as unknown as AboutChildren,
-  //       contact: Contact.children as unknown as AboutChildren,
-  //       DetailPage: DetailPage.children as DetailPageChildren,
-  //       store: Store.children as StoreChildren,
-  //       BlogList: Blog.children as BlogChildren,
-  //       BlogDetail: BlogDetail.children as BlogDetailChildren,
-  //       default: smData.sections.children,
-  //     };
-
-  //     const children =
-  //       routeConfigs[selectedRoute as keyof typeof routeConfigs] ||
-  //       routeConfigs.default;
-
-  //     if (children) {
-  //       setLayout((prevLayout: Layout) => ({
-  //         ...prevLayout,
-  //         sections: {
-  //           ...prevLayout.sections,
-  //           children: children as Layout["sections"]["children"],
-  //         },
-  //       }));
-  //     }
-  //   }
-  // }, [selectedRoute, activeMode]);
 
   const handleSave = async () => {
     const loadingToast = toast.loading("در حال ذخیره سازی");
@@ -314,9 +282,11 @@ export const Main = () => {
   const saveButtonRef = useRef<HTMLButtonElement>(null);
   const addRouteButtonRef = useRef<HTMLButtonElement>(null);
   const deleteRouteButtonRef = useRef<HTMLButtonElement>(null);
-  const changeRouteRef = useRef<HTMLSelectElement>(null);
+  const changeRouteRef = useRef<HTMLLabelElement>(null);
   const previewToggleRef = useRef<HTMLDivElement>(null);
   const sitePreviewRef = useRef<HTMLButtonElement>(null);
+  const seoButtonRef = useRef<HTMLButtonElement>(null);
+  const routeNameRef = useRef<HTMLSpanElement>(null);
 
   const getHighlightClass = (
     ref: React.RefObject<HTMLButtonElement | HTMLDivElement | HTMLSelectElement>
@@ -330,22 +300,6 @@ export const Main = () => {
 
   return (
     <div>
-      {/* {loading ? (
-        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-white bg-opacity-90 z-50">
-          <div className="card">
-            <div className="loader">
-              <p>loading</p>
-              <div className="words px-2">
-                <span className="word font-thin italic">buttons</span>
-                <span className="word font-thin italic">forms</span>
-                <span className="word font-thin italic">switches</span>
-                <span className="word font-thin italic">cards</span>
-                <span className="word font-thin italic">buttons</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : ( */}
       <CanvasProvider>
         <div className="min-h-screen ">
           {isMetaDataModalOpen && (
@@ -355,25 +309,40 @@ export const Main = () => {
                   (سئو) ویرایش متا دیتا
                 </h3>
                 <div className="space-y-4">
-                  <input
-                    type="text"
-                    placeholder="عنوان"
-                    value={metaData.title}
-                    onChange={(e) =>
-                      setMetaData({ ...metaData, title: e.target.value })
-                    }
-                    className="w-full p-2 border rounded-lg"
-                    dir="rtl"
-                  />
-                  <textarea
-                    placeholder="توضیحات"
-                    value={metaData.description}
-                    onChange={(e) =>
-                      setMetaData({ ...metaData, description: e.target.value })
-                    }
-                    className="w-full p-2 border rounded-lg"
-                    dir="rtl"
-                  />
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="عنوان"
+                      value={metaData.title}
+                      onChange={(e) =>
+                        setMetaData({ ...metaData, title: e.target.value })
+                      }
+                      className="w-full p-2 border rounded-lg"
+                      dir="rtl"
+                    />
+                    <div className="text-xs text-gray-300 text-right mt-1">
+                      عنوان صفحه که در نتایج جستجو و تب مرورگر نمایش داده می‌شود
+                    </div>
+                  </div>
+                  <div>
+                    <textarea
+                      placeholder="توضیحات (حداکثر 160 کاراکتر برای سئو)"
+                      value={metaData.description}
+                      onChange={(e) =>
+                        setMetaData({
+                          ...metaData,
+                          description: e.target.value.slice(0, 160),
+                        })
+                      }
+                      className="w-full p-2 border rounded-lg"
+                      dir="rtl"
+                      maxLength={160}
+                    />
+                    <div className="text-xs text-gray-300 text-right mt-1">
+                      توضیح کوتاه صفحه برای نمایش در نتایج جستجو -{" "}
+                      {metaData.description.length}/160 کاراکتر
+                    </div>
+                  </div>
                   <div className="flex justify-end space-x-2 space-x-reverse">
                     <button
                       onClick={handleMetaDataSave}
@@ -392,6 +361,7 @@ export const Main = () => {
               </div>
             </div>
           )}
+
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -408,7 +378,9 @@ export const Main = () => {
             <div className=" mx-auto px-4 sm:px-6 lg:px-8 ">
               <div className="flex lg:flex-row flex-wrap items-center  md:mt-0 justify-center gap-x-0 md:gap-x-1 lg:py-0  sm:space-y-0">
                 <motion.div className="md:flex hidden  items-center border-r pr-2 border-gray-300 absolute left-2 gap-2 px-3 py-0.5">
-                  <span className="text-sm font-medium">{selectedRoute}</span>
+                  <span ref={routeNameRef} className="text-sm font-medium">
+                    {selectedRoute}
+                  </span>
                   {/* {routeIcons[selectedRoute as keyof typeof routeIcons] &&
                     React.createElement(
                       routeIcons[selectedRoute as keyof typeof routeIcons],
@@ -417,6 +389,7 @@ export const Main = () => {
                       }
                     )} */}
                   <button
+                    ref={seoButtonRef}
                     className=" font-semibold border-l text-xs"
                     onClick={() => setIsMetaDataModalOpen(true)}
                   >
@@ -514,7 +487,10 @@ export const Main = () => {
                 >
                   حذف مسیر
                 </motion.button>
-                <motion.label className="relative my-2 md:my-0 text-xs font-semibold inline-flex items-center cursor-pointer">
+                <motion.label
+                  ref={changeRouteRef}
+                  className="relative my-2 md:my-0 text-xs font-semibold inline-flex items-center cursor-pointer"
+                >
                   <motion.div className="relative">
                     <motion.button
                       whileHover={{ scale: 1.02 }}
@@ -564,10 +540,12 @@ export const Main = () => {
               </div>
             </div>
           </motion.div>
+
           <Preview />
+
           <Form />
         </div>
-        {/* )} */}
+
         {isModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <motion.div
@@ -619,6 +597,7 @@ export const Main = () => {
             </motion.div>
           </div>
         )}
+
         {isDeleteModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <motion.div
@@ -669,6 +648,7 @@ export const Main = () => {
             </motion.div>
           </div>
         )}
+
         <TourGuide
           saveButtonRef={saveButtonRef}
           addRouteButtonRef={addRouteButtonRef}
@@ -676,6 +656,8 @@ export const Main = () => {
           previewToggleRef={previewToggleRef}
           sitePreviewRef={sitePreviewRef}
           changeRouteRef={changeRouteRef}
+          seoButtonRef={seoButtonRef}
+          routeNameRef={routeNameRef}
           setActiveElement={setActiveElement}
         />
       </CanvasProvider>

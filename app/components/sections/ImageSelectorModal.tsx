@@ -121,9 +121,17 @@ export default function ImageSelectorModal({
               <div className="flex flex-col items-center justify-center h-64">
                 <FiImage className="w-20 h-20 text-gray-300 mb-4" />
                 <h3 className="text-lg text-gray-500 mb-2">تصویری یافت نشد</h3>
-                <p className="text-sm text-gray-400">
-                  لطفاً ابتدا تصاویر خود را آپلود کنید
-                </p>
+                <div className="text-center max-w-md">
+                  <p className="text-sm text-gray-400 mb-3">
+                    لطفاً ابتدا تصاویر خود را آپلود کنید
+                  </p>
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <p className="text-sm text-blue-700 font-medium">
+                      راهنمایی: اگر تصویری ندارید، از دشبورد از قسمت گالری
+                      بسازید
+                    </p>
+                  </div>
+                </div>
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
