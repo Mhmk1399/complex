@@ -114,14 +114,14 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
   };
 
   return (
-    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+    <div className="p-2 max-w-4xl space-y-2 rounded" dir="rtl">
       <h3 className="text-lg font-bold mb-4">تنظیمات بلاگ</h3>
 
       {/* Tabs */}
       <TabButtons onTabChange={handleTabChange} />
 
       {isContentOpen && (
-        <div className="p-4  animate-slideDown">
+        <div className="p-2 animate-slideDown">
           <h3 className="text-lg font-semibold text-sky-700">تنظیمات محتوا</h3>
           <small>
             در صورت نیاز به افزودن بلاگ لطفاً از طریق تنظیمات بلاگ در
@@ -270,8 +270,8 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
       )}
 
       {isAnimationOpen && (
-        <div className="p-4  animate-slideDown">
-          <h3 className="text-lg font-semibold text-sky-700">
+        <div className="text-sm  animate-slideDown">
+          <h3 className="font-semibold text-sky-700">
             تنظیمات انیمیشن
           </h3>
           <p>تنظیماتی برای انیمیشن وجود ندارد.</p>
@@ -280,7 +280,7 @@ export const BlogListForm: React.FC<BlogListFormProps> = ({
 
       {/* Dropdown Content */}
       {isSpacingOpen && (
-        <div className="p-4 animate-slideDown">
+        <div className="animate-slideDown">
           <div className="bg-gray-50 rounded-lg p-2 flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

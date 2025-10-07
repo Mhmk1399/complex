@@ -632,6 +632,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
                                     (block as MultiColumnBlock)[imageSrcKey] ||
                                     ""
                                   }
+                                  readOnly
                                   onChange={(e) => handleBlockChange(e, index)}
                                   className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                                   placeholder="آدرس تصویر"
@@ -789,7 +790,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
 
       {isStyleSettingsOpen && (
         <>
-          <div className="grid md:grid-cols-1 rounded-xl gap-4 p-2 animate-slideDown">
+          <div className="grid md:grid-cols-1 rounded-xl gap-4  animate-slideDown">
             {/* heading */}
             <div>
               {" "}
@@ -1007,7 +1008,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
       {isAnimationOpen && (
         <div className="space-y-4 animate-slideDown">
           {/* Button Animation Settings */}
-          <div className="rounded-lg flex flex-col gap-3 border border-gray-200 p-4">
+          <div className="rounded-lg flex flex-col gap-3 border border-gray-200">
             <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
               <div className="flex items-center gap-2">
                 <HiSparkles className="w-4 h-4 text-blue-600" />
@@ -1471,7 +1472,7 @@ export const MultiColumnForm: React.FC<MultiColumnFormProps> = ({
       {/* Spacing Settings Dropdown */}
 
       {isSpacingOpen && (
-        <div className="p-4 animate-slideDown">
+        <div className="animate-slideDown">
           <div className="rounded-lg flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

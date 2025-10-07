@@ -169,7 +169,7 @@ export const FooterForm: React.FC<FooterFormProps> = ({
   }, []);
 
   return (
-    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+    <div className="p-2 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-lg font-bold mb-4">تنظیمات فوتر</h2>
 
       {/* Tabs */}
@@ -178,9 +178,9 @@ export const FooterForm: React.FC<FooterFormProps> = ({
 
       {/* Content Section */}
       {isContentOpen && (
-        <div className="space-y-4 animate-slideDown">
+        <div className="space-y-4 p-2 animate-slideDown">
           {/* Header Text Section */}
-          <div className="bg-white rounded-lg p-3">
+          <div className="bg-white rounded-lg">
             <div className="flex items-center gap-2 mb-3">
               <h4 className="font-medium text-gray-800 text-sm">محتوای متنی</h4>
             </div>
@@ -656,8 +656,8 @@ export const FooterForm: React.FC<FooterFormProps> = ({
 
       {/* animation */}
       {isAnimationOpen && (
-        <div className="animate-slideDown">
-          <h3 className="text-lg font-semibold text-sky-700">
+        <div className="animate-slideDown text-sm">
+          <h3 className="font-semibold text-sky-700">
             تنظیمات انیمیشن
           </h3>
           <p>تنظیماتی برای انیمیشن وجود ندارد.</p>

@@ -51,7 +51,7 @@ const extractJSON = (response: string): unknown => {
   try {
     return JSON.parse(jsonMatch[0]);
   } catch (parseError) {
-    console.error("JSON Parse Error:", parseError);
+    console.log("JSON Parse Error:", parseError);
     throw new Error(ERROR_MESSAGES.INVALID_JSON);
   }
 };
@@ -166,7 +166,7 @@ export const AIModal: React.FC<AIModalProps> = ({
 
       handleClose();
     } catch (error) {
-      console.error("AI Processing Error:", error);
+      console.log("AI Processing Error:", error);
 
       const errorMessage = getErrorMessage(error);
 

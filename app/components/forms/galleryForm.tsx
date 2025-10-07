@@ -317,7 +317,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
   const hasImageAnimation = !!currentImageAnimation;
 
   return (
-    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+    <div className="p-2 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-lg font-bold mb-4">تنظیمات گالری</h2>
 
       {/* Tabs */}
@@ -325,7 +325,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
 
       {/* Content Section */}
       {isContentOpen && (
-        <div className="p-4  animate-slideDown">
+        <div className="p-2  animate-slideDown">
           <div className=" ">
             <div>
               <label className="block mb-2">عنوان</label>
@@ -337,6 +337,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
                 className="w-full p-2 border rounded"
               />
             </div>
+            <br />
             <div>
               <label className="block mb-2">توضیحات</label>
               <textarea
@@ -428,6 +429,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
                                 e.target.value
                               )
                             }
+                            readOnly
                             className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                             placeholder="آدرس تصویر را وارد کنید"
                           />
@@ -544,7 +546,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
 
       {/* Style Settings */}
       {isStyleSettingsOpen && (
-        <div className="p-4 animate-slideDown">
+        <div className="animate-slideDown">
           <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
             {/* Title Settings */}
             <div className=" ">
@@ -736,7 +738,7 @@ export const GalleryForm: React.FC<GalleryFormProps> = ({
 
       {/* Image Animation Settings */}
       {isAnimationOpen && (
-        <div className="rounded-lg flex flex-col gap-3 border-t pt-4 mt-6">
+        <div className="rounded-lg flex flex-col gap-3  mt-6 animate-slideDown">
           {/* Header with Toggle */}
           <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
             <div className="flex items-center gap-2">

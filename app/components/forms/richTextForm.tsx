@@ -237,7 +237,7 @@ export const RichText: React.FC<RichTextFormProps> = ({
   const hasAnimation = !!currentAnimation;
 
   return (
-    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+    <div className="p-2 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-xl font-bold mb-4">تنظیمات باکس متن</h2>
       {/* Content Section */}
 
@@ -246,8 +246,8 @@ export const RichText: React.FC<RichTextFormProps> = ({
 
       {/* Dropdown Content */}
       {isContentOpen && (
-        <div className="p-4  space-y-4 animate-slideDown">
-          <div className="p-3  rounded-lg">
+        <div className="p-2 space-y-4 animate-slideDown">
+          <div className="  rounded-lg">
             <label className="block mb-2 text-sm font-bold text-gray-700">
               سربرگ
             </label>
@@ -339,9 +339,9 @@ export const RichText: React.FC<RichTextFormProps> = ({
 
       {/* Style Settings */}
       {isStyleSettingsOpen && (
-        <div className="p-4  animate-slideDown">
+        <div className="animate-slideDown">
           <div className="grid md:grid-cols-1 gap-4">
-            <div className="p-3 -gray-100 rounded-lg flex flex-col gap-3">
+            <div className=" -gray-100 rounded-lg flex flex-col gap-3">
               <h4 className="font-bold text-sky-700">تنظیمات سربرگ</h4>
               {/* Header Settings */}
 
@@ -381,7 +381,7 @@ export const RichText: React.FC<RichTextFormProps> = ({
               />
             </div>
             {/* Description Settings */}{" "}
-            <div className="p-3 -gray-100 rounded-lg flex flex-col gap-3">
+            <div className=" -gray-100 rounded-lg flex flex-col gap-3">
               <h4 className="font-bold text-sky-700">تنظیمات توضیحات</h4>
 
               <DynamicRangeInput
@@ -420,7 +420,7 @@ export const RichText: React.FC<RichTextFormProps> = ({
               />
             </div>
             {/* Background and Button Colors */}
-            <div className="p-3 -gray-100 rounded-lg flex flex-col gap-3">
+            <div className=" -gray-100 rounded-lg flex flex-col gap-3">
               <h4 className="font-bold text-sky-700">تنظیمات پس زمینه </h4>
               <ColorInput
                 label="رنگ پس زمینه"
@@ -458,7 +458,7 @@ export const RichText: React.FC<RichTextFormProps> = ({
                 onChange={handleBlockSettingChange}
               />
             </div>
-            <div className="p-3 -gray-100 rounded-lg flex flex-col gap-3">
+            <div className=" -gray-100 rounded-lg flex flex-col gap-3">
               <h4 className="font-bold text-sky-700">تنظیمات دکمه</h4>
 
               <ColorInput
@@ -501,7 +501,7 @@ export const RichText: React.FC<RichTextFormProps> = ({
               />
             </div>
             {/* Line Colors */}
-            <div className="p-3 -gray-100 rounded-lg flex flex-col gap-3">
+            <div className=" -gray-100 rounded-lg flex flex-col gap-3">
               <h4 className="font-bold text-sky-700"> تنظیمات خط</h4>
               <ColorInput
                 label="رنگ خط"

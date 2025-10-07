@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     // 2️⃣ Check secret
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
-      console.error("❌ JWT_SECRET not found in environment variables");
+      console.log("❌ JWT_SECRET not found in environment variables");
       return NextResponse.json(
         { valid: false, message: "Server misconfiguration" },
         { status: 500 }
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
       message: "Token verified successfully",
     });
   } catch {
-    console.error("JWT verification failed:");
+    console.log("JWT verification failed:");
     return NextResponse.json(
       { valid: false, message: "Invalid or expired token" },
       { status: 401 }

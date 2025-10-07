@@ -196,7 +196,7 @@ await api.endpoint('/protected').get({
 try {
   await api.endpoint('/users').get()
 } catch (error) {
-  console.error('HTTP Error:', error.message) // "HTTP 404"
+  console.log('HTTP Error:', error.message) // "HTTP 404"
 }
 ```
 

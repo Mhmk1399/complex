@@ -13,7 +13,7 @@ export async function GET(request: NextRequest ) {
         const collections = await Collections.find({ _id: collectionId });
         return NextResponse.json({ collections }, { status: 200 });
     } catch (error) {
-        console.error("Error fetching collections:", error);
+        console.log("Error fetching collections:", error);
         return NextResponse.json({ message: "Error fetching collections" }, { status: 500 });
     }
 }

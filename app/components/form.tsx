@@ -4,7 +4,7 @@ import { AnimatePresence } from "framer-motion";
 import { DragEndEvent } from "@dnd-kit/core";
 import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
-import { FaBars, FaExchangeAlt, FaPuzzlePiece } from "react-icons/fa";
+import { FaArrowLeft, FaBars, FaExchangeAlt, FaPuzzlePiece } from "react-icons/fa";
 import { RiRobot3Line } from "react-icons/ri";
 import richtextImage from "@/public/assets/images/richtext.png";
 import ImageTextImage from "@/public/assets/images/imagetext.png";
@@ -953,7 +953,7 @@ export const Form = () => {
   };
 
   const ordersButton = (
-    <div className="flex items-center justify-between p-4 mt-6 bg-gradient-to-r from-gray-50 to-white border-b border-gray-100">
+    <div className="flex items-center gap-2 justify-between p-4 mt-6 bg-gradient-to-r from-gray-50 to-white border-b border-gray-100">
       {/* Toggle Button */}
       <motion.button
         whileHover={{ scale: 1.05 }}
@@ -975,14 +975,14 @@ export const Form = () => {
           </>
         ) : (
           <>
-            <FaBars className="w-4 h-4" />
+            <FaArrowLeft className="w-4 h-4" />
             بازگشت
           </>
         )}
       </motion.button>
 
       {/* Right Side Buttons */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
         {/* AI Assistant Button */}
         <motion.button
           whileHover={{ scale: 1.1, rotate: 5 }}
@@ -1000,10 +1000,10 @@ export const Form = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsModalOpen(true)}
-              className="flex items-center gap-2 px-3 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-medium text-xs shadow-lg shadow-emerald-500/25 transition-all duration-300"
+              className="flex items-center text-nowrap gap-2 px-3 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-medium text-xs shadow-lg shadow-emerald-500/25 transition-all duration-300"
             >
               <FaPuzzlePiece className="w-4 h-4" />
-              انتخاب سکشن
+              افزودن
             </motion.button>
           )}
         </AnimatePresence>

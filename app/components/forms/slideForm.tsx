@@ -441,7 +441,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
 
   return (
     <>
-      <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+    <div className="p-2 max-w-4xl space-y-2 rounded" dir="rtl">
         <h2 className="text-lg font-bold mb-4">تنظیمات اسلاید شو</h2>
 
         {/* Tabs */}
@@ -451,7 +451,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
           <>
             {Object.values(userInputData.blocks).map((block, index) => (
               <React.Fragment key={index}>
-                <div className="mb-6 animate-slideDown bg-white rounded-xl shadow-sm border border-gray-100 mt-4">
+                <div className="mb-6 p-2 animate-slideDown bg-white rounded-xl shadow-sm border border-gray-100 mt-4">
                   <button
                     onClick={() =>
                       setIsContentOpen((prev) => ({
@@ -544,6 +544,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
                             onChange={(e) =>
                               handleBlockChange(e, index, "imageSrc")
                             }
+                            readOnly
                             className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                             placeholder="آدرس تصویر"
                           />
@@ -689,7 +690,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
         )}
 
         {isStyleSettingsOpen && (
-          <div className="p-4 animate-slideDown">
+          <div className="animate-slideDown">
             <div className="grid grid-cols-1 gap-6">
               {/* Text Settings */}
               <div className="space-y-4 rounded-lg">
@@ -971,7 +972,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
 
         {isAnimationOpen && (
           <div className="space-y-4 animate-slideDown">
-            <div className="rounded-lg flex flex-col gap-3 border border-gray-200 p-4">
+            <div className="rounded-lg flex flex-col gap-3 border border-gray-200">
               <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
                 <div className="flex items-center gap-2">
                   <HiSparkles className="w-4 h-4 text-blue-600" />
@@ -1573,7 +1574,7 @@ export const SlideForm: React.FC<SlideFormProps> = ({
 
         {isSpacingOpen && (
           <div className="animate-slideDown">
-            <div className=" rounded-lg p-2 flex items-center justify-center">
+            <div className=" flex items-center justify-center">
               <MarginPaddingEditor
                 margin={margin}
                 padding={padding}

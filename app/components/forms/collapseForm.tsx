@@ -465,7 +465,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
             <div className="mb-6">
               <button
                 onClick={handleAddBlock}
-                className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg w-full justify-center"
+                className="flex items-center text-nowrap gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-lg text-sm transition-all duration-200 shadow-md hover:shadow-lg w-full justify-center"
               >
                 <HiPlus className="w-5 h-5" />
                 افزودن آکاردئون جدید
@@ -661,7 +661,7 @@ export const CollapseForm: React.FC<CollapseFormProps> = ({
 
         {/* Style Settings */}
         {isStyleSettingsOpen && (
-          <div className="p-4 animate-slideDown">
+          <div className=" animate-slideDown">
             <div className="space-y-6">
               {/* Header Settings */}
               <div>

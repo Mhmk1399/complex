@@ -248,21 +248,22 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
   const hasAnimation = !!currentAnimation;
 
   return (
-    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+    <div className="p-2 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-lg font-bold mb-4">تنظیمات اسلایدر</h2>
       <TabButtons onTabChange={handleTabChange} />
 
       {/* Content Section */}
       {isContentOpen && (
-        <div className="p-4 animate-slideDown">
+        <div className="p-2 animate-slideDown">
           {userInputData?.blocks?.slides?.map((slide, index) => (
-            <div key={index} className="mb-4 p-4 border-b border-gray-300">
+            <div key={index} className="mb-4 border-b border-gray-300">
               <h4 className="font-semibold mb-2">اسلاید {index + 1}</h4>
               <div className="space-y-2">
                 <label>تصویر</label>
                 <div className="flex gap-2 items-center">
                   <input
                     type="text"
+                    readOnly
                     placeholder="آدرس تصویر"
                     value={slide.imageSrc}
                     onChange={(e) =>
@@ -298,7 +299,7 @@ export const SlideBannerForm: React.FC<SlideBannerFormProps> = ({
 
       {/* Style Settings */}
       {isStyleSettingsOpen && (
-        <div className="p-4 border-gray-100 animate-slideDown">
+        <div className=" border-gray-100 animate-slideDown">
           <div className="space-y-4 rounded-lg">
             <h4 className="font-bold text-sky-700 mb-3">تنظیمات ارتفاع بنر</h4>
             <DynamicRangeInput

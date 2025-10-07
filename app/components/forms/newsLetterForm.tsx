@@ -235,7 +235,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
   const hasAnimation = !!currentAnimation;
 
   return (
-    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+    <div className="p-2 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-lg font-bold mb-4">تنظیمات خبرنامه</h2>
 
       {/* Tabs */}
@@ -244,7 +244,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
       {/* Content Section */}
 
       {isContentOpen && (
-        <div className="p-4 space-y-4 animate-slideDown">
+        <div className="p-2 space-y-4 animate-slideDown">
           <div className=" rounded-lg">
             <label className="block mb-2 text-sm font-bold text-gray-700">
               سربرگ
@@ -289,7 +289,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
       {/* Style Settings */}
 
       {isStyleSettingsOpen && (
-        <div className="p-4  space-y-6 animate-slideDown">
+        <div className="space-y-6 animate-slideDown">
           {/* Heading Settings */}
           <div className="">
             <div className="rounded-lg flex flex-col gap-3">
@@ -519,7 +519,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
       )}
 
       {isAnimationOpen && (
-        <div className="rounded-lg flex flex-col gap-3 border-t pt-4 mt-6">
+        <div className="rounded-lg flex flex-col gap-3 mt-6">
           <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
             <div className="flex items-center gap-2">
               <HiSparkles className="w-4 h-4 text-blue-600" />
@@ -739,7 +739,7 @@ export const NewsLetterForm: React.FC<NewsLetterFormProps> = ({
       {/* Spacing Settings Dropdown */}
 
       {isSpacingOpen && (
-        <div className="p-4  animate-slideDown">
+        <div className="animate-slideDown">
           <div className="rounded-lg flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}

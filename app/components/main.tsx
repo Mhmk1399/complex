@@ -15,13 +15,12 @@ import {
 } from "react-icons/fa";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ToastContainer, toast, Slide } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import TourGuide from "./sections/guideTour";
 import { useSharedContext } from "@/app/contexts/SharedContext";
 import { CanvasProvider } from "../contexts/CanvasContext";
 import { createApiService } from "@/lib/api-factory";
 import { Layout } from "@/lib/types";
+import toast from "react-hot-toast";
 
 const routeIcons = {
   home: FaHome,
@@ -117,7 +116,7 @@ export const Main = () => {
         : `https://${storeId}.yourdomain.com`; // Production URL
       window.open(siteUrl, "_blank", "noopener,noreferrer");
     } catch (error) {
-      console.error("Error decoding token:", error);
+      console.log("Error decoding token:", error);
       toast.error("مشکل در خواندن توکن");
     }
   };
@@ -125,7 +124,7 @@ export const Main = () => {
   // add new route
   const handleAddRoute = async ({ name }: { name: string }) => {
     if (routes.includes(name)) {
-      toast.error("این مسیر در حال حاظر موجود است", { autoClose: 3000 });
+      toast.error("این مسیر در حال حاظر موجود است");
       return;
     }
 
@@ -139,14 +138,10 @@ export const Main = () => {
       });
 
       fetchRoutes();
-      toast.success("مسیر جدید ساخته شد", {
-        autoClose: 3000,
-      });
+      toast.success("مسیر جدید ساخته شد");
     } catch (error) {
       console.log("Error adding route:", error);
-      toast.error("مشکل در ساخت مسیر", {
-        autoClose: 3000,
-      });
+      toast.error("مشکل در ساخت مسیر");
     }
   };
 
@@ -217,6 +212,7 @@ export const Main = () => {
   // }, [selectedRoute, activeMode]);
 
   const handleSave = async () => {
+    const loadingToast = toast.loading("در حال ذخیره سازی");
     setSaveStatus("saving");
 
     try {
@@ -228,9 +224,13 @@ export const Main = () => {
         },
       });
       console.log("Save response:", result);
+      toast.dismiss(loadingToast);
+      toast.success("!ذخیره شد");
       setSaveStatus("saved");
       setTimeout(() => setSaveStatus("idle"), 2000);
     } catch (error) {
+      toast.dismiss(loadingToast);
+      toast.error("!مشکل در ذخیره سازی");
       console.log("Error saving layout:", error);
       setSaveStatus("error");
       setTimeout(() => setSaveStatus("idle"), 2000);
@@ -282,14 +282,10 @@ export const Main = () => {
 
       fetchRoutes();
       setSelectedRoute("home");
-      toast.success(" حذف مسیر انجام شد! ", {
-        autoClose: 3000,
-      });
+      toast.success(" !حذف مسیر انجام شد");
     } catch (error) {
       console.log("Error deleting route:", error);
-      toast.error("مشکل در حذف مسیر", {
-        autoClose: 3000,
-      });
+      toast.error("مشکل در حذف مسیر");
     }
     sendTokenToServer();
   };
@@ -459,25 +455,9 @@ export const Main = () => {
                   disabled={saveStatus === "saving"}
                   className={`w-fulllg:-ml-12 ${getHighlightClass(
                     saveButtonRef
-                  )} px-1  text-xs font-semibold border-r pr-2 border-gray-800 transition-all duration-300 transform
-                  ${
-                    saveStatus === "saving"
-                      ? "bg-blue-400 px-2 pl-2 py-1 rounded-xl text-white border-none"
-                      : saveStatus === "saved"
-                      ? "bg-green-400 px-2 pl-2 py-1 rounded-xl text-white border-none"
-                      : saveStatus === "error"
-                      ? "bg-red-400 pl-2 py-1 rounded-xl text-white border-none"
-                      : ""
-                  }
-                  text-black`}
+                  )} px-1  text-xs font-semibold border-r pr-2 border-gray-800 transition-all duration-300 transform text-black`}
                 >
-                  {saveStatus === "saving"
-                    ? "در حال ذخیره"
-                    : saveStatus === "saved"
-                    ? "ذخیره شد"
-                    : saveStatus === "error"
-                    ? "ناموفق"
-                    : "ذخیره تنظیمات"}
+                  ذخیره تنظیمات
                 </motion.button>
 
                 {/* View Mode Toggles */}
@@ -698,7 +678,6 @@ export const Main = () => {
             </motion.div>
           </div>
         )}
-        <ToastContainer position="top-right" transition={Slide} />
         <TourGuide
           saveButtonRef={saveButtonRef}
           addRouteButtonRef={addRouteButtonRef}

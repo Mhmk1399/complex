@@ -604,6 +604,7 @@ export const MultiRowForm: React.FC<MultiRowFormProps> = ({
                                       onChange={(e) =>
                                         handleBlockChange(e, rowIndex)
                                       }
+                                      readOnly
                                       className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                                       placeholder="آدرس تصویر"
                                     />

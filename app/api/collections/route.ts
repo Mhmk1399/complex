@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   try {
     await connect();
   } catch (connectionError) {
-    console.error("Database Connection Error:", connectionError);
+    console.log("Database Connection Error:", connectionError);
     return NextResponse.json(
       { 
         message: "Database connection failed", 
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
   const authHeader = request.headers.get("Authorization");
   
   if (!authHeader) {
-    console.error("Authorization Header Missing");
+    console.log("Authorization Header Missing");
     return NextResponse.json(
       { 
         error: "No authorization token provided", 
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
   // Validate JWT secret
   const secret = process.env.JWT_SECRET;
   if (!secret) {
-    console.error("JWT Secret Not Configured");
+    console.log("JWT Secret Not Configured");
     return NextResponse.json(
       { 
         error: "Server configuration error", 
@@ -75,7 +75,7 @@ export async function GET(request: NextRequest) {
   // Validate storeId in token
   const storeId = decodedToken.storeId;
   if (!storeId) {
-    console.error("storeId Missing in Token");
+    console.log("storeId Missing in Token");
     return NextResponse.json(
       { 
         error: "Invalid token structure", 
@@ -128,7 +128,7 @@ export async function GET(request: NextRequest) {
       { status: 200 }
     );
   } catch (fetchError) {
-    console.error("Product Fetch Error:", {
+    console.log("Product Fetch Error:", {
       storeId,
       error: fetchError instanceof Error ? fetchError.message : String(fetchError)
     });

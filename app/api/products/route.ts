@@ -16,12 +16,12 @@ export async function GET(request: NextRequest) {
     const token = request.headers.get("Authorization");
 
     if (!token) {
-      console.error("No token provided");
+      console.log("No token provided");
       return NextResponse.json({ error: "Token not provided" }, { status: 401 });
     }
     const secret = process.env.JWT_SECRET;
     if (!secret) {
-      console.error("JWT_SECRET is not defined");
+      console.log("JWT_SECRET is not defined");
       return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
     }
     let decodedToken;
@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
       decodedToken = jwt.verify(cleanToken, secret) as JwtPayload;
 
       if (!decodedToken.storeId) {
-        console.error("Token missing storeId");
+        console.log("Token missing storeId");
         return NextResponse.json({ error: "Invalid token structure" }, { status: 401 });
       }
 
@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
 
     } catch (verifyError) {
       if (verifyError instanceof Error) {
-        console.error("Detailed Token Verification Error:", {
+        console.log("Detailed Token Verification Error:", {
           name: verifyError.name,
           message: verifyError.message,
           stack: verifyError.stack
@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
           details: verifyError.message
         }, { status: 401 });
       } else {
-        console.error("Unknown error during token verification");
+        console.log("Unknown error during token verification");
         return NextResponse.json({
           error: "Invalid token",
           details: "Unknown error"
@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
       }
     }
   } catch (error) {
-    console.error("Error fetching products:", error);
+    console.log("Error fetching products:", error);
     return NextResponse.json(
       { message: "Error fetching products" },
       { status: 500 }

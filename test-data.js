@@ -48,7 +48,7 @@ const postToMongoDB = async () => {
     const result = await response.json();
     console.log('\n✅ POST Response:', result);
   } catch (error) {
-    console.error('❌ POST Error:', error);
+    console.log('❌ POST Error:', error);
   }
 };
 

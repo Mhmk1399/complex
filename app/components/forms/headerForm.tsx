@@ -334,7 +334,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
   };
 
   return (
-    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+    <div className="p-2 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-lg font-bold mb-4">تنظیمات نو بار</h2>
 
       {/* Tabs */}
@@ -342,9 +342,9 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
 
       {/* Content Tab */}
       {isContentOpen && (
-        <div className="space-y-6 animate-slideDown">
+        <div className="space-y-6 p-2 animate-slideDown">
           {/* Announcement Section */}
-          <div className=" rounded-xl p-4  transition-shadow duration-200">
+          <div className="transition-shadow duration-200">
             <div className="flex items-center gap-2 mb-4">
               <h3 className="font-semibold text-gray-800">متن اطلاع‌رسانی</h3>
             </div>
@@ -550,7 +550,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
 
       {/* Style Tab */}
       {isStyleSettingsOpen && (
-        <div className="rounded-lg p-2 animate-slideDown">
+        <div className="animate-slideDown">
           <div className="grid md:grid-cols-1 grid-cols-1 gap-2">
             <h4 className="font-bold text-sky-700 mb-3">تنظیمات پس زمینه</h4>
             <DynamicRangeInput
@@ -700,8 +700,8 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
       )}
 
       {isAnimationOpen && (
-        <div className="animate-slideDown">
-          <h3 className="text-lg font-semibold text-sky-700">
+        <div className="animate-slideDown text-sm">
+          <h3 className="  font-semibold text-sky-700">
             تنظیمات انیمیشن
           </h3>
           <p>تنظیماتی برای انیمیشن وجود ندارد.</p>

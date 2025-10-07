@@ -174,8 +174,6 @@ const ScrollTopButton = styled.button<{
   gap: 6px;
 
   &:hover {
-    background: #f9fafb;
-    border-color: #d1d5db;
     transform: translateY(-1px);
   }
 `;

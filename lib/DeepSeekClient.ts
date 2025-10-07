@@ -253,7 +253,7 @@ export class DeepSeekClient {
 
         // Log error
         if (process.env.NODE_ENV === "development") {
-          console.error(
+          console.log(
             `❌ DeepSeek API error on attempt ${attempt + 1}:`,
             error
           );

@@ -45,7 +45,7 @@ async function testMongoDB() {
     console.log('✅ Test completed successfully');
 
   } catch (error) {
-    console.error('❌ Test failed:', error);
+    console.log('❌ Test failed:', error);
     process.exit(1);
   }
 }

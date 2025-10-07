@@ -203,7 +203,7 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
         }
       }
     } catch (error) {
-      console.error("Error fetching collection products:", error);
+      console.log("Error fetching collection products:", error);
     }
   };
 
@@ -323,14 +323,14 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
   const hasAnimation = !!currentAnimation;
 
   return (
-    <div className="p-3 max-w-4xl space-y-2 rounded" dir="rtl">
+    <div className="p-2 max-w-4xl space-y-2 rounded" dir="rtl">
       <h2 className="text-lg font-bold mb-4">تنظیمات محصولات</h2>
       <TabButtons onTabChange={handleTabChange} />
 
       {/* Content Section */}
       {isContentOpen && (
-        <div className="p-4 animate-slideDown">
-          <div className="p-3  rounded-lg">
+        <div className="p-2 animate-slideDown">
+          <div className=" rounded-lg">
             <label className="block mb-2 text-sm font-bold text-gray-700">
               عنوان بخش
             </label>
@@ -363,17 +363,19 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
                 <option disabled>هیچ کالکشنی موجود نیست</option>
               )}
             </select>
-            <p className="mt-2 text-xs inline-block border border-red-500 p-3 rounded-xl text-red-600">
-              {collectionsErrorMessage}
-              <MdDangerous />
-            </p>
+            {collectionsErrorMessage && (
+              <p className="mt-2 text-xs inline-block border border-red-500 p-3 rounded-xl text-red-600">
+                {collectionsErrorMessage}
+                <MdDangerous />
+              </p>
+            )}
           </div>
         </div>
       )}
 
       {/* Style Settings */}
       {isStyleSettingsOpen && (
-        <div className="p-4 animate-slideDown">
+        <div className="animate-slideDown">
           <div className="grid md:grid-cols-1">
             <div className="p-3 rounded-lg">
               <h4 className="font-semibold text-sky-700 mb-4">تنظیمات عنوان</h4>
@@ -413,10 +415,10 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
 
             <div className="p-3 rounded-lg">
               <h4 className="font-semibold text-sky-700 my-4">
-                تنظیمات کارت محصول
+                تنظیمات پس زمینه
               </h4>
               <ColorInput
-                label="رنگ پس زمینه کارت"
+                label="رنگ پس زمینه"
                 name="backgroundColor"
                 value={userInputData?.setting.backgroundColor || "#FFFFFF"}
                 onChange={handleSettingChange}
@@ -736,7 +738,7 @@ export const ProductRowForm: React.FC<ProductRowFormProps> = ({
       {/* Spacing Settings */}
       {isSpacingOpen && (
         <div className="animate-slideDown">
-          <div className=" rounded-lg p-2 flex items-center justify-center">
+          <div className="flex items-center justify-center">
             <MarginPaddingEditor
               margin={margin}
               padding={padding}

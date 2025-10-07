@@ -39,7 +39,7 @@ import { getStoreIdFromRequest } from "@/utilities/getStoreId";
 //         const homeContent = JSON.parse(await fs.readFile(filePath, "utf-8"));
 //         return NextResponse.json(homeContent, { status: 200 });
 //       } catch (error) {
-//         console.error(`Error reading ${filePath}:`, error);
+//         console.log(`Error reading ${filePath}:`, error);
 //         return NextResponse.json(
 //           { error: `Failed to fetch home${activeMode} content` },
 //           { status: 404 }
@@ -69,14 +69,14 @@ import { getStoreIdFromRequest } from "@/utilities/getStoreId";
 
 //       return NextResponse.json(layout, { status: 200 });
 //     } catch (error) {
-//       console.error("Error fetching content:", error);
+//       console.log("Error fetching content:", error);
 //       return NextResponse.json(
 //         { error: "Failed to fetch route content" },
 //         { status: 404 }
 //       );
 //     }
 //   } catch (error) {
-//     console.error("Error processing request:", error);
+//     console.log("Error processing request:", error);
 //     return NextResponse.json(
 //       { error: "Failed to process request" },
 //       { status: 500 }
@@ -121,7 +121,7 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error in POST request:", error);
+    console.log("Error in POST request:", error);
     return NextResponse.json(
       { error: "Failed to save layout: " + error },
       { status: 500 }
@@ -176,14 +176,14 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json(layout, { status: 200 });
     } catch (error) {
-      console.error("Error fetching content:", error);
+      console.log("Error fetching content:", error);
       return NextResponse.json(
         { error: "Failed to fetch route content" },
         { status: 404 }
       );
     }
   } catch (error) {
-    console.error("Error processing request:", error);
+    console.log("Error processing request:", error);
     return NextResponse.json(
       { error: "Failed to process request" },
       { status: 500 }
