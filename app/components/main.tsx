@@ -56,8 +56,7 @@ export const Main = () => {
 
   const getAuthToken = () => {
     if (typeof window !== "undefined") {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get("token") || localStorage.getItem("authToken");
+      return localStorage.getItem("token");
     }
     return null;
   };
@@ -113,8 +112,8 @@ export const Main = () => {
 
       const isDev = process.env.NODE_ENV === "development";
       const siteUrl = isDev
-        ? `http://localhost:3001` // Development URL
-        : `https://${storeId}.yourdomain.com`; // Production URL
+        ? `http://localhost:3002` // Development URL
+        : `https://${storeId}.tomakdigitalagency.ir`; // Production URL
       window.open(siteUrl, "_blank", "noopener,noreferrer");
     } catch (error) {
       console.error("Error decoding token:", error);
@@ -179,8 +178,15 @@ export const Main = () => {
       }));
       setLayout(data as Layout);
       return data;
-    } catch (error) {
+    } catch (error: any) {
       console.log("Error in data fetch:", error);
+      if (error.message?.includes("401") || error.message?.includes("expired")) {
+        localStorage.removeItem("token");
+        const redirectUrl = process.env.NODE_ENV === "development" 
+          ? "http://localhost:3000" 
+          : "https://dashboard.tomakdigitalagency.ir";
+        window.location.href = redirectUrl;
+      }
     }
   };
 
@@ -188,33 +194,6 @@ export const Main = () => {
     sendTokenToServer();
   }, [activeMode, selectedRoute]);
 
-  // useEffect(() => {
-  //   if (activeMode === "sm") {
-  //     const routeConfigs = {
-  //       about: About.children as unknown as AboutChildren,
-  //       contact: Contact.children as unknown as AboutChildren,
-  //       DetailPage: DetailPage.children as DetailPageChildren,
-  //       store: Store.children as StoreChildren,
-  //       BlogList: Blog.children as BlogChildren,
-  //       BlogDetail: BlogDetail.children as BlogDetailChildren,
-  //       default: smData.sections.children,
-  //     };
-
-  //     const children =
-  //       routeConfigs[selectedRoute as keyof typeof routeConfigs] ||
-  //       routeConfigs.default;
-
-  //     if (children) {
-  //       setLayout((prevLayout: Layout) => ({
-  //         ...prevLayout,
-  //         sections: {
-  //           ...prevLayout.sections,
-  //           children: children as Layout["sections"]["children"],
-  //         },
-  //       }));
-  //     }
-  //   }
-  // }, [selectedRoute, activeMode]);
 
   const handleSave = async () => {
     setSaveStatus("saving");
@@ -230,8 +209,16 @@ export const Main = () => {
       console.log("Save response:", result);
       setSaveStatus("saved");
       setTimeout(() => setSaveStatus("idle"), 2000);
-    } catch (error) {
+    } catch (error: any) {
       console.log("Error saving layout:", error);
+      if (error.message?.includes("401") || error.message?.includes("expired")) {
+        localStorage.removeItem("token");
+        const redirectUrl = process.env.NODE_ENV === "development" 
+          ? "http://localhost:3000" 
+          : "https://dashboard.tomakdigitalagency.ir";
+        window.location.href = redirectUrl;
+        return;
+      }
       setSaveStatus("error");
       setTimeout(() => setSaveStatus("idle"), 2000);
     }
@@ -260,6 +247,16 @@ export const Main = () => {
           token: localStorage.getItem("token") || "",
         },
       });
+      
+      if (res.status === 401) {
+        localStorage.removeItem("token");
+        const redirectUrl = process.env.NODE_ENV === "development" 
+          ? "http://localhost:3000" 
+          : "https://dashboard.tomakdigitalagency.ir";
+        window.location.href = redirectUrl;
+        return;
+      }
+      
       const result = await res.json();
       setCache((prev) => ({
         ...prev,
@@ -269,8 +266,8 @@ export const Main = () => {
       console.log(cleanedRoutes, ",,,,,,,,,,,,,,,");
       setRoutes(cleanedRoutes as string[]);
       setActiveRoutes(cleanedRoutes as string[]);
-    } catch {
-      console.log("Error fetching routes:");
+    } catch (error) {
+      console.log("Error fetching routes:", error);
     }
   };
 
@@ -343,22 +340,6 @@ export const Main = () => {
 
   return (
     <div>
-      {/* {loading ? (
-        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-white bg-opacity-90 z-50">
-          <div className="card">
-            <div className="loader">
-              <p>loading</p>
-              <div className="words px-2">
-                <span className="word font-thin italic">buttons</span>
-                <span className="word font-thin italic">forms</span>
-                <span className="word font-thin italic">switches</span>
-                <span className="word font-thin italic">cards</span>
-                <span className="word font-thin italic">buttons</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : ( */}
       <CanvasProvider>
         <div className="min-h-screen ">
           {isMetaDataModalOpen && (

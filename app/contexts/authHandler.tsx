@@ -27,7 +27,10 @@ export default function AuthHandler({ children }: Props) {
         if (!token) {
           toast.dismiss(loadingToast || "");
           toast.error("برای ادامه، لطفاً وارد حساب خود شوید.");
-          router.replace("/login");
+          const redirectUrl = process.env.NODE_ENV === "development" 
+            ? "http://localhost:3000" 
+            : "https://dashboard.tomakdigitalagency.ir";
+          window.location.href = redirectUrl;
           return;
         }
 
@@ -44,7 +47,10 @@ export default function AuthHandler({ children }: Props) {
         if (!res.ok || !data?.valid) {
           localStorage.removeItem("token");
           toast.error("توکن منقضی شده یا نامعتبر است. لطفاً دوباره وارد شوید.");
-          router.replace("/login");
+          const redirectUrl = process.env.NODE_ENV === "development" 
+            ? "http://localhost:3000" 
+            : "https://dashboard.tomakdigitalagency.ir";
+          window.location.href = redirectUrl;
           return;
         }
 
@@ -57,7 +63,10 @@ export default function AuthHandler({ children }: Props) {
         console.log("Auth verification error:", error);
         toast.dismiss(loadingToast || "");
         if (!hasShownToast) toast.error("خطا در بررسی احراز هویت");
-        router.replace("/login");
+        const redirectUrl = process.env.NODE_ENV === "development" 
+          ? "http://localhost:3000" 
+          : "https://dashboard.tomakdigitalagency.ir";
+        window.location.href = redirectUrl;
       }
     };
 

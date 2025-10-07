@@ -25,13 +25,31 @@ interface UserInfo {
   };
 }
 
-const fetcher = (url: string) => {
+const fetcher = async (url: string) => {
   const token = localStorage.getItem("token");
-  return fetch(url, {
+  const res = await fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  }).then((res) => res.json());
+  });
+  
+  const data = await res.json();
+  
+  // Handle token expiration
+  if (!res.ok && data.expired) {
+    localStorage.removeItem("token");
+    const redirectUrl = process.env.NODE_ENV === "development" 
+      ? "http://localhost:3000" 
+      : "https://dashboard.tomakdigitalagency.ir";
+    window.location.href = redirectUrl;
+    throw new Error("Token expired");
+  }
+  
+  if (!res.ok) {
+    throw new Error(data.error || "Failed to fetch");
+  }
+  
+  return data;
 };
 
 export const useUserInfo = () => {

@@ -2,6 +2,7 @@
 import { Main } from "./components/main";
 import { Suspense } from "react";
 import AuthHandler from "./contexts/authHandler";
+import TokenHandler from "./components/TokenHandler";
  
 function HomeContent() {
   return <Main />;
@@ -10,9 +11,11 @@ function HomeContent() {
 export default function Home() {
   return (
     <Suspense fallback={<div>در حال بارگذاری</div>}>
-      <AuthHandler>
-        <HomeContent />
-      </AuthHandler>
+      <TokenHandler>
+        <AuthHandler>
+          <HomeContent />
+        </AuthHandler>
+      </TokenHandler>
     </Suspense>
   );
 }

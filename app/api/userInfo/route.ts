@@ -31,8 +31,25 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json(userInfo, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error fetching user info:", error);
+    
+    // Handle token expiration specifically
+    if (error.name === "TokenExpiredError") {
+      return NextResponse.json(
+        { error: "Token expired", expired: true },
+        { status: 401 }
+      );
+    }
+    
+    // Handle other JWT errors
+    if (error.name === "JsonWebTokenError") {
+      return NextResponse.json(
+        { error: "Invalid token", expired: true },
+        { status: 401 }
+      );
+    }
+    
     return NextResponse.json(
       { message: "Error fetching user info" },
       { status: 500 }
