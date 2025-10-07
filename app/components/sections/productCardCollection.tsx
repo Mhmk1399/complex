@@ -6,17 +6,6 @@ import {
   ProductBlockSetting,
 } from "@/lib/types";
 
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string;
-}
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { toast } from "react-hot-toast";
-
 interface ProductCardProps {
   productData: ProductCardData;
   settings?: ProductBlockSetting;
@@ -25,6 +14,7 @@ interface ProductCardProps {
 
 const Card = styled.div<{
   $setting?: ProductCardSetting;
+  $previewWidth?: "sm" | "default";
 }>`
   display: flex;
   flex-direction: column;
@@ -32,8 +22,10 @@ const Card = styled.div<{
   background-color: white;
   height: 350px;
   border-radius: 5px;
-  width: 100%;
+  width: ${(props) => (props.$previewWidth === "sm" ? "250px" : "100%")};
   max-width: 300px;
+  min-width: ${(props) => (props.$previewWidth === "sm" ? "250px" : "auto")};
+  flex-shrink: 0;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
@@ -145,9 +137,8 @@ const AddToCartButton = styled.button<{
 const ProductCardCollection: React.FC<ProductCardProps> = ({
   productData,
   settings,
+  previewWidth = "default",
 }) => {
-  const router = useRouter();
-  const [isAddingToCart, setIsAddingToCart] = useState(false);
   // Early return if productData is null or undefined
   if (!productData) {
     console.log("ProductCard: productData is null or undefined");
@@ -172,71 +163,10 @@ const ProductCardCollection: React.FC<ProductCardProps> = ({
       images: productData?.images || [currentImage],
     };
 
-    const handleNavigate = (_id: string) => {
-      router.push(`/store/${_id}`);
-    };
-
-    const addToCart = async (e: React.MouseEvent) => {
-      e.stopPropagation();
-
-      // Check if user has token
-      const token = localStorage.getItem("tokenUser");
-      if (!token) {
-        toast.error("برای افزودن به سبد خرید ابتدا وارد شوید");
-        router.push("/login");
-        return;
-      }
-
-      setIsAddingToCart(true);
-
-      try {
-        const db = await openDB();
-        const transaction = (db as IDBDatabase).transaction(
-          "cart",
-          "readwrite"
-        );
-        const store = transaction.objectStore("cart");
-
-        // Use _id or id, whichever is available
-        const productId = productData._id || productData.id;
-
-        // Check if item already exists
-        const existingItem = await new Promise<CartItem | null>((resolve) => {
-          const request = store.get(productId);
-          request.onsuccess = () => resolve(request.result);
-          request.onerror = () => resolve(null);
-        });
-
-        const cartItem = {
-          id: productId,
-          name: safeProductData.name || "Unnamed Product",
-          price: parseFloat(
-            safeProductData.price?.replace(/[^0-9.-]+/g, "") || "0"
-          ),
-          quantity: existingItem ? existingItem.quantity + 1 : 1,
-          image: currentImage.imageSrc,
-        };
-
-        await store.put(cartItem);
-        toast.success("محصول به سبد خرید اضافه شد");
-      } catch (error) {
-        console.log("Error adding to cart:", error);
-        toast.error("خطا در افزودن به سبد خرید");
-      } finally {
-        setIsAddingToCart(false);
-      }
-    };
-
     // Use _id or id, whichever is available
-    const productId = productData?._id || productData?.id || "unknown";
-    console.log(productId, "vvvvvvvvvv");
 
     return (
-      <Card
-        $setting={settings}
-        onClick={() => handleNavigate(productId)}
-        dir="rtl"
-      >
+      <Card $setting={settings} $previewWidth={previewWidth} dir="rtl">
         <ProductImage
           $settings={settings}
           $productData={safeProductData}
@@ -261,13 +191,8 @@ const ProductCardCollection: React.FC<ProductCardProps> = ({
             : "قیمت مشخص نشده"}{" "}
           تومان
         </ProductPrice>
-        <AddToCartButton
-          onClick={addToCart}
-          disabled={isAddingToCart}
-          $settings={settings}
-          $productData={productData}
-        >
-          {isAddingToCart ? "در حال افزودن..." : "افزودن به سبد خرید"}
+        <AddToCartButton $settings={settings} $productData={productData}>
+          افزودن به سبد خرید
         </AddToCartButton>
       </Card>
     );
@@ -276,22 +201,5 @@ const ProductCardCollection: React.FC<ProductCardProps> = ({
     return <div>خطا در دریافت</div>;
   }
 };
-
-// IndexedDB helper function
-async function openDB() {
-  return await new Promise((resolve, reject) => {
-    const request = indexedDB.open("CartDB", 1);
-
-    request.onerror = () => reject(request.error);
-    request.onsuccess = () => resolve(request.result);
-
-    request.onupgradeneeded = (event) => {
-      const db = (event.target as IDBOpenDBRequest).result;
-      if (!db.objectStoreNames.contains("cart")) {
-        db.createObjectStore("cart", { keyPath: "id" });
-      }
-    };
-  });
-}
 
 export default ProductCardCollection;

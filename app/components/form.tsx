@@ -4,7 +4,7 @@ import { AnimatePresence } from "framer-motion";
 import { DragEndEvent } from "@dnd-kit/core";
 import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
-import { FaArrowLeft, FaBars, FaExchangeAlt, FaPuzzlePiece } from "react-icons/fa";
+import { FaArrowLeft, FaExchangeAlt, FaPuzzlePiece } from "react-icons/fa";
 import { RiRobot3Line } from "react-icons/ri";
 import richtextImage from "@/public/assets/images/richtext.png";
 import ImageTextImage from "@/public/assets/images/imagetext.png";
@@ -494,16 +494,7 @@ export const Form = () => {
       }
     }, 300);
 
-    toast.success(`${componentName} اضافه شد`, {
-      position: "top-center",
-      duration: 2000,
-      style: {
-        background: "#4CAF50",
-        color: "#fff",
-        borderRadius: "10px",
-        padding: "16px",
-      },
-    });
+    toast.success(`${componentName} اضافه شد`);
   };
 
   const imageContainerStyle = {
@@ -1016,7 +1007,7 @@ export const Form = () => {
       <Toaster />
       <div>
         <motion.button
-          className="absolute top-1 right-4 z-[9999] hidden lg:block p-2 text-black rounded-lg hover:bg-gray-100 transition-colors backdrop-blur-sm"
+          className="absolute top-0.5 right-4 z-[9999] hidden lg:block p-2 text-black rounded-lg hover:bg-gray-100 transition-colors backdrop-blur-sm"
           onClick={() => setIsFormOpen(!isFormOpen)}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}

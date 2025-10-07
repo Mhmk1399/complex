@@ -63,7 +63,7 @@ const SpecialOfferSection = styled.section<{
   background-color: ${(props) =>
     props.$data.setting?.backgroundColor || "#ef394e"};
   border-radius: ${(props) =>
-    props.$data.blocks?.setting?.cardBorderRadius || "8"}px;
+    props.$data.blocks?.setting?.cardBorderRadius || "0"}px;
   direction: rtl;
 
   &::-webkit-scrollbar {
@@ -418,7 +418,7 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({
 
         {specialOfferProducts.length > 0 &&
           specialOfferProducts.map((product: ProductCardData) => (
-            <ProductCardCollection key={product._id} productData={product} />
+            <ProductCardCollection key={product._id} productData={product} previewWidth={preview} />
           ))}
         {specialOfferProducts.length === 0 && (
           <div className="flex flex-row items-center justify-start  lg:justify-end  w-full ">

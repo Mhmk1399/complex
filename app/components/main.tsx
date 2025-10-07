@@ -4,15 +4,6 @@ import { Preview } from "./preview";
 import { Form } from "./form";
 import Image from "next/image";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import {
-  FaHome,
-  FaInfoCircle,
-  FaEnvelope,
-  FaStore,
-  FaBlog,
-  FaNewspaper,
-  FaRobot,
-} from "react-icons/fa";
 
 import { AnimatePresence, motion } from "framer-motion";
 import TourGuide from "./sections/guideTour";
@@ -22,15 +13,15 @@ import { createApiService } from "@/lib/api-factory";
 import { Layout } from "@/lib/types";
 import toast from "react-hot-toast";
 
-const routeIcons = {
-  home: FaHome,
-  about: FaInfoCircle,
-  contact: FaEnvelope,
-  store: FaStore,
-  blog: FaBlog,
-  news: FaNewspaper,
-  ai: FaRobot,
-};
+// const routeIcons = {
+//   home: FaHome,
+//   about: FaInfoCircle,
+//   contact: FaEnvelope,
+//   store: FaStore,
+//   blog: FaBlog,
+//   news: FaNewspaper,
+//   ai: FaRobot,
+// };
 
 export const Main = () => {
   // Get shared state from context
@@ -361,7 +352,7 @@ export const Main = () => {
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
               <div className="bg-white/20 p-6 border border-gray-300 backdrop-blur-sm rounded-xl shadow-lg w-96">
                 <h3 className="text-lg font-bold text-white mb-4 text-right">
-                  ویرایش متا دیتا
+                  (سئو) ویرایش متا دیتا
                 </h3>
                 <div className="space-y-4">
                   <input
@@ -411,25 +402,25 @@ export const Main = () => {
               e.currentTarget.style.setProperty("--x", `${x}%`);
               e.currentTarget.style.setProperty("--y", `${y}%`);
             }}
-            className="sticky  top-0 z-50 backdrop-blur-2xl bg-gradient-to-br py-2 lg:py-0.5  from-[#e4e4e4]/60 to-[#fff]
+            className="sticky  top-0 z-50 backdrop-blur-2xl bg-gradient-to-br py-2 lg:py-0  from-[#e4e4e4]/60 to-[#fff]
              shadow-sm cursor-pointer"
           >
             <div className=" mx-auto px-4 sm:px-6 lg:px-8 ">
               <div className="flex lg:flex-row flex-wrap items-center  md:mt-0 justify-center gap-x-0 md:gap-x-1 lg:py-0  sm:space-y-0">
                 <motion.div className="md:flex hidden  items-center border-r pr-2 border-gray-300 absolute left-2 gap-2 px-3 py-0.5">
                   <span className="text-sm font-medium">{selectedRoute}</span>
-                  {routeIcons[selectedRoute as keyof typeof routeIcons] &&
+                  {/* {routeIcons[selectedRoute as keyof typeof routeIcons] &&
                     React.createElement(
                       routeIcons[selectedRoute as keyof typeof routeIcons],
                       {
                         className: "w-4 h-4",
                       }
-                    )}
+                    )} */}
                   <button
-                    className="hover:bg-gray-200 rounded-full p-1"
+                    className=" font-semibold border-l text-xs"
                     onClick={() => setIsMetaDataModalOpen(true)}
                   >
-                    افزودن متا دیتا
+                    سئو صفحه
                   </button>
                 </motion.div>
 
@@ -530,7 +521,7 @@ export const Main = () => {
                       onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                       className="flex items-center gap-2 px-3 py-0.5  backdrop-blur-xl rounded-md"
                     >
-                      <span className="text-sm font-medium">
+                      <span className="text-xs font-medium">
                         {selectedRoute}
                       </span>
                       <motion.svg
@@ -559,7 +550,7 @@ export const Main = () => {
                                 setSelectedRoute(route);
                                 setIsDropdownOpen(false);
                               }}
-                              className=" px-2 py-2 text-right rounded-lg text-sm transition-colors hover:text-red-500"
+                              className=" px-2 py-2 text-right rounded-lg text-xs transition-colors hover:text-red-500"
                             >
                               {route}
                             </motion.button>

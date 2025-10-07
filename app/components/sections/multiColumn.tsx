@@ -645,14 +645,7 @@ const MultiColumn: React.FC<MultiColumnProps> = ({
                 }
                 $data={sectionData}
               />
-              <Button
-                href={
-                  (typedBlock[
-                    `btnLink${index + 1}` as keyof MultiColumnSection
-                  ] as string) || ""
-                }
-                $data={sectionData}
-              >
+              <Button href={"#"} $data={sectionData}>
                 {(typedBlock[
                   `btnLable${index + 1}` as keyof MultiColumnSection
                 ] as React.ReactNode) || "بیشتر"}

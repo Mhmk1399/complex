@@ -341,7 +341,7 @@ const Gallery: React.FC<GalleryProps> = ({
         {images.map((image, index) => (
           <ImageWrapper key={index} $data={sectionData}>
             {image.imageLink ? (
-              <Link href={image.imageLink}>
+              <Link href={"#"}>
                 <Image
                   src={image.imageSrc}
                   alt={image.imageAlt}
