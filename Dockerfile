@@ -21,6 +21,9 @@ FROM node:20-alpine AS runner
 
 ENV NODE_ENV=production
 
+ARG NEXT_PUBLIC_DASHBOARD_URL
+ENV NEXT_PUBLIC_DASHBOARD_URL=$NEXT_PUBLIC_DASHBOARD_URL
+
 WORKDIR /app
 
 # Install only production dependencies
