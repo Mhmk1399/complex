@@ -160,9 +160,9 @@ export const Main = () => {
       }));
       setLayout(data as Layout);
       return data;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.log("Error in data fetch:", error);
-      if (error.message?.includes("401") || error.message?.includes("expired")) {
+      if (error instanceof Error && (error.message?.includes("401") || error.message?.includes("expired"))) {
         localStorage.removeItem("token");
         const redirectUrl = process.env.NODE_ENV === "development" 
           ? "http://localhost:3000" 
@@ -193,9 +193,9 @@ export const Main = () => {
       toast.success("!ذخیره شد");
       setSaveStatus("saved");
       setTimeout(() => setSaveStatus("idle"), 2000);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.log("Error saving layout:", error);
-      if (error.message?.includes("401") || error.message?.includes("expired")) {
+      if (error instanceof Error && (error.message?.includes("401") || error.message?.includes("expired"))) {
         localStorage.removeItem("token");
         const redirectUrl = process.env.NODE_ENV === "development" 
           ? "http://localhost:3000" 

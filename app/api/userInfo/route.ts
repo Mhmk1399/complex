@@ -31,11 +31,11 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json(userInfo, { status: 200 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error fetching user info:", error);
     
     // Handle token expiration specifically
-    if (error.name === "TokenExpiredError") {
+    if (error instanceof Error && error.name === "TokenExpiredError") {
       return NextResponse.json(
         { error: "Token expired", expired: true },
         { status: 401 }
@@ -43,7 +43,7 @@ export async function GET(request: Request) {
     }
     
     // Handle other JWT errors
-    if (error.name === "JsonWebTokenError") {
+    if (error instanceof Error && error.name === "JsonWebTokenError") {
       return NextResponse.json(
         { error: "Invalid token", expired: true },
         { status: 401 }
