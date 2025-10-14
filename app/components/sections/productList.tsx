@@ -136,6 +136,7 @@ const FilterCardBg = styled.div<{
 
 const PriceInputContainer = styled.div`
   display: flex;
+flex-direction: column;
   gap: 1rem;
   margin-top: 0.5rem;
   justify-content: space-between;
@@ -203,7 +204,7 @@ const ProductList: React.FC<ProductListProps> = ({
           ? `Bearer ${localStorage.getItem("token")}`
           : "",
     },
-  });
+  }) as ReturnType<typeof createApiService>;
 
   const { data: productsData } = api.useGet("/products", {
     revalidateOnFocus: false,

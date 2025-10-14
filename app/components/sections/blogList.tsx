@@ -137,11 +137,16 @@ const BlogList: React.FC<BlogListProps> = ({
       try {
         const response = await fetch("/api/blogs", {
           method: "GET",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization:
+              typeof window !== "undefined"
+                ? `Bearer ${localStorage.getItem("token")}`
+                : "",
+          },
         });
 
         const data = await response.json();
-        console.log("data", data);
 
         const blogInfo = data.blogs.map((blog: BlogData) => ({
           ...blog,
