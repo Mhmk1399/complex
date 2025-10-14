@@ -326,7 +326,7 @@ export const Main = () => {
         <div className="min-h-screen ">
           {isMetaDataModalOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white/20 p-6 border border-gray-300 backdrop-blur-sm rounded-xl shadow-lg w-96">
+              <div className="bg-white p-6 border border-gray-300 backdrop-blur-sm rounded-xl shadow-lg w-96">
                 <h3 className="text-lg font-bold text-white mb-4 text-right">
                   (سئو) ویرایش متا دیتا
                 </h3>

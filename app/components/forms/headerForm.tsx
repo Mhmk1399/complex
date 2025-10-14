@@ -368,7 +368,7 @@ export const HeaderForm: React.FC<HeaderFormProps> = ({
           </div>
 
           {/* Navigation Items Section */}
-          <div className="   rounded-xl p-4   transition-shadow duration-200">
+          <div className="   rounded-xl    transition-shadow duration-200">
             <div className="flex items-center gap-2 mb-4">
               <h3 className="font-semibold text-gray-800">آیتم‌های منو</h3>
             </div>
