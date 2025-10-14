@@ -26,10 +26,11 @@ export default function AuthHandler({ children }: Props) {
         const token = localStorage.getItem("token");
         if (!token) {
           toast.dismiss(loadingToast || "");
-          toast.error("برای ادامه، لطفاً وارد حساب خود شوید.");
-          const redirectUrl = process.env.NODE_ENV === "development" 
-            ? "http://localhost:3000" 
-            : "https://dashboard.tomakdigitalagency.ir";
+          toast.error("برای ادامه، لطفاً وارد حساب خود شوید");
+          const redirectUrl =
+            process.env.NODE_ENV === "development"
+              ? "http://localhost:3000"
+              : "https://dashboard.tomakdigitalagency.ir";
           window.location.href = redirectUrl;
           return;
         }
@@ -47,9 +48,10 @@ export default function AuthHandler({ children }: Props) {
         if (!res.ok || !data?.valid) {
           localStorage.removeItem("token");
           toast.error("توکن منقضی شده یا نامعتبر است. لطفاً دوباره وارد شوید.");
-          const redirectUrl = process.env.NODE_ENV === "development" 
-            ? "http://localhost:3000" 
-            : "https://dashboard.tomakdigitalagency.ir";
+          const redirectUrl =
+            process.env.NODE_ENV === "development"
+              ? "http://localhost:3000"
+              : "https://dashboard.tomakdigitalagency.ir";
           window.location.href = redirectUrl;
           return;
         }
@@ -63,9 +65,10 @@ export default function AuthHandler({ children }: Props) {
         console.log("Auth verification error:", error);
         toast.dismiss(loadingToast || "");
         if (!hasShownToast) toast.error("خطا در بررسی احراز هویت");
-        const redirectUrl = process.env.NODE_ENV === "development" 
-          ? "http://localhost:3000" 
-          : "https://dashboard.tomakdigitalagency.ir";
+        const redirectUrl =
+          process.env.NODE_ENV === "development"
+            ? "http://localhost:3000"
+            : "https://dashboard.tomakdigitalagency.ir";
         window.location.href = redirectUrl;
       }
     };

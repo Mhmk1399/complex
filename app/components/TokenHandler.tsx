@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 
 interface Props {
@@ -8,6 +8,7 @@ interface Props {
 }
 
 export default function TokenHandler({ children }: Props) {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [isProcessing, setIsProcessing] = useState(true);
 
@@ -18,6 +19,7 @@ export default function TokenHandler({ children }: Props) {
       // If no URL token, just proceed (existing token flow will handle)
       if (!urlToken) {
         setIsProcessing(false);
+        router.push("https://dashboard.tomakdigitalagency.ir/");
         return;
       }
 
