@@ -1,6 +1,8 @@
 // components/ai/AIModal.tsx
 import React, { useState } from "react";
 import { DeepSeekClient } from "@/lib/DeepSeekClient";
+import { AITokenService } from "@/lib/aiTokenService";
+import { tokenToasts } from "@/lib/tokenToasts";
 import { FaRobot } from "react-icons/fa";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
@@ -21,6 +23,8 @@ const ERROR_MESSAGES = {
   NETWORK_ERROR: "خطا در برقراری ارتباط با سرور",
   UNKNOWN_ERROR: "خطای غیرمنتظره رخ داد",
   PARSE_ERROR: "خطا در تجزیه پاسخ",
+  INSUFFICIENT_TOKENS: "توکن های شما تمام شده است. از داشبورد خرید کنید",
+  TOKEN_ERROR: "خطا در بررسی توکن ها",
 } as const;
 
 const LOADING_MESSAGES = {
@@ -138,17 +142,40 @@ export const AIModal: React.FC<AIModalProps> = ({
 
     const loadingToast = toast.loading(LOADING_MESSAGES.PROCESSING, {
       position: "top-center",
-      duration: Infinity, // ✅ تا زمانی که manually dismiss نشه
+      duration: Infinity,
     });
 
     try {
+      // Get storeId from token in localStorage
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Token not found");
+      }
+
+      // Decode token to get storeId
+      let storeId;
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        storeId = payload.storeId;
+        if (!storeId) {
+          throw new Error("Store ID not found in token");
+        }
+      } catch (error) {
+        throw new Error("Invalid token format");
+      }
+
+      // Check if user has enough tokens before making request
+      const hasTokens = await AITokenService.hasEnoughTokens(storeId, AITokenService.getEstimatedTokens());
+      if (!hasTokens) {
+        throw new Error(ERROR_MESSAGES.INSUFFICIENT_TOKENS);
+      }
+
       const fullPrompt = buildPrompt(currentStyles, prompt);
 
-      // ✅ ارسال با retry
       const response = await DeepSeekClient.sendPrompt(fullPrompt, {
         maxTokens: 4000,
         temperature: 0.3,
-        retries: 3, // ✅ 3 بار تلاش مجدد
+        retries: 3,
       });
 
       if (!response || typeof response !== "string") {
@@ -157,6 +184,14 @@ export const AIModal: React.FC<AIModalProps> = ({
 
       const updatedStyles = extractJSON(response);
       onApplyChanges(updatedStyles);
+
+      // Consume tokens AFTER successful response
+      await AITokenService.consumeTokens(storeId, AITokenService.getEstimatedTokens(), AITokenService.getAIModalFeature(), prompt);
+
+      // Refresh token display if available
+      if (typeof window !== 'undefined' && (window as any).refreshTokenDisplay) {
+        (window as any).refreshTokenDisplay();
+      }
 
       toast.dismiss(loadingToast);
       toast.success(SUCCESS_MESSAGES.UPDATED, {
@@ -171,11 +206,19 @@ export const AIModal: React.FC<AIModalProps> = ({
       const errorMessage = getErrorMessage(error);
 
       toast.dismiss(loadingToast);
-      toast.error(errorMessage, {
-        duration: 6000, // ✅ 6 ثانیه برای خطاها
-        position: "top-center",
-        icon: "❌",
-      });
+      
+      // Special handling for token limit error
+      if (errorMessage === ERROR_MESSAGES.INSUFFICIENT_TOKENS) {
+        tokenToasts.insufficientTokens();
+      } else if (errorMessage === ERROR_MESSAGES.TOKEN_ERROR) {
+        tokenToasts.tokenError();
+      } else {
+        toast.error(errorMessage, {
+          duration: 6000,
+          position: "top-center",
+          icon: "❌",
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -265,10 +308,11 @@ export const AIModal: React.FC<AIModalProps> = ({
             </p>
           </div>
 
-          {/* Character count */}
+          {/* Character count and token estimate */}
           {prompt.trim().length > 0 && (
-            <div className="text-xs text-gray-600 text-left">
-              تعداد کاراکترها: {prompt.trim().length}
+            <div className="flex justify-between text-xs text-gray-600">
+              <span>تعداد کاراکترها: {prompt.trim().length}</span>
+              <span className="text-purple-600">توکن مورد نیاز: ~{AITokenService.getEstimatedTokens()}</span>
             </div>
           )}
 
