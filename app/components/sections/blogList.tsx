@@ -14,7 +14,7 @@ interface BlogListProps {
 }
 interface BlogData {
   blogId: number;
-  imageSrc: string;
+  image: string;
   imageAlt: string;
   title: string;
   description: string;
@@ -228,9 +228,9 @@ const BlogList: React.FC<BlogListProps> = ({
 
       {blogData.map((blog, index) => (
         <BlogCard key={`blog-${blog.id}-${index}`} $data={sectionData.setting}>
-          {blog.imageSrc ? (
+          {blog.image ? (
             <Image
-              src={blog.imageSrc || "/assets/images/pro2.jpg"}
+              src={blog.image || "/assets/images/pro2.jpg"}
               alt={blog.title || "Blog image"}
               width={1000}
               height={800}

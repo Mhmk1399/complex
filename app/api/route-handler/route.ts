@@ -55,14 +55,21 @@ export async function DELETE(request: NextRequest) {
   await connect();
   const routeName = request.headers.get("filename");
   const storeId = getStoreIdFromRequest(request);
-
+console.log(request,'reques lay')
   if (!routeName) {
     return NextResponse.json(
       { error: "Route name is required" },
       { status: 400 }
     );
   }
-
+  if (!storeId) {
+    return NextResponse.json(
+      { error: "Store ID is required" },
+      { status: 400 }
+    );
+  }
+  console.log(routeName,'routeName')
+  console.log(storeId,'storeid')
   try {
     await deleteMongoDBFile(routeName, storeId);
 

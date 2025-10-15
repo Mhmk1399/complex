@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
     const activeMode = request.headers.get("activeMode") || "lg";
     const storeId = getStoreIdFromRequest(request);
     console.log(storeId, "..........................");
-
+    
     if (!routeName || !activeMode) {
       return NextResponse.json(
         { error: "Missing required parameters" },

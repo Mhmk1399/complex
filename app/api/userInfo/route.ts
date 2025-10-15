@@ -20,8 +20,8 @@ export async function GET(request: Request) {
       storeId: string;
     };
     const storeId = decoded.storeId;
-
-    const userInfo = await UserInfo.findOne({ storeId });
+    console.log(storeId,'userinfo store id')
+    const userInfo = await UserInfo.findOne({ storeId:storeId });
 
     if (!userInfo) {
       return NextResponse.json(

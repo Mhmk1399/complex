@@ -27,14 +27,13 @@ export async function getStoreIdFromToken(): Promise<string | null> {
 }
 
 export function getStoreIdFromRequest(request: NextRequest): string {
-  console.log(request , "rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
   const authHeader = request.headers.get("token");
   console.log(authHeader, "authHeader");
   if (authHeader) {
     try {
       const decoded = jwt.decode(authHeader) as any;
       console.log(decoded, "ddddddddddddddddddddddddddddddddddddd");
-      return decoded?.storeId;
+      return decoded.storeId;
     } catch (error) {
       console.log("Error decoding token:", error);
     }

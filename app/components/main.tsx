@@ -258,7 +258,11 @@ export const Main = () => {
   const handleDeleteRoute = async () => {
     try {
       await api.endpoint("/route-handler").delete({
-        headers: { filename: selectedRoute },
+        headers: { 
+          filename: selectedRoute ,
+          token: localStorage.getItem("token") || "" 
+        },
+        
       });
 
       fetchRoutes();

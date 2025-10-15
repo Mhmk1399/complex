@@ -78,10 +78,10 @@ export async function GET(request: NextRequest) {
     console.log("storeId Missing in Token");
     return NextResponse.json(
       { 
-        error: "Invalid token structure", 
+         
         details: "storeId is required" 
       }, 
-      { status: 401 }
+      { status: 200 }
     );
   }
 

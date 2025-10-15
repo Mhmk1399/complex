@@ -19,7 +19,7 @@ interface BlogDetailProps {
 interface BlogData {
   title: string;
   content: string;
-  coverImage: string;
+  image: string;
   author: string;
   createdAt: string;
 }
@@ -258,7 +258,7 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
   const [blog, setBlog] = useState<BlogData>({
     title: "",
     content: "",
-    coverImage: "/assets/images/pro3.jpg",
+    image: "/assets/images/pro3.jpg",
     author: "",
     createdAt: "",
   });
@@ -284,6 +284,11 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
     baseUrl: "/api",
     headers: {
       "Content-Type": "application/json",
+       Authorization:
+        typeof window !== "undefined"
+          ? `Bearer ${localStorage.getItem("token")}`
+          : "",
+    
     },
   });
 
@@ -377,8 +382,8 @@ const BlogDetail: React.FC<BlogDetailProps> = ({
       >
         <Image
           src={
-            sectionData.setting.coverImage ||
-            blog.coverImage ||
+            
+            blog.image ||
             "/assets/images/pro3.jpg"
           }
           alt={blog.title}
