@@ -20,7 +20,7 @@ export default function TokenHandler({ children }: Props) {
       // If no tokens at all, redirect to dashboard
       if (!urlToken && !localStorageToken) {
         setIsProcessing(false);
-        router.push("https://dashboard.tomakdigitalagency.ir/");
+        router.push(process.env.NEXT_PUBLIC_DASHBOARD_URL || "https://dashboard.tomakdigitalagency.ir");
         return;
       }
 
@@ -52,14 +52,14 @@ export default function TokenHandler({ children }: Props) {
           } else {
             toast.error("توکن نامعتبر است");
             localStorage.removeItem("token");
-            router.push("https://dashboard.tomakdigitalagency.ir/");
+            router.push(process.env.NEXT_PUBLIC_DASHBOARD_URL || "https://dashboard.tomakdigitalagency.ir");
             return;
           }
         } catch (error) {
           console.error("Token processing error:", error);
           toast.error("خطا در پردازش توکن");
           localStorage.removeItem("token");
-          router.push("https://dashboard.tomakdigitalagency.ir/");
+          router.push(process.env.NEXT_PUBLIC_DASHBOARD_URL || "https://dashboard.tomakdigitalagency.ir");
           return;
         }
       }

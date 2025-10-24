@@ -40,7 +40,7 @@ const fetcher = async (url: string) => {
     localStorage.removeItem("token");
     const redirectUrl = process.env.NODE_ENV === "development" 
       ? "http://localhost:3000" 
-      : "https://dashboard.tomakdigitalagency.ir";
+      : process.env.NEXT_PUBLIC_DASHBOARD_URL || "https://dashboard.tomakdigitalagency.ir";
     window.location.href = redirectUrl;
     throw new Error("Token expired");
   }

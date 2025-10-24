@@ -166,7 +166,7 @@ export const Main = () => {
         localStorage.removeItem("token");
         const redirectUrl = process.env.NODE_ENV === "development" 
           ? "http://localhost:3000" 
-          : "https://dashboard.tomakdigitalagency.ir";
+          : process.env.NEXT_PUBLIC_DASHBOARD_URL || "https://dashboard.tomakdigitalagency.ir";
         window.location.href = redirectUrl;
       }
     }
@@ -199,7 +199,7 @@ export const Main = () => {
         localStorage.removeItem("token");
         const redirectUrl = process.env.NODE_ENV === "development" 
           ? "http://localhost:3000" 
-          : "https://dashboard.tomakdigitalagency.ir";
+          : process.env.NEXT_PUBLIC_DASHBOARD_URL || "https://dashboard.tomakdigitalagency.ir";
         window.location.href = redirectUrl;
         return;
       }
@@ -236,7 +236,7 @@ export const Main = () => {
         localStorage.removeItem("token");
         const redirectUrl = process.env.NODE_ENV === "development" 
           ? "http://localhost:3000" 
-          : "https://dashboard.tomakdigitalagency.ir";
+          : process.env.NEXT_PUBLIC_DASHBOARD_URL || "https://dashboard.tomakdigitalagency.ir";
         window.location.href = redirectUrl;
         return;
       }
